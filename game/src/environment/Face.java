@@ -12,15 +12,25 @@ public class Face {
 	private int size=0;
 	private Point[] corners = new Point[3];
 
-	// ################################ Constructor
+	/**
+	 * Create a Face on given Planet with given size.
+	 * @param planet corresponding Planet
+	 * @param size side-tile-length
+	 */
 	public Face (Planet planet,int size) {
-
 		this.planet = planet;
-		createTiles(size);
 
+		createTiles(size);
 	}
 
-	// ################################ Set Up
+	// ###################################################################################
+	// ################################ Set Up ###########################################
+	// ###################################################################################
+
+	/**
+	 * Assigns the Tile array with fresh tiles.
+	 * @param size side-tile-length
+	 */
 	private void createTiles(int size) {
 		this.size = size;
 		tiles = new Tile[size][size];
@@ -33,22 +43,28 @@ public class Face {
 		}
 	}
 
+	/**
+	 * Defines the world Points of the Face.
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 */
 	public void assignCorners(Point p0,Point p1, Point p2) {
 		corners[0] = p0;
 		corners[1] = p1;
 		corners[2] = p2;
 	}
 
-	// ################################ Getters
-	public int getSize() { return size; }
+	// ###################################################################################
+	// ################################ Check functions ##################################
+	// ###################################################################################
 
-	public Tile getTile(int x,int y) {
-		if (tiles!=null) {
-			if ((x>=0)&&(y>=0)&&(x<size)&&(y<size)) return tiles[x][y];
-		}
-		return null;
-	}
-
+	/**
+	 * Verifies whether two Tiles are neighbours.
+	 * @param t original Tile
+	 * @param check Tile to check against
+	 * @return true, if both Tiles are on this Face and neighbours
+	 */
 	public boolean isNeighbour(Tile t, Tile check) {
 		Tile[] neighbours = getNeighbours(t.getX(),t.getY());
 		for (Tile loopT : neighbours) {
@@ -57,8 +73,61 @@ public class Face {
 		return false;
 	}
 
+	/**
+	 * Returns whether a coordinate is within the dimensions of the Tile array.
+	 */
+	public boolean inBounds(int x, int y) {
+		if (tiles == null) return false;
+		return ((x>=0)&&(y>=0)&&(x<size)&&(y<size));
+	}
+
+	/**
+	 * Checks whether a Tile is on the edge of the Face.
+	 * @param x coordinate of the Tile
+	 * @param y coordinate of the Tile
+	 * @return true if the Tile is on an edge of the Face
+	 */
+	public boolean isOnEdge(int x,int y) {
+		if (y==0) return true;
+		if (x==0) return true;
+		if (x+y==size-1) return true;
+		return false;
+	}
+
+	/**
+	 * Returns how many corners this Face shares with another Face.
+	 * @param other the other Face
+	 * @return number of shared corners (0-3)
+	 */
+	public int numberOfSharedCorners(Face other) {
+		int n=0;
+		for (int i=0;i<3;i++) {
+			for (int j=0;j<3;j++) {
+				if (corners[i]==other.getCorner(j)) n++;
+			}
+		}
+		return n;
+	}
+
+	// ###################################################################################
+	// ################################ Getters & Setters ################################
+	// ###################################################################################
+
+	public int getSize() { return size; }
+
+	public Tile getTile(int x,int y) {
+		if (inBounds(x,y)) return tiles[x][y];
+		return null;
+	}
+
+	/**
+	 * Returns all neighbouring Tiles of a given coordinate.
+	 * @param tx x coordinate of the Tile
+	 * @param ty y coordinate of the Tile
+	 * @return the three neighbouring Tiles
+	 */
 	public Tile[] getNeighbours(int tx,int ty) {
-		Tile[] neighbours = new Tile[3]; // maximally three neighbours
+		Tile[] neighbours = new Tile[3]; // there are always exactly three neighbours
 		int n=0;
 		// neighbours on same face
 		for (int x=0;x<size;x++) {
@@ -81,16 +150,13 @@ public class Face {
 				}
 			}
 		}
-		if (n!=3) System.out.println("n = "+n);
 		// neighbours on other faces
 		if ((n<3)&&(isOnEdge(tx,ty))) {
-			System.out.println("Check EdgeTile "+tx+","+ty);
 			Face[] neighbourFaces = planet.getNeighbours(this);
 			for (Face face : neighbourFaces) {
 				Point[] sharedCorners = getSharedCorners(face);
 				int nE = getNAlongEdge(sharedCorners[0],sharedCorners[1],tiles[tx][ty]);
 				if (nE!=-1) {
-					System.out.println("found right neigbour face");
 					int c1 = face.getCornerIndex(sharedCorners[0]);
 					int c2 = face.getCornerIndex(sharedCorners[1]);
 					if ((c1!=-1)&&(c2!=-1)) {
@@ -98,7 +164,6 @@ public class Face {
 						if (nE>=0) {
 							for (Tile oT : otherEdge) {
 								if (face.getNAlongEdge(sharedCorners[0],sharedCorners[1],oT)==nE) {
-									System.out.println("Is Neighbour Tile! "+tx+","+ty+" and "+oT.getX()+","+oT.getY());
 									neighbours[n] = oT;
 									n++;
 									if (n==3) break;
@@ -113,22 +178,6 @@ public class Face {
 		return neighbours;
 	}
 
-	public boolean isOnEdge(int x,int y) {
-		if (y==0) return true;
-		if (x==0) return true;
-		if (x+y==size-1) return true;
-		return false;
-	}
-
-	/*public boolean isNeighbour(Tile t,Tile n) {
-		if ((Math.abs(t.getVX()-n.getVX())>1)||(Math.abs(t.getVY()-n.getVY())>2)) return false;
-		if ((t.getVY()==n.getVY())&&(Math.abs(t.getVX()-n.getVX())==1)) return true;
-		if (t.getVY()-2*t.getFlip()==n.getVY()) {
-			if (t.getVX()+t.getFlip()==n.getVX()) return true;
-		}
-		return false;
-	}*/
-
 	public Point getCorner(int i) {
 		if ((i<0)||(i>2)) return null;
 		return corners[i];
@@ -141,6 +190,10 @@ public class Face {
 		return -1;
 	}
 
+	/**
+	 * Returns the coordinates in an array with size 3x3 where the first dimension is the index of the corner (0-2) and the second is the coordinates (x,y,z).
+	 * @return coordinates in a double[][] array
+	 */
 	public double[][] getCornerCoordinates() {
 		double[][] p = new double[3][3]; // first parameter: corner 0-2, second: x,y,z
 		for (int i=0;i<3;i++) {
@@ -152,16 +205,11 @@ public class Face {
 		return p;
 	}
 
-	public int sharesCorners(Face other) {
-		int n=0;
-		for (int i=0;i<3;i++) {
-			for (int j=0;j<3;j++) {
-				if (corners[i]==other.getCorner(j)) n++;
-			}
-		}
-		return n;
-	}
-
+	/**
+	 * Returns an array with the corners (Points) that this Face shares with another.
+	 * @param other Face
+	 * @return Point[] array with shared corners
+	 */
 	private Point[] getSharedCorners(Face other) {
 		Point[] points = new Point[3];
 		int n=0;
@@ -180,6 +228,13 @@ public class Face {
 		return newPoints;
 	}
 
+	/**
+	 * Returns the "coordinate" that a Tile has along two given Points.
+	 * @param c1 "from": the first corner (Point)
+	 * @param c2 "to": the second corner (Point)
+	 * @param t the asked Tile
+	 * @return the coordinate which lies between 0 and size-1
+	 */
 	public int getNAlongEdge(Point c1,Point c2,Tile t) {
 		if (c1==corners[0]) {
 			if (c2==corners[1]) return getNAlongXEdge(t);
@@ -209,6 +264,12 @@ public class Face {
 		return t.getY();
 	}
 
+	/**
+	 * Returns all the Tiles along the edge between two corners (Points).
+	 * @param c1 "from": index of the first corner (Point)
+	 * @param c2 "to": index of the second corner (Point)
+	 * @return Tile[] tiles along the two corners.
+	 */
 	public Tile[] getTilesAlongEdge(int c1,int c2) {
 		if (c2<c1) {
 			int tmp = c1;

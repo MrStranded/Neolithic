@@ -12,19 +12,27 @@ public class Planet {
 	private int size; // side length of faces
 	private double radius; // radius of planet
 
-	// ################################ Constructor
+	/**
+	 * Create a Planet with given specifications.
+	 * @param size side-tile-length
+	 * @param radius from center to closest edge
+	 */
 	public Planet (int size, double radius) {
-
 		this.size = size;
 		this.radius = radius;
 
 		createWorldPoints();
 		createFaces(size);
-		createFolds();
-
 	}
 
-	// ################################ Set Up
+	// ###################################################################################
+	// ################################ Set Up ###########################################
+	// ###################################################################################
+
+	/**
+	 * Assigns the 20 Faces.
+	 * @param size side-tile-length
+	 */
 	private void createFaces(int size) {
 		// regular faces
 		for (int i=0;i<3;i++) {
@@ -57,6 +65,9 @@ public class Planet {
 		}
 	}
 
+	/**
+	 * Creates the 12 Points of the isocaeder with the golden ratio.
+	 */
 	private void createWorldPoints() {
 		double phi = 1.61d; // golden Ratio
 		double c[] = new double[3]; // coordiantes
@@ -75,28 +86,30 @@ public class Planet {
 		}
 	}
 
-	private void createFolds() {
-		for (Face f : faces) {
-			f.createFold();
-		}
-	}
+	// ###################################################################################
+	// ################################ Getters & Setters ################################
+	// ###################################################################################
 
-	// ################################ Getter
 	public Face getFace(int i) {
 		if ((faces!=null)&&(i<faces.length)&&(i>=0)) return faces[i];
 		return null;
 	}
 
-	public double getRadius() { return radius; }
-
 	public Face[] getFaces() { return faces; }
 
+	public double getRadius() { return radius; }
+
+	/**
+	 * Gives the three Faces that lie next to the given Face.
+	 * @param face for which the neighbours are searched
+	 * @return three neighbour Faces
+	 */
 	public Face[] getNeighbours(Face face) {
 		Face[] neighbours = new Face[3];
 		int n=0;
 		for (Face f : faces) {
 			if (f!=face) {
-				if (face.sharesCorners(f)==2) {
+				if (face.numberOfSharedCorners(f)==2) {
 					neighbours[n]=f;
 					n++;
 				}
