@@ -132,20 +132,19 @@ public class Face {
 		// neighbours on same face
 		for (int x=0;x<size;x++) {
 			for (int y=0;y<size;y++) {
-				int dx = tiles[x][y].getVX() - tiles[tx][ty].getVX();
-				int dy = tiles[x][y].getVY() - tiles[tx][ty].getVY();
-				if (dy==0) {
-					if (Math.abs(dx)==1) {
+				if (tiles[x][y].isFlipped() != tiles[tx][ty].isFlipped()) {
+					int dx = tiles[x][y].getVX() - tiles[tx][ty].getVX();
+					int dy = tiles[x][y].getVY() - tiles[tx][ty].getVY();
+
+					int f = tiles[tx][ty].isFlipped() ? -1 : 1;
+					if (
+							((dx==0)&&(dy==0))
+							||((dx==0)&&(dy*f==-1))
+							||((dy==0)&&(dx*f==-1))
+							) {
 						neighbours[n] = tiles[x][y];
 						n++;
-						if (n==3) break;
-					}
-				} else {
-					int f = tiles[tx][ty].getFlip()? -1 : 1;
-					if ((dy==-2*f)&&(dx==f)) {
-						neighbours[n] = tiles[x][y];
-						n++;
-						if (n==3) break;
+						if (n == 3) break;
 					}
 				}
 			}

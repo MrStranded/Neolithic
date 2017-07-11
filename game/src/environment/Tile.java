@@ -1,7 +1,5 @@
 package environment;
 
-import java.awt.*;
-
 /**
  * Created by michael1337 on 14/06/17.
  *
@@ -9,11 +7,11 @@ import java.awt.*;
  */
 public class Tile {
 
-	protected int x;
-	protected int y;
+	private int x;
+	private int y;
 	private int vx,vy; // visual position. For example Tile(x,y) has the same visual position as Tile(size-x,size-y)
-	protected Face face;
-	private int height=100; // default height of a Tile
+	private Face face;
+	private int height=0; // default height of a Tile
 
 	/**
 	 * Creates a Tile.
@@ -44,8 +42,8 @@ public class Tile {
 	public void calculateVisualPosition() {
 		int size = face.getSize();
 		if (x+y >= size) {
-			vx = size-x;
-			vy = size-y;
+			vx = size-1-x;
+			vy = size-1-y;
 		} else {
 			vx = x;
 			vy = y;
@@ -72,12 +70,12 @@ public class Tile {
 
 	public Face getFace() { return face; }
 
-	public boolean getFlip() {
+	public boolean isFlipped() {
 		return (x+y>=face.getSize());
 	}
 
 	public int getHeight() { return height; }
-	public void setHeight(byte height) {
+	public void setHeight(int height) {
 		this.height = height;
 	}
 
