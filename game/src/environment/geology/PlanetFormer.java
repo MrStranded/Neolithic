@@ -23,8 +23,8 @@ public class PlanetFormer {
 		int size = face.getSize();
 		int hills = 16;
 		int hillSize = 12;
-		int stepSize = 4;
-		int elevation = 42;
+		int stepSize = 2;
+		int elevation = 100;
 
 		int x=0,y=0;
 
@@ -34,7 +34,7 @@ public class PlanetFormer {
 			for (int i = 0; i < hillSize; i++) {
 				x = (x + (int) (stepSize * Math.random())) % size;
 				y = (y + (int) (stepSize * Math.random())) % size;
-				raiseTile(face, face.getTile(x, y), elevation);
+				elevateTile(face, face.getTile(x, y), (int) (elevation*Math.random()));
 			}
 		}
 	}
@@ -49,6 +49,21 @@ public class PlanetFormer {
 			Tile[] neighbours = face.getNeighbours(tile.getX(),tile.getY());
 			for (Tile t : neighbours) {
 				if (t!=null) raiseTile(t.getFace(),t,level);
+			}
+		}
+	}
+
+	private static void elevateTile(Face face, Tile tile, int level) {
+		if (level>255) level = 255;
+		if (tile.getHeight() < level) {
+			tile.setHeight(level);
+
+			level -= ((Math.random()+0.5d)*20);
+			if (level > 0) {
+				Tile[] neighbours = face.getNeighbours(tile.getX(), tile.getY());
+				for (Tile t : neighbours) {
+					if (t != null) elevateTile(t.getFace(), t, level);
+				}
 			}
 		}
 	}

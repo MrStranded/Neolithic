@@ -17,7 +17,6 @@ public class Tile {
 	 * Creates a Tile.
 	 */
 	public Tile() {
-
 	}
 
 	// ###################################################################################
@@ -34,6 +33,7 @@ public class Tile {
 		this.face = face;
 		this.x = x;
 		this.y = y;
+		calculateVisualPosition();
 	}
 
 	/**
