@@ -1,9 +1,11 @@
 import environment.Face;
 import environment.Planet;
 import environment.geology.PlanetFormer;
+import environment.meteorology.WeatherCreater;
 import gui.DrawFace;
 import gui.Window;
 import threads.DrawThread;
+import threads.MeteorologyThread;
 
 /**
  * Created by Michael on 14.06.2017.
@@ -23,7 +25,11 @@ public class Start {
 
 		Planet gaia = new Planet(32,100);
 		PlanetFormer.generateTopology(gaia);
+		WeatherCreater.generateWeather(gaia);
 		Face faceZero = gaia.getFace(0);
 		drawFace.setFace(faceZero);
+
+		MeteorologyThread meteorologyThread = new MeteorologyThread(gaia,100);
+		meteorologyThread.start();
 	}
 }

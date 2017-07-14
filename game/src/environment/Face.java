@@ -39,6 +39,7 @@ public class Face {
 				tiles[x][y] = new Tile();
 				tiles[x][y].assignFace(this, x, y);
 				tiles[x][y].calculateVisualPosition();
+				tiles[x][y].setHeight(0);
 			}
 		}
 	}

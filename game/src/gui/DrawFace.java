@@ -1,11 +1,15 @@
 package gui;
 
 import environment.Face;
+import environment.Shelf;
 import environment.Tile;
+import environment.meteorology.RainDrop;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 
 /**
  * Created by Michael on 11.07.2017.
@@ -68,7 +72,6 @@ public class DrawFace extends Draw {
 				py[2] = (py[0] + v2y);
 
 				int h = tile.getHeight();
-				int hr = (int) (h * maxHeight / 255d);
 
 				if (tile.isFlipped()) {
 					px[0] = (px[2]+v1x);
@@ -82,18 +85,52 @@ public class DrawFace extends Draw {
 					iy[i] = (int) py[i];
 				}
 
-				for (int j = 0; j <= hr; j++) {
+				Shelf[] layers = tile.getLayers();
+
+				for (int j = 0; j <= h; j++) {
+					if (layers[j] != null) {
+						int red = layers[j].getRed();
+						red = red / 2 + (int) ((double) (red / 2) * (double) j / 255d);
+						int green = layers[j].getGreen();
+						green = green / 2 + (int) ((double) (green / 2) * (double) j / 255d);
+						int blue = layers[j].getBlue();
+						blue = blue / 2 + (int) ((double) (blue / 2) * (double) j / 255d);
+						g.setColor(new Color(red, green, blue));
+						if ((j==255) || (layers[j+1]==null)) {
+							g.fillPolygon(ix, iy, 3);
+						} else {
+							g.drawPolygon(ix, iy, 3);
+						}
+					}
 					for (int i = 0; i < 3; i++) {
 						iy[i]--;
 					}
-					int red = 240; red = red/2 + (int) ((double) (red/2)*(double) j/255d);
-					int green = 200; green = green/2 + (int) ((double) (green/2)*(double) j/255d);
-					int blue = 80; blue = blue/2 + (int) ((double) (blue/2)*(double) j/255d);
-					g.setColor(new Color(red,green,blue));
-
-					g.fillPolygon(ix, iy, 3);
 				}
-				g.setColor(Color.BLACK);
+
+				if (tile.getHumidity()>=100) {
+					g.setColor(Color.WHITE);
+
+					for (int i = 0; i < 3; i++) {
+						iy[i]-=(255-h);
+					}
+
+					g.drawPolygon(ix, iy, 3);
+				}
+
+				g.setColor(Color.BLUE);
+				if (tile.getRain()!=null) {
+					Iterator<RainDrop> rainDropIterator = tile.getRain().iterator();
+					while (rainDropIterator.hasNext()) {
+						try {
+							RainDrop rainDrop = rainDropIterator.next();
+							int rx = (int) (px[0] + v1x * rainDrop.getX() + v2x * rainDrop.getX());
+							int ry = (int) (py[0] + v1y * rainDrop.getY() + v2y * rainDrop.getY()) - rainDrop.getHeight();
+							g.drawLine(rx, ry, rx, ry - 3);
+						} catch (ConcurrentModificationException e) {
+							// it's okay. sometimes the raindrop you work on gets deleted
+						}
+					}
+				}
 				//g.drawPolygon(ix, iy, 3);
 				/*if (h < waterLevel) {
 					for (int j = hr; j<= waterLevel*maxHeight/255; j++) {
