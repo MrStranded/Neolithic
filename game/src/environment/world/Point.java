@@ -1,4 +1,4 @@
-package environment;
+package environment.world;
 
 /**
  * Created by michael1337 on 14/06/17.

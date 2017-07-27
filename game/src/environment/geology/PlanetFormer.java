@@ -1,8 +1,9 @@
 package environment.geology;
 
-import environment.Face;
-import environment.Planet;
-import environment.Tile;
+import environment.world.Entity;
+import environment.world.Face;
+import environment.world.Planet;
+import environment.world.Tile;
 
 /**
  * Created by Michael on 11.07.2017.
@@ -11,6 +12,28 @@ import environment.Tile;
  */
 public class PlanetFormer {
 
+	/**
+	 * Generates trees on the whole planet.
+	 */
+	public static void generateTrees(Planet planet) {
+		if ((planet!=null)&&(planet.getFaces()!=null)) {
+			for (Face face : planet.getFaces()) {
+				if (face != null) {
+					for (int x=0; x<face.getSize(); x++) {
+						for (int y=0; y<face.getSize(); y++) {
+							if (Math.random()>0.7d) {
+								face.getTile(x,y).addEntity(new Entity(face.getTile(x,y),'T'));
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Generates a Topology for the whole planet.
+	 */
 	public static void generateTopology(Planet planet) {
 		if ((planet!=null)&&(planet.getFaces()!=null)) {
 			for (Face face : planet.getFaces()) {
@@ -24,7 +47,7 @@ public class PlanetFormer {
 		int hills = 8;
 		int hillSize = 12;
 		int stepSize = 2;
-		int elevation = 30;
+		int elevation = 100;
 
 		int x=0,y=0;
 

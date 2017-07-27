@@ -1,15 +1,12 @@
 package gui;
 
-import environment.Face;
-import environment.Shelf;
-import environment.Tile;
-import environment.meteorology.RainDrop;
+import environment.world.Entity;
+import environment.world.Face;
+import environment.world.Shelf;
+import environment.world.Tile;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 
 /**
  * Created by Michael on 11.07.2017.
@@ -124,6 +121,18 @@ public class DrawFace extends Draw {
 
 					for (int i = 0; i < 3; i++) {
 						iy[i]--;
+					}
+				}
+
+				// %%%%%%%%%%%%%%%%%%%%%%%% drawing the tiles entities if there are some
+
+				if ((tile.getEntities()!=null)&&(!tile.getEntities().isEmpty())) {
+					int ex = (ix[0]+ix[1]+ix[2])/3;
+					int ey = (iy[0]+iy[1]+iy[2])/3;
+
+					g.setColor(Color.GREEN);
+					for (Entity entity : tile.getEntities()) {
+						g.drawString(String.valueOf(entity.getThumbnail()),ex-g.getFontMetrics().charWidth(entity.getThumbnail())/2,ey);
 					}
 				}
 

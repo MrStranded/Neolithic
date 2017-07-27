@@ -1,7 +1,7 @@
 package environment.meteorology;
 
-import environment.Face;
-import environment.Planet;
+import environment.world.Face;
+import environment.world.Planet;
 
 /**
  * Created by Michael on 14.07.2017.

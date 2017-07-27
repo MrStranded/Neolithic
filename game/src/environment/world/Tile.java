@@ -1,8 +1,9 @@
-package environment;
+package environment.world;
 
 import environment.meteorology.RainDrop;
 
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * Created by michael1337 on 14/06/17.
@@ -20,6 +21,8 @@ public class Tile {
 
 	private int humidity = 0;
 	private ArrayList<RainDrop> rain = new ArrayList<RainDrop>();
+
+	private ConcurrentLinkedDeque<Entity> entities = new ConcurrentLinkedDeque<Entity>();
 
 	/**
 	 * Creates a Tile.
@@ -59,7 +62,7 @@ public class Tile {
 
 	private void createShelfes() {
 		for (int i=0; i<=height; i++) {
-			layers[i] = new Shelf();
+			layers[i] = new Shelf(this);
 		}
 	}
 
@@ -68,21 +71,32 @@ public class Tile {
 	}
 
 	// ###################################################################################
+	// ################################ Modification #####################################
+	// ###################################################################################
+
+	public void addEntity (Entity entity) {
+		entities.add(entity);
+	}
+
+	// ###################################################################################
 	// ################################ Getters & Setters ################################
 	// ###################################################################################
+
+	public ConcurrentLinkedDeque<Entity> getEntities() {
+		return entities;
+	}
+	public void setEntities(ConcurrentLinkedDeque<Entity> entities) {
+		this.entities = entities;
+	}
 
 	/**getX returns the technical x location on the tile array of the face*/
 	public int getX() { return x; }
 	/**getY returns the technical y location on the tile array of the face*/
 	public int getY() { return y; }
 
-	/**
-	 * getVX returns the visual x position on the screen
-	 */
+	/** getVX returns the visual x position on the screen*/
 	public int getVX() { return vx; }
-	/**
-	 * getVY returns the visual y position on the screen
-	 */
+	/** getVY returns the visual y position on the screen*/
 	public int getVY() { return vy; }
 
 	public Face getFace() { return face; }

@@ -1,6 +1,6 @@
 package threads;
 
-import environment.Planet;
+import environment.world.Planet;
 import environment.meteorology.Rain;
 
 /**

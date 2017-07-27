@@ -1,11 +1,9 @@
-import environment.Face;
-import environment.Planet;
+import environment.world.Face;
+import environment.world.Planet;
 import environment.geology.PlanetFormer;
-import environment.meteorology.WeatherCreater;
 import gui.DrawFace;
 import gui.Window;
 import threads.DrawThread;
-import threads.MeteorologyThread;
 
 /**
  * Created by Michael on 14.06.2017.
@@ -20,11 +18,12 @@ public class Start {
 		DrawFace drawFace = new DrawFace();
 		window.assignDrawMethod(drawFace);
 
-		DrawThread drawThread = new DrawThread(window,500);
+		DrawThread drawThread = new DrawThread(window,2000);
 		drawThread.start();
 
 		Planet gaia = new Planet(32,100);
 		PlanetFormer.generateTopology(gaia);
+		PlanetFormer.generateTrees(gaia);
 		//WeatherCreater.generateWeather(gaia);
 		Face faceZero = gaia.getFace(0);
 		drawFace.setFace(faceZero);

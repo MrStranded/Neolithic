@@ -1,4 +1,4 @@
-package environment;
+package environment.world;
 
 /**
  * Created by michael1337 on 14/06/17.
@@ -113,6 +113,13 @@ public class Face {
 	// ###################################################################################
 	// ################################ Getters & Setters ################################
 	// ###################################################################################
+
+	public Planet getPlanet() {
+		return planet;
+	}
+	public void setPlanet(Planet planet) {
+		this.planet = planet;
+	}
 
 	public int getSize() { return size; }
 

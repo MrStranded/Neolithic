@@ -1,4 +1,6 @@
-package environment;
+package environment.world;
+
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * Created by Michael on 14.07.2017.
@@ -7,9 +9,11 @@ package environment;
  */
 public class Shelf {
 
-	int red,green,blue;
+	private Tile tile;
+	private int red,green,blue;
 
-	public Shelf() {
+	public Shelf(Tile tile) {
+		this.tile = tile;
 		red = 200 + (int) (Math.random()*42d);
 		green = 150 + (int) (Math.random()*42d);
 		blue = 50 + (int) (Math.random()*42d);
@@ -19,6 +23,12 @@ public class Shelf {
 	// ################################ Getters & Setters ################################
 	// ###################################################################################
 
+	public Tile getTile() {
+		return tile;
+	}
+	public void setTile(Tile tile) {
+		this.tile = tile;
+	}
 
 	public int getRed() {
 		return red;
