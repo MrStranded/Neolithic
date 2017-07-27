@@ -17,7 +17,8 @@ public class Tile {
 	private int vx,vy; // visual position. For example Tile(x,y) has the same visual position as Tile(size-x,size-y)
 	private Face face;
 	private int height=0; // default height of a Tile
-	private Shelf[] layers = new Shelf[256];
+
+	private int red=255,green=255,blue=255;
 
 	private int humidity = 0;
 	private ArrayList<RainDrop> rain = new ArrayList<RainDrop>();
@@ -28,6 +29,9 @@ public class Tile {
 	 * Creates a Tile.
 	 */
 	public Tile() {
+		red = 192+(int) (Math.random()*64);
+		green = 192+(int) (Math.random()*48);
+		blue = 100+(int) (Math.random()*64);
 	}
 
 	// ###################################################################################
@@ -60,12 +64,6 @@ public class Tile {
 		}
 	}
 
-	private void createShelfes() {
-		for (int i=0; i<=height; i++) {
-			layers[i] = new Shelf(this);
-		}
-	}
-
 	public void createRainDrop() {
 		rain.add(new RainDrop());
 	}
@@ -81,6 +79,27 @@ public class Tile {
 	// ###################################################################################
 	// ################################ Getters & Setters ################################
 	// ###################################################################################
+
+	public int getRed() {
+		return red;
+	}
+	public void setRed(int red) {
+		this.red = red;
+	}
+
+	public int getGreen() {
+		return green;
+	}
+	public void setGreen(int green) {
+		this.green = green;
+	}
+
+	public int getBlue() {
+		return blue;
+	}
+	public void setBlue(int blue) {
+		this.blue = blue;
+	}
 
 	public ConcurrentLinkedDeque<Entity> getEntities() {
 		return entities;
@@ -110,14 +129,6 @@ public class Tile {
 		if (height > 255) height = 255;
 		if (height < 0) height = 0;
 		this.height = height;
-		createShelfes();
-	}
-
-	public Shelf[] getLayers() {
-		return layers;
-	}
-	public void setLayers(Shelf[] layers) {
-		this.layers = layers;
 	}
 
 	public int getHumidity() {

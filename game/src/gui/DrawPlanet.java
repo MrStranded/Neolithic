@@ -18,8 +18,8 @@ public class DrawPlanet extends Draw {
 	// ################################ Drawing ##########################################
 	// ###################################################################################
 
-	double anglex = 0;
-	double angley = 0;
+	double anglex = Math.PI/2;
+	double angley = Math.PI/2;
 
 	double midx = 0;
 	double midy = 0;
@@ -33,8 +33,8 @@ public class DrawPlanet extends Draw {
 		midy = height/2;
 
 		if (planet != null) {
-			anglex += 0.01d;
-			angley -= 0.01d;
+			anglex += 0.005d;
+			angley -= 0.0025d;
 			for (Face face : planet.getFaces()) {
 				if (face != null) {
 					double[][] coordinates = rotateCoordiantes(face);
@@ -129,17 +129,15 @@ public class DrawPlanet extends Draw {
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% actually drawing the tile
 
-			Shelf[] layers = tile.getLayers();
-
-			int red = layers[0].getRed();
+			int red = tile.getRed();
 			red = red / 2 + (int) ((double) (red / 2) * (double) h / 255d);
-			int green = layers[0].getGreen();
+			int green = tile.getGreen();
 			green = green / 2 + (int) ((double) (green / 2) * (double) h / 255d);
-			int blue = layers[0].getBlue();
+			int blue = tile.getBlue();
 			blue = blue / 2 + (int) ((double) (blue / 2) * (double) h / 255d);
 			g.setColor(new Color(red, green, blue));
 
-			// %%%%%%%%%%%%%%%%%%%%%%%% drawing the shelf
+			// %%%%%%%%%%%%%%%%%%%%%%%% drawing the tile
 
 			g.fillPolygon(ix, iy, 3);
 

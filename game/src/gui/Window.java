@@ -19,7 +19,7 @@ public class Window {
 		this.width = width;
 		this.height = height;
 
-		frame.setBackground(new Color(100,180,250));
+		frame.setBackground(new Color(0,0,0));
 		frame.setSize(width, height);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

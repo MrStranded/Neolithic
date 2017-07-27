@@ -19,16 +19,17 @@ public class Start {
 		DrawPlanet drawPlanet = new DrawPlanet();
 		window.assignDrawMethod(drawPlanet);
 
-		DrawThread drawThread = new DrawThread(window,50);
+		DrawThread drawThread = new DrawThread(window,42);
 		drawThread.start();
 
 		Planet gaia = new Planet(32,18);
-		PlanetFormer.generateTopology(gaia);
-		PlanetFormer.generateTrees(gaia);
-		//WeatherCreater.generateWeather(gaia);
 
 		drawPlanet.setPlanet(gaia);
 
+		PlanetFormer.setPlanet(gaia);
+		new PlanetFormer().start();
+
+		//WeatherCreater.generateWeather(gaia);
 		//MeteorologyThread meteorologyThread = new MeteorologyThread(gaia,100);
 		//meteorologyThread.start();
 	}

@@ -10,19 +10,38 @@ import environment.world.Tile;
  *
  * This class forms hills and mountains on a mountain.
  */
-public class PlanetFormer {
+public class PlanetFormer extends Thread {
+
+	private static Planet planet;
+
+	public static void setPlanet (Planet p) {
+		planet = p;
+	}
+
+	public void run () {
+		System.out.println("Starting topology generation.");
+		generateTopology();
+		System.out.println("Planting trees.");
+		generateTrees();
+		System.out.println("Planet formation completed.");
+	}
 
 	/**
 	 * Generates trees on the whole planet.
 	 */
-	public static void generateTrees(Planet planet) {
+	public static void generateTrees() {
 		if ((planet!=null)&&(planet.getFaces()!=null)) {
 			for (Face face : planet.getFaces()) {
 				if (face != null) {
 					for (int x=0; x<face.getSize(); x++) {
 						for (int y=0; y<face.getSize(); y++) {
-							if (Math.random()>0.7d) {
+							if (Math.random()>0.95d) {
 								face.getTile(x,y).addEntity(new Entity(face.getTile(x,y),'T'));
+								try {
+									sleep(5);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
 							}
 						}
 					}
@@ -34,7 +53,7 @@ public class PlanetFormer {
 	/**
 	 * Generates a Topology for the whole planet.
 	 */
-	public static void generateTopology(Planet planet) {
+	public static void generateTopology() {
 		if ((planet!=null)&&(planet.getFaces()!=null)) {
 			for (Face face : planet.getFaces()) {
 				if (face != null) generateFaceTopology(face);
@@ -44,10 +63,10 @@ public class PlanetFormer {
 
 	private static void generateFaceTopology(Face face) {
 		int size = face.getSize();
-		int hills = 8;
-		int hillSize = 12;
-		int stepSize = 2;
-		int elevation = 100;
+		int hills = 2 + (int) (Math.random()*5);
+		int hillSize = 8 + (int) (Math.random()*8);
+		int stepSize = 1 + (int) (Math.random()*2);
+		int elevation = 100 + (int) (Math.random()*156);
 
 		int x=0,y=0;
 
@@ -58,6 +77,12 @@ public class PlanetFormer {
 				x = (x + (int) (stepSize * Math.random())) % size;
 				y = (y + (int) (stepSize * Math.random())) % size;
 				elevateTile(face, face.getTile(x, y), (int) (elevation*Math.random()));
+
+				try {
+					sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

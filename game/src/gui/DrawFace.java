@@ -2,7 +2,6 @@ package gui;
 
 import environment.world.Entity;
 import environment.world.Face;
-import environment.world.Shelf;
 import environment.world.Tile;
 
 import java.awt.*;
@@ -94,30 +93,26 @@ public class DrawFace extends Draw {
 
 				// %%%%%%%%%%%%%%%%%%%%%%%% actually drawing the tile
 
-				Shelf[] layers = tile.getLayers();
-
 				for (int j = 0; j <= h; j++) {
-					if (layers[j] != null) {
 
-						// %%%%%%%%%%%%%%%%%%%%%%%% initializing the color of the shelf
+					// %%%%%%%%%%%%%%%%%%%%%%%% initializing the color of the tile
 
-						int red = layers[j].getRed();
-						red = red / 2 + (int) ((double) (red / 2) * (double) j / 255d);
-						int green = layers[j].getGreen();
-						green = green / 2 + (int) ((double) (green / 2) * (double) j / 255d);
-						int blue = layers[j].getBlue();
-						blue = blue / 2 + (int) ((double) (blue / 2) * (double) j / 255d);
-						g.setColor(new Color(red, green, blue));
+					int red = tile.getRed();
+					red = red / 2 + (int) ((double) (red / 2) * (double) h / 255d);
+					int green = tile.getGreen();
+					green = green / 2 + (int) ((double) (green / 2) * (double) h / 255d);
+					int blue = tile.getBlue();
+					blue = blue / 2 + (int) ((double) (blue / 2) * (double) h / 255d);
+					g.setColor(new Color(red, green, blue));
 
-						// %%%%%%%%%%%%%%%%%%%%%%%% drawing the shelf
+					// %%%%%%%%%%%%%%%%%%%%%%%% drawing the tile
 
-						g.drawPolygon(ix, iy, 3);
-						if ((j==255) || (layers[j+1]==null)) {
-							g.fillPolygon(ix, iy, 3);
-						}
+					g.drawPolygon(ix, iy, 3);
+					if ((j==h)) {
+						g.fillPolygon(ix, iy, 3);
 					}
 
-					// %%%%%%%%%%%%%%%%%%%%%%%% setting up the position for the next shelf
+					// %%%%%%%%%%%%%%%%%%%%%%%% setting up the position for the next layer
 
 					for (int i = 0; i < 3; i++) {
 						iy[i]--;
