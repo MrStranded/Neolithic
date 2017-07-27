@@ -25,12 +25,15 @@ public class DrawFace extends Draw {
 	// ################################ Drawing ##########################################
 	// ###################################################################################
 
+	/**
+	 * The big master method for drawing Faces. Too big as it is now.
+	 */
 	public void paintComponent(Graphics g) {
 		if (face != null) {
-			int size = face.getSize();
 
-			double tileWidth = width/2/size;
-			double tileHeight = height/2/size;
+			// %%%%%%%%%%%%%%%%%%%%%%%% initializing necessary variables concerning orientation and so forth
+
+			int size = face.getSize();
 
 			int[] fx = new int[3];
 			int[] fy = new int[3];
@@ -48,20 +51,23 @@ public class DrawFace extends Draw {
 			double v2x = (double) (fx[2]-fx[0])/(double) size;
 			double v2y = (double) (fy[2]-fy[0])/(double) size;
 
-			int maxHeight = 255;
-			int waterLevel = 70;
+			double[] px = new double[3];
+			double[] py = new double[3];
+
+			// %%%%%%%%%%%%%%%%%%%%%%%% these variables go through the tiles in a special manner to go sure that tiles further away are drawn first
 
 			int k = 1;
 			int counter = 1;
 			boolean flip = false;
 			int x=0,y=size-1;
 
+			// %%%%%%%%%%%%%%%%%%%%%%%% going through all tiles
+
 			for (int t=0; t<size*size; t++) {
 
 				Tile tile = face.getTile(x,y);
 
-				double[] px = new double[3];
-				double[] py = new double[3];
+				// %%%%%%%%%%%%%%%%%%%%%%%% calculating the position of the tile
 
 				px[0] = fx[0] + (v1x*tile.getVX() + v2x*tile.getVY());
 				px[1] = (px[0] + v1x);
@@ -73,10 +79,14 @@ public class DrawFace extends Draw {
 
 				int h = tile.getHeight();
 
+				// %%%%%%%%%%%%%%%%%%%%%%%% flipping it if necessary
+
 				if (tile.isFlipped()) {
 					px[0] = (px[2]+v1x);
 					py[0] = (py[2]+v1y);
 				}
+
+				// %%%%%%%%%%%%%%%%%%%%%%%% converting into those sweet integers
 
 				int[] ix = new int[3];
 				int[] iy = new int[3];
@@ -85,10 +95,15 @@ public class DrawFace extends Draw {
 					iy[i] = (int) py[i];
 				}
 
+				// %%%%%%%%%%%%%%%%%%%%%%%% actually drawing the tile
+
 				Shelf[] layers = tile.getLayers();
 
 				for (int j = 0; j <= h; j++) {
 					if (layers[j] != null) {
+
+						// %%%%%%%%%%%%%%%%%%%%%%%% initializing the color of the shelf
+
 						int red = layers[j].getRed();
 						red = red / 2 + (int) ((double) (red / 2) * (double) j / 255d);
 						int green = layers[j].getGreen();
@@ -96,18 +111,25 @@ public class DrawFace extends Draw {
 						int blue = layers[j].getBlue();
 						blue = blue / 2 + (int) ((double) (blue / 2) * (double) j / 255d);
 						g.setColor(new Color(red, green, blue));
+
+						// %%%%%%%%%%%%%%%%%%%%%%%% drawing the shelf
+
+						g.drawPolygon(ix, iy, 3);
 						if ((j==255) || (layers[j+1]==null)) {
 							g.fillPolygon(ix, iy, 3);
-						} else {
-							g.drawPolygon(ix, iy, 3);
 						}
 					}
+
+					// %%%%%%%%%%%%%%%%%%%%%%%% setting up the position for the next shelf
+
 					for (int i = 0; i < 3; i++) {
 						iy[i]--;
 					}
 				}
 
-				if (tile.getHumidity()>=100) {
+				// %%%%%%%%%%%%%%%%%%%%%%%% temporary cloud drawing
+
+				/*if (tile.getHumidity()>=100) {
 					g.setColor(Color.WHITE);
 
 					for (int i = 0; i < 3; i++) {
@@ -115,9 +137,11 @@ public class DrawFace extends Draw {
 					}
 
 					g.drawPolygon(ix, iy, 3);
-				}
+				}*/
 
-				g.setColor(Color.BLUE);
+				// %%%%%%%%%%%%%%%%%%%%%%%% temporary rain drawing
+
+				/*g.setColor(Color.BLUE);
 				if (tile.getRain()!=null) {
 					Iterator<RainDrop> rainDropIterator = tile.getRain().iterator();
 					while (rainDropIterator.hasNext()) {
@@ -130,8 +154,10 @@ public class DrawFace extends Draw {
 							// it's okay. sometimes the raindrop you work on gets deleted
 						}
 					}
-				}
-				//g.drawPolygon(ix, iy, 3);
+				}*/
+
+				// %%%%%%%%%%%%%%%%%%%%%%%% temporary water / sea drawing
+
 				/*if (h < waterLevel) {
 					for (int j = hr; j<= waterLevel*maxHeight/255; j++) {
 						for (int i = 0; i < 3; i++) {
@@ -144,30 +170,35 @@ public class DrawFace extends Draw {
 					}
 				}*/
 
-				counter++;
-				if (counter>k) {
-					if (!flip) {
+				// %%%%%%%%%%%%%%%%%%%%%%%% a really messy way to go through all the tiles in the visibly correct order
+
+				counter++; // the counter does not directly correspond to going to the next tile
+				if (counter>k) { // when crossing the diagonal of the tile array
+					if (!flip) { // on the small side of the array
 						flip = true;
 						x = size-1;
 						y = size-y;
-					} else {
+					} else { // on the big side of the array
 						flip = false;
 						x = 0;
 						k++;
 						y = size-k;
 					}
-					counter = 1;
+					counter = 1; // starting at the start of a line
 				} else {
 					if (!flip) {
-						x++;
+						x++; // going to the next tile on the big side of the array
 					} else {
-						x--;
+						x--; // going to the next tile on the small side of the array
 					}
 				}
 			}
 		}
 	}
 
+	/**
+	 * Keeps track where the mouse was last clicked.
+	 */
 	public void mousePressed(MouseEvent e) {
 		mx = e.getX();
 		my = e.getY();

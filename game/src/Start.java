@@ -20,16 +20,16 @@ public class Start {
 		DrawFace drawFace = new DrawFace();
 		window.assignDrawMethod(drawFace);
 
-		DrawThread drawThread = new DrawThread(window,100);
+		DrawThread drawThread = new DrawThread(window,500);
 		drawThread.start();
 
 		Planet gaia = new Planet(32,100);
 		PlanetFormer.generateTopology(gaia);
-		WeatherCreater.generateWeather(gaia);
+		//WeatherCreater.generateWeather(gaia);
 		Face faceZero = gaia.getFace(0);
 		drawFace.setFace(faceZero);
 
-		MeteorologyThread meteorologyThread = new MeteorologyThread(gaia,100);
-		meteorologyThread.start();
+		//MeteorologyThread meteorologyThread = new MeteorologyThread(gaia,100);
+		//meteorologyThread.start();
 	}
 }

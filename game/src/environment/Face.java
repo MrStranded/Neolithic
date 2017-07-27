@@ -131,7 +131,26 @@ public class Face {
 		Tile[] neighbours = new Tile[3]; // there are always exactly three neighbours
 		int n=0;
 		// neighbours on same face
-		for (int x=0;x<size;x++) {
+		// calculating the position is way faster than traversing the array
+
+		int nx = size-tx-1;
+		int ny = size-ty-1;
+
+		if (tiles[tx][ty].isFlipped() != tiles[nx][ny].isFlipped()) { // the first neighbour is only correct when it has a different flip (on other side of array)
+			neighbours[n] = tiles[nx][ny];
+			n++;
+		}
+		if (inBounds(nx+1,ny)) { // second neighbour - insecure to exist
+			neighbours[n] = tiles[nx+1][ny];
+			n++;
+		}
+		if (inBounds(nx,ny+1)) { // third neighbour - insecure to exist
+			neighbours[n] = tiles[nx][ny+1];
+			n++;
+		}
+
+		// redundant code
+		/*for (int x=0;x<size;x++) {
 			for (int y=0;y<size;y++) {
 				if (tiles[x][y].isFlipped() != tiles[tx][ty].isFlipped()) {
 					int dx = tiles[x][y].getVX() - tiles[tx][ty].getVX();
@@ -149,7 +168,8 @@ public class Face {
 					}
 				}
 			}
-		}
+		}*/
+
 		// neighbours on other faces
 		if ((n<3)&&(isOnEdge(tx,ty))) {
 			Face[] neighbourFaces = planet.getNeighbours(this);

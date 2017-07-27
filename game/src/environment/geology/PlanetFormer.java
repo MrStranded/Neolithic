@@ -21,10 +21,10 @@ public class PlanetFormer {
 
 	private static void generateFaceTopology(Face face) {
 		int size = face.getSize();
-		int hills = 16;
+		int hills = 8;
 		int hillSize = 12;
 		int stepSize = 2;
-		int elevation = 100;
+		int elevation = 30;
 
 		int x=0,y=0;
 
@@ -58,7 +58,7 @@ public class PlanetFormer {
 		if (tile.getHeight() < level) {
 			tile.setHeight(level);
 
-			level -= ((Math.random()+0.5d)*20);
+			level -= ((Math.random()+0.5d)*8);
 			if (level > 0) {
 				Tile[] neighbours = face.getNeighbours(tile.getX(), tile.getY());
 				for (Tile t : neighbours) {
