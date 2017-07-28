@@ -35,7 +35,7 @@ public class PlanetFormer extends Thread {
 				if (face != null) {
 					for (int x=0; x<face.getSize(); x++) {
 						for (int y=0; y<face.getSize(); y++) {
-							if (Math.random()>0.95d) {
+							if ((face.getTile(x,y).getHeight()>100) && (Math.random()>0.95d)) {
 								face.getTile(x,y).addEntity(new Entity(face.getTile(x,y),'T'));
 								try {
 									sleep(5);
@@ -66,7 +66,7 @@ public class PlanetFormer extends Thread {
 		int hills = 2 + (int) (Math.random()*5);
 		int hillSize = 8 + (int) (Math.random()*8);
 		int stepSize = 1 + (int) (Math.random()*2);
-		int elevation = 100 + (int) (Math.random()*156);
+		int elevation = 156 + (int) (Math.random()*100);
 
 		int x=0,y=0;
 

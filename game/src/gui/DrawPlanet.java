@@ -111,9 +111,16 @@ public class DrawPlanet extends Draw {
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% scaling it to fit the height
 
+			boolean water = false;
 			for (int i = 0; i < 3; i++) {
 				double mh = 1000d;
-				double f = (h+mh)/(255d+mh);
+				double f;
+				if (h>100) {
+					f = (h+mh)/(255d+mh);
+				} else {
+					f = (100+mh)/(255d+mh);
+					water = true;
+				}
 				px[i] = midx + (px[i]-midx)*f;
 				py[i] = midy + (py[i]-midy)*f;
 			}
@@ -135,6 +142,13 @@ public class DrawPlanet extends Draw {
 			green = green / 2 + (int) ((double) (green / 2) * (double) h / 255d);
 			int blue = tile.getBlue();
 			blue = blue / 2 + (int) ((double) (blue / 2) * (double) h / 255d);
+
+			if (water) {
+				red = 20 + (int) (Math.random()*5);
+				green = 50 + (int) (Math.random()*10);
+				blue = 120 + (int) (Math.random()*5);
+			}
+
 			g.setColor(new Color(red, green, blue));
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% drawing the tile

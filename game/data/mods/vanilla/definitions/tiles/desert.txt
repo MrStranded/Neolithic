@@ -1,0 +1,6 @@
+tSand {
+	onStart {
+		name = "Sand";
+		color = [180,250],[160,220],[80,150];
+	}
+}

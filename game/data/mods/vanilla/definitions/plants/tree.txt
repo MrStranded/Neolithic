@@ -1,0 +1,20 @@
+pTree {
+
+	onStart {
+		name = "Tree";
+		color = 50,150,20;
+	
+		char = ["T","t"];
+
+		ticks = 3;
+	}
+
+	onTick {
+		char = ["i","I","l"];
+
+		neighbour = getEntity(0);
+		if (neighbour == pTree) {
+			move (0);
+		}
+	}
+}
