@@ -2,15 +2,21 @@ pTree {
 
 	onStart {
 		name = "Tree";
-		color = 50,150,20;
+		color = [50,150,20];
 	
-		char = ["T","t"];
+		char = "T";
 
 		ticks = 3;
+		growthstage = 1;
 	}
 
 	onTick {
-		char = ["i","I","l"];
+		char = growthstage;
+
+		growthstage = growthstage + 1;
+		if (growthstage > 1) {
+			char = "G";
+		}
 
 		neighbour = getEntity(0);
 		if (neighbour == pTree) {

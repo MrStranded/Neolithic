@@ -1,0 +1,12 @@
+tSand {
+	onStart {
+		name = "Sand";
+		color = [0,0,255];
+
+		ticks = 2;
+	}
+
+	onTick {
+		color = [random(40,60),random(70,100),random(100,150)];
+	}
+}
