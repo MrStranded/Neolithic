@@ -4,6 +4,7 @@ import environment.geology.PlanetFormer;
 import gui.DrawFace;
 import gui.DrawPlanet;
 import gui.Window;
+import parser.Parser;
 import threads.DrawThread;
 
 /**
@@ -15,12 +16,20 @@ public class Start {
 
 	public static void main (String[] args) {
 
+		// ------------------- window setup
+
 		Window window = new Window("Neolithic",1200,1000);
 		DrawPlanet drawPlanet = new DrawPlanet();
 		window.assignDrawMethod(drawPlanet);
 
 		DrawThread drawThread = new DrawThread(window,42);
 		drawThread.start();
+
+		// ------------------- loading
+
+		Parser.loadMods(Parser.getModList());
+
+		// ------------------- planet creation
 
 		Planet gaia = new Planet(32,18);
 
