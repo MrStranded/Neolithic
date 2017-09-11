@@ -6,6 +6,7 @@ import gui.DrawPlanet;
 import gui.Window;
 import parser.Parser;
 import threads.DrawThread;
+import threads.ParserThread;
 
 /**
  * Created by Michael on 14.06.2017.
@@ -27,7 +28,8 @@ public class Start {
 
 		// ------------------- loading
 
-		Parser.loadMods(Parser.getModList());
+		ParserThread parserThread = new ParserThread();
+		parserThread.start();
 
 		// ------------------- planet creation
 

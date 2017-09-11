@@ -22,8 +22,9 @@ public class Tile {
 
 	private int humidity = 0;
 	private ArrayList<RainDrop> rain = new ArrayList<RainDrop>();
+	private ConcurrentLinkedDeque<Entity> entities = new ConcurrentLinkedDeque<Entity>(); // contained entities
 
-	private ConcurrentLinkedDeque<Entity> entities = new ConcurrentLinkedDeque<Entity>();
+	private Entity self; // the entity that is responsible for the tile itself
 
 	/**
 	 * Creates a Tile.
@@ -72,13 +73,21 @@ public class Tile {
 	// ################################ Modification #####################################
 	// ###################################################################################
 
-	public void addEntity (Entity entity) {
+	public void addEntity(Entity entity) {
 		entities.add(entity);
 	}
 
 	// ###################################################################################
 	// ################################ Getters & Setters ################################
 	// ###################################################################################
+
+
+	public ConcurrentLinkedDeque<Entity> getEntities() {
+		return entities;
+	}
+	public void setEntities(ConcurrentLinkedDeque<Entity> entities) {
+		this.entities = entities;
+	}
 
 	public int getRed() {
 		return red;
@@ -99,13 +108,6 @@ public class Tile {
 	}
 	public void setBlue(int blue) {
 		this.blue = blue;
-	}
-
-	public ConcurrentLinkedDeque<Entity> getEntities() {
-		return entities;
-	}
-	public void setEntities(ConcurrentLinkedDeque<Entity> entities) {
-		this.entities = entities;
 	}
 
 	/**getX returns the technical x location on the tile array of the face*/

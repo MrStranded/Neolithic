@@ -1,6 +1,6 @@
 pTree {
 
-	onStart {
+	onCreate {
 		name = "Tree";
 		color = [50,150,20];
 	
@@ -14,13 +14,13 @@ pTree {
 		char = growthstage;
 
 		growthstage = growthstage + 1;
-		if (growthstage > 1) {
+		if:(growthstage > 1) {
 			char = "G";
 		}
 
-		neighbour = getEntity(0);
-		if (neighbour == pTree) {
-			move (0);
+		neighbour = getEntity:(0);
+		if:(getClass:(neighbour) != "pTree") {
+			move:(0);
 		}
 	}
 }

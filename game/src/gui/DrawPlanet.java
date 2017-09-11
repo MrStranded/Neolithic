@@ -1,6 +1,7 @@
 package gui;
 
 import environment.world.*;
+import parser.Parser;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -28,6 +29,11 @@ public class DrawPlanet extends Draw {
 	 * The big master method for drawing Faces. Too big as it is now.
 	 */
 	public void paintComponent(Graphics g) {
+
+		if (!Parser.isFinished()) {
+			System.out.println();
+			System.out.println("DrawPlanet.paintComponent.showParserProgress: "+Parser.getProgress());
+		}
 
 		midx = width/2;
 		midy = height/2;

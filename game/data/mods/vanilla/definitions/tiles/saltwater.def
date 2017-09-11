@@ -1,5 +1,5 @@
-tSand {
-	onStart {
+tSaltwater {
+	onCreate {
 		name = "Sand";
 		color = [0,0,255];
 
@@ -7,6 +7,6 @@ tSand {
 	}
 
 	onTick {
-		color = [random(40,60),random(70,100),random(100,150)];
+		color = [random:[40,60],random:[70,100],random:[100,150]];
 	}
 }

@@ -1,9 +1,12 @@
 package parser;
 
+import data.Data;
+import enums.script.Sign;
+import environment.world.Entity;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Michael on 08.08.2017.
@@ -87,6 +90,7 @@ public class Parser {
 			}
 			loadedMods++;
 		}
+		finished = true;
 	}
 
 	/**
@@ -117,13 +121,60 @@ public class Parser {
 	 * Loads a certain file.
 	 */
 	private static void loadFile(File file) {
-		System.out.println("loading "+file.getName());
+		System.out.println();
+		System.out.println("Loading File: "+file.getName());
 		try {
 			FileReader fileReader = new FileReader(file);
 
 			try {
+
+				String codeBuilder = "";
+				char currentChar = 0;
+
+				int blockCounter = 0;
+				Deque<ScriptBlock> scriptBlockStack = new LinkedList<>();
+
 				while (fileReader.ready()) {
-					System.out.print((char) fileReader.read());
+					//System.out.print((char) fileReader.read());
+
+					currentChar = (char) fileReader.read();
+
+					if (currentChar == Sign.OPEN_BLOCK.getChar()) { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% start of new block
+						//System.out.println("startet block : "+codeBuilder);
+						blockCounter++;
+						scriptBlockStack.push(new ScriptBlock(codeBuilder.trim()));
+
+						codeBuilder = "";
+					} else if (currentChar == Sign.CLOSE_BLOCK.getChar()) { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end of a block
+						//System.out.println("ended block");
+						blockCounter--;
+						ScriptBlock scriptBlock = scriptBlockStack.pop();
+						if (scriptBlockStack.peekFirst() != null) {
+							//System.out.println("adds block to another");
+							scriptBlockStack.peekFirst().addScriptBlock(scriptBlock);
+						} else {
+							//System.out.println("adds block to a new entity");
+							Entity entity = Data.getOrCreateEntity(scriptBlock.toString().trim());
+							entity.addScriptBlock(scriptBlock);
+						}
+
+						codeBuilder = "";
+					} else if (currentChar == Sign.END_OF_BLOCK.getChar()) { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end of a line
+						//System.out.println("end of a line: "+codeBuilder);
+						if (!codeBuilder.trim().equals("")) {
+							scriptBlockStack.peekFirst().addScriptBlock(new ScriptBlock(codeBuilder));
+						}
+
+						codeBuilder = "";
+					} else { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% a "normal" char
+						if (currentChar >= 32) { // no special chars please
+							codeBuilder = codeBuilder + currentChar;
+						}
+					}
+				}
+
+				if (blockCounter != 0) {
+					System.out.println("ERROR! Block brackets "+Sign.OPEN_BLOCK.getChar()+" and "+Sign.CLOSE_BLOCK.getChar()+" do not match up in file "+file.getName());
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -142,7 +193,8 @@ public class Parser {
 	public static double getProgress() {
 		if (modsToLoad < 1) modsToLoad = 1;
 		if (filesToLoad < 1) filesToLoad = 1;
-		return ((double) loadedMods / (double) modsToLoad) + ((double) loadedFiles / (double) filesToLoad / (double) modsToLoad);
+		double progress = ((double) loadedMods / (double) modsToLoad) + ((double) loadedFiles / (double) filesToLoad / (double) modsToLoad);
+		return (progress>1?1:progress);
 	}
 
 	// ###################################################################################

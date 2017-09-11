@@ -3,6 +3,7 @@ package gui;
 import environment.world.Entity;
 import environment.world.Face;
 import environment.world.Tile;
+import parser.Parser;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -25,6 +26,7 @@ public class DrawFace extends Draw {
 	 * The big master method for drawing Faces. Too big as it is now.
 	 */
 	public void paintComponent(Graphics g) {
+
 		if (face != null) {
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% initializing necessary variables concerning orientation and so forth
