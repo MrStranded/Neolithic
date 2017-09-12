@@ -42,11 +42,36 @@ public class Value {
 	// ################################ Getters & Setters ################################
 	// ###################################################################################
 
+
+	public DataType getDataType() {
+		return dataType;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public double getNumber() {
+		return number;
+	}
+
+	public Entity getObject() {
+		return object;
+	}
+
+	public Command getCommand() {
+		return command;
+	}
+
+	public Variable getVariable() {
+		return variable;
+	}
+
 	public String toString() {
 		String str = "";
 		if (dataType!=null) str += dataType.name() + "|";
 		switch (dataType) {
-			case TEXT:
+			case TEXT: case EVENT:
 				str += text;
 				break;
 			case NUMBER:
@@ -59,7 +84,11 @@ public class Value {
 				if (command != null) str += command.toString();
 				break;
 			case VARIABLE:
-				if (variable != null) str += variable.toString();
+				if (variable != null) {
+					str += variable.toString();
+				} else {
+					str += "?"+text+"?"; // a value that did not yet find a variable but knows the name already
+				}
 				break;
 		}
 		return str;

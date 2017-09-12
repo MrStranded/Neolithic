@@ -10,6 +10,7 @@ public enum DataType {
 	TEXT,
 	NUMBER,
 	OBJECT,
+	EVENT,
 	COMMAND,
 	VARIABLE;
 

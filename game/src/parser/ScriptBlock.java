@@ -14,8 +14,8 @@ public class ScriptBlock {
 	private Expression expression = null;
 	private ConcurrentLinkedDeque<ScriptBlock> scriptBlocks = null;
 
-	public ScriptBlock(String code) {
-		expression = ExpressionBuilder.parseLine(code);
+	public ScriptBlock(String code, boolean blockStart) {
+		expression = ExpressionBuilder.parseLine(code,blockStart);
 	}
 
 	// ###################################################################################
@@ -30,6 +30,10 @@ public class ScriptBlock {
 	// ###################################################################################
 	// ################################ Getters & Setters ################################
 	// ###################################################################################
+
+	public Expression getExpression() {
+		return expression;
+	}
 
 	public ConcurrentLinkedDeque<ScriptBlock> getScriptBlocks() {
 		return scriptBlocks;

@@ -1,6 +1,7 @@
 package data;
 
 import environment.world.Entity;
+import environment.world.Planet;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -13,6 +14,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class Data {
 
 	private static ConcurrentLinkedDeque<Entity> protoEntities = new ConcurrentLinkedDeque<Entity>();
+	private static Planet planet = null;
 
 	// ###################################################################################
 	// ################################ Modification #####################################
@@ -43,5 +45,12 @@ public class Data {
 	}
 	public static void setProtoEntities(ConcurrentLinkedDeque<Entity> protoEntities) {
 		Data.protoEntities = protoEntities;
+	}
+
+	public static Planet getPlanet() {
+		return planet;
+	}
+	public static void setPlanet(Planet planet) {
+		Data.planet = planet;
 	}
 }

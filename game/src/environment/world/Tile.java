@@ -81,6 +81,12 @@ public class Tile {
 	// ################################ Getters & Setters ################################
 	// ###################################################################################
 
+	public Entity getSelf() {
+		return self;
+	}
+	public void setSelf(Entity self) {
+		this.self = self;
+	}
 
 	public ConcurrentLinkedDeque<Entity> getEntities() {
 		return entities;

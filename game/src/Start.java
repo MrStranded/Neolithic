@@ -1,9 +1,11 @@
+import data.Data;
 import environment.world.Face;
 import environment.world.Planet;
 import environment.geology.PlanetFormer;
 import gui.DrawFace;
 import gui.DrawPlanet;
 import gui.Window;
+import parser.EventHandler;
 import parser.Parser;
 import threads.DrawThread;
 import threads.ParserThread;
@@ -28,17 +30,22 @@ public class Start {
 
 		// ------------------- loading
 
-		ParserThread parserThread = new ParserThread();
-		parserThread.start();
+		new ParserThread().start();
 
 		// ------------------- planet creation
 
 		Planet gaia = new Planet(32,18);
 
 		drawPlanet.setPlanet(gaia);
+		Data.setPlanet(gaia);
 
-		PlanetFormer.setPlanet(gaia);
-		new PlanetFormer().start();
+		while (!Parser.isFinished()) {
+			System.out.println(Parser.getProgress());
+		}
+		EventHandler.call("onStart",null);
+
+//		PlanetFormer.setPlanet(gaia);
+//		new PlanetFormer().start();
 
 		//WeatherCreater.generateWeather(gaia);
 		//MeteorologyThread meteorologyThread = new MeteorologyThread(gaia,100);

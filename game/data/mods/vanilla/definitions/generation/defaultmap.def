@@ -1,0 +1,20 @@
+onStart {
+	fillWorld:"tSaltwater";
+
+	i = 0;
+	for {
+		face = random:[0,19];
+		length = worldSize;
+		x = random:[0,length-1];
+		y = random:[0,length-1];
+
+		tile = getTile:[face,x,y];
+		setTile:[tile,"tSand"];
+		setHeight:[tile,120];
+
+		i = i+1;
+		if:(i<10){
+			call:"for";
+		}
+	}
+}

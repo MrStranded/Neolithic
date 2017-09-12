@@ -14,9 +14,28 @@ public class Variable {
 	private Value value = null;
 	private Variable[] array = null;
 
+	public Variable(String name,Expression expression) {
+		this.name = name;
+
+		if (expression.getArray() != null) {
+			array = new Variable[expression.getArray().size()];
+			int i=0;
+			for (Expression exp : expression.getArray()) {
+				array[i] = new Variable(null,exp);
+				i++;
+			}
+		} else {
+			value = expression.getValue();
+		}
+	}
+
 	// ###################################################################################
 	// ################################ Getters & Setters ################################
 	// ###################################################################################
+
+	public String getName() {
+		return name;
+	}
 
 	public Value getValue() {
 		return getValue(new int[0],0);
@@ -45,6 +64,20 @@ public class Variable {
 		} else {
 			return value;
 		}
+	}
+
+	public String toString() {
+		String str = "";
+		if (array != null) {
+			str += "[";
+			for (Variable var : array) {
+				str += var.toString();
+			}
+			str += "]";
+		} else {
+			str = getValue().toString();
+		}
+		return str;
 	}
 
 }

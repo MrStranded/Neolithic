@@ -18,9 +18,8 @@ pTree {
 			char = "G";
 		}
 
-		neighbour = getEntity:(0);
-		if:(getClass:(neighbour) != "pTree") {
-			move:(0);
+		if:isFree:0 {
+			move:0;
 		}
 	}
 }

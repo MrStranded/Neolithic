@@ -3,6 +3,7 @@ package parser;
 import data.Data;
 import enums.script.Sign;
 import environment.world.Entity;
+import log.Log;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
@@ -91,6 +92,7 @@ public class Parser {
 			loadedMods++;
 		}
 		finished = true;
+		Log.status();
 	}
 
 	/**
@@ -121,8 +123,8 @@ public class Parser {
 	 * Loads a certain file.
 	 */
 	private static void loadFile(File file) {
-		System.out.println();
-		System.out.println("Loading File: "+file.getName());
+		Log.setCurrentFile(file.getPath()); // for better error retrieval
+		Log.setCurrentLine(1);
 		try {
 			FileReader fileReader = new FileReader(file);
 
@@ -142,7 +144,7 @@ public class Parser {
 					if (currentChar == Sign.OPEN_BLOCK.getChar()) { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% start of new block
 						//System.out.println("startet block : "+codeBuilder);
 						blockCounter++;
-						scriptBlockStack.push(new ScriptBlock(codeBuilder.trim()));
+						scriptBlockStack.push(new ScriptBlock(codeBuilder.trim(),true));
 
 						codeBuilder = "";
 					} else if (currentChar == Sign.CLOSE_BLOCK.getChar()) { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end of a block
@@ -154,7 +156,7 @@ public class Parser {
 							scriptBlockStack.peekFirst().addScriptBlock(scriptBlock);
 						} else {
 							//System.out.println("adds block to a new entity");
-							Entity entity = Data.getOrCreateEntity(scriptBlock.toString().trim());
+							Entity entity = Data.getOrCreateEntity(scriptBlock.getExpression().getValue().getText());
 							entity.addScriptBlock(scriptBlock);
 						}
 
@@ -162,7 +164,7 @@ public class Parser {
 					} else if (currentChar == Sign.END_OF_BLOCK.getChar()) { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end of a line
 						//System.out.println("end of a line: "+codeBuilder);
 						if (!codeBuilder.trim().equals("")) {
-							scriptBlockStack.peekFirst().addScriptBlock(new ScriptBlock(codeBuilder));
+							scriptBlockStack.peekFirst().addScriptBlock(new ScriptBlock(codeBuilder, false));
 						}
 
 						codeBuilder = "";
@@ -170,11 +172,12 @@ public class Parser {
 						if (currentChar >= 32) { // no special chars please
 							codeBuilder = codeBuilder + currentChar;
 						}
+						if (currentChar == 10) Log.setCurrentLine(Log.getCurrentLine()+1);
 					}
 				}
 
 				if (blockCounter != 0) {
-					System.out.println("ERROR! Block brackets "+Sign.OPEN_BLOCK.getChar()+" and "+Sign.CLOSE_BLOCK.getChar()+" do not match up in file "+file.getName());
+					Log.error("Block brackets "+Sign.OPEN_BLOCK.getChar()+" and "+Sign.CLOSE_BLOCK.getChar()+" do not match up");
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

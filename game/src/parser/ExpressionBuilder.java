@@ -4,6 +4,7 @@ import enums.script.Command;
 import enums.script.DataType;
 import enums.script.Operator;
 import enums.script.Sign;
+import log.Log;
 
 import java.util.ArrayList;
 import java.util.Deque;
@@ -16,13 +17,17 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class ExpressionBuilder {
 
 	private static String[] operators = getOperatorArray();
+	private static String originalCode = "";
+	private static boolean blockStart = false;
 
 	/**
 	 * Entry to split a piece of code into a construct of expressions.
 	 */
-	public static Expression parseLine (String code) {
+	public static Expression parseLine (String code,boolean bS) {
 		Expression expression = new Expression();
 
+		originalCode = code;
+		blockStart = bS;
 		splitCode(expression,code);
 
 		return expression;
@@ -33,13 +38,14 @@ public class ExpressionBuilder {
 	 * When nothing is found, then the code is interpreted as a value and added to the parent expression.
 	 */
 	private static void splitCode (Expression parent, String code) {
-		System.out.println("splitCode: "+code);
 		code = code.trim();
 
 		boolean inString = false;
 
 		int pos = 0;
 		int l = code.length();
+
+		Expression left = null;
 
 		while (pos < l) {
 			char currentChar = code.charAt(pos);
@@ -52,24 +58,28 @@ public class ExpressionBuilder {
 
 				Operator operator = getExistingOperator(code,pos);
 				if (operator!=null) { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% operator found! -> split
-					Expression left = new Expression();
+					if (left == null) {
+						left = new Expression();
+						splitCode(left,code.substring(0,pos));
+					}
 					Expression right = new Expression();
+					splitCode(right,code.substring(pos+operator.toString().length(),code.length()));
 
 					parent.setLeft(left);
 					parent.setRight(right);
 					parent.setOperator(operator);
-
-					splitCode(left,code.substring(0,pos));
-					splitCode(right,code.substring(pos+operator.toString().length(),code.length()));
 					return;
 
-//				} else if (currentChar == Sign.OPEN_EXPRESSION.getChar()) { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% separate expression
-//					int expressionEnd = findExpressionEnd(code,pos,Sign.OPEN_EXPRESSION.getChar(),Sign.CLOSE_EXPRESSION.getChar());
-//
-//					if (expressionEnd>=0) {
-//						splitCode(parent,code.substring(pos+1,expressionEnd));
-//						return;
-//					}
+				} else if (currentChar == Sign.OPEN_EXPRESSION.getChar()) { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% separate expression
+					int expressionEnd = findExpressionEnd(code,pos,Sign.OPEN_EXPRESSION.getChar(),Sign.CLOSE_EXPRESSION.getChar());
+
+					if (expressionEnd>=0) {
+						left = new Expression();
+						splitCode(left,code.substring(pos+1,expressionEnd));
+						pos = expressionEnd+1;
+					} else {
+						Log.error("number of open brackets '"+Sign.OPEN_EXPRESSION.getChar()+"' and close brackets '"+Sign.CLOSE_EXPRESSION.getChar()+"' don't match up in line: |-> "+originalCode);
+					}
 
 				} else if (currentChar == Sign.OPEN_ARRAY.getChar()) { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% start of an array
 					int expressionEnd = findExpressionEnd(code,pos,Sign.OPEN_ARRAY.getChar(),Sign.CLOSE_ARRAY.getChar());
@@ -84,8 +94,23 @@ public class ExpressionBuilder {
 			pos++;
 		}
 
-		// When code did not exit method yet, then we deal with a raw value.
-		parent.setValue(getValueFromCode(code));
+		if (left != null) {
+			// There are useless brackets (left != null but right == null)
+			if ((left.getLeft() != null)&&(left.getRight() != null)) {
+				parent.setLeft(left.getLeft());
+				parent.setRight(left.getRight());
+				parent.setOperator(left.getOperator());
+			} else if (left.getArray() != null) {
+				parent.setArray(left.getArray());
+			} else {
+				parent.setValue(left.getValue());
+			}
+		} else {
+			// When code did not exit method yet, then we deal with a raw value.
+			parent.setValue(getValueFromCode(code));
+		}
+
+		blockStart = false; // only the first expression may be an event. otherwise it's a variable
 	}
 
 	/**
@@ -93,21 +118,48 @@ public class ExpressionBuilder {
 	 */
 	private static Value getValueFromCode(String code) {
 		if (code==null) return null;
+		code = code.trim();
 
 		// ------- check for commands
 		for (Command command : Command.values()) {
-			//if ()
+			if (code.equals(command.toString())) {
+				return new Value(DataType.COMMAND,command);
+			}
 		}
 
-		return new Value(DataType.TEXT,code);
-		//return null;
+		// ------- check for strings
+		if (code.charAt(0) == Sign.QUOTATION_MARK.getChar()) {
+			return new Value(DataType.TEXT,code.substring(1,code.length()-1));
+		}
+
+		// ------- check for numbers
+		int numberOfDots = 0;
+		boolean onlyNumbers = true;
+		for (char c : code.toCharArray()) {
+			if ((c!=Sign.DOT.getChar()) && ((c<48) || (c>57))) {
+				onlyNumbers = false;
+				break;
+			} else if (c==Sign.DOT.getChar()) { // there is a dot!
+				numberOfDots++;
+			}
+		}
+		if ((onlyNumbers) && (numberOfDots <= 1)) {
+			return new Value(DataType.NUMBER,Double.parseDouble(code));
+		}
+
+		// ------- check whether expression stands in front of scriptblock
+		if (blockStart) {
+			return new Value(DataType.EVENT,code);
+		}
+
+		// ------- in the last case we deal with a variable
+		return new Value(DataType.VARIABLE,code);
 	}
 
 	/**
 	 * This method takes a junk of code, splits it into expressions and adds them as a list to the parent.
 	 */
 	public static void splitCodeIntoArray(Expression parent, String code) {
-		System.out.println("splitCodeIntoArray: "+code);
 		ConcurrentLinkedDeque<Expression> expressions = new ConcurrentLinkedDeque<>();
 
 		int expBracketLevel = 0;

@@ -9,6 +9,7 @@ public enum Sign {
 	END_OF_BLOCK (';'),
 	QUOTATION_MARK ('"'),
 	COMMENT ('#'),
+	DOT ('.'),
 
 	OPEN_EXPRESSION ('('),
 	CLOSE_EXPRESSION (')'),

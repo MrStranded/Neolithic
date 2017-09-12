@@ -1,6 +1,7 @@
 package environment.world;
 
 import parser.ScriptBlock;
+import parser.Variable;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 
@@ -19,6 +20,7 @@ public class Entity {
 
 	private ConcurrentLinkedDeque<Entity> entities = new ConcurrentLinkedDeque<Entity>(); // contained entities
 	private ConcurrentLinkedDeque<ScriptBlock> scriptBlocks = null;
+	private ConcurrentLinkedDeque<Variable> variables = null;
 
 	public Entity (Tile tile) {
 		this.tile = tile;
@@ -42,6 +44,20 @@ public class Entity {
 	public void addScriptBlock(ScriptBlock scriptBlock) {
 		if (scriptBlocks == null) scriptBlocks = new ConcurrentLinkedDeque<ScriptBlock>();
 		scriptBlocks.add(scriptBlock);
+	}
+
+	public void addVariable (Variable variable) {
+		variables.add(variable);
+	}
+
+	public Variable tryToGetVariable(String name) {
+		if (name == null) return null;
+		if (variables != null) {
+			for (Variable variable : variables) {
+				if (name.equals(variable.getName())) return variable;
+			}
+		}
+		return null;
 	}
 
 	// ###################################################################################

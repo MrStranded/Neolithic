@@ -2,6 +2,8 @@ package gui;
 
 import environment.world.*;
 import parser.Parser;
+import parser.Value;
+import parser.Variable;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -142,17 +144,27 @@ public class DrawPlanet extends Draw {
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% actually drawing the tile
 
-			int red = tile.getRed();
-			red = red / 2 + (int) ((double) (red / 2) * (double) h / 255d);
-			int green = tile.getGreen();
-			green = green / 2 + (int) ((double) (green / 2) * (double) h / 255d);
-			int blue = tile.getBlue();
-			blue = blue / 2 + (int) ((double) (blue / 2) * (double) h / 255d);
+//			int red = tile.getRed();
+//			red = red / 2 + (int) ((double) (red / 2) * (double) h / 255d);
+//			int green = tile.getGreen();
+//			green = green / 2 + (int) ((double) (green / 2) * (double) h / 255d);
+//			int blue = tile.getBlue();
+//			blue = blue / 2 + (int) ((double) (blue / 2) * (double) h / 255d);
+//
+//			if (water) {
+//				red = 20 + (int) (Math.random()*5);
+//				green = 50 + (int) (Math.random()*10);
+//				blue = 120 + (int) (Math.random()*5);
+//			}
+			int red = 128, green = 128, blue = 128;
 
-			if (water) {
-				red = 20 + (int) (Math.random()*5);
-				green = 50 + (int) (Math.random()*10);
-				blue = 120 + (int) (Math.random()*5);
+			if (tile.getSelf() != null) {
+				Variable color = tile.getSelf().tryToGetVariable("color");
+				if (color != null) {
+					red = (int) (color.getValue(0).getNumber());
+					green = (int) (color.getValue(1).getNumber());
+					blue = (int) (color.getValue(2).getNumber());
+				}
 			}
 
 			g.setColor(new Color(red, green, blue));
