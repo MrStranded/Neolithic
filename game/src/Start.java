@@ -8,6 +8,7 @@ import gui.Window;
 import parser.EventHandler;
 import parser.Parser;
 import threads.DrawThread;
+import threads.EntityThread;
 import threads.ParserThread;
 
 /**
@@ -29,8 +30,8 @@ public class Start {
 		drawThread.start();
 
 		// ------------------- loading
-
-		new ParserThread().start();
+//
+//		new ParserThread().start();
 
 		// ------------------- planet creation
 
@@ -39,16 +40,14 @@ public class Start {
 		drawPlanet.setPlanet(gaia);
 		Data.setPlanet(gaia);
 
-		while (!Parser.isFinished()) {
-			System.out.println(Parser.getProgress());
-		}
-		EventHandler.call("onStart",null);
+//		while (!Parser.isFinished()) {
+//			System.out.println(Parser.getProgress());
+//		}
+//		EventHandler.call("onStart",null);
 
-//		PlanetFormer.setPlanet(gaia);
-//		new PlanetFormer().start();
+		PlanetFormer.setPlanet(gaia);
+		new PlanetFormer().start();
 
-		//WeatherCreater.generateWeather(gaia);
-		//MeteorologyThread meteorologyThread = new MeteorologyThread(gaia,100);
-		//meteorologyThread.start();
+		new EntityThread(gaia,100).start();
 	}
 }

@@ -39,11 +39,6 @@ public class ScriptExecuter {
 			if (leftValue == null) return null;
 			switch (expression.getOperator()) { // going through the operators
 				case LET:
-					if (leftValue.getDataType() == DataType.VARIABLE) {
-						Variable var = new Variable(leftValue.getText(),expression.getRight());
-						parent.addVariable(var);
-						System.out.println("created variable "+var.getName()+": "+var.toString());
-					}
 					break;
 			}
 		}

@@ -1,5 +1,6 @@
 package data;
 
+import data.proto.ProtoAttribute;
 import environment.world.Entity;
 import environment.world.Planet;
 
@@ -13,39 +14,36 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  */
 public class Data {
 
-	private static ConcurrentLinkedDeque<Entity> protoEntities = new ConcurrentLinkedDeque<Entity>();
+	private static ConcurrentLinkedDeque<ProtoAttribute> protoAttributes = new ConcurrentLinkedDeque<>();
 	private static Planet planet = null;
 
 	// ###################################################################################
 	// ################################ Modification #####################################
 	// ###################################################################################
 
-	public static boolean hasEntity(String textID) {
-		for (Entity entity : protoEntities) {
-			if (entity.getTextID().equals(textID)) return true;
-		}
-		return false;
+	public static void addProtoAttribute(ProtoAttribute protoAttribute) {
+		int id = protoAttributes.size();
+		protoAttribute.setId(id);
+		protoAttributes.add(protoAttribute);
 	}
 
-	public static Entity getOrCreateEntity(String textID) {
-		for (Entity entity : protoEntities) {
-			if (entity.getTextID().equals(textID)) return entity;
+	public static ProtoAttribute getProtoAttribute(int id) {
+		for (ProtoAttribute protoAttribute : protoAttributes) {
+			if (protoAttribute.getId() == id) return protoAttribute;
 		}
-		Entity entity = new Entity(textID);
-		protoEntities.add(entity);
-		return entity;
+		return null;
+	}
+
+	public static int getProtoAttributeId(String textId) {
+		for (ProtoAttribute protoAttribute : protoAttributes) {
+			if (textId.equals(protoAttribute.getTextId())) return protoAttribute.getId();
+		}
+		return -1;
 	}
 
 	// ###################################################################################
 	// ################################ Getters & Setters ################################
 	// ###################################################################################
-
-	public static ConcurrentLinkedDeque<Entity> getProtoEntities() {
-		return protoEntities;
-	}
-	public static void setProtoEntities(ConcurrentLinkedDeque<Entity> protoEntities) {
-		Data.protoEntities = protoEntities;
-	}
 
 	public static Planet getPlanet() {
 		return planet;

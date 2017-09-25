@@ -10,7 +10,7 @@ import parser.ScriptBlock;
  *
  * Created by Michael on 14.08.2017.
  */
-public class TestThread extends Thread {
+public class ParserTestThread extends Thread {
 
 	public void run() {
 
@@ -34,14 +34,6 @@ public class TestThread extends Thread {
 
 		System.out.println("");
 		System.out.println("----------- Loaded Entities:");
-		for (Entity entity : Data.getProtoEntities()) {
-			System.out.println("Entity: "+entity.getTextID());
-			if (entity.getScriptBlocks() != null) {
-				for (ScriptBlock scriptBlock : entity.getScriptBlocks()) {
-					writeScriptBlocks(scriptBlock,"-->");
-				}
-			}
-		}
 
 	}
 

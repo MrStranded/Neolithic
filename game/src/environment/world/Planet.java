@@ -1,5 +1,7 @@
 package environment.world;
 
+import java.util.concurrent.ConcurrentLinkedDeque;
+
 /**
  * Created by Michael on 14.06.2017.
  *
@@ -11,6 +13,8 @@ public class Planet {
 	private Point[] worldPoints = new Point[12];
 	private int size; // side length of faces
 	private double radius; // radius of planet
+
+	private ConcurrentLinkedDeque<Entity> entityProcessingQueue = new ConcurrentLinkedDeque<>();
 
 	/**
 	 * Create a Planet with given specifications.
@@ -87,8 +91,21 @@ public class Planet {
 	}
 
 	// ###################################################################################
+	// ################################ Modification #####################################
+	// ###################################################################################
+
+	public void signEntity(Entity entity) {
+		entityProcessingQueue.add(entity);
+	}
+
+	// ###################################################################################
 	// ################################ Getters & Setters ################################
 	// ###################################################################################
+
+
+	public ConcurrentLinkedDeque<Entity> getEntityProcessingQueue() {
+		return entityProcessingQueue;
+	}
 
 	public Face getFace(int i) {
 		if ((faces!=null)&&(i<faces.length)&&(i>=0)) return faces[i];

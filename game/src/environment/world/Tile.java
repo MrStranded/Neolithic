@@ -1,8 +1,6 @@
 package environment.world;
 
-import environment.meteorology.RainDrop;
-
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -20,8 +18,6 @@ public class Tile {
 
 	private int red=255,green=255,blue=255;
 
-	private int humidity = 0;
-	private ArrayList<RainDrop> rain = new ArrayList<RainDrop>();
 	private ConcurrentLinkedDeque<Entity> entities = new ConcurrentLinkedDeque<Entity>(); // contained entities
 
 	private Entity self; // the entity that is responsible for the tile itself
@@ -65,16 +61,22 @@ public class Tile {
 		}
 	}
 
-	public void createRainDrop() {
-		rain.add(new RainDrop());
-	}
-
 	// ###################################################################################
 	// ################################ Modification #####################################
 	// ###################################################################################
 
 	public void addEntity(Entity entity) {
 		entities.add(entity);
+	}
+
+	public void removeEntity(Entity entity) {
+		Iterator<Entity> entityIterator = entities.iterator();
+		while (entityIterator.hasNext()) {
+			if (entityIterator.next() == entity) {
+				entityIterator.remove();
+				return;
+			}
+		}
 	}
 
 	// ###################################################################################
@@ -139,14 +141,4 @@ public class Tile {
 		this.height = height;
 	}
 
-	public int getHumidity() {
-		return humidity;
-	}
-	public void setHumidity(int humidity) {
-		this.humidity = humidity;
-	}
-
-	public ArrayList<RainDrop> getRain() {
-		return rain;
-	}
 }

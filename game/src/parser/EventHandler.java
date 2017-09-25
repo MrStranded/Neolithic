@@ -19,15 +19,6 @@ public class EventHandler {
 		if (event == null) return;
 
 		if (parent == null) {
-			System.out.println("called event: "+event);
-			for (Entity entity : Data.getProtoEntities()) {
-				System.out.println("entity: "+entity.getTextID());
-				if (event.equals(entity.getTextID())) {
-					System.out.println("found entity");
-					ScriptExecuter.executeScriptBlocks(entity.getScriptBlocks(),entity);
-					return;
-				}
-			}
 		}
 	}
 

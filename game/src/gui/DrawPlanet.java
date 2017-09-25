@@ -21,8 +21,8 @@ public class DrawPlanet extends Draw {
 	// ################################ Drawing ##########################################
 	// ###################################################################################
 
-	double anglex = Math.PI/2;
-	double angley = Math.PI/2;
+	double anglex = Math.PI/2+0.5d;
+	double angley = Math.PI/2+0.5d;
 
 	double midx = 0;
 	double midy = 0;
@@ -32,17 +32,20 @@ public class DrawPlanet extends Draw {
 	 */
 	public void paintComponent(Graphics g) {
 
-		if (!Parser.isFinished()) {
-			System.out.println();
-			System.out.println("DrawPlanet.paintComponent.showParserProgress: "+Parser.getProgress());
-		}
+//		if (!Parser.isFinished()) {
+//			System.out.println();
+//			System.out.println("DrawPlanet.paintComponent.showParserProgress: "+Parser.getProgress());
+//		}
 
 		midx = width/2;
 		midy = height/2;
 
 		if (planet != null) {
-			anglex += 0.005d;
-			angley -= 0.0025d;
+			// planet rotation
+			//anglex += 0.005d;
+			//angley += 0.0025d;
+
+			// face corner rotation
 			for (Face face : planet.getFaces()) {
 				if (face != null) {
 					double[][] coordinates = rotateCoordiantes(face);
@@ -120,15 +123,15 @@ public class DrawPlanet extends Draw {
 			// %%%%%%%%%%%%%%%%%%%%%%%% scaling it to fit the height
 
 			boolean water = false;
+			double mh = 1000d;
+			double f;
+			if (h>100) {
+				f = (h+mh)/(255d+mh);
+			} else {
+				f = (100+mh)/(255d+mh);
+				water = true;
+			}
 			for (int i = 0; i < 3; i++) {
-				double mh = 1000d;
-				double f;
-				if (h>100) {
-					f = (h+mh)/(255d+mh);
-				} else {
-					f = (100+mh)/(255d+mh);
-					water = true;
-				}
 				px[i] = midx + (px[i]-midx)*f;
 				py[i] = midy + (py[i]-midy)*f;
 			}
@@ -144,28 +147,30 @@ public class DrawPlanet extends Draw {
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% actually drawing the tile
 
-//			int red = tile.getRed();
-//			red = red / 2 + (int) ((double) (red / 2) * (double) h / 255d);
-//			int green = tile.getGreen();
-//			green = green / 2 + (int) ((double) (green / 2) * (double) h / 255d);
-//			int blue = tile.getBlue();
-//			blue = blue / 2 + (int) ((double) (blue / 2) * (double) h / 255d);
-//
-//			if (water) {
-//				red = 20 + (int) (Math.random()*5);
-//				green = 50 + (int) (Math.random()*10);
-//				blue = 120 + (int) (Math.random()*5);
-//			}
-			int red = 128, green = 128, blue = 128;
+			int red = 220;//tile.getRed();
+			int green = 200;//tile.getGreen();
+			int blue = 40;//tile.getBlue();
 
-			if (tile.getSelf() != null) {
-				Variable color = tile.getSelf().tryToGetVariable("color");
-				if (color != null) {
-					red = (int) (color.getValue(0).getNumber());
-					green = (int) (color.getValue(1).getNumber());
-					blue = (int) (color.getValue(2).getNumber());
-				}
+			if (water) {
+				red = 70;
+				green = 180;
+				blue = 240;
 			}
+
+			red = red / 2 + (int) ((double) (red / 2) * (double) h / 255d);
+			green = green / 2 + (int) ((double) (green / 2) * (double) h / 255d);
+			blue = blue / 2 + (int) ((double) (blue / 2) * (double) h / 255d);
+
+//			int red = 128, green = 128, blue = 128;
+//
+//			if (tile.getSelf() != null) {
+//				Variable color = tile.getSelf().tryToGetVariable("color");
+//				if (color != null) {
+//					red = (int) (color.getValue(0).getNumber());
+//					green = (int) (color.getValue(1).getNumber());
+//					blue = (int) (color.getValue(2).getNumber());
+//				}
+//			}
 
 			g.setColor(new Color(red, green, blue));
 
@@ -177,10 +182,13 @@ public class DrawPlanet extends Draw {
 
 			if ((tile.getEntities()!=null)&&(!tile.getEntities().isEmpty())) {
 				int ex = (ix[0]+ix[1]+ix[2])/3;
-				int ey = (iy[0]+iy[1]+iy[2])/3;
+				int ey = (iy[0]+iy[1]+iy[2])/3+g.getFontMetrics().getHeight()/3;
 
-				g.setColor(Color.GREEN);
 				for (Entity entity : tile.getEntities()) {
+					if (entity.getThumbnail() == 'T') g.setColor(new Color(40,150,0));
+					if (entity.getThumbnail() == 'C') g.setColor(Color.YELLOW);
+					if (entity.getThumbnail() == 'S') g.setColor(Color.PINK);
+
 					g.drawString(String.valueOf(entity.getThumbnail()),ex-g.getFontMetrics().charWidth(entity.getThumbnail())/2,ey);
 				}
 			}

@@ -156,8 +156,8 @@ public class Parser {
 							scriptBlockStack.peekFirst().addScriptBlock(scriptBlock);
 						} else {
 							//System.out.println("adds block to a new entity");
-							Entity entity = Data.getOrCreateEntity(scriptBlock.getExpression().getValue().getText());
-							entity.addScriptBlock(scriptBlock);
+							//Entity entity = Data.getOrCreateEntity(scriptBlock.getExpression().getValue().getText());
+							//entity.addScriptBlock(scriptBlock);
 						}
 
 						codeBuilder = "";

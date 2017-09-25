@@ -1,4 +1,4 @@
-import threads.TestThread;
+import threads.ParserTestThread;
 import threads.ParserThread;
 
 /**
@@ -12,7 +12,7 @@ public class ParserTest {
 
 		new ParserThread().start();
 
-		new TestThread().start();
+		new ParserTestThread().start();
 	}
 
 }

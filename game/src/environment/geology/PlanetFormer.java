@@ -1,5 +1,8 @@
 package environment.geology;
 
+import data.Data;
+import data.personal.Attribute;
+import data.proto.ProtoAttribute;
 import environment.world.Entity;
 import environment.world.Face;
 import environment.world.Planet;
@@ -23,7 +26,42 @@ public class PlanetFormer extends Thread {
 		generateTopology();
 		System.out.println("Planting trees.");
 		generateTrees();
+		System.out.println("Growing life forms.");
+		generateCreatures();
 		System.out.println("Planet formation completed.");
+	}
+
+	/**
+	 * Generates a handful of creatures on face(0).
+	 */
+	public static void generateCreatures() {
+		if ((planet!=null)&&(planet.getFaces()!=null)) {
+			Face face = planet.getFace(0);
+			if (face != null) {
+
+				ProtoAttribute speed = new ProtoAttribute("Speed","attSpeed",false,true);
+				Data.addProtoAttribute(speed);
+				int speedId = Data.getProtoAttributeId(speed.getTextId());
+
+				Tile stile = face.getTile((int) (Math.random()*face.getSize()),(int) (Math.random()*face.getSize()));
+				Entity semira = new Entity(stile,'S');
+				stile.addEntity(semira);
+				planet.signEntity(semira);
+
+				Attribute scSpeed = new Attribute(speedId,(int) (Math.random()*3)+1);
+				semira.addAttribute(scSpeed);
+
+				for (int i=0; i<7; i++) {
+					Tile tile = face.getTile((int) (Math.random()*face.getSize()),(int) (Math.random()*face.getSize()));
+					Entity creature = new Entity(tile,'C');
+					tile.addEntity(creature);
+					planet.signEntity(creature);
+
+					Attribute cSpeed = new Attribute(speedId,(int) (Math.random()*3)+1);
+					creature.addAttribute(cSpeed);
+				}
+			}
+		}
 	}
 
 	/**
@@ -37,11 +75,11 @@ public class PlanetFormer extends Thread {
 						for (int y=0; y<face.getSize(); y++) {
 							if ((face.getTile(x,y).getHeight()>100) && (Math.random()>0.95d)) {
 								face.getTile(x,y).addEntity(new Entity(face.getTile(x,y),'T'));
-								try {
-									sleep(5);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
+//								try {
+//									sleep(5);
+//								} catch (InterruptedException e) {
+//									e.printStackTrace();
+//								}
 							}
 						}
 					}
@@ -78,11 +116,11 @@ public class PlanetFormer extends Thread {
 				y = (y + (int) (stepSize * Math.random())) % size;
 				elevateTile(face, face.getTile(x, y), (int) (elevation*Math.random()));
 
-				try {
-					sleep(10);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+//				try {
+//					sleep(10);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
 			}
 		}
 	}

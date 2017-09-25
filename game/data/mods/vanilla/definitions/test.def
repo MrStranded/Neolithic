@@ -1,0 +1,49 @@
+Tile: tDirt {
+	name: "Dirt";
+	description: "A patch of dirt.";
+}
+
+Fluid: fWater {
+	name: "Water";
+
+	effect: eWater;
+}
+
+Fluid: fSaltWater {
+	name: "Salt water";
+
+	effect: eSalty;
+	effect: eWater;
+}
+
+Effect: eSalty {
+	name: "Salty";
+	attribute: SALT, 1;
+	attribute: THIRST, 3;
+}
+
+Effect: eWater {
+	name: "wet";
+	attribute: FLUID, 1;
+}
+
+Attribute: SALT {
+	name: "Salt";
+}
+Attribute: THIRST {
+	name: "Thirst";
+}
+Attribute: FLUID {
+	name: "fluid";
+	cap: 0,1;
+}
+
+Interaction: iDrink {
+	name: "Drink";
+
+	Condition {
+		target.attribute.==: FLUID,1;
+	}
+	
+	
+}

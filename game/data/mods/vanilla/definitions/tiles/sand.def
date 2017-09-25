@@ -1,6 +1,0 @@
-tSand {
-	onCreate {
-		name = "Sand";
-		color = [random:[180,250],random:[160,220],random:[80,50]];
-	}
-}

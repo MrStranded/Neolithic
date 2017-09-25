@@ -1,7 +1,7 @@
 package environment.world;
 
+import data.personal.Attribute;
 import parser.ScriptBlock;
-import parser.Variable;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 
@@ -20,7 +20,7 @@ public class Entity {
 
 	private ConcurrentLinkedDeque<Entity> entities = new ConcurrentLinkedDeque<Entity>(); // contained entities
 	private ConcurrentLinkedDeque<ScriptBlock> scriptBlocks = null;
-	private ConcurrentLinkedDeque<Variable> variables = null;
+	private ConcurrentLinkedDeque<Attribute> attributes = new ConcurrentLinkedDeque<Attribute>();
 
 	public Entity (Tile tile) {
 		this.tile = tile;
@@ -46,18 +46,16 @@ public class Entity {
 		scriptBlocks.add(scriptBlock);
 	}
 
-	public void addVariable (Variable variable) {
-		variables.add(variable);
+	public void addAttribute(Attribute attribute) {
+		attributes.add(attribute);
 	}
 
-	public Variable tryToGetVariable(String name) {
-		if (name == null) return null;
-		if (variables != null) {
-			for (Variable variable : variables) {
-				if (name.equals(variable.getName())) return variable;
-			}
+	public int getAttribute(int id) {
+		int a = 0;
+		for (Attribute attribute : attributes) {
+			if (attribute.getId() == id) a += attribute.getValue();
 		}
-		return null;
+		return a;
 	}
 
 	// ###################################################################################
