@@ -9,7 +9,8 @@ Object: oTree {
 	color: 64,200,0;
 }
 
-Attribute: attSpeed { name: "Speed"; }
+Attribute: attSpeed { name: "Speed"; mutate:1; }
+Attribute: attSwim { name: "Swims"; flag:1; mutate:0; }
 
 Creature: cMichi {
 	name: "Michi"; #%%%%%%%%%%%%%%%%%%%%%%% just a comment
@@ -18,7 +19,7 @@ Creature: cMichi {
 
 	onTick: sMove;
 
-	dna: attSpeed,1;
+	addToDNA: attSpeed,1;
 }
 
 Creature: cSemira {
@@ -28,5 +29,6 @@ Creature: cSemira {
 
 	onTick: sMove;
 
-	dna: attSpeed,2;
+	addToDNA: attSpeed,2;
+	addToDNA: attSwim,1;
 }

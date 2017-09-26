@@ -1,7 +1,9 @@
 package threads;
 
 import data.Data;
+import data.personal.Attribute;
 import data.proto.Container;
+import data.proto.ProtoAttribute;
 import data.proto.Value;
 import parser.Parser;
 
@@ -50,6 +52,10 @@ public class ParserTestThread extends Thread {
 					i++;
 				}
 			}
+		}
+		ConcurrentLinkedDeque<ProtoAttribute> protoAttributes = Data.getProtoAttributes();
+		for (ProtoAttribute protoAttribute : protoAttributes) {
+			System.out.println("Attribute "+protoAttribute.getName()+","+protoAttribute.getTextId()+"("+protoAttribute.isFlag()+","+protoAttribute.canMutate()+")");
 		}
 
 	}

@@ -1,5 +1,8 @@
 package data.proto;
 
+import data.personal.Attribute;
+import enums.script.ObjectType;
+
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -9,18 +12,25 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  */
 public class Container {
 
-	private String type = "";
+	private ObjectType type = ObjectType.NONE;
 	private String textId = "";
 	private int id = 0;
 
 	private ConcurrentLinkedDeque<Value> values = new ConcurrentLinkedDeque<>();
+	private ConcurrentLinkedDeque<Attribute> attributes = new ConcurrentLinkedDeque<>();
 
-	public Container(String type) {
-		this.type = type;
+	public Container(String s) {
+		ObjectType[] types = ObjectType.values();
+		for (ObjectType t : types) {
+			if (t.toString().equals(s)) {
+				type = t;
+				return;
+			}
+		}
 	}
 
 	// ###################################################################################
-	// ################################ Modification #####################################
+	// ################################ Modification ###### Values #######################
 	// ###################################################################################
 
 	public void addValue(Value value) {
@@ -36,6 +46,9 @@ public class Container {
 		return null;
 	}
 
+	public String getString(String name) {
+		return getString(name,0);
+	}
 	public String getString(String name, int i) {
 		Value value = tryToGet(name);
 		if (value != null) {
@@ -43,6 +56,10 @@ public class Container {
 			if (v != null) return v;
 		}
 		return "";
+	}
+
+	public int getInt(String name) {
+		return getInt(name,0);
 	}
 	public int getInt(String name, int i) {
 		Value value = tryToGet(name);
@@ -53,14 +70,28 @@ public class Container {
 	}
 
 	// ###################################################################################
+	// ################################ Modification ###### Attributes ###################
+	// ###################################################################################
+
+	public void addAttribute(Attribute attribute) {
+		for (Attribute a : attributes) {
+			if (a.getId() == attribute.getId()) {
+				a.setValue(a.getValue() + attribute.getValue());
+				return;
+			}
+		}
+		attributes.add(attribute);
+	}
+	public void addAttribute(int id,int value) {
+		addAttribute(new Attribute(id,value));
+	}
+
+	// ###################################################################################
 	// ################################ Getters & Setters ################################
 	// ###################################################################################
 
-	public String getType() {
+	public ObjectType getType() {
 		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public String getTextId() {

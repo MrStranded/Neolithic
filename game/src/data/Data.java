@@ -1,11 +1,16 @@
 package data;
 
+import data.personal.Attribute;
 import data.proto.Container;
 import data.proto.ProtoAttribute;
+import data.proto.Value;
+import enums.script.ContainerValue;
+import enums.script.ObjectType;
 import environment.world.Entity;
 import environment.world.Planet;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -44,13 +49,37 @@ public class Data {
 	}
 
 	// ###################################################################################
-	// ################################ Modification ###### Attributes ###################
+	// ################################ Modification ###### Containers ###################
 	// ###################################################################################
 
 	public static void addContainer(Container container) {
-		int id = containers.size();
-		container.setId(id);
-		containers.add(container);
+		if (container.getType() == ObjectType.ATTRIBUTE) {  // Attributes are handled separately
+			String name = container.getString(ContainerValue.NAME.toString());
+			boolean flag = (container.getInt(ContainerValue.FLAG.toString()) != 0);
+			boolean mutation = (container.getInt(ContainerValue.MUTATION.toString()) != 0);
+			ProtoAttribute protoAttribute = new ProtoAttribute(name,container.getTextId(),flag,mutation);
+			addProtoAttribute(protoAttribute);
+		} else {                                            // all other kinds of objects
+			int id = containers.size();
+			container.setId(id);
+			containers.add(container);
+		}
+	}
+
+	public static void turnValuesIntoAttributes() {
+		for (Container container : containers) {
+			if (container.getValues().size() == 0) return;
+			Iterator<Value> iterator = container.getValues().iterator();
+			while (iterator.hasNext()) {
+				Value value = iterator.next();
+				if (ContainerValue.DNA.equals(value.getName())) {
+					String textId = value.tryToGetString(0);
+					int val = value.tryToGetInt(1);
+					container.addAttribute(getProtoAttributeId(textId),val);
+					iterator.remove();
+				}
+			}
+		}
 	}
 
 	// ###################################################################################

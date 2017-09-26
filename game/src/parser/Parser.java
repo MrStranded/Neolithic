@@ -1,5 +1,6 @@
 package parser;
 
+import data.Data;
 import log.Log;
 import parser.definitions.DefinitionParser;
 import parser.scripts.ScriptParser;
@@ -89,6 +90,10 @@ public class Parser {
 			}
 			loadedMods++;
 		}
+
+		// finishing moves
+		Data.turnValuesIntoAttributes();
+
 		finished = true;
 		Log.status();
 	}
