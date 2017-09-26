@@ -1,15 +1,10 @@
 import data.Data;
-import environment.world.Face;
-import environment.world.Planet;
 import environment.geology.PlanetFormer;
-import gui.DrawFace;
+import environment.world.Planet;
 import gui.DrawPlanet;
 import gui.Window;
-import parser.EventHandler;
-import parser.Parser;
 import threads.DrawThread;
 import threads.EntityThread;
-import threads.ParserThread;
 
 /**
  * Created by Michael on 14.06.2017.

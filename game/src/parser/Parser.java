@@ -1,11 +1,9 @@
 package parser;
 
-import data.Data;
-import enums.script.Sign;
-import environment.world.Entity;
 import log.Log;
+import parser.definitions.DefinitionParser;
+import parser.scripts.ScriptParser;
 
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 import java.util.*;
 
@@ -108,10 +106,7 @@ public class Parser {
 				if (file.isDirectory()) {
 					files.addAll(getFilesFromDirectory(file));
 				} else {
-					int dot = file.getName().lastIndexOf('.');
-					if ((dot > 0) && (file.getName().substring(dot+1).equals("def"))) {
-						files.add(file);
-					}
+					files.add(file);
 				}
 			}
 		}
@@ -125,69 +120,17 @@ public class Parser {
 	private static void loadFile(File file) {
 		Log.setCurrentFile(file.getPath()); // for better error retrieval
 		Log.setCurrentLine(1);
-		try {
-			FileReader fileReader = new FileReader(file);
 
-			try {
-
-				String codeBuilder = "";
-				char currentChar = 0;
-
-				int blockCounter = 0;
-				Deque<ScriptBlock> scriptBlockStack = new LinkedList<>();
-
-				while (fileReader.ready()) {
-					//System.out.print((char) fileReader.read());
-
-					currentChar = (char) fileReader.read();
-
-					if (currentChar == Sign.OPEN_BLOCK.getChar()) { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% start of new block
-						//System.out.println("startet block : "+codeBuilder);
-						blockCounter++;
-						scriptBlockStack.push(new ScriptBlock(codeBuilder.trim(),true));
-
-						codeBuilder = "";
-					} else if (currentChar == Sign.CLOSE_BLOCK.getChar()) { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end of a block
-						//System.out.println("ended block");
-						blockCounter--;
-						ScriptBlock scriptBlock = scriptBlockStack.pop();
-						if (scriptBlockStack.peekFirst() != null) {
-							//System.out.println("adds block to another");
-							scriptBlockStack.peekFirst().addScriptBlock(scriptBlock);
-						} else {
-							//System.out.println("adds block to a new entity");
-							//Entity entity = Data.getOrCreateEntity(scriptBlock.getExpression().getValue().getText());
-							//entity.addScriptBlock(scriptBlock);
-						}
-
-						codeBuilder = "";
-					} else if (currentChar == Sign.END_OF_BLOCK.getChar()) { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end of a line
-						//System.out.println("end of a line: "+codeBuilder);
-						if (!codeBuilder.trim().equals("")) {
-							scriptBlockStack.peekFirst().addScriptBlock(new ScriptBlock(codeBuilder, false));
-						}
-
-						codeBuilder = "";
-					} else { // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% a "normal" char
-						if (currentChar >= 32) { // no special chars please
-							codeBuilder = codeBuilder + currentChar;
-						}
-						if (currentChar == 10) Log.setCurrentLine(Log.getCurrentLine()+1);
-					}
-				}
-
-				if (blockCounter != 0) {
-					Log.error("Block brackets "+Sign.OPEN_BLOCK.getChar()+" and "+Sign.CLOSE_BLOCK.getChar()+" do not match up");
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+		String extension = "";
+		int i = file.getName().lastIndexOf(".");
+		if (i>=0) {
+			extension = file.getName().substring(i+1);
+			if (extension.equals("def")) {
+				DefinitionParser.parseFile(file);
+			} else if (extension.equals("neo")) {
+				ScriptParser.parseFile(file);
 			}
-
-		} catch (FileNotFoundException e) {
-			System.out.println("Could not load file '"+file.getName()+"'");
-			e.printStackTrace();
 		}
-
 	}
 
 	/**

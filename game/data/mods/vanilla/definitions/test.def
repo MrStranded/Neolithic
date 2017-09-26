@@ -1,49 +1,32 @@
 Tile: tDirt {
+	color: 128,64,32;
 	name: "Dirt";
-	description: "A patch of dirt.";
 }
 
-Fluid: fWater {
-	name: "Water";
-
-	effect: eWater;
+Object: oTree {
+	name: "Tree";
+	char: t;
+	color: 64,200,0;
 }
 
-Fluid: fSaltWater {
-	name: "Salt water";
+Attribute: attSpeed { name: "Speed"; }
 
-	effect: eSalty;
-	effect: eWater;
+Creature: cMichi {
+	name: "Michi"; #%%%%%%%%%%%%%%%%%%%%%%% just a comment
+	char: "M";
+	color: 2#comment#00,200,200;
+
+	onTick: sMove;
+
+	dna: attSpeed,1;
 }
 
-Effect: eSalty {
-	name: "Salty";
-	attribute: SALT, 1;
-	attribute: THIRST, 3;
-}
+Creature: cSemira {
+	name: "Semira";
+	char: S;
+	color: 255,0,255;
 
-Effect: eWater {
-	name: "wet";
-	attribute: FLUID, 1;
-}
+	onTick: sMove;
 
-Attribute: SALT {
-	name: "Salt";
-}
-Attribute: THIRST {
-	name: "Thirst";
-}
-Attribute: FLUID {
-	name: "fluid";
-	cap: 0,1;
-}
-
-Interaction: iDrink {
-	name: "Drink";
-
-	Condition {
-		target.attribute.==: FLUID,1;
-	}
-	
-	
+	dna: attSpeed,2;
 }

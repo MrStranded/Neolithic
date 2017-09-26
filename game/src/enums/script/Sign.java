@@ -2,14 +2,17 @@ package enums.script;
 
 /**
  * Created by Michael on 11.09.2017.
+ *
+ * Holds all the system-relevant chars used in .def files.
  */
 public enum Sign {
 
 	COMMA (','),
-	END_OF_BLOCK (';'),
+	SEMICOLON (';'),
 	QUOTATION_MARK ('"'),
 	COMMENT ('#'),
 	DOT ('.'),
+	COLON (':'),
 
 	OPEN_EXPRESSION ('('),
 	CLOSE_EXPRESSION (')'),

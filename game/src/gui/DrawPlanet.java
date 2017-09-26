@@ -1,12 +1,11 @@
 package gui;
 
-import environment.world.*;
-import parser.Parser;
-import parser.Value;
-import parser.Variable;
+import environment.world.Entity;
+import environment.world.Face;
+import environment.world.Planet;
+import environment.world.Tile;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 
 /**
  * Created by Michael on 11.07.2017.

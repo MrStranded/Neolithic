@@ -1,9 +1,12 @@
 package threads;
 
 import data.Data;
-import environment.world.Entity;
+import data.proto.Container;
+import data.proto.Value;
 import parser.Parser;
-import parser.ScriptBlock;
+
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * This class handles the Parser activities in a seperate thread.
@@ -32,17 +35,23 @@ public class ParserTestThread extends Thread {
 			}
 		}
 
-		System.out.println("");
-		System.out.println("----------- Loaded Entities:");
+		System.out.println("Parser finished.");
 
-	}
-
-	private void writeScriptBlocks (ScriptBlock scriptBlock, String prefix) {
-		System.out.println("ScriptBlock: "+prefix+" "+scriptBlock);
-		if (scriptBlock.getScriptBlocks() != null) {
-			for (ScriptBlock sB : scriptBlock.getScriptBlocks()) {
-				writeScriptBlocks(sB,prefix+"-->");
+		ConcurrentLinkedDeque<Container> containers = Data.getContainers();
+		for (Container container : containers) {
+			System.out.println("Container "+container.getType()+","+container.getTextId()+"("+container.getId()+")");
+			ConcurrentLinkedDeque<Value> values = container.getValues();
+			for (Value value : values) {
+				System.out.println("   Value "+value.getName()+"=");
+				int i = 0;
+				String s = null;
+				while ((s = value.tryToGetString(i))!=null) {
+					System.out.println("      >"+s+"<");
+					i++;
+				}
 			}
 		}
+
 	}
+
 }

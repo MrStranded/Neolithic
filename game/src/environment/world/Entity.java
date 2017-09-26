@@ -1,7 +1,6 @@
 package environment.world;
 
 import data.personal.Attribute;
-import parser.ScriptBlock;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 
@@ -19,7 +18,6 @@ public class Entity {
 	private Tile tile = null;
 
 	private ConcurrentLinkedDeque<Entity> entities = new ConcurrentLinkedDeque<Entity>(); // contained entities
-	private ConcurrentLinkedDeque<ScriptBlock> scriptBlocks = null;
 	private ConcurrentLinkedDeque<Attribute> attributes = new ConcurrentLinkedDeque<Attribute>();
 
 	public Entity (Tile tile) {
@@ -41,11 +39,6 @@ public class Entity {
 		entities.add(entity);
 	}
 
-	public void addScriptBlock(ScriptBlock scriptBlock) {
-		if (scriptBlocks == null) scriptBlocks = new ConcurrentLinkedDeque<ScriptBlock>();
-		scriptBlocks.add(scriptBlock);
-	}
-
 	public void addAttribute(Attribute attribute) {
 		attributes.add(attribute);
 	}
@@ -65,10 +58,6 @@ public class Entity {
 
 	public ConcurrentLinkedDeque<Entity> getEntities() {
 		return entities;
-	}
-
-	public ConcurrentLinkedDeque<ScriptBlock> getScriptBlocks() {
-		return scriptBlocks;
 	}
 
 	public String getTextID() {

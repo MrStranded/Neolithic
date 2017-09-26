@@ -1,5 +1,6 @@
 package data;
 
+import data.proto.Container;
 import data.proto.ProtoAttribute;
 import environment.world.Entity;
 import environment.world.Planet;
@@ -15,10 +16,11 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class Data {
 
 	private static ConcurrentLinkedDeque<ProtoAttribute> protoAttributes = new ConcurrentLinkedDeque<>();
+	private static ConcurrentLinkedDeque<Container> containers = new ConcurrentLinkedDeque<>();
 	private static Planet planet = null;
 
 	// ###################################################################################
-	// ################################ Modification #####################################
+	// ################################ Modification ###### Attributes ###################
 	// ###################################################################################
 
 	public static void addProtoAttribute(ProtoAttribute protoAttribute) {
@@ -42,6 +44,16 @@ public class Data {
 	}
 
 	// ###################################################################################
+	// ################################ Modification ###### Attributes ###################
+	// ###################################################################################
+
+	public static void addContainer(Container container) {
+		int id = containers.size();
+		container.setId(id);
+		containers.add(container);
+	}
+
+	// ###################################################################################
 	// ################################ Getters & Setters ################################
 	// ###################################################################################
 
@@ -50,5 +62,13 @@ public class Data {
 	}
 	public static void setPlanet(Planet planet) {
 		Data.planet = planet;
+	}
+
+	public static ConcurrentLinkedDeque<ProtoAttribute> getProtoAttributes() {
+		return protoAttributes;
+	}
+
+	public static ConcurrentLinkedDeque<Container> getContainers() {
+		return containers;
 	}
 }
