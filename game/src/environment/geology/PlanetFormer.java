@@ -7,13 +7,14 @@ import environment.world.Entity;
 import environment.world.Face;
 import environment.world.Planet;
 import environment.world.Tile;
+import threads.DependantThread;
 
 /**
  * Created by Michael on 11.07.2017.
  *
  * This class forms hills and mountains on a mountain.
  */
-public class PlanetFormer extends Thread {
+public class PlanetFormer extends DependantThread {
 
 	private static Planet planet;
 
@@ -22,6 +23,8 @@ public class PlanetFormer extends Thread {
 	}
 
 	public void run () {
+		waitForDependantThread();
+
 		System.out.println("Starting topology generation.");
 		generateTopology();
 		System.out.println("Planting trees.");

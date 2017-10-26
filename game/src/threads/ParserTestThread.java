@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * Created by Michael on 14.08.2017.
  */
-public class ParserTestThread extends Thread {
+public class ParserTestThread extends DependantThread {
 
 	public void run() {
 
@@ -23,20 +23,7 @@ public class ParserTestThread extends Thread {
 		// ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ parser test ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 		// ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
-		double lastProgress = -1;
-		while (!Parser.isFinished()) {
-			if (lastProgress != Parser.getProgress()) {
-				lastProgress = Parser.getProgress();
-				System.out.println("Parser progress: "+lastProgress);
-			}
-
-			try {
-				sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
+		waitForDependantThread();
 		System.out.println("Parser finished.");
 
 		ConcurrentLinkedDeque<Container> containers = Data.getContainers();

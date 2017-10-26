@@ -10,9 +10,12 @@ public class ParserTest {
 
 		// ------------------- loading
 
-		new ParserThread().start();
+		ParserThread parserThread = new ParserThread();
+		ParserTestThread parserTestThread = new ParserTestThread();
 
-		new ParserTestThread().start();
+		parserThread.start();
+		parserTestThread.setDependant(parserThread);
+		parserTestThread.start();
 	}
 
 }

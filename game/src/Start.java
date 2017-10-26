@@ -5,6 +5,7 @@ import gui.DrawPlanet;
 import gui.Window;
 import threads.DrawThread;
 import threads.EntityThread;
+import threads.ParserThread;
 
 /**
  * Created by Michael on 14.06.2017.
@@ -25,8 +26,9 @@ public class Start {
 		drawThread.start();
 
 		// ------------------- loading
-//
-//		new ParserThread().start();
+
+		ParserThread parserThread = new ParserThread();
+		parserThread.start();
 
 		// ------------------- planet creation
 
@@ -35,13 +37,11 @@ public class Start {
 		drawPlanet.setPlanet(gaia);
 		Data.setPlanet(gaia);
 
-//		while (!Parser.isFinished()) {
-//			System.out.println(Parser.getProgress());
-//		}
-//		EventHandler.call("onStart",null);
-
 		PlanetFormer.setPlanet(gaia);
-		new PlanetFormer().start();
+		PlanetFormer planetFormer = new PlanetFormer();
+
+		planetFormer.setDependant(parserThread);
+		planetFormer.start();
 
 		new EntityThread(gaia,100).start();
 	}
