@@ -1,10 +1,14 @@
 package enums.script;
 
+import enums.TextEnumInterface;
+
 /**
  * Created by Michael on 11.09.2017.
  */
-public enum Command {
+public enum Command implements TextEnumInterface {
 
+	NONE ("none"),
+	
 	MOVE ("move"),
 	IF ("if"),
 	RANDOM ("random"),
@@ -37,4 +41,14 @@ public enum Command {
 		return this.text;
 	}
 
+	public Command get(String name) {
+		Command[] types = Command.values();
+		for (Command t : types) {
+			if (t.toString().equals(name)) {
+				return t;
+			}
+		}
+		return NONE;
+	}
+	
 }

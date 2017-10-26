@@ -1,14 +1,19 @@
 package enums.script;
 
 import com.sun.org.apache.xpath.internal.operations.NotEquals;
+import enums.TextEnumInterface;
+
+import java.time.temporal.Temporal;
 
 /**
  * logical and mathematical operators
  *
  * Created by Michael on 11.09.2017.
  */
-public enum Operator {
+public enum Operator implements TextEnumInterface {
 
+	NONE ("none"),
+	
 	ADDITION ("+"),
 	SUBTRACTION ("-"),
 	MULTIPLICATION ("*"),
@@ -49,4 +54,14 @@ public enum Operator {
 		return this.text;
 	}
 
+	public Operator get(String name) {
+		Operator[] types = Operator.values();
+		for (Operator t : types) {
+			if (t.toString().equals(name)) {
+				return t;
+			}
+		}
+		return NONE;
+	}
+	
 }

@@ -1,10 +1,14 @@
 package enums.script;
 
+import enums.TextEnumInterface;
+
 /**
  * Created by Michael on 26.09.2017.
  */
-public enum ContainerValue {
+public enum ContainerValue implements TextEnumInterface {
 
+	NONE ("none"),
+	
 	// general
 	NAME ("name"),
 
@@ -36,4 +40,15 @@ public enum ContainerValue {
 	public String toString() {
 		return this.text;
 	}
+
+	public ContainerValue get(String name) {
+		ContainerValue[] types = ContainerValue.values();
+		for (ContainerValue t : types) {
+			if (t.toString().equals(name)) {
+				return t;
+			}
+		}
+		return NONE;
+	}
+	
 }

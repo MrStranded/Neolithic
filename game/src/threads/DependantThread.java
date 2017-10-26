@@ -1,6 +1,10 @@
 package threads;
 
 /**
+ * How to use:
+ * - Set the Thread, this Thread depends on with setDependant().
+ * - Call waitForDependantThread() to join the required Thread anywhere in your run() method.
+ *
  * Created by michael1337 on 26/10/17.
  */
 public class DependantThread extends Thread {

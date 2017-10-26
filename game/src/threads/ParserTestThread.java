@@ -31,13 +31,14 @@ public class ParserTestThread extends DependantThread {
 			System.out.println("Container "+container.getType()+","+container.getTextId()+"("+container.getId()+")");
 			ConcurrentLinkedDeque<Value> values = container.getValues();
 			for (Value value : values) {
-				System.out.println("   Value "+value.getName()+"=");
+				System.out.print("   Value "+value.getName()+"=");
 				int i = 0;
 				String s = null;
 				while ((s = value.tryToGetString(i))!=null) {
-					System.out.println("      >"+s+"<");
+					System.out.print(" "+s+",");
 					i++;
 				}
+				System.out.println("");
 			}
 		}
 		ConcurrentLinkedDeque<ProtoAttribute> protoAttributes = Data.getProtoAttributes();

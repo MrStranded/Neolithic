@@ -42,9 +42,7 @@ public class PlanetFormer extends DependantThread {
 			Face face = planet.getFace(0);
 			if (face != null) {
 
-				ProtoAttribute speed = new ProtoAttribute("Speed","attSpeed",false,true);
-				Data.addProtoAttribute(speed);
-				int speedId = Data.getProtoAttributeId(speed.getTextId());
+				int speedId = Data.getProtoAttributeId("attSpeed");
 
 				Tile stile = face.getTile((int) (Math.random()*face.getSize()),(int) (Math.random()*face.getSize()));
 				Entity semira = new Entity(stile,'S');

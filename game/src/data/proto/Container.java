@@ -19,14 +19,8 @@ public class Container {
 	private ConcurrentLinkedDeque<Value> values = new ConcurrentLinkedDeque<>();
 	private ConcurrentLinkedDeque<Attribute> attributes = new ConcurrentLinkedDeque<>();
 
-	public Container(String s) {
-		ObjectType[] types = ObjectType.values();
-		for (ObjectType t : types) {
-			if (t.toString().equals(s)) {
-				type = t;
-				return;
-			}
-		}
+	public Container(String objectType) {
+		type = ObjectType.OBJECT.get(objectType);
 	}
 
 	// ###################################################################################

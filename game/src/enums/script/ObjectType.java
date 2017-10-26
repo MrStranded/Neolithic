@@ -1,9 +1,11 @@
 package enums.script;
 
+import enums.TextEnumInterface;
+
 /**
  * Created by Michael on 26.09.2017.
  */
-public enum ObjectType {
+public enum ObjectType implements TextEnumInterface {
 
 	NONE ("none"),
 	ATTRIBUTE ("Attribute"),
@@ -31,6 +33,16 @@ public enum ObjectType {
 
 	public String toString() {
 		return this.text;
+	}
+
+	public ObjectType get(String name) {
+		ObjectType[] types = ObjectType.values();
+		for (ObjectType t : types) {
+			if (t.toString().equals(name)) {
+				return t;
+			}
+		}
+		return NONE;
 	}
 
 }
