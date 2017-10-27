@@ -1,6 +1,10 @@
 Tile: tDirt {
-	color: 128,64,32;
+	color: 220,200,40;
 	name: "Dirt";
+}
+Fluid: fWater {
+	color: 40,80,140;
+	name: "Water";
 }
 
 Object: oTree {

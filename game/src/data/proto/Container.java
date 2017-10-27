@@ -108,4 +108,11 @@ public class Container {
 	public void setValues(ConcurrentLinkedDeque<Value> values) {
 		this.values = values;
 	}
+
+	public ConcurrentLinkedDeque<Attribute> getAttributes() {
+		return attributes;
+	}
+	public void setAttributes(ConcurrentLinkedDeque<Attribute> attributes) {
+		this.attributes = attributes;
+	}
 }

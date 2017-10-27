@@ -1,5 +1,8 @@
 package gui;
 
+import data.Data;
+import data.proto.Value;
+import engine.EntityValueProcessor;
 import environment.world.Entity;
 import environment.world.Face;
 import environment.world.Planet;
@@ -121,15 +124,8 @@ public class DrawPlanet extends Draw {
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% scaling it to fit the height
 
-			boolean water = false;
 			double mh = 1000d;
-			double f;
-			if (h>100) {
-				f = (h+mh)/(255d+mh);
-			} else {
-				f = (100+mh)/(255d+mh);
-				water = true;
-			}
+			double f = (h+mh)/(255d+mh);
 			for (int i = 0; i < 3; i++) {
 				px[i] = midx + (px[i]-midx)*f;
 				py[i] = midy + (py[i]-midy)*f;
@@ -146,19 +142,19 @@ public class DrawPlanet extends Draw {
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% actually drawing the tile
 
-			int red = 220;//tile.getRed();
-			int green = 200;//tile.getGreen();
-			int blue = 40;//tile.getBlue();
-
-			if (water) {
-				red = 70;
-				green = 180;
-				blue = 240;
-			}
-
-			red = red / 2 + (int) ((double) (red / 2) * (double) h / 255d);
-			green = green / 2 + (int) ((double) (green / 2) * (double) h / 255d);
-			blue = blue / 2 + (int) ((double) (blue / 2) * (double) h / 255d);
+//			int red = 220;//tile.getRed();
+//			int green = 200;//tile.getGreen();
+//			int blue = 40;//tile.getBlue();
+//
+//			if (water) {
+//				red = 70;
+//				green = 180;
+//				blue = 240;
+//			}
+//
+//			red = red / 2 + (int) ((double) (red / 2) * (double) h / 255d);
+//			green = green / 2 + (int) ((double) (green / 2) * (double) h / 255d);
+//			blue = blue / 2 + (int) ((double) (blue / 2) * (double) h / 255d);
 
 //			int red = 128, green = 128, blue = 128;
 //
@@ -171,7 +167,7 @@ public class DrawPlanet extends Draw {
 //				}
 //			}
 
-			g.setColor(new Color(red, green, blue));
+			g.setColor(adjustColorToHeight(EntityValueProcessor.getEntityColor(tile.getSelf()),h));
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% drawing the tile
 
@@ -184,9 +180,7 @@ public class DrawPlanet extends Draw {
 				int ey = (iy[0]+iy[1]+iy[2])/3+g.getFontMetrics().getHeight()/3;
 
 				for (Entity entity : tile.getEntities()) {
-					if (entity.getThumbnail() == 'T') g.setColor(new Color(40,150,0));
-					if (entity.getThumbnail() == 'C') g.setColor(Color.YELLOW);
-					if (entity.getThumbnail() == 'S') g.setColor(Color.PINK);
+					g.setColor(EntityValueProcessor.getEntityColor(entity));
 
 					g.drawString(String.valueOf(entity.getThumbnail()),ex-g.getFontMetrics().charWidth(entity.getThumbnail())/2,ey);
 				}
@@ -236,6 +230,17 @@ public class DrawPlanet extends Draw {
 		}
 
 		return nv;
+	}
+
+	private Color adjustColorToHeight(Color c, int height) {
+		double f = (double) height / 255d;
+		int r = c.getRed();
+		int g = c.getGreen();
+		int b = c.getBlue();
+		r = r / 2 + (int) ((double) (r / 2) * f);
+		g = g / 2 + (int) ((double) (g / 2) * f);
+		b = b / 2 + (int) ((double) (b / 2) * f);
+		return new Color(r,g,b);
 	}
 
 	// ###################################################################################

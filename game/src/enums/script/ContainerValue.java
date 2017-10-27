@@ -18,6 +18,16 @@ public enum ContainerValue implements TextEnumInterface {
 
 	// DNA
 	DNA ("addToDNA"),
+
+	// WorldGen
+	DEFAULTTILE ("defaultTile"),
+	DEFAULTTILEHEIGHT ("defaultTileHeight"),
+
+	DEFAULTFLUID ("defaultFluid"),
+	DEFAULTFLUIDHEIGHT ("defaultFluidHeight"),
+
+	MOUNTAINPERCENT ("mountainPercent"),
+	VALLEYPERCENT ("valleyPercent")
 	;
 
 	// ###################################################################################

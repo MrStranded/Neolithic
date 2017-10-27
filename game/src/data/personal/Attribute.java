@@ -1,5 +1,7 @@
 package data.personal;
 
+import org.w3c.dom.Attr;
+
 /**
  * A 'pointer' to the ProtoAttributes in the Data class.
  *
@@ -13,6 +15,11 @@ public class Attribute {
 	public Attribute(int id,int value) {
 		this.id = id;
 		this.value = value;
+	}
+
+	public Attribute(Attribute other) {
+		id = other.id;
+		value = other.value;
 	}
 
 	// ###################################################################################

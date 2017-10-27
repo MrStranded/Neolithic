@@ -22,7 +22,7 @@ public class Start {
 		DrawPlanet drawPlanet = new DrawPlanet();
 		window.assignDrawMethod(drawPlanet);
 
-		DrawThread drawThread = new DrawThread(window,42);
+		DrawThread drawThread = new DrawThread(window,100);
 		drawThread.start();
 
 		// ------------------- loading

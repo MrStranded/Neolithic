@@ -26,8 +26,7 @@ public class ParserTestThread extends DependantThread {
 		waitForDependantThread();
 		System.out.println("Parser finished.");
 
-		ConcurrentLinkedDeque<Container> containers = Data.getContainers();
-		for (Container container : containers) {
+		for (Container container : Data.getContainers()) {
 			System.out.println("Container "+container.getType()+","+container.getTextId()+"("+container.getId()+")");
 			ConcurrentLinkedDeque<Value> values = container.getValues();
 			for (Value value : values) {
@@ -41,8 +40,8 @@ public class ParserTestThread extends DependantThread {
 				System.out.println("");
 			}
 		}
-		ConcurrentLinkedDeque<ProtoAttribute> protoAttributes = Data.getProtoAttributes();
-		for (ProtoAttribute protoAttribute : protoAttributes) {
+
+		for (ProtoAttribute protoAttribute : Data.getProtoAttributes()) {
 			System.out.println("Attribute "+protoAttribute.getName()+","+protoAttribute.getTextId()+"("+protoAttribute.isFlag()+","+protoAttribute.canMutate()+")");
 		}
 

@@ -2,7 +2,9 @@ package environment.geology;
 
 import data.Data;
 import data.personal.Attribute;
+import data.proto.Container;
 import data.proto.ProtoAttribute;
+import engine.EntityBuilder;
 import environment.world.Entity;
 import environment.world.Face;
 import environment.world.Planet;
@@ -17,13 +19,27 @@ import threads.DependantThread;
 public class PlanetFormer extends DependantThread {
 
 	private static Planet planet;
-
 	public static void setPlanet (Planet p) {
 		planet = p;
 	}
 
+	private static int size = 1;
+
+	private static int defaultTileId = -1;
+	private static int defaultTileHeight = 0;
+
+	private static double mountainPercent = 0;
+	private static int mountainMinHeight = 0;
+	private static int mountainMaxHeight = 0;
+
+	private static double valleyPercent = 0;
+	private static int valleyMinHeight = 0;
+	private static int valleyMaxHeight = 0;
+
 	public void run () {
 		waitForDependantThread();
+
+		initializeGenerationValues();
 
 		System.out.println("Starting topology generation.");
 		generateTopology();
@@ -32,6 +48,24 @@ public class PlanetFormer extends DependantThread {
 		System.out.println("Growing life forms.");
 		generateCreatures();
 		System.out.println("Planet formation completed.");
+	}
+
+	private static void initializeGenerationValues() {
+		if (planet != null) size = planet.getFace(0).getSize();
+
+		Container worldGen = Data.getContainer(Data.getContainerId("gen01"));
+		if (worldGen != null) {
+			defaultTileId = Data.getContainerId(worldGen.getString("defaultTile"));
+			defaultTileHeight = worldGen.getInt("defaultTileHeight");
+
+			mountainPercent = Double.parseDouble(worldGen.getString("mountainPercent"));
+			mountainMinHeight = worldGen.getInt("mountainHeight",0);
+			mountainMaxHeight = worldGen.getInt("mountainHeight",1);
+
+			valleyPercent = Double.parseDouble(worldGen.getString("valleyPercent"));
+			valleyMinHeight = worldGen.getInt("valleyDepth",0);
+			valleyMaxHeight = worldGen.getInt("valleyDepth",1);
+		}
 	}
 
 	/**
@@ -44,22 +78,12 @@ public class PlanetFormer extends DependantThread {
 
 				int speedId = Data.getProtoAttributeId("attSpeed");
 
-				Tile stile = face.getTile((int) (Math.random()*face.getSize()),(int) (Math.random()*face.getSize()));
-				Entity semira = new Entity(stile,'S');
-				stile.addEntity(semira);
-				planet.signEntity(semira);
-
-				Attribute scSpeed = new Attribute(speedId,(int) (Math.random()*3)+1);
-				semira.addAttribute(scSpeed);
+				Tile tile = face.getTile((int) (Math.random()*face.getSize()),(int) (Math.random()*face.getSize()));
+				EntityBuilder.createEntity(tile,"cSemira");
 
 				for (int i=0; i<7; i++) {
-					Tile tile = face.getTile((int) (Math.random()*face.getSize()),(int) (Math.random()*face.getSize()));
-					Entity creature = new Entity(tile,'C');
-					tile.addEntity(creature);
-					planet.signEntity(creature);
-
-					Attribute cSpeed = new Attribute(speedId,(int) (Math.random()*3)+1);
-					creature.addAttribute(cSpeed);
+					tile = face.getTile((int) (Math.random()*face.getSize()),(int) (Math.random()*face.getSize()));
+					EntityBuilder.createEntity(tile,"cMichi");
 				}
 			}
 		}
@@ -75,12 +99,7 @@ public class PlanetFormer extends DependantThread {
 					for (int x=0; x<face.getSize(); x++) {
 						for (int y=0; y<face.getSize(); y++) {
 							if ((face.getTile(x,y).getHeight()>100) && (Math.random()>0.95d)) {
-								face.getTile(x,y).addEntity(new Entity(face.getTile(x,y),'T'));
-//								try {
-//									sleep(5);
-//								} catch (InterruptedException e) {
-//									e.printStackTrace();
-//								}
+								EntityBuilder.createEntity(face.getTile(x,y),"oTree");
 							}
 						}
 					}
@@ -94,48 +113,43 @@ public class PlanetFormer extends DependantThread {
 	 */
 	public static void generateTopology() {
 		if ((planet!=null)&&(planet.getFaces()!=null)) {
+			// ------------------------- defaults
+			for (Face face : planet.getFaces()) {
+				if (face != null) generateDefaultFaceTopology(face);
+			}
+
+			// ------------------------- features
 			for (Face face : planet.getFaces()) {
 				if (face != null) generateFaceTopology(face);
 			}
 		}
 	}
 
-	private static void generateFaceTopology(Face face) {
-		int size = face.getSize();
-		int hills = 2 + (int) (Math.random()*5);
-		int hillSize = 8 + (int) (Math.random()*8);
-		int stepSize = 1 + (int) (Math.random()*2);
-		int elevation = 156 + (int) (Math.random()*100);
+	private static void generateDefaultFaceTopology(Face face) {
+		for (int tx = 0; tx < size; tx++) {
+			for (int ty = 0; ty < size; ty++) {
+				Tile tile = face.getTile(tx, ty);
 
-		int x=0,y=0;
+				tile.setHeight(defaultTileHeight);
 
-		for (int j=0; j<hills; j++) {
-			x = (int) (size * Math.random());
-			y = (int) (size * Math.random());
-			for (int i = 0; i < hillSize; i++) {
-				x = (x + (int) (stepSize * Math.random())) % size;
-				y = (y + (int) (stepSize * Math.random())) % size;
-				elevateTile(face, face.getTile(x, y), (int) (elevation*Math.random()));
-
-//				try {
-//					sleep(10);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
+				if (defaultTileId != -1) {
+					EntityBuilder.setTileEntity(tile, defaultTileId);
+				}
 			}
 		}
 	}
 
-	private static void raiseTile(Face face, Tile tile, int level) {
-		int h = tile.getHeight()+level;
-		if (h>255) h = 255;
-		tile.setHeight(h);
+	private static void generateFaceTopology(Face face) {
+		for (int tx=0; tx<size; tx++) {
+			for (int ty = 0; ty < size; ty++) {
+				Tile tile = face.getTile(tx, ty);
 
-		level *= (Math.random()/4d+0.375d);
-		if (level>0) {
-			Tile[] neighbours = face.getNeighbours(tile.getX(),tile.getY());
-			for (Tile t : neighbours) {
-				if (t!=null) raiseTile(t.getFace(),t,level);
+				if (Math.random() * 100d < mountainPercent) {
+					elevateTile(face, tile, mountainMinHeight + (int) (Math.random()*(mountainMaxHeight-mountainMinHeight)));
+				}
+				if (Math.random() * 100d < valleyPercent) {
+					sinkTile(face, tile, valleyMinHeight + (int) (Math.random()*(valleyMaxHeight-valleyMinHeight)));
+				}
 			}
 		}
 	}
@@ -150,6 +164,21 @@ public class PlanetFormer extends DependantThread {
 				Tile[] neighbours = face.getNeighbours(tile.getX(), tile.getY());
 				for (Tile t : neighbours) {
 					if (t != null) elevateTile(t.getFace(), t, level);
+				}
+			}
+		}
+	}
+
+	private static void sinkTile(Face face, Tile tile, int level) {
+		if (level<0) level = 0;
+		if (tile.getHeight() > level) {
+			tile.setHeight(level);
+
+			level += ((Math.random()+0.5d)*8);
+			if (level < 255) {
+				Tile[] neighbours = face.getNeighbours(tile.getX(), tile.getY());
+				for (Tile t : neighbours) {
+					if (t != null) sinkTile(t.getFace(), t, level);
 				}
 			}
 		}

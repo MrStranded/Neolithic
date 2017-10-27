@@ -11,7 +11,6 @@ import environment.world.Planet;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * This class holds all the proto entities of the game, which in turn store all the scripts.
@@ -20,8 +19,8 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  */
 public class Data {
 
-	private static ConcurrentLinkedDeque<ProtoAttribute> protoAttributes = new ConcurrentLinkedDeque<>();
-	private static ConcurrentLinkedDeque<Container> containers = new ConcurrentLinkedDeque<>();
+	private static ArrayList<ProtoAttribute> protoAttributes = new ArrayList<>();
+	private static ArrayList<Container> containers = new ArrayList<>();
 	private static Planet planet = null;
 
 	// ###################################################################################
@@ -66,6 +65,13 @@ public class Data {
 		}
 	}
 
+	/**
+	 * This method takes a container, looks at it's values and turns some of them into ProtoAttributes.
+	 * The values in the container are deleted and the ProtoAttributes added.
+	 *
+	 * Values that get converted:
+	 * - ContainerValue.DNA
+	 */
 	public static void turnValuesIntoAttributes() {
 		for (Container container : containers) {
 			if (container.getValues().size() == 0) return;
@@ -81,6 +87,29 @@ public class Data {
 			}
 		}
 	}
+	
+	public static Container getContainer (int id) {
+		if ((id >= 0) && (id < containers.size())) {
+			return containers.get(id);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Attention: returns -1 when textId is not found!
+	 */
+	public static int getContainerId (String textId) {
+		if (textId == null) return -1;
+
+		for (Container container : containers) {
+			if (textId.equals(container.getTextId())) {
+				return container.getId();
+			}
+		}
+
+		return -1;
+	}
 
 	// ###################################################################################
 	// ################################ Getters & Setters ################################
@@ -93,11 +122,11 @@ public class Data {
 		Data.planet = planet;
 	}
 
-	public static ConcurrentLinkedDeque<ProtoAttribute> getProtoAttributes() {
+	public static ArrayList<ProtoAttribute> getProtoAttributes() {
 		return protoAttributes;
 	}
 
-	public static ConcurrentLinkedDeque<Container> getContainers() {
+	public static ArrayList<Container> getContainers() {
 		return containers;
 	}
 }

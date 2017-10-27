@@ -1,6 +1,8 @@
 package environment.world;
 
 import data.personal.Attribute;
+import data.proto.Container;
+import engine.EntityBuilder;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 
@@ -20,16 +22,26 @@ public class Entity {
 	private ConcurrentLinkedDeque<Entity> entities = new ConcurrentLinkedDeque<Entity>(); // contained entities
 	private ConcurrentLinkedDeque<Attribute> attributes = new ConcurrentLinkedDeque<Attribute>();
 
-	public Entity (Tile tile) {
-		this.tile = tile;
-	}
-	public Entity (Tile tile, char thumbnail) {
-		this.tile = tile;
-		this.thumbnail = thumbnail;
-	}
-	public Entity (String textID) {
-		this.textID = textID;
-	}
+//	public Entity (Tile tile) {
+//		this.tile = tile;
+//	}
+//	public Entity (Tile tile, char thumbnail) {
+//		this.tile = tile;
+//		this.thumbnail = thumbnail;
+//	}
+//	public Entity (String textID) {
+//		this.textID = textID;
+//	}
+//
+//	public Entity (Tile tile, Container container) {
+//		this.tile = tile;
+//		EntityBuilder.buildEntityFromContainer(this,container);
+//	}
+
+	/**
+	 * Entities are filled with data by the EntityBuilder and should also only be created there.
+	 */
+	public Entity() {}
 
 	// ###################################################################################
 	// ################################ Modification #####################################

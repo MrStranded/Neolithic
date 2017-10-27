@@ -1,0 +1,21 @@
+WorldGen: gen01 {
+	name: "Desert";
+	onStart: worldGen01;
+
+	defaultTileHeight: 50;
+	defaultTile: tDirt;
+
+	defaultFluidHeight: 45;
+	defaultFluid: fWater;
+
+	mountainPercent: "0.5";
+	mountainHeight: 60,200;
+
+	valleyPercent: "1";
+	vallayDepth: 10,49;
+}
+
+WorldGen: gen02 {
+	name: "Jungle";
+	onStart: worldGen02;
+}
