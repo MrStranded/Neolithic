@@ -28,6 +28,9 @@ public class PlanetFormer extends DependantThread {
 	private static int defaultTileId = -1;
 	private static int defaultTileHeight = 0;
 
+	private static int defaultFluidId = -1;
+	private static int defaultFluidHeight = 0;
+
 	private static double mountainPercent = 0;
 	private static double mountainContinuationPercent = 0;
 	private static int mountainMinHeight = 0;
@@ -63,6 +66,9 @@ public class PlanetFormer extends DependantThread {
 		if (worldGen != null) {
 			defaultTileId = Data.getContainerId(worldGen.getString("defaultTile"));
 			defaultTileHeight = worldGen.getInt("defaultTileHeight");
+
+			defaultFluidId = Data.getContainerId(worldGen.getString("defaultFluid"));
+			defaultFluidHeight = worldGen.getInt("defaultFluidHeight");
 
 			mountainPercent = Double.parseDouble(worldGen.getString("mountainPercent",0));
 			mountainContinuationPercent = Double.parseDouble(worldGen.getString("mountainPercent",1));
@@ -137,6 +143,11 @@ public class PlanetFormer extends DependantThread {
 			for (Face face : planet.getFaces()) {
 				if (face != null) generateFaceTopology(face);
 			}
+
+			// ------------------------- default fluids
+			for (Face face : planet.getFaces()) {
+				if (face != null) generateDefaultFluidFaceTopology(face);
+			}
 		}
 	}
 
@@ -150,6 +161,20 @@ public class PlanetFormer extends DependantThread {
 				if (defaultTileId != -1) {
 					EntityBuilder.setTileEntity(tile, defaultTileId);
 				}
+			}
+		}
+	}
+
+	private static void generateDefaultFluidFaceTopology(Face face) {
+		for (int tx = 0; tx < size; tx++) {
+			for (int ty = 0; ty < size; ty++) {
+				Tile tile = face.getTile(tx, ty);
+
+//				tile.setHeight(defaultTileHeight);
+//
+//				if (defaultTileId != -1) {
+//					EntityBuilder.setTileEntity(tile, defaultTileId);
+//				}
 			}
 		}
 	}
