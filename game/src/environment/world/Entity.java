@@ -18,25 +18,10 @@ public class Entity {
 	private int id = 0;
 	private char thumbnail = 'X';
 	private Tile tile = null;
+	private int amount = 1;
 
 	private ConcurrentLinkedDeque<Entity> entities = new ConcurrentLinkedDeque<Entity>(); // contained entities
 	private ConcurrentLinkedDeque<Attribute> attributes = new ConcurrentLinkedDeque<Attribute>();
-
-//	public Entity (Tile tile) {
-//		this.tile = tile;
-//	}
-//	public Entity (Tile tile, char thumbnail) {
-//		this.tile = tile;
-//		this.thumbnail = thumbnail;
-//	}
-//	public Entity (String textID) {
-//		this.textID = textID;
-//	}
-//
-//	public Entity (Tile tile, Container container) {
-//		this.tile = tile;
-//		EntityBuilder.buildEntityFromContainer(this,container);
-//	}
 
 	/**
 	 * Entities are filled with data by the EntityBuilder and should also only be created there.
@@ -98,5 +83,12 @@ public class Entity {
 	}
 	public void setThumbnail(char thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 }

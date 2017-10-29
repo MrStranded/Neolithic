@@ -3,14 +3,14 @@ Tile: tDirt {
 	name: "Dirt";
 }
 Fluid: fWater {
-	color: 40,80,140;
+	color: 80,160,255;
 	name: "Water";
 }
 
 Object: oTree {
 	name: "Tree";
 	char: T;
-	color: 100,220,0;
+	color: 120,250,20;
 }
 
 Attribute: attSpeed { name: "Speed"; mutate:1; }
@@ -19,7 +19,7 @@ Attribute: attSwim { name: "Swims"; flag:1; mutate:0; }
 Creature: cMichi {
 	name: "Michi"; #%%%%%%%%%%%%%%%%%%%%%%% just a comment
 	char: "M";
-	color: 2#comment#00,200,200;
+	color: 255,255,255;
 
 	onTick: sMove;
 

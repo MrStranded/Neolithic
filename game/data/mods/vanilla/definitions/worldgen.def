@@ -5,14 +5,14 @@ WorldGen: gen01 {
 	defaultTileHeight: 50;
 	defaultTile: tDirt;
 
-	defaultFluidHeight: 45;
+	defaultFluidHeight: 48;
 	defaultFluid: fWater;
 
-	mountainPercent: "0.1",95;
-	mountainHeight: 60,200,10,4;
+	mountainPercent: "1",10;
+	mountainHeight: 60,255,20,10;
 
-	valleyPercent: "0.1",99;
-	vallayDepth: 10,49,15,0;
+	valleyPercent: "0.1",100;
+	vallayDepth: 0,49,30,6;
 }
 
 WorldGen: gen02 {

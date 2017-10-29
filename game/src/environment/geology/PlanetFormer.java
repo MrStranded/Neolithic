@@ -166,15 +166,16 @@ public class PlanetFormer extends DependantThread {
 	}
 
 	private static void generateDefaultFluidFaceTopology(Face face) {
+		if (defaultFluidId < 0) return;
+
 		for (int tx = 0; tx < size; tx++) {
 			for (int ty = 0; ty < size; ty++) {
 				Tile tile = face.getTile(tx, ty);
 
-//				tile.setHeight(defaultTileHeight);
-//
-//				if (defaultTileId != -1) {
-//					EntityBuilder.setTileEntity(tile, defaultTileId);
-//				}
+				if (tile.getHeight() < defaultFluidHeight) {
+					Entity fluid = EntityBuilder.createEntity(tile,defaultFluidId);
+					fluid.setAmount(defaultFluidHeight-tile.getHeight());
+				}
 			}
 		}
 	}
@@ -233,6 +234,11 @@ public class PlanetFormer extends DependantThread {
 				}
 			}
 		}
+	}
+
+	// only temporary?
+	public static int getDefaultFluidHeight() {
+		return defaultFluidHeight;
 	}
 
 }

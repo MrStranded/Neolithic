@@ -3,6 +3,8 @@ package gui;
 import data.Data;
 import data.proto.Value;
 import engine.EntityValueProcessor;
+import enums.script.ObjectType;
+import environment.geology.PlanetFormer;
 import environment.world.Entity;
 import environment.world.Face;
 import environment.world.Planet;
@@ -126,52 +128,22 @@ public class DrawPlanet extends Draw {
 
 			double mh = 1000d;
 			double f = (h+mh)/(255d+mh);
-			for (int i = 0; i < 3; i++) {
-				px[i] = midx + (px[i]-midx)*f;
-				py[i] = midy + (py[i]-midy)*f;
-			}
-
-			// %%%%%%%%%%%%%%%%%%%%%%%% converting into those sweet integers
-
 			int[] ix = new int[3];
 			int[] iy = new int[3];
 			for (int i = 0; i < 3; i++) {
-				ix[i] = (int) px[i];
-				iy[i] = (int) py[i];
+				ix[i] = (int) (midx + (px[i]-midx)*f);
+				iy[i] = (int) (midy + (py[i]-midy)*f);
 			}
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% actually drawing the tile
-
-//			int red = 220;//tile.getRed();
-//			int green = 200;//tile.getGreen();
-//			int blue = 40;//tile.getBlue();
-//
-//			if (water) {
-//				red = 70;
-//				green = 180;
-//				blue = 240;
-//			}
-//
-//			red = red / 2 + (int) ((double) (red / 2) * (double) h / 255d);
-//			green = green / 2 + (int) ((double) (green / 2) * (double) h / 255d);
-//			blue = blue / 2 + (int) ((double) (blue / 2) * (double) h / 255d);
-
-//			int red = 128, green = 128, blue = 128;
-//
-//			if (tile.getSelf() != null) {
-//				Variable color = tile.getSelf().tryToGetVariable("color");
-//				if (color != null) {
-//					red = (int) (color.getValue(0).getNumber());
-//					green = (int) (color.getValue(1).getNumber());
-//					blue = (int) (color.getValue(2).getNumber());
-//				}
-//			}
 
 			g.setColor(adjustColorToHeight(EntityValueProcessor.getEntityColor(tile.getSelf()),h));
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% drawing the tile
 
-			g.fillPolygon(ix, iy, 3);
+			if (h>= PlanetFormer.getDefaultFluidHeight()) { // temporary, to reduce clipping errors
+				g.fillPolygon(ix, iy, 3);
+			}
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% drawing the tiles entities if there are some
 
@@ -180,9 +152,18 @@ public class DrawPlanet extends Draw {
 				int ey = (iy[0]+iy[1]+iy[2])/3+g.getFontMetrics().getHeight()/3;
 
 				for (Entity entity : tile.getEntities()) {
-					g.setColor(EntityValueProcessor.getEntityColor(entity));
+					g.setColor(adjustColorToHeight(EntityValueProcessor.getEntityColor(entity),h));
 
-					g.drawString(String.valueOf(entity.getThumbnail()),ex-g.getFontMetrics().charWidth(entity.getThumbnail())/2,ey);
+					if (Data.getContainer(entity.getId()).getType() == ObjectType.FLUID) {
+						f = (h+mh+entity.getAmount())/(255d+mh);
+						for (int i = 0; i < 3; i++) {
+							ix[i] = (int) (midx + (px[i]-midx)*f);
+							iy[i] = (int) (midy + (py[i]-midy)*f);
+						}
+						g.fillPolygon(ix, iy, 3);
+					} else {
+						g.drawString(String.valueOf(entity.getThumbnail()), ex - g.getFontMetrics().charWidth(entity.getThumbnail()) / 2, ey);
+					}
 				}
 			}
 
