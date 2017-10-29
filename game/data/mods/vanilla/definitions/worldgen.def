@@ -8,11 +8,11 @@ WorldGen: gen01 {
 	defaultFluidHeight: 45;
 	defaultFluid: fWater;
 
-	mountainPercent: "0.5";
-	mountainHeight: 60,200;
+	mountainPercent: "0.1",95;
+	mountainHeight: 60,200,10,4;
 
-	valleyPercent: "1";
-	vallayDepth: 10,49;
+	valleyPercent: "0.1",99;
+	vallayDepth: 10,49,15,0;
 }
 
 WorldGen: gen02 {
