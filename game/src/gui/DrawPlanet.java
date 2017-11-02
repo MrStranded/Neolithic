@@ -11,6 +11,7 @@ import environment.world.Planet;
 import environment.world.Tile;
 
 import java.awt.*;
+import java.util.Arrays;
 
 /**
  * Created by Michael on 11.07.2017.
@@ -30,6 +31,8 @@ public class DrawPlanet extends Draw {
 
 	double midx = 0;
 	double midy = 0;
+
+	double minHeight = 1000d;
 
 	/**
 	 * The big master method for drawing Faces. Too big as it is now.
@@ -126,14 +129,7 @@ public class DrawPlanet extends Draw {
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% scaling it to fit the height
 
-			double mh = 1000d;
-			double f = (h+mh)/(255d+mh);
-			int[] ix = new int[3];
-			int[] iy = new int[3];
-			for (int i = 0; i < 3; i++) {
-				ix[i] = (int) (midx + (px[i]-midx)*f);
-				iy[i] = (int) (midy + (py[i]-midy)*f);
-			}
+			int[] p = scaleCoordinatesToHeight(px,py,h);
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% actually drawing the tile
 
@@ -142,25 +138,21 @@ public class DrawPlanet extends Draw {
 			// %%%%%%%%%%%%%%%%%%%%%%%% drawing the tile
 
 			if (h>= PlanetFormer.getDefaultFluidHeight()) { // temporary, to reduce clipping errors
-				g.fillPolygon(ix, iy, 3);
+				g.fillPolygon(getXPoints(p),getYPoints(p), 3);
 			}
 
 			// %%%%%%%%%%%%%%%%%%%%%%%% drawing the tiles entities if there are some
 
 			if ((tile.getEntities()!=null)&&(!tile.getEntities().isEmpty())) {
-				int ex = (ix[0]+ix[1]+ix[2])/3;
-				int ey = (iy[0]+iy[1]+iy[2])/3+g.getFontMetrics().getHeight()/3;
+				int ex = (p[0]+p[1]+p[2])/3;
+				int ey = (p[3]+p[4]+p[5])/3+g.getFontMetrics().getHeight()/3;
 
 				for (Entity entity : tile.getEntities()) {
 					g.setColor(adjustColorToHeight(EntityValueProcessor.getEntityColor(entity),h));
 
 					if (Data.getContainer(entity.getId()).getType() == ObjectType.FLUID) {
-						f = (h+mh+entity.getAmount())/(255d+mh);
-						for (int i = 0; i < 3; i++) {
-							ix[i] = (int) (midx + (px[i]-midx)*f);
-							iy[i] = (int) (midy + (py[i]-midy)*f);
-						}
-						g.fillPolygon(ix, iy, 3);
+						int[] fp = scaleCoordinatesToHeight(px,py,h+entity.getAmount());
+						g.fillPolygon(getXPoints(fp),getYPoints(fp), 3);
 					} else {
 						g.drawString(String.valueOf(entity.getThumbnail()), ex - g.getFontMetrics().charWidth(entity.getThumbnail()) / 2, ey);
 					}
@@ -222,6 +214,22 @@ public class DrawPlanet extends Draw {
 		g = g / 2 + (int) ((double) (g / 2) * f);
 		b = b / 2 + (int) ((double) (b / 2) * f);
 		return new Color(r,g,b);
+	}
+
+	private int[] scaleCoordinatesToHeight(double[] px,double[] py, int height) {
+		double f = (height+minHeight)/(255d+minHeight);
+		int[] p = new int[6];
+		for (int i = 0; i < 3; i++) {
+			p[i] = (int) (midx + (px[i]-midx)*f);
+			p[i+3] = (int) (midy + (py[i]-midy)*f);
+		}
+		return p;
+	}
+	private int[] getXPoints(int[] p) {
+		return Arrays.copyOfRange(p,0,3);
+	}
+	private int[] getYPoints(int[] p) {
+		return Arrays.copyOfRange(p,3,6);
 	}
 
 	// ###################################################################################

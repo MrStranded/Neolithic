@@ -4,12 +4,15 @@ import data.Data;
 import data.personal.Attribute;
 import data.proto.Container;
 import data.proto.ProtoAttribute;
+import data.proto.Value;
 import engine.EntityBuilder;
 import environment.world.Entity;
 import environment.world.Face;
 import environment.world.Planet;
 import environment.world.Tile;
 import threads.DependantThread;
+
+import java.util.ArrayList;
 
 /**
  * Created by Michael on 11.07.2017.
@@ -31,19 +34,7 @@ public class PlanetFormer extends DependantThread {
 	private static int defaultFluidId = -1;
 	private static int defaultFluidHeight = 0;
 
-	private static double mountainPercent = 0;
-	private static double mountainContinuationPercent = 0;
-	private static int mountainMinHeight = 0;
-	private static int mountainMaxHeight = 0;
-	private static int mountainDeltaHeight = 8;
-	private static int mountainDeltaDerivation = 0;
-
-	private static double valleyPercent = 0;
-	private static double valleyContinuationPercent = 0;
-	private static int valleyMinHeight = 0;
-	private static int valleyMaxHeight = 0;
-	private static int valleyDeltaHeight = 8;
-	private static int valleyDeltaDerivation = 8;
+	private static ArrayList<Formation> formations = new ArrayList<>();
 
 	public void run () {
 		waitForDependantThread();
@@ -70,22 +61,15 @@ public class PlanetFormer extends DependantThread {
 			defaultFluidId = Data.getContainerId(worldGen.getString("defaultFluid"));
 			defaultFluidHeight = worldGen.getInt("defaultFluidHeight");
 
-			mountainPercent = Double.parseDouble(worldGen.getString("mountainPercent",0));
-			mountainContinuationPercent = Double.parseDouble(worldGen.getString("mountainPercent",1));
-			mountainMinHeight = worldGen.getInt("mountainHeight",0);
-			mountainMaxHeight = worldGen.getInt("mountainHeight",1);
-			mountainDeltaHeight = worldGen.getInt("mountainHeight",2);
-			mountainDeltaDerivation = worldGen.getInt("mountainHeight",3);
-
-			valleyPercent = Double.parseDouble(worldGen.getString("valleyPercent",0));
-			valleyContinuationPercent = Double.parseDouble(worldGen.getString("valleyPercent",1));
-			valleyMinHeight = worldGen.getInt("valleyDepth",0);
-			valleyMaxHeight = worldGen.getInt("valleyDepth",1);
-			valleyDeltaHeight = worldGen.getInt("valleyDepth",2);
-			valleyDeltaDerivation = worldGen.getInt("valleyDepth",3);
-
-			if (mountainDeltaHeight <= 0) mountainDeltaHeight = 8;
-			if (valleyDeltaHeight <= 0) valleyDeltaHeight = 8;
+			Value formationsValue = worldGen.tryToGet("formations");
+			if (formationsValue != null) {
+				for (String formationTextId : formationsValue.getData()) {
+					Container formation = Data.getContainer(Data.getContainerId(formationTextId));
+					if (formation != null) {
+						formations.add(new Formation(formation));
+					}
+				}
+			}
 		}
 	}
 
@@ -185,13 +169,12 @@ public class PlanetFormer extends DependantThread {
 			for (int ty = 0; ty < size; ty++) {
 				Tile tile = face.getTile(tx, ty);
 
-				if (Math.random() * 100d < mountainPercent) {
-					changeTileHeight(face, tile,
-							mountainMinHeight + (int) (Math.random()*(mountainMaxHeight-mountainMinHeight)),-1,null);
-				}
-				if (Math.random() * 100d < valleyPercent) {
-					changeTileHeight(face, tile,
-							valleyMinHeight + (int) (Math.random()*(valleyMaxHeight-valleyMinHeight)),1,null);
+				for (Formation formation : formations) {
+					if (Math.random() * 100d < formation.getSpawnPercent()) {
+						int h = formation.getMinHeight() + (int) (Math.random()*(formation.getMaxHeight()-formation.getMinHeight()));
+						int d = h>tile.getHeight()? -1 : 1;
+						changeTileHeight(face,tile,formation,h,d,null);
+					}
 				}
 			}
 		}
@@ -201,23 +184,23 @@ public class PlanetFormer extends DependantThread {
 	 * changeTileHeight is the general method to either lift or sink the tile and it's neighbours in appropriate fashion.
 	 * @param face the Face of the Tile tile. needed to find the neighbours
 	 * @param tile the Tile that should be adjusted in it's height
+	 * @param formation  the Formation that the geology data is taken from
 	 * @param level the new level the tile should be set to
 	 * @param direction -1 denotes a lift of the tile. 1 denotes to sink it. Other values should not be used!
 	 * @param lastTile may be null. Needed to that hilltops don't instantly run into themselves
 	 */
-	private static void changeTileHeight(Face face, Tile tile, int level, int direction, Tile lastTile) {
+	private static void changeTileHeight(Face face, Tile tile, Formation formation, int level, int direction, Tile lastTile) {
 		if (level>255) level = 255;
 		if (level<0)   level = 0;
 		if (tile.getHeight()*direction > level*direction) {
 			tile.setHeight(level);
 
-			int newLevel = level + (int) ((direction == 1? valleyDeltaHeight : mountainDeltaHeight)
-					+ (Math.random()-0.5d)*(direction == 1? valleyDeltaDerivation : mountainDeltaDerivation))*direction;
+			int newLevel = level + (int) (formation.getDeltaHeight() + (Math.random()-0.5d)*formation.getDeltaDerivation())*direction;
 
 			Tile[] neighbours = face.getNeighbours(tile.getX(), tile.getY());
 
 			int sameHeightTileId = -1;
-			if (Math.random()*100d < (direction == 1? valleyContinuationPercent : mountainContinuationPercent)) {
+			if (Math.random()*100d < formation.getContinuationPercent()) {
 				while ((sameHeightTileId == -1) || (neighbours[sameHeightTileId] == lastTile)) {
 					sameHeightTileId = (int) (Math.random() * 3d);
 				}
@@ -227,9 +210,9 @@ public class PlanetFormer extends DependantThread {
 				Tile t = neighbours[i];
 				if (t != null) {
 					if (i == sameHeightTileId) {
-						changeTileHeight(t.getFace(), t, level+direction, direction, tile);
+						changeTileHeight(t.getFace(), t, formation,level+direction, direction, tile);
 					} else {
-						changeTileHeight(t.getFace(), t, newLevel, direction, tile);
+						changeTileHeight(t.getFace(), t, formation, newLevel, direction, tile);
 					}
 				}
 			}

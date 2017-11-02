@@ -13,7 +13,8 @@ public enum ObjectType implements TextEnumInterface {
 	FLUID ("Fluid"),
 	OBJECT ("Object"),
 	CREATURE ("Creature"),
-	WORLDGEN ("WorldGen");
+	WORLDGEN ("WorldGen"),
+	FORMATION ("Formation");
 
 	// ###################################################################################
 	// ################################ Modification #####################################
