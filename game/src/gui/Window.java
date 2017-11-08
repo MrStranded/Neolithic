@@ -8,7 +8,7 @@ import java.awt.*;
  *
  * The class to create a Window in which one may display things.
  */
-public class Window {
+public class Window implements WindowInterface {
 
 	private JFrame frame;
 	private int width, height;
@@ -35,9 +35,19 @@ public class Window {
 		return frame.getInsets();
 	}
 
-	public void redraw() {
+	public boolean draw() {
 		frame.validate();
 		frame.repaint();
+
+		return true;
+	}
+
+	public void close() {
+		// nothing to do
+	}
+
+	public void init() {
+		// nothing to do
 	}
 
 	// ###################################################################################

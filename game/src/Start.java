@@ -3,6 +3,7 @@ import environment.geology.PlanetFormer;
 import environment.world.Planet;
 import gui.DrawPlanet;
 import gui.Window;
+import gui.graphics.GraphicsHandler;
 import threads.DrawThread;
 import threads.EntityThread;
 import threads.ParserThread;
@@ -19,10 +20,12 @@ public class Start {
 		// ------------------- window setup
 
 		Window window = new Window("Neolithic",1200,1000);
+		GraphicsHandler.addWindow(window);
+
 		DrawPlanet drawPlanet = new DrawPlanet();
 		window.assignDrawMethod(drawPlanet);
 
-		DrawThread drawThread = new DrawThread(window,100);
+		DrawThread drawThread = new DrawThread(100);
 		drawThread.start();
 
 		// ------------------- loading

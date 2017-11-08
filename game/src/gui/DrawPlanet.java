@@ -1,7 +1,6 @@
 package gui;
 
 import data.Data;
-import data.proto.Value;
 import engine.EntityValueProcessor;
 import enums.script.ObjectType;
 import environment.geology.PlanetFormer;
@@ -9,6 +8,7 @@ import environment.world.Entity;
 import environment.world.Face;
 import environment.world.Planet;
 import environment.world.Tile;
+import gui.graphics.GraphicsHandler;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -76,7 +76,7 @@ public class DrawPlanet extends Draw {
 
 	/**
 	 * Basically a copy of the content of the DrawFace class.
-	 * @param g the Graphics object
+	 * @param g the GraphicsHandler object
 	 * @param face the Face to be drawn
 	 * @param fx x coordinates of face
 	 * @param fy y coordinates of face

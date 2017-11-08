@@ -1,6 +1,6 @@
 package threads;
 
-import gui.Window;
+import gui.graphics.GraphicsHandler;
 
 /**
  * Created by Michael on 11.07.2017.
@@ -9,17 +9,18 @@ import gui.Window;
  */
 public class DrawThread extends Thread {
 
-	private Window window;
 	private int sleepTime;
 
-	public DrawThread(Window window, int sleepTime) {
-		this.window = window;
+	public DrawThread(int sleepTime) {
 		this.sleepTime = sleepTime;
+
+		setDaemon(true);
 	}
 
 	public void run() {
-		while (true) {
-			window.redraw();
+		GraphicsHandler.init();
+
+		while (GraphicsHandler.draw()) {
 
 			try {
 				sleep(sleepTime);
@@ -27,6 +28,8 @@ public class DrawThread extends Thread {
 				e.printStackTrace();
 			}
 		}
+
+		GraphicsHandler.tearDown();
 	}
 
 }
