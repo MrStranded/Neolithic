@@ -103,12 +103,6 @@ public class Window3D implements WindowInterface {
 
 		// Set the clear color
 		glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-
-		// Init OpenGL
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(0, 10, 10, 0, 1, -1);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
 	public boolean draw() {
@@ -119,22 +113,6 @@ public class Window3D implements WindowInterface {
 		// Poll for window events. The key callback above will only be
 		// invoked during this call.
 		glfwPollEvents();
-
-
-		// Begin drawing
-		GL11.glBegin(GL11.GL_TRIANGLES);
-		// Top & Red
-		GL11.glColor3f(1.0f, 0.0f, 0.0f);
-		GL11.glVertex3f(0.0f, 1.0f,0.0f);
-
-		// Right & Green
-		GL11.glColor3f(0.0f, 1.0f, 0.0f);
-		GL11.glVertex3f(1.0f, 1.0f,0.0f);
-
-		// Left & Blue
-		GL11.glColor3f(0.0f, 0.0f, 1.0f);
-		GL11.glVertex3f(1.0f, -1.0f,0.0f);
-		GL11.glEnd();
 
 		// Run the rendering loop until the user has attempted to close
 		// the window or has pressed the ESCAPE key.
