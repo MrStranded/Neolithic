@@ -126,15 +126,15 @@ public class Window3D implements WindowInterface {
 		GL11.glBegin(GL11.GL_TRIANGLES);
 		// Top & Red
 		GL11.glColor3f(1.0f, 0.0f, 0.0f);
-		GL11.glVertex2f(0.0f, 1.0f);
+		GL11.glVertex3f(0.0f, 1.0f,0.0f);
 
 		// Right & Green
 		GL11.glColor3f(0.0f, 1.0f, 0.0f);
-		GL11.glVertex2f(1.0f, 1.0f);
+		GL11.glVertex3f(1.0f, 1.0f,0.0f);
 
 		// Left & Blue
 		GL11.glColor3f(0.0f, 0.0f, 1.0f);
-		GL11.glVertex2f(1.0f, -1.0f);
+		GL11.glVertex3f(1.0f, -1.0f,0.0f);
 		GL11.glEnd();
 
 		// Run the rendering loop until the user has attempted to close
