@@ -35,6 +35,7 @@ import com.ardor3d.renderer.state.TextureState;
 import com.ardor3d.renderer.state.ZBufferState;
 import com.ardor3d.scenegraph.Mesh;
 import com.ardor3d.scenegraph.shape.Box;
+import com.ardor3d.scenegraph.shape.Icosahedron;
 import com.ardor3d.ui.text.BasicText;
 import com.ardor3d.util.ReadOnlyTimer;
 import com.ardor3d.util.TextureManager;
@@ -47,7 +48,7 @@ public class RotatingCubeGame implements Updater {
     private final Key toggleRotationKey;
 
     private final static float CUBE_ROTATE_SPEED = 1;
-    private final Vector3 rotationAxis = new Vector3(1, 1, 0);
+    private final Vector3 rotationAxis = new Vector3(-1, 0.5, 0);
     private double angle = 0;
     private Mesh box;
     private final Matrix3 rotation = new Matrix3();
@@ -72,7 +73,8 @@ public class RotatingCubeGame implements Updater {
         // add a cube to the scene
         // add a rotating controller to the cube
         // add a light
-        box = new Box("The cube", new Vector3(-1, -1, -1), new Vector3(1, 1, 1));
+        box = new Icosahedron("world",2);
+        //new Box("The cube", new Vector3(-1, -1, -1), new Vector3(1, 1, 1));
 
         final ZBufferState buf = new ZBufferState();
         buf.setEnabled(true);
@@ -94,7 +96,7 @@ public class RotatingCubeGame implements Updater {
         final float a = random.nextFloat();
 
         light.setDiffuse(new ColorRGBA(r, g, b, a));
-        light.setAmbient(new ColorRGBA(0.5f, 0.5f, 0.5f, 1.0f));
+        light.setAmbient(new ColorRGBA(1f, 1f, 1f, 1.0f));
         light.setLocation(new Vector3(MOVE_SPEED, MOVE_SPEED, MOVE_SPEED));
         light.setEnabled(true);
 
@@ -108,7 +110,7 @@ public class RotatingCubeGame implements Updater {
 
         registerInputTriggers();
 
-        final BasicText text = BasicText.createDefaultTextLabel("test", "Hello World!");
+        final BasicText text = BasicText.createDefaultTextLabel("test", "Hello World!lulz");
         scene.getRoot().attachChild(text);
 
         inited = true;
