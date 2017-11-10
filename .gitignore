@@ -1,3 +1,7 @@
 
 
 *.class
+
+game/\.idea/libraries/java\.xml
+
+game/\.idea/
