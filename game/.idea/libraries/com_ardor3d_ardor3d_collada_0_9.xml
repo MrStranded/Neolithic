@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="com.ardor3d:ardor3d-collada:0.9" type="repository">
+    <properties maven-id="com.ardor3d:ardor3d-collada:0.9" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/ardor3d-collada-0.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/ardor3d-core-0.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/ardor3d-math-0.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/ardor3d-savable-0.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/guava-14.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/ardor3d-animation-0.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jdom2-2.0.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jaxen-1.1.4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/ardor3d-collada-0.9-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/ardor3d-collada-0.9-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
