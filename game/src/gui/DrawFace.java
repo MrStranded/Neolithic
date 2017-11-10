@@ -3,7 +3,6 @@ package gui;
 import environment.world.Entity;
 import environment.world.Face;
 import environment.world.Tile;
-import gui.graphics.GraphicsHandler;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;

@@ -1,7 +1,5 @@
 package gui;
 
-import gui.graphics.GraphicsHandler;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -33,10 +31,6 @@ public class Draw extends JPanel implements MouseListener {
 	// ###################################################################################
 	// ################################ Drawing ##########################################
 	// ###################################################################################
-
-	public void paintComponent(GraphicsHandler g) {
-
-	}
 
 	// ###################################################################################
 	// ################################ Mouse ############################################

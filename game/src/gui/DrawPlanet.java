@@ -8,7 +8,6 @@ import environment.world.Entity;
 import environment.world.Face;
 import environment.world.Planet;
 import environment.world.Tile;
-import gui.graphics.GraphicsHandler;
 
 import java.awt.*;
 import java.util.Arrays;
