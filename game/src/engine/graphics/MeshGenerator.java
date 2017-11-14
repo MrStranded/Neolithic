@@ -20,6 +20,10 @@ public class MeshGenerator {
 	static double anglex = Math.PI/2+0.5d;
 	static double angley = Math.PI/2+0.5d;
 
+	static double[] px;
+	static double[] py;
+	static double[] pz;
+
 	public static void createWorld(Planet planet) {
 		if (worldRenderer != null) {
 			if (planet != null) {
@@ -44,8 +48,9 @@ public class MeshGenerator {
 					double v2x = (fx[2]-fx[0])/(double) size;
 					double v2y = (fy[2]-fy[0])/(double) size;
 
-					double[] px = new double[3];
-					double[] py = new double[3];
+					px = new double[3];
+					py = new double[3];
+					pz = new double[3];
 
 					for (int tx = 0; tx < face.getSize(); tx++) {
 						for (int ty = 0; ty < face.getSize(); ty++) {
