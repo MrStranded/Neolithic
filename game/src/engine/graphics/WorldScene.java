@@ -16,10 +16,10 @@ import com.ardor3d.util.GameTaskQueueManager;
  * The framework should provide a default implementation of a scene, probably with a root node and a stats node, just
  * like today. Probably, controllers don't belong here, but I also don't think they belong in the Node API.
  */
-public final class ExampleScene implements Scene {
+public final class WorldScene implements Scene {
 	private final Node root;
 
-	public ExampleScene() {
+	public WorldScene() {
 		root = new Node("root");
 	}
 

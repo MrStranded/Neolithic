@@ -1,14 +1,14 @@
 /**
- * Copyright (c) 2008-2010 Ardor Labs, Inc.
+ * Copyright (c) 2008-2012 Ardor Labs, Inc.
  *
  * This file is part of Ardor3D.
  *
- * Ardor3D is free software: you can redistribute it and/or modify it
+ * Ardor3D is free software: you can redistribute it and/or modify it 
  * under the terms of its license which may be found in the accompanying
  * LICENSE file or at <http://www.ardor3d.com/LICENSE>.
  */
 
-package engine.graphics;
+package engine.graphics.examples;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -26,17 +26,17 @@ import javax.swing.SwingConstants;
 import com.ardor3d.framework.Canvas;
 import com.ardor3d.framework.DisplaySettings;
 import com.ardor3d.framework.FrameHandler;
+import com.ardor3d.framework.jogl.JoglAwtCanvas;
 import com.ardor3d.framework.jogl.JoglCanvasRenderer;
-import com.ardor3d.framework.jogl.JoglNewtAwtCanvas;
-import com.ardor3d.image.util.jogl.JoglImageLoader;
+import com.ardor3d.image.util.awt.AWTImageLoader;
 import com.ardor3d.input.ControllerWrapper;
 import com.ardor3d.input.Key;
 import com.ardor3d.input.MouseCursor;
 import com.ardor3d.input.PhysicalLayer;
-import com.ardor3d.input.jogl.JoglNewtFocusWrapper;
-import com.ardor3d.input.jogl.JoglNewtKeyboardWrapper;
-import com.ardor3d.input.jogl.JoglNewtMouseManager;
-import com.ardor3d.input.jogl.JoglNewtMouseWrapper;
+import com.ardor3d.input.awt.AwtFocusWrapper;
+import com.ardor3d.input.awt.AwtKeyboardWrapper;
+import com.ardor3d.input.awt.AwtMouseManager;
+import com.ardor3d.input.awt.AwtMouseWrapper;
 import com.ardor3d.input.logical.DummyControllerWrapper;
 import com.ardor3d.input.logical.InputTrigger;
 import com.ardor3d.input.logical.KeyPressedCondition;
@@ -46,15 +46,15 @@ import com.ardor3d.input.logical.TwoInputStates;
 import com.ardor3d.util.Timer;
 import com.ardor3d.util.resource.ResourceLocatorTool;
 import com.ardor3d.util.resource.SimpleResourceLocator;
+import engine.graphics.Exit;
 
 /**
- * This examples demonstrates how to render OpenGL (via JOGL) on a NEWT AWT canvas. FIXME update the thumbnail and the
- * description
+ * This examples demonstrates how to render OpenGL (via JOGL) on a AWT canvas.
  */
 //@Purpose(htmlDescriptionKey = "com.ardor3d.example.canvas.JoglAwtExample", //
 //thumbnailPath = "com/ardor3d/example/media/thumbnails/canvas_JoglAwtExample.jpg", //
 //maxHeapMemory = 64)
-public class JoglNewtAwtExample {
+public class JoglAwtExample {
     static MouseCursor _cursor1;
     static MouseCursor _cursor2;
 
@@ -78,7 +78,7 @@ public class JoglNewtAwtExample {
         frameWork.addUpdater(game1);
         frameWork.addUpdater(game2);
 
-        final JFrame frame = new JFrame("NEWT AWT Example");
+        final JFrame frame = new JFrame("AWT Example");
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(final WindowEvent e) {
@@ -88,19 +88,19 @@ public class JoglNewtAwtExample {
 
         frame.setLayout(new GridLayout(2, 3));
 
-        JoglImageLoader.registerLoader();
+        AWTImageLoader.registerLoader();
 
         try {
             final SimpleResourceLocator srl = new SimpleResourceLocator(ResourceLocatorTool.getClassPathResource(
-                    JoglNewtAwtExample.class, "com/ardor3d/example/media/"));
+                    JoglAwtExample.class, "com/ardor3d/example/media/"));
             ResourceLocatorTool.addResourceLocator(ResourceLocatorTool.TYPE_TEXTURE, srl);
         } catch (final URISyntaxException ex) {
             ex.printStackTrace();
         }
 
-        final JoglImageLoader joglImageLoader = new JoglImageLoader();
-        _cursor1 = createMouseCursor(joglImageLoader, "com/ardor3d/example/media/input/wait_cursor.png");
-        _cursor2 = createMouseCursor(joglImageLoader, "com/ardor3d/example/media/input/movedata.gif");
+        final AWTImageLoader awtImageLoader = new AWTImageLoader();
+        _cursor1 = createMouseCursor(awtImageLoader, "com/ardor3d/example/media/input/wait_cursor.png");
+        _cursor2 = createMouseCursor(awtImageLoader, "com/ardor3d/example/media/input/movedata.gif");
 
         addCanvas(frame, scene1, logicalLayer, frameWork);
         frame.add(new JLabel(
@@ -109,7 +109,6 @@ public class JoglNewtAwtExample {
                         + "<tr><th align=\"left\" style=\"font-size: 16\">Action</th><th align=\"left\" style=\"font-size: 16\">Command</th></tr>"
                         + "<tr><td>WS</td><td>Move camera position forward/back</td></tr>"
                         + "<tr><td>AD</td><td>Turn camera left/right</td></tr>"
-                        + "<tr><td>QE</td><td>Strafe camera left/right</td></tr>"
                         + "<tr><td>T</td><td>Toggle cube rotation for scene 1 on press</td></tr>"
                         + "<tr><td>G</td><td>Toggle cube rotation for scene 2 on press</td></tr>"
                         + "<tr><td>U</td><td>Toggle both cube rotations on release</td></tr>"
@@ -138,10 +137,10 @@ public class JoglNewtAwtExample {
         System.exit(0);
     }
 
-    private static MouseCursor createMouseCursor(final JoglImageLoader joglImageLoader, final String resourceName)
+    private static MouseCursor createMouseCursor(final AWTImageLoader awtImageLoader, final String resourceName)
             throws IOException {
-        final com.ardor3d.image.Image image = joglImageLoader.load(
-                ResourceLocatorTool.getClassPathResourceAsStream(JoglNewtAwtExample.class, resourceName), false);
+        final com.ardor3d.image.Image image = awtImageLoader.load(
+                ResourceLocatorTool.getClassPathResourceAsStream(JoglAwtExample.class, resourceName), false);
 
         return new MouseCursor("cursor1", image, 0, image.getHeight() - 1);
     }
@@ -151,7 +150,7 @@ public class JoglNewtAwtExample {
         final JoglCanvasRenderer canvasRenderer = new JoglCanvasRenderer(scene);
 
         final DisplaySettings settings = new DisplaySettings(400, 300, 24, 0, 0, 16, 0, 0, false, false);
-        final JoglNewtAwtCanvas theCanvas = new JoglNewtAwtCanvas(settings, canvasRenderer);
+        final JoglAwtCanvas theCanvas = new JoglAwtCanvas(settings, canvasRenderer);
 
         frame.add(theCanvas);
 
@@ -160,10 +159,10 @@ public class JoglNewtAwtExample {
         theCanvas.setSize(new Dimension(400, 300));
         theCanvas.setVisible(true);
 
-        final JoglNewtKeyboardWrapper keyboardWrapper = new JoglNewtKeyboardWrapper(theCanvas);
-        final JoglNewtFocusWrapper focusWrapper = new JoglNewtFocusWrapper(theCanvas);
-        final JoglNewtMouseManager mouseManager = new JoglNewtMouseManager(theCanvas);
-        final JoglNewtMouseWrapper mouseWrapper = new JoglNewtMouseWrapper(theCanvas, mouseManager);
+        final AwtKeyboardWrapper keyboardWrapper = new AwtKeyboardWrapper(theCanvas);
+        final AwtFocusWrapper focusWrapper = new AwtFocusWrapper(theCanvas);
+        final AwtMouseManager mouseManager = new AwtMouseManager(theCanvas);
+        final AwtMouseWrapper mouseWrapper = new AwtMouseWrapper(theCanvas, mouseManager);
         final ControllerWrapper controllerWrapper = new DummyControllerWrapper();
 
         final PhysicalLayer pl = new PhysicalLayer(keyboardWrapper, mouseWrapper, controllerWrapper, focusWrapper);

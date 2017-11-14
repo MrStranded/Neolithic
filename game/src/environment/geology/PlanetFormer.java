@@ -6,6 +6,7 @@ import data.proto.Container;
 import data.proto.ProtoAttribute;
 import data.proto.Value;
 import engine.EntityBuilder;
+import engine.graphics.MeshGenerator;
 import environment.world.Entity;
 import environment.world.Face;
 import environment.world.Planet;
@@ -48,6 +49,9 @@ public class PlanetFormer extends DependantThread {
 		System.out.println("Growing life forms.");
 		generateCreatures();
 		System.out.println("Planet formation completed.");
+
+		generateMesh();
+		System.out.println("Mesh generation completed.");
 	}
 
 	private static void initializeGenerationValues() {
@@ -71,6 +75,10 @@ public class PlanetFormer extends DependantThread {
 				}
 			}
 		}
+	}
+
+	public static void generateMesh() {
+		MeshGenerator.createWorld(planet);
 	}
 
 	/**

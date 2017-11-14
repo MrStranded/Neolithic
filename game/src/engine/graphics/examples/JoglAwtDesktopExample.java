@@ -1,4 +1,4 @@
-package engine.graphics;
+package engine.graphics.examples;
 
 /**
  * Copyright (c) 2008-2012 Ardor Labs, Inc.
@@ -49,8 +49,7 @@ import com.ardor3d.renderer.Camera;
 import com.ardor3d.util.Timer;
 import com.ardor3d.util.resource.ResourceLocatorTool;
 import com.ardor3d.util.resource.SimpleResourceLocator;
-import com.ardor3d.input.Key;
-import net.java.games.input.Component;
+import engine.graphics.Exit;
 
 /**
  * Created by Michael on 10.11.2017.

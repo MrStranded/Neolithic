@@ -3,6 +3,8 @@ import environment.geology.PlanetFormer;
 import environment.world.Planet;
 import gui.DrawPlanet;
 import gui.Window;
+import gui.WindowInterface;
+import gui.WorldWindow;
 import threads.DrawThread;
 import threads.EntityThread;
 import threads.ParserThread;
@@ -16,16 +18,6 @@ public class Start {
 
 	public static void main (String[] args) {
 
-		// ------------------- window setup
-
-		Window window = new Window("Neolithic",1200,1000);
-
-		DrawPlanet drawPlanet = new DrawPlanet();
-		window.assignDrawMethod(drawPlanet);
-
-		DrawThread drawThread = new DrawThread(window,100);
-		drawThread.start();
-
 		// ------------------- loading
 
 		ParserThread parserThread = new ParserThread();
@@ -35,7 +27,15 @@ public class Start {
 
 		Planet gaia = new Planet(32,18);
 
-		drawPlanet.setPlanet(gaia);
+		// ------------------- window setup
+
+		WindowInterface window = new WorldWindow(gaia,1200,1000);
+
+		DrawThread drawThread = new DrawThread(window,100);
+		drawThread.start();
+
+		// ------------------- geology generation
+
 		Data.setPlanet(gaia);
 
 		PlanetFormer.setPlanet(gaia);

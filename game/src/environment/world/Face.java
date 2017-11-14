@@ -11,16 +11,19 @@ public class Face {
 	private Tile[][] tiles;
 	private int size=0;
 	private Point[] corners = new Point[3];
+	private int index=0;
 
 	/**
 	 * Create a Face on given Planet with given size.
 	 * @param planet corresponding Planet
 	 * @param size side-tile-length
 	 */
-	public Face (Planet planet,int size) {
+	public Face (Planet planet,int size, int index) {
 		this.planet = planet;
+		this.index = index;
+		this.size = size;
 
-		createTiles(size);
+		createTiles();
 	}
 
 	// ###################################################################################
@@ -29,10 +32,8 @@ public class Face {
 
 	/**
 	 * Assigns the Tile array with fresh tiles.
-	 * @param size side-tile-length
 	 */
-	private void createTiles(int size) {
-		this.size = size;
+	private void createTiles() {
 		tiles = new Tile[size][size];
 		for (int x=0;x<size;x++) {
 			for (int y=0;y<size;y++) {
@@ -319,4 +320,7 @@ public class Face {
 		return edge;
 	}
 
+	public int getIndex() {
+		return index;
+	}
 }

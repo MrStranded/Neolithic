@@ -47,7 +47,7 @@ public class Planet {
 					int c2 = c1 + 2;
 					int c3 = (n + 4)%12;
 
-					faces[n] = new Face(this,size);
+					faces[n] = new Face(this,size,n);
 					faces[n].assignCorners(worldPoints[c1], worldPoints[c2], worldPoints[c3]);
 				}
 			}
@@ -62,7 +62,7 @@ public class Planet {
 					int c2 = 4 + k + i*2;
 					int c3 = 8 + j + k*2;
 
-					faces[n] = new Face(this,size);
+					faces[n] = new Face(this,size,n);
 					faces[n].assignCorners(worldPoints[c1], worldPoints[c2], worldPoints[c3]);
 				}
 			}
@@ -115,6 +115,10 @@ public class Planet {
 	public Face[] getFaces() { return faces; }
 
 	public double getRadius() { return radius; }
+
+	public int getSize() {
+		return size;
+	}
 
 	/**
 	 * Gives the three Faces that lie next to the given Face.
