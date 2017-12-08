@@ -13,8 +13,7 @@ import com.ardor3d.util.GameTaskQueue;
 import com.ardor3d.util.GameTaskQueueManager;
 
 /**
- * The framework should provide a default implementation of a scene, probably with a root node and a stats node, just
- * like today. Probably, controllers don't belong here, but I also don't think they belong in the Node API.
+ * The framework should provide a default implementation of a scene, probably with a root node and a stats node.
  */
 public final class WorldScene implements Scene {
 	private final Node root;
@@ -31,8 +30,7 @@ public final class WorldScene implements Scene {
 	@MainThread
 	public boolean renderUnto(final Renderer renderer) {
 		// Execute renderQueue item
-		GameTaskQueueManager.getManager(ContextManager.getCurrentContext()).getQueue(GameTaskQueue.RENDER)
-				.execute(renderer);
+		GameTaskQueueManager.getManager(ContextManager.getCurrentContext()).getQueue(GameTaskQueue.RENDER).execute(renderer);
 		ContextGarbageCollector.doRuntimeCleanup(renderer);
 
 		renderer.draw(root);

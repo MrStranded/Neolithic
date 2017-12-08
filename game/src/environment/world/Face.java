@@ -157,27 +157,6 @@ public class Face {
 			n++;
 		}
 
-		// redundant code
-		/*for (int x=0;x<size;x++) {
-			for (int y=0;y<size;y++) {
-				if (tiles[x][y].isFlipped() != tiles[tx][ty].isFlipped()) {
-					int dx = tiles[x][y].getVX() - tiles[tx][ty].getVX();
-					int dy = tiles[x][y].getVY() - tiles[tx][ty].getVY();
-
-					int f = tiles[tx][ty].isFlipped() ? -1 : 1;
-					if (
-							((dx==0)&&(dy==0))
-							||((dx==0)&&(dy*f==-1))
-							||((dy==0)&&(dx*f==-1))
-							) {
-						neighbours[n] = tiles[x][y];
-						n++;
-						if (n == 3) break;
-					}
-				}
-			}
-		}*/
-
 		// neighbours on other faces
 		if ((n<3)&&(isOnEdge(tx,ty))) {
 			Face[] neighbourFaces = planet.getNeighbours(this);

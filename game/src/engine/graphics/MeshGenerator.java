@@ -6,6 +6,7 @@ import com.ardor3d.scenegraph.Mesh;
 import com.ardor3d.util.geom.BufferUtils;
 import environment.world.Face;
 import environment.world.Planet;
+import environment.world.Point;
 import environment.world.Tile;
 
 import java.nio.ByteBuffer;
@@ -27,37 +28,54 @@ public class MeshGenerator {
 	public static void createWorld(Planet planet) {
 		if (worldRenderer != null) {
 			if (planet != null) {
+				WorldMesh worldMesh = new WorldMesh(20);
+
 				for (Face face : planet.getFaces()) {
 
-					int size = face.getSize();
-
-					double[][] coordinates = rotateCoordiantes(face);
-
-					double[] fx = new double[3];
-					double[] fy = new double[3];
-
-					double y = 0;
+					float[][] coordinates = new float[3][3];
 
 					for (int i=0; i<3; i++) {
-						fx[i] = coordinates[i][0] * planet.getRadius();
-						fy[i] = coordinates[i][1] * planet.getRadius();
+						Point p = face.getCorner(i);
+						coordinates[i][0] = (float) p.getX();
+						coordinates[i][1] = (float) p.getY();
+						coordinates[i][2] = (float) p.getZ();
 					}
 
-					double v1x = (fx[1]-fx[0])/(double) size;
-					double v1y = (fy[1]-fy[0])/(double) size;
-					double v2x = (fx[2]-fx[0])/(double) size;
-					double v2y = (fy[2]-fy[0])/(double) size;
+					TileMesh tileMesh = new TileMesh();
+					tileMesh.setTopFace(coordinates);
+					worldMesh.registerTile(tileMesh);
 
-					px = new double[3];
-					py = new double[3];
-					pz = new double[3];
-
-					for (int tx = 0; tx < face.getSize(); tx++) {
-						for (int ty = 0; ty < face.getSize(); ty++) {
-							createTile(face.getTile(tx,ty));
-						}
-					}
+//					int size = face.getSize();
+//
+//					double[][] coordinates = rotateCoordiantes(face);
+//
+//					double[] fx = new double[3];
+//					double[] fy = new double[3];
+//
+//					double y = 0;
+//
+//					for (int i=0; i<3; i++) {
+//						fx[i] = coordinates[i][0] * planet.getRadius();
+//						fy[i] = coordinates[i][1] * planet.getRadius();
+//					}
+//
+//					double v1x = (fx[1]-fx[0])/(double) size;
+//					double v1y = (fy[1]-fy[0])/(double) size;
+//					double v2x = (fx[2]-fx[0])/(double) size;
+//					double v2y = (fy[2]-fy[0])/(double) size;
+//
+//					px = new double[3];
+//					py = new double[3];
+//					pz = new double[3];
+//
+//					for (int tx = 0; tx < face.getSize(); tx++) {
+//						for (int ty = 0; ty < face.getSize(); ty++) {
+//							createTile(face.getTile(tx,ty));
+//						}
+//					}
 				}
+
+				worldRenderer.registerWorldMesh(worldMesh);
 			}
 		}
 	}

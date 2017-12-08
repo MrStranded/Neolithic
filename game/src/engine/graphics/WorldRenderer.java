@@ -99,14 +99,19 @@ public class WorldRenderer implements Updater {
 		tiles = new Mesh[tileAmount];
 
 		// there is no input yet
-		// registerInputTriggers();
+		registerInputTriggers();
 
 		inited = true;
 	}
 
-	public void registerMesh(int index, Mesh mesh) {
-		tiles[index] = mesh;
+	public void registerMesh(Mesh mesh) {
 		scene.getRoot().attachChild(mesh);
+	}
+
+	public void registerWorldMesh(WorldMesh worldMesh) {
+		for (Mesh mesh : worldMesh.getMeshes()) {
+			registerMesh(mesh);
+		}
 	}
 
 	private void registerInputTriggers() {
@@ -155,7 +160,7 @@ public class WorldRenderer implements Updater {
 	}
 
 	private void resetCamera(final Canvas source) {
-		final Vector3 loc = new Vector3(0.0f, 0.0f, 10.0f);
+		final Vector3 loc = new Vector3(0.0f, 0.0f, 100.0f);
 		final Vector3 left = new Vector3(-1.0f, 0.0f, 0.0f);
 		final Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
 		final Vector3 dir = new Vector3(0.0f, 0f, -1.0f);
@@ -180,6 +185,8 @@ public class WorldRenderer implements Updater {
 		rotation.fromAngleAxis(angle, rotationAxis);
 
 		// here one would rotate the world
+
+		//scene.getRoot().setRotation(angle,rotationAxis);
 
 		scene.getRoot().updateGeometricState(tpf, true);
 	}

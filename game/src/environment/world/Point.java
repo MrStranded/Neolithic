@@ -23,6 +23,24 @@ public class Point {
 		this.worldSheet=worldSheet;
 	}
 
+	// ################################ Math
+
+	public Point add (Point p) {
+		return new Point(x+p.getX(), y+p.getY(), z+p.getZ());
+	}
+
+	public Point subtract (Point p) {
+		return new Point(x-p.getX(), y-p.getY(), z-p.getZ());
+	}
+
+	public Point multiply (double f) {
+		return new Point(x*f, y*f, z*f);
+	}
+
+	public Point divide (double f) {
+		return new Point(x/f, y/f, z/f);
+	}
+
 	// ################################ Getters
 	public double getX() { return x; }
 	public double getY() { return y; }
