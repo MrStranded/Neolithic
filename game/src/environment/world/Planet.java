@@ -47,8 +47,7 @@ public class Planet {
 					int c2 = c1 + 2;
 					int c3 = (n + 4)%12;
 
-					faces[n] = new Face(this,size,n);
-					faces[n].assignCorners(worldPoints[c1], worldPoints[c2], worldPoints[c3]);
+					assignFace(n,c1,c2,c3);
 				}
 			}
 		}
@@ -62,11 +61,36 @@ public class Planet {
 					int c2 = 4 + k + i*2;
 					int c3 = 8 + j + k*2;
 
-					faces[n] = new Face(this,size,n);
-					faces[n].assignCorners(worldPoints[c1], worldPoints[c2], worldPoints[c3]);
+					assignFace(n,c1,c2,c3);
 				}
 			}
 		}
+	}
+
+	/**
+	 * Assigns the appropriate slot in the faces array with the corresponding worldPoints.
+	 * @param n index of face
+	 * @param c1 first worldPoint index
+	 * @param c2 second worldPoint index
+	 * @param c3 third worldPoint index
+	 */
+	private void assignFace(int n, int c1, int c2, int c3) {
+		faces[n] = new Face(this,size,n);
+		if (isRightOrientated(n)) {
+			faces[n].assignCorners(worldPoints[c1], worldPoints[c2], worldPoints[c3]);
+		} else {
+			faces[n].assignCorners(worldPoints[c1], worldPoints[c3], worldPoints[c2]);
+		}
+	}
+
+	/**
+	 * calculates, whether the face is leftoriented, based on it's index
+	 * @param n index
+	 * @return true, when left-oriented
+	 */
+	private boolean isRightOrientated(int n) {
+		if (n<16) return (((n-1)/2)%2 == 0);
+		return (((n+1)/2)%2 == 0);
 	}
 
 	/**
@@ -83,7 +107,7 @@ public class Planet {
 					c[(i+1)%3] = k*phi*radius;
 					c[(i+2)%3] = 0;
 
-					int n=i*4 + (j+1)+(k+1)/2;
+					int n=i*4 + (j+1) + (k+1)/2;
 					worldPoints[n] = new Point(c[0],c[1],c[2],(byte) i);
 				}
 			}
