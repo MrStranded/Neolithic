@@ -8,6 +8,9 @@ import com.ardor3d.util.geom.BufferUtils;
 import java.nio.ByteBuffer;
 
 /**
+ * Handles the lower level generation of meshes for single tiles.
+ * Each tile should get a top face, but side faces should only exist on the borders to lower tiles.
+ *
  * Created by michael1337 on 07/12/17.
  */
 public class TileMesh {
@@ -17,6 +20,10 @@ public class TileMesh {
 	 * 1-3 -> optional side faces
 	 */
 	private Mesh[] meshFaces = new Mesh[4];
+
+	/**
+	 * remembers which array entry in the meshFaces array should be filled by side meshes
+	 */
 	private int index = 1;
 
 	/**
@@ -80,6 +87,11 @@ public class TileMesh {
 		return meshFaces[0];
 	}
 
+	/**
+	 * i reaches from 0 to 2, other than the technical implementation inside the class
+	 * @param i side from 0-2
+	 * @return mesh of the side. may be null!
+	 */
 	public Mesh getSideMesh(int i) {
 		if ((i < 0) || (i > 2)) return null;
 		return meshFaces[i+1];

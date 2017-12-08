@@ -42,7 +42,7 @@ public class Planet {
 		for (int i=0;i<3;i++) {
 			for (int j=0;j<2;j++) {
 				for (int k=0;k<2;k++) {
-					int n = j*2 + k + i*4;
+					int n = i*4 + j*2 + k;
 					int c1 = i*4 + j;
 					int c2 = c1 + 2;
 					int c3 = (n + 4)%12;

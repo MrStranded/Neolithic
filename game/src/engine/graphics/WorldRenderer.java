@@ -20,8 +20,10 @@ import com.ardor3d.input.control.FirstPersonControl;
 import com.ardor3d.input.logical.*;
 import com.ardor3d.light.PointLight;
 import com.ardor3d.math.ColorRGBA;
+import com.ardor3d.math.MathUtils;
 import com.ardor3d.math.Matrix3;
 import com.ardor3d.math.Vector3;
+import com.ardor3d.math.type.ReadOnlyMatrix3;
 import com.ardor3d.renderer.IndexMode;
 import com.ardor3d.renderer.state.LightState;
 import com.ardor3d.renderer.state.TextureState;
@@ -44,9 +46,10 @@ public class WorldRenderer implements Updater {
 	private final LogicalLayer logicalLayer;
 	private final Key toggleRotationKey;
 
-	private final static float WORLD_ROTATE_SPEED = 1;
-	private final Vector3 rotationAxis = new Vector3(0, 1, 0);
+	private final static float WORLD_ROTATE_SPEED = 0.5f;
 	private double angle = 0;
+	private Vector3 at,up;
+	private Matrix3 rotationMatrix;
 
 	private Planet planet;
 	private Mesh[] tiles;
@@ -182,11 +185,14 @@ public class WorldRenderer implements Updater {
 
 		angle += tpf * WORLD_ROTATE_SPEED * rotationSign;
 
-		rotation.fromAngleAxis(angle, rotationAxis);
+		at = new Vector3(Math.cos(angle),0,Math.sin(angle));
+		up = new Vector3(0,1d,0);
 
 		// here one would rotate the world
 
-		//scene.getRoot().setRotation(angle,rotationAxis);
+		rotationMatrix = new Matrix3();
+		MathUtils.matrixLookAt(scene.getRoot().getWorldTranslation(),at,up,rotationMatrix);
+		scene.getRoot().setRotation(rotationMatrix);
 
 		scene.getRoot().updateGeometricState(tpf, true);
 	}
