@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/junit" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/.idea/libraries" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -41,5 +42,6 @@
     <orderEntry type="library" name="com.ardor3d:ardor3d-savable:0.9" level="project" />
     <orderEntry type="library" name="com.ardor3d:ardor3d-terrain:0.9" level="project" />
     <orderEntry type="library" name="com.ardor3d:ardor3d-ui:0.9" level="project" />
+    <orderEntry type="library" name="ardor3d-animation-0.9-javadoc" level="project" />
   </component>
 </module>
