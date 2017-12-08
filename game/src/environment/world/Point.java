@@ -23,6 +23,10 @@ public class Point {
 		this.worldSheet=worldSheet;
 	}
 
+	public Point copy() {
+		return new Point(x,y,z);
+	}
+
 	// ################################ Math
 
 	public Point add (Point p) {

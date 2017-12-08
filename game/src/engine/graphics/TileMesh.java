@@ -4,6 +4,7 @@ import com.ardor3d.math.ColorRGBA;
 import com.ardor3d.renderer.IndexMode;
 import com.ardor3d.scenegraph.Mesh;
 import com.ardor3d.util.geom.BufferUtils;
+import environment.world.Point;
 
 import java.nio.ByteBuffer;
 
@@ -30,9 +31,8 @@ public class TileMesh {
 	 * Creates a mesh for the top triangle from given points.
 	 * the first dimension of the array holds the point
 	 * the second dimension of the array holds the x,y,z values
-	 * @param points coordinates for triangle
 	 */
-	public void setTopFace(float[][] points) {
+	public void setTopFace(Point p1, Point p2, Point p3) {
 		meshFaces[0] = new Mesh();
 		meshFaces[0].getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(3));
 
@@ -44,11 +44,15 @@ public class TileMesh {
 		meshFaces[0].getMeshData().setIndexMode(IndexMode.Triangles);
 		meshFaces[0].getMeshData().getVertexBuffer().clear();
 
-		for (int i=0; i<3; i++) {
-			for (int j=0; j<3; j++) {
-				meshFaces[0].getMeshData().getVertexBuffer().put(points[i][j]);
-			}
-		}
+		meshFaces[0].getMeshData().getVertexBuffer().put((float) p1.getX());
+		meshFaces[0].getMeshData().getVertexBuffer().put((float) p1.getY());
+		meshFaces[0].getMeshData().getVertexBuffer().put((float) p1.getZ());
+		meshFaces[0].getMeshData().getVertexBuffer().put((float) p2.getX());
+		meshFaces[0].getMeshData().getVertexBuffer().put((float) p2.getY());
+		meshFaces[0].getMeshData().getVertexBuffer().put((float) p2.getZ());
+		meshFaces[0].getMeshData().getVertexBuffer().put((float) p3.getX());
+		meshFaces[0].getMeshData().getVertexBuffer().put((float) p3.getY());
+		meshFaces[0].getMeshData().getVertexBuffer().put((float) p3.getZ());
 
 		meshFaces[0].setDefaultColor(new ColorRGBA(1f,1f,1f,1f));
 	}
