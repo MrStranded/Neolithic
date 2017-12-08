@@ -76,20 +76,22 @@ public class Planet {
 	 */
 	private void assignFace(int n, int c1, int c2, int c3) {
 		faces[n] = new Face(this,size,n);
+
 		if (isRightOrientated(n)) {
-			faces[n].assignCorners(worldPoints[c1], worldPoints[c2], worldPoints[c3]);
-		} else {
-			faces[n].assignCorners(worldPoints[c1], worldPoints[c3], worldPoints[c2]);
+			int tmp = c2;
+			c2 = c3;
+			c3 = tmp;
 		}
+		faces[n].assignCorners(worldPoints[c1], worldPoints[c2], worldPoints[c3]);
 	}
 
 	/**
-	 * calculates, whether the face is leftoriented, based on it's index
+	 * calculates, whether the face is right-oriented, based on its index
 	 * @param n index
-	 * @return true, when left-oriented
+	 * @return true, when right-oriented
 	 */
 	private boolean isRightOrientated(int n) {
-		if (n<16) return (((n-1)/2)%2 == 0);
+		if (n<16) return (((n+3)/2)%2 == 0);
 		return (((n+1)/2)%2 == 0);
 	}
 
