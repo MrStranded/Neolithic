@@ -61,9 +61,8 @@ public class TileMesh {
 	 * Creates a mesh for the next side from given points.
 	 * the first dimension of the array holds the point
 	 * the second dimension of the array holds the x,y,z values
-	 * @param points coordinates for triangle
 	 */
-	public void addSideFace(float[][] points) {
+	public void addSideFace(Point top1, Point top2, Point down1, Point down2) {
 		meshFaces[index] = new Mesh();
 		meshFaces[index].getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(4));
 
@@ -75,11 +74,18 @@ public class TileMesh {
 		meshFaces[index].getMeshData().setIndexMode(IndexMode.Quads);
 		meshFaces[index].getMeshData().getVertexBuffer().clear();
 
-		for (int i=0; i<4; i++) {
-			for (int j=0; j<3; j++) {
-				meshFaces[index].getMeshData().getVertexBuffer().put(points[i][j]);
-			}
-		}
+		meshFaces[index].getMeshData().getVertexBuffer().put((float) top1.getX());
+		meshFaces[index].getMeshData().getVertexBuffer().put((float) top1.getY());
+		meshFaces[index].getMeshData().getVertexBuffer().put((float) top1.getZ());
+		meshFaces[index].getMeshData().getVertexBuffer().put((float) top2.getX());
+		meshFaces[index].getMeshData().getVertexBuffer().put((float) top2.getY());
+		meshFaces[index].getMeshData().getVertexBuffer().put((float) top2.getZ());
+		meshFaces[index].getMeshData().getVertexBuffer().put((float) down2.getX());
+		meshFaces[index].getMeshData().getVertexBuffer().put((float) down2.getY());
+		meshFaces[index].getMeshData().getVertexBuffer().put((float) down2.getZ());
+		meshFaces[index].getMeshData().getVertexBuffer().put((float) down1.getX());
+		meshFaces[index].getMeshData().getVertexBuffer().put((float) down1.getY());
+		meshFaces[index].getMeshData().getVertexBuffer().put((float) down1.getZ());
 
 		meshFaces[index].setDefaultColor(new ColorRGBA(1f,1f,1f,1f));
 

@@ -29,11 +29,13 @@ import com.ardor3d.renderer.state.LightState;
 import com.ardor3d.renderer.state.TextureState;
 import com.ardor3d.renderer.state.ZBufferState;
 import com.ardor3d.scenegraph.Mesh;
+import com.ardor3d.scenegraph.Node;
 import com.ardor3d.scenegraph.shape.Icosahedron;
 import com.ardor3d.ui.text.BasicText;
 import com.ardor3d.util.ReadOnlyTimer;
 import com.ardor3d.util.TextureManager;
 import com.ardor3d.util.geom.BufferUtils;
+import data.Data;
 import environment.world.Planet;
 
 import java.nio.ByteBuffer;
@@ -46,17 +48,18 @@ public class WorldRenderer implements Updater {
 	private final LogicalLayer logicalLayer;
 	private final Key toggleRotationKey;
 
-	private final static float WORLD_ROTATE_SPEED = 0.5f;
+	private final static float WORLD_ROTATE_SPEED = 0.2f;
 	private double angle = 0;
 	private Vector3 at,up;
 	private Matrix3 rotationMatrix;
 
 	private Planet planet;
 	private Mesh[] tiles;
+	private Node worldMeshNode;
 
 	private final Matrix3 rotation = new Matrix3();
 
-	private static final int MOVE_SPEED = 4;
+	private static final int MOVE_SPEED = 10;
 	private int rotationSign = 1;
 	private boolean inited;
 
@@ -85,11 +88,12 @@ public class WorldRenderer implements Updater {
 		final PointLight light = new PointLight();
 
 		light.setDiffuse(new ColorRGBA(0.5f, 0.5f,0.5f, 0.5f));
-		light.setAmbient(new ColorRGBA(1f, 1f, 1f, 1f));
-		light.setLocation(new Vector3(MOVE_SPEED, MOVE_SPEED, MOVE_SPEED)); // take this line out maybe
+		light.setAmbient(new ColorRGBA(1f, 1f, 0, 1f));
+		light.setLocation(new Vector3(2000,2000,2000)); // take this line out maybe
 		light.setEnabled(true);
 
 		// Attach the light to a lightState and the lightState to rootNode.
+
 		final LightState lightState = new LightState();
 		lightState.setEnabled(true);
 		lightState.attach(light);
@@ -107,14 +111,16 @@ public class WorldRenderer implements Updater {
 		inited = true;
 	}
 
-	public void registerMesh(Mesh mesh) {
-		scene.getRoot().attachChild(mesh);
-	}
+//	public void registerMesh(Mesh mesh) {
+//		scene.getRoot().attachChild(mesh);
+//	}
 
 	public void registerWorldMesh(WorldMesh worldMesh) {
-		for (Mesh mesh : worldMesh.getMeshes()) {
-			registerMesh(mesh);
-		}
+//		for (Mesh mesh : worldMesh.getMeshes()) {
+//			registerMesh(mesh);
+//		}
+		worldMeshNode = worldMesh;
+		scene.getRoot().attachChild(worldMesh);
 	}
 
 	private void registerInputTriggers() {
@@ -163,7 +169,7 @@ public class WorldRenderer implements Updater {
 	}
 
 	private void resetCamera(final Canvas source) {
-		final Vector3 loc = new Vector3(0.0f, 0.0f, 100.0f);
+		final Vector3 loc = new Vector3(0.0f, 0.0f, (Data.getPlanet().getRadius()+255) * 2);
 		final Vector3 left = new Vector3(-1.0f, 0.0f, 0.0f);
 		final Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
 		final Vector3 dir = new Vector3(0.0f, 0f, -1.0f);
@@ -192,7 +198,7 @@ public class WorldRenderer implements Updater {
 
 		rotationMatrix = new Matrix3();
 		MathUtils.matrixLookAt(scene.getRoot().getWorldTranslation(),at,up,rotationMatrix);
-		scene.getRoot().setRotation(rotationMatrix);
+		//if (worldMeshNode != null) worldMeshNode.setRotation(rotationMatrix);
 
 		scene.getRoot().updateGeometricState(tpf, true);
 	}

@@ -25,7 +25,7 @@ public class Start {
 
 		// ------------------- planet creation
 
-		Planet gaia = new Planet(32,18);
+		Planet gaia = new Planet(32,10);
 
 		// ------------------- window setup
 

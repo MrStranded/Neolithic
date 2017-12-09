@@ -37,12 +37,47 @@ public class MeshGenerator {
 
 					for (int x=0; x<face.getSize(); x++) {
 						for (int y=0; y<face.getSize(); y++) {
-							Point p1 = origin.add(dx.multiply(x)).add(dy.multiply(y));
-							Point p2 = p1.add(dx);
-							Point p3 = p1.add(dy);
+							Point p1,p2,p3;
+							Tile tile = face.getTile(x,y);
+
+							// calculating normal positions
+							p1 = origin.add(dx.multiply(tile.getVX())).add(dy.multiply(tile.getVY()));
+							p2 = p1.add(dx);
+							p3 = p1.add(dy);
+
+							// when flipped -> translate p1 and swap p2,p3 because of normal of  meshface
+							if (tile.isFlipped()) {
+								p1 = p1.add(dx).add(dy);
+								Point tmp = p2;
+								p2 = p3;
+								p3 = tmp;
+							}
+
+							// multiply by (height of tile/100d + radius) / radius
+
+							double correction = 1d;
+
+							Point[] top = new Point[3];
+							double factor = getHeightFactor(tile,planet);
+							top[0] = p1.multiply(factor);
+							top[1] = p2.multiply(factor);
+							top[2] = p3.multiply(factor);
 
 							TileMesh tileMesh = new TileMesh();
-							tileMesh.setTopFace(p1,p2,p3);
+							tileMesh.setTopFace(top[0],top[1],top[2]);
+
+							Point[] down = new Point[3];
+							Tile [] neighbours = face.getNeighbours(tile.getX(),tile.getY());
+							for (int i = 0; i < 3; i++) {
+								if (neighbours[i].getHeight() < tile.getHeight()) {
+									factor = getHeightFactor(neighbours[i], planet);
+									down[i] = p1.multiply(factor);
+									down[(i + 1) % 3] = p2.multiply(factor);
+									down[(i + 2) % 3] = p3.multiply(factor);
+									tileMesh.addSideFace(top[i],top[(i+1)%3],down[i],down[(i+1)%3]);
+								}
+							}
+
 							worldMesh.registerTile(tileMesh);
 						}
 					}
@@ -51,6 +86,11 @@ public class MeshGenerator {
 				worldRenderer.registerWorldMesh(worldMesh);
 			}
 		}
+	}
+
+	private static double getHeightFactor(Tile tile,Planet planet) {
+		double correction = 20d;
+		return ((((double) tile.getHeight())/correction + planet.getRadius()) / planet.getRadius());
 	}
 	
 	private static void createTile(Tile t) {
