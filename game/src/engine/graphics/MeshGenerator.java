@@ -89,7 +89,7 @@ public class MeshGenerator {
 	}
 
 	private static double getHeightFactor(Tile tile,Planet planet) {
-		double correction = 20d;
+		double correction = 100d;
 		return ((((double) tile.getHeight())/correction + planet.getRadius()) / planet.getRadius());
 	}
 	

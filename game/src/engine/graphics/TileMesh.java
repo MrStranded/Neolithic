@@ -36,7 +36,7 @@ public class TileMesh {
 		meshFaces[0] = new Mesh();
 		meshFaces[0].getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(3));
 
-		final byte[] indices = {0, 1, 2};
+		final byte[] indices = {0, 2, 1};
 		final ByteBuffer bbuf = BufferUtils.createByteBuffer(indices.length);
 		bbuf.put(indices);
 		bbuf.rewind();

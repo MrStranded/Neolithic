@@ -80,16 +80,17 @@ public class WorldRenderer implements Updater {
 
 		final ZBufferState buf = new ZBufferState();
 		buf.setEnabled(true);
-		buf.setFunction(ZBufferState.TestFunction.LessThanOrEqualTo);
+		buf.setFunction(ZBufferState.TestFunction.LessThan);
 		scene.getRoot().setRenderState(buf);
 
 		// world lights
 
 		final PointLight light = new PointLight();
 
-		light.setDiffuse(new ColorRGBA(0.5f, 0.5f,0.5f, 0.5f));
+		light.setDiffuse(new ColorRGBA(1f, 1f,1f, 1f));
 		light.setAmbient(new ColorRGBA(1f, 1f, 0, 1f));
-		light.setLocation(new Vector3(2000,2000,2000)); // take this line out maybe
+		light.setLocation(new Vector3(0,0,100)); // take this line out maybe
+		light.setShadowCaster(true);
 		light.setEnabled(true);
 
 		// Attach the light to a lightState and the lightState to rootNode.
@@ -98,12 +99,6 @@ public class WorldRenderer implements Updater {
 		lightState.setEnabled(true);
 		lightState.attach(light);
 		scene.getRoot().setRenderState(lightState);
-
-		int tileAmount = 0;
-		if (planet != null) {
-			tileAmount = planet.getSize()*planet.getSize()*20;
-		}
-		tiles = new Mesh[tileAmount];
 
 		// there is no input yet
 		registerInputTriggers();
@@ -126,42 +121,42 @@ public class WorldRenderer implements Updater {
 	private void registerInputTriggers() {
 		final FirstPersonControl control = FirstPersonControl.setupTriggers(logicalLayer, Vector3.UNIT_Y, true);
 		control.setMoveSpeed(MOVE_SPEED);
-
-		logicalLayer.registerTrigger(new InputTrigger(new KeyPressedCondition(Key.ESCAPE), new TriggerAction() {
-			public void perform(final Canvas source, final TwoInputStates inputStates, final double tpf) {
-				exit.exit();
-			}
-		}));
-
-		logicalLayer.registerTrigger(new InputTrigger(new KeyPressedCondition(toggleRotationKey), new TriggerAction() {
-			public void perform(final Canvas source, final TwoInputStates inputStates, final double tpf) {
-				toggleRotation();
-			}
-		}));
-		logicalLayer.registerTrigger(new InputTrigger(new KeyReleasedCondition(Key.U), new TriggerAction() {
-			public void perform(final Canvas source, final TwoInputStates inputStates, final double tpf) {
-				toggleRotation();
-			}
-		}));
-
-		logicalLayer.registerTrigger(new InputTrigger(new KeyPressedCondition(Key.ZERO), new TriggerAction() {
-			public void perform(final Canvas source, final TwoInputStates inputStates, final double tpf) {
-				resetCamera(source);
-			}
-		}));
-		logicalLayer.registerTrigger(new InputTrigger(new KeyPressedCondition(Key.NINE), new TriggerAction() {
-			public void perform(final Canvas source, final TwoInputStates inputStates, final double tpf) {
-				lookAtZero(source);
-			}
-		}));
-
-		logicalLayer.registerTrigger(new InputTrigger(new AnyKeyCondition(), new TriggerAction() {
-			public void perform(final Canvas source, final TwoInputStates inputStates, final double tpf) {
-				final InputState current = inputStates.getCurrent();
-
-				System.out.println("Key character pressed: " + current.getKeyboardState().getKeyEvent().getKeyChar());
-			}
-		}));
+//
+//		logicalLayer.registerTrigger(new InputTrigger(new KeyPressedCondition(Key.ESCAPE), new TriggerAction() {
+//			public void perform(final Canvas source, final TwoInputStates inputStates, final double tpf) {
+//				exit.exit();
+//			}
+//		}));
+//
+//		logicalLayer.registerTrigger(new InputTrigger(new KeyPressedCondition(toggleRotationKey), new TriggerAction() {
+//			public void perform(final Canvas source, final TwoInputStates inputStates, final double tpf) {
+//				toggleRotation();
+//			}
+//		}));
+//		logicalLayer.registerTrigger(new InputTrigger(new KeyReleasedCondition(Key.U), new TriggerAction() {
+//			public void perform(final Canvas source, final TwoInputStates inputStates, final double tpf) {
+//				toggleRotation();
+//			}
+//		}));
+//
+//		logicalLayer.registerTrigger(new InputTrigger(new KeyPressedCondition(Key.ZERO), new TriggerAction() {
+//			public void perform(final Canvas source, final TwoInputStates inputStates, final double tpf) {
+//				resetCamera(source);
+//			}
+//		}));
+//		logicalLayer.registerTrigger(new InputTrigger(new KeyPressedCondition(Key.NINE), new TriggerAction() {
+//			public void perform(final Canvas source, final TwoInputStates inputStates, final double tpf) {
+//				lookAtZero(source);
+//			}
+//		}));
+//
+//		logicalLayer.registerTrigger(new InputTrigger(new AnyKeyCondition(), new TriggerAction() {
+//			public void perform(final Canvas source, final TwoInputStates inputStates, final double tpf) {
+//				final InputState current = inputStates.getCurrent();
+//
+//				System.out.println("Key character pressed: " + current.getKeyboardState().getKeyEvent().getKeyChar());
+//			}
+//		}));
 	}
 
 	private void lookAtZero(final Canvas source) {

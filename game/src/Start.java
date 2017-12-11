@@ -25,14 +25,29 @@ public class Start {
 
 		// ------------------- planet creation
 
-		Planet gaia = new Planet(32,10);
+		Planet gaia = new Planet(32,18);
 
 		// ------------------- window setup
 
-		WindowInterface window = new WorldWindow(gaia,1200,1000);
+		boolean mode3d = false;
+		DrawThread drawThread;
 
-		DrawThread drawThread = new DrawThread(window,100);
-		drawThread.start();
+		if (mode3d) {   // 3D
+			WindowInterface window3d = new WorldWindow(gaia,1200,1000);
+
+			drawThread = new DrawThread(window3d,100);
+			drawThread.start();
+
+		} else {        // 2D
+			Window window2d = new Window("Neolithic", 1200, 1000);
+
+			DrawPlanet drawPlanet = new DrawPlanet();
+			drawPlanet.setPlanet(gaia);
+			window2d.assignDrawMethod(drawPlanet);
+
+			drawThread = new DrawThread(window2d, 100);
+			drawThread.start();
+		}
 
 		// ------------------- geology generation
 
