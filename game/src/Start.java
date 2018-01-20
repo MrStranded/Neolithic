@@ -29,14 +29,14 @@ public class Start {
 
 		// ------------------- window setup
 
-		boolean mode3d = false;
+		boolean mode3d = true;
 		DrawThread drawThread;
 
 		if (mode3d) {   // 3D
-			WindowInterface window3d = new WorldWindow(gaia,1200,1000);
+			WindowInterface window3d = new WorldWindow("Neolihic", gaia,1200,1000);
 
-			drawThread = new DrawThread(window3d,100);
-			drawThread.start();
+			//drawThread = new DrawThread(window3d,100);
+			//drawThread.start();
 
 		} else {        // 2D
 			Window window2d = new Window("Neolithic", 1200, 1000);

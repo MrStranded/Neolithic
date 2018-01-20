@@ -10,125 +10,85 @@
 
 package gui;
 
-import com.ardor3d.framework.Canvas;
-import com.ardor3d.framework.DisplaySettings;
-import com.ardor3d.framework.FrameHandler;
-import com.ardor3d.framework.jogl.JoglAwtCanvas;
-import com.ardor3d.framework.jogl.JoglCanvasRenderer;
-import com.ardor3d.image.util.awt.AWTImageLoader;
-import com.ardor3d.input.ControllerWrapper;
-import com.ardor3d.input.Key;
-import com.ardor3d.input.MouseCursor;
-import com.ardor3d.input.PhysicalLayer;
-import com.ardor3d.input.awt.AwtFocusWrapper;
-import com.ardor3d.input.awt.AwtKeyboardWrapper;
-import com.ardor3d.input.awt.AwtMouseManager;
-import com.ardor3d.input.awt.AwtMouseWrapper;
-import com.ardor3d.input.logical.*;
-import com.ardor3d.util.Timer;
-import com.ardor3d.util.resource.ResourceLocatorTool;
-import com.ardor3d.util.resource.SimpleResourceLocator;
-import engine.graphics.Exit;
-import engine.graphics.WorldRenderer;
-import engine.graphics.WorldScene;
-import engine.graphics.examples.ExampleScene;
-import engine.graphics.examples.RotatingCubeGame;
+import com.jme3.app.SimpleApplication;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
+import com.jme3.scene.VertexBuffer.Type;
+import com.jme3.util.BufferUtils;
+
 import environment.world.Planet;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * This examples demonstrates how to render OpenGL (via JOGL) on a AWT canvas.
  */
-public class WorldWindow implements WindowInterface {
+public class WorldWindow extends SimpleApplication implements WindowInterface {
 	private Map<Canvas, Boolean> _showCursor1 = new HashMap<Canvas, Boolean>();
 	private Planet planet;
+	private String title;
 
 	private int width=800,height=600;
 
-	public WorldWindow(Planet planet, int width, int height) {
+	public WorldWindow(String title, Planet planet, int width, int height) {
 		this.planet = planet;
-		this.width = width;
-		this.height = height;
+
+//		this.settings.setWidth(width);
+//		this.settings.setHeight(height);
+//		this.settings.setTitle(title);
+		this.start();
 	}
 
+	@Override
+	public void simpleInitApp() {
+
+		Mesh m = new Mesh();
+
+		// Vertex positions in space
+		Vector3f [] vertices = new Vector3f[4];
+		vertices[0] = new Vector3f(0,0,0);
+		vertices[1] = new Vector3f(3,0,0);
+		vertices[2] = new Vector3f(0,3,0);
+		vertices[3] = new Vector3f(3,3,0);
+
+		// Texture coordinates
+		Vector2f [] texCoord = new Vector2f[4];
+		texCoord[0] = new Vector2f(0,0);
+		texCoord[1] = new Vector2f(1,0);
+		texCoord[2] = new Vector2f(0,1);
+		texCoord[3] = new Vector2f(1,1);
+
+		// Indexes. We define the order in which mesh should be constructed
+		short[] indexes = {2, 0, 1, 1, 3, 2};
+
+		// Setting buffers
+		m.setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(vertices));
+		m.setBuffer(Type.TexCoord, 2, BufferUtils.createFloatBuffer(texCoord));
+		m.setBuffer(Type.Index, 1, BufferUtils.createShortBuffer(indexes));
+		m.updateBound();
+
+		// *************************************************************************
+		// First mesh uses one solid color
+		// *************************************************************************
+
+		// Creating a geometry, and apply a single color material to it
+		Geometry geom = new Geometry("OurMesh", m);
+		Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+		mat.setColor("Color", ColorRGBA.Blue);
+		geom.setMaterial(mat);
+
+		// Attaching our geometry to the root node.
+		rootNode.attachChild(geom);
+	}
+
+	@Override
 	public void init() {
-		System.setProperty("ardor3d.useMultipleContexts", "true");
-
-		final Timer timer = new Timer();
-		final FrameHandler frameWork = new FrameHandler(timer);
-
-		final MyExit exit = new MyExit();
-		final LogicalLayer logicalLayer = new LogicalLayer();
-
-		final WorldScene scene = new WorldScene();
-		final WorldRenderer game = new WorldRenderer(scene, exit, logicalLayer, Key.SPACE, planet);
-
-		frameWork.addUpdater(game);
-
-		final JFrame frame = new JFrame("Neolithic");
-		frame.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(final WindowEvent e) {
-				exit.exit();
-			}
-		});
-
-		//frame.setLayout(new GridLayout(2, 3));
-
-		AWTImageLoader.registerLoader();
-
-		try {
-			addCanvas(frame, scene, logicalLayer, frameWork);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		frame.pack();
-		frame.setVisible(true);
-
-		game.init();
-
-		while (!exit.isExit()) {
-			frameWork.updateFrame();
-			Thread.yield();
-		}
-
-		frame.dispose();
-		System.exit(0);
-	}
-
-	private void addCanvas(final JFrame frame, final WorldScene scene, final LogicalLayer logicalLayer, final FrameHandler frameWork) throws Exception {
-		final JoglCanvasRenderer canvasRenderer = new JoglCanvasRenderer(scene);
-
-		final DisplaySettings settings = new DisplaySettings(width, height, 32, 0, 0, 16, 0, 0, false, false);
-		final JoglAwtCanvas theCanvas = new JoglAwtCanvas(settings, canvasRenderer);
-
-		frame.add(theCanvas);
-
-		_showCursor1.put(theCanvas, true);
-
-		theCanvas.setSize(new Dimension(width, height));
-		theCanvas.setVisible(true);
-
-		final AwtKeyboardWrapper keyboardWrapper = new AwtKeyboardWrapper(theCanvas);
-		final AwtFocusWrapper focusWrapper = new AwtFocusWrapper(theCanvas);
-		final AwtMouseManager mouseManager = new AwtMouseManager(theCanvas);
-		final AwtMouseWrapper mouseWrapper = new AwtMouseWrapper(theCanvas, mouseManager);
-		final ControllerWrapper controllerWrapper = new DummyControllerWrapper();
-
-		final PhysicalLayer pl = new PhysicalLayer(keyboardWrapper, mouseWrapper, controllerWrapper, focusWrapper);
-
-		logicalLayer.registerInput(theCanvas, pl);
-
-		frameWork.addCanvas(theCanvas);
 
 	}
 
@@ -139,17 +99,5 @@ public class WorldWindow implements WindowInterface {
 	public void close() {
 		
 	}
-	
-	private class MyExit implements Exit {
-		private volatile boolean exit = false;
 
-		@Override
-		public void exit() {
-			exit = true;
-		}
-
-		public boolean isExit() {
-			return exit;
-		}
-	}
 }

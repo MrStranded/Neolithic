@@ -19,29 +19,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" scope="TEST">
-      <library name="JUnit5">
-        <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/plugins/junit/lib/junit-jupiter-api-5.0.0-M4.jar!/" />
-          <root url="jar://$APPLICATION_HOME_DIR$/plugins/junit/lib/opentest4j-1.0.0-M2.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="library" name="java" level="project" />
-    <orderEntry type="library" name="com.ardor3d:ardor3d-animation:0.9" level="project" />
-    <orderEntry type="library" name="com.ardor3d:ardor3d-awt:0.9" level="project" />
-    <orderEntry type="library" name="com.ardor3d:ardor3d-collada:0.9" level="project" />
-    <orderEntry type="library" name="com.ardor3d:ardor3d-core:0.9" level="project" />
-    <orderEntry type="library" name="com.ardor3d:ardor3d-effects:0.9" level="project" />
-    <orderEntry type="library" name="com.ardor3d:ardor3d-extras:0.9" level="project" />
-    <orderEntry type="library" name="com.ardor3d:ardor3d-jogl:0.9" level="project" />
-    <orderEntry type="library" name="com.ardor3d:ardor3d-lwjgl:0.9" level="project" />
-    <orderEntry type="library" name="com.ardor3d:ardor3d-math:0.9" level="project" />
-    <orderEntry type="library" name="com.ardor3d:ardor3d-savable:0.9" level="project" />
-    <orderEntry type="library" name="com.ardor3d:ardor3d-terrain:0.9" level="project" />
-    <orderEntry type="library" name="com.ardor3d:ardor3d-ui:0.9" level="project" />
-    <orderEntry type="library" name="ardor3d-animation-0.9-javadoc" level="project" />
+    <orderEntry type="library" name="core" level="project" />
   </component>
 </module>

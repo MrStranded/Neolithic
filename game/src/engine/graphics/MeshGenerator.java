@@ -1,22 +1,14 @@
 package engine.graphics;
 
-import com.ardor3d.math.ColorRGBA;
-import com.ardor3d.renderer.IndexMode;
-import com.ardor3d.scenegraph.Mesh;
-import com.ardor3d.util.geom.BufferUtils;
 import environment.world.Face;
 import environment.world.Planet;
 import environment.world.Point;
 import environment.world.Tile;
 
-import java.nio.ByteBuffer;
-
 /**
  * Created by Michael on 11.11.2017.
  */
 public class MeshGenerator {
-
-	private static WorldRenderer worldRenderer;
 
 	static double anglex = Math.PI/2+0.5d;
 	static double angley = Math.PI/2+0.5d;
@@ -26,7 +18,6 @@ public class MeshGenerator {
 	static double[] pz;
 
 	public static void createWorld(Planet planet) {
-		if (worldRenderer != null) {
 			if (planet != null) {
 				WorldMesh worldMesh = new WorldMesh(20);
 
@@ -64,7 +55,7 @@ public class MeshGenerator {
 							top[2] = p3.multiply(factor);
 
 							TileMesh tileMesh = new TileMesh();
-							tileMesh.setTopFace(top[0],top[1],top[2]);
+							//tileMesh.setTopFace(top[0],top[1],top[2]);
 
 							Point[] down = new Point[3];
 							Tile [] neighbours = face.getNeighbours(tile.getX(),tile.getY());
@@ -74,17 +65,15 @@ public class MeshGenerator {
 									down[i] = p1.multiply(factor);
 									down[(i + 1) % 3] = p2.multiply(factor);
 									down[(i + 2) % 3] = p3.multiply(factor);
-									tileMesh.addSideFace(top[i],top[(i+1)%3],down[i],down[(i+1)%3]);
+							//		tileMesh.addSideFace(top[i],top[(i+1)%3],down[i],down[(i+1)%3]);
 								}
 							}
 
-							worldMesh.registerTile(tileMesh);
+							//worldMesh.registerTile(tileMesh);
 						}
 					}
 				}
 
-				worldRenderer.registerWorldMesh(worldMesh);
-			}
 		}
 	}
 
@@ -99,47 +88,46 @@ public class MeshGenerator {
 		Tile[] neighbours = t.getFace().getNeighbours(t.getX(),t.getY());
 		boolean[] lower = new boolean[3];
 		int vertices = 3;
-		
-		for (int i=0; i<3; i++) {
-			Tile neighbour = neighbours[i];
-			if (neighbour.getHeight() < t.getHeight()) {
-				lower[i] = true;
-				//vertices += 2;
-			} else {
-				lower[i] = false;
-			}
-		}
 
-		Mesh tile = new Mesh();
+//		for (int i=0; i<3; i++) {
+//			Tile neighbour = neighbours[i];
+//			if (neighbour.getHeight() < t.getHeight()) {
+//				lower[i] = true;
+//				//vertices += 2;
+//			} else {
+//				lower[i] = false;
+//			}
+//		}
 
-		tile.getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(vertices));
-
-		// top
-		final byte[] indices = new byte[vertices];
-		for (byte i=0; i< vertices; i++) { indices[i] = i; }
-		final ByteBuffer bbuf = BufferUtils.createByteBuffer(indices.length);
-		bbuf.put(indices);
-		bbuf.rewind();
-		tile.getMeshData().setIndexBuffer(bbuf);
-
-		tile.getMeshData().setIndexMode(IndexMode.Triangles);
-
-		tile.getMeshData().getVertexBuffer().clear();
-
-		tile.getMeshData().getVertexBuffer().put(-5); // first
-		tile.getMeshData().getVertexBuffer().put(0);
-		tile.getMeshData().getVertexBuffer().put(0);
-		tile.getMeshData().getVertexBuffer().put(5); // second
-		tile.getMeshData().getVertexBuffer().put(0);
-		tile.getMeshData().getVertexBuffer().put(0);
-		tile.getMeshData().getVertexBuffer().put(0); // third
-		tile.getMeshData().getVertexBuffer().put(5);
-		tile.getMeshData().getVertexBuffer().put(0);
-
-		tile.setDefaultColor(new ColorRGBA(0,1f,0,1f));
+//		Mesh tile = new Mesh();
+//
+//		tile.getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(vertices));
+//
+//		// top
+//		final byte[] indices = new byte[vertices];
+//		for (byte i=0; i< vertices; i++) { indices[i] = i; }
+//		final ByteBuffer bbuf = BufferUtils.createByteBuffer(indices.length);
+//		bbuf.put(indices);
+//		bbuf.rewind();
+//		tile.getMeshData().setIndexBuffer(bbuf);
+//
+//		tile.getMeshData().setIndexMode(IndexMode.Triangles);
+//
+//		tile.getMeshData().getVertexBuffer().clear();
+//
+//		tile.getMeshData().getVertexBuffer().put(-5); // first
+//		tile.getMeshData().getVertexBuffer().put(0);
+//		tile.getMeshData().getVertexBuffer().put(0);
+//		tile.getMeshData().getVertexBuffer().put(5); // second
+//		tile.getMeshData().getVertexBuffer().put(0);
+//		tile.getMeshData().getVertexBuffer().put(0);
+//		tile.getMeshData().getVertexBuffer().put(0); // third
+//		tile.getMeshData().getVertexBuffer().put(5);
+//		tile.getMeshData().getVertexBuffer().put(0);
+//
+//		tile.setDefaultColor(new ColorRGBA(0,1f,0,1f));
 	
 	}
-
 
 	/**
 	 * Returns rotated coordinates, depending on the two variables anglex and angley.
@@ -160,10 +148,5 @@ public class MeshGenerator {
 		}
 
 		return nv;
-	}
-
-	// this is being set during the creation of a WorldRenderer object
-	public static void setWorldRenderer(WorldRenderer worldRenderer) {
-		MeshGenerator.worldRenderer = worldRenderer;
 	}
 }
