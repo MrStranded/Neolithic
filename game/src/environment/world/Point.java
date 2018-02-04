@@ -50,6 +50,10 @@ public class Point {
 	public double getY() { return y; }
 	public double getZ() { return z; }
 
+	public float getXf() { return (float) x; }
+	public float getYf() { return (float) y; }
+	public float getZf() { return (float) z; }
+
 	/**optional parameter.
 	 * The world sheet corresponds to the three planes, on which the points of a ikosaeder lie.
 	 * 0->0 bis 3

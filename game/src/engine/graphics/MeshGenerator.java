@@ -55,21 +55,21 @@ public class MeshGenerator {
 							top[2] = p3.multiply(factor);
 
 							TileMesh tileMesh = new TileMesh();
-							//tileMesh.setTopFace(top[0],top[1],top[2]);
+							tileMesh.setTopFace(top[0],top[1],top[2]);
 
-							Point[] down = new Point[3];
-							Tile [] neighbours = face.getNeighbours(tile.getX(),tile.getY());
-							for (int i = 0; i < 3; i++) {
-								if (neighbours[i].getHeight() < tile.getHeight()) {
-									factor = getHeightFactor(neighbours[i], planet);
-									down[i] = p1.multiply(factor);
-									down[(i + 1) % 3] = p2.multiply(factor);
-									down[(i + 2) % 3] = p3.multiply(factor);
-							//		tileMesh.addSideFace(top[i],top[(i+1)%3],down[i],down[(i+1)%3]);
-								}
-							}
+//							Point[] down = new Point[3];
+//							Tile [] neighbours = face.getNeighbours(tile.getX(),tile.getY());
+//							for (int i = 0; i < 3; i++) {
+//								if (neighbours[i].getHeight() < tile.getHeight()) {
+//									factor = getHeightFactor(neighbours[i], planet);
+//									down[i] = p1.multiply(factor);
+//									down[(i + 1) % 3] = p2.multiply(factor);
+//									down[(i + 2) % 3] = p3.multiply(factor);
+//							//		tileMesh.addSideFace(top[i],top[(i+1)%3],down[i],down[(i+1)%3]);
+//								}
+//							}
 
-							//worldMesh.registerTile(tileMesh);
+							worldMesh.registerTile(tileMesh);
 						}
 					}
 				}

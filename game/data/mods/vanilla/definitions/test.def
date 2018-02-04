@@ -2,12 +2,6 @@ Tile: tDirt {
 	color: 220,200,40;
 	name: "Dirt";
 	growChance: "5"; # in percent
-
-	on.tick {
-		if (hasNeighbour(fWater) && chance(growChance)) {
-			replace (self, tGras);
-		}
-	}
 }
 Tile: tGras {
 	color: 180,220,30;

@@ -25,7 +25,8 @@ public class Start {
 
 		// ------------------- planet creation
 
-		Planet gaia = new Planet(32,18);
+		Planet gaia = new Planet(32,10);
+		Data.setPlanet(gaia);
 
 		// ------------------- window setup
 
@@ -33,7 +34,7 @@ public class Start {
 		DrawThread drawThread;
 
 		if (mode3d) {   // 3D
-			WindowInterface window3d = new WorldWindow("Neolihic", gaia,1200,1000);
+			WindowInterface window3d = new WorldWindow("Neolihic",1200,1000);
 
 			//drawThread = new DrawThread(window3d,100);
 			//drawThread.start();
@@ -50,8 +51,6 @@ public class Start {
 		}
 
 		// ------------------- geology generation
-
-		Data.setPlanet(gaia);
 
 		PlanetFormer.setPlanet(gaia);
 		PlanetFormer planetFormer = new PlanetFormer();
