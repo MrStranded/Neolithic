@@ -62,7 +62,7 @@ public class TileMesh {
 		// Creating a geometry, and apply a single color material to it
 		meshGeometries[0] = new Geometry("Tile_Top", meshFaces[0]);
 		Material mat = new Material(WorldWindow.getStaticAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-		mat.setColor("Color", new ColorRGBA(0.8f,0.7f,0.1f,1f));
+		mat.setColor("Color", new ColorRGBA((float) Math.random(),0.7f,0.1f,1f));
 		meshGeometries[0].setMaterial(mat);
 	}
 
@@ -99,7 +99,8 @@ public class TileMesh {
 		// Creating a geometry, and apply a single color material to it
 		meshGeometries[index] = new Geometry("Tile_Side", meshFaces[index]);
 		Material mat = new Material(WorldWindow.getStaticAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-		mat.setColor("Color", new ColorRGBA(0.6f,0.5f,0.0f,0.7f));
+		//mat.setColor("Color", new ColorRGBA(0.6f,0.5f,0.0f,0.7f));
+		mat.setColor("Color", new ColorRGBA((float) Math.random(),(float) Math.random(),(float) Math.random(),0.7f));
 		meshGeometries[index].setMaterial(mat);
 
 		index = (index+1) % 4;

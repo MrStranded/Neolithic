@@ -130,6 +130,34 @@ public class Face {
 	}
 
 	/**
+	 * Checks wheter tile is on edge 0 of the face. (diagonal)
+	 * @param tx x coordinate of the Tile
+	 * @param ty y coordinate of the Tile
+	 * @return true if it is on edge
+	 */
+	public boolean tileIsOnEdge0(int tx,int ty) {
+		return tiles[tx][ty].isFlipped() == tiles[size-tx-1][size-ty-1].isFlipped();
+	}
+	/**
+	 * Checks wheter tile is on edge 1 of the face. (x-Axis)
+	 * @param tx x coordinate of the Tile
+	 * @param ty y coordinate of the Tile
+	 * @return true if it is on edge
+	 */
+	public boolean tileIsOnEdge1(int tx,int ty) {
+		return !inBounds(size-tx,size-ty-1);
+	}
+	/**
+	 * Checks wheter tile is on edge 2 of the face. (y-Axis)
+	 * @param tx x coordinate of the Tile
+	 * @param ty y coordinate of the Tile
+	 * @return true if it is on edge
+	 */
+	public boolean tileIsOnEdge2(int tx,int ty) {
+		return !inBounds(size-tx-1,size-ty);
+	}
+
+	/**
 	 * Returns all neighbouring Tiles of a given coordinate.
 	 * @param tx x coordinate of the Tile
 	 * @param ty y coordinate of the Tile

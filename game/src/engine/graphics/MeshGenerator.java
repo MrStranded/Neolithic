@@ -18,91 +18,112 @@ public class MeshGenerator {
 	static double[] pz;
 
 	public static void createWorld(Planet planet) {
-			if (planet != null) {
-				WorldMesh worldMesh = new WorldMesh(20);
+		if (planet != null) {
+			WorldMesh worldMesh = new WorldMesh(20);
 
-				for (Face face : planet.getFaces()) {
-					Point origin = face.getCorner(0).copy();
-					Point dx = face.getCorner(1).subtract(origin).divide(planet.getSize());
-					Point dy = face.getCorner(2).subtract(origin).divide(planet.getSize());
+			for (Face face : planet.getFaces()) {
+				Point origin = face.getCorner(0).copy();
+				Point dx = face.getCorner(1).subtract(origin).divide(planet.getSize());
+				Point dy = face.getCorner(2).subtract(origin).divide(planet.getSize());
 
-					for (int x=0; x<face.getSize(); x++) {
-						for (int y=0; y<face.getSize(); y++) {
-							Point p1,p2,p3;
-							Tile tile = face.getTile(x,y);
+				for (int x=0; x<face.getSize(); x++) {
+					for (int y=0; y<face.getSize(); y++) {
+						Point p1,p2,p3;
+						Tile tile = face.getTile(x,y);
 
-							// calculating normal positions
-							p1 = origin.add(dx.multiply(tile.getVX())).add(dy.multiply(tile.getVY()));
-							p2 = p1.add(dx);
-							p3 = p1.add(dy);
+						// calculating normal positions
+						p1 = origin.add(dx.multiply(tile.getVX())).add(dy.multiply(tile.getVY()));
+						p2 = p1.add(dx);
+						p3 = p1.add(dy);
 
-							// when flipped -> translate p1 and swap p2,p3 because of normal of  meshface
-							if (tile.isFlipped()) {
-								p1 = p1.add(dx).add(dy);
-								Point tmp = p2;
-								p2 = p3;
-								p3 = tmp;
-							}
+						// when flipped -> translate p1 and swap p2,p3 because of normal of  meshface
+						if (tile.isFlipped()) {
+							p1 = p1.add(dx).add(dy);
+							Point tmp = p2;
+							p2 = p3;
+							p3 = tmp;
+						}
 
-							// multiply by (height of tile/100d + radius) / radius
+						// multiply by (height of tile/100d + radius) / radius
 
-							//double correction = 1d;
+						//double correction = 1d;
 
-							Point[] top = new Point[3];
-							double factor = getHeightFactor(tile,planet);
-							top[0] = p1.multiply(factor);
-							top[1] = p2.multiply(factor);
-							top[2] = p3.multiply(factor);
+						double factor = getHeightFactor(tile,planet);
+						Point[] top = new Point[3];
+						top[0] = p1.multiply(factor);
+						top[1] = p2.multiply(factor);
+						top[2] = p3.multiply(factor);
 
-							TileMesh tileMesh = new TileMesh();
-							tileMesh.setTopFace(top[0],top[1],top[2]);
+						TileMesh tileMesh = new TileMesh();
+						tileMesh.setTopFace(top[0],top[1],top[2]);
 
-							Point down1 = top[0];
-							Point down2 = top[0];
-							Point top1 = top[0];
-							Point top2 = top[0];
+						Point down1 = top[0];
+						Point down2 = top[0];
+						Point top1 = top[0];
+						Point top2 = top[0];
 
-							double lowerFactor;
+						double lowerFactor;
 
-							Tile [] neighbours = face.getNeighbours(tile.getX(),tile.getY());
-							for (int i = 0; i < 3; i++) {
-								if (neighbours[i].getHeight() < tile.getHeight()) {
-									lowerFactor = getHeightFactor(neighbours[i], planet);
+						Tile [] neighbours = face.getNeighbours(tile.getX(),tile.getY());
+						for (int i = 0; i < 3; i++) {
+							if (neighbours[i].getHeight() < tile.getHeight()) {
+								lowerFactor = getHeightFactor(neighbours[i], planet);
 
-									switch (i) {
-										case 0:
-											top1 = top[2];
-											top2 = top[1];
-											down1 = top1.multiply(lowerFactor/factor);
-											down2 = top2.multiply(lowerFactor/factor);
-											break;
-										case 1:
-											top1 = top[0];
-											top2 = top[2];
-											down1 = top1.multiply(lowerFactor/factor);
-											down2 = top2.multiply(lowerFactor/factor);
-											break;
-										case 2:
+								boolean doit = false;
+								switch (i) {
+									case 0:
+										if (!face.tileIsOnEdge0(tile.getX(), tile.getY())) {
+	//												top1 = top[2];
+	//												top2 = top[1];
+										} else {
+											if (!face.tileIsOnEdge1(tile.getX(),tile.getY())) {
+												top1 = top[0];
+												top2 = top[2];
+											} else {
+												top1 = top[1];
+												top2 = top[0];
+											}
+											doit=true;
+										}
+										break;
+									case 1:
+										if (!face.tileIsOnEdge1(tile.getX(), tile.getY())) {
+	//												top1 = top[0];
+	//												top2 = top[2];
+										} else {
 											top1 = top[1];
 											top2 = top[0];
-											down1 = top1.multiply(lowerFactor/factor);
-											down2 = top2.multiply(lowerFactor/factor);
-											break;
-									}
+											//doit=true;
+										}
+										break;
+									case 2:
+										if (!face.tileIsOnEdge2(tile.getX(),tile.getY())) {
+	//												top1 = top[1];
+	//												top2 = top[0];
+										} else {
+											top1 = top[0];
+											top2 = top[2];
+											//doit=true;
+										}
+										break;
+								}
 
-									tileMesh.addSideFace(top1,top2,down1,down2);
+								down1 = top1.multiply(lowerFactor / factor);
+								down2 = top2.multiply(lowerFactor / factor);
+
+								if (doit) tileMesh.addSideFace(top1,top2,down1,down2);
 //									if (tile.isFlipped()) {
 //										tileMesh.addSideFace(top1,top2,down1,down2);
 //									} else {
 //										tileMesh.addSideFace(top2,top1,down2,down1);
 //									}
-								}
 							}
-
-							worldMesh.registerTile(tileMesh);
 						}
+
+						worldMesh.registerTile(tileMesh);
 					}
 				}
+			}
 
 		}
 	}
