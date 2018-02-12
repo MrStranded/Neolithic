@@ -71,36 +71,40 @@ public class TileMesh {
 	 * the first dimension of the array holds the point
 	 * the second dimension of the array holds the x,y,z values
 	 */
-//	public void addSideFace(Point top1, Point top2, Point down1, Point down2) {
-//		meshFaces[index] = new Mesh();
-//		meshFaces[index].getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(4));
-//
-//		final byte[] indices = {0, 1, 2, 3};
-//		final ByteBuffer bbuf = BufferUtils.createByteBuffer(indices.length);
-//		bbuf.put(indices);
-//		bbuf.rewind();
-//		meshFaces[index].getMeshData().setIndexBuffer(bbuf);
-//		meshFaces[index].getMeshData().setIndexMode(IndexMode.Quads);
-//		meshFaces[index].getMeshData().getVertexBuffer().clear();
-//
-//		meshFaces[index].getMeshData().getVertexBuffer().put((float) top1.getX());
-//		meshFaces[index].getMeshData().getVertexBuffer().put((float) top1.getY());
-//		meshFaces[index].getMeshData().getVertexBuffer().put((float) top1.getZ());
-//		meshFaces[index].getMeshData().getVertexBuffer().put((float) top2.getX());
-//		meshFaces[index].getMeshData().getVertexBuffer().put((float) top2.getY());
-//		meshFaces[index].getMeshData().getVertexBuffer().put((float) top2.getZ());
-//		meshFaces[index].getMeshData().getVertexBuffer().put((float) down2.getX());
-//		meshFaces[index].getMeshData().getVertexBuffer().put((float) down2.getY());
-//		meshFaces[index].getMeshData().getVertexBuffer().put((float) down2.getZ());
-//		meshFaces[index].getMeshData().getVertexBuffer().put((float) down1.getX());
-//		meshFaces[index].getMeshData().getVertexBuffer().put((float) down1.getY());
-//		meshFaces[index].getMeshData().getVertexBuffer().put((float) down1.getZ());
-//
-//		meshFaces[index].setDefaultColor(new ColorRGBA(1f,1f,1f,1f));
-//
-//		index = (index+1) % 4;
-//		if (index == 0) index = 1;
-//	}
+	public void addSideFace(Point top1, Point top2, Point down1, Point down2) {
+		meshFaces[index] = new Mesh();
+
+		short[] indexes = {0, 1, 3, 2};
+
+		// Vertex positions in space
+		Vector3f[] vertices = new Vector3f[4];
+		vertices[0] = new Vector3f(top1.getXf(),top1.getYf(),top1.getZf());
+		vertices[1] = new Vector3f(top2.getXf(),top2.getYf(),top2.getZf());
+		vertices[2] = new Vector3f(down1.getXf(),down1.getYf(),down1.getZf());
+		vertices[3] = new Vector3f(down2.getXf(),down2.getYf(),down2.getZf());
+
+		// Texture coordinates
+		Vector2f[] texCoord = new Vector2f[4];
+		texCoord[0] = new Vector2f(0,0);
+		texCoord[1] = new Vector2f(1,0);
+		texCoord[2] = new Vector2f(0,1);
+		texCoord[3] = new Vector2f(1,1);
+
+		// Setting buffers
+		meshFaces[index].setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(vertices));
+		meshFaces[index].setBuffer(VertexBuffer.Type.TexCoord, 2, BufferUtils.createFloatBuffer(texCoord));
+		meshFaces[index].setBuffer(VertexBuffer.Type.Index, 1, BufferUtils.createShortBuffer(indexes));
+		meshFaces[index].updateBound();
+
+		// Creating a geometry, and apply a single color material to it
+		meshGeometries[index] = new Geometry("Tile_Side", meshFaces[index]);
+		Material mat = new Material(WorldWindow.getStaticAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+		mat.setColor("Color", new ColorRGBA(0.6f,0.5f,0.0f,0.7f));
+		meshGeometries[index].setMaterial(mat);
+
+		index = (index+1) % 4;
+		if (index == 0) index = 1;
+	}
 
 	public Mesh getTopMesh() {
 		return meshFaces[0];
@@ -117,6 +121,10 @@ public class TileMesh {
 	public Mesh getSideMesh(int i) {
 		if ((i < 0) || (i > 2)) return null;
 		return meshFaces[i+1];
+	}
+	public Geometry getSideGeometry(int i) {
+		if ((i < 0) || (i > 2)) return null;
+		return meshGeometries[i+1];
 	}
 
 }

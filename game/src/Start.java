@@ -25,7 +25,7 @@ public class Start {
 
 		// ------------------- planet creation
 
-		Planet gaia = new Planet(32,10);
+		Planet gaia = new Planet(8,10);
 		Data.setPlanet(gaia);
 
 		// ------------------- window setup

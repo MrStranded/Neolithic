@@ -46,7 +46,7 @@ public class MeshGenerator {
 
 							// multiply by (height of tile/100d + radius) / radius
 
-							double correction = 1d;
+							//double correction = 1d;
 
 							Point[] top = new Point[3];
 							double factor = getHeightFactor(tile,planet);
@@ -57,17 +57,35 @@ public class MeshGenerator {
 							TileMesh tileMesh = new TileMesh();
 							tileMesh.setTopFace(top[0],top[1],top[2]);
 
-//							Point[] down = new Point[3];
-//							Tile [] neighbours = face.getNeighbours(tile.getX(),tile.getY());
-//							for (int i = 0; i < 3; i++) {
-//								if (neighbours[i].getHeight() < tile.getHeight()) {
-//									factor = getHeightFactor(neighbours[i], planet);
-//									down[i] = p1.multiply(factor);
-//									down[(i + 1) % 3] = p2.multiply(factor);
-//									down[(i + 2) % 3] = p3.multiply(factor);
-//							//		tileMesh.addSideFace(top[i],top[(i+1)%3],down[i],down[(i+1)%3]);
-//								}
-//							}
+							//Point[] down = new Point[3];
+							Point down1 = p1.copy();
+							Point down2 = p2.copy();
+							Point top1 = top[0];
+							Point top2 = top[1];
+
+							double lowerFactor;
+
+							Tile [] neighbours = face.getNeighbours(tile.getX(),tile.getY());
+							for (int i = 0; i < 1; i++) {
+								if (neighbours[i].getHeight() < tile.getHeight()) {
+									lowerFactor = getHeightFactor(neighbours[i], planet);
+
+									switch (i) {
+										case 0:
+											top1 = top[0];
+											top2 = top[2];
+											down1 = top1.multiply(lowerFactor/factor);
+											down2 = top2.multiply(lowerFactor/factor);
+											break;
+									}
+
+									if (tile.isFlipped()) {
+										tileMesh.addSideFace(top1,top2,down1,down2);
+									} else {
+										tileMesh.addSideFace(top2,top1,down2,down1);
+									}
+								}
+							}
 
 							worldMesh.registerTile(tileMesh);
 						}
@@ -78,7 +96,7 @@ public class MeshGenerator {
 	}
 
 	private static double getHeightFactor(Tile tile,Planet planet) {
-		double correction = 100d;
+		double correction = 20d;
 		return ((((double) tile.getHeight())/correction + planet.getRadius()) / planet.getRadius());
 	}
 	

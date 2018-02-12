@@ -1,6 +1,7 @@
 package engine.graphics;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import gui.WorldWindow;
@@ -21,11 +22,11 @@ public class WorldMesh {
 	public void registerTile(TileMesh mesh) {
 		meshs.add(mesh);
 		WorldWindow.getStaticRootNode().attachChild(mesh.getTopGeometry());
-//		for (int i=0; i<3; i++) {
-//			Mesh side = mesh.getSideMesh(i);
-//			if (side == null) break;
-//			//this.attachChild(side);
-//		}
+		for (int i=0; i<3; i++) {
+			Geometry side = mesh.getSideGeometry(i);
+			if (side == null) break;
+			WorldWindow.getStaticRootNode().attachChild(side);
+		}
 	}
 //
 //	public List<Mesh> getMeshes() {
