@@ -60,7 +60,7 @@ public class WorldWindow extends SimpleApplication implements WindowInterface {
 		MeshGenerator.createWorld(Data.getPlanet());
 
 		cam.setLocation(new Vector3f(0,0,30f));
-		flyCam.setMoveSpeed(3f);
+		flyCam.setMoveSpeed(7f);
 	}
 
 	public static AssetManager getStaticAssetManager() { return WorldWindow.staticAssetManager; }

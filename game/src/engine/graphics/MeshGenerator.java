@@ -57,16 +57,15 @@ public class MeshGenerator {
 							TileMesh tileMesh = new TileMesh();
 							tileMesh.setTopFace(top[0],top[1],top[2]);
 
-							//Point[] down = new Point[3];
-							Point down1 = p1.copy();
-							Point down2 = p2.copy();
+							Point down1 = top[0];
+							Point down2 = top[0];
 							Point top1 = top[0];
-							Point top2 = top[1];
+							Point top2 = top[0];
 
 							double lowerFactor;
 
 							Tile [] neighbours = face.getNeighbours(tile.getX(),tile.getY());
-							for (int i = 0; i < 1; i++) {
+							for (int i = 0; i < 3; i++) {
 								if (neighbours[i].getHeight() < tile.getHeight()) {
 									lowerFactor = getHeightFactor(neighbours[i], planet);
 
@@ -74,6 +73,18 @@ public class MeshGenerator {
 										case 0:
 											top1 = top[2];
 											top2 = top[1];
+											down1 = top1.multiply(lowerFactor/factor);
+											down2 = top2.multiply(lowerFactor/factor);
+											break;
+										case 1:
+											top1 = top[0];
+											top2 = top[2];
+											down1 = top1.multiply(lowerFactor/factor);
+											down2 = top2.multiply(lowerFactor/factor);
+											break;
+										case 2:
+											top1 = top[1];
+											top2 = top[0];
 											down1 = top1.multiply(lowerFactor/factor);
 											down2 = top2.multiply(lowerFactor/factor);
 											break;
