@@ -72,18 +72,19 @@ public class MeshGenerator {
 
 									switch (i) {
 										case 0:
-											top1 = top[0];
-											top2 = top[2];
+											top1 = top[2];
+											top2 = top[1];
 											down1 = top1.multiply(lowerFactor/factor);
 											down2 = top2.multiply(lowerFactor/factor);
 											break;
 									}
 
-									if (tile.isFlipped()) {
-										tileMesh.addSideFace(top1,top2,down1,down2);
-									} else {
-										tileMesh.addSideFace(top2,top1,down2,down1);
-									}
+									tileMesh.addSideFace(top1,top2,down1,down2);
+//									if (tile.isFlipped()) {
+//										tileMesh.addSideFace(top1,top2,down1,down2);
+//									} else {
+//										tileMesh.addSideFace(top2,top1,down2,down1);
+//									}
 								}
 							}
 

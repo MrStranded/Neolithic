@@ -74,14 +74,14 @@ public class TileMesh {
 	public void addSideFace(Point top1, Point top2, Point down1, Point down2) {
 		meshFaces[index] = new Mesh();
 
-		short[] indexes = {0, 1, 3, 2};
+		short[] indexes = {2,0,1,1,3,2};
 
 		// Vertex positions in space
 		Vector3f[] vertices = new Vector3f[4];
-		vertices[0] = new Vector3f(top1.getXf(),top1.getYf(),top1.getZf());
-		vertices[1] = new Vector3f(top2.getXf(),top2.getYf(),top2.getZf());
-		vertices[2] = new Vector3f(down1.getXf(),down1.getYf(),down1.getZf());
-		vertices[3] = new Vector3f(down2.getXf(),down2.getYf(),down2.getZf());
+		vertices[0] = new Vector3f(down1.getXf(),down1.getYf(),down1.getZf());
+		vertices[1] = new Vector3f(down2.getXf(),down2.getYf(),down2.getZf());
+		vertices[2] = new Vector3f(top1.getXf(),top1.getYf(),top1.getZf());
+		vertices[3] = new Vector3f(top2.getXf(),top2.getYf(),top2.getZf());
 
 		// Texture coordinates
 		Vector2f[] texCoord = new Vector2f[4];

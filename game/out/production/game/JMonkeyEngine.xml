@@ -1,0 +1,94 @@
+<component name="libraryTable">
+  <library name="JMonkeyEngine">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/JMonkeyEngine" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/dense64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/denseC64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/eventbus.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/gluegen-rt-natives-android-aarch64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/gluegen-rt-natives-android-armv6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/gluegen-rt-natives-linux-amd64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/gluegen-rt-natives-linux-armv6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/gluegen-rt-natives-linux-armv6hf.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/gluegen-rt-natives-linux-i586.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/gluegen-rt-natives-macosx-universal.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/gluegen-rt-natives-solaris-amd64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/gluegen-rt-natives-solaris-i586.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/gluegen-rt-natives-windows-amd64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/gluegen-rt-natives-windows-i586.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/gluegen-rt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/j-ogg-all.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jglfont-core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jinput.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jme3-blender.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jme3-core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jme3-desktop.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jme3-effects.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jme3-jbullet.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jme3-jogg.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jme3-jogl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jme3-lwjgl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jme3-networking.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jme3-niftygui.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jme3-plugins.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jme3-terrain.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/joal-natives-android-aarch64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/joal-natives-android-armv6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/joal-natives-linux-amd64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/joal-natives-linux-armv6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/joal-natives-linux-armv6hf.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/joal-natives-linux-i586.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/joal-natives-macosx-universal.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/joal-natives-solaris-amd64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/joal-natives-solaris-i586.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/joal-natives-windows-amd64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/joal-natives-windows-i586.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/joal.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jogl-all-natives-android-aarch64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jogl-all-natives-android-armv6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jogl-all-natives-linux-amd64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jogl-all-natives-linux-armv6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jogl-all-natives-linux-armv6hf.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jogl-all-natives-linux-i586.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jogl-all-natives-macosx-universal.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jogl-all-natives-solaris-amd64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jogl-all-natives-solaris-i586.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jogl-all-natives-windows-amd64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jogl-all-natives-windows-i586.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jogl-all.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jsr305.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jutils.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/lwjgl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/nifty-default-controls.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/nifty-examples.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/nifty.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/simple.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/vecmath.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/xpp3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/lib/JMonkeyEngine/javadoc" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/lib/jsr305.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-android-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-blender-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-bullet-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-core-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-desktop-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-effects-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-ios-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-jbullet-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-jogg-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-jogl-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-lwjgl-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-lwjgl3-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-networking-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-niftygui-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-plugins-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JMonkeyEngine/sources/jme3-terrain-sources.jar!/" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/lib/JMonkeyEngine" recursive="false" />
+  </library>
+</component>
