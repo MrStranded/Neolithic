@@ -9,12 +9,6 @@ WorldGen: gen01 {
 	defaultFluid: fWater;
 
 	formations: mountain01,mountain02,valley01;
-
-	#mountainPercent: "1",42;
-	#mountainHeight: 60,255,20,10;
-
-	#valleyPercent: "0.1",100;
-	#vallayDepth: 0,10,30,6;
 }
 
 Formation: mountain01 {

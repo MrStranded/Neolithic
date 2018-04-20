@@ -8,7 +8,7 @@ package environment.world;
 public class Point {
 
 	private double x,y,z;
-	private byte worldSheet; // 0->0 bis 3, 1->4 bis 7, 2->8 bis 11
+	private byte worldSheet; // 0->0 till 3, 1->4 till 7, 2->8 till 11
 
 	public Point (double x,double y,double z) {
 		this.x=x;
@@ -56,9 +56,9 @@ public class Point {
 
 	/**optional parameter.
 	 * The world sheet corresponds to the three planes, on which the points of a ikosaeder lie.
-	 * 0->0 bis 3
-	 * 1->4 bis 7
-	 * 2->8 bis 11
+	 * 0->0 till 3
+	 * 1->4 till 7
+	 * 2->8 till 11
 	 */
 	public byte getWorldSheet() { return worldSheet; }
 

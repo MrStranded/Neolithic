@@ -71,7 +71,7 @@ public class TileMesh {
 	 * the first dimension of the array holds the point
 	 * the second dimension of the array holds the x,y,z values
 	 */
-	public void addSideFace(Point top1, Point top2, Point down1, Point down2) {
+	public void addSideFace(Point top1, Point top2, Point down1, Point down2, ColorRGBA color) {
 		meshFaces[index] = new Mesh();
 
 		short[] indexes = {2,0,1,1,3,2};
@@ -100,7 +100,7 @@ public class TileMesh {
 		meshGeometries[index] = new Geometry("Tile_Side", meshFaces[index]);
 		Material mat = new Material(WorldWindow.getStaticAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
 		//mat.setColor("Color", new ColorRGBA(0.6f,0.5f,0.0f,0.7f));
-		mat.setColor("Color", new ColorRGBA((float) Math.random(),(float) Math.random(),(float) Math.random(),0.7f));
+		mat.setColor("Color", color);
 		meshGeometries[index].setMaterial(mat);
 
 		index = (index+1) % 4;

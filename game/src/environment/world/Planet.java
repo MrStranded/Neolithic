@@ -13,6 +13,7 @@ public class Planet {
 	private Point[] worldPoints = new Point[12];
 	private int size; // side length of faces
 	private double radius; // radius of planet
+	private double tileHeightCorrection = 32d; // is used in CoordinateCalculator.getHeightFactor to normalize tile heights
 
 	private ConcurrentLinkedDeque<Entity> entityProcessingQueue = new ConcurrentLinkedDeque<>();
 
@@ -165,4 +166,11 @@ public class Planet {
 		return neighbours;
 	}
 
+	/**
+	 * Is used in CoordinateCalculator.getHeightFactor to normalize tile heights.
+	 * @return
+	 */
+	public double getTileHeightCorrection() {
+		return tileHeightCorrection;
+	}
 }
