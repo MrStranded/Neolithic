@@ -15,7 +15,7 @@ Fluid: fWater {
 Object: oTree {
 	name: "Tree";
 	char: T;
-	color: 120,250,20;
+	color: 60,150,20;
 }
 
 Attribute: attSpeed { name: "Speed"; mutate:1; }

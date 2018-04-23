@@ -22,6 +22,20 @@ public class Attribute {
 		value = other.value;
 	}
 
+	/**
+	 * Adds the value of another Attribute to the value of this Attribute and returns it.
+	 * ATTENTION: The addition is inplace.
+	 *
+	 * @param other Attribute
+	 * @return this (modified)
+	 */
+	public Attribute add (Attribute other) {
+		if (id == other.id) {
+			value += other.value;
+		}
+		return this;
+	}
+
 	// ###################################################################################
 	// ################################ Getters & Setters ################################
 	// ###################################################################################

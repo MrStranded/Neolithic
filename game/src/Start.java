@@ -25,12 +25,12 @@ public class Start {
 
 		// ------------------- planet creation
 
-		Planet gaia = new Planet(8,5);
+		Planet gaia = new Planet(8,15);
 		Data.setPlanet(gaia);
 
 		// ------------------- window setup
 
-		boolean mode3d = true;
+		boolean mode3d = false;
 		DrawThread drawThread;
 
 		if (mode3d) {   // 3D

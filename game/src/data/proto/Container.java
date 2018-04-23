@@ -1,5 +1,6 @@
 package data.proto;
 
+import data.infrastructure.BinaryAttributeTree;
 import data.personal.Attribute;
 import enums.script.ObjectType;
 
@@ -17,7 +18,8 @@ public class Container {
 	private int id = 0;
 
 	private ConcurrentLinkedDeque<Value> values = new ConcurrentLinkedDeque<>();
-	private ConcurrentLinkedDeque<Attribute> attributes = new ConcurrentLinkedDeque<>();
+	//private ConcurrentLinkedDeque<Attribute> attributes = new ConcurrentLinkedDeque<>();
+	private BinaryAttributeTree attributes = new BinaryAttributeTree();
 
 	public Container(String objectType) {
 		type = ObjectType.OBJECT.get(objectType);
@@ -68,12 +70,13 @@ public class Container {
 	// ###################################################################################
 
 	public void addAttribute(Attribute attribute) {
-		for (Attribute a : attributes) {
+		/*for (Attribute a : attributes) {
 			if (a.getId() == attribute.getId()) {
 				a.setValue(a.getValue() + attribute.getValue());
 				return;
 			}
 		}
+		attributes.add(attribute);*/
 		attributes.add(attribute);
 	}
 	public void addAttribute(int id,int value) {
@@ -109,10 +112,13 @@ public class Container {
 		this.values = values;
 	}
 
-	public ConcurrentLinkedDeque<Attribute> getAttributes() {
+	public BinaryAttributeTree getAttributes() {
+		return attributes;
+	}
+	/*public ConcurrentLinkedDeque<Attribute> getAttributes() {
 		return attributes;
 	}
 	public void setAttributes(ConcurrentLinkedDeque<Attribute> attributes) {
 		this.attributes = attributes;
-	}
+	}*/
 }
