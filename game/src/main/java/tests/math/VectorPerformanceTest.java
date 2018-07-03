@@ -16,13 +16,13 @@ public class VectorPerformanceTest {
 
 		for (int j=0; j<m; j++) {
 
-			Vector3 a = new Vector3(1, 2, 3);
+			Vector3 a = new Vector3(1,2,3);
+			Vector3 b = new Vector3(3,2,1);
 
 			t = System.nanoTime();
 
 			for (int i = 0; i < n; i++) {
-				a = a.times(2);
-				a = a.times(0.5);
+				a = a.cross(b);
 			}
 
 			tn += System.nanoTime() - t;
@@ -30,8 +30,7 @@ public class VectorPerformanceTest {
 			t = System.nanoTime();
 
 			for (int i = 0; i < n; i++) {
-				a = a.timesInplace(2);
-				a = a.timesInplace(0.5);
+				a = a.crossInplace(b);
 			}
 
 			ti += System.nanoTime() - t;

@@ -27,11 +27,32 @@ public class Vector3 {
 		return new Vector3(x+other.x, y+other.y, z+other.z);
 	}
 
+	public Vector3 plusInplace(Vector3 other) {
+		x += other.x;
+		y += other.y;
+		z += other.z;
+		return this;
+	}
+
 	public Vector3 minus(Vector3 other) {
 		return new Vector3(x-other.x, y-other.y, z-other.z);
 	}
 
+	public Vector3 minusInplace(Vector3 other) {
+		x -= other.x;
+		y -= other.y;
+		z -= other.z;
+		return this;
+	}
+
 	public Vector3 times(double t) { return new Vector3(x*t,y*t,z*t); }
+
+	public Vector3 timesInplace(double t) {
+		x *= t;
+		y *= t;
+		z *= t;
+		return this;
+	}
 
 	public double dot(Vector3 other) {
 		return x*other.x + y*other.y + z*other.z;
@@ -44,10 +65,11 @@ public class Vector3 {
 				x*other.y - other.x*y);
 	}
 
-	public Vector3 timesInplace(double t) {
-		x = x*t;
-		y = y*t;
-		z = z*t;
+	public Vector3 crossInplace(Vector3 other) {
+		double newX = y*other.z - other.y*z;
+		double newY = z*other.x - other.z*x;
+		double newZ = x*other.y - other.x*y;
+		x = newX; y = newY; z = newZ;
 		return this;
 	}
 
