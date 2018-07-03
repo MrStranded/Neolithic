@@ -5,7 +5,7 @@ package math;
  */
 public class Vector3 {
 
-	private final double x,y,z;
+	private double x,y,z;
 
 	public Vector3(double x, double y, double z) {
 		this.x = x;
@@ -37,11 +37,18 @@ public class Vector3 {
 		return x*other.x + y*other.y + z*other.z;
 	}
 
-	public Vector3 cross (Vector3 other) {
+	public Vector3 cross(Vector3 other) {
 		return new Vector3(
 				y*other.z - other.y*z,
 				z*other.x - other.z*x,
 				x*other.y - other.x*y);
+	}
+
+	public Vector3 timesInplace(double t) {
+		x = x*t;
+		y = y*t;
+		z = z*t;
+		return this;
 	}
 
 	public double length() {
