@@ -36,11 +36,35 @@ public class Vector4Test {
 		assertEquals(4,b.getZ());
 		assertEquals(1,b.getW());
 
-		// standardizing a Vector4 with w==0 does not crash, but return the vector with unchanged x,y,z values and w==1
+		// standardizing a Vector4 with w==0 has to throw an ArtithmeticException
 		Vector4 c = new Vector4(1,3,8,0);
 
 		try {
 			Vector4 d = c.standardize();
+
+			fail("Method should throw an ArtihmeticException");
+		} catch (ArithmeticException e) {
+			// all is well. method behaves as expected
+		}
+	}
+
+	@Test
+	public void testStandardizationInplace() {
+
+		Vector4 a = new Vector4(1,3,8,2);
+
+		a.standardizeInplace();
+
+		assertEquals(0.5,a.getX());
+		assertEquals(1.5,a.getY());
+		assertEquals(4,a.getZ());
+		assertEquals(1,a.getW());
+
+		// standardizing a Vector4 with w==0 has to throw an ArtithmeticException
+		Vector4 c = new Vector4(1,3,8,0);
+
+		try {
+			c.standardizeInplace();
 
 			fail("Method should throw an ArtihmeticException");
 		} catch (ArithmeticException e) {

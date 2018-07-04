@@ -20,27 +20,20 @@ public class VectorPerformanceTest {
 			Vector3 b = new Vector3(3,2,1);
 
 			t = System.nanoTime();
-
 			for (int i = 0; i < n; i++) {
 				a = a.cross(b);
 			}
-
 			tn += System.nanoTime() - t;
 
 			t = System.nanoTime();
-
 			for (int i = 0; i < n; i++) {
 				a = a.crossInplace(b);
 			}
-
 			ti += System.nanoTime() - t;
-
 		}
 
 		System.out.println("normal took " + tn + " nanoseconds");
-
 		System.out.println("inplace took "+ti+" nanoseconds");
-
 		System.out.println("inplace is "+((double) tn/(double) ti)+" times faster");
 	}
 

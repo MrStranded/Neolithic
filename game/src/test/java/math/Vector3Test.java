@@ -54,6 +54,19 @@ public class Vector3Test {
 	}
 
 	@Test
+	public void testAdditionInplace() {
+
+		Vector3 a = new Vector3(-10,5,7);
+		Vector3 b = new Vector3(100, 3.25, 0);
+
+		a.plusInplace(b);
+
+		assertEquals(90,a.getX());
+		assertEquals(8.25,a.getY());
+		assertEquals(7,a.getZ());
+	}
+
+	@Test
 	public void testSubtraction() {
 
 		Vector3 a = new Vector3(-10,5,7);
@@ -67,6 +80,19 @@ public class Vector3Test {
 	}
 
 	@Test
+	public void testSubtractionInplace() {
+
+		Vector3 a = new Vector3(-10,5,7);
+		Vector3 b = new Vector3(100, 3.25, 0);
+
+		a.minusInplace(b);
+
+		assertEquals(-110,a.getX());
+		assertEquals(1.75,a.getY());
+		assertEquals(7,a.getZ());
+	}
+
+	@Test
 	public void testMultiplication() {
 
 		Vector3 a = new Vector3(0,1,3);
@@ -76,6 +102,18 @@ public class Vector3Test {
 		assertEquals(0,b.getX());
 		assertEquals(5,b.getY());
 		assertEquals(15,b.getZ());
+	}
+
+	@Test
+	public void testMultiplicationInplace() {
+
+		Vector3 a = new Vector3(0,1,3);
+
+		a.timesInplace(5);
+
+		assertEquals(0,a.getX());
+		assertEquals(5,a.getY());
+		assertEquals(15,a.getZ());
 	}
 
 	@Test
@@ -107,6 +145,28 @@ public class Vector3Test {
 		assertEquals(-7,f.getX());
 		assertEquals(-1,f.getY());
 		assertEquals(3,f.getZ());
+	}
+
+	@Test
+	public void testCrossProductInplace() {
+
+		Vector3 a = new Vector3(1,0,0);
+		Vector3 b = new Vector3(0,1,0);
+
+		a.crossInplace(b);
+
+		assertEquals(0,a.getX());
+		assertEquals(0,a.getY());
+		assertEquals(1,a.getZ());
+
+		Vector3 d = new Vector3(1,2,3);
+		Vector3 e = new Vector3(-1,1,-2);
+
+		d.crossInplace(e); // x = 2*-2 - 1*3 = -7.   y = 3*-1 - -2*1 = -1.   z = 1*1 - -1*2 = 3
+
+		assertEquals(-7,d.getX());
+		assertEquals(-1,d.getY());
+		assertEquals(3,d.getZ());
 	}
 
 }
