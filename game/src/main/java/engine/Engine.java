@@ -1,5 +1,6 @@
 package engine;
 
+import engine.window.Window;
 import renderer.Renderer;
 
 /**
@@ -9,21 +10,14 @@ import renderer.Renderer;
 
 public class Engine {
 
-	private Renderer renderer;
+	private static Renderer renderer;
 
-	public Engine() {
-		initialize();
+	public static void initialize() {
+
+		Window window = new Window(800,600,"Neolithic");
 	}
 
-	private void initialize() {
-
-	}
-
-	public void loadData() {
-
-	}
-
-	public void createWorld() {
+	public static void createWorld() {
 
 	}
 

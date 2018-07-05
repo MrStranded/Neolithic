@@ -1,4 +1,5 @@
 import engine.Engine;
+import math.Matrix4;
 
 /**
  * Use this class to start the game.
@@ -12,9 +13,8 @@ public class Start {
 
 	public static void main(String[] args) {
 
-		Engine engine = new Engine();
-		engine.loadData();
-		engine.createWorld();
+		Engine.initialize();
+		Engine.createWorld();
 
 	}
 

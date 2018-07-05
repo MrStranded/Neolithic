@@ -11,4 +11,14 @@ public class Point {
 	private Vector3 position;
 	private RGBA color;
 
+	public Point(Vector3 position) {
+		this.position = position;
+		color = new RGBA(1,1,1);
+	}
+
+	public Point(Vector3 position ,RGBA color) {
+		this.position = position;
+		this.color = color;
+	}
+
 }

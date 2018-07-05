@@ -5,6 +5,13 @@ package math;
  */
 public class Matrix4 {
 
+	/**
+	 * With this boolean you can control the behaviour of the toString() method.
+	 * If the boolean is set to true, it will print the indices a11 to a33 into the matrix,
+	 * otherwise it will only print the values.
+	 */
+	private static boolean printMatrixIndices = true;
+
 	private final double
 			a11,a12,a13,a14,
 			a21,a22,a23,a24,
@@ -106,6 +113,26 @@ public class Matrix4 {
 	}
 
 	// ###################################################################################
+	// ################################ Printing #########################################
+	// ###################################################################################
+
+	public String toString() {
+		String out = "";
+		if (printMatrixIndices) {
+			out += "/a11: " + a11 + " ,a12: " + a12 + " ,a13: " + a13 + " ,a14: " + a14 + "\\" + System.lineSeparator();
+			out += "|a21: " + a21 + " ,a22: " + a22 + " ,a23: " + a23 + " ,a24: " + a24 + "|" + System.lineSeparator();
+			out += "|a31: " + a31 + " ,a32: " + a32 + " ,a33: " + a33 + " ,a34: " + a34 + "|" + System.lineSeparator();
+			out += "\\a41: " + a41 + " ,a42: " + a42 + " ,a43: " + a43 + " ,a44: " + a44 + "/";
+		} else {
+			out += "/" + a11 + " ," + a12 + " ," + a13 + " ," + a14 + "\\" + System.lineSeparator();
+			out += "|" + a21 + " ," + a22 + " ," + a23 + " ," + a24 + "|" + System.lineSeparator();
+			out += "|" + a31 + " ," + a32 + " ," + a33 + " ," + a34 + "|" + System.lineSeparator();
+			out += "\\" + a41 + " ," + a42 + " ," + a43 + " ," + a44 + "/";
+		}
+		return out;
+	}
+
+	// ###################################################################################
 	// ################################ Gettes and Setters ###############################
 	// ###################################################################################
 
@@ -157,4 +184,8 @@ public class Matrix4 {
 	public double getA44() {
 		return a44;
 	}
+
+	public static boolean getPrintMatrixIndices() { return printMatrixIndices; }
+	public static void setPrintMatrixIndices(boolean print) { printMatrixIndices = print; }
+
 }
