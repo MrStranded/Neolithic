@@ -17,10 +17,21 @@ public class Screen extends JPanel implements MouseListener {
 		addMouseListener(this);
 	}
 
+	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+	}
+
 	public void paintComponent(Graphics g) {
 
-		g.drawRect(0,0,200,100);
-		g.drawRect(700,400,100,200);
+		System.out.println("painting "+width+" , "+height);
+
+		int n = 4;
+		for (int i=0; i<n; i++) {
+			g.drawRect(i*width/n,100,width/n, height/2);
+		}
+		//g.drawRect(0,0,width/4,height/8);
+		//g.drawRect(width*3/4,height*7/8,width/4-1,height/8-1);
 	}
 
 	@Override

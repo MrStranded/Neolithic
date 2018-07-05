@@ -2,6 +2,8 @@ package engine.window;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class Window {
 
@@ -34,7 +36,27 @@ public class Window {
 		screen = new Screen(width, height);
 		frame.add(screen);
 
-		// show the whole thing
+		// a trick that seems to work
+		Window window = this;
+
+		// checking the resizing of the window and behave accordingly
+		frame.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				super.componentResized(e);
+
+				System.out.println("resized!");
+
+				window.width = frame.getWidth();
+				window.height = frame.getHeight();
+
+				screen.setSize(window.width - insets.left - insets.right, window.height - insets.top - insets.bottom);
+
+				frame.repaint();
+			}
+		});
+
+		// everything is ready - show the whole thing
 		frame.setVisible(true);
 	}
 }
