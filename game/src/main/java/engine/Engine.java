@@ -1,6 +1,7 @@
 package engine;
 
 import engine.window.Window;
+import renderer.RenderThread;
 import renderer.Renderer;
 
 /**
@@ -15,6 +16,11 @@ public class Engine {
 	public static void initialize() {
 
 		Window window = new Window(800,600,"Neolithic");
+
+		renderer = new Renderer(window.getScreen());
+		RenderThread renderThread = new RenderThread(renderer);
+
+		renderThread.start();
 	}
 
 	public static void createWorld() {
