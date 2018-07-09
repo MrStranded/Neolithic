@@ -14,32 +14,32 @@ import java.awt.*;
 public class Renderer {
 
 	private Screen screen;
-	private int x = 0;
+	private int x = 0, y = 0;
 
 	public Renderer(Screen screen) {
-
 		this.screen = screen;
 	}
 
 	public void render() {
 
-		System.out.println("rendering");
+		clear();
 
-		Graphics g = screen.getBufferStrategy().getDrawGraphics();
+		Graphics g = screen.getGraphics();
 
-		g.clearRect(0,0,screen.getWidth(),screen.getHeight());
-
-		g.drawRect(x,x,10,10);
-
-		x = ((x+1)%(screen.getWidth()-10))%(screen.getHeight()-10);
-
+		g.drawRect(x,y,10,10);
 		screen.drawTestImage(g);
+
+		x = (x+1)%(screen.getWidth()-10);
+		y = (y+1)%(screen.getHeight()-10);
 
 		flip();
 	}
 
-	private void flip() {
+	private void clear() {
+		screen.clear();
+	}
 
+	private void flip() {
 		screen.getBufferStrategy().show();
 	}
 

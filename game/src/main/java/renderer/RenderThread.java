@@ -4,13 +4,12 @@ public class RenderThread extends Thread {
 
 	private Renderer renderer;
 	private int destinationFPS = 60;
-	private int millisecondsPerFrame;
+	private int millisecondsPerFrame = 1000/destinationFPS;
 	private boolean running = true;
 
 	public RenderThread(Renderer renderer) {
 
 		this.renderer = renderer;
-		setFPS(destinationFPS);
 	}
 
 	public RenderThread(Renderer renderer, int fps) {
@@ -34,7 +33,6 @@ public class RenderThread extends Thread {
 			renderer.render();
 
 			long timeToWait = t + millisecondsPerFrame - System.currentTimeMillis();
-			System.out.println(timeToWait);
 			if (timeToWait > 0) {
 				try {
 					sleep(timeToWait);

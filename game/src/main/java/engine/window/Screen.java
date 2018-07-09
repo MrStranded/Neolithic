@@ -33,12 +33,14 @@ public class Screen extends Canvas implements MouseListener {
 	// ################################ Drawing ##########################################
 	// ###################################################################################
 
+	public void clear() {
+		getGraphics().clearRect(0,0,getWidth(),getHeight());
+	}
+
 	public void drawTestImage(Graphics g) {
 
 		int w = getWidth();
 		int h = getHeight();
-
-		System.out.println("painting " + w + " , " + h);
 
 		int n = 4;
 		for (int i=0; i<n; i++) {
@@ -76,5 +78,13 @@ public class Screen extends Canvas implements MouseListener {
 	@Override
 	public void mouseExited(MouseEvent e) {
 
+	}
+
+	// ###################################################################################
+	// ################################ Getters and Setters ##############################
+	// ###################################################################################
+
+	public Graphics getGraphics() {
+		return getBufferStrategy().getDrawGraphics();
 	}
 }
