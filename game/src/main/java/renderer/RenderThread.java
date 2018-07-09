@@ -1,5 +1,7 @@
 package renderer;
 
+import org.lwjgl.opengl.GLContext;
+
 public class RenderThread extends Thread {
 
 	private Renderer renderer;
@@ -9,12 +11,14 @@ public class RenderThread extends Thread {
 	public RenderThread(Renderer renderer) {
 
 		this.renderer = renderer;
+		renderer.setFps(destinationFPS);
 	}
 
 	public RenderThread(Renderer renderer, int fps) {
 
 		this.renderer = renderer;
 		setFPS(fps);
+		renderer.setFps(destinationFPS);
 	}
 
 	private void setFPS(int fps) {
@@ -24,6 +28,8 @@ public class RenderThread extends Thread {
 	}
 
 	public void run() {
+
+		renderer.initialize();
 
 		while (renderer.displayExists()) {
 
@@ -40,6 +46,8 @@ public class RenderThread extends Thread {
 				}
 			}
 		}
+
+		renderer.destroy();
 	}
 
 	// ###################################################################################

@@ -11,21 +11,20 @@ public class Window {
 
 	private String title;
 	private int width,height;
+	private int fps = 60;
 
 	public Window(int width, int height, String title) {
 
 		this.title = title;
 		this.width = width;
 		this.height = height;
-
-		initialize(width, height, title);
 	}
 
 	// ###################################################################################
 	// ################################ Set Up ###########################################
 	// ###################################################################################
 
-	private void initialize(int width, int height, String title) {
+	public void initialize() {
 
 		setCorrectLWJGLPath();
 
@@ -74,7 +73,45 @@ public class Window {
 	}
 
 	// ###################################################################################
+	// ################################ Runtime Methods ##################################
+	// ###################################################################################
+
+	public boolean isClosed() {
+		return Display.isCloseRequested();
+	}
+
+	public void update() {
+		Display.update();
+	}
+
+	public void sync() {
+		Display.sync(fps);
+	}
+
+	// ###################################################################################
+	// ################################ Clean Up #########################################
+	// ###################################################################################
+
+	public void destroy() {
+		Display.destroy();
+	}
+
+	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
+	public int getFps() {
+		return fps;
+	}
+	public void setFps(int fps) {
+		this.fps = fps;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
 }

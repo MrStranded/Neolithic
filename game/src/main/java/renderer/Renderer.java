@@ -1,50 +1,56 @@
 package renderer;
 
-import engine.window.Screen;
 import engine.window.Window;
-
-import java.awt.*;
-
+import static org.lwjgl.opengl.GL11.*;
 
 /**
- * The renderer is only concerned about periodically drawing the given world data onto a screen - it's backbuffer.
+ * The renderer is only concerned about periodically drawing the given world data onto a window
  */
 
 public class Renderer {
 
 	private Window window;
-	private Screen screen;
 	private int x = 0, y = 0;
 
 	public Renderer(Window window) {
+
 		this.window = window;
+	}
+
+	public void initialize() {
+
+		window.initialize();
+
+		// setting up the projection matrix
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0,window.getWidth(),0,window.getHeight(),1,-1);
+		glMatrixMode(GL_MODELVIEW);
 	}
 
 	public void render() {
 
-		/*clear();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		Graphics g = screen.getGraphics();
+		glBegin(GL_LINE);
 
-		g.drawRect(x,y,10,10);
-		screen.drawTestImage(g);
+		glColor3d(1,0,0);
+		glVertex3d(0,0,0);
+		glVertex3d(800,600,100);
 
-		x = (x+1)%(screen.getWidth()-10);
-		y = (y+1)%(screen.getHeight()-10);
-
-		flip();*/
-	}
-
-	private void clear() {
-		screen.clear();
-	}
-
-	private void flip() {
-		screen.getBufferStrategy().show();
+		glEnd();
 	}
 
 	public boolean displayExists() {
-		return false;
+		return window.isClosed();
+	}
+
+	public void destroy() {
+		window.destroy();
+	}
+
+	public void setFps(int fps) {
+		window.setFps(fps);
 	}
 
 }
