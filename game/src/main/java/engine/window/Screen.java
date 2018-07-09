@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class Screen extends JPanel implements MouseListener {
+public class Screen extends Canvas implements MouseListener {
 
 	public Screen(int width, int height) {
 
@@ -24,6 +24,7 @@ public class Screen extends JPanel implements MouseListener {
 	 * @param width
 	 * @param height
 	 */
+	@Override
 	public void setSize(int width, int height) {
 		setPreferredSize(new Dimension(width,height));
 	}
@@ -32,12 +33,7 @@ public class Screen extends JPanel implements MouseListener {
 	// ################################ Drawing ##########################################
 	// ###################################################################################
 
-	public void paintComponent(Graphics g) {
-
-		//drawTestImage(g);
-	}
-
-	private void drawTestImage(Graphics g) {
+	public void drawTestImage(Graphics g) {
 
 		int w = getWidth();
 		int h = getHeight();

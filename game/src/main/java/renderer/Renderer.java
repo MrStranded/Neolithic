@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * The renderer is only concerned about periodically drawing the given world data onto a canvas - it's backbuffer.
+ * The renderer is only concerned about periodically drawing the given world data onto a screen - it's backbuffer.
  */
 
 public class Renderer {
@@ -19,24 +19,28 @@ public class Renderer {
 	public Renderer(Screen screen) {
 
 		this.screen = screen;
-		this.screen.setDoubleBuffered(true);
 	}
 
 	public void render() {
 
 		System.out.println("rendering");
 
-		Graphics g = screen.getGraphics();
+		Graphics g = screen.getBufferStrategy().getDrawGraphics();
+
+		g.clearRect(0,0,screen.getWidth(),screen.getHeight());
+
 		g.drawRect(x,x,10,10);
 
-		x = ((x+1)%screen.getWidth())%screen.getHeight();
+		x = ((x+1)%(screen.getWidth()-10))%(screen.getHeight()-10);
+
+		screen.drawTestImage(g);
 
 		flip();
 	}
 
 	private void flip() {
 
-		screen.repaint();
+		screen.getBufferStrategy().show();
 	}
 
 }

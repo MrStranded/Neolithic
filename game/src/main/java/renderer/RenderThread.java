@@ -5,6 +5,7 @@ public class RenderThread extends Thread {
 	private Renderer renderer;
 	private int destinationFPS = 60;
 	private int millisecondsPerFrame;
+	private boolean running = true;
 
 	public RenderThread(Renderer renderer) {
 
@@ -26,19 +27,32 @@ public class RenderThread extends Thread {
 
 	public void run() {
 
-		long t = System.currentTimeMillis();
+		while (running) {
 
-		renderer.render();
+			long t = System.currentTimeMillis();
 
-		long timeToWait = t + millisecondsPerFrame - System.currentTimeMillis();
-		System.out.println(timeToWait);
-		if (timeToWait > 0) {
-			try {
-				sleep(timeToWait);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			renderer.render();
+
+			long timeToWait = t + millisecondsPerFrame - System.currentTimeMillis();
+			System.out.println(timeToWait);
+			if (timeToWait > 0) {
+				try {
+					sleep(timeToWait);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 
+	// ###################################################################################
+	// ################################ Getters and Setters ##############################
+	// ###################################################################################
+
+	public boolean isRunning() {
+		return running;
+	}
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
 }

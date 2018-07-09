@@ -1,6 +1,7 @@
 package engine.window;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -25,19 +26,23 @@ public class Window {
 		this.title = title;
 
 		frame = new JFrame(title);
-
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		// adding a drawable surface to the window
-		screen = new Screen(width, height);
-		frame.add(screen);
+		screen = new Screen(width,height);
 
+		frame.getContentPane().add(screen);
 		frame.pack();
 
 		// centering the window
 		frame.setLocationRelativeTo(null);
 
 		addResizeListener();
+
+		// switching to active rendering
+		frame.setIgnoreRepaint(true);
+		screen.setIgnoreRepaint(true);
+		// creating double buffering
+		screen.createBufferStrategy(2);
 
 		frame.setVisible(true);
 	}
@@ -54,7 +59,6 @@ public class Window {
 				super.componentResized(e);
 
 				screen.setSize(frame.getWidth(), frame.getHeight());
-				frame.repaint();
 			}
 		});
 	}
