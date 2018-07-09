@@ -1,18 +1,22 @@
 package engine.window;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.LWJGLUtil;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+
+import java.io.File;
 
 public class Window {
 
 	private String title;
-
-	private JFrame frame;
-	private Screen screen;
+	private int width,height;
 
 	public Window(int width, int height, String title) {
+
+		this.title = title;
+		this.width = width;
+		this.height = height;
 
 		initialize(width, height, title);
 	}
@@ -23,51 +27,54 @@ public class Window {
 
 	private void initialize(int width, int height, String title) {
 
-		this.title = title;
+		setCorrectLWJGLPath();
 
-		frame = new JFrame(title);
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		try {
+			Display.setDisplayMode(new DisplayMode(width, height));
+			Display.setTitle(title);
+			Display.create();
+		} catch (LWJGLException e) {
+			System.err.println("Display wasn't initialized correctly.");
+			System.exit(1);
+		}
 
-		screen = new Screen(width,height);
+		while (!Display.isCloseRequested()) {
+			Display.update();
+			Display.sync(60);
+		}
 
-		frame.getContentPane().add(screen);
-		frame.pack();
-
-		// centering the window
-		frame.setLocationRelativeTo(null);
-
-		addResizeListener();
-
-		// switching to active rendering
-		frame.setIgnoreRepaint(true);
-		screen.setIgnoreRepaint(true);
-		// creating double buffering
-		screen.createBufferStrategy(2);
-
-		frame.setVisible(true);
+		Display.destroy();
 	}
 
-	private void addResizeListener() {
+	private void setCorrectLWJGLPath() {
+		File JGLLib = null;
 
-		// a trick that seems to work
-		Window window = this;
-
-		// checking the resizing of the window and behave accordingly
-		frame.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-				super.componentResized(e);
-
-				screen.setSize(frame.getWidth(), frame.getHeight());
+		switch(LWJGLUtil.getPlatform()) {
+			case LWJGLUtil.PLATFORM_WINDOWS: {
+				JGLLib = new File("lib/lwjgl/native/windows/");
 			}
-		});
+			break;
+
+			case LWJGLUtil.PLATFORM_LINUX: {
+				JGLLib = new File("lib/lwjgl/native/linux/");
+			}
+			break;
+
+			case LWJGLUtil.PLATFORM_MACOSX: {
+				JGLLib = new File("lib/lwjgl/native/macosx/");
+			}
+			break;
+		}
+
+		if (JGLLib != null) {
+			System.setProperty("org.lwjgl.librarypath", JGLLib.getAbsolutePath());
+		} else {
+			System.out.println("Sadly we do not have the necessary LWJGL libraries for you operating system.");
+		}
 	}
 
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public Screen getScreen() {
-		return screen;
-	}
 }

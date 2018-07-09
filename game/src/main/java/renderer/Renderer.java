@@ -1,11 +1,10 @@
 package renderer;
 
 import engine.window.Screen;
-import renderer.color.RGBA;
-import renderer.image.Image;
+import engine.window.Window;
 
-import javax.swing.*;
 import java.awt.*;
+
 
 /**
  * The renderer is only concerned about periodically drawing the given world data onto a screen - it's backbuffer.
@@ -13,16 +12,17 @@ import java.awt.*;
 
 public class Renderer {
 
+	private Window window;
 	private Screen screen;
 	private int x = 0, y = 0;
 
-	public Renderer(Screen screen) {
-		this.screen = screen;
+	public Renderer(Window window) {
+		this.window = window;
 	}
 
 	public void render() {
 
-		clear();
+		/*clear();
 
 		Graphics g = screen.getGraphics();
 
@@ -32,7 +32,7 @@ public class Renderer {
 		x = (x+1)%(screen.getWidth()-10);
 		y = (y+1)%(screen.getHeight()-10);
 
-		flip();
+		flip();*/
 	}
 
 	private void clear() {
@@ -41,6 +41,10 @@ public class Renderer {
 
 	private void flip() {
 		screen.getBufferStrategy().show();
+	}
+
+	public boolean displayExists() {
+		return false;
 	}
 
 }

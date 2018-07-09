@@ -5,7 +5,6 @@ public class RenderThread extends Thread {
 	private Renderer renderer;
 	private int destinationFPS = 60;
 	private int millisecondsPerFrame = 1000/destinationFPS;
-	private boolean running = true;
 
 	public RenderThread(Renderer renderer) {
 
@@ -26,7 +25,7 @@ public class RenderThread extends Thread {
 
 	public void run() {
 
-		while (running) {
+		while (renderer.displayExists()) {
 
 			long t = System.currentTimeMillis();
 
@@ -47,10 +46,4 @@ public class RenderThread extends Thread {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public boolean isRunning() {
-		return running;
-	}
-	public void setRunning(boolean running) {
-		this.running = running;
-	}
 }

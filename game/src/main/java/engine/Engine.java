@@ -17,7 +17,7 @@ public class Engine {
 
 		Window window = new Window(800,600,"Neolithic");
 
-		renderer = new Renderer(window.getScreen());
+		renderer = new Renderer(window);
 		RenderThread renderThread = new RenderThread(renderer);
 
 		renderThread.start();
