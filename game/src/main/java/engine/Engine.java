@@ -18,16 +18,16 @@ public class Engine {
 
 		renderer = new Renderer(window);
 		renderer.initialize();
-
-		//RenderThread renderThread = new RenderThread(renderer);
-
-		//renderThread.start();
+		renderer.setFps(60); // let a brotha chill out
 	}
 
 	public static void createWorld() {
 
 	}
 
+	/**
+	 * Starting the drawing loop and cleaning up the window after exiting the program.
+	 */
 	public static void start() {
 
 		while (renderer.displayExists()) {

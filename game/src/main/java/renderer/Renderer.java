@@ -30,15 +30,33 @@ public class Renderer {
 
 	public void render() {
 
+		long t = System.nanoTime();
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glBegin(GL_LINES);
-
 		glColor3d(1,1,1);
-		glVertex3f(0,0,0);
-		glVertex3f(800,600,100);
-
+		glVertex3d(0,y,0);
+		glVertex3d(800,600-y,1);
 		glEnd();
+
+		glBegin(GL_TRIANGLES);
+		glColor3d(1,0,0.5);
+		glVertex3d(x,y,1);
+		glVertex3d(x+100,y,-1);
+		glVertex3d(x+100,y+100,0);
+
+		glColor3d(0,1,0.5);
+		glVertex3d(800-x,600-y,1);
+		glVertex3d(700-x,600-y,-1);
+		glVertex3d(700-x,500-y,0);
+		glEnd();
+
+		double dt = (double) (System.nanoTime() - t)/1000000;
+		System.out.println("rendering took " + dt + " ms");
+
+		x = (x+1)%window.getWidth();
+		y = (y+1)%window.getHeight();
 	}
 
 	public boolean displayExists() {
@@ -54,14 +72,9 @@ public class Renderer {
 	}
 
 	public void sync() {
+
 		window.update();
 		window.sync();
-
-		/*try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}*/
 	}
 
 }
