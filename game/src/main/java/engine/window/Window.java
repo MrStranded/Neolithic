@@ -36,13 +36,6 @@ public class Window {
 			System.err.println("Display wasn't initialized correctly.");
 			System.exit(1);
 		}
-
-		while (!Display.isCloseRequested()) {
-			Display.update();
-			Display.sync(60);
-		}
-
-		Display.destroy();
 	}
 
 	private void setCorrectLWJGLPath() {

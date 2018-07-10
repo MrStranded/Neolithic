@@ -7,6 +7,9 @@ import math.Matrix4;
  *
  * Running the program:
  * - go sure to use this VM argument: -Dsun.java2d.opengl=true
+ *
+ * On Windows, this other option may improve performance and stability:
+ * -Dsun.java2d.noddraw=true
  */
 
 public class Start {
@@ -15,6 +18,8 @@ public class Start {
 
 		Engine.initialize();
 		Engine.createWorld();
+
+		Engine.start();
 
 	}
 

@@ -32,17 +32,17 @@ public class Renderer {
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glBegin(GL_LINE);
+		glBegin(GL_LINES);
 
-		glColor3d(1,0,0);
-		glVertex3d(0,0,0);
-		glVertex3d(800,600,100);
+		glColor3d(1,1,1);
+		glVertex3f(0,0,0);
+		glVertex3f(800,600,100);
 
 		glEnd();
 	}
 
 	public boolean displayExists() {
-		return window.isClosed();
+		return !window.isClosed();
 	}
 
 	public void destroy() {
@@ -51,6 +51,17 @@ public class Renderer {
 
 	public void setFps(int fps) {
 		window.setFps(fps);
+	}
+
+	public void sync() {
+		window.update();
+		window.sync();
+
+		/*try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}*/
 	}
 
 }
