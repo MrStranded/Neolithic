@@ -1,6 +1,6 @@
 package renderer.shapes;
 
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
 
@@ -19,7 +19,7 @@ public class Triangle {
 
 	public FloatBuffer getFloatBuffer() {
 
-		FloatBuffer floatBuffer = BufferUtils.createFloatBuffer(vertices.length * 3);
+		FloatBuffer floatBuffer = MemoryUtil.memAllocFloat(vertices.length);
 		floatBuffer.put(vertices).flip();
 		return floatBuffer;
 	}
