@@ -1,10 +1,10 @@
 package renderer;
 
 import engine.window.Window;
-import static org.lwjgl.opengl.GL11.*;
+import org.lwjgl.opengl.GL11;
 
 /**
- * The renderer is only concerned about periodically drawing the given world data onto a window
+ * The renderer is only concerned about periodically drawing the given mesh data onto a window
  */
 
 public class Renderer {
@@ -17,40 +17,48 @@ public class Renderer {
 		this.window = window;
 	}
 
+	// ###################################################################################
+	// ################################ Set Up ###########################################
+	// ###################################################################################
+
 	public void initialize() {
 
 		window.initialize();
 
 		// setting up the projection matrix
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0,window.getWidth(),0,window.getHeight(),1,-1);
-		glMatrixMode(GL_MODELVIEW);
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		GL11.glLoadIdentity();
+		GL11.glOrtho(0,window.getWidth(),0,window.getHeight(),1,-1);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
+
+	// ###################################################################################
+	// ################################ Rendering ########################################
+	// ###################################################################################
 
 	public void render() {
 
 		long t = System.nanoTime();
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-		glBegin(GL_LINES);
-		glColor3d(1,1,1);
-		glVertex3d(0,y,0);
-		glVertex3d(800,600-y,1);
-		glEnd();
+		GL11.glBegin(GL11.GL_LINES);
+		GL11.glColor3d(1,1,1);
+		GL11.glVertex3d(0,y,0);
+		GL11.glVertex3d(800,600-y,1);
+		GL11.glEnd();
 
-		glBegin(GL_TRIANGLES);
-		glColor3d(1,0,0.5);
-		glVertex3d(x,y,1);
-		glVertex3d(x+100,y,-1);
-		glVertex3d(x+100,y+100,0);
+		GL11.glBegin(GL11.GL_TRIANGLES);
+		GL11.glColor3d(1,0,0.5);
+		GL11.glVertex3d(x,y,1);
+		GL11.glVertex3d(x+100,y,-1);
+		GL11.glVertex3d(x+100,y+100,0);
 
-		glColor3d(0,1,0.5);
-		glVertex3d(800-x,600-y,1);
-		glVertex3d(700-x,600-y,-1);
-		glVertex3d(700-x,500-y,0);
-		glEnd();
+		GL11.glColor3d(0,1,0.5);
+		GL11.glVertex3d(800-x,600-y,1);
+		GL11.glVertex3d(700-x,600-y,-1);
+		GL11.glVertex3d(700-x,500-y,0);
+		GL11.glEnd();
 
 		double dt = (double) (System.nanoTime() - t)/1000000;
 		System.out.println("rendering took " + dt + " ms");
@@ -59,12 +67,12 @@ public class Renderer {
 		y = (y+1)%window.getHeight();
 	}
 
+	// ###################################################################################
+	// ################################ Runtime Methods ##################################
+	// ###################################################################################
+
 	public boolean displayExists() {
 		return !window.isClosed();
-	}
-
-	public void destroy() {
-		window.destroy();
 	}
 
 	public void setFps(int fps) {
@@ -73,8 +81,15 @@ public class Renderer {
 
 	public void sync() {
 
-		window.update();
 		window.sync();
+		window.update();
 	}
 
+	// ###################################################################################
+	// ################################ Clean Up #########################################
+	// ###################################################################################
+
+	public void destroy() {
+		window.destroy();
+	}
 }

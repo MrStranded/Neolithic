@@ -61,7 +61,7 @@ public class Window {
 		if (JGLLib != null) {
 			System.setProperty("org.lwjgl.librarypath", JGLLib.getAbsolutePath());
 		} else {
-			System.out.println("Sadly we do not have the necessary LWJGL libraries for you operating system.");
+			System.out.println("Sadly we do not have the necessary LWJGL libraries for your operating system.");
 		}
 	}
 
