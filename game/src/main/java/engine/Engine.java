@@ -18,7 +18,7 @@ public class Engine {
 
 		renderer = new Renderer(window);
 		renderer.initialize();
-		renderer.setFps(60); // let a brotha chill out
+		renderer.setFps(1); // let a brotha chill out
 	}
 
 	public static void createWorld() {
@@ -34,8 +34,11 @@ public class Engine {
 			renderer.render();
 			renderer.sync();
 		}
+	}
 
-		renderer.destroy();
+	public static void cleanUp() {
+
+		renderer.cleanUp();
 	}
 
 }

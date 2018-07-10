@@ -23,6 +23,8 @@ public class Start {
 		Engine.createWorld();
 
 		Engine.start();
+
+		Engine.cleanUp();
 	}
 
 }

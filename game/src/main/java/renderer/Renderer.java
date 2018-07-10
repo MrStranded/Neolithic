@@ -1,7 +1,9 @@
 package renderer;
 
 import engine.window.Window;
+import load.FileToString;
 import org.lwjgl.opengl.GL11;
+import renderer.shaders.ShaderProgram;
 
 /**
  * The renderer is only concerned about periodically drawing the given mesh data onto a window
@@ -10,6 +12,8 @@ import org.lwjgl.opengl.GL11;
 public class Renderer {
 
 	private Window window;
+	private ShaderProgram shaderProgram;
+
 	private int x = 0, y = 0;
 
 	public Renderer(Window window) {
@@ -24,6 +28,16 @@ public class Renderer {
 	public void initialize() {
 
 		window.initialize();
+
+		// loading and binding the shaders
+		try {
+			shaderProgram = new ShaderProgram();
+			shaderProgram.createVertexShader(FileToString.read("src/main/resources/shaders/vertex.vs"));
+			shaderProgram.createFragmentShader(FileToString.read("src/main/resources/shaders/fragment.fs"));
+			shaderProgram.link();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		// setting up the projection matrix
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -89,7 +103,9 @@ public class Renderer {
 	// ################################ Clean Up #########################################
 	// ###################################################################################
 
-	public void destroy() {
+	public void cleanUp() {
+
+		shaderProgram.cleanup();
 		window.destroy();
 	}
 }
