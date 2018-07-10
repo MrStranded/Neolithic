@@ -32,7 +32,6 @@ public class Engine {
 
 		while (renderer.displayExists()) {
 			renderer.render();
-			renderer.sync();
 		}
 	}
 

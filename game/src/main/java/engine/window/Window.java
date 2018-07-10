@@ -1,17 +1,22 @@
 package engine.window;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.LWJGLUtil;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.glfw.Callbacks;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.system.MemoryStack;
 
-import java.io.File;
+import java.nio.IntBuffer;
 
 public class Window {
 
 	private String title;
 	private int width,height;
 	private int fps = 60;
+
+	private long window;
 
 	public Window(int width, int height, String title) {
 
@@ -26,43 +31,69 @@ public class Window {
 
 	public void initialize() {
 
-		setCorrectLWJGLPath();
+		// Setup an error callback. The default implementation
+		// will print the error message in System.err.
+		GLFWErrorCallback.createPrint(System.err).set();
 
-		try {
-			Display.setDisplayMode(new DisplayMode(width, height));
-			Display.setTitle(title);
-			Display.create();
-		} catch (LWJGLException e) {
-			System.err.println("Display wasn't initialized correctly.");
-			System.exit(1);
-		}
-	}
-
-	private void setCorrectLWJGLPath() {
-		File JGLLib = null;
-
-		switch(LWJGLUtil.getPlatform()) {
-			case LWJGLUtil.PLATFORM_WINDOWS: {
-				JGLLib = new File("lib/lwjgl/native/windows/");
-			}
-			break;
-
-			case LWJGLUtil.PLATFORM_LINUX: {
-				JGLLib = new File("lib/lwjgl/native/linux/");
-			}
-			break;
-
-			case LWJGLUtil.PLATFORM_MACOSX: {
-				JGLLib = new File("lib/lwjgl/native/macosx/");
-			}
-			break;
+		// Initialize GLFW. Most GLFW functions will not work before doing this.
+		if (!GLFW.glfwInit()) {
+			throw new IllegalStateException("Unable to initialize GLFW");
 		}
 
-		if (JGLLib != null) {
-			System.setProperty("org.lwjgl.librarypath", JGLLib.getAbsolutePath());
-		} else {
-			System.out.println("Sadly we do not have the necessary LWJGL libraries for your operating system.");
+		// Configure GLFW
+		GLFW.glfwDefaultWindowHints(); // optional, the current window hints are already the default
+		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE); // the window will stay hidden after creation
+		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_FALSE); // the window will be resizable
+
+		// Create the window
+		window = GLFW.glfwCreateWindow(width, height, title, 0, 0);
+		if (window == 0) {
+			throw new RuntimeException("Failed to create the GLFW window");
 		}
+
+		// Setup a key callback. It will be called every time a key is pressed, repeated or released.
+		GLFW.glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+			if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_RELEASE) {
+				GLFW.glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+			}
+		});
+
+		// Get the thread stack and push a new frame
+		try (MemoryStack stack = MemoryStack.stackPush()) {
+			IntBuffer pWidth = stack.mallocInt(1); // int*
+			IntBuffer pHeight = stack.mallocInt(1); // int*
+
+			// Get the window size passed to glfwCreateWindow
+			GLFW.glfwGetWindowSize(window, pWidth, pHeight);
+
+			// Get the resolution of the primary monitor
+			GLFWVidMode vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+
+			// Center the window
+			GLFW.glfwSetWindowPos(
+					window,
+					(vidmode.width() - pWidth.get(0)) / 2,
+					(vidmode.height() - pHeight.get(0)) / 2
+			);
+		} // the stack frame is popped automatically
+
+		// Make the OpenGL context current
+		GLFW.glfwMakeContextCurrent(window);
+		// Enable v-sync
+		GLFW.glfwSwapInterval(1);
+
+		// Make the window visible
+		GLFW.glfwShowWindow(window);
+
+		// This line is critical for LWJGL's interoperation with GLFW's
+		// OpenGL context, or any context that is managed externally.
+		// LWJGL detects the context that is current in the current thread,
+		// creates the GLCapabilities instance and makes the OpenGL
+		// bindings available for use.
+		GL.createCapabilities();
+
+		// Set the clear color
+		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 
 	// ###################################################################################
@@ -70,15 +101,16 @@ public class Window {
 	// ###################################################################################
 
 	public boolean isClosed() {
-		return Display.isCloseRequested();
+		return GLFW.glfwWindowShouldClose(window);
 	}
 
-	public void update() {
-		Display.update();
-	}
+	public void flip() {
 
-	public void sync() {
-		Display.sync(fps);
+		GLFW.glfwSwapBuffers(window); // swap the color buffers
+
+		// Poll for window events. The key callback above will only be
+		// invoked during this call.
+		GLFW.glfwPollEvents();
 	}
 
 	// ###################################################################################
@@ -86,7 +118,13 @@ public class Window {
 	// ###################################################################################
 
 	public void destroy() {
-		Display.destroy();
+		// Free the window callbacks and destroy the window
+		Callbacks.glfwFreeCallbacks(window);
+		GLFW.glfwDestroyWindow(window);
+
+		// Terminate GLFW and free the error callback
+		GLFW.glfwTerminate();
+		GLFW.glfwSetErrorCallback(null).free();
 	}
 
 	// ###################################################################################

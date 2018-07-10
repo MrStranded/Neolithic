@@ -2,6 +2,7 @@ package renderer;
 
 import engine.window.Window;
 import load.FileToString;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import renderer.shaders.ShaderProgram;
 
@@ -79,6 +80,8 @@ public class Renderer {
 
 		x = (x+1)%window.getWidth();
 		y = (y+1)%window.getHeight();
+
+		flip();
 	}
 
 	// ###################################################################################
@@ -93,10 +96,8 @@ public class Renderer {
 		window.setFps(fps);
 	}
 
-	public void sync() {
-
-		window.sync();
-		window.update();
+	public void flip() {
+		window.flip();
 	}
 
 	// ###################################################################################
