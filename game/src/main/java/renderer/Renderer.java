@@ -2,13 +2,16 @@ package renderer;
 
 import engine.window.Window;
 import load.FileToString;
+import math.Vector3;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 import renderer.shaders.ShaderProgram;
+import renderer.shapes.Mesh;
 import renderer.shapes.Triangle;
+import utils.MeshGenerator;
 
 import java.nio.FloatBuffer;
 
@@ -20,10 +23,8 @@ public class Renderer {
 
 	private Window window;
 	private ShaderProgram shaderProgram;
-	private int vertexArrayObjectId;
-	private int vertexBufferObjectId;
 
-	private int x = 0, y = 0;
+	private Mesh mesh;
 
 	public Renderer(Window window) {
 
@@ -60,26 +61,8 @@ public class Renderer {
 
 	private void initializeVertexObjects() {
 
-		FloatBuffer verticesBuffer = new Triangle().getFloatBuffer();
-
-		vertexArrayObjectId = GL30.glGenVertexArrays();
-		GL30.glBindVertexArray(vertexArrayObjectId);
-
-		vertexBufferObjectId = GL15.glGenBuffers();
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBufferObjectId);
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, verticesBuffer, GL15.GL_STATIC_DRAW);
-
-		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
-
-		// Unbind the VBO
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-
-		// Unbind the VAO
-		GL30.glBindVertexArray(0);
-
-		if (verticesBuffer != null) {
-			MemoryUtil.memFree(verticesBuffer);
-		}
+		//mesh = MeshGenerator.createTetrahedron();
+		mesh = MeshGenerator.createQuad();
 	}
 
 	public void calculateProjectionMatrix() {
@@ -104,11 +87,11 @@ public class Renderer {
 		shaderProgram.bind();
 
 		// Bind to the VAO
-		GL30.glBindVertexArray(vertexArrayObjectId);
+		GL30.glBindVertexArray(mesh.getVertexArrayObjectId());
 		GL20.glEnableVertexAttribArray(0);
 
 		// Draw the vertices
-		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, 3);
+		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.getVertexCount());
 
 		// Restore state
 		GL20.glDisableVertexAttribArray(0);
@@ -148,15 +131,7 @@ public class Renderer {
 			shaderProgram.cleanup();
 		}
 
-		GL20.glDisableVertexAttribArray(0);
-
-		// Delete the VBO
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-		GL15.glDeleteBuffers(vertexBufferObjectId);
-
-		// Delete the VAO
-		GL30.glBindVertexArray(0);
-		GL30.glDeleteVertexArrays(vertexArrayObjectId);
+		mesh.cleanUp();
 
 		window.destroy();
 	}
