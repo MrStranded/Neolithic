@@ -1,12 +1,10 @@
 package engine.window;
 
-import org.lwjgl.glfw.Callbacks;
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
+import renderer.Renderer;
 
 import java.nio.IntBuffer;
 
@@ -16,6 +14,7 @@ public class Window {
 	private int width,height;
 	private int fps = 60;
 
+	private Renderer renderer;
 	private long window;
 
 	public Window(int width, int height, String title) {
@@ -31,6 +30,14 @@ public class Window {
 
 	public void initialize() {
 
+		createWindow();
+		createKeyCallback();
+		createResizeCallback();
+		registerWindow();
+	}
+
+	private void createWindow() {
+
 		// Setup an error callback. The default implementation
 		// will print the error message in System.err.
 		GLFWErrorCallback.createPrint(System.err).set();
@@ -43,13 +50,16 @@ public class Window {
 		// Configure GLFW
 		GLFW.glfwDefaultWindowHints(); // optional, the current window hints are already the default
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE); // the window will stay hidden after creation
-		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_FALSE); // the window will be resizable
+		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_TRUE); // the window will be resizable
 
 		// Create the window
 		window = GLFW.glfwCreateWindow(width, height, title, 0, 0);
 		if (window == 0) {
 			throw new RuntimeException("Failed to create the GLFW window");
 		}
+	}
+
+	private void createKeyCallback() {
 
 		// Setup a key callback. It will be called every time a key is pressed, repeated or released.
 		GLFW.glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
@@ -57,6 +67,27 @@ public class Window {
 				GLFW.glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
 			}
 		});
+	}
+
+	private void createResizeCallback() {
+
+		// Setup a resize callback. It will be called every time the window is resized.
+		GLFWWindowSizeCallback windowSizeCallback;
+		Window self = this;
+		GLFW.glfwSetWindowSizeCallback(window, windowSizeCallback = new GLFWWindowSizeCallback(){
+			@Override
+			public void invoke(long window, int width, int height){
+				self.width = width;
+				self.height = height;
+				GL11.glViewport(0, 0, width, height);
+				if (renderer != null) {
+					renderer.calculateProjectionMatrix();
+				}
+			}
+		});
+	}
+
+	private void registerWindow() {
 
 		// Get the thread stack and push a new frame
 		try (MemoryStack stack = MemoryStack.stackPush()) {
@@ -144,5 +175,9 @@ public class Window {
 
 	public int getHeight() {
 		return height;
+	}
+
+	public void setRenderer(Renderer renderer) {
+		this.renderer = renderer;
 	}
 }

@@ -6,7 +6,7 @@ import math.Matrix4;
  * It sets up the top-most services.
  *
  * OpenGL version: 3.0 Mesa 17.2.8
- * LWJGL version: 2.9.3
+ * LWJGL version: 3.1.6
  *
  * Running the program:
  * - go sure to use this VM argument: -Dsun.java2d.opengl=true

@@ -18,7 +18,6 @@ public class Engine {
 
 		renderer = new Renderer(window);
 		renderer.initialize();
-		renderer.setFps(1); // let a brotha chill out
 	}
 
 	public static void createWorld() {
