@@ -67,10 +67,12 @@ public class Renderer {
 
 	public void calculateProjectionMatrix() {
 
+		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
+
 		// setting up the projection matrix
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(0,window.getWidth(),0,window.getHeight(),1,-1);
+		GL11.glOrtho(-aspectRatio, aspectRatio, -1, 1,1,-1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
@@ -89,12 +91,14 @@ public class Renderer {
 		// Bind to the VAO
 		GL30.glBindVertexArray(mesh.getVertexArrayObjectId());
 		GL20.glEnableVertexAttribArray(0);
+		GL20.glEnableVertexAttribArray(1);
 
-		// Draw the vertices
-		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.getVertexCount());
+		// Draw the mesh
+		GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 
 		// Restore state
 		GL20.glDisableVertexAttribArray(0);
+		GL20.glDisableVertexAttribArray(1);
 		GL30.glBindVertexArray(0);
 
 		shaderProgram.unbind();

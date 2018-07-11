@@ -7,21 +7,29 @@ public class MeshGenerator {
 
 	public static Mesh createQuad() {
 
-		Vector3[] points = new Vector3[4];
-		points[0] = new Vector3(-0.5d,-0.5d,0d); // left bottom
-		points[1] = new Vector3(0.5d,-0.5d,0d);  // right bottom
-		points[2] = new Vector3(-0.5d,0.5d,0d); // left top
-		points[3] = new Vector3(0.5d,0.5d,0d);  // right top
-
-		Vector3[] vertices = {
-				points[0],points[1],points[2],
-				points[1],points[3],points[2]
+		float[] vertices = {
+				-0.5f,  -0.5f,  0,  // left bottom
+				0.5f,   -0.5f,  0,  // right bottom
+				-0.5f,  0.5f,   0,  // left top
+				0.5f,   0.5f,   0   // right top
 		};
 
-		return new Mesh(vertices);
+		int[] indices = {
+				0,1,2,
+				1,3,2
+		};
+
+		float[] colors = {
+				0.0f, 1.0f, 0.0f,
+				1.0f, 0.0f, 0.0f,
+				0.0f, 0.0f, 1.0f,
+				1.0f, 1.0f, 1.0f,
+		};
+
+		return new Mesh(vertices, indices, colors);
 	}
 
-	public static Mesh createTetrahedron() {
+	/*public static Mesh createTetrahedron() {
 
 		Vector3[] points = new Vector3[4];
 		points[0] = new Vector3(-0.5d,-0.5d,-0.5d); // left back
@@ -37,5 +45,5 @@ public class MeshGenerator {
 		};
 
 		return new Mesh(vertices);
-	}
+	}*/
 }

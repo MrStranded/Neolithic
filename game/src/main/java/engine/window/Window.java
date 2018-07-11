@@ -72,9 +72,8 @@ public class Window {
 	private void createResizeCallback() {
 
 		// Setup a resize callback. It will be called every time the window is resized.
-		GLFWWindowSizeCallback windowSizeCallback;
 		Window self = this;
-		GLFW.glfwSetWindowSizeCallback(window, windowSizeCallback = new GLFWWindowSizeCallback(){
+		GLFW.glfwSetWindowSizeCallback(window, new GLFWWindowSizeCallback(){
 			@Override
 			public void invoke(long window, int width, int height){
 				self.width = width;
