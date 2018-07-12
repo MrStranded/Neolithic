@@ -80,18 +80,18 @@ public class Renderer {
 		objects[2].scale(2d,0.5d,1d);
 		objects[3].setScale(1d,1d,0d);
 
-		objects[0].rotate(Math.toRadians(30),0,0);
+		/*objects[0].rotate(Math.toRadians(30),0,0);
 		objects[1].setRotation(0,Math.toRadians(30),0);
 		objects[2].rotate(0,0,Math.toRadians(30));
 		objects[3].setRotation(Math.toRadians(30),Math.toRadians(30),Math.toRadians(30));
-
+		*/
 		objects[0].translate(-0.5d,0.25d,-1d);
-		objects[1].translate(1d,-0.5d,-2d);
+		objects[1].translate(1d,-0.5d,-1d);
 		objects[2].setPosition(0,-0.25d,-1d);
 		objects[3].setPosition(0,0,-1d);
 
-		objects[4].scale(50,50,50);
-		objects[4].translate(0,0,-100d);
+		objects[4].scale(0.5,0.5,0.5);
+		objects[4].translate(0,0,-1.25d);
 	}
 
 	private void initializeUniforms() {
@@ -117,11 +117,12 @@ public class Renderer {
 
 	public void render() {
 
-		angle+=0.01d;
-		objects[0].setRotation(angle,0,0);
-		objects[1].setRotation(0,angle,0);
-		objects[2].setRotation(0,0,angle);
-		objects[3].setRotation(angle,angle,angle);
+		double angleStep = 0.01d;
+		angle += angleStep;
+		objects[0].rotateX(angleStep);
+		objects[1].rotateY(angleStep);
+		objects[2].rotateZ(angleStep);
+		objects[3].rotate(angleStep,angleStep,angleStep);
 		objects[4].setRotation(0,angle,0);
 
 		long t = System.nanoTime();

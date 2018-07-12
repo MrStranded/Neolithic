@@ -6,6 +6,15 @@ import renderer.shapes.Mesh;
 
 public class MeshGenerator {
 
+	// Icosahedron constants
+	private static final float height = 1f;
+	private static final float phi = 0.5f * (1f + (float) Math.sqrt(5f));
+	private static final float alpha = 2f * (float) Math.atan(1f / phi);
+	private static final float radius = height * (float) Math.sin(alpha);
+	private static final float y = height * (float) Math.cos(alpha); // y position of upper/lower ring
+	private static final float angle = 2f * (float) Math.PI / 5f;
+	private static final float halfAngle = angle / 2f;
+
 	public static Mesh createQuad(double size) {
 
 		float s = (float) size / 2f;
@@ -34,21 +43,12 @@ public class MeshGenerator {
 
 	public static Mesh createIcosahedron() {
 
-		float height = 1f;
-		float phi = 0.5f * (1f + (float) Math.sqrt(5f));
-		float alpha = 2f * (float) Math.atan(1f / phi);
-		float radius = height * (float) Math.sin(alpha);
-		float y = height * (float) Math.cos(alpha); // y position of upper/lower ring
-
 		// ------------------------------------- vertices
 		float[] vertices = new float[12*3];
 
 		// 10th vertex is north pole, 11th vertex is south pole
 		vertices[10*3 + 1] = height;
 		vertices[11*3 + 1] = -height;
-
-		float angle = 2f * (float) Math.PI / 5f;
-		float halfAngle = angle / 2f;
 
 		for (int i=0; i<5; i++) {
 			// up - vertices 0 to 4

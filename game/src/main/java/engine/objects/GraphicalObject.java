@@ -65,7 +65,23 @@ public class GraphicalObject {
 
 		Vector3 v = new Vector3(x,y,z);
 		rotation.plusInplace(v);
-		worldMatrix = MatrixTransformations.rotate(v);
+		worldMatrix = MatrixTransformations.rotate(v).times(worldMatrix);
+	}
+
+	public void rotateX(double a) {
+
+		rotation.plusInplace(new Vector3(a,0,0));
+		worldMatrix = MatrixTransformations.rotateX(a).times(worldMatrix);
+	}
+	public void rotateY(double a) {
+
+		rotation.plusInplace(new Vector3(0,a,0));
+		worldMatrix = MatrixTransformations.rotateY(a).times(worldMatrix);
+	}
+	public void rotateZ(double a) {
+
+		rotation.plusInplace(new Vector3(0,0,a));
+		worldMatrix = MatrixTransformations.rotateZ(a).times(worldMatrix);
 	}
 
 	public void setRotation(double x, double y, double z) {
