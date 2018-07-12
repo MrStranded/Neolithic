@@ -28,6 +28,8 @@ public class Renderer {
 
 	private GraphicalObject[] objects;
 
+	private double angle = 0;
+
 	public Renderer(Window window) {
 
 		this.window = window;
@@ -88,6 +90,7 @@ public class Renderer {
 		objects[2].setPosition(0,-0.25d,-1d);
 		objects[3].setPosition(0,0,-1d);
 
+		//objects[4].rotate(Math.toRadians(90),0,0);
 		objects[4].translate(0,0,-2d);
 	}
 
@@ -113,6 +116,9 @@ public class Renderer {
 	// ###################################################################################
 
 	public void render() {
+
+		angle+=0.01d;
+		objects[4].setRotation(0,angle,0);
 
 		long t = System.nanoTime();
 

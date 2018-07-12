@@ -38,15 +38,14 @@ public class MeshGenerator {
 		float phi = 0.5f * (1f + (float) Math.sqrt(5f));
 		float alpha = 2f * (float) Math.atan(1f / phi);
 		float radius = height * (float) Math.sin(alpha);
-		float y = height * (float) Math.cos(alpha); // z position of upper/lower ring
+		float y = height * (float) Math.cos(alpha); // y position of upper/lower ring
 
 		// ------------------------------------- vertices
 		float[] vertices = new float[12*3];
 
 		// 10th vertex is north pole, 11th vertex is south pole
-
-		vertices[10*3 + 2] = height;
-		vertices[11*3 + 2] = -height;
+		vertices[10*3 + 1] = height;
+		vertices[11*3 + 1] = -height;
 
 		float angle = 2f * (float) Math.PI / 5f;
 		float halfAngle = angle / 2f;
@@ -54,13 +53,13 @@ public class MeshGenerator {
 		for (int i=0; i<5; i++) {
 			// up - vertices 0 to 4
 			vertices[i*3 + 0] = radius * (float) Math.cos(i * angle);
-			vertices[i*3 + 1] = radius * (float) Math.sin(i * angle);
-			vertices[i*3 + 2] = y;
+			vertices[i*3 + 1] = y;
+			vertices[i*3 + 2] = radius * (float) Math.sin(i * angle);
 
 			// down - vertices 5 to 9
-			vertices[5 + i*3 + 0] = radius * (float) Math.cos(i * angle + halfAngle);
-			vertices[5 + i*3 + 1] = radius * (float) Math.sin(i * angle + halfAngle);
-			vertices[5 + i*3 + 2] = -y;
+			vertices[5*3 + i*3 + 0] = radius * (float) Math.cos(i * angle - halfAngle);
+			vertices[5*3 + i*3 + 1] = -y;
+			vertices[5*3 + i*3 + 2] = radius * (float) Math.sin(i * angle - halfAngle);
 		}
 
 		// ------------------------------------- indices
@@ -73,19 +72,19 @@ public class MeshGenerator {
 			indices[i*3 + 2] = 5 + i; // down k
 
 			// layer 1
-			indices[5 + i*3 + 0] = 5 + i; // down
-			indices[5 + i*3 + 1] = 5 + ((i+1) % 5); // down k+1
-			indices[5 + i*3 + 2] = i; // up k
+			indices[5*3 + i*3 + 0] = 5 + i; // down
+			indices[5*3 + i*3 + 1] = 5 + ((i+1) % 5); // down k+1
+			indices[5*3 + i*3 + 2] = i; // up k
 
 			// layer 2
-			indices[10 + i*3 + 0] = 5 + ((i+1) % 5); // down k+1
-			indices[10 + i*3 + 1] = (i+1) % 5; // up k+1
-			indices[10 + i*3 + 2] = i; // up k
+			indices[10*3 + i*3 + 0] = 5 + ((i+1) % 5); // down k+1
+			indices[10*3 + i*3 + 1] = (i+1) % 5; // up k+1
+			indices[10*3 + i*3 + 2] = i; // up k
 
 			// layer 3
-			indices[10 + i*3 + 0] = i; // up k
-			indices[10 + i*3 + 1] = (i+1) % 5; // up k+1
-			indices[10 + i*3 + 2] = 10; // north
+			indices[15*3 + i*3 + 0] = i; // up k
+			indices[15*3 + i*3 + 1] = (i+1) % 5; // up k+1
+			indices[15*3 + i*3 + 2] = 10; // north
 		}
 
 		// ------------------------------------- colors
