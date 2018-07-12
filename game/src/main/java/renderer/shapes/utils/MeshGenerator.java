@@ -1,20 +1,19 @@
-package utils;
+package renderer.shapes.utils;
 
 import math.Vector3;
 import renderer.shapes.Mesh;
 
 public class MeshGenerator {
 
-	public static Mesh createQuad() {
+	public static Mesh createQuad(double size) {
 
-		float d = -1.1f; // distance
-		float s = 2f; // size
+		float s = (float) size/2f;
 
 		float[] vertices = {
-				-s,  -s,  d,  // left bottom
-				s,   -s,  d,  // right bottom
-				-s,  s,   d,  // left top
-				s,   s,   d   // right top
+				-s,  -s,  0,  // left bottom
+				s,   -s,  0,  // right bottom
+				-s,  s,   0,  // left top
+				s,   s,   0   // right top
 		};
 
 		int[] indices = {

@@ -1,12 +1,10 @@
 package renderer.shapes;
 
-import math.Vector3;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
-import utils.VectorConverter;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;

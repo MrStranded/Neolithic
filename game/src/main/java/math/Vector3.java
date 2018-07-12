@@ -54,6 +54,13 @@ public class Vector3 {
 		return this;
 	}
 
+	public Vector3 timesElementwiseInplace(Vector3 other) {
+		x *= other.x;
+		y *= other.y;
+		z *= other.z;
+		return this;
+	}
+
 	public double dot(Vector3 other) {
 		return x*other.x + y*other.y + z*other.z;
 	}

@@ -1,4 +1,4 @@
-package utils;
+package math.utils;
 
 import math.Vector3;
 

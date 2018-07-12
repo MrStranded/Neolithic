@@ -1,22 +1,16 @@
 package renderer;
 
+import engine.objects.GraphicalObject;
 import engine.window.Window;
 import load.FileToString;
 import math.Matrix4;
-import math.Vector3;
-import math.Vector4;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.system.MemoryUtil;
 import renderer.projection.Projection;
 import renderer.shaders.ShaderProgram;
 import renderer.shapes.Mesh;
-import renderer.shapes.Triangle;
-import utils.MeshGenerator;
-
-import java.nio.FloatBuffer;
+import renderer.shapes.utils.MeshGenerator;
 
 /**
  * The renderer is only concerned about periodically drawing the given mesh data onto a window
@@ -27,12 +21,12 @@ public class Renderer {
 	private Window window;
 	private ShaderProgram shaderProgram;
 
-	private double zNear = 1d; // freaking out for values <1
+	private double zNear = 0.001d;
 	private double zFar = 1000d;
 
 	private Matrix4 projectionMatrix;
 
-	private Mesh mesh;
+	private GraphicalObject[] objects;
 	private double angle = 0;
 
 	public Renderer(Window window) {
@@ -73,13 +67,24 @@ public class Renderer {
 
 	private void initializeVertexObjects() {
 
-		mesh = MeshGenerator.createQuad();
+		objects = new GraphicalObject[3];
+
+		objects[0] = new GraphicalObject(MeshGenerator.createQuad(1d));
+		objects[1] = new GraphicalObject(MeshGenerator.createQuad(2d));
+		objects[2] = new GraphicalObject(MeshGenerator.createQuad(0.5d));
+
+		objects[0].translate(-0.5d,0.25d,-1d);
+		objects[1].translate(1d,-0.5d,-2d);
+		objects[2].translate(0,-0.25d,-1d);
+
+		objects[2].scale(2d,0.5d,1d);
 	}
 
 	private void initializeUniforms() {
 
 		try {
 			shaderProgram.createUniform("projectionMatrix");
+			shaderProgram.createUniform("worldMatrix");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -89,7 +94,7 @@ public class Renderer {
 
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
 
-		projectionMatrix = Projection.createProjectionMatrix(-aspectRatio,aspectRatio,1d,-1d,zNear,zFar);
+		projectionMatrix = Projection.createProjectionMatrix(-aspectRatio*zNear,aspectRatio*zNear,1d*zNear,-1d*zNear,zNear,zFar);
 	}
 
 	// ###################################################################################
@@ -98,7 +103,7 @@ public class Renderer {
 
 	public void render() {
 
-		double r = 1d;
+		/*double r = 1d;
 		angle -= 0.01;
 		if (angle > Math.PI*2d) {
 			angle -= Math.PI*2d;
@@ -111,7 +116,7 @@ public class Renderer {
 			System.out.println("---------------");
 			System.out.println(v);
 			System.out.println(projectionMatrix.times(v));
-		}
+		}*/
 
 		long t = System.nanoTime();
 
@@ -122,18 +127,12 @@ public class Renderer {
 		// upload projection matrix
 		shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
-		// Bind to the VAO
-		GL30.glBindVertexArray(mesh.getVertexArrayObjectId());
-		GL20.glEnableVertexAttribArray(0);
-		GL20.glEnableVertexAttribArray(1);
-
-		// Draw the mesh
-		GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-
-		// Restore state
-		GL20.glDisableVertexAttribArray(0);
-		GL20.glDisableVertexAttribArray(1);
-		GL30.glBindVertexArray(0);
+		//System.out.println("-----------");
+		for (GraphicalObject object : objects) {
+			//System.out.println(object.getWorldMatrix());
+			shaderProgram.setUniform("worldMatrix", object.getWorldMatrix());
+			object.render();
+		}
 
 		shaderProgram.unbind();
 
@@ -165,7 +164,9 @@ public class Renderer {
 			shaderProgram.cleanup();
 		}
 
-		mesh.cleanUp();
+		for (GraphicalObject object : objects) {
+			object.cleanUp();
+		}
 
 		window.destroy();
 	}
