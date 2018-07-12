@@ -69,6 +69,7 @@ public class Renderer {
 
 		Texture trollFace = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png");
 		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/cube_texture.png");
+		Texture grasTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
 
 		objects = new GraphicalObject[5];
 
@@ -77,7 +78,7 @@ public class Renderer {
 		objects[2] = new GraphicalObject(MeshGenerator.createQuad(0.5d, cubeTexture));
 		objects[3] = new GraphicalObject(MeshGenerator.createQuad(1d, cubeTexture));
 
-		objects[4] = new GraphicalObject(MeshGenerator.createIcosahedron(trollFace));
+		objects[4] = new GraphicalObject(MeshGenerator.createIcosahedron(grasTexture));
 
 		objects[2].scale(2d,0.5d,1d);
 		objects[3].setScale(1d,1d,0d);

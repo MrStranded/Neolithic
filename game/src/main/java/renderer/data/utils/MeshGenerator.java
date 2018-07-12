@@ -103,7 +103,7 @@ public class MeshGenerator {
 		// ------------------------------------- texture coordinates
 		float[] textureCoordniates = new float[12*2];
 
-		for (int i=0; i<textureCoordniates.length; i++) {
+		for (int i=0; i<24; i++) {
 			textureCoordniates[i] = (float) Math.random();
 		}
 
