@@ -51,6 +51,8 @@ public class Renderer {
 		initializeShaders();
 		initializeVertexObjects();
 
+		initializeUniforms();
+		
 		calculateProjectionMatrix();
 	}
 
@@ -108,7 +110,7 @@ public class Renderer {
 		shaderProgram.bind();
 
 		// upload projection matrix
-		//shaderProgram.setUniform("projectionMatrix", projectionMatrix);
+		shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
 		// Bind to the VAO
 		GL30.glBindVertexArray(mesh.getVertexArrayObjectId());
