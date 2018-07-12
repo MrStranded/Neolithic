@@ -7,11 +7,13 @@ public class MeshGenerator {
 
 	public static Mesh createQuad() {
 
+		float d = 0;
+
 		float[] vertices = {
-				-0.5f,  -0.5f,  0,  // left bottom
-				0.5f,   -0.5f,  0,  // right bottom
-				-0.5f,  0.5f,   0,  // left top
-				0.5f,   0.5f,   0   // right top
+				-0.5f,  -0.5f,  d,  // left bottom
+				0.5f,   -0.5f,  d,  // right bottom
+				-0.5f,  0.5f,   d,  // left top
+				0.5f,   0.5f,   d   // right top
 		};
 
 		int[] indices = {

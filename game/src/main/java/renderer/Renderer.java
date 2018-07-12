@@ -2,12 +2,14 @@ package renderer;
 
 import engine.window.Window;
 import load.FileToString;
+import math.Matrix4;
 import math.Vector3;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
+import renderer.projection.Projection;
 import renderer.shaders.ShaderProgram;
 import renderer.shapes.Mesh;
 import renderer.shapes.Triangle;
@@ -23,6 +25,12 @@ public class Renderer {
 
 	private Window window;
 	private ShaderProgram shaderProgram;
+
+	private double fieldOfView = 1.0d;
+	private double zNear = 0.01d;
+	private double zFar = 1000d;
+
+	private Matrix4 projectionMatrix;
 
 	private Mesh mesh;
 
@@ -65,9 +73,20 @@ public class Renderer {
 		mesh = MeshGenerator.createQuad();
 	}
 
+	private void initializeUniforms() {
+
+		try {
+			shaderProgram.createUniform("projectionMatrix");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void calculateProjectionMatrix() {
 
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
+
+		projectionMatrix = Projection.createProjectionMatrix(1d, aspectRatio, zNear, zFar);
 
 		// setting up the projection matrix
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -87,6 +106,9 @@ public class Renderer {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		shaderProgram.bind();
+
+		// upload projection matrix
+		//shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
 		// Bind to the VAO
 		GL30.glBindVertexArray(mesh.getVertexArrayObjectId());

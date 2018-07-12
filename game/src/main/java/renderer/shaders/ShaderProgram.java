@@ -1,6 +1,13 @@
 package renderer.shaders;
 
+import math.Matrix4;
+import math.utils.MatrixConverter;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.system.MemoryStack;
+
+import java.nio.FloatBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShaderProgram {
 
@@ -8,17 +15,29 @@ public class ShaderProgram {
 	private int vertexShaderId;
 	private int fragmentShaderId;
 
+	private final Map<String, Integer> uniforms;
+
 	public ShaderProgram() throws Exception {
 
 		programId = GL20.glCreateProgram();
 		if (programId == 0) {
 			throw new Exception("Could not create shader.");
 		}
+
+		uniforms = new HashMap<>();
 	}
 
 	// ###################################################################################
 	// ################################ Set Up ###########################################
 	// ###################################################################################
+
+	public void createUniform(String uniformName) throws Exception {
+		int uniformLocation = GL20.glGetUniformLocation(programId, uniformName);
+		if (uniformLocation < 0) {
+			throw new Exception("Could not find uniform: " + uniformName);
+		}
+		uniforms.put(uniformName, uniformLocation);
+	}
 
 	public void createVertexShader(String shaderCode) throws Exception {
 		vertexShaderId = createShader(shaderCode, GL20.GL_VERTEX_SHADER);
@@ -88,6 +107,19 @@ public class ShaderProgram {
 		unbind();
 		if (programId != 0) {
 			GL20.glDeleteProgram(programId);
+		}
+	}
+
+	// ###################################################################################
+	// ################################ Getters and Setters ##############################
+	// ###################################################################################
+
+	public void setUniform(String uniformName, Matrix4 m) {
+		// Dump the matrix into a float buffer
+		try (MemoryStack stack = MemoryStack.stackPush()) {
+			FloatBuffer floatBuffer = stack.mallocFloat(16);
+			MatrixConverter.putMatrix4IntoFloatBuffer(m, floatBuffer);
+			GL20.glUniformMatrix4fv(uniforms.get(uniformName), false, floatBuffer);
 		}
 	}
 
