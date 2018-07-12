@@ -27,8 +27,8 @@ public class Renderer {
 	private ShaderProgram shaderProgram;
 
 	private double fieldOfView = 1.0d;
-	private double zNear = 0.01d;
-	private double zFar = 1000d;
+	private double zNear = 1d;
+	private double zFar = 100d;
 
 	private Matrix4 projectionMatrix;
 
@@ -88,12 +88,12 @@ public class Renderer {
 
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
 
-		projectionMatrix = Projection.createProjectionMatrix(1d, aspectRatio, zNear, zFar);
+		projectionMatrix = Projection.createProjectionMatrix(fieldOfView, aspectRatio, zNear, zFar);
 
 		// setting up the projection matrix
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(-aspectRatio, aspectRatio, -1, 1,1,-1);
+		//GL11.glMatrixMode(GL11.GL_PROJECTION);
+		//GL11.glLoadIdentity();
+		//GL11.glOrtho(-aspectRatio, aspectRatio, -1, 1,1,-1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
