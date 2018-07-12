@@ -1,13 +1,14 @@
 package renderer.shapes.utils;
 
 import math.Vector3;
+import math.utils.MatrixTransformations;
 import renderer.shapes.Mesh;
 
 public class MeshGenerator {
 
 	public static Mesh createQuad(double size) {
 
-		float s = (float) size/2f;
+		float s = (float) size / 2f;
 
 		float[] vertices = {
 				-s,  -s,  0,  // left bottom
@@ -31,21 +32,69 @@ public class MeshGenerator {
 		return new Mesh(vertices, indices, colors);
 	}
 
-	/*public static Mesh createTetrahedron() {
+	public static Mesh createIcosahedron() {
 
-		Vector3[] points = new Vector3[4];
-		points[0] = new Vector3(-0.5d,-0.5d,-0.5d); // left back
-		points[1] = new Vector3(0.5d,-0.5d,-0.5d);  // right back
-		points[2] = new Vector3(0d,-0.6d,0.5d);     // middle front
-		points[3] = new Vector3(0d,0.5d,0d);        // top
+		float height = 1f;
+		float phi = 0.5f * (1f + (float) Math.sqrt(5f));
+		float alpha = 2f * (float) Math.atan(1f / phi);
+		float radius = height * (float) Math.sin(alpha);
+		float y = height * (float) Math.cos(alpha); // z position of upper/lower ring
 
-		Vector3[] vertices = {
-				points[0],points[1],points[2],
-				points[0],points[3],points[1],
-				points[0],points[2],points[3],
-				points[1],points[3],points[2]
-		};
+		// ------------------------------------- vertices
+		float[] vertices = new float[12*3];
 
-		return new Mesh(vertices);
-	}*/
+		// 10th vertex is north pole, 11th vertex is south pole
+
+		vertices[10*3 + 2] = height;
+		vertices[11*3 + 2] = -height;
+
+		float angle = 2f * (float) Math.PI / 5f;
+		float halfAngle = angle / 2f;
+
+		for (int i=0; i<5; i++) {
+			// up - vertices 0 to 4
+			vertices[i*3 + 0] = radius * (float) Math.cos(i * angle);
+			vertices[i*3 + 1] = radius * (float) Math.sin(i * angle);
+			vertices[i*3 + 2] = y;
+
+			// down - vertices 5 to 9
+			vertices[5 + i*3 + 0] = radius * (float) Math.cos(i * angle + halfAngle);
+			vertices[5 + i*3 + 1] = radius * (float) Math.sin(i * angle + halfAngle);
+			vertices[5 + i*3 + 2] = -y;
+		}
+
+		// ------------------------------------- indices
+		int[] indices = new int[20*3];
+
+		for (int i=0; i<5; i++) {
+			// layer 0
+			indices[i*3 + 0] = 11; // south
+			indices[i*3 + 1] = 5 + ((i+1) % 5); // down k+1
+			indices[i*3 + 2] = 5 + i; // down k
+
+			// layer 1
+			indices[5 + i*3 + 0] = 5 + i; // down
+			indices[5 + i*3 + 1] = 5 + ((i+1) % 5); // down k+1
+			indices[5 + i*3 + 2] = i; // up k
+
+			// layer 2
+			indices[10 + i*3 + 0] = 5 + ((i+1) % 5); // down k+1
+			indices[10 + i*3 + 1] = (i+1) % 5; // up k+1
+			indices[10 + i*3 + 2] = i; // up k
+
+			// layer 3
+			indices[10 + i*3 + 0] = i; // up k
+			indices[10 + i*3 + 1] = (i+1) % 5; // up k+1
+			indices[10 + i*3 + 2] = 10; // north
+		}
+
+		// ------------------------------------- colors
+		float[] colors = new float[12*3];
+
+		for (int i=0; i<colors.length; i++) {
+			colors[i] = (float) Math.random();
+		}
+
+		return new Mesh(vertices, indices, colors);
+	}
 }

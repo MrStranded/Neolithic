@@ -27,7 +27,6 @@ public class Renderer {
 	private Matrix4 projectionMatrix;
 
 	private GraphicalObject[] objects;
-	private double angle = 0;
 
 	public Renderer(Window window) {
 
@@ -67,12 +66,14 @@ public class Renderer {
 
 	private void initializeVertexObjects() {
 
-		objects = new GraphicalObject[4];
+		objects = new GraphicalObject[5];
 
 		objects[0] = new GraphicalObject(MeshGenerator.createQuad(1d));
 		objects[1] = new GraphicalObject(MeshGenerator.createQuad(2d));
 		objects[2] = new GraphicalObject(MeshGenerator.createQuad(0.5d));
 		objects[3] = new GraphicalObject(MeshGenerator.createQuad(1d));
+
+		objects[4] = new GraphicalObject(MeshGenerator.createIcosahedron());
 
 		objects[2].scale(2d,0.5d,1d);
 		objects[3].setScale(1d,1d,0d);
@@ -86,6 +87,8 @@ public class Renderer {
 		objects[1].translate(1d,-0.5d,-2d);
 		objects[2].setPosition(0,-0.25d,-1d);
 		objects[3].setPosition(0,0,-1d);
+
+		objects[4].translate(0,0,-2d);
 	}
 
 	private void initializeUniforms() {
@@ -110,21 +113,6 @@ public class Renderer {
 	// ###################################################################################
 
 	public void render() {
-
-		/*double r = 1d;
-		angle -= 0.01;
-		if (angle > Math.PI*2d) {
-			angle -= Math.PI*2d;
-		}
-		float z = -1f + (float) (Math.sin(angle)*r);
-		mesh.setZValues(z);
-		mesh.registerData();
-		if (z < -1f-r*0.9f) {
-			Vector4 v = new Vector4(1,1,z,1);
-			System.out.println("---------------");
-			System.out.println(v);
-			System.out.println(projectionMatrix.times(v));
-		}*/
 
 		long t = System.nanoTime();
 
