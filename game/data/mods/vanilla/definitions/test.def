@@ -1,0 +1,43 @@
+Tile: tDirt {
+	color: 220,200,40;
+	name: "Dirt";
+	growChance: "5"; # in percent
+}
+Tile: tGras {
+	color: 180,220,30;
+	name: "Gras";
+}
+Fluid: fWater {
+	color: 80,160,255;
+	name: "Water";
+}
+
+Object: oTree {
+	name: "Tree";
+	char: T;
+	color: 60,150,20;
+}
+
+Attribute: attSpeed { name: "Speed"; mutate:1; }
+Attribute: attSwim { name: "Swims"; flag:1; mutate:0; }
+
+Creature: cMichi {
+	name: "Michi"; #%%%%%%%%%%%%%%%%%%%%%%% just a comment
+	char: "M";
+	color: 255,255,255;
+
+	onTick: sMove;
+
+	addToDNA: attSpeed,1;
+}
+
+Creature: cSemira {
+	name: "Semira";
+	char: S;
+	color: 255,0,255;
+
+	onTick: sMove;
+
+	addToDNA: attSpeed,2;
+	addToDNA: attSwim,1;
+}

@@ -1,4 +1,4 @@
-package renderer.shapes;
+package renderer.data;
 
 import org.lwjgl.system.MemoryUtil;
 

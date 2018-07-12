@@ -23,5 +23,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="lwjgl" level="project" />
+    <orderEntry type="library" name="PNGDecoder" level="project" />
   </component>
 </module>

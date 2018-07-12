@@ -3,14 +3,13 @@ package renderer;
 import engine.objects.GraphicalObject;
 import engine.window.Window;
 import load.FileToString;
+import load.TextureLoader;
 import math.Matrix4;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import renderer.data.Texture;
 import renderer.projection.Projection;
 import renderer.shaders.ShaderProgram;
-import renderer.shapes.Mesh;
-import renderer.shapes.utils.MeshGenerator;
+import renderer.data.utils.MeshGenerator;
 
 /**
  * The renderer is only concerned about periodically drawing the given mesh data onto a window
@@ -68,14 +67,17 @@ public class Renderer {
 
 	private void initializeVertexObjects() {
 
+		Texture trollFace = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png");
+		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/cube_texture.png");
+
 		objects = new GraphicalObject[5];
 
-		objects[0] = new GraphicalObject(MeshGenerator.createQuad(1d));
-		objects[1] = new GraphicalObject(MeshGenerator.createQuad(2d));
-		objects[2] = new GraphicalObject(MeshGenerator.createQuad(0.5d));
-		objects[3] = new GraphicalObject(MeshGenerator.createQuad(1d));
+		objects[0] = new GraphicalObject(MeshGenerator.createQuad(1d, trollFace));
+		objects[1] = new GraphicalObject(MeshGenerator.createQuad(2d, trollFace));
+		objects[2] = new GraphicalObject(MeshGenerator.createQuad(0.5d, cubeTexture));
+		objects[3] = new GraphicalObject(MeshGenerator.createQuad(1d, cubeTexture));
 
-		objects[4] = new GraphicalObject(MeshGenerator.createIcosahedron());
+		objects[4] = new GraphicalObject(MeshGenerator.createIcosahedron(trollFace));
 
 		objects[2].scale(2d,0.5d,1d);
 		objects[3].setScale(1d,1d,0d);
@@ -99,6 +101,7 @@ public class Renderer {
 		try {
 			shaderProgram.createUniform("projectionMatrix");
 			shaderProgram.createUniform("worldMatrix");
+			shaderProgram.createUniform("textureSampler");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -133,6 +136,8 @@ public class Renderer {
 
 		// upload projection matrix
 		shaderProgram.setUniform("projectionMatrix", projectionMatrix);
+		// set used texture (id = 0)
+		shaderProgram.setUniform("textureSampler", 0);
 
 		//System.out.println("-----------");
 		for (GraphicalObject object : objects) {

@@ -1,8 +1,7 @@
-package renderer.shapes.utils;
+package renderer.data.utils;
 
-import math.Vector3;
-import math.utils.MatrixTransformations;
-import renderer.shapes.Mesh;
+import renderer.data.Mesh;
+import renderer.data.Texture;
 
 public class MeshGenerator {
 
@@ -15,7 +14,7 @@ public class MeshGenerator {
 	private static final float angle = 2f * (float) Math.PI / 5f;
 	private static final float halfAngle = angle / 2f;
 
-	public static Mesh createQuad(double size) {
+	public static Mesh createQuad(double size, Texture texture) {
 
 		float s = (float) size / 2f;
 
@@ -38,10 +37,17 @@ public class MeshGenerator {
 				1.0f, 1.0f, 1.0f,
 		};
 
-		return new Mesh(vertices, indices, colors);
+		float[] textureCoordinates = {
+				0f, 1f,
+				1f, 1f,
+				0f, 0f,
+				1f, 0f
+		};
+
+		return new Mesh(vertices, indices, colors, texture, textureCoordinates);
 	}
 
-	public static Mesh createIcosahedron() {
+	public static Mesh createIcosahedron(Texture texture) {
 
 		// ------------------------------------- vertices
 		float[] vertices = new float[12*3];
@@ -94,6 +100,13 @@ public class MeshGenerator {
 			colors[i] = (float) Math.random();
 		}
 
-		return new Mesh(vertices, indices, colors);
+		// ------------------------------------- texture coordinates
+		float[] textureCoordniates = new float[12*2];
+
+		for (int i=0; i<textureCoordniates.length; i++) {
+			textureCoordniates[i] = (float) Math.random();
+		}
+
+		return new Mesh(vertices, indices, colors, texture, textureCoordniates);
 	}
 }
