@@ -7,7 +7,7 @@ public class MeshGenerator {
 
 	public static Mesh createQuad() {
 
-		float d = -1f; // distance
+		float d = -1.1f; // distance
 		float s = 2f; // size
 
 		float[] vertices = {

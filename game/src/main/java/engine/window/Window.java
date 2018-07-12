@@ -12,7 +12,6 @@ public class Window {
 
 	private String title;
 	private int width,height;
-	private int fps = 60;
 
 	private Renderer renderer;
 	private long window;
@@ -122,6 +121,8 @@ public class Window {
 		// bindings available for use.
 		GL.createCapabilities();
 
+
+
 		// Set the clear color
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	}
@@ -160,13 +161,6 @@ public class Window {
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
-
-	public int getFps() {
-		return fps;
-	}
-	public void setFps(int fps) {
-		this.fps = fps;
-	}
 
 	public int getWidth() {
 		return width;

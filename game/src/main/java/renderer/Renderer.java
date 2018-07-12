@@ -4,6 +4,7 @@ import engine.window.Window;
 import load.FileToString;
 import math.Matrix4;
 import math.Vector3;
+import math.Vector4;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -26,12 +27,13 @@ public class Renderer {
 	private Window window;
 	private ShaderProgram shaderProgram;
 
-	private double zNear = 0.001d;
+	private double zNear = 1d; // freaking out for values <1
 	private double zFar = 1000d;
 
 	private Matrix4 projectionMatrix;
 
 	private Mesh mesh;
+	private double angle = 0;
 
 	public Renderer(Window window) {
 
@@ -96,6 +98,21 @@ public class Renderer {
 
 	public void render() {
 
+		double r = 1d;
+		angle -= 0.01;
+		if (angle > Math.PI*2d) {
+			angle -= Math.PI*2d;
+		}
+		float z = -1f + (float) (Math.sin(angle)*r);
+		mesh.setZValues(z);
+		mesh.registerData();
+		if (z < -1f-r*0.9f) {
+			Vector4 v = new Vector4(1,1,z,1);
+			System.out.println("---------------");
+			System.out.println(v);
+			System.out.println(projectionMatrix.times(v));
+		}
+
 		long t = System.nanoTime();
 
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -132,10 +149,6 @@ public class Renderer {
 
 	public boolean displayExists() {
 		return !window.isClosed();
-	}
-
-	public void setFps(int fps) {
-		window.setFps(fps);
 	}
 
 	public void flip() {
