@@ -10,10 +10,10 @@ public class MeshGenerator {
 		float d = -1f;
 
 		float[] vertices = {
-				-0.5f,  -0.5f,  d,  // left bottom
-				0.5f,   -0.5f,  d,  // right bottom
-				-0.5f,  0.5f,   d,  // left top
-				0.5f,   0.5f,   d   // right top
+				-1f,  -1f,  d,  // left bottom
+				1f,   -1f,  d,  // right bottom
+				-1f,  1f,   d,  // left top
+				1f,   1f,   d   // right top
 		};
 
 		int[] indices = {

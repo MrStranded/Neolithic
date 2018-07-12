@@ -20,6 +20,5 @@ public class Projection {
 	        0, 0, v3, v4,
 	        0, 0, -1d, 0
 	    );
-		//return new Matrix4();
 	}
 }

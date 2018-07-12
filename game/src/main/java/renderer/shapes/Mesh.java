@@ -20,7 +20,37 @@ public class Mesh {
 
 	private final int vertexCount;
 
+	private float[] vertices;
+	private int[] indices;
+	private float[] colors;
+
 	public Mesh(float[] vertices, int[] indices, float[] colors) {
+
+		this.vertices = vertices;
+		this.indices = indices;
+		this.colors = colors;
+
+		// set up static data
+
+		// ------------------ whole object
+		vertexCount = indices.length;
+
+		vertexArrayObjectId = GL30.glGenVertexArrays();
+
+		// ------------------ vertex part
+		positionsVboId = GL15.glGenBuffers();
+
+		// ------------------ index part
+		indicesVboId = GL15.glGenBuffers();
+
+		// ------------------ color part
+		colorsVboId = GL15.glGenBuffers();
+
+		// register mesh data
+		registerData();
+	}
+
+	public void registerData() {
 
 		FloatBuffer verticesBuffer = null;
 		IntBuffer indicesBuffer = null;
@@ -29,16 +59,12 @@ public class Mesh {
 		try {
 
 			// ------------------ whole object
-			vertexCount = indices.length;
-
-			vertexArrayObjectId = GL30.glGenVertexArrays();
 			GL30.glBindVertexArray(vertexArrayObjectId);
 
 			// ------------------ vertex part
 			verticesBuffer = MemoryUtil.memAllocFloat(vertices.length);
 			verticesBuffer.put(vertices).flip();
 
-			positionsVboId = GL15.glGenBuffers();
 			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, positionsVboId);
 			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, verticesBuffer, GL15.GL_STATIC_DRAW);
 
@@ -48,7 +74,6 @@ public class Mesh {
 			indicesBuffer = MemoryUtil.memAllocInt(indices.length);
 			indicesBuffer.put(indices).flip();
 
-			indicesVboId = GL15.glGenBuffers();
 			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesVboId);
 			GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL15.GL_STATIC_DRAW);
 
@@ -56,7 +81,6 @@ public class Mesh {
 			colorsBuffer = MemoryUtil.memAllocFloat(colors.length);
 			colorsBuffer.put(colors).flip();
 
-			colorsVboId = GL15.glGenBuffers();
 			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, colorsVboId);
 			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colorsBuffer, GL15.GL_STATIC_DRAW);
 
@@ -105,6 +129,13 @@ public class Mesh {
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
+
+	public void setZValues(float z) {
+
+		for (int i=2; i<vertices.length; i+=3) {
+			vertices[i] = z;
+		}
+	}
 
 	public int getVertexArrayObjectId() {
 		return vertexArrayObjectId;

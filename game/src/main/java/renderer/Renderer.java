@@ -26,13 +26,15 @@ public class Renderer {
 	private Window window;
 	private ShaderProgram shaderProgram;
 
-	private double fieldOfView = 1.0d;
-	private double zNear = 1d;
-	private double zFar = 100d;
+	private double fieldOfView = Math.PI/3d;
+	private double zNear = 1d; // for any other value the renderer goes nuts
+	private double zFar = 1000d;
 
 	private Matrix4 projectionMatrix;
 
 	private Mesh mesh;
+	private float z = 1.0f;
+	private float zStep = -0.001f;
 
 	public Renderer(Window window) {
 
@@ -50,10 +52,11 @@ public class Renderer {
 
 		initializeShaders();
 		initializeVertexObjects();
-
 		initializeUniforms();
 
 		calculateProjectionMatrix();
+
+		//GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
 	private void initializeShaders() {
@@ -71,7 +74,6 @@ public class Renderer {
 
 	private void initializeVertexObjects() {
 
-		//mesh = MeshGenerator.createTetrahedron();
 		mesh = MeshGenerator.createQuad();
 	}
 
@@ -89,12 +91,6 @@ public class Renderer {
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
 
 		projectionMatrix = Projection.createProjectionMatrix(fieldOfView, aspectRatio, zNear, zFar);
-
-		// setting up the projection matrix
-		//GL11.glMatrixMode(GL11.GL_PROJECTION);
-		//GL11.glLoadIdentity();
-		//GL11.glOrtho(-aspectRatio, aspectRatio, -1, 1,1,-1);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
 	// ###################################################################################
@@ -131,6 +127,13 @@ public class Renderer {
 		//System.out.println("rendering took " + dt + " ms");
 
 		flip();
+
+		System.out.println("z = " + z);
+		z += zStep;
+		if (z > zFar) { zStep = -zStep; }
+		if (z < zNear/10f) { zStep = -zStep; }
+		mesh.setZValues(-z);
+		mesh.registerData();
 	}
 
 	// ###################################################################################
