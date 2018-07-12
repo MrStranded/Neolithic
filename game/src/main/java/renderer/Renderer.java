@@ -6,10 +6,13 @@ import load.FileToString;
 import load.TextureLoader;
 import math.Matrix4;
 import org.lwjgl.opengl.GL11;
+import renderer.camera.Camera;
 import renderer.data.Texture;
 import renderer.projection.Projection;
 import renderer.shaders.ShaderProgram;
 import renderer.data.utils.MeshGenerator;
+
+import java.util.Calendar;
 
 /**
  * The renderer is only concerned about periodically drawing the given mesh data onto a window
@@ -26,6 +29,8 @@ public class Renderer {
 	private Matrix4 projectionMatrix;
 
 	private GraphicalObject[] objects;
+
+	private Camera camera;
 
 	private double angle = 0;
 
@@ -46,6 +51,7 @@ public class Renderer {
 		initializeShaders();
 		initializeVertexObjects();
 		initializeUniforms();
+		initializeCamera();
 
 		calculateProjectionMatrix();
 
@@ -108,6 +114,12 @@ public class Renderer {
 		}
 	}
 
+	private void initializeCamera() {
+
+		camera = new Camera();
+		camera.translate(0,0,2);
+	}
+
 	public void calculateProjectionMatrix() {
 
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
@@ -123,11 +135,17 @@ public class Renderer {
 
 		double angleStep = 0.01d;
 		angle += angleStep;
+		if (angle > Math.PI*2d) {
+			angle -= Math.PI*2d;
+		}
 		objects[0].rotateX(angleStep);
 		objects[1].rotateY(angleStep);
 		objects[2].rotateZ(angleStep);
 		objects[3].rotate(angleStep,angleStep,angleStep);
 		objects[4].setRotation(0,angle,0);
+
+		camera.setPosition(0,0,2+Math.sin(angle*2)*2);
+		camera.rotate(-angleStep,-angleStep,-angleStep);
 
 		long t = System.nanoTime();
 
@@ -143,7 +161,7 @@ public class Renderer {
 		//System.out.println("-----------");
 		for (GraphicalObject object : objects) {
 			//System.out.println(object.getWorldMatrix());
-			shaderProgram.setUniform("worldMatrix", object.getWorldMatrix());
+			shaderProgram.setUniform("worldMatrix", camera.getViewMatrix().times(object.getWorldMatrix()));
 			object.render();
 		}
 
