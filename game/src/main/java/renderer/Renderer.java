@@ -90,8 +90,8 @@ public class Renderer {
 		objects[2].setPosition(0,-0.25d,-1d);
 		objects[3].setPosition(0,0,-1d);
 
-		//objects[4].rotate(Math.toRadians(90),0,0);
-		objects[4].translate(0,0,-2d);
+		objects[4].scale(50,50,50);
+		objects[4].translate(0,0,-100d);
 	}
 
 	private void initializeUniforms() {
@@ -118,6 +118,10 @@ public class Renderer {
 	public void render() {
 
 		angle+=0.01d;
+		objects[0].setRotation(angle,0,0);
+		objects[1].setRotation(0,angle,0);
+		objects[2].setRotation(0,0,angle);
+		objects[3].setRotation(angle,angle,angle);
 		objects[4].setRotation(0,angle,0);
 
 		long t = System.nanoTime();

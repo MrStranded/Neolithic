@@ -68,23 +68,23 @@ public class MeshGenerator {
 		for (int i=0; i<5; i++) {
 			// layer 0
 			indices[i*3 + 0] = 11; // south
-			indices[i*3 + 1] = 5 + ((i+1) % 5); // down k+1
-			indices[i*3 + 2] = 5 + i; // down k
+			indices[i*3 + 1] = 5 + i; // down k
+			indices[i*3 + 2] = 5 + ((i+1) % 5); // down k+1
 
 			// layer 1
 			indices[5*3 + i*3 + 0] = 5 + i; // down
-			indices[5*3 + i*3 + 1] = 5 + ((i+1) % 5); // down k+1
-			indices[5*3 + i*3 + 2] = i; // up k
+			indices[5*3 + i*3 + 1] = i; // up k
+			indices[5*3 + i*3 + 2] = 5 + ((i+1) % 5); // down k+1
 
 			// layer 2
 			indices[10*3 + i*3 + 0] = 5 + ((i+1) % 5); // down k+1
-			indices[10*3 + i*3 + 1] = (i+1) % 5; // up k+1
-			indices[10*3 + i*3 + 2] = i; // up k
+			indices[10*3 + i*3 + 1] = i; // up k
+			indices[10*3 + i*3 + 2] = (i+1) % 5; // up k+1
 
 			// layer 3
 			indices[15*3 + i*3 + 0] = i; // up k
-			indices[15*3 + i*3 + 1] = (i+1) % 5; // up k+1
-			indices[15*3 + i*3 + 2] = 10; // north
+			indices[15*3 + i*3 + 1] = 10; // north
+			indices[15*3 + i*3 + 2] = (i+1) % 5; // up k+1
 		}
 
 		// ------------------------------------- colors

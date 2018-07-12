@@ -121,7 +121,8 @@ public class Window {
 		// bindings available for use.
 		GL.createCapabilities();
 
-
+		// enable back face culling
+		GL11.glEnable(GL11.GL_CULL_FACE);
 
 		// Set the clear color
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
