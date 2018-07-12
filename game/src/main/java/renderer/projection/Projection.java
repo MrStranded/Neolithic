@@ -14,12 +14,12 @@ public class Projection {
 		double v3 = -zp/zm;
 		double v4 = -(2d*zFar*zNear)/zm;
 
-	    /*return new Matrix4(
+	    return new Matrix4(
 	        v1, 0, 0, 0,
 	        0, v2, 0, 0,
 	        0, 0, v3, v4,
 	        0, 0, -1d, 0
-	    );*/
-		return new Matrix4();
+	    );
+		//return new Matrix4();
 	}
 }
