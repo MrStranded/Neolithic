@@ -12,7 +12,7 @@ public class Matrix4 {
 	 */
 	private static boolean printMatrixIndices = true;
 
-	private final double
+	private double
 			a11,a12,a13,a14,
 			a21,a22,a23,a24,
 			a31,a32,a33,a34,
@@ -183,6 +183,55 @@ public class Matrix4 {
 	}
 	public double getA44() {
 		return a44;
+	}
+
+	public void setA11(double a11) {
+		this.a11 = a11;
+	}
+	public void setA12(double a12) {
+		this.a12 = a12;
+	}
+	public void setA13(double a13) {
+		this.a13 = a13;
+	}
+	public void setA14(double a14) {
+		this.a14 = a14;
+	}
+	public void setA21(double a21) {
+		this.a21 = a21;
+	}
+	public void setA22(double a22) {
+		this.a22 = a22;
+	}
+	public void setA23(double a23) {
+		this.a23 = a23;
+	}
+	public void setA24(double a24) {
+		this.a24 = a24;
+	}
+	public void setA31(double a31) {
+		this.a31 = a31;
+	}
+	public void setA32(double a32) {
+		this.a32 = a32;
+	}
+	public void setA33(double a33) {
+		this.a33 = a33;
+	}
+	public void setA34(double a34) {
+		this.a34 = a34;
+	}
+	public void setA41(double a41) {
+		this.a41 = a41;
+	}
+	public void setA42(double a42) {
+		this.a42 = a42;
+	}
+	public void setA43(double a43) {
+		this.a43 = a43;
+	}
+	public void setA44(double a44) {
+		this.a44 = a44;
 	}
 
 	public static boolean getPrintMatrixIndices() { return printMatrixIndices; }

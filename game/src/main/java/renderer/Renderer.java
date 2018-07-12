@@ -26,15 +26,12 @@ public class Renderer {
 	private Window window;
 	private ShaderProgram shaderProgram;
 
-	private double fieldOfView = Math.PI/3d;
-	private double zNear = 1d; // for any other value the renderer goes nuts
+	private double zNear = 0.001d;
 	private double zFar = 1000d;
 
 	private Matrix4 projectionMatrix;
 
 	private Mesh mesh;
-	private float z = 1.0f;
-	private float zStep = -0.001f;
 
 	public Renderer(Window window) {
 
@@ -90,7 +87,7 @@ public class Renderer {
 
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
 
-		projectionMatrix = Projection.createProjectionMatrix(fieldOfView, aspectRatio, zNear, zFar);
+		projectionMatrix = Projection.createProjectionMatrix(-aspectRatio,aspectRatio,1d,-1d,zNear,zFar);
 	}
 
 	// ###################################################################################
@@ -127,13 +124,6 @@ public class Renderer {
 		//System.out.println("rendering took " + dt + " ms");
 
 		flip();
-
-		System.out.println("z = " + z);
-		z += zStep;
-		if (z > zFar) { zStep = -zStep; }
-		if (z < zNear/10f) { zStep = -zStep; }
-		mesh.setZValues(-z);
-		mesh.registerData();
 	}
 
 	// ###################################################################################

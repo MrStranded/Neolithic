@@ -4,21 +4,22 @@ import math.Matrix4;
 
 public class Projection {
 
-	public static Matrix4 createProjectionMatrix(double fieldOfView, double aspectRatio, double zNear, double zFar) {
+	public static Matrix4 createProjectionMatrix(double left, double right, double top, double bottom, double near, double far) {
 
-		double zp = zFar + zNear;
-		double zm = zFar - zNear;
+		Matrix4 m = new Matrix4();
 
-		double v2 = 1d/Math.tan(fieldOfView/2d);
-		double v1 = v2/aspectRatio;
-		double v3 = -zp/zm;
-		double v4 = -(2d*zFar*zNear)/zm;
+		m.setA11(2d*near/(right-left));
+		m.setA13((right+left)/(right-left));
 
-	    return new Matrix4(
-	        v1, 0, 0, 0,
-	        0, v2, 0, 0,
-	        0, 0, v3, v4,
-	        0, 0, -1d, 0
-	    );
+		m.setA22(2d*near/(top-bottom));
+		m.setA23((top+bottom)/(top-bottom));
+
+		m.setA33(-(far+near)/(far-near));
+		m.setA34(-2d*far*near/(far-near));
+
+		m.setA43(-1d);
+		m.setA44(0d);
+
+		return m;
 	}
 }
