@@ -67,17 +67,25 @@ public class Renderer {
 
 	private void initializeVertexObjects() {
 
-		objects = new GraphicalObject[3];
+		objects = new GraphicalObject[4];
 
 		objects[0] = new GraphicalObject(MeshGenerator.createQuad(1d));
 		objects[1] = new GraphicalObject(MeshGenerator.createQuad(2d));
 		objects[2] = new GraphicalObject(MeshGenerator.createQuad(0.5d));
+		objects[3] = new GraphicalObject(MeshGenerator.createQuad(1d));
+
+		objects[2].scale(2d,0.5d,1d);
+		objects[3].setScale(1d,1d,0d);
+
+		objects[0].rotate(Math.toRadians(30),0,0);
+		objects[1].setRotation(0,Math.toRadians(30),0);
+		objects[2].rotate(0,0,Math.toRadians(30));
+		objects[3].setRotation(Math.toRadians(30),Math.toRadians(30),Math.toRadians(30));
 
 		objects[0].translate(-0.5d,0.25d,-1d);
 		objects[1].translate(1d,-0.5d,-2d);
-		objects[2].translate(0,-0.25d,-1d);
-
-		objects[2].scale(2d,0.5d,1d);
+		objects[2].setPosition(0,-0.25d,-1d);
+		objects[3].setPosition(0,0,-1d);
 	}
 
 	private void initializeUniforms() {
