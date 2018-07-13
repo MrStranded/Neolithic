@@ -153,25 +153,21 @@ public class Renderer {
 		if (angle > Math.PI*2d) {
 			angle -= Math.PI*2d;
 		}
-		/*objects[0].rotate(angleStep,0,0);
+		/*
+		objects[0].rotate(angleStep,0,0);
 		objects[1].rotateYAroundOrigin(angleStep);
 		objects[2].rotateAroundOrigin(0,0,angleStep);
-		objects[3].rotate(angleStep,angleStep,angleStep);*/
+		objects[3].rotate(angleStep,angleStep,angleStep);
+		*/
 		objects[4].rotateYAroundOrigin(0.01d);
 
 		objects[2].setScale(Math.abs(Math.cos(angle)*5d),Math.abs(Math.sin(angle)*2d),0d);
 
-		if (keyboard.isPressed(GLFW.GLFW_KEY_W)) { // move forward
-			camera.move(0,0,-0.01d);
-		}
-		if (keyboard.isPressed(GLFW.GLFW_KEY_S)) { // move backward
-			camera.move(0,0,0.01d);
-		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
-			camera.rotateY(-0.01d);
+			camera.rotateYAroundOrigin(-0.01d);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_D)) { // rotate right
-			camera.rotateY(0.01d);
+			camera.rotateYAroundOrigin(0.01d);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_E)) { // look down
 			camera.rotateX(-0.01d);
@@ -179,9 +175,16 @@ public class Renderer {
 		if (keyboard.isPressed(GLFW.GLFW_KEY_Q)) { // look up
 			camera.rotateX(0.01d);
 		}
+		if (keyboard.isPressed(GLFW.GLFW_KEY_W)) { // move forward
+			camera.move(0,0,-0.01d);
+		}
+		if (keyboard.isPressed(GLFW.GLFW_KEY_S)) { // move backward
+			camera.move(0,0,0.01d);
+		}
 
-		System.out.println(camera.getPosition().length());
-		System.out.println(Math.toDegrees(camera.getRotation().getY()));
+		//System.out.println(camera.getPosition().length());
+		//System.out.println(Math.toDegrees(camera.getRotation().getY()));
+		System.out.println(camera.getPosition());
 
 		long t = System.nanoTime();
 

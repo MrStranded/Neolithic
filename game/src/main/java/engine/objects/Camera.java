@@ -1,11 +1,10 @@
 package engine.objects;
 
+import engine.objects.movement.MoveableCamera;
 import math.Matrix4;
 import math.Vector3;
-import math.Vector4;
-import math.utils.MatrixTransformations;
 
-public class Camera extends MoveableObject {
+public class Camera extends MoveableCamera {
 
 	public Camera() {
 	}
@@ -13,20 +12,6 @@ public class Camera extends MoveableObject {
 	// ###################################################################################
 	// ################################ Update ###########################################
 	// ###################################################################################
-
-	@Override
-	protected void optionalUpdate() {
-		update();
-	}
-
-	@Override
-	protected void update() {
-
-		checkAngle();
-
-		matrix =    MatrixTransformations.translate(position.times(-1d)).times(
-					MatrixTransformations.rotate(rotation.times(-1d)));
-	}
 
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
@@ -37,10 +22,10 @@ public class Camera extends MoveableObject {
 	}
 
 	public Vector3 getPosition() {
-		return position;
+		return worldPosition.times(-1d);
 	}
 
 	public Vector3 getRotation() {
-		return rotation;
+		return worldRotation.times(-1d);
 	}
 }

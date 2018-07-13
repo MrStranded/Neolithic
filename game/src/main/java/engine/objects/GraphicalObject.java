@@ -1,8 +1,8 @@
 package engine.objects;
 
+import engine.objects.movement.MoveableObject;
 import math.Matrix4;
 import math.Vector3;
-import math.utils.MatrixTransformations;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
