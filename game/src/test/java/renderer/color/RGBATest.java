@@ -1,5 +1,6 @@
 package renderer.color;
 
+import engine.renderer.color.RGBA;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

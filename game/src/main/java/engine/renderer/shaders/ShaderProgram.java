@@ -1,4 +1,4 @@
-package renderer.shaders;
+package engine.renderer.shaders;
 
 import math.Matrix4;
 import math.utils.MatrixConverter;

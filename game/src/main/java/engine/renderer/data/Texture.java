@@ -1,4 +1,4 @@
-package renderer.data;
+package engine.renderer.data;
 
 import java.nio.ByteBuffer;
 

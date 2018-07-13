@@ -1,7 +1,7 @@
-package renderer.data.utils;
+package engine.renderer.data.utils;
 
-import renderer.data.Mesh;
-import renderer.data.Texture;
+import engine.renderer.data.Mesh;
+import engine.renderer.data.Texture;
 
 public class MeshGenerator {
 

@@ -7,99 +7,15 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import renderer.data.Mesh;
+import engine.renderer.data.Mesh;
 
-public class GraphicalObject {
-
-	private Vector3 position = new Vector3(0,0,0);
-	private Vector3 scale = new Vector3(1,1,1);
-	private Vector3 rotation = new Vector3(0,0,0);
-
-	private Matrix4 worldMatrix = new Matrix4();
+public class GraphicalObject extends MoveableObject {
 
 	private Mesh mesh;
 
 	public GraphicalObject(Mesh mesh) {
 
 		this.mesh = mesh;
-	}
-
-	// ###################################################################################
-	// ################################ Position #########################################
-	// ###################################################################################
-
-	public void translate(double x, double y, double z) {
-
-		Vector3 v = new Vector3(x,y,z);
-		position.plusInplace(v);
-		worldMatrix = MatrixTransformations.translate(v).times(worldMatrix);
-	}
-
-	public void setPosition(double x, double y, double z) {
-
-		position = new Vector3(x,y,z);
-		updateWorldMatrix();
-	}
-
-	// ###################################################################################
-	// ################################ Scale ############################################
-	// ###################################################################################
-
-	public void scale(double x, double y, double z) {
-
-		Vector3 v = new Vector3(x,y,z);
-		scale.timesElementwiseInplace(v);
-		worldMatrix = MatrixTransformations.scale(v).times(worldMatrix);
-	}
-
-	public void setScale(double x, double y, double z) {
-
-		scale = new Vector3(x,y,z);
-		updateWorldMatrix();
-	}
-
-	// ###################################################################################
-	// ################################ Rotation #########################################
-	// ###################################################################################
-
-	public void rotate(double x, double y, double z) {
-
-		Vector3 v = new Vector3(x,y,z);
-		rotation.plusInplace(v);
-		worldMatrix = MatrixTransformations.rotate(v).times(worldMatrix);
-	}
-
-	public void rotateX(double a) {
-
-		rotation.plusInplace(new Vector3(a,0,0));
-		worldMatrix = MatrixTransformations.rotateX(a).times(worldMatrix);
-	}
-	public void rotateY(double a) {
-
-		rotation.plusInplace(new Vector3(0,a,0));
-		worldMatrix = MatrixTransformations.rotateY(a).times(worldMatrix);
-	}
-	public void rotateZ(double a) {
-
-		rotation.plusInplace(new Vector3(0,0,a));
-		worldMatrix = MatrixTransformations.rotateZ(a).times(worldMatrix);
-	}
-
-	public void setRotation(double x, double y, double z) {
-
-		rotation = new Vector3(x,y,z);
-		updateWorldMatrix();
-	}
-
-	// ###################################################################################
-	// ################################ Update ###########################################
-	// ###################################################################################
-
-	private void updateWorldMatrix() {
-
-		worldMatrix =   MatrixTransformations.translate(position).times(
-						MatrixTransformations.rotate(rotation).times(
-						MatrixTransformations.scale(scale)));
 	}
 
 	// ###################################################################################
@@ -146,6 +62,18 @@ public class GraphicalObject {
 	}
 
 	public Matrix4 getWorldMatrix() {
-		return worldMatrix;
+		return matrix;
+	}
+
+	public Vector3 getPosition() {
+		return position;
+	}
+
+	public Vector3 getScale() {
+		return scale;
+	}
+
+	public Vector3 getRotation() {
+		return rotation;
 	}
 }

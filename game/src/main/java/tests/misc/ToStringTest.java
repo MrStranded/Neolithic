@@ -4,7 +4,7 @@ import math.Matrix3;
 import math.Matrix4;
 import math.Vector3;
 import math.Vector4;
-import renderer.color.RGBA;
+import engine.renderer.color.RGBA;
 
 public class ToStringTest {
 

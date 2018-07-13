@@ -4,7 +4,7 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
-import renderer.Renderer;
+import engine.renderer.Renderer;
 
 import java.nio.IntBuffer;
 

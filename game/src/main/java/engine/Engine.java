@@ -1,7 +1,7 @@
 package engine;
 
 import engine.window.Window;
-import renderer.Renderer;
+import engine.renderer.Renderer;
 
 /**
  * The engine binds the whole thing together.

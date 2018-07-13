@@ -1,4 +1,4 @@
-package renderer.data;
+package engine.renderer.data;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;

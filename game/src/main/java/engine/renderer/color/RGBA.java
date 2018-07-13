@@ -1,4 +1,4 @@
-package renderer.color;
+package engine.renderer.color;
 
 import java.awt.*;
 

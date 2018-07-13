@@ -1,18 +1,16 @@
-package renderer;
+package engine.renderer;
 
 import engine.objects.GraphicalObject;
+import engine.objects.Camera;
+import engine.renderer.data.Texture;
+import engine.renderer.projection.Projection;
+import engine.renderer.shaders.ShaderProgram;
 import engine.window.Window;
 import load.FileToString;
 import load.TextureLoader;
 import math.Matrix4;
 import org.lwjgl.opengl.GL11;
-import renderer.camera.Camera;
-import renderer.data.Texture;
-import renderer.projection.Projection;
-import renderer.shaders.ShaderProgram;
-import renderer.data.utils.MeshGenerator;
-
-import java.util.Calendar;
+import engine.renderer.data.utils.MeshGenerator;
 
 /**
  * The renderer is only concerned about periodically drawing the given mesh data onto a window
@@ -117,7 +115,10 @@ public class Renderer {
 	private void initializeCamera() {
 
 		camera = new Camera();
-		camera.translate(0,0,2);
+		camera.translate(0,0,4);
+		//camera.rotateAroundOrigin(0,Math.toRadians(90),0);
+		//camera.setRotation(0,Math.toRadians(90),0);
+		//camera.translate(4,0,0);
 	}
 
 	public void calculateProjectionMatrix() {
@@ -138,14 +139,20 @@ public class Renderer {
 		if (angle > Math.PI*2d) {
 			angle -= Math.PI*2d;
 		}
-		objects[0].rotateX(angleStep);
-		objects[1].rotateY(angleStep);
-		objects[2].rotateZ(angleStep);
+		objects[0].rotate(angleStep,0,0);
+		objects[1].rotateYAroundOrigin(angleStep);
+		objects[2].rotateAroundOrigin(0,0,angleStep);
 		objects[3].rotate(angleStep,angleStep,angleStep);
 		objects[4].setRotation(0,angle,0);
 
-		camera.setPosition(0,0,2+Math.sin(angle*2)*2);
-		camera.rotate(-angleStep,-angleStep,-angleStep);
+		objects[0].move(Math.cos(angle)/100d,0,0.01d);
+
+		//camera.setPosition(0,0,2+Math.sin(angle*2)*2);
+		//camera.rotateAroundOrigin(0,-angleStep,0);
+		camera.move(0,0,Math.cos(angle)/20d);
+		System.out.println("-------");
+		System.out.println("Position: " + objects[0].getPosition());
+		System.out.println("Rotation:" + objects[0].getRotation());
 
 		long t = System.nanoTime();
 
