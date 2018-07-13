@@ -44,6 +44,6 @@ public class MouseInput {
 	}
 
 	public String toString() {
-		return "xPos: " + xPos + " ,yPos: " + yPos + " ,zPos: " + zPos;
+		return "xPos: " + xPos + " ,yPos: " + yPos + " ,zPos: " + zPos + " ,inWindow: " + inWindow;
 	}
 }

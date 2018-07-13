@@ -1,5 +1,6 @@
 package engine.renderer;
 
+import engine.input.MouseInput;
 import engine.objects.GraphicalObject;
 import engine.objects.Camera;
 import engine.renderer.data.Texture;
@@ -27,8 +28,9 @@ public class Renderer {
 	private Matrix4 projectionMatrix;
 
 	private GraphicalObject[] objects;
-
 	private Camera camera;
+
+	private MouseInput mouse;
 
 	private double angle = 0;
 
@@ -50,6 +52,7 @@ public class Renderer {
 		initializeVertexObjects();
 		initializeUniforms();
 		initializeCamera();
+		initializeInput();
 
 		calculateProjectionMatrix();
 
@@ -127,6 +130,15 @@ public class Renderer {
 		//camera.translate(4,0,0);
 	}
 
+	private void initializeInput() {
+
+		mouse = new MouseInput(window);
+	}
+
+	// ###################################################################################
+	// ################################ Calculation ######################################
+	// ###################################################################################
+
 	public void calculateProjectionMatrix() {
 
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
@@ -179,6 +191,8 @@ public class Renderer {
 
 		double dt = (double) (System.nanoTime() - t)/1000000;
 		//System.out.println("rendering took " + dt + " ms");
+
+		//System.out.println(mouse);
 
 		flip();
 	}
