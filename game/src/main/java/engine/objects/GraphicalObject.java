@@ -12,6 +12,7 @@ import engine.renderer.data.Mesh;
 public class GraphicalObject extends MoveableObject {
 
 	private Mesh mesh;
+	private boolean useDepthTest = true;
 
 	public GraphicalObject(Mesh mesh) {
 
@@ -35,8 +36,16 @@ public class GraphicalObject extends MoveableObject {
 		GL20.glEnableVertexAttribArray(1);
 		GL20.glEnableVertexAttribArray(2);
 
+		if (!useDepthTest) {
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
+		}
+
 		// Draw the mesh
 		GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+
+		if (!useDepthTest) {
+			GL11.glEnable(GL11.GL_DEPTH_TEST);
+		}
 
 		// Restore state
 		GL20.glDisableVertexAttribArray(0);
@@ -57,6 +66,10 @@ public class GraphicalObject extends MoveableObject {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
+	public void setColor(float r, float g, float b) {
+		mesh.setColor(r,g,b);
+	}
+
 	public Mesh getMesh() {
 		return mesh;
 	}
@@ -75,5 +88,12 @@ public class GraphicalObject extends MoveableObject {
 
 	public Vector3 getRotation() {
 		return rotation;
+	}
+
+	public boolean isUseDepthTest() {
+		return useDepthTest;
+	}
+	public void setUseDepthTest(boolean useDepthTest) {
+		this.useDepthTest = useDepthTest;
 	}
 }

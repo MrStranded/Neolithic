@@ -98,7 +98,13 @@ public class Renderer {
 		objects[3].setPosition(0,0,-1d);
 
 		objects[4].scale(0.5,0.5,0.5);
-		objects[4].translate(0,0,-1.25d);
+		objects[4].translate(0,0,0.5d);
+
+		objects[0].setColor(1,1,1);
+		objects[2].setColor(1,1,0);
+		objects[4].setColor(1,1,1);
+
+		objects[4].setUseDepthTest(false);
 	}
 
 	private void initializeUniforms() {
@@ -115,7 +121,7 @@ public class Renderer {
 	private void initializeCamera() {
 
 		camera = new Camera();
-		camera.translate(0,0,4);
+		camera.translate(0,0,2);
 		//camera.rotateAroundOrigin(0,Math.toRadians(90),0);
 		//camera.setRotation(0,Math.toRadians(90),0);
 		//camera.translate(4,0,0);
@@ -145,14 +151,13 @@ public class Renderer {
 		objects[3].rotate(angleStep,angleStep,angleStep);
 		objects[4].setRotation(0,angle,0);
 
-		objects[0].move(Math.cos(angle)/100d,0,0.01d);
+		objects[2].setScale(Math.abs(Math.cos(angle)*5d),Math.abs(Math.sin(angle)*2d),0d);
 
-		//camera.setPosition(0,0,2+Math.sin(angle*2)*2);
-		//camera.rotateAroundOrigin(0,-angleStep,0);
-		camera.move(0,0,Math.cos(angle)/20d);
-		System.out.println("-------");
-		System.out.println("Position: " + objects[0].getPosition());
-		System.out.println("Rotation:" + objects[0].getRotation());
+		objects[0].move(Math.cos(angle)/100d,0,0.01d);
+		objects[4].translate(0,0,Math.cos(angle)/50d);
+
+		//camera.rotateAroundOrigin(0,angleStep,0);
+		camera.move(0,0,Math.cos(angle)/50d);
 
 		long t = System.nanoTime();
 
@@ -161,14 +166,12 @@ public class Renderer {
 		shaderProgram.bind();
 
 		// upload projection matrix
-		shaderProgram.setUniform("projectionMatrix", projectionMatrix);
+		shaderProgram.setUniform("projectionMatrix", projectionMatrix.times(camera.getViewMatrix()));
 		// set used texture (id = 0)
 		shaderProgram.setUniform("textureSampler", 0);
 
-		//System.out.println("-----------");
 		for (GraphicalObject object : objects) {
-			//System.out.println(object.getWorldMatrix());
-			shaderProgram.setUniform("worldMatrix", camera.getViewMatrix().times(object.getWorldMatrix()));
+			shaderProgram.setUniform("worldMatrix", object.getWorldMatrix());
 			object.render();
 		}
 

@@ -162,6 +162,17 @@ public class Mesh {
 		for (int i=2; i<vertices.length; i+=3) {
 			vertices[i] = z;
 		}
+		registerData();
+	}
+
+	public void setColor(float r, float g, float b) {
+
+		for (int i=0; i<colors.length/3; i++) {
+			colors[i*3 + 0] = r;
+			colors[i*3 + 1] = g;
+			colors[i*3 + 2] = b;
+		}
+		registerData();
 	}
 
 	public int getVertexArrayObjectId() {
