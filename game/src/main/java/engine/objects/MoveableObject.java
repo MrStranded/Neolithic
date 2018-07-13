@@ -81,6 +81,10 @@ public class MoveableObject {
 	// ################################ Rotation Around Origin ###########################
 	// ###################################################################################
 
+	/**
+	 * Rotates Object by given degrees around origin of world coordinates.
+	 * Attention: for the camera, this behaves as if rotating the camera in place! The behaviour is flipped!
+	 */
 	public void rotateAroundOrigin(double x, double y, double z) {
 
 		Vector3 v = new Vector3(x,y,z);
@@ -91,6 +95,10 @@ public class MoveableObject {
 		optionalUpdate();
 	}
 
+	/**
+	 * Rotates Object by given degree around origin of world coordinates around the x axis.
+	 * Attention: for the camera, this behaves as if rotating the camera in place! The behaviour is flipped!
+	 */
 	public void rotateXAroundOrigin(double a) {
 
 		Matrix4 rotationMatrix = MatrixTransformations.rotateX(a);
@@ -99,6 +107,10 @@ public class MoveableObject {
 		matrix = rotationMatrix.times(matrix);
 		optionalUpdate();
 	}
+	/**
+	 * Rotates Object by given degree around origin of world coordinates around the y axis.
+	 * Attention: for the camera, this behaves as if rotating the camera in place! The behaviour is flipped!
+	 */
 	public void rotateYAroundOrigin(double a) {
 
 		Matrix4 rotationMatrix = MatrixTransformations.rotateY(a);
@@ -107,6 +119,10 @@ public class MoveableObject {
 		matrix = rotationMatrix.times(matrix);
 		optionalUpdate();
 	}
+	/**
+	 * Rotates Object by given degree around origin of world coordinates around the z axis.
+	 * Attention: for the camera, this behaves as if rotating the camera in place! The behaviour is flipped!
+	 */
 	public void rotateZAroundOrigin(double a) {
 
 		Matrix4 rotationMatrix = MatrixTransformations.rotateZ(a);
@@ -120,6 +136,10 @@ public class MoveableObject {
 	// ################################ Rotation Around Self Center ######################
 	// ###################################################################################
 
+	/**
+	 * Rotates Object by given degrees around center of own mesh.
+	 * Attention: for the camera, this behaves as if rotating the camera around the origin of the world! The behaviour is flipped!
+	 */
 	public void rotate(double x, double y, double z) {
 
 		Vector3 v = new Vector3(x,y,z);
@@ -127,16 +147,28 @@ public class MoveableObject {
 		update();
 	}
 
+	/**
+	 * Rotates Object by given degree around center of own mesh around x axis.
+	 * Attention: for the camera, this behaves as if rotating the camera around the origin of the world! The behaviour is flipped!
+	 */
 	public void rotateX(double a) {
 
 		rotation.plusInplace(new Vector3(a,0,0));
 		update();
 	}
+	/**
+	 * Rotates Object by given degree around center of own mesh around y axis.
+	 * Attention: for the camera, this behaves as if rotating the camera around the origin of the world! The behaviour is flipped!
+	 */
 	public void rotateY(double a) {
 
 		rotation.plusInplace(new Vector3(0,a,0));
 		update();
 	}
+	/**
+	 * Rotates Object by given degree around center of own mesh around z axis.
+	 * Attention: for the camera, this behaves as if rotating the camera around the origin of the world! The behaviour is flipped!
+	 */
 	public void rotateZ(double a) {
 
 		rotation.plusInplace(new Vector3(0,0,a));
@@ -147,6 +179,10 @@ public class MoveableObject {
 	// ################################ Rotation #########################################
 	// ###################################################################################
 
+	/**
+	 * Sets rotation of object to given exact value.
+	 * Attention: for the camera, this behaves as if rotating the camera around the origin of the world! The behaviour is flipped!
+	 */
 	public void setRotation(double x, double y, double z) {
 
 		rotation = new Vector3(x,y,z);

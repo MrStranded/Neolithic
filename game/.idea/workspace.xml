@@ -15,13 +15,13 @@
       <file leaf-file-name="Renderer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/renderer/Renderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="103">
-              <caret line="94" column="39" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
+            <state relative-caret-position="478">
+              <caret line="179" column="26" selection-start-line="179" selection-start-column="26" selection-end-line="179" selection-end-column="26" />
               <folding>
-                <element signature="e#6128#6129#0" expanded="true" />
-                <element signature="e#6160#6161#0" expanded="true" />
-                <element signature="e#6183#6184#0" expanded="true" />
-                <element signature="e#6203#6204#0" expanded="true" />
+                <element signature="e#6232#6233#0" expanded="true" />
+                <element signature="e#6264#6265#0" expanded="true" />
+                <element signature="e#6287#6288#0" expanded="true" />
+                <element signature="e#6307#6308#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -128,8 +128,8 @@
       <file leaf-file-name="MoveableObject.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/objects/MoveableObject.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="106" column="8" selection-start-line="106" selection-start-column="8" selection-end-line="106" selection-end-column="8" />
+            <state relative-caret-position="463">
+              <caret line="183" column="130" selection-start-line="183" selection-start-column="130" selection-end-line="183" selection-end-column="130" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -595,7 +595,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="111857000" />
+    <option name="totallyTimeSpent" value="113965000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -672,10 +672,10 @@
         <state relative-caret-position="1080">
           <caret line="81" column="8" selection-start-line="81" selection-start-column="8" selection-end-line="81" selection-end-column="8" />
           <folding>
-            <element signature="e#6128#6129#0" expanded="true" />
-            <element signature="e#6160#6161#0" expanded="true" />
-            <element signature="e#6183#6184#0" expanded="true" />
-            <element signature="e#6203#6204#0" expanded="true" />
+            <element signature="e#6232#6233#0" expanded="true" />
+            <element signature="e#6264#6265#0" expanded="true" />
+            <element signature="e#6287#6288#0" expanded="true" />
+            <element signature="e#6307#6308#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1007,24 +1007,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/objects/Camera.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="21" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#508#509#0" expanded="true" />
-            <element signature="e#521#522#0" expanded="true" />
-            <element signature="e#3128#3129#0" expanded="true" />
-            <element signature="e#3152#3153#0" expanded="true" />
-            <element signature="e#3185#3186#0" expanded="true" />
-            <element signature="e#3207#3208#0" expanded="true" />
-            <element signature="e#3240#3241#0" expanded="true" />
-            <element signature="e#3262#3263#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/renderer/data/Mesh.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="523">
@@ -1133,10 +1115,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/objects/Camera.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="21" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#508#509#0" expanded="true" />
+            <element signature="e#521#522#0" expanded="true" />
+            <element signature="e#3128#3129#0" expanded="true" />
+            <element signature="e#3152#3153#0" expanded="true" />
+            <element signature="e#3185#3186#0" expanded="true" />
+            <element signature="e#3207#3208#0" expanded="true" />
+            <element signature="e#3240#3241#0" expanded="true" />
+            <element signature="e#3262#3263#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/objects/MoveableObject.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="106" column="8" selection-start-line="106" selection-start-column="8" selection-end-line="106" selection-end-column="8" />
+        <state relative-caret-position="463">
+          <caret line="183" column="130" selection-start-line="183" selection-start-column="130" selection-end-line="183" selection-end-column="130" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1145,13 +1145,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/renderer/Renderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="103">
-          <caret line="94" column="39" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
+        <state relative-caret-position="478">
+          <caret line="179" column="26" selection-start-line="179" selection-start-column="26" selection-end-line="179" selection-end-column="26" />
           <folding>
-            <element signature="e#6128#6129#0" expanded="true" />
-            <element signature="e#6160#6161#0" expanded="true" />
-            <element signature="e#6183#6184#0" expanded="true" />
-            <element signature="e#6203#6204#0" expanded="true" />
+            <element signature="e#6232#6233#0" expanded="true" />
+            <element signature="e#6264#6265#0" expanded="true" />
+            <element signature="e#6287#6288#0" expanded="true" />
+            <element signature="e#6307#6308#0" expanded="true" />
           </folding>
         </state>
       </provider>
