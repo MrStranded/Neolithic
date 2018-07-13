@@ -1,5 +1,6 @@
 package engine.renderer;
 
+import engine.input.KeyboardInput;
 import engine.input.MouseInput;
 import engine.objects.GraphicalObject;
 import engine.objects.Camera;
@@ -10,6 +11,7 @@ import engine.window.Window;
 import load.FileToString;
 import load.TextureLoader;
 import math.Matrix4;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import engine.renderer.data.utils.MeshGenerator;
 
@@ -31,6 +33,7 @@ public class Renderer {
 	private Camera camera;
 
 	private MouseInput mouse;
+	private KeyboardInput keyboard;
 
 	private double angle = 0;
 
@@ -80,29 +83,24 @@ public class Renderer {
 
 		objects = new GraphicalObject[5];
 
-		objects[0] = new GraphicalObject(MeshGenerator.createQuad(1d, trollFace));
-		objects[1] = new GraphicalObject(MeshGenerator.createQuad(2d, trollFace));
-		objects[2] = new GraphicalObject(MeshGenerator.createQuad(0.5d, cubeTexture));
-		objects[3] = new GraphicalObject(MeshGenerator.createQuad(1d, cubeTexture));
+		objects[0] = new GraphicalObject(MeshGenerator.createQuad(trollFace));
+		objects[1] = new GraphicalObject(MeshGenerator.createQuad(trollFace));
+		objects[2] = new GraphicalObject(MeshGenerator.createQuad(cubeTexture));
+		objects[3] = new GraphicalObject(MeshGenerator.createQuad(cubeTexture));
 
 		objects[4] = new GraphicalObject(MeshGenerator.createIcosahedron(grasTexture));
 
 		objects[2].scale(2d,0.5d,1d);
 		objects[3].setScale(1d,1d,0d);
+		objects[4].scale(0.1d,0.1d,0.1d);
 
-		/*objects[0].rotate(Math.toRadians(30),0,0);
-		objects[1].setRotation(0,Math.toRadians(30),0);
-		objects[2].rotate(0,0,Math.toRadians(30));
-		objects[3].setRotation(Math.toRadians(30),Math.toRadians(30),Math.toRadians(30));
-		*/
-		objects[0].translate(-0.5d,0.25d,-1d);
+		/*objects[0].translate(-0.5d,0.25d,-1d);
 		objects[1].translate(1d,-0.5d,-1d);
 		objects[2].setPosition(0,-0.25d,-1d);
 		objects[3].setPosition(0,0,-1d);
 
-		objects[4].scale(0.5,0.5,0.5);
 		objects[4].translate(0,0,0.5d);
-
+		*/
 		objects[0].setColor(1,1,1);
 		objects[2].setColor(1,1,0);
 		objects[4].setColor(1,1,1);
@@ -125,14 +123,12 @@ public class Renderer {
 
 		camera = new Camera();
 		camera.translate(0,0,2);
-		//camera.rotateAroundOrigin(0,Math.toRadians(90),0);
-		//camera.setRotation(0,Math.toRadians(90),0);
-		//camera.translate(4,0,0);
 	}
 
 	private void initializeInput() {
 
 		mouse = new MouseInput(window);
+		keyboard = new KeyboardInput(window);
 	}
 
 	// ###################################################################################
@@ -165,11 +161,18 @@ public class Renderer {
 
 		objects[2].setScale(Math.abs(Math.cos(angle)*5d),Math.abs(Math.sin(angle)*2d),0d);
 
-		objects[0].move(Math.cos(angle)/100d,0,0.01d);
-		objects[4].translate(0,0,Math.cos(angle)/50d);
-
-		//camera.rotateAroundOrigin(0,angleStep,0);
-		camera.move(0,0,Math.cos(angle)/50d);
+		if (keyboard.isPressed(GLFW.GLFW_KEY_W)) {
+			camera.move(0,0,-0.01d);
+		}
+		if (keyboard.isPressed(GLFW.GLFW_KEY_S)) {
+			camera.move(0,0,0.01d);
+		}
+		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) {
+			camera.rotateYAroundOrigin(-0.01d);
+		}
+		if (keyboard.isPressed(GLFW.GLFW_KEY_D)) {
+			camera.rotateYAroundOrigin(0.01d);
+		}
 
 		long t = System.nanoTime();
 
@@ -192,9 +195,12 @@ public class Renderer {
 		double dt = (double) (System.nanoTime() - t)/1000000;
 		//System.out.println("rendering took " + dt + " ms");
 
-		//System.out.println(mouse);
-
 		flip();
+
+		// closing window
+		if (keyboard.isClicked(GLFW.GLFW_KEY_ESCAPE)) {
+			window.close();
+		}
 	}
 
 	// ###################################################################################

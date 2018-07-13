@@ -6,23 +6,21 @@ import engine.renderer.data.Texture;
 public class MeshGenerator {
 
 	// Icosahedron constants
-	private static final float height = 1f;
-	private static final float phi = 0.5f * (1f + (float) Math.sqrt(5f));
-	private static final float alpha = 2f * (float) Math.atan(1f / phi);
-	private static final float radius = height * (float) Math.sin(alpha);
-	private static final float y = height * (float) Math.cos(alpha); // y position of upper/lower ring
-	private static final float angle = 2f * (float) Math.PI / 5f;
-	private static final float halfAngle = angle / 2f;
+	private static final float HEIGHT = 1f;
+	private static final float PHI = 0.5f * (1f + (float) Math.sqrt(5f));
+	private static final float ALPHA = 2f * (float) Math.atan(1f / PHI);
+	private static final float RADIUS = HEIGHT * (float) Math.sin(ALPHA);
+	private static final float Y = HEIGHT * (float) Math.cos(ALPHA); // y position of upper/lower ring
+	private static final float ANGLE = 2f * (float) Math.PI / 5f;
+	private static final float HALFANGLE = ANGLE / 2f;
 
-	public static Mesh createQuad(double size, Texture texture) {
-
-		float s = (float) size / 2f;
+	public static Mesh createQuad(Texture texture) {
 
 		float[] vertices = {
-				-s,  -s,  0,  // left bottom
-				s,   -s,  0,  // right bottom
-				-s,  s,   0,  // left top
-				s,   s,   0   // right top
+				-0.5f,  -0.5f,  0,  // left bottom
+				0.5f,   -0.5f,  0,  // right bottom
+				-0.5f,  0.5f,   0,  // left top
+				0.5f,   0.5f,   0   // right top
 		};
 
 		int[] indices = {
@@ -53,19 +51,19 @@ public class MeshGenerator {
 		float[] vertices = new float[12*3];
 
 		// 10th vertex is north pole, 11th vertex is south pole
-		vertices[10*3 + 1] = height;
-		vertices[11*3 + 1] = -height;
+		vertices[10*3 + 1] = HEIGHT;
+		vertices[11*3 + 1] = -HEIGHT;
 
 		for (int i=0; i<5; i++) {
 			// up - vertices 0 to 4
-			vertices[i*3 + 0] = radius * (float) Math.cos(i * angle);
-			vertices[i*3 + 1] = y;
-			vertices[i*3 + 2] = radius * (float) Math.sin(i * angle);
+			vertices[i*3 + 0] = RADIUS * (float) Math.cos(i * ANGLE);
+			vertices[i*3 + 1] = Y;
+			vertices[i*3 + 2] = RADIUS * (float) Math.sin(i * ANGLE);
 
 			// down - vertices 5 to 9
-			vertices[5*3 + i*3 + 0] = radius * (float) Math.cos(i * angle - halfAngle);
-			vertices[5*3 + i*3 + 1] = -y;
-			vertices[5*3 + i*3 + 2] = radius * (float) Math.sin(i * angle - halfAngle);
+			vertices[5*3 + i*3 + 0] = RADIUS * (float) Math.cos(i * ANGLE - HALFANGLE);
+			vertices[5*3 + i*3 + 1] = -Y;
+			vertices[5*3 + i*3 + 2] = RADIUS * (float) Math.sin(i * ANGLE - HALFANGLE);
 		}
 
 		// ------------------------------------- indices

@@ -11,10 +11,11 @@ import engine.renderer.Renderer;
 public class Engine {
 
 	private static Renderer renderer;
+	private static Window window;
 
 	public static void initialize() {
 
-		Window window = new Window(800,600,"Neolithic");
+		window = new Window(800,600,"Neolithic");
 
 		renderer = new Renderer(window);
 		renderer.initialize();
@@ -28,6 +29,11 @@ public class Engine {
 	 * Starting the drawing loop and cleaning up the window after exiting the program.
 	 */
 	public static void start() {
+
+		renderLoop();
+	}
+
+	private static void renderLoop() {
 
 		while (renderer.displayExists()) {
 			renderer.render();

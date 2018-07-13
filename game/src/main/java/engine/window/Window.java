@@ -58,6 +58,9 @@ public class Window {
 		}
 	}
 
+	/**
+	 * This method is disfunctional, as soon as a KeyboardInput is created, which references this window.
+	 */
 	private void createKeyCallback() {
 
 		// Setup a key callback. It will be called every time a key is pressed, repeated or released.
@@ -132,6 +135,10 @@ public class Window {
 	// ###################################################################################
 	// ################################ Runtime Methods ##################################
 	// ###################################################################################
+
+	public void close() {
+		GLFW.glfwSetWindowShouldClose(window,true);
+	}
 
 	public boolean isClosed() {
 		return GLFW.glfwWindowShouldClose(window);
