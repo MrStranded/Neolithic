@@ -175,4 +175,8 @@ public class Window {
 	public void setRenderer(Renderer renderer) {
 		this.renderer = renderer;
 	}
+
+	public long getWindowId() {
+		return window;
+	}
 }
