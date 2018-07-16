@@ -1,10 +1,9 @@
 package engine.objects.movement;
 
-import engine.renderer.data.Mesh;
 import math.Matrix4;
 import math.Vector3;
 import math.Vector4;
-import math.utils.MatrixTransformations;
+import math.utils.Transformations;
 
 public class MoveableObject {
 
@@ -46,11 +45,9 @@ public class MoveableObject {
 	 */
 	public void move(double x, double y, double z) {
 
-		Matrix4 cameraRotation = MatrixTransformations.rotate(rotation);
-		Vector3 xInternal = cameraRotation.times(new Vector4(1d,0,0,0)).extractVector3();
-		Vector3 yInternal = cameraRotation.times(new Vector4(0,1d,0,0)).extractVector3();
-		Vector3 zInternal = cameraRotation.times(new Vector4(0,0,1d,0)).extractVector3();
-		position.plusInplace(xInternal.times(x)).plusInplace(yInternal.times(y)).plusInplace(zInternal.times(z));
+		Vector3[] internalAxes = Transformations.getInternalAxes(rotation);
+
+		position.plusInplace(internalAxes[0].times(x)).plusInplace(internalAxes[0].times(y)).plusInplace(internalAxes[0].times(z));
 		update();
 	}
 
@@ -87,7 +84,7 @@ public class MoveableObject {
 	public void rotateAroundOrigin(double x, double y, double z) {
 
 		Vector3 v = new Vector3(x,y,z);
-		Matrix4 rotationMatrix = MatrixTransformations.rotate(v);
+		Matrix4 rotationMatrix = Transformations.rotate(v);
 		rotation.plusInplace(v);
 		position = rotationMatrix.times(new Vector4(position)).extractVector3();
 		matrix = rotationMatrix.times(matrix);
@@ -98,7 +95,7 @@ public class MoveableObject {
 	 */
 	public void rotateXAroundOrigin(double a) {
 
-		Matrix4 rotationMatrix = MatrixTransformations.rotateX(a);
+		Matrix4 rotationMatrix = Transformations.rotateX(a);
 		rotation.plusInplace(new Vector3(a,0,0));
 		position = rotationMatrix.times(new Vector4(position)).extractVector3();
 		matrix = rotationMatrix.times(matrix);
@@ -108,7 +105,7 @@ public class MoveableObject {
 	 */
 	public void rotateYAroundOrigin(double a) {
 
-		Matrix4 rotationMatrix = MatrixTransformations.rotateY(a);
+		Matrix4 rotationMatrix = Transformations.rotateY(a);
 		rotation.plusInplace(new Vector3(0,a,0));
 		position = rotationMatrix.times(new Vector4(position)).extractVector3();
 		matrix = rotationMatrix.times(matrix);
@@ -118,7 +115,7 @@ public class MoveableObject {
 	 */
 	public void rotateZAroundOrigin(double a) {
 
-		Matrix4 rotationMatrix = MatrixTransformations.rotateZ(a);
+		Matrix4 rotationMatrix = Transformations.rotateZ(a);
 		rotation.plusInplace(new Vector3(0,0,a));
 		position = rotationMatrix.times(new Vector4(position)).extractVector3();
 		matrix = rotationMatrix.times(matrix);
@@ -184,9 +181,9 @@ public class MoveableObject {
 
 		checkAngle();
 
-		matrix =    MatrixTransformations.translate(position).times(
-					MatrixTransformations.rotate(rotation).times(
-					MatrixTransformations.scale(scale)));
+		matrix =    Transformations.translate(position).times(
+					Transformations.rotate(rotation).times(
+					Transformations.scale(scale)));
 	}
 
 	protected void checkAngle() {

@@ -87,6 +87,17 @@ public class Vector3 {
 		return x*x + y*y + z*z;
 	}
 
+	public Vector3 normalize() throws Exception {
+
+		double length = length();
+
+		if (length == 0) {
+			throw new Exception("Vector of length zero cannot be normalized!");
+		}
+
+		return new Vector3(x/length, y/length, z/length);
+	}
+
 	// ###################################################################################
 	// ################################ Test #############################################
 	// ###################################################################################

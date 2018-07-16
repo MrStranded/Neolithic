@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Please keep in mind: With Vector3 we are dealing with double values.
@@ -12,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 
 public class Vector3Test {
+
+	private static final double epsilon = 0.00001d;
 
 	@Test
 	public void testEquality() {
@@ -167,6 +170,38 @@ public class Vector3Test {
 		assertEquals(-7,d.getX());
 		assertEquals(-1,d.getY());
 		assertEquals(3,d.getZ());
+	}
+
+	@Test
+	public void testNormalization() {
+
+		Vector3 a = new Vector3(1,2,3);
+		Vector3 b = null;
+		try {
+			b = a.normalize();
+		} catch (Exception e) {
+			fail("This should not throw an exception!");
+		}
+
+		assertTrue(Math.abs(b.length() - 1d) < epsilon);
+
+		Vector3 c = new Vector3(-1,0,-100);
+		Vector3 d = null;
+		try {
+			d = c.normalize();
+		} catch (Exception e) {
+			fail("This should not throw an exception!");
+		}
+
+		assertTrue(Math.abs(d.length() - 1d) < epsilon);
+
+		try {
+			new Vector3(0,0,0).normalize();
+
+			fail("This should throw an exception!");
+		} catch (Exception e) {
+			// all is well
+		}
 	}
 
 }

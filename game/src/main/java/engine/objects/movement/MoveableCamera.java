@@ -3,7 +3,7 @@ package engine.objects.movement;
 import math.Matrix4;
 import math.Vector3;
 import math.Vector4;
-import math.utils.MatrixTransformations;
+import math.utils.Transformations;
 
 public class MoveableCamera {
 
@@ -31,7 +31,7 @@ public class MoveableCamera {
 	 */
 	public void translate(double x, double y, double z) {
 
-		Matrix4 cameraRotation = MatrixTransformations.rotate(worldRotation);
+		Matrix4 cameraRotation = Transformations.rotate(worldRotation);
 		Vector3 xInternal = cameraRotation.times(new Vector4(1d,0,0,0)).extractVector3();
 		Vector3 yInternal = cameraRotation.times(new Vector4(0,1d,0,0)).extractVector3();
 		Vector3 zInternal = cameraRotation.times(new Vector4(0,0,1d,0)).extractVector3();
@@ -68,7 +68,7 @@ public class MoveableCamera {
 	public void rotate(double x, double y, double z) {
 
 		Vector3 v = new Vector3(x,y,z);
-		Matrix4 worldRotationMatrix = MatrixTransformations.rotate(v);
+		Matrix4 worldRotationMatrix = Transformations.rotate(v);
 		worldRotation.plusInplace(v);
 		worldPosition = worldRotationMatrix.times(new Vector4(worldPosition)).extractVector3();
 		matrix = worldRotationMatrix.times(matrix);
@@ -79,7 +79,7 @@ public class MoveableCamera {
 	 */
 	public void rotateX(double a) {
 
-		Matrix4 worldRotationMatrix = MatrixTransformations.rotateX(a);
+		Matrix4 worldRotationMatrix = Transformations.rotateX(a);
 		worldRotation.plusInplace(new Vector3(a,0,0));
 		worldPosition = worldRotationMatrix.times(new Vector4(worldPosition)).extractVector3();
 		matrix = worldRotationMatrix.times(matrix);
@@ -89,7 +89,7 @@ public class MoveableCamera {
 	 */
 	public void rotateY(double a) {
 
-		Matrix4 worldRotationMatrix = MatrixTransformations.rotateY(a);
+		Matrix4 worldRotationMatrix = Transformations.rotateY(a);
 		worldRotation.plusInplace(new Vector3(0,a,0));
 		worldPosition = worldRotationMatrix.times(new Vector4(worldPosition)).extractVector3();
 		matrix = worldRotationMatrix.times(matrix);
@@ -99,7 +99,7 @@ public class MoveableCamera {
 	 */
 	public void rotateZ(double a) {
 
-		Matrix4 worldRotationMatrix = MatrixTransformations.rotateZ(a);
+		Matrix4 worldRotationMatrix = Transformations.rotateZ(a);
 		worldRotation.plusInplace(new Vector3(0,0,a));
 		worldPosition = worldRotationMatrix.times(new Vector4(worldPosition)).extractVector3();
 		matrix = worldRotationMatrix.times(matrix);
@@ -165,8 +165,8 @@ public class MoveableCamera {
 
 		checkAngle();
 
-		matrix =    MatrixTransformations.translate(worldPosition).times(
-					MatrixTransformations.rotate(worldRotation));
+		matrix =    Transformations.translate(worldPosition).times(
+					Transformations.rotate(worldRotation));
 	}
 
 	protected void checkAngle() {
