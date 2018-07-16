@@ -90,8 +90,8 @@ public class Renderer {
 
 		objects[4] = new GraphicalObject(MeshGenerator.createIcosahedron(grasTexture));
 
-		objects[2].scale(2d,0.5d,1d);
-		objects[3].setScale(1d,1d,0d);
+		//objects[2].scale(2d,0.5d,1d);
+		//objects[3].setScale(1d,1d,0d);
 		//objects[4].scale(0.1d,0.1d,0.1d);
 
 		/*objects[0].translate(-0.5d,0.25d,-1d);
@@ -99,11 +99,14 @@ public class Renderer {
 		objects[2].setPosition(0,-0.25d,-1d);
 		objects[3].setPosition(0,0,-1d);
 		*/
+		/*
 		objects[4].translate(0,0,-4d);
 
 		objects[0].setColor(1,1,1);
 		objects[2].setColor(1,1,0);
 		objects[4].setColor(1,1,1);
+		*/
+		objects[4].scale(3,3,3);
 
 		//objects[4].setUseDepthTest(false);
 	}
@@ -122,7 +125,7 @@ public class Renderer {
 	private void initializeCamera() {
 
 		camera = new Camera();
-		camera.translate(0,1,5);
+		camera.translate(0,0,5);
 	}
 
 	private void initializeInput() {
@@ -158,11 +161,12 @@ public class Renderer {
 		objects[1].rotateYAroundOrigin(angleStep);
 		objects[2].rotateAroundOrigin(0,0,angleStep);
 		objects[3].rotate(angleStep,angleStep,angleStep);
-		*/
+
 		objects[4].rotateYAroundOrigin(0.01d);
 
 		objects[2].setScale(Math.abs(Math.cos(angle)*5d),Math.abs(Math.sin(angle)*2d),0d);
 
+		*/
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
 			camera.rotateYAroundOrigin(-0.01d);
 		}
@@ -170,10 +174,10 @@ public class Renderer {
 			camera.rotateYAroundOrigin(0.01d);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_E)) { // look down
-			camera.rotateX(-0.01d);
+			camera.rotateXAroundOrigin(-0.01d);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_Q)) { // look up
-			camera.rotateX(0.01d);
+			camera.rotateXAroundOrigin(0.01d);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_W)) { // move forward
 			camera.move(0,0,-0.01d);

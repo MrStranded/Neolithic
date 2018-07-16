@@ -12,16 +12,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Renderer.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Renderer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/renderer/Renderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="463">
-              <caret line="181" column="12" lean-forward="true" selection-start-line="181" selection-start-column="12" selection-end-line="181" selection-end-column="12" />
+            <state relative-caret-position="349">
+              <caret line="179" column="38" selection-start-line="179" selection-start-column="38" selection-end-line="179" selection-end-column="38" />
               <folding>
-                <element signature="e#6589#6590#0" expanded="true" />
-                <element signature="e#6621#6622#0" expanded="true" />
-                <element signature="e#6644#6645#0" expanded="true" />
-                <element signature="e#6664#6665#0" expanded="true" />
+                <element signature="e#6590#6591#0" expanded="true" />
+                <element signature="e#6622#6623#0" expanded="true" />
+                <element signature="e#6645#6646#0" expanded="true" />
+                <element signature="e#6665#6666#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -39,8 +39,8 @@
       <file leaf-file-name="Transformations.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/math/utils/Transformations.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="178">
-              <caret line="105" column="30" selection-start-line="105" selection-start-column="30" selection-end-line="105" selection-end-column="30" />
+            <state relative-caret-position="388">
+              <caret line="35" selection-start-line="35" selection-end-line="35" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -92,11 +92,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MoveableObject.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MoveableObject.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/objects/movement/MoveableObject.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-285">
-              <caret line="77" column="90" lean-forward="true" selection-start-line="77" selection-start-column="90" selection-end-line="77" selection-end-column="90" />
+            <state relative-caret-position="313">
+              <caret line="154" column="74" lean-forward="true" selection-start-line="154" selection-start-column="74" selection-end-line="154" selection-end-column="74" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -168,6 +168,7 @@
       <find>halfAngle</find>
       <find>position</find>
       <find>rotation</find>
+      <find>globalRotation</find>
     </findStrings>
     <replaceStrings>
       <replace>screen</replace>
@@ -180,6 +181,8 @@
       <replace>HALFANGLE</replace>
       <replace>worldPosition</replace>
       <replace>worldRotation</replace>
+      <replace>globalRotation</replace>
+      <replace>rotation</replace>
     </replaceStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -231,11 +234,11 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/objects/MoveableCamera.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/objects/Camera.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/objects/movement/MoveableCamera.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/renderer/Renderer.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/objects/movement/MoveableObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/math/Vector3.java" />
         <option value="$PROJECT_DIR$/src/test/java/math/Vector3Test.java" />
         <option value="$PROJECT_DIR$/src/main/java/math/utils/Transformations.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/objects/movement/MoveableObject.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/renderer/Renderer.java" />
       </list>
     </option>
   </component>
@@ -430,7 +433,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.Vector3Test.testNormalization">
+  <component name="RunManager" selected="Application.Start">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
     </configuration>
@@ -570,8 +573,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.Vector3Test.testNormalization" />
         <item itemvalue="Application.Start" />
+        <item itemvalue="JUnit.Vector3Test.testNormalization" />
         <item itemvalue="Application.ToStringTest" />
         <item itemvalue="JUnit.RGBATest" />
         <item itemvalue="JUnit.RGBATest.testSubtractionInplace" />
@@ -594,9 +597,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="RGBATest_testSubtraction - 2018.07.04 at 13h 49m 27s.xml">
-      <configuration name="RGBATest.testSubtraction" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="RGBATest_testSubtractionInplace - 2018.07.04 at 13h 49m 58s.xml">
       <configuration name="RGBATest.testSubtractionInplace" configurationId="JUnit" />
     </history-entry>
@@ -624,9 +624,12 @@
     <history-entry file="Vector3Test_testNormalization - 2018.07.16 at 11h 11m 08s.xml">
       <configuration name="Vector3Test.testNormalization" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="Vector3Test_testNormalization - 2018.07.16 at 12h 08m 37s.xml">
+      <configuration name="Vector3Test.testNormalization" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="119739000" />
+    <option name="totallyTimeSpent" value="122209000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -1122,19 +1125,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/renderer/Renderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="463">
-          <caret line="181" column="12" lean-forward="true" selection-start-line="181" selection-start-column="12" selection-end-line="181" selection-end-column="12" />
-          <folding>
-            <element signature="e#6589#6590#0" expanded="true" />
-            <element signature="e#6621#6622#0" expanded="true" />
-            <element signature="e#6644#6645#0" expanded="true" />
-            <element signature="e#6664#6665#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/math/utils/VectorConverter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -1173,8 +1163,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/math/utils/Transformations.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="105" column="30" selection-start-line="105" selection-start-column="30" selection-end-line="105" selection-end-column="30" />
+        <state relative-caret-position="388">
+          <caret line="35" selection-start-line="35" selection-end-line="35" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1183,10 +1173,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/objects/movement/MoveableObject.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-285">
-          <caret line="77" column="90" lean-forward="true" selection-start-line="77" selection-start-column="90" selection-end-line="77" selection-end-column="90" />
+        <state relative-caret-position="313">
+          <caret line="154" column="74" lean-forward="true" selection-start-line="154" selection-start-column="74" selection-end-line="154" selection-end-column="74" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/renderer/Renderer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="349">
+          <caret line="179" column="38" selection-start-line="179" selection-start-column="38" selection-end-line="179" selection-end-column="38" />
+          <folding>
+            <element signature="e#6590#6591#0" expanded="true" />
+            <element signature="e#6622#6623#0" expanded="true" />
+            <element signature="e#6645#6646#0" expanded="true" />
+            <element signature="e#6665#6666#0" expanded="true" />
           </folding>
         </state>
       </provider>

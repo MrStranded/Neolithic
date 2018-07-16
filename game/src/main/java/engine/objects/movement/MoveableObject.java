@@ -122,6 +122,41 @@ public class MoveableObject {
 	}
 
 	// ###################################################################################
+	// ################################ Rotation Around Internal Axes ####################
+	// ###################################################################################
+
+	/**
+	 * Rotates object around internal x axis.
+	 * Attention: Rotations around internal axes are NOT saved and disappear with the next update of the matrix!
+	 * @param a angle in radian
+	 */
+	public void rotateXLocal(double a) {
+
+		Vector3 internalAxis = Transformations.getInternalXAxis(rotation);
+		matrix = Transformations.rotateAroundVector(internalAxis,a).times(matrix);
+	}
+	/**
+	 * Rotates object around internal y axis.
+	 * Attention: Rotations around internal axes are NOT saved and disappear with the next update of the matrix!
+	 * @param a angle in radian
+	 */
+	public void rotateYLocal(double a) {
+
+		Vector3 internalAxis = Transformations.getInternalYAxis(rotation);
+		matrix = Transformations.rotateAroundVector(internalAxis,a).times(matrix);
+	}
+	/**
+	 * Rotates object around internal z axis.
+	 * Attention: Rotations around internal axes are NOT saved and disappear with the next update of the matrix!
+	 * @param a angle in radian
+	 */
+	public void rotateZLocal(double a) {
+
+		Vector3 internalAxis = Transformations.getInternalZAxis(rotation);
+		matrix = Transformations.rotateAroundVector(internalAxis,a).times(matrix);
+	}
+
+	// ###################################################################################
 	// ################################ Rotation Around Self Center ######################
 	// ###################################################################################
 

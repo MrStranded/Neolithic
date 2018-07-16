@@ -22,6 +22,22 @@ public class Transformations {
 		return out;
 	}
 
+	public static Vector3 getInternalXAxis(Vector3 rotation) {
+
+		Matrix4 rotationMatrix = Transformations.rotate(rotation);
+		return rotationMatrix.times(new Vector4(1d,0,0,0)).extractVector3();
+	}
+	public static Vector3 getInternalYAxis(Vector3 rotation) {
+
+		Matrix4 rotationMatrix = Transformations.rotate(rotation);
+		return rotationMatrix.times(new Vector4(0,1d,0,0)).extractVector3();
+	}
+	public static Vector3 getInternalZAxis(Vector3 rotation) {
+
+		Matrix4 rotationMatrix = Transformations.rotate(rotation);
+		return rotationMatrix.times(new Vector4(0,0,1d,0)).extractVector3();
+	}
+
 	// ###################################################################################
 	// ################################ Translate ########################################
 	// ###################################################################################
