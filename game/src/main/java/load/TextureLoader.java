@@ -1,7 +1,7 @@
 package load;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
-import engine.data.Texture;
+import engine.graphics.objects.models.Texture;
 
 import java.io.FileInputStream;
 import java.io.IOException;

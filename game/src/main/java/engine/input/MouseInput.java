@@ -1,6 +1,6 @@
 package engine.input;
 
-import engine.window.Window;
+import engine.graphics.window.Window;
 import org.lwjgl.glfw.GLFW;
 
 public class MouseInput {

@@ -1,5 +1,7 @@
 package math;
 
+import engine.math.numericalObjects.Matrix3;
+import engine.math.numericalObjects.Vector3;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

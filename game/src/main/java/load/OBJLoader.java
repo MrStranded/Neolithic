@@ -1,13 +1,12 @@
 package load;
 
-import com.sun.org.apache.xml.internal.serializer.utils.Utils;
-import engine.data.IndexGroup;
-import engine.data.Mesh;
-import engine.data.MeshFace;
-import engine.utils.IntegerConverter;
-import engine.utils.VectorConverter;
-import math.Vector2;
-import math.Vector3;
+import engine.graphics.objects.models.IndexGroup;
+import engine.graphics.objects.models.Mesh;
+import engine.graphics.objects.models.MeshFace;
+import engine.utils.converters.IntegerConverter;
+import engine.utils.converters.VectorConverter;
+import engine.math.numericalObjects.Vector2;
+import engine.math.numericalObjects.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;

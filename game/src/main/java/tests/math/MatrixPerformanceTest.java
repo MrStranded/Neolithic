@@ -1,6 +1,6 @@
 package tests.math;
 
-import math.Matrix3;
+import engine.math.numericalObjects.Matrix3;
 
 public class MatrixPerformanceTest {
 

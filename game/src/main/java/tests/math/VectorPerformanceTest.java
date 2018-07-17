@@ -1,6 +1,6 @@
 package tests.math;
 
-import math.Vector3;
+import engine.math.numericalObjects.Vector3;
 
 public class VectorPerformanceTest {
 

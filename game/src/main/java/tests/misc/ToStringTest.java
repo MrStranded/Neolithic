@@ -1,10 +1,10 @@
 package tests.misc;
 
-import math.Matrix3;
-import math.Matrix4;
-import math.Vector3;
-import math.Vector4;
-import engine.renderer.color.RGBA;
+import engine.math.numericalObjects.Matrix3;
+import engine.math.numericalObjects.Matrix4;
+import engine.math.numericalObjects.Vector3;
+import engine.math.numericalObjects.Vector4;
+import engine.graphics.renderer.color.RGBA;
 
 public class ToStringTest {
 
