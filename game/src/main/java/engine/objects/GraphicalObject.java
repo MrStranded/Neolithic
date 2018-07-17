@@ -1,13 +1,10 @@
 package engine.objects;
 
+import engine.data.Texture;
 import engine.objects.movement.MoveableObject;
 import math.Matrix4;
 import math.Vector3;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
-import engine.renderer.data.Mesh;
+import engine.data.Mesh;
 
 public class GraphicalObject extends MoveableObject {
 
@@ -25,33 +22,7 @@ public class GraphicalObject extends MoveableObject {
 
 	public void render() {
 
-		// Activate first texture unit
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		// Bind the texture
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, mesh.getTextureId());
-
-		// Bind to the VAO
-		GL30.glBindVertexArray(mesh.getVertexArrayObjectId());
-		GL20.glEnableVertexAttribArray(0);
-		GL20.glEnableVertexAttribArray(1);
-		GL20.glEnableVertexAttribArray(2);
-
-		if (!useDepthTest) {
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-		}
-
-		// Draw the mesh
-		GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-
-		if (!useDepthTest) {
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-		}
-
-		// Restore state
-		GL20.glDisableVertexAttribArray(0);
-		GL20.glDisableVertexAttribArray(1);
-		GL20.glDisableVertexAttribArray(2);
-		GL30.glBindVertexArray(0);
+		mesh.render(useDepthTest);
 	}
 
 	// ###################################################################################
@@ -68,6 +39,13 @@ public class GraphicalObject extends MoveableObject {
 
 	public void setColor(float r, float g, float b) {
 		mesh.setColor(r,g,b);
+	}
+	public void setColor(float r, float g, float b, float a) {
+		mesh.setColor(r,g,b,a);
+	}
+
+	public void setTexture(Texture texture) {
+		mesh.setTexture(texture);
 	}
 
 	public Mesh getMesh() {

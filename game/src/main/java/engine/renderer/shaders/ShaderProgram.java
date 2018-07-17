@@ -1,7 +1,9 @@
 package engine.renderer.shaders;
 
+import engine.renderer.color.RGBA;
+import engine.utils.ColorConverter;
 import math.Matrix4;
-import math.utils.MatrixConverter;
+import engine.utils.MatrixConverter;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.system.MemoryStack;
 
@@ -121,6 +123,10 @@ public class ShaderProgram {
 			MatrixConverter.putMatrix4IntoFloatBuffer(m, floatBuffer);
 			GL20.glUniformMatrix4fv(uniforms.get(uniformName), false, floatBuffer);
 		}
+	}
+
+	public void setUniform(String uniformName, RGBA color) {
+		GL20.glUniform4f(uniforms.get(uniformName), (float) color.getR(), (float) color.getG(), (float) color.getB(), (float) color.getA());
 	}
 
 	public void setUniform(String uniformName, int value) {

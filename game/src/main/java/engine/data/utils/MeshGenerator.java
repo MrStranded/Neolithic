@@ -1,7 +1,8 @@
-package engine.renderer.data.utils;
+package engine.data.utils;
 
-import engine.renderer.data.Mesh;
-import engine.renderer.data.Texture;
+import engine.data.Mesh;
+import engine.data.Texture;
+import math.Vector3;
 
 public class MeshGenerator {
 
@@ -14,13 +15,20 @@ public class MeshGenerator {
 	private static final float ANGLE = 2f * (float) Math.PI / 5f;
 	private static final float HALFANGLE = ANGLE / 2f;
 
-	public static Mesh createQuad(Texture texture) {
+	public static Mesh createQuad() {
 
 		float[] vertices = {
 				-0.5f,  -0.5f,  0,  // left bottom
 				0.5f,   -0.5f,  0,  // right bottom
 				-0.5f,  0.5f,   0,  // left top
 				0.5f,   0.5f,   0   // right top
+		};
+
+		float[] normals = {
+				0, 0, 1,
+				0, 0, 1,
+				0, 0, 1,
+				0, 0, 1
 		};
 
 		int[] indices = {
@@ -42,10 +50,10 @@ public class MeshGenerator {
 				1f, 0f
 		};
 
-		return new Mesh(vertices, indices, colors, texture, textureCoordinates);
+		return new Mesh(vertices, indices, normals, textureCoordinates);
 	}
 
-	public static Mesh createIcosahedron(Texture texture) {
+	public static Mesh createIcosahedron() {
 
 		// ------------------------------------- vertices
 		float[] vertices = new float[12*3];
@@ -64,6 +72,22 @@ public class MeshGenerator {
 			vertices[5*3 + i*3 + 0] = RADIUS * (float) Math.cos(i * ANGLE - HALFANGLE);
 			vertices[5*3 + i*3 + 1] = -Y;
 			vertices[5*3 + i*3 + 2] = RADIUS * (float) Math.sin(i * ANGLE - HALFANGLE);
+		}
+
+		// ------------------------------------- normals
+		float[] normals = new float[vertices.length];
+
+		for (int i=0; i<normals.length/3; i++) {
+
+			Vector3 normal = new Vector3(vertices[i*3 + 0], vertices[i*3 + 1], vertices[i*3 + 2]);
+			try {
+				normal = normal.normalize();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			normals[i*3 + 0] = (float) normal.getX();
+			normals[i*3 + 1] = (float) normal.getY();
+			normals[i*3 + 2] = (float) normal.getZ();
 		}
 
 		// ------------------------------------- indices
@@ -105,6 +129,6 @@ public class MeshGenerator {
 			textureCoordniates[i] = (float) Math.random();
 		}
 
-		return new Mesh(vertices, indices, colors, texture, textureCoordniates);
+		return new Mesh(vertices, indices, normals, textureCoordniates);
 	}
 }

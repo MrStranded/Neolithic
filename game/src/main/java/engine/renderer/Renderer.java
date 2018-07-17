@@ -4,7 +4,8 @@ import engine.input.KeyboardInput;
 import engine.input.MouseInput;
 import engine.objects.GraphicalObject;
 import engine.objects.Camera;
-import engine.renderer.data.Texture;
+import engine.data.Mesh;
+import engine.data.Texture;
 import engine.renderer.projection.Projection;
 import engine.renderer.shaders.ShaderProgram;
 import engine.window.Window;
@@ -13,7 +14,7 @@ import load.TextureLoader;
 import math.Matrix4;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
-import engine.renderer.data.utils.MeshGenerator;
+import engine.data.utils.MeshGenerator;
 
 /**
  * The renderer is only concerned about periodically drawing the given mesh data onto a window
@@ -83,13 +84,14 @@ public class Renderer {
 
 		objects = new GraphicalObject[2];
 
-		objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron(grasTexture));
+		objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron());
+		objects[0].setTexture(grasTexture);
 		objects[0].scale(3,3,3);
 		objects[0].rotate(0,0,Math.PI/8);
 
-		objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron(trollFace));
+		objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		objects[1].scale(100,100,100);
-		objects[1].setPosition(0,0,5000);
+		objects[1].setPosition(0,0,-5000);
 		objects[1].setColor(1,1,0);
 	}
 
@@ -99,6 +101,8 @@ public class Renderer {
 			shaderProgram.createUniform("viewMatrix");
 			shaderProgram.createUniform("worldMatrix");
 			shaderProgram.createUniform("textureSampler");
+			shaderProgram.createUniform("color");
+			shaderProgram.createUniform("colorOnly");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -167,9 +171,12 @@ public class Renderer {
 			camera.changeRadius(0.01d);
 		}
 
-		//System.out.println(camera.getPosition().length());
-		//System.out.println(Math.toDegrees(camera.getRotation().getY()));
-		System.out.println(camera.getPosition());
+		if (keyboard.isClicked(GLFW.GLFW_KEY_T)) { // troll tex
+			objects[0].setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png"));
+		}
+		if (keyboard.isClicked(GLFW.GLFW_KEY_G)) { // gras tex
+			objects[0].setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png"));
+		}
 
 		long t = System.nanoTime();
 
@@ -183,7 +190,10 @@ public class Renderer {
 		shaderProgram.setUniform("textureSampler", 0);
 
 		for (GraphicalObject object : objects) {
+			Mesh mesh = object.getMesh();
 			shaderProgram.setUniform("worldMatrix", object.getWorldMatrix());
+			shaderProgram.setUniform("color", mesh.getColor());
+			shaderProgram.setUniform("colorOnly", mesh.hasTexture()? 0 : 1);
 			object.render();
 		}
 
