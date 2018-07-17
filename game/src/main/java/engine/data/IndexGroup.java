@@ -6,7 +6,7 @@ package engine.data;
  */
 public class IndexGroup {
 
-	private static final int UNDEF = -1;
+	public static final int UNDEF = -1;
 
 	private int positionIndex;
 	private int textureCoordinatesIndex;

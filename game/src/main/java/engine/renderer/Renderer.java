@@ -9,6 +9,7 @@ import engine.data.Texture;
 import engine.renderer.projection.Projection;
 import engine.renderer.shaders.ShaderProgram;
 import engine.window.Window;
+import load.OBJLoader;
 import load.StringLoader;
 import load.TextureLoader;
 import math.Matrix4;
@@ -84,7 +85,12 @@ public class Renderer {
 
 		objects = new GraphicalObject[2];
 
-		objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron());
+		//objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron());
+		try {
+			objects[0] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/cylinder.obj"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		objects[0].setTexture(grasTexture);
 		objects[0].scale(3,3,3);
 		objects[0].rotate(0,0,Math.PI/8);

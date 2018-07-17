@@ -1,8 +1,11 @@
 package load;
 
 import com.sun.org.apache.xml.internal.serializer.utils.Utils;
+import engine.data.IndexGroup;
 import engine.data.Mesh;
 import engine.data.MeshFace;
+import engine.utils.IntegerConverter;
+import engine.utils.VectorConverter;
 import math.Vector2;
 import math.Vector3;
 
@@ -13,12 +16,14 @@ public class OBJLoader {
 
 	public static Mesh loadMesh(String fileName) throws Exception {
 
+		System.out.println("loading mesh " + fileName);
+
 		List<String> lines = StringLoader.readAllLines(fileName);
 
-		List<Vector3> vertices = new ArrayList<>();
-		List<Vector2> textures = new ArrayList<>();
-		List<Vector3> normals = new ArrayList<>();
-		List<MeshFace> faces = new ArrayList<>();
+		List<Vector3> verticesList = new ArrayList<>();
+		List<Vector2> texturesList = new ArrayList<>();
+		List<Vector3> normalsList = new ArrayList<>();
+		List<MeshFace> facesList = new ArrayList<>();
 
 		// ---------------------- parsing the file
 		for (String line : lines) {
@@ -32,7 +37,7 @@ public class OBJLoader {
 							Float.parseFloat(tokens[2]),
 							Float.parseFloat(tokens[3])
 					);
-					vertices.add(v);
+					verticesList.add(v);
 					break;
 
 				case "vt": // texture coordinate
@@ -40,7 +45,7 @@ public class OBJLoader {
 							Float.parseFloat(tokens[1]),
 							Float.parseFloat(tokens[2])
 					);
-					textures.add(vt);
+					texturesList.add(vt);
 					break;
 
 				case "vn": // normal
@@ -49,17 +54,19 @@ public class OBJLoader {
 							Float.parseFloat(tokens[2]),
 							Float.parseFloat(tokens[3])
 					);
-					normals.add(vn);
+					normalsList.add(vn);
 					break;
 
 				case "f": // face
-					MeshFace f = new MeshFace();
-					f.putOBJData(
-							tokens[1],
-							tokens[2],
-							tokens[3]
-					);
-					faces.add(f);
+					for (int i=0; i<tokens.length-3; i++) {
+						MeshFace f = new MeshFace();
+						f.putOBJData(
+								tokens[i+1],
+								tokens[i+2],
+								tokens[i+3]
+						);
+						facesList.add(f);
+					}
 					break;
 
 				default: // ignore other information
@@ -67,6 +74,38 @@ public class OBJLoader {
 			}
 		}
 
-		return null;
+		// ---------------------- putting data into arrays
+		Vector3[] verticesArray = verticesList.toArray(new Vector3[verticesList.size()]);
+
+		int length = verticesArray.length;
+		Vector2[] texturesArray = new Vector2[length];
+		Vector3[] normalsArray = new Vector3[length];
+
+		List<Integer> indicesList = new ArrayList<>();
+
+		for (MeshFace face : facesList) {
+			for (int i=0; i<3; i++) {
+				// get current index group of corner of face
+				IndexGroup indexGroup = face.getIndexGroups()[i];
+
+				// put the index into the mesh defining vertex index list
+				indicesList.add(indexGroup.getPositionIndex());
+
+				// put the corresponding texture coordinates and normals in the place of the vertex index
+				if (indexGroup.getTextureCoordinatesIndex() != IndexGroup.UNDEF) {
+					texturesArray[indexGroup.getPositionIndex()] = texturesList.get(indexGroup.getTextureCoordinatesIndex());
+				}
+				normalsArray[indexGroup.getPositionIndex()] = normalsList.get(indexGroup.getNormalIndex());
+			}
+		}
+
+
+		// ---------------------- creating mesh
+		return new Mesh(
+				VectorConverter.Vector3ArrayToFloatArray(verticesArray),
+				IntegerConverter.IntegerListToIntArray(indicesList),
+				VectorConverter.Vector3ArrayToFloatArray(normalsArray),
+				VectorConverter.Vector2ArrayToFloatArray(texturesArray)
+		);
 	}
 }

@@ -12,7 +12,7 @@ public class TextureLoader {
 	public static Texture loadTexture(String fileName) {
 
 		ByteBuffer buffer = null;
-		System.out.println("loading " + fileName);
+		System.out.println("loading texture " + fileName);
 
 		try {
 			PNGDecoder decoder = new PNGDecoder(new FileInputStream(fileName));
