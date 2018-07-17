@@ -14,8 +14,8 @@ public class MoveableObject {
 	// this matrix holds the complete position, scale and rotation information at once
 	protected Matrix4 matrix = new Matrix4();
 
-	// tau constant
-	private static final double tau = Math.PI*2d;
+	// TAU constant
+	private static final double TAU = Math.PI*2d;
 
 	public MoveableObject() {
 	}
@@ -223,23 +223,23 @@ public class MoveableObject {
 
 	protected void checkAngle() {
 
-		if (rotation.getX() > tau) {
-			rotation.setX(rotation.getX()-tau);
+		if (rotation.getX() > TAU) {
+			rotation.setX(rotation.getX()-TAU);
 		}
-		if (rotation.getY() > tau) {
-			rotation.setY(rotation.getY()-tau);
+		if (rotation.getY() > TAU) {
+			rotation.setY(rotation.getY()-TAU);
 		}
-		if (rotation.getZ() > tau) {
-			rotation.setZ(rotation.getZ()-tau);
+		if (rotation.getZ() > TAU) {
+			rotation.setZ(rotation.getZ()-TAU);
 		}
 		if (rotation.getX()<0) {
-			rotation.setX(rotation.getX()+tau);
+			rotation.setX(rotation.getX()+TAU);
 		}
 		if (rotation.getY()<0) {
-			rotation.setY(rotation.getY()+tau);
+			rotation.setY(rotation.getY()+TAU);
 		}
 		if (rotation.getZ()<0) {
-			rotation.setZ(rotation.getZ()+tau);
+			rotation.setZ(rotation.getZ()+TAU);
 		}
 	}
 }

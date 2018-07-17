@@ -7,14 +7,17 @@ import math.utils.Transformations;
 
 public class MoveableCamera {
 
-	protected Vector3 worldPosition = new Vector3(0,0,0);
-	protected Vector3 worldRotation = new Vector3(0,0,0);
+	protected double radius = 1d; // distance of camera to center
+	protected double yaw = 0d; // rotation around y axis. longitude
+	protected double pitch = 0d; // rotation 'around x axis'. lattitude
+	protected double tilt = 0d; // tilt of camera. similar to pitch in a way. determines how steeply we look at the planet
 
 	// this matrix holds the complete worldPosition, scale and worldRotation information at once
 	protected Matrix4 matrix = new Matrix4();
 
-	// tau constant
-	private static final double tau = Math.PI*2d;
+	// PI and TAU constants
+	private static final double PI = Math.PI;
+	private static final double TAU = PI*2d;
 
 	public MoveableCamera() {
 	}
@@ -23,124 +26,15 @@ public class MoveableCamera {
 	// ################################ Position #########################################
 	// ###################################################################################
 
-	/**
-	 * Translation modifies the object's coordinates in respect to the global coordinate axes.
-	 * @param x translation on global x axis
-	 * @param y translation on global x axis
-	 * @param z translation on global x axis
-	 */
-	public void translate(double x, double y, double z) {
+	public void changeRadius(double delta) {
 
-		Matrix4 cameraRotation = Transformations.rotate(worldRotation);
-		Vector3 xInternal = cameraRotation.times(new Vector4(1d,0,0,0)).extractVector3();
-		Vector3 yInternal = cameraRotation.times(new Vector4(0,1d,0,0)).extractVector3();
-		Vector3 zInternal = cameraRotation.times(new Vector4(0,0,1d,0)).extractVector3();
-		worldPosition.plusInplace(xInternal.times(-x)).plusInplace(yInternal.times(-y)).plusInplace(zInternal.times(-z));
+		this.radius += delta;
 		update();
 	}
 
-	/**
-	 * Movement modifies the object's coordinates in respect to the internal coordinate axes.
-	 * @param x translation on internal x axis
-	 * @param y translation on internal x axis
-	 * @param z translation on internal x axis
-	 */
-	public void move(double x, double y, double z) {
+	public void setRadius(double radius) {
 
-		Vector3 v = new Vector3(-x,-y,-z);
-		worldPosition.plusInplace(v);
-		update();
-	}
-
-	public void setPosition(double x, double y, double z) {
-
-		worldPosition = new Vector3(-x,-y,-z);
-		update();
-	}
-
-	// ###################################################################################
-	// ################################ Rotation Around Own Center #######################
-	// ###################################################################################
-
-	/**
-	 * Rotates Camera by given degrees around origin of world coordinates.
-	 */
-	public void rotate(double x, double y, double z) {
-
-		Vector3 v = new Vector3(x,y,z);
-		Matrix4 worldRotationMatrix = Transformations.rotate(v);
-		worldRotation.plusInplace(v);
-		worldPosition = worldRotationMatrix.times(new Vector4(worldPosition)).extractVector3();
-		matrix = worldRotationMatrix.times(matrix);
-	}
-
-	/**
-	 * Rotates Camera by given degree around origin of world coordinates around the x axis.
-	 */
-	public void rotateX(double a) {
-
-		Matrix4 worldRotationMatrix = Transformations.rotateX(a);
-		worldRotation.plusInplace(new Vector3(a,0,0));
-		worldPosition = worldRotationMatrix.times(new Vector4(worldPosition)).extractVector3();
-		matrix = worldRotationMatrix.times(matrix);
-	}
-	/**
-	 * Rotates Camera by given degree around origin of world coordinates around the y axis.
-	 */
-	public void rotateY(double a) {
-
-		Matrix4 worldRotationMatrix = Transformations.rotateY(a);
-		worldRotation.plusInplace(new Vector3(0,a,0));
-		worldPosition = worldRotationMatrix.times(new Vector4(worldPosition)).extractVector3();
-		matrix = worldRotationMatrix.times(matrix);
-	}
-	/**
-	 * Rotates Camera by given degree around origin of world coordinates around the z axis.
-	 */
-	public void rotateZ(double a) {
-
-		Matrix4 worldRotationMatrix = Transformations.rotateZ(a);
-		worldRotation.plusInplace(new Vector3(0,0,a));
-		worldPosition = worldRotationMatrix.times(new Vector4(worldPosition)).extractVector3();
-		matrix = worldRotationMatrix.times(matrix);
-	}
-
-	// ###################################################################################
-	// ################################ Rotation Around Origin ###########################
-	// ###################################################################################
-
-	/**
-	 * Rotates Camera by given degrees around center of own mesh.
-	 */
-	public void rotateAroundOrigin(double x, double y, double z) {
-
-		Vector3 v = new Vector3(-x,-y,-z);
-		worldRotation.plusInplace(v);
-		update();
-	}
-
-	/**
-	 * Rotates Camera by given degree around center of own mesh around x axis.
-	 */
-	public void rotateXAroundOrigin(double a) {
-
-		worldRotation.plusInplace(new Vector3(-a,0,0));
-		update();
-	}
-	/**
-	 * Rotates Camera by given degree around center of own mesh around y axis.
-	 */
-	public void rotateYAroundOrigin(double a) {
-
-		worldRotation.plusInplace(new Vector3(0,-a,0));
-		update();
-	}
-	/**
-	 * Rotates Camera by given degree around center of own mesh around z axis.
-	 */
-	public void rotateZAroundOrigin(double a) {
-
-		worldRotation.plusInplace(new Vector3(0,0,-a));
+		this.radius = radius;
 		update();
 	}
 
@@ -148,12 +42,27 @@ public class MoveableCamera {
 	// ################################ Rotation #########################################
 	// ###################################################################################
 
-	/**
-	 * Sets worldRotation of object to given exact value.
-	 */
-	public void setRotation(double x, double y, double z) {
+	public void setRotation(double yaw, double pitch, double tilt) {
 
-		worldRotation = new Vector3(x,y,z);
+		this.yaw = yaw;
+		this.pitch = pitch;
+		this.tilt = tilt;
+		update();
+	}
+
+	public void rotateYaw(double delta) {
+
+		yaw += delta;
+		update();
+	}
+	public void rotatePitch(double delta) {
+
+		pitch += delta;
+		update();
+	}
+	public void rotateTilt(double delta) {
+
+		tilt += delta;
 		update();
 	}
 
@@ -165,29 +74,39 @@ public class MoveableCamera {
 
 		checkAngle();
 
+		/*
+		Vector3 worldRotation = new Vector3(-pitch-tilt, -yaw, 0);
+		Vector3 worldPosition = new Vector3(0, Math.sin(-tilt)*radius, -Math.cos(tilt)*radius - radius);
+
 		matrix =    Transformations.translate(worldPosition).times(
 					Transformations.rotate(worldRotation));
+		*/
+
+		matrix = Transformations.rotateX(-tilt).times(
+				Transformations.translate(new Vector3(0,0, -radius)).times(
+				Transformations.rotateX(-pitch).times(
+				Transformations.rotateY(-yaw))));
 	}
 
 	protected void checkAngle() {
 
-		if (worldRotation.getX() > tau) {
-			worldRotation.setX(worldRotation.getX()-tau);
+		if (yaw > TAU) {
+			yaw -= TAU;
 		}
-		if (worldRotation.getY() > tau) {
-			worldRotation.setY(worldRotation.getY()-tau);
+		if (pitch > TAU) {
+			pitch -= TAU;
 		}
-		if (worldRotation.getZ() > tau) {
-			worldRotation.setZ(worldRotation.getZ()-tau);
+		if (tilt > TAU) {
+			tilt -= TAU;
 		}
-		if (worldRotation.getX()<0) {
-			worldRotation.setX(worldRotation.getX()+tau);
+		if (yaw < 0) {
+			yaw += TAU;
 		}
-		if (worldRotation.getY()<0) {
-			worldRotation.setY(worldRotation.getY()+tau);
+		if (pitch < 0) {
+			pitch += TAU;
 		}
-		if (worldRotation.getZ()<0) {
-			worldRotation.setZ(worldRotation.getZ()+tau);
+		if (tilt < 0) {
+			tilt += TAU;
 		}
 	}
 }

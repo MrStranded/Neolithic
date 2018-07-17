@@ -125,7 +125,7 @@ public class Renderer {
 	private void initializeCamera() {
 
 		camera = new Camera();
-		camera.translate(0,0,5);
+		camera.setRadius(5);
 	}
 
 	private void initializeInput() {
@@ -142,7 +142,7 @@ public class Renderer {
 
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
 
-		projectionMatrix = Projection.createProjectionMatrix(-aspectRatio*zNear,aspectRatio*zNear,1d*zNear,-1d*zNear,zNear,zFar);
+		projectionMatrix = Projection.createPerspectiveProjectionMatrix(-aspectRatio*zNear,aspectRatio*zNear,1d*zNear,-1d*zNear,zNear,zFar);
 	}
 
 	// ###################################################################################
@@ -168,22 +168,28 @@ public class Renderer {
 
 		*/
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
-			camera.rotateYAroundOrigin(-0.01d);
+			camera.rotateYaw(-0.01d);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_D)) { // rotate right
-			camera.rotateYAroundOrigin(0.01d);
+			camera.rotateYaw(0.01d);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_E)) { // look down
-			camera.rotateXAroundOrigin(-0.01d);
+			camera.rotateTilt(-0.01d);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_Q)) { // look up
-			camera.rotateXAroundOrigin(0.01d);
+			camera.rotateTilt(0.01d);
 		}
-		if (keyboard.isPressed(GLFW.GLFW_KEY_W)) { // move forward
-			camera.move(0,0,-0.01d);
+		if (keyboard.isPressed(GLFW.GLFW_KEY_W)) { // rotate up
+			camera.rotatePitch(-0.01d);
 		}
-		if (keyboard.isPressed(GLFW.GLFW_KEY_S)) { // move backward
-			camera.move(0,0,0.01d);
+		if (keyboard.isPressed(GLFW.GLFW_KEY_S)) { // rotate down
+			camera.rotatePitch(0.01d);
+		}
+		if (keyboard.isPressed(GLFW.GLFW_KEY_R)) { // go closer
+			camera.changeRadius(-0.01d);
+		}
+		if (keyboard.isPressed(GLFW.GLFW_KEY_F)) { // go farther
+			camera.changeRadius(0.01d);
 		}
 
 		//System.out.println(camera.getPosition().length());

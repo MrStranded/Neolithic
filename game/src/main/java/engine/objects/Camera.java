@@ -22,10 +22,10 @@ public class Camera extends MoveableCamera {
 	}
 
 	public Vector3 getPosition() {
-		return worldPosition.times(-1d);
+		return new Vector3(0,0,radius);
 	}
 
 	public Vector3 getRotation() {
-		return worldRotation.times(-1d);
+		return new Vector3(pitch+tilt,yaw,0);
 	}
 }
