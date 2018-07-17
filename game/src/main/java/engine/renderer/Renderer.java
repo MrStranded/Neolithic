@@ -9,7 +9,7 @@ import engine.data.Texture;
 import engine.renderer.projection.Projection;
 import engine.renderer.shaders.ShaderProgram;
 import engine.window.Window;
-import load.FileToString;
+import load.StringLoader;
 import load.TextureLoader;
 import math.Matrix4;
 import org.lwjgl.glfw.GLFW;
@@ -68,8 +68,8 @@ public class Renderer {
 		// loading and binding the shaders
 		try {
 			shaderProgram = new ShaderProgram();
-			shaderProgram.createVertexShader(FileToString.read("src/main/resources/shaders/vertex.vs"));
-			shaderProgram.createFragmentShader(FileToString.read("src/main/resources/shaders/fragment.fs"));
+			shaderProgram.createVertexShader(StringLoader.read("src/main/resources/shaders/vertex.vs"));
+			shaderProgram.createFragmentShader(StringLoader.read("src/main/resources/shaders/fragment.fs"));
 			shaderProgram.link();
 		} catch (Exception e) {
 			e.printStackTrace();
