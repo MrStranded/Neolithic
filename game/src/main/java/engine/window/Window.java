@@ -128,6 +128,9 @@ public class Window {
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 
+		// wireframe on: use GL11.GL_LINE, wireframe off: use GL11.GL_FILL
+		//GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+
 		// Set the clear color
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	}

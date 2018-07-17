@@ -41,9 +41,10 @@ public class OBJLoader {
 					break;
 
 				case "vt": // texture coordinate
+					// texture coordinates are in UV format, so y coordinate has to be flipped
 					Vector2 vt = new Vector2(
 							Float.parseFloat(tokens[1]),
-							Float.parseFloat(tokens[2])
+							1f - Float.parseFloat(tokens[2])
 					);
 					texturesList.add(vt);
 					break;
@@ -58,15 +59,14 @@ public class OBJLoader {
 					break;
 
 				case "f": // face
-					for (int i=0; i<tokens.length-3; i++) {
-						MeshFace f = new MeshFace();
-						f.putOBJData(
-								tokens[i+1],
-								tokens[i+2],
-								tokens[i+3]
-						);
-						facesList.add(f);
-					}
+					// Attention: no support for faces with more than three vertices!
+					MeshFace f = new MeshFace();
+					f.putOBJData(
+							tokens[1],
+							tokens[2],
+							tokens[3]
+					);
+					facesList.add(f);
 					break;
 
 				default: // ignore other information

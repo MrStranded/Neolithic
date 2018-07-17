@@ -87,7 +87,7 @@ public class Renderer {
 
 		//objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		try {
-			objects[0] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/cylinder.obj"));
+			objects[0] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
