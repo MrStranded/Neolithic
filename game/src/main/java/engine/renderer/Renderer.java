@@ -25,7 +25,7 @@ public class Renderer {
 	private ShaderProgram shaderProgram;
 
 	private double zNear = 0.001d;
-	private double zFar = 1000d;
+	private double zFar = 10000d;
 
 	private Matrix4 projectionMatrix;
 
@@ -81,40 +81,22 @@ public class Renderer {
 		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/cube_texture.png");
 		Texture grasTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
 
-		objects = new GraphicalObject[5];
+		objects = new GraphicalObject[2];
 
-		objects[0] = new GraphicalObject(MeshGenerator.createQuad(trollFace));
-		objects[1] = new GraphicalObject(MeshGenerator.createQuad(trollFace));
-		objects[2] = new GraphicalObject(MeshGenerator.createQuad(cubeTexture));
-		objects[3] = new GraphicalObject(MeshGenerator.createQuad(cubeTexture));
+		objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron(grasTexture));
+		objects[0].scale(3,3,3);
+		objects[0].rotate(0,0,Math.PI/8);
 
-		objects[4] = new GraphicalObject(MeshGenerator.createIcosahedron(grasTexture));
-
-		//objects[2].scale(2d,0.5d,1d);
-		//objects[3].setScale(1d,1d,0d);
-		//objects[4].scale(0.1d,0.1d,0.1d);
-
-		/*objects[0].translate(-0.5d,0.25d,-1d);
-		objects[1].translate(1d,-0.5d,-1d);
-		objects[2].setPosition(0,-0.25d,-1d);
-		objects[3].setPosition(0,0,-1d);
-		*/
-		/*
-		objects[4].translate(0,0,-4d);
-
-		objects[0].setColor(1,1,1);
-		objects[2].setColor(1,1,0);
-		objects[4].setColor(1,1,1);
-		*/
-		objects[4].scale(3,3,3);
-
-		//objects[4].setUseDepthTest(false);
+		objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron(trollFace));
+		objects[1].scale(100,100,100);
+		objects[1].setPosition(0,0,5000);
+		objects[1].setColor(1,1,0);
 	}
 
 	private void initializeUniforms() {
 
 		try {
-			shaderProgram.createUniform("projectionMatrix");
+			shaderProgram.createUniform("viewMatrix");
 			shaderProgram.createUniform("worldMatrix");
 			shaderProgram.createUniform("textureSampler");
 		} catch (Exception e) {
@@ -151,22 +133,15 @@ public class Renderer {
 
 	public void render() {
 
-		double angleStep = 0.01d;
+		double angleStep = 0.0025d;
 		angle += angleStep;
 		if (angle > Math.PI*2d) {
 			angle -= Math.PI*2d;
 		}
-		/*
-		objects[0].rotate(angleStep,0,0);
-		objects[1].rotateYAroundOrigin(angleStep);
-		objects[2].rotateAroundOrigin(0,0,angleStep);
-		objects[3].rotate(angleStep,angleStep,angleStep);
 
-		objects[4].rotateYAroundOrigin(0.01d);
+		objects[0].rotateY(angleStep);
+		objects[1].rotateYAroundOrigin(-angleStep);
 
-		objects[2].setScale(Math.abs(Math.cos(angle)*5d),Math.abs(Math.sin(angle)*2d),0d);
-
-		*/
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
 			camera.rotateYaw(-0.01d);
 		}
@@ -203,7 +178,7 @@ public class Renderer {
 		shaderProgram.bind();
 
 		// upload projection matrix
-		shaderProgram.setUniform("projectionMatrix", projectionMatrix.times(camera.getViewMatrix()));
+		shaderProgram.setUniform("viewMatrix", projectionMatrix.times(camera.getViewMatrix()));
 		// set used texture (id = 0)
 		shaderProgram.setUniform("textureSampler", 0);
 
