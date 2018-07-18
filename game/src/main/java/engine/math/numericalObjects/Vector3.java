@@ -92,11 +92,11 @@ public class Vector3 {
 
 		if (length == 0) {
 			// this is super awkward. surely there is a better way to handle this?
-			try {
+			/*try {
 				throw new Exception("Vector of length zero cannot be normalized!");
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
+			}*/
 			return this;
 		}
 

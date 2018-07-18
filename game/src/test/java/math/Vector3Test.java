@@ -189,7 +189,7 @@ public class Vector3Test {
 		d = c.normalize();
 
 		assertTrue(Math.abs(d.length() - 1d) < epsilon);
-		
+
 		Vector3 e = new Vector3(0,0,0);
 
 		// normalizing a vector of length zero just returns the same vector

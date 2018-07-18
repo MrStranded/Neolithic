@@ -16,7 +16,7 @@ public class Mesh {
 	private final int textureId; // Texture Buffer Id
 	private final int textureVboId; // Texture Coordinates Vertex Buffer Object Id
 
-	private Texture texture; // the Texture itself
+	private Material material; // the Material, containing also the texture
 	private RGBA color; // color of the mesh
 
 	private final int vertexCount;
@@ -33,7 +33,7 @@ public class Mesh {
 		this.normals = normals;
 		this.textureCoordinates = textureCoordinates;
 
-		texture = null;
+		material = new Material();
 		color = new RGBA(1,1,1,1);
 
 		// set up static data
@@ -98,12 +98,16 @@ public class Mesh {
 			GL20.glVertexAttribPointer(1, 3, GL11.GL_FLOAT, false, 0, 0);
 
 			// ------------------ texture part
-			if (texture != null) {
+			if (material.hasTexture()) {
 				GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
 				GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-				GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, texture.getWidth(), texture.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, texture.getBuffer());
+				GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA,
+						material.getTexture().getWidth(),
+						material.getTexture().getHeight(),
+						0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
+						material.getTexture().getBuffer());
 				GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
 				textureBuffer = MemoryUtil.memAllocFloat(textureCoordinates.length);
@@ -213,15 +217,21 @@ public class Mesh {
 	}
 
 	public void setTexture(Texture texture) {
-
-		this.texture = texture;
+		material.setTexture(texture);
 		registerData();
 	}
 	public Texture getTexture() {
-		return texture;
+		return material.getTexture();
 	}
 	public boolean hasTexture() {
-		return (texture != null);
+		return material.hasTexture();
+	}
+
+	public Material getMaterial() {
+		return material;
+	}
+	public void setMaterial(Material material) {
+		this.material = material;
 	}
 
 	public int getVertexArrayObjectId() {

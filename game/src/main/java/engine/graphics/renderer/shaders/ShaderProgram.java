@@ -1,7 +1,11 @@
 package engine.graphics.renderer.shaders;
 
+import engine.graphics.objects.light.Attenuation;
+import engine.graphics.objects.light.PointLight;
+import engine.graphics.objects.models.Material;
 import engine.graphics.renderer.color.RGBA;
 import engine.math.numericalObjects.Matrix4;
+import engine.math.numericalObjects.Vector3;
 import engine.utils.converters.MatrixConverter;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.system.MemoryStack;
@@ -59,7 +63,7 @@ public class ShaderProgram {
 		GL20.glCompileShader(shaderId);
 
 		if (GL20.glGetShaderi(shaderId, GL20.GL_COMPILE_STATUS) == 0) {
-			throw new Exception("Error while compiling shader code: " + GL20.glGetShaderInfoLog(shaderId, 1024));
+			throw new Exception("Error while compiling shader. Code: " + GL20.glGetShaderInfoLog(shaderId, 1024));
 		}
 
 		GL20.glAttachShader(programId, shaderId);
@@ -97,6 +101,27 @@ public class ShaderProgram {
 	}
 
 	// ###################################################################################
+	// ################################ Generation########################################
+	// ###################################################################################
+
+	public void createPointLightUniform(String uniformName) throws Exception {
+		createUniform(uniformName + ".color");
+		createUniform(uniformName + ".position");
+		createUniform(uniformName + ".intensity");
+		createUniform(uniformName + ".attenuation.constant");
+		createUniform(uniformName + ".attenuation.linear");
+		createUniform(uniformName + ".attenuation.exponent");
+	}
+
+	public void createMaterialUniform(String uniformName) throws Exception {
+		createUniform(uniformName + ".ambient");
+		createUniform(uniformName + ".diffuse");
+		createUniform(uniformName + ".specular");
+		createUniform(uniformName + ".hasTexture");
+		createUniform(uniformName + ".reflectance");
+	}
+
+	// ###################################################################################
 	// ################################ Clean Up #########################################
 	// ###################################################################################
 
@@ -128,8 +153,35 @@ public class ShaderProgram {
 		GL20.glUniform4f(uniforms.get(uniformName), (float) color.getR(), (float) color.getG(), (float) color.getB(), (float) color.getA());
 	}
 
+	public void setUniform(String uniformName, Vector3 vector) {
+		GL20.glUniform3f(uniforms.get(uniformName), (float) vector.getX(), (float) vector.getY(), (float) vector.getZ());
+	}
+
 	public void setUniform(String uniformName, int value) {
 		GL20.glUniform1i(uniforms.get(uniformName), value);
+	}
+
+	public void setUniform(String uniformName, float value) {
+		GL20.glUniform1f(uniforms.get(uniformName), value);
+	}
+
+	public void setUniform(String uniformName, PointLight pointLight) {
+		setUniform(uniformName + ".color", pointLight.getColor() );
+		setUniform(uniformName + ".position", pointLight.getPosition());
+		setUniform(uniformName + ".intensity", pointLight.getIntensity());
+		Attenuation attenuation = pointLight.getAttenuation();
+		setUniform(uniformName + ".attenuation.constant", attenuation.getConstant());
+		setUniform(uniformName + ".attenuation.linear", attenuation.getLinear());
+		setUniform(uniformName + ".attenuation.exponent", attenuation.getExponent());
+		setUniform("specularPower",attenuation.getExponent());
+	}
+
+	public void setUniform(String uniformName, Material material) {
+		setUniform(uniformName + ".ambient", material.getAmbientStrength());
+		setUniform(uniformName + ".diffuse", material.getDiffuseStrength());
+		setUniform(uniformName + ".specular", material.getSpecularPower());
+		setUniform(uniformName + ".hasTexture", material.hasTexture() ? 1 : 0);
+		setUniform(uniformName + ".reflectance", material.getReflectanceStrength());
 	}
 
 }

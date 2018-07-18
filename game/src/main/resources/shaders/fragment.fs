@@ -13,7 +13,7 @@ struct PointLight
     // Light position is assumed to be in view coordinates
     vec3 position;
     float intensity;
-    Attenuation attentuation;
+    Attenuation attenuation;
 };
 
 struct Material
@@ -33,7 +33,7 @@ out vec4 fragmentColor;
 
 uniform sampler2D textureSampler;
 uniform vec4 color;
-uniform vec3 ambientLight;
+uniform vec4 ambientLight;
 uniform float specularPower;
 uniform Material material;
 uniform PointLight pointLight;
@@ -41,25 +41,17 @@ uniform vec3 cameraPosition;
 
 vec4 ambientC;
 vec4 diffuseC;
-vec4 speculrC;
+vec4 specularC;
 
-void main(){
-    setupColours(material, outTextureCoordinates);
-
-    vec4 diffuseSpecularComposition = calculatePointLight(pointLight, mvVertexPos, mvVertexNormal);
-
-    fragColor = color * ambientC * vec4(ambientLight, 1) + diffuseSpecularComposition;
-}
-
-void setupColours(Material material, vec2 textureCoordinates) {
+void setupColors(Material material, vec2 textureCoordinates) {
     if (material.hasTexture == 1) {
         ambientC = texture(textureSampler, textureCoordinates);
         diffuseC = ambientC;
-        speculrC = ambientC;
+        specularC = ambientC;
     } else {
         ambientC = material.ambient;
         diffuseC = material.diffuse;
-        speculrC = material.specular;
+        specularC = material.specular;
     }
 }
 
@@ -71,7 +63,7 @@ vec4 calculatePointLight(PointLight light, vec3 position, vec3 normal) {
     vec3 lightDirection = light.position - position;
     vec3 toLightSource  = normalize(lightDirection);
     float diffuseFactor = max(dot(normal, toLightSource ), 0.0);
-    diffuseColour = diffuseC * vec4(light.colour, 1.0) * light.intensity * diffuseFactor;
+    diffuseColour = diffuseC * vec4(light.color, 1.0) * light.intensity * diffuseFactor;
 
     // Specular Light
     vec3 cameraDirection = normalize(-position);
@@ -79,13 +71,21 @@ vec4 calculatePointLight(PointLight light, vec3 position, vec3 normal) {
     vec3 reflectedLight = normalize(reflect(fromLightSource, normal));
     float specularFactor = max(dot(cameraDirection, reflectedLight), 0.0);
     specularFactor = pow(specularFactor, specularPower);
-    specularColour = specularC * specularFactor * material.reflectance * vec4(light.colour, 1.0);
+    specularColour = specularC * specularFactor * material.reflectance * vec4(light.color, 1.0);
 
     // Attenuation
     float distance = length(lightDirection);
     float attenuationInverse =
-        light.attentuation.constant +
-        light.attentuation.linear * distance +
-        light.attentuation.exponent * distance * distance;
+        light.attenuation.constant +
+        light.attenuation.linear * distance +
+        light.attenuation.exponent * distance * distance;
     return (diffuseColour + specularColour) / attenuationInverse;
+}
+
+void main(){
+    setupColors(material, outTextureCoordinates);
+
+    vec4 diffuseSpecularComposition = calculatePointLight(pointLight, outPosition, outNormal);
+
+    fragmentColor = color * ambientC * ambientLight + diffuseSpecularComposition;
 }

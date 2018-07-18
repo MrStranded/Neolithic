@@ -1,5 +1,8 @@
 package engine.graphics.renderer;
 
+import engine.graphics.objects.light.Attenuation;
+import engine.graphics.objects.light.PointLight;
+import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.input.KeyboardInput;
@@ -32,6 +35,7 @@ public class Renderer {
 	private Matrix4 projectionMatrix;
 
 	private GraphicalObject[] objects;
+	private PointLight pointLight;
 	private Camera camera;
 
 	private MouseInput mouse;
@@ -60,8 +64,6 @@ public class Renderer {
 		initializeInput();
 
 		calculateProjectionMatrix();
-
-		//GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
 	private void initializeShaders() {
@@ -99,16 +101,24 @@ public class Renderer {
 		objects[1].scale(100,100,100);
 		objects[1].setPosition(0,0,-5000);
 		objects[1].setColor(1,1,0);
+
+		pointLight = new PointLight(1f,1f,1f);
+		//pointLight.setAttenuation(Attenuation.FAR());
+		pointLight.setPosition(0,0,-5000);
 	}
 
 	private void initializeUniforms() {
-
 		try {
 			shaderProgram.createUniform("modelViewMatrix");
 			shaderProgram.createUniform("projectionMatrix");
 			shaderProgram.createUniform("textureSampler");
 			shaderProgram.createUniform("color");
-			shaderProgram.createUniform("colorOnly");
+			shaderProgram.createUniform("ambientLight");
+			shaderProgram.createUniform("specularPower");
+			shaderProgram.createUniform("cameraPosition");
+
+			shaderProgram.createPointLightUniform("pointLight");
+			shaderProgram.createMaterialUniform("material");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -151,6 +161,7 @@ public class Renderer {
 
 		objects[0].rotateY(angleStep);
 		objects[1].rotateYAroundOrigin(-angleStep);
+		pointLight.rotateYAroundOrigin(-angleStep);
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
 			camera.rotateYaw(-0.01d);
@@ -194,12 +205,19 @@ public class Renderer {
 		shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 		// set used texture (id = 0)
 		shaderProgram.setUniform("textureSampler", 0);
+		// set point light uniforms
+		pointLight.actualizeViewPosition(camera.getViewMatrix());
+		shaderProgram.setUniform("pointLight",pointLight);
+		// set camera position
+		shaderProgram.setUniform("cameraPosition",camera.getRotation());
+		// set ambient light
+		shaderProgram.setUniform("ambientLight",new RGBA(1,1,1,1));
 
 		for (GraphicalObject object : objects) {
 			Mesh mesh = object.getMesh();
 			shaderProgram.setUniform("modelViewMatrix", camera.getViewMatrix().times(object.getWorldMatrix()));
 			shaderProgram.setUniform("color", mesh.getColor());
-			shaderProgram.setUniform("colorOnly", mesh.hasTexture()? 0 : 1);
+			shaderProgram.setUniform("material",object.getMesh().getMaterial());
 			object.render();
 		}
 

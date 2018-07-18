@@ -12,7 +12,7 @@ uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 
 void main() {
-    vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
+    vec4 modelViewPosition = modelViewMatrix * vec4(inPosition, 1.0);
     gl_Position = projectionMatrix * modelViewPosition;
 
     outPosition = modelViewPosition.xyz;

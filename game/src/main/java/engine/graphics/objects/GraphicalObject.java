@@ -68,7 +68,7 @@ public class GraphicalObject extends MoveableObject {
 		return rotation;
 	}
 
-	public boolean isUseDepthTest() {
+	public boolean usesDepthTest() {
 		return useDepthTest;
 	}
 	public void setUseDepthTest(boolean useDepthTest) {
