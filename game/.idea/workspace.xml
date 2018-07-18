@@ -11,7 +11,65 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="AmbientLight.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/AmbientLight.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+              <folding>
+                <element signature="e#171#172#0" expanded="true" />
+                <element signature="e#181#182#0" expanded="true" />
+                <element signature="e#251#252#0" expanded="true" />
+                <element signature="e#280#281#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PointLight.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/PointLight.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="358">
+              <caret line="27" column="44" selection-start-line="27" selection-start-column="44" selection-end-line="27" selection-end-column="44" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#248#249#0" expanded="true" />
+                <element signature="e#273#274#0" expanded="true" />
+                <element signature="e#327#328#0" expanded="true" />
+                <element signature="e#362#363#0" expanded="true" />
+                <element signature="e#991#992#0" expanded="true" />
+                <element signature="e#1052#1053#0" expanded="true" />
+                <element signature="e#1071#1072#0" expanded="true" />
+                <element signature="e#1107#1108#0" expanded="true" />
+                <element signature="e#1132#1133#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Vector3.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/math/numericalObjects/Vector3.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="94" column="82" selection-start-line="94" selection-start-column="82" selection-end-line="94" selection-end-column="82" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Camera.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/Camera.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -60,9 +118,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/renderer/shapes/Triangle.java" />
-        <option value="$PROJECT_DIR$/src/main/java/utils/VectorConverter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/math/Matrix4.java" />
         <option value="$PROJECT_DIR$/src/main/java/renderer/projection/Projection.java" />
         <option value="$PROJECT_DIR$/src/main/java/utils/MeshGenerator.java" />
         <option value="$PROJECT_DIR$/src/main/java/math/utils/MatrixConverter.java" />
@@ -111,6 +166,9 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/window/Window.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/math/Transformations.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/AmbientLight.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/math/numericalObjects/Vector3.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/PointLight.java" />
       </list>
     </option>
   </component>
@@ -195,7 +253,37 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="engine" type="462c0819:PsiDirectoryNode" />
               <item name="graphics" type="462c0819:PsiDirectoryNode" />
+              <item name="objects" type="462c0819:PsiDirectoryNode" />
+              <item name="light" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
+              <item name="graphics" type="462c0819:PsiDirectoryNode" />
               <item name="renderer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
+              <item name="math" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
+              <item name="math" type="462c0819:PsiDirectoryNode" />
+              <item name="numericalObjects" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
@@ -457,10 +545,11 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="141680000" />
+    <option name="totallyTimeSpent" value="143088000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -528,8 +617,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/Camera.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/renderer/image/Image.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/renderer/rasterizer/PointRasterizer.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/window/Screen.java" />
     <entry file="file://$PROJECT_DIR$/src/test/java/math/Matrix4Test.java">
@@ -677,22 +764,6 @@
           <caret line="202" column="26" selection-start-line="202" selection-start-column="26" selection-end-line="202" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/Camera.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="42" lean-forward="true" selection-start-line="28" selection-start-column="42" selection-end-line="28" selection-end-column="42" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3128#3129#0" expanded="true" />
-            <element signature="e#3152#3153#0" expanded="true" />
-            <element signature="e#3185#3186#0" expanded="true" />
-            <element signature="e#3207#3208#0" expanded="true" />
-            <element signature="e#3240#3241#0" expanded="true" />
-            <element signature="e#3262#3263#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -910,13 +981,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/math/numericalObjects/Vector3.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/math/numericalObjects/Vector4.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -981,6 +1045,55 @@
           <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/AmbientLight.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+          <folding>
+            <element signature="e#171#172#0" expanded="true" />
+            <element signature="e#181#182#0" expanded="true" />
+            <element signature="e#251#252#0" expanded="true" />
+            <element signature="e#280#281#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/Camera.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/math/numericalObjects/Vector3.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="94" column="82" selection-start-line="94" selection-start-column="82" selection-end-line="94" selection-end-column="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/PointLight.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="27" column="44" selection-start-line="27" selection-start-column="44" selection-end-line="27" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#248#249#0" expanded="true" />
+            <element signature="e#273#274#0" expanded="true" />
+            <element signature="e#327#328#0" expanded="true" />
+            <element signature="e#362#363#0" expanded="true" />
+            <element signature="e#991#992#0" expanded="true" />
+            <element signature="e#1052#1053#0" expanded="true" />
+            <element signature="e#1071#1072#0" expanded="true" />
+            <element signature="e#1107#1108#0" expanded="true" />
+            <element signature="e#1132#1133#0" expanded="true" />
           </folding>
         </state>
       </provider>
