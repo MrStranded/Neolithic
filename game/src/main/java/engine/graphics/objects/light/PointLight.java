@@ -7,6 +7,7 @@ import engine.math.numericalObjects.Vector3;
 public class PointLight extends MoveableObject {
 
 	private RGBA color;
+	private float intensity = 1f;
 
 	public PointLight(RGBA color) {
 		this.color = color;
@@ -38,5 +39,12 @@ public class PointLight extends MoveableObject {
 	}
 	public void setColor(RGBA color) {
 		this.color = color;
+	}
+
+	public float getIntensity() {
+		return intensity;
+	}
+	public void setIntensity(float intensity) {
+		this.intensity = intensity;
 	}
 }

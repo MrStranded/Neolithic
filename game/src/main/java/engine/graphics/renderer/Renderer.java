@@ -104,8 +104,8 @@ public class Renderer {
 	private void initializeUniforms() {
 
 		try {
-			shaderProgram.createUniform("viewMatrix");
-			shaderProgram.createUniform("worldMatrix");
+			shaderProgram.createUniform("modelViewMatrix");
+			shaderProgram.createUniform("projectionMatrix");
 			shaderProgram.createUniform("textureSampler");
 			shaderProgram.createUniform("color");
 			shaderProgram.createUniform("colorOnly");
@@ -191,13 +191,13 @@ public class Renderer {
 		shaderProgram.bind();
 
 		// upload projection matrix
-		shaderProgram.setUniform("viewMatrix", projectionMatrix.times(camera.getViewMatrix()));
+		shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 		// set used texture (id = 0)
 		shaderProgram.setUniform("textureSampler", 0);
 
 		for (GraphicalObject object : objects) {
 			Mesh mesh = object.getMesh();
-			shaderProgram.setUniform("worldMatrix", object.getWorldMatrix());
+			shaderProgram.setUniform("modelViewMatrix", camera.getViewMatrix().times(object.getWorldMatrix()));
 			shaderProgram.setUniform("color", mesh.getColor());
 			shaderProgram.setUniform("colorOnly", mesh.hasTexture()? 0 : 1);
 			object.render();

@@ -88,7 +88,6 @@ public class Vector3 {
 	}
 
 	public Vector3 normalize() {
-
 		double length = length();
 
 		if (length == 0) {
@@ -98,6 +97,7 @@ public class Vector3 {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			return this;
 		}
 
 		return new Vector3(x/length, y/length, z/length);
