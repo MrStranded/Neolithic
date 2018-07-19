@@ -13,7 +13,6 @@ public class Material {
 	private Texture texture;
 
 	public Material() {
-
 		ambientStrength = new RGBA(1,1,1,1);
 		diffuseStrength = new RGBA(1,1,1,1);
 		reflectanceStrength = new RGBA(1,1,1,1);

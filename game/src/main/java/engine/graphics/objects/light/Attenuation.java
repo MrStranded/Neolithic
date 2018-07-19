@@ -36,7 +36,7 @@ public class Attenuation {
 		return new Attenuation(
 				1f,
 				0.1f,
-				0.1f
+				0.01f
 		);
 	}
 

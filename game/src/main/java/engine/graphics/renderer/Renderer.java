@@ -1,5 +1,6 @@
 package engine.graphics.renderer;
 
+import engine.graphics.objects.light.AmbientLight;
 import engine.graphics.objects.light.Attenuation;
 import engine.graphics.objects.light.PointLight;
 import engine.graphics.renderer.color.RGBA;
@@ -12,6 +13,7 @@ import engine.graphics.objects.Camera;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.models.Texture;
 import engine.graphics.window.Window;
+import engine.math.numericalObjects.Vector4;
 import load.OBJLoader;
 import load.StringLoader;
 import load.TextureLoader;
@@ -37,6 +39,7 @@ public class Renderer {
 	private GraphicalObject[] objects;
 	private PointLight pointLight;
 	private Camera camera;
+	private AmbientLight ambientLight;
 
 	private MouseInput mouse;
 	private KeyboardInput keyboard;
@@ -89,7 +92,9 @@ public class Renderer {
 
 		//objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		try {
-			objects[0] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
+			//objects[0] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
+			//objects[0].getMesh().randomizeTextureCoordinates();
+			objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -98,13 +103,15 @@ public class Renderer {
 		objects[0].rotate(0,0,Math.PI/8);
 
 		objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[1].scale(100,100,100);
-		objects[1].setPosition(0,0,-5000);
+		//objects[1].scale(100,100,100);
+		objects[1].setPosition(0,0,-5);
 		objects[1].setColor(1,1,0);
 
-		pointLight = new PointLight(1f,1f,1f);
-		//pointLight.setAttenuation(Attenuation.FAR());
-		pointLight.setPosition(0,0,-5000);
+		pointLight = new PointLight(0.875,1,0.75);
+		pointLight.setAttenuation(Attenuation.CONSTANT());
+		pointLight.setPosition(0,0,-5);
+
+		ambientLight = new AmbientLight(0.5,0.25,0.25);
 	}
 
 	private void initializeUniforms() {
@@ -115,7 +122,6 @@ public class Renderer {
 			shaderProgram.createUniform("color");
 			shaderProgram.createUniform("ambientLight");
 			shaderProgram.createUniform("specularPower");
-			shaderProgram.createUniform("cameraPosition");
 
 			shaderProgram.createPointLightUniform("pointLight");
 			shaderProgram.createMaterialUniform("material");
@@ -152,7 +158,6 @@ public class Renderer {
 	// ###################################################################################
 
 	public void render() {
-
 		double angleStep = 0.0025d;
 		angle += angleStep;
 		if (angle > Math.PI*2d) {
@@ -162,6 +167,7 @@ public class Renderer {
 		objects[0].rotateY(angleStep);
 		objects[1].rotateYAroundOrigin(-angleStep);
 		pointLight.rotateYAroundOrigin(-angleStep);
+		camera.rotateYaw(-angleStep);
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
 			camera.rotateYaw(-0.01d);
@@ -208,10 +214,15 @@ public class Renderer {
 		// set point light uniforms
 		pointLight.actualizeViewPosition(camera.getViewMatrix());
 		shaderProgram.setUniform("pointLight",pointLight);
-		// set camera position
-		shaderProgram.setUniform("cameraPosition",camera.getRotation());
 		// set ambient light
-		shaderProgram.setUniform("ambientLight",new RGBA(1,1,1,1));
+		shaderProgram.setUniform("ambientLight",ambientLight.getColor());
+
+		double angleInDegrees = pointLight.getRotation().getY()*180/Math.PI;
+		if (Math.abs(angleInDegrees - 180) < 0.2) {
+			System.out.println(angleInDegrees);
+			System.out.println("Pointlight: "+pointLight.getViewPosition());
+			System.out.println("Sun:        "+(camera.getViewMatrix().times(objects[1].getWorldMatrix().times(new Vector4(objects[1].getPosition())))).extractVector3());
+		}
 
 		for (GraphicalObject object : objects) {
 			Mesh mesh = object.getMesh();

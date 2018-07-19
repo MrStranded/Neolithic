@@ -176,6 +176,24 @@ public class Mesh {
 	}
 
 	// ###################################################################################
+	// ################################ Modification #####################################
+	// ###################################################################################
+
+	public void setZValues(float z) {
+		for (int i=2; i<vertices.length; i+=3) {
+			vertices[i] = z;
+		}
+		registerData();
+	}
+
+	public void randomizeTextureCoordinates() {
+		for (int i=0; i<textureCoordinates.length; i++) {
+			textureCoordinates[i] = (float) Math.random();
+		}
+		registerData();
+	}
+
+	// ###################################################################################
 	// ################################ Clean Up #########################################
 	// ###################################################################################
 
@@ -197,14 +215,6 @@ public class Mesh {
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
-
-	public void setZValues(float z) {
-
-		for (int i=2; i<vertices.length; i+=3) {
-			vertices[i] = z;
-		}
-		registerData();
-	}
 
 	public void setColor(float r, float g, float b) {
 		color = new RGBA(r,g,b);

@@ -73,6 +73,10 @@ public class PointLight extends MoveableObject {
 	public Vector3 getPosition() {
 		return position;
 	}
+
+	public Vector3 getRotation() {
+		return rotation;
+	}
 	
 	public Vector3 getViewPosition() {
 		return viewPosition;
