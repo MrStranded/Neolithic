@@ -169,10 +169,12 @@ public class ShaderProgram {
 		setUniform(uniformName + ".color", pointLight.getColor());
 		setUniform(uniformName + ".position", pointLight.getViewPosition());
 		setUniform(uniformName + ".intensity", pointLight.getIntensity());
+
 		Attenuation attenuation = pointLight.getAttenuation();
 		setUniform(uniformName + ".attenuation.constant", attenuation.getConstant());
 		setUniform(uniformName + ".attenuation.linear", attenuation.getLinear());
 		setUniform(uniformName + ".attenuation.exponent", attenuation.getExponent());
+
 		setUniform("specularPower",4);
 	}
 
@@ -180,7 +182,8 @@ public class ShaderProgram {
 		setUniform(uniformName + ".ambient", material.getAmbientStrength());
 		setUniform(uniformName + ".diffuse", material.getDiffuseStrength());
 		setUniform(uniformName + ".reflectance", material.getReflectanceStrength());
-		setUniform(uniformName + ".specular", material.getSpecularPower());
+		setUniform(uniformName + ".specular", material.getSpecularStrength());
+
 		setUniform(uniformName + ".hasTexture", material.hasTexture() ? 1 : 0);
 	}
 

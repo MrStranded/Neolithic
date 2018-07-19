@@ -7,8 +7,7 @@ public class Material {
 	private RGBA ambientStrength;
 	private RGBA diffuseStrength;
 	private RGBA reflectanceStrength;
-
-	private float specularPower;
+	private RGBA specularStrength;
 
 	private Texture texture;
 
@@ -16,8 +15,7 @@ public class Material {
 		ambientStrength = new RGBA(1,1,1,1);
 		diffuseStrength = new RGBA(1,1,1,1);
 		reflectanceStrength = new RGBA(1,1,1,1);
-
-		specularPower = 1f;
+		specularStrength = new RGBA(1,1,1,1);
 
 		texture = null;
 	}
@@ -47,11 +45,11 @@ public class Material {
 		this.reflectanceStrength = reflectanceStrength;
 	}
 
-	public float getSpecularPower() {
-		return specularPower;
+	public RGBA getSpecularStrength() {
+		return specularStrength;
 	}
-	public void setSpecularPower(float specularPower) {
-		this.specularPower = specularPower;
+	public void setSpecularStrength(RGBA specularStrength) {
+		this.specularStrength = specularStrength;
 	}
 
 	public Texture getTexture() {

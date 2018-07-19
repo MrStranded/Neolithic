@@ -1,5 +1,7 @@
 #version 130
 
+// ----------- structures
+
 struct Attenuation
 {
     float constant;
@@ -25,22 +27,33 @@ struct Material
     int hasTexture;
 };
 
+// ----------- in / out
+
 in vec3 outPosition;
 in vec3 outNormal;
 in vec2 outTextureCoordinates;
 
 out vec4 fragmentColor;
 
+// ----------- uniforms
+
 uniform sampler2D textureSampler;
 uniform vec4 color;
+
 uniform vec4 ambientLight;
-uniform float specularPower;
+
 uniform Material material;
+
 uniform PointLight pointLight;
+uniform float specularPower;
+
+// ----------- globals
 
 vec4 ambientC;
 vec4 diffuseC;
 vec4 specularC;
+
+// ----------- methods
 
 void setupColors(Material material, vec2 textureCoordinates) {
     if (material.hasTexture == 1) {
@@ -65,12 +78,23 @@ vec4 calculatePointLight(PointLight light, vec3 position, vec3 normal) {
     diffuseColor = diffuseC * light.color * light.intensity * diffuseFactor;
 
     // Specular Light
-    vec3 cameraDirection = normalize(position); // gives camera direction because camera always sits in position 0
+    vec3 cameraDirection = normalize(-position); // gives camera direction because camera always sits in position 0
     vec3 fromLightSource = -toLightSource;
-    vec3 reflectedLight = normalize(reflect(fromLightSource, normal));
+    vec3 reflectedLight = normalize(reflect(normal, fromLightSource));
     float specularFactor = max(dot(cameraDirection, reflectedLight), 0.0);
     specularFactor = pow(specularFactor, specularPower);
     specularColor = specularC * light.color * light.intensity * specularFactor * material.reflectance;
+
+    // this proves that somehow specularColor becomes negative
+    if (specularColor.x < 0.0) {
+        specularColor.x = 0.0;
+    }
+    if (specularColor.y < 0.0) {
+        specularColor.y = 0.0;
+    }
+    if (specularColor.z < 0.0) {
+        specularColor.z = 0.0;
+    }
 
     // Attenuation
     float distance = length(lightDirection);
@@ -83,12 +107,14 @@ vec4 calculatePointLight(PointLight light, vec3 position, vec3 normal) {
     return specularColor - specularColor + attenuationInverse - attenuationInverse + diffuseColor - diffuseColor + specularColor;
 }
 
+// ----------- main
+
 void main() {
     setupColors(material, outTextureCoordinates);
 
     vec4 diffuseSpecularComposition = calculatePointLight(pointLight, outPosition, outNormal);
 
-    fragmentColor = color * (ambientC * ambientLight + diffuseSpecularComposition);
-    //vec4 tmp = color * ambientC * ambientLight + diffuseSpecularComposition;
-    //fragmentColor = tmp - tmp + diffuseSpecularComposition;
+    //fragmentColor = color * (ambientC * ambientLight + diffuseSpecularComposition);
+    vec4 tmp = color * ambientC * ambientLight + diffuseSpecularComposition;
+    fragmentColor = tmp - tmp + ambientC + diffuseSpecularComposition;
 }
