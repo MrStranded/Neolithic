@@ -101,13 +101,15 @@ public class Renderer {
 		objects[0].setTexture(grasTexture);
 		objects[0].scale(3,3,3);
 		objects[0].rotate(0,0,Math.PI/8);
+		objects[0].getMesh().getMaterial().setSpecularPower(4);
+		objects[0].getMesh().getMaterial().setReflectanceStrength(new RGBA(0,0,1,0));
 
 		objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		objects[1].scale(100,100,100);
 		objects[1].setPosition(0,0,-5000);
 		objects[1].setColor(1,1,0);
 
-		pointLight = new PointLight(0.875,1,0.75);
+		pointLight = new PointLight(1,1,1);
 		pointLight.setAttenuation(Attenuation.CONSTANT());
 		pointLight.setPosition(0,0,-5000);
 

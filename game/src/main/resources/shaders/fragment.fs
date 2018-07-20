@@ -58,9 +58,11 @@ void setupColors(Material material, vec2 textureCoordinates) {
     if (material.hasTexture == 1) {
         ambientC = texture(textureSampler, textureCoordinates);
         diffuseC = ambientC;
+        specularC = ambientC;
     } else {
         ambientC = material.ambient;
         diffuseC = material.diffuse;
+        specularC = material.reflectance;
     }
 }
 
