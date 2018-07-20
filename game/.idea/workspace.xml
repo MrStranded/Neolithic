@@ -12,11 +12,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Renderer.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Renderer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="117" column="39" selection-start-line="117" selection-start-column="39" selection-end-line="117" selection-end-column="39" />
+            <state relative-caret-position="60">
+              <caret line="88" column="99" selection-start-line="88" selection-start-column="99" selection-end-line="88" selection-end-column="99" />
               <folding>
                 <element signature="e#7966#7967#0" expanded="true" />
                 <element signature="e#7998#7999#0" expanded="true" />
@@ -50,11 +50,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MeshGenerator.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MeshGenerator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/MeshGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="343">
-              <caret line="102" column="41" selection-start-line="102" selection-start-column="41" selection-end-line="102" selection-end-column="41" />
+            <state relative-caret-position="358">
+              <caret line="105" column="75" selection-start-line="105" selection-start-column="75" selection-end-line="105" selection-end-column="75" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -244,8 +244,8 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/renderer/shaders/ShaderProgram.java" />
         <option value="$PROJECT_DIR$/src/main/resources/shaders/fragment.fs" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/GraphicalObject.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/MeshGenerator.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/MeshGenerator.java" />
       </list>
     </option>
   </component>
@@ -698,7 +698,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="174927000" />
+    <option name="totallyTimeSpent" value="177393000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -1207,25 +1207,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/MeshGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="102" column="41" selection-start-line="102" selection-start-column="41" selection-end-line="102" selection-end-column="41" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="117" column="39" selection-start-line="117" selection-start-column="39" selection-end-line="117" selection-end-column="39" />
+        <state relative-caret-position="60">
+          <caret line="88" column="99" selection-start-line="88" selection-start-column="99" selection-end-line="88" selection-end-column="99" />
           <folding>
             <element signature="e#7966#7967#0" expanded="true" />
             <element signature="e#7998#7999#0" expanded="true" />
             <element signature="e#8021#8022#0" expanded="true" />
             <element signature="e#8041#8042#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/MeshGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="105" column="75" selection-start-line="105" selection-start-column="75" selection-end-line="105" selection-end-column="75" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

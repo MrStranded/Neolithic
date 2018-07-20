@@ -54,18 +54,20 @@ public class MeshGenerator {
 
 	public static Mesh createCube(boolean foldedInside) {
 		float[] vertices = {
-				-0.5f, 0.5f, -0.5f, // top left back    - 0
-				0.5f, 0.5f, -0.5f, // top right back    - 1
-				-0.5f, 0.5f, 0.5f, // top left front    - 2
-				0.5f, 0.5f, 0.5f, // top right front    - 3
-				-0.5f, -0.5f, 0.5f, // bottom left front- 4
-				0.5f, -0.5f, 0.5f, // bottom right front- 5
-				-0.5f, -0.5f, -0.5f, // bottom left back- 6
-				0.5f, -0.5f, -0.5f, // bottom right back- 7
-				0.5f, 0.5f, -0.5f, // top right back    - 8
-				0.5f, -0.5f, -0.5f, // bottom right back- 9
-				-0.5f, 0.5f, -0.5f, // top left back    - 10
-				-0.5f, -0.5f, -0.5f // bottom left back - 11
+				-1, 1, -1, // top left back
+				-1, -1, -1, // bottom left back
+				-1, 1, -1, // top left back
+				-1, 1, 1, // top left front
+				-1, -1, 1, // bottom left front
+				-1, -1, -1, // bottom left back
+				1, 1, -1, // top right back
+				1, 1, 1, // top right front
+				1, -1, 1, // bottom right front
+				1, -1, -1, // bottom right back
+				1, 1, -1, // top right back
+				1, -1, -1, // bottom right back
+				-1, 1, -1, // top left back
+				-1, -1, -1 // bottom left back
 		};
 
 		float[] normals = new float[vertices.length];
@@ -84,12 +86,20 @@ public class MeshGenerator {
 		}
 
 		int[] indices = {
-				0, 2, 1, 1, 2, 3, // top
-				2, 4, 3, 3, 4, 5, // front
-				4, 6, 5, 5, 6, 7, // bottom
-				3, 5, 8, 8, 5, 9, // right
-				8, 9, 10, 9, 11, 10, // back
-				2, 10, 11, 11, 4, 2 // left
+				0, 1, 3, 1, 4, 3, // left
+				2, 3, 6, 3, 7, 6, // top
+				3, 4, 7, 4, 8, 7, // front
+				4, 5, 8, 5, 9, 8, // bottom
+				7, 8, 10, 8, 11, 10, // right
+				10, 11, 12, 11, 13, 12 // back
+		};
+
+		float[] textureCoordinates = {
+				0, 0.25f, 0, 0.5f, // 0,1
+				0.25f, 0f, 0.25f, 0.25f, 0.25f, 0.5f, 0.25f, 0.75f, // 2,3,4,5
+				0.5f, 0f, 0.5f, 0.25f, 0.5f, 0.5f, 0.5f, 0.75f, // 6,7,8,9
+				0.75f, 0.25f, 0.75f, 0.5f, // 10,11
+				1f, 0.25f, 1f, 0.5f // 12,13
 		};
 
 		if (foldedInside) {
@@ -103,12 +113,6 @@ public class MeshGenerator {
 				normals[i] = -normals[i];
 			}
 		}
-
-		float[] textureCoordinates = {
-				0, 0, 1, 0, 0, 1, 1, 1,
-				0, 0, 1, 0, 0, 1, 1, 1,
-				0, 1, 0, 0, 1, 1, 1, 0
-		};
 
 		return new Mesh(vertices, indices, normals, textureCoordinates);
 	}
