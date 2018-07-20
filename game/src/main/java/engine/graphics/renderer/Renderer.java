@@ -165,7 +165,8 @@ public class Renderer {
 
 		objects[0].rotateY(angleStep);
 		objects[1].rotateYAroundOrigin(-angleStep);
-		pointLight.rotateYAroundOrigin(-angleStep);
+		//pointLight.rotateYAroundOrigin(-angleStep);
+		pointLight.setPosition(objects[1].getPosition());
 		camera.rotateYaw(-angleStep);
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
@@ -216,9 +217,10 @@ public class Renderer {
 		// set ambient light
 		shaderProgram.setUniform("ambientLight",ambientLight.getColor());
 
-		double angleInDegrees = pointLight.getRotation().getY()*180/Math.PI;
+		double angleInDegrees = angle*180/Math.PI;
 		if (Math.abs(angleInDegrees - 180) < 0.2) {
 			System.out.println(angleInDegrees);
+			System.out.println("diff: "+pointLight.getPosition().minus(objects[1].getPosition()));
 			System.out.println("Pointlight: "+pointLight.getViewPosition());
 			System.out.println("Sun:        "+(camera.getViewMatrix().times(objects[1].getWorldMatrix().times(new Vector4(objects[1].getPosition())))).extractVector3());
 		}
