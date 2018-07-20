@@ -28,4 +28,8 @@ public class Camera extends MoveableCamera {
 	public Vector3 getRotation() {
 		return new Vector3(pitch+tilt,yaw,0);
 	}
+
+	public double getRadius() {
+		return radius;
+	}
 }

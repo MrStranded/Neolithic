@@ -22,6 +22,8 @@ struct Material
 {
     vec4 ambient;
     vec4 diffuse;
+    vec4 reflectance;
+    float specularPower;
     int hasTexture;
 };
 
@@ -48,6 +50,7 @@ uniform PointLight pointLight;
 
 vec4 ambientC;
 vec4 diffuseC;
+vec4 specularC;
 
 // ----------- methods
 
@@ -63,12 +66,21 @@ void setupColors(Material material, vec2 textureCoordinates) {
 
 vec4 calculatePointLight(PointLight light, vec3 position, vec3 normal) {
     vec4 diffuseColor = vec4(0, 0, 0, 0);
+    vec4 specularColor = vec4(0, 0, 0, 0);
 
     // Diffuse Light
     vec3 lightDirection = light.position - position;
     vec3 toLightSource  = normalize(lightDirection);
     float diffuseFactor = max(dot(normal, toLightSource ), 0.0);
     diffuseColor = diffuseC * light.color * light.intensity * diffuseFactor;
+
+    // Specular Light
+    vec3 cameraDirection = normalize(-position); // gives camera direction because camera always sits in position 0
+    vec3 fromLightSource = -toLightSource;
+    vec3 reflectedLight = normalize(reflect(fromLightSource, normal));
+    float specularFactor = max(dot(cameraDirection, reflectedLight), 0.0);
+    specularFactor = pow(specularFactor, material.specularPower);
+    specularColor = specularC * light.color * light.intensity * specularFactor * material.reflectance;
 
     // Attenuation
     float distance = length(lightDirection);
@@ -77,7 +89,7 @@ vec4 calculatePointLight(PointLight light, vec3 position, vec3 normal) {
         light.attenuation.linear * distance +
         light.attenuation.exponent * distance * distance;
 
-    return diffuseColor / attenuationInverse;
+    return (diffuseColor + specularColor) / attenuationInverse;
 }
 
 // ----------- main

@@ -103,13 +103,13 @@ public class Renderer {
 		objects[0].rotate(0,0,Math.PI/8);
 
 		objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		//objects[1].scale(100,100,100);
-		objects[1].setPosition(0,0,-5);
+		objects[1].scale(100,100,100);
+		objects[1].setPosition(0,0,-5000);
 		objects[1].setColor(1,1,0);
 
 		pointLight = new PointLight(0.875,1,0.75);
 		pointLight.setAttenuation(Attenuation.CONSTANT());
-		pointLight.setPosition(0,0,-5);
+		pointLight.setPosition(0,0,-5000);
 
 		ambientLight = new AmbientLight(0.5,0.25,0.25);
 	}
@@ -165,9 +165,9 @@ public class Renderer {
 
 		objects[0].rotateY(angleStep);
 		objects[1].rotateYAroundOrigin(-angleStep);
-		//pointLight.rotateYAroundOrigin(-angleStep);
-		pointLight.setPosition(objects[1].getPosition());
-		camera.rotateYaw(-angleStep);
+		pointLight.rotateYAroundOrigin(-angleStep);
+		//pointLight.setPosition(objects[1].getPosition());
+		//camera.rotateYaw(-angleStep);
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
 			camera.rotateYaw(-0.01d);
@@ -188,10 +188,10 @@ public class Renderer {
 			camera.rotatePitch(0.01d);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_R)) { // go closer
-			camera.changeRadius(-0.05d);
+			camera.changeRadius(-camera.getRadius()/100d);
 		}
-		if (keyboard.isPressed(GLFW.GLFW_KEY_F)) { // go farther
-			camera.changeRadius(0.05d);
+		if (keyboard.isPressed(GLFW.GLFW_KEY_F)) { // go farther away
+			camera.changeRadius(camera.getRadius()/100d);
 		}
 
 		if (keyboard.isClicked(GLFW.GLFW_KEY_T)) { // troll tex
