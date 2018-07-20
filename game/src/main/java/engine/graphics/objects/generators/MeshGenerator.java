@@ -14,8 +14,11 @@ public class MeshGenerator {
 	private static final float ANGLE = 2f * (float) Math.PI / 5f;
 	private static final float HALFANGLE = ANGLE / 2f;
 
-	public static Mesh createQuad() {
+	// ###################################################################################
+	// ################################ Quad #############################################
+	// ###################################################################################
 
+	public static Mesh createQuad() {
 		float[] vertices = {
 				-0.5f,  -0.5f,  0,  // left bottom
 				0.5f,   -0.5f,  0,  // right bottom
@@ -35,13 +38,6 @@ public class MeshGenerator {
 				1,3,2
 		};
 
-		float[] colors = {
-				0.0f, 1.0f, 0.0f,
-				1.0f, 0.0f, 0.0f,
-				0.0f, 0.0f, 1.0f,
-				1.0f, 1.0f, 1.0f,
-		};
-
 		float[] textureCoordinates = {
 				0f, 1f,
 				1f, 1f,
@@ -52,8 +48,76 @@ public class MeshGenerator {
 		return new Mesh(vertices, indices, normals, textureCoordinates);
 	}
 
-	public static Mesh createIcosahedron() {
+	// ###################################################################################
+	// ################################ Cube #############################################
+	// ###################################################################################
 
+	public static Mesh createCube(boolean foldedInside) {
+		float[] vertices = {
+				-0.5f, 0.5f, -0.5f, // top left back    - 0
+				0.5f, 0.5f, -0.5f, // top right back    - 1
+				-0.5f, 0.5f, 0.5f, // top left front    - 2
+				0.5f, 0.5f, 0.5f, // top right front    - 3
+				-0.5f, -0.5f, 0.5f, // bottom left front- 4
+				0.5f, -0.5f, 0.5f, // bottom right front- 5
+				-0.5f, -0.5f, -0.5f, // bottom left back- 6
+				0.5f, -0.5f, -0.5f, // bottom right back- 7
+				0.5f, 0.5f, -0.5f, // top right back    - 8
+				0.5f, -0.5f, -0.5f, // bottom right back- 9
+				-0.5f, 0.5f, -0.5f, // top left back    - 10
+				-0.5f, -0.5f, -0.5f // bottom left back - 11
+		};
+
+		float[] normals = new float[vertices.length];
+
+		for (int i=0; i<normals.length/3; i++) {
+
+			Vector3 normal = new Vector3(vertices[i*3 + 0], vertices[i*3 + 1], vertices[i*3 + 2]);
+			try {
+				normal = normal.normalize();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			normals[i*3 + 0] = (float) normal.getX();
+			normals[i*3 + 1] = (float) normal.getY();
+			normals[i*3 + 2] = (float) normal.getZ();
+		}
+
+		int[] indices = {
+				0, 2, 1, 1, 2, 3, // top
+				2, 4, 3, 3, 4, 5, // front
+				4, 6, 5, 5, 6, 7, // bottom
+				3, 5, 8, 8, 5, 9, // right
+				8, 9, 10, 9, 11, 10, // back
+				2, 10, 11, 11, 4, 2 // left
+		};
+
+		if (foldedInside) {
+			for (int i=0; i<indices.length/3; i++) {
+				int tmp = indices[i*3 + 1];
+				indices[i*3 + 1] = indices[i*3 + 2];
+				indices[i*3 + 2] = tmp;
+			}
+
+			for (int i=0; i<normals.length; i++) {
+				normals[i] = -normals[i];
+			}
+		}
+
+		float[] textureCoordinates = {
+				0, 0, 1, 0, 0, 1, 1, 1,
+				0, 0, 1, 0, 0, 1, 1, 1,
+				0, 1, 0, 0, 1, 1, 1, 0
+		};
+
+		return new Mesh(vertices, indices, normals, textureCoordinates);
+	}
+
+	// ###################################################################################
+	// ################################ Icosahedron ######################################
+	// ###################################################################################
+
+	public static Mesh createIcosahedron() {
 		// ------------------------------------- vertices
 		float[] vertices = new float[12*3];
 

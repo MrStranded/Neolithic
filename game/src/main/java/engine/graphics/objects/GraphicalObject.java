@@ -10,6 +10,7 @@ public class GraphicalObject extends MoveableObject {
 
 	private Mesh mesh;
 	private boolean useDepthTest = true;
+	private boolean affectedByLight = true;
 
 	public GraphicalObject(Mesh mesh) {
 
@@ -69,5 +70,12 @@ public class GraphicalObject extends MoveableObject {
 	}
 	public void setUseDepthTest(boolean useDepthTest) {
 		this.useDepthTest = useDepthTest;
+	}
+
+	public boolean isAffectedByLight() {
+		return affectedByLight;
+	}
+	public void setAffectedByLight(boolean affectedByLight) {
+		this.affectedByLight = affectedByLight;
 	}
 }

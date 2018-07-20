@@ -13,6 +13,7 @@ import engine.graphics.objects.Camera;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.models.Texture;
 import engine.graphics.window.Window;
+import engine.math.numericalObjects.Vector3;
 import engine.math.numericalObjects.Vector4;
 import load.OBJLoader;
 import load.StringLoader;
@@ -32,7 +33,7 @@ public class Renderer {
 	private ShaderProgram shaderProgram;
 
 	private double zNear = 0.001d;
-	private double zFar = 10000d;
+	private double zFar = 15000d;
 
 	private Matrix4 projectionMatrix;
 
@@ -85,16 +86,17 @@ public class Renderer {
 	private void initializeVertexObjects() {
 
 		Texture trollFace = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png");
-		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/cube_texture.png");
+		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/space.png");
 		Texture grasTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
 
-		objects = new GraphicalObject[2];
+		objects = new GraphicalObject[3];
 
 		//objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		try {
 			//objects[0] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
 			//objects[0].getMesh().randomizeTextureCoordinates();
 			objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron());
+			//objects[0] = new GraphicalObject(MeshGenerator.createCube(true));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -108,6 +110,12 @@ public class Renderer {
 		objects[1].scale(100,100,100);
 		objects[1].setPosition(0,0,-5000);
 		objects[1].setColor(1,1,0);
+		objects[1].setAffectedByLight(false);
+
+		objects[2] = new GraphicalObject(MeshGenerator.createCube(true));
+		objects[2].setTexture(cubeTexture);
+		objects[2].setAffectedByLight(false);
+		objects[2].scale(10000,10000,10000);
 
 		pointLight = new PointLight(1,1,1);
 		pointLight.setAttenuation(Attenuation.CONSTANT());
@@ -122,6 +130,7 @@ public class Renderer {
 			shaderProgram.createUniform("projectionMatrix");
 			shaderProgram.createUniform("textureSampler");
 			shaderProgram.createUniform("color");
+			shaderProgram.createUniform("affectedByLight");
 			shaderProgram.createUniform("ambientLight");
 
 			shaderProgram.createPointLightUniform("pointLight");
@@ -168,8 +177,6 @@ public class Renderer {
 		objects[0].rotateY(angleStep);
 		objects[1].rotateYAroundOrigin(-angleStep);
 		pointLight.rotateYAroundOrigin(-angleStep);
-		//pointLight.setPosition(objects[1].getPosition());
-		//camera.rotateYaw(-angleStep);
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
 			camera.rotateYaw(-0.01d);
@@ -203,6 +210,9 @@ public class Renderer {
 			objects[0].setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png"));
 		}
 
+		//Vector3 cameraPosition = camera.getViewMatrix().times(new Vector4(0,0,0,1)).extractVector3();
+		//objects[2].setPosition(cameraPosition);
+
 		long t = System.nanoTime();
 
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -219,18 +229,11 @@ public class Renderer {
 		// set ambient light
 		shaderProgram.setUniform("ambientLight",ambientLight.getColor());
 
-		double angleInDegrees = angle*180/Math.PI;
-		if (Math.abs(angleInDegrees - 180) < 0.2) {
-			System.out.println(angleInDegrees);
-			System.out.println("diff: "+pointLight.getPosition().minus(objects[1].getPosition()));
-			System.out.println("Pointlight: "+pointLight.getViewPosition());
-			System.out.println("Sun:        "+(camera.getViewMatrix().times(objects[1].getWorldMatrix().times(new Vector4(0,0,0,1)))).extractVector3());
-		}
-
 		for (GraphicalObject object : objects) {
 			Mesh mesh = object.getMesh();
 			shaderProgram.setUniform("modelViewMatrix", camera.getViewMatrix().times(object.getWorldMatrix()));
 			shaderProgram.setUniform("color", mesh.getColor());
+			shaderProgram.setUniform("affectedByLight", object.isAffectedByLight() ? 1 : 0);
 			shaderProgram.setUniform("material",object.getMesh().getMaterial());
 			object.render();
 		}

@@ -39,11 +39,11 @@ out vec4 fragmentColor;
 
 uniform sampler2D textureSampler;
 uniform vec4 color;
-
-uniform vec4 ambientLight;
+uniform int affectedByLight;
 
 uniform Material material;
 
+uniform vec4 ambientLight;
 uniform PointLight pointLight;
 
 // ----------- globals
@@ -99,7 +99,11 @@ vec4 calculatePointLight(PointLight light, vec3 position, vec3 normal) {
 void main() {
     setupColors(material, outTextureCoordinates);
 
-    vec4 diffuseSpecularComposition = calculatePointLight(pointLight, outPosition, outNormal);
+    if (affectedByLight == 1) {
+        vec4 diffuseSpecularComposition = calculatePointLight(pointLight, outPosition, outNormal);
 
-    fragmentColor = color * (ambientC * ambientLight + diffuseSpecularComposition);
+        fragmentColor = color * (ambientC * ambientLight + diffuseSpecularComposition);
+    } else {
+        fragmentColor = color * ambientC;
+    }
 }
