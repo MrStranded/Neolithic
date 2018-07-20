@@ -42,7 +42,7 @@ public class PointLight extends MoveableObject {
 	// ###################################################################################
 
 	public void actualizeViewPosition(Matrix4 viewMatrix) {
-		viewPosition = viewMatrix.times(matrix.times(new Vector4(position))).extractVector3();
+		viewPosition = viewMatrix.times(getWorldMatrix().times(new Vector4(0,0,0,1))).extractVector3();
 	}
 
 	// ###################################################################################

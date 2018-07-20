@@ -52,10 +52,6 @@ public class GraphicalObject extends MoveableObject {
 		return mesh;
 	}
 
-	public Matrix4 getWorldMatrix() {
-		return matrix;
-	}
-
 	public Vector3 getPosition() {
 		return position;
 	}

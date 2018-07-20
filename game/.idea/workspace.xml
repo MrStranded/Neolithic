@@ -12,11 +12,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Renderer.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Renderer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="388">
-              <caret line="222" column="95" selection-start-line="222" selection-start-column="95" selection-end-line="222" selection-end-column="95" />
+            <state relative-caret-position="418">
+              <caret line="224" column="129" selection-start-line="224" selection-start-column="129" selection-end-line="224" selection-end-column="129" />
               <folding>
                 <element signature="e#7966#7967#0" expanded="true" />
                 <element signature="e#7998#7999#0" expanded="true" />
@@ -30,20 +30,28 @@
       <file leaf-file-name="MoveableObject.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/movement/MoveableObject.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="388">
-              <caret line="59" column="5" selection-start-line="59" selection-start-column="5" selection-end-line="59" selection-end-column="5" />
+            <state relative-caret-position="-107">
+              <caret line="153" column="38" selection-start-line="153" selection-start-column="38" selection-end-line="153" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1642#1643#0" expanded="true" />
+                <element signature="e#1678#1679#0" expanded="true" />
+                <element signature="e#1724#1725#0" expanded="true" />
+                <element signature="e#1755#1756#0" expanded="true" />
+                <element signature="e#2200#2201#0" expanded="true" />
+                <element signature="e#2233#2234#0" expanded="true" />
+                <element signature="e#5267#5268#0" expanded="true" />
+                <element signature="e#5303#5304#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PointLight.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="PointLight.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/PointLight.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="74" column="5" selection-start-line="74" selection-start-column="5" selection-end-line="74" selection-end-column="5" />
+            <state relative-caret-position="133">
+              <caret line="44" column="82" selection-start-line="44" selection-start-column="82" selection-end-line="44" selection-end-column="82" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1121#1122#0" expanded="true" />
@@ -56,8 +64,8 @@
       <file leaf-file-name="GraphicalObject.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/GraphicalObject.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="60" column="5" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
+            <state relative-caret-position="315">
+              <caret line="52" column="5" selection-start-line="52" selection-start-column="5" selection-end-line="52" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -215,7 +223,6 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/math/Transformations.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/AmbientLight.java" />
         <option value="$PROJECT_DIR$/src/test/java/math/Vector3Test.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/GraphicalObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/math/numericalObjects/Vector3.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/Attenuation.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/models/Mesh.java" />
@@ -223,9 +230,10 @@
         <option value="$PROJECT_DIR$/src/main/resources/shaders/vertex.vs" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/models/Material.java" />
         <option value="$PROJECT_DIR$/src/main/resources/shaders/fragment.fs" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/PointLight.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/movement/MoveableObject.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/GraphicalObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/PointLight.java" />
       </list>
     </option>
   </component>
@@ -678,7 +686,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="168210000" />
+    <option name="totallyTimeSpent" value="168932000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -1155,32 +1163,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/GraphicalObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="60" column="5" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/PointLight.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="74" column="5" selection-start-line="74" selection-start-column="5" selection-end-line="74" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1121#1122#0" expanded="true" />
-            <element signature="e#1169#1170#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/movement/MoveableObject.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="59" column="5" selection-start-line="59" selection-start-column="5" selection-end-line="59" selection-end-column="5" />
+        <state relative-caret-position="-107">
+          <caret line="153" column="38" selection-start-line="153" selection-start-column="38" selection-end-line="153" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1642#1643#0" expanded="true" />
+            <element signature="e#1678#1679#0" expanded="true" />
+            <element signature="e#1724#1725#0" expanded="true" />
+            <element signature="e#1755#1756#0" expanded="true" />
+            <element signature="e#2200#2201#0" expanded="true" />
+            <element signature="e#2233#2234#0" expanded="true" />
+            <element signature="e#5267#5268#0" expanded="true" />
+            <element signature="e#5303#5304#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/GraphicalObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="52" column="5" selection-start-line="52" selection-start-column="5" selection-end-line="52" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1189,13 +1193,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="222" column="95" selection-start-line="222" selection-start-column="95" selection-end-line="222" selection-end-column="95" />
+        <state relative-caret-position="418">
+          <caret line="224" column="129" selection-start-line="224" selection-start-column="129" selection-end-line="224" selection-end-column="129" />
           <folding>
             <element signature="e#7966#7967#0" expanded="true" />
             <element signature="e#7998#7999#0" expanded="true" />
             <element signature="e#8021#8022#0" expanded="true" />
             <element signature="e#8041#8042#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/PointLight.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="44" column="82" selection-start-line="44" selection-start-column="82" selection-end-line="44" selection-end-column="82" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1121#1122#0" expanded="true" />
+            <element signature="e#1169#1170#0" expanded="true" />
           </folding>
         </state>
       </provider>

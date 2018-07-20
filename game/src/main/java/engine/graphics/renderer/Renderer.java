@@ -222,7 +222,7 @@ public class Renderer {
 			System.out.println(angleInDegrees);
 			System.out.println("diff: "+pointLight.getPosition().minus(objects[1].getPosition()));
 			System.out.println("Pointlight: "+pointLight.getViewPosition());
-			System.out.println("Sun:        "+(camera.getViewMatrix().times(objects[1].getWorldMatrix().times(new Vector4(objects[1].getPosition())))).extractVector3());
+			System.out.println("Sun:        "+(camera.getViewMatrix().times(objects[1].getWorldMatrix().times(new Vector4(0,0,0,1)))).extractVector3());
 		}
 
 		for (GraphicalObject object : objects) {
