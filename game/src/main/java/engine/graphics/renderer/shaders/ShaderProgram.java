@@ -116,9 +116,7 @@ public class ShaderProgram {
 	public void createMaterialUniform(String uniformName) throws Exception {
 		createUniform(uniformName + ".ambient");
 		createUniform(uniformName + ".diffuse");
-		createUniform(uniformName + ".specular");
 		createUniform(uniformName + ".hasTexture");
-		createUniform(uniformName + ".reflectance");
 	}
 
 	// ###################################################################################
@@ -174,15 +172,11 @@ public class ShaderProgram {
 		setUniform(uniformName + ".attenuation.constant", attenuation.getConstant());
 		setUniform(uniformName + ".attenuation.linear", attenuation.getLinear());
 		setUniform(uniformName + ".attenuation.exponent", attenuation.getExponent());
-
-		setUniform("specularPower",4);
 	}
 
 	public void setUniform(String uniformName, Material material) {
 		setUniform(uniformName + ".ambient", material.getAmbientStrength());
 		setUniform(uniformName + ".diffuse", material.getDiffuseStrength());
-		setUniform(uniformName + ".reflectance", material.getReflectanceStrength());
-		setUniform(uniformName + ".specular", material.getSpecularStrength());
 
 		setUniform(uniformName + ".hasTexture", material.hasTexture() ? 1 : 0);
 	}

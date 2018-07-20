@@ -121,7 +121,6 @@ public class Renderer {
 			shaderProgram.createUniform("textureSampler");
 			shaderProgram.createUniform("color");
 			shaderProgram.createUniform("ambientLight");
-			shaderProgram.createUniform("specularPower");
 
 			shaderProgram.createPointLightUniform("pointLight");
 			shaderProgram.createMaterialUniform("material");
