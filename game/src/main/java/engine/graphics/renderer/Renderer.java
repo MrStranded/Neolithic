@@ -88,6 +88,7 @@ public class Renderer {
 		Texture trollFace = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png");
 		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/space.png");
 		Texture grasTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
+		Texture icoTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/ico_wireframe.png");
 
 		objects = new GraphicalObject[3];
 
@@ -100,7 +101,7 @@ public class Renderer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		objects[0].setTexture(grasTexture);
+		objects[0].setTexture(icoTexture);
 		objects[0].scale(3,3,3);
 		objects[0].rotate(0,0,Math.PI/8);
 		objects[0].getMesh().getMaterial().setSpecularPower(4);
