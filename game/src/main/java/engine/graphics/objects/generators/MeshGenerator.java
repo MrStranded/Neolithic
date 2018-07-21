@@ -119,16 +119,17 @@ public class MeshGenerator {
 			vertices[(17 + i) * 3 + 1] = -HEIGHT;
 		}
 
+		// mids
 		for (int i=0; i<6; i++) {
 			// up - vertices 5 to 10 where 5 = 10
-			vertices[(i+5)*3 + 0] = RADIUS * (float) Math.cos(i * ANGLE);
+			vertices[(i+5)*3 + 0] = RADIUS * (float) Math.cos(-i * ANGLE);
 			vertices[(i+5)*3 + 1] = Y;
-			vertices[(i+5)*3 + 2] = RADIUS * (float) Math.sin(i * ANGLE);
+			vertices[(i+5)*3 + 2] = RADIUS * (float) Math.sin(-i * ANGLE);
 
 			// down - vertices 11 to 16 where 11 = 16
-			vertices[(i+11)*3 + 0] = RADIUS * (float) Math.cos(i * ANGLE - HALFANGLE);
+			vertices[(i+11)*3 + 0] = RADIUS * (float) Math.cos(-i * ANGLE + HALFANGLE);
 			vertices[(i+11)*3 + 1] = -Y;
-			vertices[(i+11)*3 + 2] = RADIUS * (float) Math.sin(i * ANGLE - HALFANGLE);
+			vertices[(i+11)*3 + 2] = RADIUS * (float) Math.sin(-i * ANGLE + HALFANGLE);
 		}
 
 		// ------------------------------------- normals
@@ -140,23 +141,23 @@ public class MeshGenerator {
 		for (int i=0; i<5; i++) {
 			// layer 0
 			indices[i*3 + 0] = 11 + i; // down k
-			indices[i*3 + 1] = 11 + ((i+1) % 5); // down k+1
-			indices[i*3 + 2] = 17 + i; // south k
+			indices[i*3 + 1] = 17 + i; // south k
+			indices[i*3 + 2] = 11 + i+1; // down k+1
 
 			// layer 1
-			indices[5*3 + i*3 + 0] = 5 + i; // up k
-			indices[5*3 + i*3 + 1] = 11 + ((i+1) % 5); // down k+1
-			indices[5*3 + i*3 + 2] = 11 + i; // down k
+			indices[(5+i)*3 + 0] = 5 + i; // up k
+			indices[(5+i)*3 + 1] = 11 + i; // down k
+			indices[(5+i)*3 + 2] = 11 + i+1; // down k+1
 
 			// layer 2
-			indices[10*3 + i*3 + 0] = 11 + ((i+1) % 5); // down k+1
-			indices[10*3 + i*3 + 1] = 5 + i; // up k
-			indices[10*3 + i*3 + 2] = 5 + ((i+1) % 5); // up k+1
+			indices[(10+i)*3 + 0] = 11 + i+1; // down k+1
+			indices[(10+i)*3 + 1] = 5 + i+1; // up k+1
+			indices[(10+i)*3 + 2] = 5 + i; // up k
 
 			// layer 3
-			indices[15*3 + i*3 + 0] = 5 + ((i+1) % 5); // up k+1
-			indices[15*3 + i*3 + 1] = 5 + i; // up k
-			indices[15*3 + i*3 + 2] = i; // north k
+			indices[(15+i)*3 + 0] = 5 + i+1; // up k+1
+			indices[(15+i)*3 + 1] = i; // north k
+			indices[(15+i)*3 + 2] = 5 + i; // up k
 		}
 
 		// ------------------------------------- texture coordinates
