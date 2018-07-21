@@ -86,7 +86,7 @@ public class Renderer {
 	private void initializeVertexObjects() {
 
 		Texture trollFace = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png");
-		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/testCube.png");
+		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/space.png");
 		Texture grasTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
 
 		objects = new GraphicalObject[3];
@@ -115,7 +115,7 @@ public class Renderer {
 		objects[2] = new GraphicalObject(MeshGenerator.createCube(true));
 		objects[2].setTexture(cubeTexture);
 		objects[2].setAffectedByLight(false);
-		objects[2].scale(5000,5000,5000);
+		objects[2].scale(6000,6000,6000);
 
 		pointLight = new PointLight(1,1,1);
 		pointLight.setAttenuation(Attenuation.CONSTANT());

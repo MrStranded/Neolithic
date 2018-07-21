@@ -70,20 +70,7 @@ public class MeshGenerator {
 				-1, -1, -1 // bottom left back
 		};
 
-		float[] normals = new float[vertices.length];
-
-		for (int i=0; i<normals.length/3; i++) {
-
-			Vector3 normal = new Vector3(vertices[i*3 + 0], vertices[i*3 + 1], vertices[i*3 + 2]);
-			try {
-				normal = normal.normalize();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			normals[i*3 + 0] = (float) normal.getX();
-			normals[i*3 + 1] = (float) normal.getY();
-			normals[i*3 + 2] = (float) normal.getZ();
-		}
+		float[] normals = createOutwardFacingNormals(vertices);
 
 		int[] indices = {
 				0, 1, 3, 1, 4, 3, // left
@@ -123,25 +110,84 @@ public class MeshGenerator {
 
 	public static Mesh createIcosahedron() {
 		// ------------------------------------- vertices
-		float[] vertices = new float[12*3];
+		float[] vertices = new float[22*3];
 
-		// 10th vertex is north pole, 11th vertex is south pole
-		vertices[10*3 + 1] = HEIGHT;
-		vertices[11*3 + 1] = -HEIGHT;
-
+		// vertices 0 to 4 are north poles
+		// vertices 17 to 21 are south poles
 		for (int i=0; i<5; i++) {
-			// up - vertices 0 to 4
-			vertices[i*3 + 0] = RADIUS * (float) Math.cos(i * ANGLE);
-			vertices[i*3 + 1] = Y;
-			vertices[i*3 + 2] = RADIUS * (float) Math.sin(i * ANGLE);
+			vertices[i * 3 + 1] = HEIGHT;
+			vertices[(17 + i) * 3 + 1] = -HEIGHT;
+		}
 
-			// down - vertices 5 to 9
-			vertices[5*3 + i*3 + 0] = RADIUS * (float) Math.cos(i * ANGLE - HALFANGLE);
-			vertices[5*3 + i*3 + 1] = -Y;
-			vertices[5*3 + i*3 + 2] = RADIUS * (float) Math.sin(i * ANGLE - HALFANGLE);
+		for (int i=0; i<6; i++) {
+			// up - vertices 5 to 10 where 5 = 10
+			vertices[(i+5)*3 + 0] = RADIUS * (float) Math.cos(i * ANGLE);
+			vertices[(i+5)*3 + 1] = Y;
+			vertices[(i+5)*3 + 2] = RADIUS * (float) Math.sin(i * ANGLE);
+
+			// down - vertices 11 to 16 where 11 = 16
+			vertices[(i+11)*3 + 0] = RADIUS * (float) Math.cos(i * ANGLE - HALFANGLE);
+			vertices[(i+11)*3 + 1] = -Y;
+			vertices[(i+11)*3 + 2] = RADIUS * (float) Math.sin(i * ANGLE - HALFANGLE);
 		}
 
 		// ------------------------------------- normals
+		float[] normals = createOutwardFacingNormals(vertices);
+
+		// ------------------------------------- indices
+		int[] indices = new int[20*3];
+
+		for (int i=0; i<5; i++) {
+			// layer 0
+			indices[i*3 + 0] = 11 + i; // down k
+			indices[i*3 + 1] = 11 + ((i+1) % 5); // down k+1
+			indices[i*3 + 2] = 17 + i; // south k
+
+			// layer 1
+			indices[5*3 + i*3 + 0] = 5 + i; // up k
+			indices[5*3 + i*3 + 1] = 11 + ((i+1) % 5); // down k+1
+			indices[5*3 + i*3 + 2] = 11 + i; // down k
+
+			// layer 2
+			indices[10*3 + i*3 + 0] = 11 + ((i+1) % 5); // down k+1
+			indices[10*3 + i*3 + 1] = 5 + i; // up k
+			indices[10*3 + i*3 + 2] = 5 + ((i+1) % 5); // up k+1
+
+			// layer 3
+			indices[15*3 + i*3 + 0] = 5 + ((i+1) % 5); // up k+1
+			indices[15*3 + i*3 + 1] = 5 + i; // up k
+			indices[15*3 + i*3 + 2] = i; // north k
+		}
+
+		// ------------------------------------- texture coordinates
+		float[] textureCoordniates = new float[22*2];
+
+		float dx = 1f/5f;
+		float dy = 1f/3f;
+
+		// north - 0 to 4
+		// south - 17 to 21
+		for (int i=0; i<5; i++) {
+			textureCoordniates[i*2 + 0] = dx*i;
+			textureCoordniates[i*2 + 1] = 0f;
+
+			textureCoordniates[(i+17)*2 + 0] = dx*(i+1);
+			textureCoordniates[(i+17)*2 + 1] = 1f;
+		}
+
+		// mids
+		for (int i=0; i<6; i++) {
+			textureCoordniates[(i+5)*2 + 0] = dx*i;
+			textureCoordniates[(i+5)*2 + 1] = dy;
+
+			textureCoordniates[(i+11)*2 + 0] = dx*i;
+			textureCoordniates[(i+11)*2 + 1] = 1f-dy;
+		}
+
+		return new Mesh(vertices, indices, normals, textureCoordniates);
+	}
+
+	private static float[] createOutwardFacingNormals(float[] vertices) {
 		float[] normals = new float[vertices.length];
 
 		for (int i=0; i<normals.length/3; i++) {
@@ -157,45 +203,6 @@ public class MeshGenerator {
 			normals[i*3 + 2] = (float) normal.getZ();
 		}
 
-		// ------------------------------------- indices
-		int[] indices = new int[20*3];
-
-		for (int i=0; i<5; i++) {
-			// layer 0
-			indices[i*3 + 0] = 11; // south
-			indices[i*3 + 1] = 5 + i; // down k
-			indices[i*3 + 2] = 5 + ((i+1) % 5); // down k+1
-
-			// layer 1
-			indices[5*3 + i*3 + 0] = 5 + i; // down
-			indices[5*3 + i*3 + 1] = i; // up k
-			indices[5*3 + i*3 + 2] = 5 + ((i+1) % 5); // down k+1
-
-			// layer 2
-			indices[10*3 + i*3 + 0] = 5 + ((i+1) % 5); // down k+1
-			indices[10*3 + i*3 + 1] = i; // up k
-			indices[10*3 + i*3 + 2] = (i+1) % 5; // up k+1
-
-			// layer 3
-			indices[15*3 + i*3 + 0] = i; // up k
-			indices[15*3 + i*3 + 1] = 10; // north
-			indices[15*3 + i*3 + 2] = (i+1) % 5; // up k+1
-		}
-
-		// ------------------------------------- colors
-		float[] colors = new float[12*3];
-
-		for (int i=0; i<colors.length; i++) {
-			colors[i] = (float) Math.random();
-		}
-
-		// ------------------------------------- texture coordinates
-		float[] textureCoordniates = new float[12*2];
-
-		for (int i=0; i<24; i++) {
-			textureCoordniates[i] = (float) Math.random();
-		}
-
-		return new Mesh(vertices, indices, normals, textureCoordniates);
+		return normals;
 	}
 }
