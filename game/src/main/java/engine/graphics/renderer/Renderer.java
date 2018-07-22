@@ -124,6 +124,11 @@ public class Renderer {
 		pointLight.setPosition(0,0,-5000);
 		pointLight.setColor(new RGBA(0,0,0));
 
+		spotLight = new SpotLight(1,1,1);
+		spotLight.setAttenuation(Attenuation.CONSTANT());
+		spotLight.setPosition(0,0,-5000);
+		spotLight.setDirection(new Vector3(0,0,1));
+
 		ambientLight = new AmbientLight(0.5,0.5,0.5);
 	}
 
@@ -137,6 +142,7 @@ public class Renderer {
 			shaderProgram.createUniform("ambientLight");
 
 			shaderProgram.createPointLightUniform("pointLight");
+			shaderProgram.createSpotLightUniform("spotLight");
 			shaderProgram.createMaterialUniform("material");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -181,6 +187,8 @@ public class Renderer {
 		objects[1].rotateYAroundOrigin(-angleStep);
 		objects[3].rotateYAroundOrigin(angleStep*2);
 		pointLight.rotateYAroundOrigin(-angleStep);
+		spotLight.rotateYAroundOrigin(-angleStep);
+		spotLight.setDirection(spotLight.getPosition().times(-1).normalize());
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
 			camera.rotateYaw(-0.01d);
@@ -230,6 +238,9 @@ public class Renderer {
 		// set point light uniforms
 		pointLight.actualize(camera.getViewMatrix());
 		shaderProgram.setUniform("pointLight",pointLight);
+		// set spot light uniforms
+		spotLight.actualize(camera.getViewMatrix());
+		shaderProgram.setUniform("spotLight",spotLight);
 		// set ambient light
 		shaderProgram.setUniform("ambientLight",ambientLight.getColor());
 

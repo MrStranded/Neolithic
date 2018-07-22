@@ -18,6 +18,17 @@ struct PointLight
     Attenuation attenuation;
 };
 
+struct SpotLight
+{
+    vec4 color;
+    // Light position is assumed to be in view coordinates
+    vec3 position;
+    vec3 direction;
+    float coneCosine;
+    float intensity;
+    Attenuation attenuation;
+};
+
 struct Material
 {
     vec4 ambient;
@@ -45,6 +56,7 @@ uniform Material material;
 
 uniform vec4 ambientLight;
 uniform PointLight pointLight;
+uniform SpotLight spotLight;
 
 // ----------- globals
 
@@ -66,23 +78,32 @@ void setupColors(Material material, vec2 textureCoordinates) {
     }
 }
 
-vec4 calculatePointLight(PointLight light, vec3 position, vec3 normal) {
+// ----------------------------------------------------------------------------------------------- Calculate Light
+
+vec4 calculateLight(vec3 lightPosition, vec4 lightColor, vec3 fromLightSource, vec3 position, vec3 normal) {
     vec4 diffuseColor = vec4(0, 0, 0, 0);
     vec4 specularColor = vec4(0, 0, 0, 0);
 
     // Diffuse Light
-    vec3 lightDirection = light.position - position;
-    vec3 toLightSource  = normalize(lightDirection);
+    vec3 toLightSource  = -fromLightSource;
     float diffuseFactor = max(dot(normal, toLightSource ), 0.0);
-    diffuseColor = diffuseC * light.color * light.intensity * diffuseFactor;
+    diffuseColor = diffuseC * lightColor * diffuseFactor;
 
     // Specular Light
     vec3 cameraDirection = normalize(-position); // gives camera direction because camera always sits in position 0
-    vec3 fromLightSource = -toLightSource;
     vec3 reflectedLight = normalize(reflect(fromLightSource, normal));
     float specularFactor = max(dot(cameraDirection, reflectedLight), 0.0);
     specularFactor = pow(specularFactor, material.specularPower);
-    specularColor = specularC * light.color * light.intensity * specularFactor * material.reflectance;
+    specularColor = specularC * lightColor * specularFactor * material.reflectance;
+
+    return (diffuseColor + specularColor);
+}
+
+// ----------------------------------------------------------------------------------------------- Point Light
+
+vec4 calculatePointLight(PointLight light, vec3 position, vec3 normal) {
+    vec3 lightDirection = position - light.position;
+    vec4 calculatedColor = calculateLight(light.position, light.color * light.intensity, normalize(lightDirection), position, normal);
 
     // Attenuation
     float distance = length(lightDirection);
@@ -91,7 +112,35 @@ vec4 calculatePointLight(PointLight light, vec3 position, vec3 normal) {
         light.attenuation.linear * distance +
         light.attenuation.exponent * distance * distance;
 
-    return (diffuseColor + specularColor) / attenuationInverse;
+    return calculatedColor / attenuationInverse;
+}
+
+// ----------------------------------------------------------------------------------------------- Spot Light
+
+vec4 calculateSpotLight(SpotLight light, vec3 position, vec3 normal) {
+    vec4 calculatedColor = vec4(0, 0, 0, 0);
+
+    vec3 lightDirection = position - light.position;
+    vec3 fromLightSource = normalize(lightDirection);
+    float angleCosine = dot(fromLightSource, light.direction);
+
+    if (angleCosine > light.coneCosine) {
+        vec4 calculatedColor = calculateLight(light.position, light.color * light.intensity, fromLightSource, position, normal);
+
+        // radial strength of spot light
+        calculatedColor = calculatedColor * (1 - (1-angleCosine) / (1-light.coneCosine));
+
+        // Attenuation
+        float distance = length(lightDirection);
+        float attenuationInverse =
+            light.attenuation.constant +
+            light.attenuation.linear * distance +
+            light.attenuation.exponent * distance * distance;
+
+        calculatedColor = calculatedColor / attenuationInverse;
+     }
+
+    return calculatedColor;
 }
 
 // ----------- main
@@ -100,9 +149,10 @@ void main() {
     setupColors(material, outTextureCoordinates);
 
     if (affectedByLight == 1) {
-        vec4 diffuseSpecularComposition = calculatePointLight(pointLight, outPosition, outNormal);
+        vec4 pointLightColor = calculatePointLight(pointLight, outPosition, outNormal);
+        vec4 spotLightColor = calculateSpotLight(spotLight, outPosition, outNormal);
 
-        fragmentColor = color * (ambientC * ambientLight + diffuseSpecularComposition);
+        fragmentColor = color * (ambientC * ambientLight + pointLightColor);
     } else {
         fragmentColor = color * ambientC;
     }
