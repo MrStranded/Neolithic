@@ -3,6 +3,7 @@ package engine.graphics.renderer;
 import engine.graphics.objects.light.AmbientLight;
 import engine.graphics.objects.light.Attenuation;
 import engine.graphics.objects.light.PointLight;
+import engine.graphics.objects.light.SpotLight;
 import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
@@ -39,6 +40,7 @@ public class Renderer {
 
 	private GraphicalObject[] objects;
 	private PointLight pointLight;
+	private SpotLight spotLight;
 	private Camera camera;
 	private AmbientLight ambientLight;
 
@@ -90,39 +92,39 @@ public class Renderer {
 		Texture grasTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
 		Texture icoTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/ico_wireframe.png");
 
-		objects = new GraphicalObject[3];
+		objects = new GraphicalObject[4];
 
-		//objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		try {
-			//objects[0] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
-			//objects[0].getMesh().randomizeTextureCoordinates();
-			objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron());
-			//objects[0] = new GraphicalObject(MeshGenerator.createCube(true));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		//objects[0] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
+		objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		objects[0].setTexture(icoTexture);
 		objects[0].scale(3,3,3);
 		objects[0].rotate(0,0,Math.PI/8);
 		objects[0].getMesh().getMaterial().setSpecularPower(4);
-		objects[0].getMesh().getMaterial().setReflectanceStrength(new RGBA(0,0,1,0));
+		objects[0].getMesh().getMaterial().setReflectanceStrength(new RGBA(1,0.5,0.5,0));
 
 		objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		objects[1].scale(100,100,100);
 		objects[1].setPosition(0,0,-5000);
-		objects[1].setColor(1,1,0);
+		objects[1].setColor(1,1,0.5f);
 		objects[1].setAffectedByLight(false);
 
+		// background
 		objects[2] = new GraphicalObject(MeshGenerator.createCube(true));
 		objects[2].setTexture(cubeTexture);
 		objects[2].setAffectedByLight(false);
 		objects[2].scale(6000,6000,6000);
 
+		objects[3] = new GraphicalObject(MeshGenerator.createIcosahedron());
+		objects[3].setTexture(icoTexture);
+		objects[3].scale(0.5,0.5,0.5);
+		objects[3].setPosition(5,0,0);
+
 		pointLight = new PointLight(1,1,1);
 		pointLight.setAttenuation(Attenuation.CONSTANT());
 		pointLight.setPosition(0,0,-5000);
+		pointLight.setColor(new RGBA(0,0,0));
 
-		ambientLight = new AmbientLight(0.5,0.25,0.25);
+		ambientLight = new AmbientLight(0.5,0.5,0.5);
 	}
 
 	private void initializeUniforms() {
@@ -177,6 +179,7 @@ public class Renderer {
 
 		objects[0].rotateY(angleStep);
 		objects[1].rotateYAroundOrigin(-angleStep);
+		objects[3].rotateYAroundOrigin(angleStep*2);
 		pointLight.rotateYAroundOrigin(-angleStep);
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
@@ -225,7 +228,7 @@ public class Renderer {
 		// set used texture (id = 0)
 		shaderProgram.setUniform("textureSampler", 0);
 		// set point light uniforms
-		pointLight.actualizeViewPosition(camera.getViewMatrix());
+		pointLight.actualize(camera.getViewMatrix());
 		shaderProgram.setUniform("pointLight",pointLight);
 		// set ambient light
 		shaderProgram.setUniform("ambientLight",ambientLight.getColor());

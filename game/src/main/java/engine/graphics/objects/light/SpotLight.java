@@ -6,22 +6,27 @@ import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
 import engine.math.numericalObjects.Vector4;
 
-public class PointLight extends MoveableObject {
+public class SpotLight extends MoveableObject {
 
 	private RGBA color;
 	private float intensity = 1f;
 	private Attenuation attenuation;
-	
-	private Vector3 viewPosition;
 
-	public PointLight(RGBA color) {
+	private Vector3 viewPosition;
+	private Vector3 direction;
+	private Vector3 viewDirection;
+	private double coneAngle = Math.PI/2;
+
+	public SpotLight(RGBA color) {
 		this.color = color;
 		attenuation = Attenuation.CONSTANT();
+		direction = new Vector3(0,0,1);
 	}
 
-	public PointLight(double r, double g, double b) {
+	public SpotLight(double r, double g, double b) {
 		this.color = new RGBA(r,g,b);
 		attenuation = Attenuation.CONSTANT();
+		direction = new Vector3(0,0,1);
 	}
 
 	// ###################################################################################
@@ -43,11 +48,30 @@ public class PointLight extends MoveableObject {
 
 	public void actualize(Matrix4 viewMatrix) {
 		viewPosition = viewMatrix.times(getWorldMatrix().times(new Vector4(0,0,0,1))).extractVector3();
+		viewDirection = viewMatrix.times(getWorldMatrix().times(new Vector4(direction,0))).extractVector3();
 	}
 
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
+
+	public Vector3 getDirection() {
+		return direction;
+	}
+	public void setDirection(Vector3 direction) {
+		this.direction = direction;
+	}
+
+	public double getConeAngle() {
+		return coneAngle;
+	}
+	public void setConeAngle(double coneAngle) {
+		this.coneAngle = coneAngle;
+	}
+
+	public double getConeCosine() {
+		return Math.cos(coneAngle);
+	}
 
 	public RGBA getColor() {
 		return color;
@@ -80,5 +104,9 @@ public class PointLight extends MoveableObject {
 	
 	public Vector3 getViewPosition() {
 		return viewPosition;
+	}
+
+	public Vector3 getViewDirection() {
+		return viewDirection;
 	}
 }

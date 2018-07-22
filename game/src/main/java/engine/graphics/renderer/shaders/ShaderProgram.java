@@ -2,6 +2,7 @@ package engine.graphics.renderer.shaders;
 
 import engine.graphics.objects.light.Attenuation;
 import engine.graphics.objects.light.PointLight;
+import engine.graphics.objects.light.SpotLight;
 import engine.graphics.objects.models.Material;
 import engine.graphics.renderer.color.RGBA;
 import engine.math.numericalObjects.Matrix4;
@@ -101,13 +102,24 @@ public class ShaderProgram {
 	}
 
 	// ###################################################################################
-	// ################################ Generation########################################
+	// ################################ Generation #######################################
 	// ###################################################################################
 
 	public void createPointLightUniform(String uniformName) throws Exception {
 		createUniform(uniformName + ".color");
 		createUniform(uniformName + ".position");
 		createUniform(uniformName + ".intensity");
+		createUniform(uniformName + ".attenuation.constant");
+		createUniform(uniformName + ".attenuation.linear");
+		createUniform(uniformName + ".attenuation.exponent");
+	}
+
+	public void createSpotLightUniform(String uniformName) throws Exception {
+		createUniform(uniformName + ".color");
+		createUniform(uniformName + ".position");
+		createUniform(uniformName + ".intensity");
+		createUniform(uniformName + ".direction");
+		createUniform(uniformName + ".coneCosine");
 		createUniform(uniformName + ".attenuation.constant");
 		createUniform(uniformName + ".attenuation.linear");
 		createUniform(uniformName + ".attenuation.exponent");
@@ -171,6 +183,19 @@ public class ShaderProgram {
 		setUniform(uniformName + ".intensity", pointLight.getIntensity());
 
 		Attenuation attenuation = pointLight.getAttenuation();
+		setUniform(uniformName + ".attenuation.constant", attenuation.getConstant());
+		setUniform(uniformName + ".attenuation.linear", attenuation.getLinear());
+		setUniform(uniformName + ".attenuation.exponent", attenuation.getExponent());
+	}
+
+	public void setUniform(String uniformName, SpotLight spotLight) {
+		setUniform(uniformName + ".color", spotLight.getColor());
+		setUniform(uniformName + ".position", spotLight.getViewPosition());
+		setUniform(uniformName + ".intensity", spotLight.getIntensity());
+		setUniform(uniformName + ".direction", spotLight.getViewDirection());
+		setUniform(uniformName + ".coneCosine", (float) spotLight.getConeCosine());
+
+		Attenuation attenuation = spotLight.getAttenuation();
 		setUniform(uniformName + ".attenuation.constant", attenuation.getConstant());
 		setUniform(uniformName + ".attenuation.linear", attenuation.getLinear());
 		setUniform(uniformName + ".attenuation.exponent", attenuation.getExponent());
