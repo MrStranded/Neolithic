@@ -86,7 +86,7 @@ public class Renderer {
 	private void initializeVertexObjects() {
 
 		Texture trollFace = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png");
-		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/space.png");
+		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/space_cube.png");
 		Texture grasTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
 		Texture icoTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/ico_wireframe.png");
 
