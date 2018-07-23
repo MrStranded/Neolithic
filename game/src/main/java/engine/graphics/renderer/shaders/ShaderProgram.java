@@ -184,10 +184,24 @@ public class ShaderProgram {
 		GL20.glUniform1f(uniforms.get(uniformName), value);
 	}
 
+	public void setUniform(String uniformName, Material material) {
+		setUniform(uniformName + ".ambient", material.getAmbientStrength());
+		setUniform(uniformName + ".diffuse", material.getDiffuseStrength());
+		setUniform(uniformName + ".reflectance", material.getReflectanceStrength());
+
+		setUniform(uniformName + ".specularPower", material.getSpecularPower());
+
+		setUniform(uniformName + ".hasTexture", material.hasTexture() ? 1 : 0);
+	}
+
 	public void setUniform(String uniformName, DirectionalLight directionalLight) {
 		setUniform(uniformName + ".color", directionalLight.getColor());
 		setUniform(uniformName + ".intensity", directionalLight.getIntensity());
 		setUniform(uniformName + ".direction", directionalLight.getViewDirection());
+	}
+
+	public void setUniform(String uniformName, PointLight pointLight, int pos) {
+		setUniform(uniformName + "[" + pos + "]", pointLight);
 	}
 
 	public void setUniform(String uniformName, PointLight pointLight) {
@@ -199,6 +213,19 @@ public class ShaderProgram {
 		setUniform(uniformName + ".attenuation.constant", attenuation.getConstant());
 		setUniform(uniformName + ".attenuation.linear", attenuation.getLinear());
 		setUniform(uniformName + ".attenuation.exponent", attenuation.getExponent());
+	}
+
+	public void setUniform(String uniformName, PointLight[] pointLights) {
+		int numberOfLights = pointLights != null? pointLights.length : 0;
+		for (int i=0; i<numberOfLights; i++) {
+			if (pointLights[i] != null) {
+				setUniform(uniformName, pointLights[i], i);
+			}
+		}
+	}
+
+	public void setUniform(String uniformName, SpotLight spotLight, int pos) {
+		setUniform(uniformName + "[" + pos + "]", spotLight);
 	}
 
 	public void setUniform(String uniformName, SpotLight spotLight) {
@@ -214,14 +241,12 @@ public class ShaderProgram {
 		setUniform(uniformName + ".attenuation.exponent", attenuation.getExponent());
 	}
 
-	public void setUniform(String uniformName, Material material) {
-		setUniform(uniformName + ".ambient", material.getAmbientStrength());
-		setUniform(uniformName + ".diffuse", material.getDiffuseStrength());
-		setUniform(uniformName + ".reflectance", material.getReflectanceStrength());
-
-		setUniform(uniformName + ".specularPower", material.getSpecularPower());
-
-		setUniform(uniformName + ".hasTexture", material.hasTexture() ? 1 : 0);
+	public void setUniform(String uniformName, SpotLight[] spotLights) {
+		int numberOfLights = spotLights != null? spotLights.length : 0;
+		for (int i=0; i<numberOfLights; i++) {
+			if (spotLights[i] != null) {
+				setUniform(uniformName, spotLights[i], i);
+			}
+		}
 	}
-
 }

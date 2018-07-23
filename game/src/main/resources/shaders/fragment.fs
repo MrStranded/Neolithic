@@ -1,5 +1,10 @@
 #version 130
 
+// ----------- constants
+
+const int MAX_POINT_LIGHTS = 8;
+const int MAX_SPOT_LIGHTS = 8;
+
 // ----------- structures
 
 struct Attenuation {
@@ -59,8 +64,9 @@ uniform Material material;
 
 uniform vec4 ambientLight;
 uniform DirectionalLight directionalLight;
-uniform PointLight pointLight;
-uniform SpotLight spotLight;
+
+uniform PointLight pointLight[MAX_POINT_LIGHTS];
+uniform SpotLight spotLight[MAX_SPOT_LIGHTS];
 
 // ----------- globals
 
@@ -165,8 +171,22 @@ void main() {
     setupColors(material, outTextureCoordinates);
 
     if (affectedByLight == 1) {
-        vec4 pointLightColor = calculatePointLight(pointLight, outPosition, outNormal);
-        vec4 spotLightColor = calculateSpotLight(spotLight, outPosition, outNormal);
+        vec4 pointLightColor = vec4(0, 0, 0, 0);
+
+        for (int i=0; i<MAX_POINT_LIGHTS; i++) {
+            if (pointLight[i].intensity > 0) {
+                pointLightColor += calculatePointLight(pointLight[i], outPosition, outNormal);
+            }
+        }
+
+        vec4 spotLightColor = vec4(0, 0, 0, 0);
+
+        for (int i=0; i<MAX_SPOT_LIGHTS; i++) {
+            if (spotLight[i].intensity > 0) {
+                spotLightColor += calculateSpotLight(spotLight[i], outPosition, outNormal);
+            }
+        }
+
         vec4 directionalLightColor = calculateDirectionalLight(directionalLight, outNormal);
 
         fragmentColor = color * (ambientC * ambientLight + pointLightColor + spotLightColor + directionalLightColor);

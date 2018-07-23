@@ -29,6 +29,9 @@ import static java.lang.System.exit;
 
 public class Renderer {
 
+	private static final int MAX_POINT_LIGHTS = 8;
+	private static final int MAX_SPOT_LIGHTS = 8;
+
 	private Window window;
 	private ShaderProgram shaderProgram;
 
@@ -42,8 +45,8 @@ public class Renderer {
 
 	private AmbientLight ambientLight;
 	private DirectionalLight directionalLight;
-	private PointLight pointLight;
-	private SpotLight spotLight;
+	private PointLight[] pointLights;
+	private SpotLight[] spotLights;
 
 	private MouseInput mouse;
 	private KeyboardInput keyboard;
@@ -94,6 +97,8 @@ public class Renderer {
 		Texture icoTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/ico_wireframe.png");
 
 		objects = new GraphicalObject[4];
+		pointLights = new PointLight[3];
+		spotLights = new SpotLight[MAX_SPOT_LIGHTS];
 		double sunDistance = 10;
 
 		//objects[0] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
@@ -121,15 +126,15 @@ public class Renderer {
 		objects[3].scale(0.5,0.5,0.5);
 		objects[3].setPosition(5,0,0);
 
-		pointLight = new PointLight(1,0,0);
-		pointLight.setAttenuation(Attenuation.CONSTANT());
-		pointLight.setPosition(0,0,-sunDistance);
+		pointLights[1] = new PointLight(1,0,0);
+		pointLights[1].setAttenuation(Attenuation.CONSTANT());
+		pointLights[1].setPosition(0,0,-sunDistance);
 
-		spotLight = new SpotLight(0,1,0);
-		spotLight.setAttenuation(Attenuation.CONSTANT());
-		spotLight.setPosition(0,0,-sunDistance);
-		spotLight.setDirection(new Vector3(0,0,1));
-		spotLight.setConeAngle(Math.PI/32);
+		spotLights[5] = new SpotLight(0,1,0);
+		spotLights[5].setAttenuation(Attenuation.MEDIUM());
+		spotLights[5].setPosition(0,0,-sunDistance);
+		spotLights[5].setDirection(new Vector3(0,0,1));
+		spotLights[5].setConeAngle(Math.PI/32);
 
 		directionalLight = new DirectionalLight(0,0,1);
 		directionalLight.setDirection(new Vector3(0,0,1));
@@ -147,9 +152,14 @@ public class Renderer {
 			shaderProgram.createUniform("ambientLight");
 
 			shaderProgram.createDirectionalLightUniform("directionalLight");
-			shaderProgram.createPointLightUniform("pointLight");
-			shaderProgram.createSpotLightUniform("spotLight");
 			shaderProgram.createMaterialUniform("material");
+
+			for (int i=0; i<MAX_POINT_LIGHTS; i++) {
+				shaderProgram.createPointLightUniform("pointLight[" + i + "]");
+			}
+			for (int i=0; i<MAX_SPOT_LIGHTS; i++) {
+				shaderProgram.createSpotLightUniform("spotLight[" + i + "]");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			exit(1);
@@ -194,8 +204,8 @@ public class Renderer {
 		objects[1].rotateYAroundOrigin(-angleStep);
 		objects[3].rotateYAroundOrigin(angleStep*2);
 		directionalLight.rotateY(-angleStep);
-		pointLight.rotateYAroundOrigin(-angleStep);
-		spotLight.rotateYAroundOrigin(-angleStep);
+		pointLights[1].rotateYAroundOrigin(-angleStep);
+		spotLights[5].rotateYAroundOrigin(-angleStep);
 		//spotLight.setDirection(spotLight.getPosition().times(-1).normalize());
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
@@ -247,11 +257,19 @@ public class Renderer {
 		directionalLight.actualize(camera.getViewMatrix());
 		shaderProgram.setUniform("directionalLight",directionalLight);
 		// set point light uniforms
-		pointLight.actualize(camera.getViewMatrix());
-		shaderProgram.setUniform("pointLight",pointLight);
+		for (PointLight pointLight : pointLights) {
+			if (pointLight != null) {
+				pointLight.actualize(camera.getViewMatrix());
+			}
+		}
+		shaderProgram.setUniform("pointLight",pointLights);
 		// set spot light uniforms
-		spotLight.actualize(camera.getViewMatrix());
-		shaderProgram.setUniform("spotLight",spotLight);
+		for (SpotLight spotLight : spotLights) {
+			if (spotLight != null) {
+				spotLight.actualize(camera.getViewMatrix());
+			}
+		}
+		shaderProgram.setUniform("spotLight",spotLights);
 		// set ambient light
 		shaderProgram.setUniform("ambientLight",ambientLight.getColor());
 
