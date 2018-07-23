@@ -1,6 +1,7 @@
 package engine.graphics.renderer.shaders;
 
 import engine.graphics.objects.light.Attenuation;
+import engine.graphics.objects.light.DirectionalLight;
 import engine.graphics.objects.light.PointLight;
 import engine.graphics.objects.light.SpotLight;
 import engine.graphics.objects.models.Material;
@@ -105,6 +106,12 @@ public class ShaderProgram {
 	// ################################ Generation #######################################
 	// ###################################################################################
 
+	public void createDirectionalLightUniform(String uniformName) throws Exception {
+		createUniform(uniformName + ".color");
+		createUniform(uniformName + ".intensity");
+		createUniform(uniformName + ".direction");
+	}
+
 	public void createPointLightUniform(String uniformName) throws Exception {
 		createUniform(uniformName + ".color");
 		createUniform(uniformName + ".position");
@@ -175,6 +182,12 @@ public class ShaderProgram {
 
 	public void setUniform(String uniformName, float value) {
 		GL20.glUniform1f(uniforms.get(uniformName), value);
+	}
+
+	public void setUniform(String uniformName, DirectionalLight directionalLight) {
+		setUniform(uniformName + ".color", directionalLight.getColor());
+		setUniform(uniformName + ".intensity", directionalLight.getIntensity());
+		setUniform(uniformName + ".direction", directionalLight.getViewDirection());
 	}
 
 	public void setUniform(String uniformName, PointLight pointLight) {

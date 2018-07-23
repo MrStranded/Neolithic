@@ -1,9 +1,6 @@
 package engine.graphics.renderer;
 
-import engine.graphics.objects.light.AmbientLight;
-import engine.graphics.objects.light.Attenuation;
-import engine.graphics.objects.light.PointLight;
-import engine.graphics.objects.light.SpotLight;
+import engine.graphics.objects.light.*;
 import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
@@ -41,10 +38,12 @@ public class Renderer {
 	private Matrix4 projectionMatrix;
 
 	private GraphicalObject[] objects;
+	private Camera camera;
+
+	private AmbientLight ambientLight;
+	private DirectionalLight directionalLight;
 	private PointLight pointLight;
 	private SpotLight spotLight;
-	private Camera camera;
-	private AmbientLight ambientLight;
 
 	private MouseInput mouse;
 	private KeyboardInput keyboard;
@@ -122,16 +121,18 @@ public class Renderer {
 		objects[3].scale(0.5,0.5,0.5);
 		objects[3].setPosition(5,0,0);
 
-		pointLight = new PointLight(1,0,1);
+		pointLight = new PointLight(1,0,0);
 		pointLight.setAttenuation(Attenuation.CONSTANT());
 		pointLight.setPosition(0,0,-sunDistance);
-		//pointLight.setColor(new RGBA(0,0,0));
 
 		spotLight = new SpotLight(0,1,0);
 		spotLight.setAttenuation(Attenuation.CONSTANT());
 		spotLight.setPosition(0,0,-sunDistance);
 		spotLight.setDirection(new Vector3(0,0,1));
 		spotLight.setConeAngle(Math.PI/32);
+
+		directionalLight = new DirectionalLight(0,0,1);
+		directionalLight.setDirection(new Vector3(0,0,1));
 
 		ambientLight = new AmbientLight(0.5,0.5,0.5);
 	}
@@ -145,6 +146,7 @@ public class Renderer {
 			shaderProgram.createUniform("affectedByLight");
 			shaderProgram.createUniform("ambientLight");
 
+			shaderProgram.createDirectionalLightUniform("directionalLight");
 			shaderProgram.createPointLightUniform("pointLight");
 			shaderProgram.createSpotLightUniform("spotLight");
 			shaderProgram.createMaterialUniform("material");
@@ -191,6 +193,7 @@ public class Renderer {
 		objects[0].rotateY(angleStep);
 		objects[1].rotateYAroundOrigin(-angleStep);
 		objects[3].rotateYAroundOrigin(angleStep*2);
+		directionalLight.rotateY(-angleStep);
 		pointLight.rotateYAroundOrigin(-angleStep);
 		spotLight.rotateYAroundOrigin(-angleStep);
 		//spotLight.setDirection(spotLight.getPosition().times(-1).normalize());
@@ -240,6 +243,9 @@ public class Renderer {
 		shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 		// set used texture (id = 0)
 		shaderProgram.setUniform("textureSampler", 0);
+		// set directional light uniforms
+		directionalLight.actualize(camera.getViewMatrix());
+		shaderProgram.setUniform("directionalLight",directionalLight);
 		// set point light uniforms
 		pointLight.actualize(camera.getViewMatrix());
 		shaderProgram.setUniform("pointLight",pointLight);

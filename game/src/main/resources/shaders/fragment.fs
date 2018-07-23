@@ -2,15 +2,20 @@
 
 // ----------- structures
 
-struct Attenuation
-{
+struct Attenuation {
     float constant;
     float linear;
     float exponent;
 };
 
-struct PointLight
-{
+struct DirectionalLight {
+    vec4 color;
+    // Light direction is assumed to be in view coordinates
+    vec3 direction;
+    float intensity;
+};
+
+struct PointLight {
     vec4 color;
     // Light position is assumed to be in view coordinates
     vec3 position;
@@ -18,8 +23,7 @@ struct PointLight
     Attenuation attenuation;
 };
 
-struct SpotLight
-{
+struct SpotLight {
     vec4 color;
     // Light position is assumed to be in view coordinates, as well as direction
     vec3 position;
@@ -29,8 +33,7 @@ struct SpotLight
     Attenuation attenuation;
 };
 
-struct Material
-{
+struct Material {
     vec4 ambient;
     vec4 diffuse;
     vec4 reflectance;
@@ -55,6 +58,7 @@ uniform int affectedByLight;
 uniform Material material;
 
 uniform vec4 ambientLight;
+uniform DirectionalLight directionalLight;
 uniform PointLight pointLight;
 uniform SpotLight spotLight;
 
@@ -145,6 +149,16 @@ vec4 calculateSpotLight(SpotLight light, vec3 position, vec3 normal) {
     return calculatedColor;
 }
 
+// ----------------------------------------------------------------------------------------------- Directional Light
+
+vec4 calculateDirectionalLight(DirectionalLight light, vec3 normal) {
+    // Diffuse Light
+    float diffuseFactor = max(dot(normal, -light.direction), 0.0);
+    vec4 diffuseColor = diffuseC * light.color * light.intensity * diffuseFactor;
+
+    return diffuseColor;
+}
+
 // ----------- main
 
 void main() {
@@ -153,8 +167,9 @@ void main() {
     if (affectedByLight == 1) {
         vec4 pointLightColor = calculatePointLight(pointLight, outPosition, outNormal);
         vec4 spotLightColor = calculateSpotLight(spotLight, outPosition, outNormal);
+        vec4 directionalLightColor = calculateDirectionalLight(directionalLight, outNormal);
 
-        fragmentColor = color * (ambientC * ambientLight + pointLightColor + spotLightColor);
+        fragmentColor = color * (ambientC * ambientLight + pointLightColor + spotLightColor + directionalLightColor);
     } else {
         fragmentColor = color * ambientC;
     }
