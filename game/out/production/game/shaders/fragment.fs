@@ -21,7 +21,7 @@ struct PointLight
 struct SpotLight
 {
     vec4 color;
-    // Light position is assumed to be in view coordinates
+    // Light position is assumed to be in view coordinates, as well as direction
     vec3 position;
     vec3 direction;
     float coneCosine;
@@ -65,6 +65,8 @@ vec4 diffuseC;
 vec4 specularC;
 
 // ----------- methods
+
+// ----------------------------------------------------------------------------------------------- Set Up Colors
 
 void setupColors(Material material, vec2 textureCoordinates) {
     if (material.hasTexture == 1) {
@@ -125,10 +127,10 @@ vec4 calculateSpotLight(SpotLight light, vec3 position, vec3 normal) {
     float angleCosine = dot(fromLightSource, light.direction);
 
     if (angleCosine > light.coneCosine) {
-        vec4 calculatedColor = calculateLight(light.position, light.color * light.intensity, fromLightSource, position, normal);
+        calculatedColor = calculateLight(light.position, light.color * light.intensity, fromLightSource, position, normal);
 
         // radial strength of spot light
-        calculatedColor = calculatedColor * (1 - (1-angleCosine) / (1-light.coneCosine));
+        calculatedColor = calculatedColor * (1.0 - (1.0-angleCosine) / (1.0-light.coneCosine));
 
         // Attenuation
         float distance = length(lightDirection);
@@ -152,7 +154,7 @@ void main() {
         vec4 pointLightColor = calculatePointLight(pointLight, outPosition, outNormal);
         vec4 spotLightColor = calculateSpotLight(spotLight, outPosition, outNormal);
 
-        fragmentColor = color * (ambientC * ambientLight + pointLightColor);
+        fragmentColor = color * (ambientC * ambientLight + pointLightColor + spotLightColor);
     } else {
         fragmentColor = color * ambientC;
     }

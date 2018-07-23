@@ -47,8 +47,9 @@ public class SpotLight extends MoveableObject {
 	// ###################################################################################
 
 	public void actualize(Matrix4 viewMatrix) {
-		viewPosition = viewMatrix.times(getWorldMatrix().times(new Vector4(0,0,0,1))).extractVector3();
-		viewDirection = viewMatrix.times(getWorldMatrix().times(new Vector4(direction,0))).extractVector3();
+		Matrix4 transformation = viewMatrix.times(getWorldMatrix());
+		viewPosition = transformation.times(new Vector4(0,0,0,1)).extractVector3();
+		viewDirection = transformation.times(new Vector4(direction,0)).extractVector3();
 	}
 
 	// ###################################################################################

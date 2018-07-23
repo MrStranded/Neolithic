@@ -24,6 +24,8 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import engine.graphics.objects.generators.MeshGenerator;
 
+import static java.lang.System.exit;
+
 /**
  * The renderer is only concerned about periodically drawing the given mesh data onto a window
  */
@@ -34,7 +36,7 @@ public class Renderer {
 	private ShaderProgram shaderProgram;
 
 	private double zNear = 0.001d;
-	private double zFar = 15000d;
+	private double zFar = 1000d;
 
 	private Matrix4 projectionMatrix;
 
@@ -93,6 +95,7 @@ public class Renderer {
 		Texture icoTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/ico_wireframe.png");
 
 		objects = new GraphicalObject[4];
+		double sunDistance = 10;
 
 		//objects[0] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
 		objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron());
@@ -103,8 +106,8 @@ public class Renderer {
 		objects[0].getMesh().getMaterial().setReflectanceStrength(new RGBA(1,0.5,0.5,0));
 
 		objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[1].scale(100,100,100);
-		objects[1].setPosition(0,0,-5000);
+		objects[1].scale(1,1,1);
+		objects[1].setPosition(0,0,-sunDistance);
 		objects[1].setColor(1,1,0.5f);
 		objects[1].setAffectedByLight(false);
 
@@ -112,22 +115,23 @@ public class Renderer {
 		objects[2] = new GraphicalObject(MeshGenerator.createCube(true));
 		objects[2].setTexture(cubeTexture);
 		objects[2].setAffectedByLight(false);
-		objects[2].scale(6000,6000,6000);
+		objects[2].scale(sunDistance*2,sunDistance*2,sunDistance*2);
 
 		objects[3] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		objects[3].setTexture(icoTexture);
 		objects[3].scale(0.5,0.5,0.5);
 		objects[3].setPosition(5,0,0);
 
-		pointLight = new PointLight(1,1,1);
+		pointLight = new PointLight(1,0,1);
 		pointLight.setAttenuation(Attenuation.CONSTANT());
-		pointLight.setPosition(0,0,-5000);
-		pointLight.setColor(new RGBA(0,0,0));
+		pointLight.setPosition(0,0,-sunDistance);
+		//pointLight.setColor(new RGBA(0,0,0));
 
-		spotLight = new SpotLight(1,1,1);
+		spotLight = new SpotLight(0,1,0);
 		spotLight.setAttenuation(Attenuation.CONSTANT());
-		spotLight.setPosition(0,0,-5000);
+		spotLight.setPosition(0,0,-sunDistance);
 		spotLight.setDirection(new Vector3(0,0,1));
+		spotLight.setConeAngle(Math.PI/32);
 
 		ambientLight = new AmbientLight(0.5,0.5,0.5);
 	}
@@ -146,6 +150,7 @@ public class Renderer {
 			shaderProgram.createMaterialUniform("material");
 		} catch (Exception e) {
 			e.printStackTrace();
+			exit(1);
 		}
 	}
 
@@ -188,7 +193,7 @@ public class Renderer {
 		objects[3].rotateYAroundOrigin(angleStep*2);
 		pointLight.rotateYAroundOrigin(-angleStep);
 		spotLight.rotateYAroundOrigin(-angleStep);
-		spotLight.setDirection(spotLight.getPosition().times(-1).normalize());
+		//spotLight.setDirection(spotLight.getPosition().times(-1).normalize());
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
 			camera.rotateYaw(-0.01d);
