@@ -11,18 +11,18 @@ public class GraphicalObject extends MoveableObject {
 	private Mesh mesh;
 	private boolean useDepthTest = true;
 	private boolean affectedByLight = true;
+	private boolean isStatic = false; // static objects won't be moved around and are always in the same place around the camera
 
 	public GraphicalObject(Mesh mesh) {
-
 		this.mesh = mesh;
 	}
+	public GraphicalObject() {}
 
 	// ###################################################################################
 	// ################################ Rendering ########################################
 	// ###################################################################################
 
 	public void render() {
-
 		mesh.render(useDepthTest);
 	}
 
@@ -77,5 +77,12 @@ public class GraphicalObject extends MoveableObject {
 	}
 	public void setAffectedByLight(boolean affectedByLight) {
 		this.affectedByLight = affectedByLight;
+	}
+
+	public boolean isStatic() {
+		return isStatic;
+	}
+	public void setStatic(boolean aStatic) {
+		isStatic = aStatic;
 	}
 }

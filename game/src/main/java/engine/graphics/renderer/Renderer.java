@@ -101,25 +101,27 @@ public class Renderer {
 		spotLights = new SpotLight[MAX_SPOT_LIGHTS];
 		double sunDistance = 10;
 
-		//objects[0] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
-		objects[0] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[0].setTexture(icoTexture);
-		objects[0].scale(3,3,3);
-		objects[0].rotate(0,0,Math.PI/8);
-		objects[0].getMesh().getMaterial().setSpecularPower(4);
-		objects[0].getMesh().getMaterial().setReflectanceStrength(new RGBA(1,0.5,0.5,0));
-
-		objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[1].scale(1,1,1);
-		objects[1].setPosition(0,0,-sunDistance);
-		objects[1].setColor(1,1,0.5f);
-		objects[1].setAffectedByLight(false);
-
 		// background
-		objects[2] = new GraphicalObject(MeshGenerator.createCube(true));
-		objects[2].setTexture(cubeTexture);
+		objects[0] = new GraphicalObject(MeshGenerator.createCube(true));
+		objects[0].setTexture(cubeTexture);
+		objects[0].scale(sunDistance*2,sunDistance*2,sunDistance*2);
+		objects[0].setAffectedByLight(false);
+		objects[0].setStatic(true);
+		objects[0].setUseDepthTest(false);
+
+		//objects[1] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
+		objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron());
+		objects[1].setTexture(icoTexture);
+		objects[1].scale(3,3,3);
+		objects[1].rotate(0,0,Math.PI/8);
+		objects[1].getMesh().getMaterial().setSpecularPower(4);
+		objects[1].getMesh().getMaterial().setReflectanceStrength(new RGBA(1,0.5,0.5,0));
+
+		objects[2] = new GraphicalObject(MeshGenerator.createIcosahedron());
+		objects[2].scale(1,1,1);
+		objects[2].setPosition(0,0,-sunDistance);
+		objects[2].setColor(1,1,0.5f);
 		objects[2].setAffectedByLight(false);
-		objects[2].scale(sunDistance*2,sunDistance*2,sunDistance*2);
 
 		objects[3] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		objects[3].setTexture(icoTexture);
@@ -149,6 +151,7 @@ public class Renderer {
 			shaderProgram.createUniform("textureSampler");
 			shaderProgram.createUniform("color");
 			shaderProgram.createUniform("affectedByLight");
+			shaderProgram.createUniform("dynamic");
 			shaderProgram.createUniform("ambientLight");
 
 			shaderProgram.createDirectionalLightUniform("directionalLight");
@@ -200,8 +203,8 @@ public class Renderer {
 			angle -= Math.PI*2d;
 		}
 
-		objects[0].rotateY(angleStep);
-		objects[1].rotateYAroundOrigin(-angleStep);
+		objects[1].rotateY(angleStep);
+		objects[2].rotateYAroundOrigin(-angleStep);
 		objects[3].rotateYAroundOrigin(angleStep*2);
 		directionalLight.rotateY(-angleStep);
 		pointLights[1].rotateYAroundOrigin(-angleStep);
@@ -234,14 +237,14 @@ public class Renderer {
 		}
 
 		if (keyboard.isClicked(GLFW.GLFW_KEY_T)) { // troll tex
-			objects[0].setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png"));
+			objects[1].setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png"));
 		}
 		if (keyboard.isClicked(GLFW.GLFW_KEY_G)) { // gras tex
-			objects[0].setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png"));
+			objects[1].setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png"));
 		}
 
 		//Vector3 cameraPosition = camera.getViewMatrix().times(new Vector4(0,0,0,1)).extractVector3();
-		//objects[2].setPosition(cameraPosition);
+		//objects[0].setPosition(cameraPosition);
 
 		long t = System.nanoTime();
 
@@ -278,7 +281,8 @@ public class Renderer {
 			shaderProgram.setUniform("modelViewMatrix", camera.getViewMatrix().times(object.getWorldMatrix()));
 			shaderProgram.setUniform("color", mesh.getColor());
 			shaderProgram.setUniform("affectedByLight", object.isAffectedByLight() ? 1 : 0);
-			shaderProgram.setUniform("material",object.getMesh().getMaterial());
+			shaderProgram.setUniform("dynamic", object.isStatic() ? 0 : 1);
+			shaderProgram.setUniform("material", object.getMesh().getMaterial());
 			object.render();
 		}
 
@@ -291,6 +295,7 @@ public class Renderer {
 
 		// closing window
 		if (keyboard.isClicked(GLFW.GLFW_KEY_ESCAPE)) {
+			//cleanUp(); // somehow enabling this causes the program to not close properly anymore
 			window.close();
 		}
 	}

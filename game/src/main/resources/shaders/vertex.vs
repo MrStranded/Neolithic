@@ -10,9 +10,10 @@ out vec2 outTextureCoordinates;
 
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
+uniform int dynamic; // 1 if the object may move, 0 if it is static
 
 void main() {
-    vec4 modelViewPosition = modelViewMatrix * vec4(inPosition, 1.0);
+    vec4 modelViewPosition = modelViewMatrix * vec4(inPosition, dynamic);
     gl_Position = projectionMatrix * modelViewPosition;
 
     outPosition = modelViewPosition.xyz;
