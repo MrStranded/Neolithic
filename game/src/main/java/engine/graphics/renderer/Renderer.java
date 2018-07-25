@@ -1,5 +1,8 @@
 package engine.graphics.renderer;
 
+import engine.graphics.GraphicalConstants;
+import engine.graphics.gui.HUDInterface;
+import engine.graphics.objects.Scene;
 import engine.graphics.objects.light.*;
 import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.projection.Projection;
@@ -12,8 +15,6 @@ import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.models.Texture;
 import engine.graphics.window.Window;
 import engine.math.numericalObjects.Vector3;
-import engine.math.numericalObjects.Vector4;
-import load.OBJLoader;
 import load.StringLoader;
 import load.TextureLoader;
 import engine.math.numericalObjects.Matrix4;
@@ -29,24 +30,17 @@ import static java.lang.System.exit;
 
 public class Renderer {
 
-	private static final int MAX_POINT_LIGHTS = 8;
-	private static final int MAX_SPOT_LIGHTS = 8;
-
 	private Window window;
 	private ShaderProgram shaderProgram;
+	private ShaderProgram hudShaderProgram;
 
 	private double zNear = 0.001d;
 	private double zFar = 1000d;
 
 	private Matrix4 projectionMatrix;
+	private Matrix4 orthographicMatrix;
 
-	private GraphicalObject[] objects;
-	private Camera camera;
-
-	private AmbientLight ambientLight;
-	private DirectionalLight directionalLight;
-	private PointLight[] pointLights;
-	private SpotLight[] spotLights;
+	private HUDInterface hudInterface;
 
 	private MouseInput mouse;
 	private KeyboardInput keyboard;
@@ -54,7 +48,6 @@ public class Renderer {
 	private double angle = 0;
 
 	public Renderer(Window window) {
-
 		this.window = window;
 		window.setRenderer(this);
 	}
@@ -64,20 +57,18 @@ public class Renderer {
 	// ###################################################################################
 
 	public void initialize() {
-
 		window.initialize();
 
 		initializeShaders();
-		initializeVertexObjects();
+		initializeHUDShaders();
 		initializeUniforms();
-		initializeCamera();
 		initializeInput();
 
 		calculateProjectionMatrix();
+		calculateOrthographicMatrix();
 	}
 
 	private void initializeShaders() {
-
 		// loading and binding the shaders
 		try {
 			shaderProgram = new ShaderProgram();
@@ -89,60 +80,18 @@ public class Renderer {
 		}
 	}
 
-	private void initializeVertexObjects() {
-
-		Texture trollFace = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png");
-		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/space_cube.png");
-		Texture grasTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
-		Texture icoTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/ico_wireframe.png");
-
-		objects = new GraphicalObject[4];
-		pointLights = new PointLight[3];
-		spotLights = new SpotLight[MAX_SPOT_LIGHTS];
-		double sunDistance = 10;
-
-		// background
-		objects[0] = new GraphicalObject(MeshGenerator.createCube(true));
-		objects[0].setTexture(cubeTexture);
-		objects[0].scale(sunDistance*2,sunDistance*2,sunDistance*2);
-		objects[0].setAffectedByLight(false);
-		objects[0].setStatic(true);
-		objects[0].setUseDepthTest(false);
-
-		//objects[1] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
-		objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[1].setTexture(icoTexture);
-		objects[1].scale(3,3,3);
-		objects[1].rotate(0,0,Math.PI/8);
-		objects[1].getMesh().getMaterial().setSpecularPower(4);
-		objects[1].getMesh().getMaterial().setReflectanceStrength(new RGBA(1,0.5,0.5,0));
-
-		objects[2] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[2].scale(1,1,1);
-		objects[2].setPosition(0,0,-sunDistance);
-		objects[2].setColor(1,1,0.5f);
-		objects[2].setAffectedByLight(false);
-
-		objects[3] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[3].setTexture(icoTexture);
-		objects[3].scale(0.5,0.5,0.5);
-		objects[3].setPosition(5,0,0);
-
-		pointLights[1] = new PointLight(1,0,0);
-		pointLights[1].setAttenuation(Attenuation.CONSTANT());
-		pointLights[1].setPosition(0,0,-sunDistance);
-
-		spotLights[5] = new SpotLight(0,1,0);
-		spotLights[5].setAttenuation(Attenuation.MEDIUM());
-		spotLights[5].setPosition(0,0,-sunDistance);
-		spotLights[5].setDirection(new Vector3(0,0,1));
-		spotLights[5].setConeAngle(Math.PI/32);
-
-		directionalLight = new DirectionalLight(0,0,1);
-		directionalLight.setDirection(new Vector3(0,0,1));
-
-		ambientLight = new AmbientLight(0.5,0.5,0.5);
+	private void initializeHUDShaders() {
+		// loading and binding the shaders
+		try {
+			hudShaderProgram = new ShaderProgram();
+			hudShaderProgram.createVertexShader(StringLoader.read("src/main/resources/shaders/orthoVertex.vs"));
+			hudShaderProgram.createFragmentShader(StringLoader.read("src/main/resources/shaders/orthoFragment.fs"));
+			hudShaderProgram.link();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
+
 
 	private void initializeUniforms() {
 		try {
@@ -157,10 +106,10 @@ public class Renderer {
 			shaderProgram.createDirectionalLightUniform("directionalLight");
 			shaderProgram.createMaterialUniform("material");
 
-			for (int i=0; i<MAX_POINT_LIGHTS; i++) {
+			for (int i = 0; i<GraphicalConstants.MAX_POINT_LIGHTS; i++) {
 				shaderProgram.createPointLightUniform("pointLight[" + i + "]");
 			}
-			for (int i=0; i<MAX_SPOT_LIGHTS; i++) {
+			for (int i = 0; i<GraphicalConstants.MAX_SPOT_LIGHTS; i++) {
 				shaderProgram.createSpotLightUniform("spotLight[" + i + "]");
 			}
 		} catch (Exception e) {
@@ -169,14 +118,7 @@ public class Renderer {
 		}
 	}
 
-	private void initializeCamera() {
-
-		camera = new Camera();
-		camera.setRadius(5);
-	}
-
 	private void initializeInput() {
-
 		mouse = new MouseInput(window);
 		keyboard = new KeyboardInput(window);
 	}
@@ -186,29 +128,37 @@ public class Renderer {
 	// ###################################################################################
 
 	public void calculateProjectionMatrix() {
-
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
 
 		projectionMatrix = Projection.createPerspectiveProjectionMatrix(-aspectRatio*zNear,aspectRatio*zNear,1d*zNear,-1d*zNear,zNear,zFar);
+	}
+
+	public void calculateOrthographicMatrix() {
+		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
+
+		orthographicMatrix = Projection.createOrthographicProjectionMatrix(-aspectRatio*zNear,aspectRatio*zNear,1d*zNear,-1d*zNear,zNear,zFar);
 	}
 
 	// ###################################################################################
 	// ################################ Rendering ########################################
 	// ###################################################################################
 
-	public void render() {
+	public void render(Scene scene, HUDInterface hudInterface) {
 		double angleStep = 0.0025d;
 		angle += angleStep;
 		if (angle > Math.PI*2d) {
 			angle -= Math.PI*2d;
 		}
 
+		GraphicalObject[] objects = scene.getObjects();
+		Camera camera = scene.getCamera();
+
 		objects[1].rotateY(angleStep);
 		objects[2].rotateYAroundOrigin(-angleStep);
 		objects[3].rotateYAroundOrigin(angleStep*2);
-		directionalLight.rotateY(-angleStep);
-		pointLights[1].rotateYAroundOrigin(-angleStep);
-		spotLights[5].rotateYAroundOrigin(-angleStep);
+		scene.getDirectionalLight().rotateY(-angleStep);
+		scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
+		scene.getSpotLights()[5].rotateYAroundOrigin(-angleStep);
 		//spotLight.setDirection(spotLight.getPosition().times(-1).normalize());
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
@@ -243,40 +193,50 @@ public class Renderer {
 			objects[1].setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png"));
 		}
 
-		//Vector3 cameraPosition = camera.getViewMatrix().times(new Vector4(0,0,0,1)).extractVector3();
-		//objects[0].setPosition(cameraPosition);
-
-		long t = System.nanoTime();
-
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
+		renderScene(scene);
+		renderHUD(hudInterface);
+
+		flip();
+
+		// closing window
+		if (keyboard.isClicked(GLFW.GLFW_KEY_ESCAPE)) {
+			//cleanUp(); // somehow enabling this causes the program to not close properly anymore
+			window.close();
+		}
+	}
+
+	private void renderScene(Scene scene) {
 		shaderProgram.bind();
+
+		Camera camera = scene.getCamera();
 
 		// upload projection matrix
 		shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 		// set used texture (id = 0)
 		shaderProgram.setUniform("textureSampler", 0);
 		// set directional light uniforms
-		directionalLight.actualize(camera.getViewMatrix());
-		shaderProgram.setUniform("directionalLight",directionalLight);
+		scene.getDirectionalLight().actualize(camera.getViewMatrix());
+		shaderProgram.setUniform("directionalLight",scene.getDirectionalLight());
 		// set point light uniforms
-		for (PointLight pointLight : pointLights) {
+		for (PointLight pointLight : scene.getPointLights()) {
 			if (pointLight != null) {
 				pointLight.actualize(camera.getViewMatrix());
 			}
 		}
-		shaderProgram.setUniform("pointLight",pointLights);
+		shaderProgram.setUniform("pointLight",scene.getPointLights());
 		// set spot light uniforms
-		for (SpotLight spotLight : spotLights) {
+		for (SpotLight spotLight : scene.getSpotLights()) {
 			if (spotLight != null) {
 				spotLight.actualize(camera.getViewMatrix());
 			}
 		}
-		shaderProgram.setUniform("spotLight",spotLights);
+		shaderProgram.setUniform("spotLight",scene.getSpotLights());
 		// set ambient light
-		shaderProgram.setUniform("ambientLight",ambientLight.getColor());
+		shaderProgram.setUniform("ambientLight",scene.getAmbientLight().getColor());
 
-		for (GraphicalObject object : objects) {
+		for (GraphicalObject object : scene.getObjects()) {
 			Mesh mesh = object.getMesh();
 			shaderProgram.setUniform("modelViewMatrix", camera.getViewMatrix().times(object.getWorldMatrix()));
 			shaderProgram.setUniform("color", mesh.getColor());
@@ -287,17 +247,10 @@ public class Renderer {
 		}
 
 		shaderProgram.unbind();
+	}
 
-		double dt = (double) (System.nanoTime() - t)/1000000;
-		//System.out.println("rendering took " + dt + " ms");
+	private void renderHUD(HUDInterface hudInterface) {
 
-		flip();
-
-		// closing window
-		if (keyboard.isClicked(GLFW.GLFW_KEY_ESCAPE)) {
-			//cleanUp(); // somehow enabling this causes the program to not close properly anymore
-			window.close();
-		}
 	}
 
 	// ###################################################################################
@@ -317,13 +270,8 @@ public class Renderer {
 	// ###################################################################################
 
 	public void cleanUp() {
-
 		if (shaderProgram != null) {
 			shaderProgram.cleanup();
-		}
-
-		for (GraphicalObject object : objects) {
-			object.cleanUp();
 		}
 
 		window.destroy();
