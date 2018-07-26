@@ -15,6 +15,7 @@ import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.models.Texture;
 import engine.graphics.window.Window;
 import engine.math.numericalObjects.Vector3;
+import engine.math.numericalObjects.Vector4;
 import load.StringLoader;
 import load.TextureLoader;
 import engine.math.numericalObjects.Matrix4;
@@ -95,6 +96,7 @@ public class Renderer {
 
 	private void initializeUniforms() {
 		try {
+			// ---------------------------------------------------------- normal scene
 			shaderProgram.createUniform("modelViewMatrix");
 			shaderProgram.createUniform("projectionMatrix");
 			shaderProgram.createUniform("textureSampler");
@@ -112,6 +114,11 @@ public class Renderer {
 			for (int i = 0; i<GraphicalConstants.MAX_SPOT_LIGHTS; i++) {
 				shaderProgram.createSpotLightUniform("spotLight[" + i + "]");
 			}
+
+			// ---------------------------------------------------------- hud
+			hudShaderProgram.createUniform("projectionViewMatrix");
+			hudShaderProgram.createUniform("textureSampler");
+			hudShaderProgram.createUniform("color");
 		} catch (Exception e) {
 			e.printStackTrace();
 			exit(1);
@@ -136,14 +143,14 @@ public class Renderer {
 	public void calculateOrthographicMatrix() {
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
 
-		orthographicMatrix = Projection.createOrthographicProjectionMatrix(-aspectRatio*zNear,aspectRatio*zNear,1d*zNear,-1d*zNear,zNear,zFar);
+		orthographicMatrix = Projection.createOrthographicProjectionMatrix(-aspectRatio,aspectRatio,1d,-1d,0d,10d);
 	}
 
 	// ###################################################################################
-	// ################################ Rendering ########################################
+	// ################################ Input SHOULD NOT STAY HERE !!!! ##################
 	// ###################################################################################
 
-	public void render(Scene scene, HUDInterface hudInterface) {
+	private void processInput(Scene scene) {
 		double angleStep = 0.0025d;
 		angle += angleStep;
 		if (angle > Math.PI*2d) {
@@ -192,6 +199,14 @@ public class Renderer {
 		if (keyboard.isClicked(GLFW.GLFW_KEY_G)) { // gras tex
 			objects[1].setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png"));
 		}
+	}
+
+	// ###################################################################################
+	// ################################ Rendering ########################################
+	// ###################################################################################
+
+	public void render(Scene scene, HUDInterface hudInterface) {
+		processInput(scene);
 
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
@@ -237,20 +252,41 @@ public class Renderer {
 		shaderProgram.setUniform("ambientLight",scene.getAmbientLight().getColor());
 
 		for (GraphicalObject object : scene.getObjects()) {
-			Mesh mesh = object.getMesh();
-			shaderProgram.setUniform("modelViewMatrix", camera.getViewMatrix().times(object.getWorldMatrix()));
-			shaderProgram.setUniform("color", mesh.getColor());
-			shaderProgram.setUniform("affectedByLight", object.isAffectedByLight() ? 1 : 0);
-			shaderProgram.setUniform("dynamic", object.isStatic() ? 0 : 1);
-			shaderProgram.setUniform("material", object.getMesh().getMaterial());
-			object.render();
+			if (object != null) {
+				Mesh mesh = object.getMesh();
+				shaderProgram.setUniform("modelViewMatrix", camera.getViewMatrix().times(object.getWorldMatrix()));
+				shaderProgram.setUniform("color", mesh.getColor());
+				shaderProgram.setUniform("affectedByLight", object.isAffectedByLight() ? 1 : 0);
+				shaderProgram.setUniform("dynamic", object.isStatic() ? 0 : 1);
+				shaderProgram.setUniform("material", object.getMesh().getMaterial());
+				object.render();
+			}
 		}
 
 		shaderProgram.unbind();
 	}
 
 	private void renderHUD(HUDInterface hudInterface) {
+		hudInterface.getGraphicalObjects()[0].setPosition(-1,Math.cos(angle*16),0);
 
+		hudShaderProgram.bind();
+
+		// set used texture (id = 0)
+		hudShaderProgram.setUniform("textureSampler", 0);
+
+		for (GraphicalObject object : hudInterface.getGraphicalObjects()) {
+			if (object != null) {
+				hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
+				hudShaderProgram.setUniform("color", object.getMesh().getColor());
+				object.render();
+
+				//Matrix4 m = orthographicMatrix.times(object.getWorldMatrix());
+				//System.out.println(m);
+				//System.out.println(m.times(new Vector4(object.getPosition())));
+			}
+		}
+
+		hudShaderProgram.unbind();
 	}
 
 	// ###################################################################################

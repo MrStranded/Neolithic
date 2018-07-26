@@ -5,6 +5,7 @@ import engine.graphics.objects.light.*;
 import engine.graphics.objects.models.Texture;
 import engine.graphics.renderer.color.RGBA;
 import engine.math.numericalObjects.Vector3;
+import load.OBJLoader;
 import load.TextureLoader;
 
 public class Scene {
@@ -41,7 +42,11 @@ public class Scene {
 		objects[0].setStatic(true);
 		objects[0].setUseDepthTest(false);
 
-		//objects[1] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
+//		try {
+//			objects[1] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		objects[1].setTexture(icoTexture);
 		objects[1].scale(3,3,3);

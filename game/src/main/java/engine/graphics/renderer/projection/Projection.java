@@ -30,7 +30,7 @@ public class Projection {
 		m.setA11(2d / (right-left));
 		m.setA14(- (right+left) / (right-left));
 
-		m.setA22(1d / (top-bottom));
+		m.setA22(2d / (top-bottom));
 		m.setA24(- (top+bottom) / (top-bottom));
 
 		m.setA33(-2d / (far-near));

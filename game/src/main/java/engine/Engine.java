@@ -1,5 +1,6 @@
 package engine;
 
+import engine.graphics.gui.BaseHUD;
 import engine.graphics.gui.HUDInterface;
 import engine.graphics.objects.Scene;
 import engine.graphics.window.Window;
@@ -25,6 +26,7 @@ public class Engine {
 		renderer.initialize();
 
 		scene = new Scene();
+		hud = new BaseHUD();
 	}
 
 	public static void createWorld() {
