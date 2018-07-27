@@ -195,6 +195,54 @@ public class Mesh {
 		registerData();
 	}
 
+	/**
+	 * This method ensures that the x and y coordinates of the vertices reach (at most) from (0,0) to (1,1).
+	 */
+	public void normalize() {
+		float leftMost=0f, rightMost=0f, topMost=0f, bottomMost=0f;
+
+		// find out the dimenstions of the mesh
+		int dimension = 0;
+		for (int i=0; i<vertices.length; i++) {
+			if (dimension == 0) { // X dimension
+				if (vertices[i] < leftMost) {
+					leftMost = vertices[i];
+				}
+				if (vertices[i] > rightMost) {
+					rightMost = vertices[i];
+				}
+			} else if (dimension == 1) { // Y dimension
+				if (vertices[i] < bottomMost) {
+					bottomMost = vertices[i];
+				}
+				if (vertices[i] > topMost) {
+					topMost = vertices[i];
+				}
+			}
+
+			dimension = (dimension + 1) % 3;
+		}
+
+		float width = rightMost - leftMost;
+		float height = topMost - bottomMost;
+		if (width == 0f) { width = 1f; }
+		if (height == 0f) { height = 1f; }
+
+		// modify the coordinates to fit into the desired space from (0,0) to (1,1)
+		dimension = 0;
+		for (int i=0; i<vertices.length; i++) {
+			if (dimension == 0) { // X dimension
+				vertices[i] = (vertices[i] - leftMost) / width;
+			} else if (dimension == 1) { // Y dimension
+				vertices[i] = (vertices[i] - bottomMost) / height;
+			}
+
+			dimension = (dimension + 1) % 3;
+		}
+
+		registerData();
+	}
+
 	// ###################################################################################
 	// ################################ Clean Up #########################################
 	// ###################################################################################

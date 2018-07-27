@@ -12,7 +12,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextObject extends GraphicalObject {
+public class TextObject extends HUDObject {
 
 	private String text;
 	private FontTexture fontTexture;
@@ -98,6 +98,7 @@ public class TextObject extends GraphicalObject {
 				normals,
 				FloatConverter.FloatListToFloatArray(textureCoordinates)
 		);
+		mesh.normalize();
 		mesh.setTexture(fontTexture.getTexture());
 		return mesh;
 	}

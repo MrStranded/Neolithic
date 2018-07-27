@@ -1,6 +1,6 @@
 package engine.graphics.gui;
 
-import engine.graphics.objects.GraphicalObject;
+import engine.graphics.objects.HUDObject;
 import engine.graphics.objects.TextObject;
 import engine.graphics.objects.generators.MeshGenerator;
 import engine.graphics.objects.textures.FontTexture;
@@ -10,14 +10,14 @@ import java.awt.*;
 
 public class BaseHUD implements HUDInterface {
 
-	private GraphicalObject[] objects;
+	private HUDObject[] objects;
 
 	public BaseHUD() {
 		initializeTestObjects();
 	}
 
 	private void initializeTestObjects() {
-		objects = new GraphicalObject[2];
+		objects = new HUDObject[2];
 
 		FontTexture fontTexture = null;
 		try {
@@ -27,11 +27,11 @@ public class BaseHUD implements HUDInterface {
 		}
 		objects[0] = new TextObject("Test", fontTexture);
 		//objects[0].setPosition(-1,-1,0);
-		double s = 1d/100d;
-		objects[0].setScale(s,s,s);
+		//double s = 1d/100d;
+		//objects[0].setScale(s,s,s);
 		//objects[0].getMesh().randomizeTextureCoordinates();
 
-		objects[1] = new GraphicalObject(MeshGenerator.createQuad());
+		objects[1] = new HUDObject(MeshGenerator.createQuad());
 		objects[1].setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png"));
 		//objects[1].setTexture(fontTexture.getTexture());
 	}
@@ -41,7 +41,7 @@ public class BaseHUD implements HUDInterface {
 	// ###################################################################################
 
 	@Override
-	public GraphicalObject[] getGraphicalObjects() {
+	public HUDObject[] getHUDObjects() {
 		return objects;
 	}
 }

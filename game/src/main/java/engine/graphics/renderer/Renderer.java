@@ -3,6 +3,7 @@ package engine.graphics.renderer;
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
 import engine.graphics.gui.HUDInterface;
+import engine.graphics.objects.HUDObject;
 import engine.graphics.objects.Scene;
 import engine.graphics.objects.light.*;
 import engine.graphics.renderer.projection.Projection;
@@ -33,6 +34,12 @@ public class Renderer {
 
 	private Matrix4 projectionMatrix;
 	private Matrix4 orthographicMatrix;
+
+	/**
+	 * Whenever the aspect ratio has changed, we might need to update the scale of the hud objects.
+	 * This is done in renderHUD().
+	 */
+	private boolean aspectRatioHasChanged = true;
 
 	private MouseInput mouse;
 	private KeyboardInput keyboard;
@@ -127,10 +134,12 @@ public class Renderer {
 	public void recalculateAspectRatio() {
 		calculateProjectionMatrix();
 		calculateOrthographicMatrix();
+
+		aspectRatioHasChanged = true;
 	}
 
 	private void calculateProjectionMatrix() {
-		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
+		double aspectRatio = getAspectRatio();
 
 		// values are multiplied with znear so the size of objects on the screen is independant from the znear value
 		projectionMatrix = Projection.createPerspectiveProjectionMatrix(
@@ -144,7 +153,7 @@ public class Renderer {
 	}
 
 	private void calculateOrthographicMatrix() {
-		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
+		double aspectRatio = getAspectRatio();
 
 		orthographicMatrix = Projection.createOrthographicProjectionMatrix(-aspectRatio, aspectRatio,1d,-1d,0d,10d);
 	}
@@ -274,15 +283,20 @@ public class Renderer {
 	}
 
 	private void renderHUD(HUDInterface hud) {
-		hud.getGraphicalObjects()[0].setPosition(-0.5,Math.cos(angle*1),0);
+		hud.getHUDObjects()[0].setPosition(-0.5,Math.cos(angle*16)-0.5,0);
+		hud.getHUDObjects()[1].setPosition(-getAspectRatio(),0,0);
 
 		hudShaderProgram.bind();
 
 		// set used texture (id = 0)
 		hudShaderProgram.setUniform("textureSampler", 0);
 
-		for (GraphicalObject object : hud.getGraphicalObjects()) {
+		for (HUDObject object : hud.getHUDObjects()) {
 			if (object != null) {
+				if (aspectRatioHasChanged) {
+					object.recalculateScale(window.getWidth(), window.getHeight());
+				}
+
 				hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
 				hudShaderProgram.setUniform("color", object.getMesh().getColor());
 				object.render();
@@ -290,6 +304,8 @@ public class Renderer {
 		}
 
 		hudShaderProgram.unbind();
+
+		aspectRatioHasChanged = false;
 	}
 
 	// ###################################################################################
@@ -317,5 +333,13 @@ public class Renderer {
 		}
 
 		window.destroy();
+	}
+
+	// ###################################################################################
+	// ################################ Getters and Setters ##############################
+	// ###################################################################################
+
+	public double getAspectRatio() {
+		return (double) window.getWidth() / (double) window.getHeight();
 	}
 }

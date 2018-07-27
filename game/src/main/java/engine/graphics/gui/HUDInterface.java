@@ -1,14 +1,14 @@
 package engine.graphics.gui;
 
-import engine.graphics.objects.GraphicalObject;
+import engine.graphics.objects.HUDObject;
 
 public interface HUDInterface {
 
-	GraphicalObject[] getGraphicalObjects();
+	HUDObject[] getHUDObjects();
 
 	default void cleanUp() {
-		GraphicalObject[] objects = getGraphicalObjects();
-		for (GraphicalObject object : objects) {
+		HUDObject[] objects = getHUDObjects();
+		for (HUDObject object : objects) {
 			object.cleanUp();
 		}
 	}

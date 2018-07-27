@@ -8,9 +8,9 @@ import engine.graphics.objects.models.Mesh;
 public class GraphicalObject extends MoveableObject {
 
 	protected Mesh mesh;
-	private boolean useDepthTest = true;
-	private boolean affectedByLight = true;
-	private boolean isStatic = false; // static objects won't be moved around and are always in the same place around the camera
+	protected boolean useDepthTest = true;
+	protected boolean affectedByLight = true;
+	protected boolean isStatic = false; // static objects won't be moved around and are always in the same place around the camera
 
 	public GraphicalObject(Mesh mesh) {
 		this.mesh = mesh;
