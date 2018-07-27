@@ -15,27 +15,13 @@
       <file leaf-file-name="Renderer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="448">
-              <caret line="284" column="18" selection-start-line="284" selection-start-column="18" selection-end-line="284" selection-end-column="18" />
+            <state relative-caret-position="-615">
+              <caret line="219" column="9" selection-start-line="219" selection-start-column="9" selection-end-line="219" selection-end-column="9" />
               <folding>
-                <element signature="e#9473#9474#0" expanded="true" />
-                <element signature="e#9505#9506#0" expanded="true" />
-                <element signature="e#9528#9529#0" expanded="true" />
-                <element signature="e#9548#9549#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseHUD.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseHUD.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#184#185#0" expanded="true" />
-                <element signature="e#196#197#0" expanded="true" />
+                <element signature="e#10260#10261#0" expanded="true" />
+                <element signature="e#10292#10293#0" expanded="true" />
+                <element signature="e#10315#10316#0" expanded="true" />
+                <element signature="e#10335#10336#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -44,8 +30,8 @@
       <file leaf-file-name="Scene.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/Scene.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="358">
-              <caret line="47" column="32" lean-forward="true" selection-start-line="47" selection-start-column="32" selection-end-line="47" selection-end-column="32" />
+            <state relative-caret-position="403">
+              <caret line="80" column="40" lean-forward="true" selection-start-line="80" selection-start-column="40" selection-end-line="80" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#546#547#0" expanded="true" />
@@ -55,18 +41,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Engine.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/Engine.java">
+      <file leaf-file-name="GraphicalObject.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/GraphicalObject.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="28" column="28" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
+            <state relative-caret-position="435">
+              <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#768#769#0" expanded="true" />
-                <element signature="e#787#788#0" expanded="true" />
-                <element signature="e#935#936#0" expanded="true" />
-                <element signature="e#960#961#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GraphicalConstants.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/GraphicalConstants.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="23" selection-start-line="5" selection-start-column="23" selection-end-line="5" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -74,34 +65,46 @@
       <file leaf-file-name="Mesh.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/models/Mesh.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2520">
-              <caret line="192" column="23" selection-start-line="192" selection-start-column="23" selection-end-line="192" selection-end-column="23" />
+            <state relative-caret-position="75">
+              <caret line="98" column="66" lean-forward="true" selection-start-line="98" selection-start-column="66" selection-end-line="98" selection-end-column="66" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#7205#7206#0" expanded="true" />
+                <element signature="e#7235#7236#0" expanded="true" />
+                <element signature="e#7295#7296#0" expanded="true" />
+                <element signature="e#7327#7328#0" expanded="true" />
+                <element signature="e#7353#7354#0" expanded="true" />
+                <element signature="e#7372#7373#0" expanded="true" />
+                <element signature="e#7500#7501#0" expanded="true" />
+                <element signature="e#7535#7536#0" expanded="true" />
+                <element signature="e#7566#7567#0" expanded="true" />
+                <element signature="e#7601#7602#0" expanded="true" />
+                <element signature="e#7635#7636#0" expanded="true" />
+                <element signature="e#7657#7658#0" expanded="true" />
+                <element signature="e#7703#7704#0" expanded="true" />
+                <element signature="e#7734#7735#0" expanded="true" />
+                <element signature="e#7774#7775#0" expanded="true" />
+                <element signature="e#7807#7808#0" expanded="true" />
+                <element signature="e#7848#7849#0" expanded="true" />
+                <element signature="e#7876#7877#0" expanded="true" />
+                <element signature="e#7906#7907#0" expanded="true" />
+                <element signature="e#7929#7930#0" expanded="true" />
+                <element signature="e#7961#7962#0" expanded="true" />
+                <element signature="e#7986#7987#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TextObject.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TextObject.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/TextObject.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="25" column="8" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
+            <state relative-caret-position="555">
+              <caret line="115" column="34" lean-forward="true" selection-start-line="115" selection-start-column="34" selection-end-line="115" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ShaderProgram.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/renderer/shaders/ShaderProgram.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="463">
-              <caret line="166" selection-start-line="166" selection-end-line="166" />
-              <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#3471#3472#0" expanded="true" />
+                <element signature="e#3489#3490#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -116,11 +119,20 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="vertex.vs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/vertex.vs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="17" selection-start-line="17" selection-end-line="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="orthoVertex.vs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/orthoVertex.vs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="34" lean-forward="true" selection-start-line="8" selection-start-column="34" selection-end-line="8" selection-end-column="34" />
+            <state relative-caret-position="45">
+              <caret line="3" column="17" selection-start-line="3" selection-start-column="17" selection-end-line="3" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -129,7 +141,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/orthoFragment.fs">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="150">
-              <caret line="10" column="73" selection-start-line="10" selection-start-column="73" selection-end-line="10" selection-end-column="73" />
+              <caret line="10" column="65" selection-start-line="10" selection-start-column="65" selection-end-line="10" selection-end-column="65" />
             </state>
           </provider>
         </entry>
@@ -170,6 +182,7 @@
       <find>TempObject</find>
       <find>integerList</find>
       <find>intArray</find>
+      <find>hudInterface</find>
     </findStrings>
     <replaceStrings>
       <replace>screen</replace>
@@ -194,12 +207,12 @@
       <replace>objects[2]</replace>
       <replace>floatList</replace>
       <replace>floatArray</replace>
+      <replace>hud</replace>
     </replaceStrings>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/engine/objects/movement/MoveableObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/objects/Camera.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/objects/movement/MoveableCamera.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/renderer/projection/Projection.java" />
@@ -226,7 +239,6 @@
         <option value="$PROJECT_DIR$/src/test/java/math/Vector3Test.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/math/numericalObjects/Vector3.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/Attenuation.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/models/Mesh.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/movement/MoveableObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/Camera.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/models/Material.java" />
@@ -237,19 +249,21 @@
         <option value="$PROJECT_DIR$/src/main/resources/shaders/fragment.fs" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/renderer/shaders/ShaderProgram.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/MeshGenerator.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/shaders/vertex.vs" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/GraphicalObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/utils/converters/FloatConverter.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/shaders/orthoVertex.vs" />
-        <option value="$PROJECT_DIR$/src/main/resources/shaders/orthoFragment.fs" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/gui/HUDInterface.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/Constants.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/Engine.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/Scene.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseHUD.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/renderer/projection/Projection.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseHUD.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/Engine.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/shaders/orthoFragment.fs" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/TextObject.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/GraphicalConstants.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/Scene.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/shaders/orthoVertex.vs" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/models/Mesh.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/shaders/vertex.vs" />
       </list>
     </option>
   </component>
@@ -367,6 +381,15 @@
               <item name="graphics" type="462c0819:PsiDirectoryNode" />
               <item name="renderer" type="462c0819:PsiDirectoryNode" />
               <item name="projection" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
+              <item name="converters" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
@@ -652,7 +675,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="206997000" />
+    <option name="totallyTimeSpent" value="217010000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -1011,13 +1034,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/fragment.fs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="185" column="30" selection-start-line="185" selection-start-column="30" selection-end-line="185" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/Camera.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
@@ -1040,13 +1056,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/vertex.vs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="71" selection-start-line="15" selection-start-column="71" selection-end-line="15" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/math/numericalObjects/Vector4.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="508">
@@ -1058,13 +1067,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/utils/converters/FloatConverter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
         </state>
       </provider>
     </entry>
@@ -1093,27 +1095,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/GraphicalConstants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/Engine.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="28" column="28" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#768#769#0" expanded="true" />
-            <element signature="e#787#788#0" expanded="true" />
-            <element signature="e#935#936#0" expanded="true" />
-            <element signature="e#960#961#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/renderer/shaders/ShaderProgram.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="463">
@@ -1124,60 +1105,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/orthoVertex.vs">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/fragment.fs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="34" lean-forward="true" selection-start-line="8" selection-start-column="34" selection-end-line="8" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/orthoFragment.fs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="73" selection-start-line="10" selection-start-column="73" selection-end-line="10" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/GraphicalObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/models/Mesh.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2520">
-          <caret line="192" column="23" selection-start-line="192" selection-start-column="23" selection-end-line="192" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/Scene.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
-          <caret line="47" column="32" lean-forward="true" selection-start-line="47" selection-start-column="32" selection-end-line="47" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#546#547#0" expanded="true" />
-            <element signature="e#576#577#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="1645">
+          <caret line="185" column="30" selection-start-line="185" selection-start-column="30" selection-end-line="185" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseHUD.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
+        <state relative-caret-position="285">
+          <caret line="19" column="10" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#184#185#0" expanded="true" />
             <element signature="e#196#197#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/Engine.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="20" column="37" selection-start-line="20" selection-start-column="37" selection-end-line="20" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1189,26 +1141,117 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/utils/converters/FloatConverter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="448">
-          <caret line="284" column="18" selection-start-line="284" selection-start-column="18" selection-end-line="284" selection-end-column="18" />
-          <folding>
-            <element signature="e#9473#9474#0" expanded="true" />
-            <element signature="e#9505#9506#0" expanded="true" />
-            <element signature="e#9528#9529#0" expanded="true" />
-            <element signature="e#9548#9549#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="90">
+          <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/TextObject.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="25" column="8" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
+        <state relative-caret-position="555">
+          <caret line="115" column="34" lean-forward="true" selection-start-line="115" selection-start-column="34" selection-end-line="115" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3471#3472#0" expanded="true" />
+            <element signature="e#3489#3490#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/GraphicalObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/GraphicalConstants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="23" selection-start-line="5" selection-start-column="23" selection-end-line="5" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/Scene.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="403">
+          <caret line="80" column="40" lean-forward="true" selection-start-line="80" selection-start-column="40" selection-end-line="80" selection-end-column="40" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#546#547#0" expanded="true" />
+            <element signature="e#576#577#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-615">
+          <caret line="219" column="9" selection-start-line="219" selection-start-column="9" selection-end-line="219" selection-end-column="9" />
+          <folding>
+            <element signature="e#10260#10261#0" expanded="true" />
+            <element signature="e#10292#10293#0" expanded="true" />
+            <element signature="e#10315#10316#0" expanded="true" />
+            <element signature="e#10335#10336#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/orthoFragment.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="65" selection-start-line="10" selection-start-column="65" selection-end-line="10" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/orthoVertex.vs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="17" selection-start-line="3" selection-start-column="17" selection-end-line="3" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/models/Mesh.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="98" column="66" lean-forward="true" selection-start-line="98" selection-start-column="66" selection-end-line="98" selection-end-column="66" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#7205#7206#0" expanded="true" />
+            <element signature="e#7235#7236#0" expanded="true" />
+            <element signature="e#7295#7296#0" expanded="true" />
+            <element signature="e#7327#7328#0" expanded="true" />
+            <element signature="e#7353#7354#0" expanded="true" />
+            <element signature="e#7372#7373#0" expanded="true" />
+            <element signature="e#7500#7501#0" expanded="true" />
+            <element signature="e#7535#7536#0" expanded="true" />
+            <element signature="e#7566#7567#0" expanded="true" />
+            <element signature="e#7601#7602#0" expanded="true" />
+            <element signature="e#7635#7636#0" expanded="true" />
+            <element signature="e#7657#7658#0" expanded="true" />
+            <element signature="e#7703#7704#0" expanded="true" />
+            <element signature="e#7734#7735#0" expanded="true" />
+            <element signature="e#7774#7775#0" expanded="true" />
+            <element signature="e#7807#7808#0" expanded="true" />
+            <element signature="e#7848#7849#0" expanded="true" />
+            <element signature="e#7876#7877#0" expanded="true" />
+            <element signature="e#7906#7907#0" expanded="true" />
+            <element signature="e#7929#7930#0" expanded="true" />
+            <element signature="e#7961#7962#0" expanded="true" />
+            <element signature="e#7986#7987#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/vertex.vs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
         </state>
       </provider>
     </entry>

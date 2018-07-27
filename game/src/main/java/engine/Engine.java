@@ -19,18 +19,15 @@ public class Engine {
 	private static HUDInterface hud;
 
 	public static void initialize() {
-
 		window = new Window(800,600,"Neolithic");
 
 		renderer = new Renderer(window);
 		renderer.initialize();
-
-		scene = new Scene();
-		hud = new BaseHUD();
 	}
 
 	public static void createWorld() {
-
+		scene = new Scene();
+		hud = new BaseHUD();
 	}
 
 	/**
@@ -48,6 +45,8 @@ public class Engine {
 
 	public static void cleanUp() {
 		renderer.cleanUp();
+		scene.cleanUp();
+		hud.cleanUp();
 	}
 
 }

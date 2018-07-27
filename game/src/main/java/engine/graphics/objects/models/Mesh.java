@@ -27,7 +27,6 @@ public class Mesh {
 	private float[] textureCoordinates;
 
 	public Mesh(float[] vertices, int[] indices, float[] normals, float[] textureCoordinates) {
-
 		this.vertices = vertices;
 		this.indices = indices;
 		this.normals = normals;
@@ -61,14 +60,12 @@ public class Mesh {
 	}
 
 	public void registerData() {
-
 		FloatBuffer verticesBuffer = null;
 		IntBuffer indicesBuffer = null;
 		FloatBuffer normalsBuffer = null;
 		FloatBuffer textureBuffer = null;
 
 		try {
-
 			// ------------------ whole object
 			GL30.glBindVertexArray(vertexArrayObjectId);
 
@@ -125,6 +122,8 @@ public class Mesh {
 			//GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 			// Unbind the VAO
 			GL30.glBindVertexArray(0);
+			// Unbind the texture
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		} finally {
 
 			// ------------------ buffer clean up
@@ -137,6 +136,9 @@ public class Mesh {
 			if (normalsBuffer != null) {
 				MemoryUtil.memFree(normalsBuffer);
 			}
+			if (textureBuffer != null) {
+				MemoryUtil.memFree(textureBuffer);
+			}
 		}
 	}
 
@@ -145,7 +147,6 @@ public class Mesh {
 	// ###################################################################################
 
 	public void render(boolean useDepthTest) {
-
 		// Activate first texture unit
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		// Bind the texture
@@ -198,14 +199,16 @@ public class Mesh {
 	// ###################################################################################
 
 	public void cleanUp() {
-
 		GL20.glDisableVertexAttribArray(0);
+		GL20.glDisableVertexAttribArray(1);
+		GL20.glDisableVertexAttribArray(2);
 
 		// Delete the VBOs
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 		GL15.glDeleteBuffers(positionsVboId);
 		GL15.glDeleteBuffers(indicesVboId);
 		GL15.glDeleteBuffers(normalsVboId);
+		GL15.glDeleteBuffers(textureVboId);
 
 		// Delete the VAO
 		GL30.glBindVertexArray(0);

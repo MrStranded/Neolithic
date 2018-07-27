@@ -35,13 +35,8 @@ public class Renderer {
 	private ShaderProgram shaderProgram;
 	private ShaderProgram hudShaderProgram;
 
-	private double zNear = 0.001d;
-	private double zFar = 1000d;
-
 	private Matrix4 projectionMatrix;
 	private Matrix4 orthographicMatrix;
-
-	private HUDInterface hudInterface;
 
 	private MouseInput mouse;
 	private KeyboardInput keyboard;
@@ -70,7 +65,7 @@ public class Renderer {
 	}
 
 	private void initializeShaders() {
-		// loading and binding the shaders
+		// loading and linking the shaders
 		try {
 			shaderProgram = new ShaderProgram();
 			shaderProgram.createVertexShader(StringLoader.read("src/main/resources/shaders/vertex.vs"));
@@ -82,7 +77,7 @@ public class Renderer {
 	}
 
 	private void initializeHUDShaders() {
-		// loading and binding the shaders
+		// loading and linking the shaders
 		try {
 			hudShaderProgram = new ShaderProgram();
 			hudShaderProgram.createVertexShader(StringLoader.read("src/main/resources/shaders/orthoVertex.vs"));
@@ -103,11 +98,10 @@ public class Renderer {
 			shaderProgram.createUniform("color");
 			shaderProgram.createUniform("affectedByLight");
 			shaderProgram.createUniform("dynamic");
-			shaderProgram.createUniform("ambientLight");
-
-			shaderProgram.createDirectionalLightUniform("directionalLight");
 			shaderProgram.createMaterialUniform("material");
 
+			shaderProgram.createUniform("ambientLight");
+			shaderProgram.createDirectionalLightUniform("directionalLight");
 			for (int i = 0; i<GraphicalConstants.MAX_POINT_LIGHTS; i++) {
 				shaderProgram.createPointLightUniform("pointLight[" + i + "]");
 			}
@@ -137,13 +131,21 @@ public class Renderer {
 	public void calculateProjectionMatrix() {
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
 
-		projectionMatrix = Projection.createPerspectiveProjectionMatrix(-aspectRatio*zNear,aspectRatio*zNear,1d*zNear,-1d*zNear,zNear,zFar);
+		// values are multiplied with znear so the size of objects on the screen is independant from the znear value
+		projectionMatrix = Projection.createPerspectiveProjectionMatrix(
+				-aspectRatio*GraphicalConstants.ZNEAR,
+				aspectRatio*GraphicalConstants.ZNEAR,
+				GraphicalConstants.ZNEAR,
+				-GraphicalConstants.ZNEAR,
+				GraphicalConstants.ZNEAR,
+				GraphicalConstants.ZFAR
+		);
 	}
 
 	public void calculateOrthographicMatrix() {
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
 
-		orthographicMatrix = Projection.createOrthographicProjectionMatrix(-aspectRatio,aspectRatio,1d,-1d,0d,10d);
+		orthographicMatrix = Projection.createOrthographicProjectionMatrix(-1d, 1d,1d,-1d,0d,10d);
 	}
 
 	// ###################################################################################
@@ -205,13 +207,17 @@ public class Renderer {
 	// ################################ Rendering ########################################
 	// ###################################################################################
 
-	public void render(Scene scene, HUDInterface hudInterface) {
+	public void render(Scene scene, HUDInterface hud) {
 		processInput(scene);
 
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-		renderScene(scene);
-		renderHUD(hudInterface);
+		if (scene != null) {
+			renderScene(scene);
+		}
+		if (hud != null) {
+			renderHUD(hud);
+		}
 
 		flip();
 
@@ -266,23 +272,19 @@ public class Renderer {
 		shaderProgram.unbind();
 	}
 
-	private void renderHUD(HUDInterface hudInterface) {
-		hudInterface.getGraphicalObjects()[0].setPosition(-1,Math.cos(angle*16),0);
+	private void renderHUD(HUDInterface hud) {
+		hud.getGraphicalObjects()[0].setPosition(-0.5,Math.cos(angle*16),0);
 
 		hudShaderProgram.bind();
 
 		// set used texture (id = 0)
 		hudShaderProgram.setUniform("textureSampler", 0);
 
-		for (GraphicalObject object : hudInterface.getGraphicalObjects()) {
+		for (GraphicalObject object : hud.getGraphicalObjects()) {
 			if (object != null) {
 				hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
 				hudShaderProgram.setUniform("color", object.getMesh().getColor());
 				object.render();
-
-				//Matrix4 m = orthographicMatrix.times(object.getWorldMatrix());
-				//System.out.println(m);
-				//System.out.println(m.times(new Vector4(object.getPosition())));
 			}
 		}
 
@@ -308,6 +310,9 @@ public class Renderer {
 	public void cleanUp() {
 		if (shaderProgram != null) {
 			shaderProgram.cleanup();
+		}
+		if (hudShaderProgram != null) {
+			hudShaderProgram.cleanup();
 		}
 
 		window.destroy();

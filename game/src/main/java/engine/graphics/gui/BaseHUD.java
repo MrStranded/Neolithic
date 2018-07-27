@@ -17,6 +17,7 @@ public class BaseHUD implements HUDInterface {
 		objects[0] = new TextObject("Test");
 		//objects[0].setPosition(-1,-1,0);
 		//objects[0].setScale(0.1,0.1,1);
+		//objects[0].getMesh().randomizeTextureCoordinates();
 	}
 
 	// ###################################################################################

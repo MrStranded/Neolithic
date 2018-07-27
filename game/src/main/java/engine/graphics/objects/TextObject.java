@@ -26,7 +26,7 @@ public class TextObject extends GraphicalObject {
 		Texture texture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
 		mesh = buildMesh(texture);
 
-		setUseDepthTest(false);
+		//setUseDepthTest(false);
 	}
 
 	private Mesh buildMesh(Texture texture) {
@@ -51,8 +51,6 @@ public class TextObject extends GraphicalObject {
 			int character = characters[i] - 32; // minus 32 because the first 32 chars are control chars that are not in the font texture
 			float xPos = (float) (character % columns);
 			float yPos = (float) (character / columns);
-
-			System.out.println("char "+text.charAt(i)+" has value "+character+" at position ("+xPos+","+yPos+")");
 
 			// small tile / quad for current character
 
