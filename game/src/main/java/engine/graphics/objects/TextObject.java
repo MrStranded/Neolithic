@@ -22,8 +22,8 @@ public class TextObject extends GraphicalObject {
 		this.columns = 16;
 		this.rows = 16;
 
-		//Texture texture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/font_png.png");
-		Texture texture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
+		Texture texture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/font_png.png");
+		//Texture texture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
 		mesh = buildMesh(texture);
 
 		//setUseDepthTest(false);

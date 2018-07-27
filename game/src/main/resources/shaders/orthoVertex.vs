@@ -11,5 +11,10 @@ uniform mat4 projectionViewMatrix;
 void main() {
     gl_Position = projectionViewMatrix * vec4(inPosition, 1.0);
 
-    outTextureCoordinates = inTextureCoordinates;
+    // So this is very interesting: if we do not 'use' inNormal here, the gpu seems to think it does not need the
+    // inNormal value, thus disabling the vertex attribute and apparantely also the following attribute, which happens
+    // to be the texture coordinates.
+    // Consequently we need to 'use' the inNormal value to trick the gpu into thinking the value is needed, such that
+    // we may use the texture coordinates.
+    outTextureCoordinates = inTextureCoordinates + inNormal.xy - inNormal.xy;
 }

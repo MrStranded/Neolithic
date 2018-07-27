@@ -48,12 +48,12 @@ public class Mesh {
 		// ------------------ index part
 		indicesVboId = GL15.glGenBuffers();
 
-		// ------------------ color part
+		// ------------------ normal part
 		normalsVboId = GL15.glGenBuffers();
 
 		// ------------------ texture part
-		textureId = GL11.glGenTextures();
 		textureVboId = GL15.glGenBuffers();
+		textureId = GL11.glGenTextures();
 
 		// register mesh data
 		registerData();
@@ -96,6 +96,14 @@ public class Mesh {
 
 			// ------------------ texture part
 			if (material.hasTexture()) {
+				textureBuffer = MemoryUtil.memAllocFloat(textureCoordinates.length);
+				textureBuffer.put(textureCoordinates).flip();
+
+				GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, textureVboId);
+				GL15.glBufferData(GL15.GL_ARRAY_BUFFER, textureBuffer, GL15.GL_STATIC_DRAW);
+
+				GL20.glVertexAttribPointer(2, 2, GL11.GL_FLOAT, false, 0, 0);
+
 				GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
 				GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
@@ -106,14 +114,6 @@ public class Mesh {
 						0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
 						material.getTexture().getBuffer());
 				GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-
-				textureBuffer = MemoryUtil.memAllocFloat(textureCoordinates.length);
-				textureBuffer.put(textureCoordinates).flip();
-
-				GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, textureVboId);
-				GL15.glBufferData(GL15.GL_ARRAY_BUFFER, textureBuffer, GL15.GL_STATIC_DRAW);
-
-				GL20.glVertexAttribPointer(2, 2, GL11.GL_FLOAT, false, 0, 0);
 			}
 
 			// ------------------ unbind

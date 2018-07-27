@@ -273,7 +273,7 @@ public class Renderer {
 	}
 
 	private void renderHUD(HUDInterface hud) {
-		hud.getGraphicalObjects()[0].setPosition(-0.5,Math.cos(angle*16),0);
+		hud.getGraphicalObjects()[0].setPosition(-0.5,Math.cos(angle*1),0);
 
 		hudShaderProgram.bind();
 

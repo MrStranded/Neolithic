@@ -17,7 +17,6 @@ public class Window {
 	private long window;
 
 	public Window(int width, int height, String title) {
-
 		this.title = title;
 		this.width = width;
 		this.height = height;
@@ -28,7 +27,6 @@ public class Window {
 	// ###################################################################################
 
 	public void initialize() {
-
 		createWindow();
 		createKeyCallback();
 		createResizeCallback();
@@ -36,7 +34,6 @@ public class Window {
 	}
 
 	private void createWindow() {
-
 		// Setup an error callback. The default implementation
 		// will print the error message in System.err.
 		GLFWErrorCallback.createPrint(System.err).set();
@@ -62,7 +59,6 @@ public class Window {
 	 * This method is disfunctional, as soon as a KeyboardInput is created, which references this window.
 	 */
 	private void createKeyCallback() {
-
 		// Setup a key callback. It will be called every time a key is pressed, repeated or released.
 		GLFW.glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
 			if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_RELEASE) {
@@ -72,7 +68,6 @@ public class Window {
 	}
 
 	private void createResizeCallback() {
-
 		// Setup a resize callback. It will be called every time the window is resized.
 		Window self = this;
 		GLFW.glfwSetWindowSizeCallback(window, new GLFWWindowSizeCallback(){
@@ -89,7 +84,6 @@ public class Window {
 	}
 
 	private void registerWindow() {
-
 		// Get the thread stack and push a new frame
 		try (MemoryStack stack = MemoryStack.stackPush()) {
 			IntBuffer pWidth = stack.mallocInt(1); // int*
@@ -133,6 +127,10 @@ public class Window {
 
 		// Set the clear color
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+		// Support for transparencies
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	}
 
 	// ###################################################################################
