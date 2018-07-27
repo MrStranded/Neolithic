@@ -17,10 +17,6 @@ public class Camera extends MoveableCamera {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public Matrix4 getViewMatrix() {
-		return matrix;
-	}
-
 	public Vector3 getPosition() {
 		return new Vector3(0,0,radius);
 	}

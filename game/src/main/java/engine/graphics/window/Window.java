@@ -31,6 +31,7 @@ public class Window {
 		createKeyCallback();
 		createResizeCallback();
 		registerWindow();
+		setSettings();
 	}
 
 	private void createWindow() {
@@ -117,7 +118,9 @@ public class Window {
 		// creates the GLCapabilities instance and makes the OpenGL
 		// bindings available for use.
 		GL.createCapabilities();
+	}
 
+	private void setSettings() {
 		// enable back face culling and depth testing
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -146,7 +149,6 @@ public class Window {
 	}
 
 	public void flip() {
-
 		GLFW.glfwSwapBuffers(window); // swap the color buffers
 
 		// Poll for window events. The key callback above will only be

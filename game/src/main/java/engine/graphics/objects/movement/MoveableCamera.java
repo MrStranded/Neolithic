@@ -26,15 +26,11 @@ public class MoveableCamera {
 	// ###################################################################################
 
 	public void changeRadius(double delta) {
-
 		this.radius += delta;
-		update();
 	}
 
 	public void setRadius(double radius) {
-
 		this.radius = radius;
-		update();
 	}
 
 	// ###################################################################################
@@ -42,53 +38,30 @@ public class MoveableCamera {
 	// ###################################################################################
 
 	public void setRotation(double yaw, double pitch, double tilt) {
-
 		this.yaw = yaw;
 		this.pitch = pitch;
 		this.tilt = tilt;
-		update();
+		checkAngle();
 	}
 
 	public void rotateYaw(double delta) {
-
 		yaw += delta;
-		update();
+		checkAngle();
 	}
 	public void rotatePitch(double delta) {
-
 		pitch += delta;
-		update();
+		checkAngle();
 	}
 	public void rotateTilt(double delta) {
-
 		tilt += delta;
-		update();
+		checkAngle();
 	}
 
 	// ###################################################################################
 	// ################################ Update ###########################################
 	// ###################################################################################
 
-	protected void update() {
-
-		checkAngle();
-
-		/*
-		Vector3 worldRotation = new Vector3(-pitch-tilt, -yaw, 0);
-		Vector3 worldPosition = new Vector3(0, Math.sin(-tilt)*radius, -Math.cos(tilt)*radius - radius);
-
-		matrix =    Transformations.translate(worldPosition).times(
-					Transformations.rotate(worldRotation));
-		*/
-
-		matrix = Transformations.rotateX(-tilt).times(
-				Transformations.translate(new Vector3(0,0, -radius)).times(
-				Transformations.rotateX(-pitch).times(
-				Transformations.rotateY(-yaw))));
-	}
-
 	protected void checkAngle() {
-
 		if (yaw > TAU) {
 			yaw -= TAU;
 		}
@@ -107,5 +80,16 @@ public class MoveableCamera {
 		if (tilt < 0) {
 			tilt += TAU;
 		}
+	}
+
+	// ###################################################################################
+	// ################################ View Matrix ######################################
+	// ###################################################################################
+
+	public Matrix4 getViewMatrix() {
+		return  Transformations.rotateX(-tilt).times(
+				Transformations.translate(new Vector3(0,0, -radius)).times(
+				Transformations.rotateX(-pitch).times(
+				Transformations.rotateY(-yaw))));
 	}
 }
