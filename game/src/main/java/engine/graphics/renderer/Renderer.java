@@ -4,7 +4,6 @@ import engine.graphics.GraphicalConstants;
 import engine.graphics.gui.HUDInterface;
 import engine.graphics.objects.Scene;
 import engine.graphics.objects.light.*;
-import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.input.KeyboardInput;
@@ -12,16 +11,12 @@ import engine.input.MouseInput;
 import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.Camera;
 import engine.graphics.objects.models.Mesh;
-import engine.graphics.objects.models.Texture;
 import engine.graphics.window.Window;
-import engine.math.numericalObjects.Vector3;
-import engine.math.numericalObjects.Vector4;
 import load.StringLoader;
 import load.TextureLoader;
 import engine.math.numericalObjects.Matrix4;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
-import engine.graphics.objects.generators.MeshGenerator;
 
 import static java.lang.System.exit;
 

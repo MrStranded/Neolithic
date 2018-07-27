@@ -11,6 +11,7 @@ void main() {
     vec4 textureColor = texture(textureSampler, outTextureCoordinates);
     if (textureColor.w == 0.0) {
         discard;
+        //fragmentColor = vec4(outTextureCoordinates, 0.0, 1.0);
     } else {
         fragmentColor = color * textureColor;
     }

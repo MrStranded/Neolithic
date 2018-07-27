@@ -2,10 +2,9 @@ package engine.graphics.objects;
 
 import engine.graphics.objects.generators.MeshGenerator;
 import engine.graphics.objects.light.*;
-import engine.graphics.objects.models.Texture;
+import engine.graphics.objects.textures.Texture;
 import engine.graphics.renderer.color.RGBA;
 import engine.math.numericalObjects.Vector3;
-import load.OBJLoader;
 import load.TextureLoader;
 
 public class Scene {

@@ -1,5 +1,6 @@
 package engine.graphics.objects.models;
 
+import engine.graphics.objects.textures.Texture;
 import engine.graphics.renderer.color.RGBA;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.MemoryUtil;

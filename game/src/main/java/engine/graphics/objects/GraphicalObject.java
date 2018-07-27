@@ -1,8 +1,7 @@
 package engine.graphics.objects;
 
-import engine.graphics.objects.models.Texture;
+import engine.graphics.objects.textures.Texture;
 import engine.graphics.objects.movement.MoveableObject;
-import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
 import engine.graphics.objects.models.Mesh;
 

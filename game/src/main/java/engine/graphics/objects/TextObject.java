@@ -1,7 +1,9 @@
 package engine.graphics.objects;
 
 import engine.graphics.objects.models.Mesh;
-import engine.graphics.objects.models.Texture;
+import engine.graphics.objects.textures.CharInfo;
+import engine.graphics.objects.textures.FontTexture;
+import engine.graphics.objects.textures.Texture;
 import engine.utils.converters.FloatConverter;
 import engine.utils.converters.IntegerConverter;
 import load.TextureLoader;
@@ -13,24 +15,19 @@ import java.util.List;
 public class TextObject extends GraphicalObject {
 
 	private String text;
-	private int columns, rows;
+	private FontTexture fontTexture;
 
-	public TextObject(String text) {
+	private float width, height;
+
+	public TextObject(String text, FontTexture fontTexture) {
 		this.text = text;
+		this.fontTexture = fontTexture;
 
-		// make this interchangeable?
-		this.columns = 16;
-		this.rows = 16;
-
-		Texture texture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/font_png.png");
-		//Texture texture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
-		mesh = buildMesh(texture);
-
-		//setUseDepthTest(false);
+		mesh = buildMesh();
 	}
 
-	private Mesh buildMesh(Texture texture) {
-		byte[] characters = text.getBytes(Charset.forName("ISO-8859-1"));
+	private Mesh buildMesh() {
+		char[] characters = text.toCharArray();
 		int numberOfCharacters = characters.length;
 
 		List<Float> positions = new ArrayList<>();
@@ -38,49 +35,50 @@ public class TextObject extends GraphicalObject {
 		List<Integer> indices = new ArrayList<>();
 		float[] normals = new float[0];
 
-		//float tileWidth = (float) texture.getWidth() / (float) columns;
-		//float tileHeight = (float) texture.getHeight() / (float) rows;
+		// please do not confuse with charInfo.xPos
+		// this xPos here refers to the current position in the text mesh
+		// the charInfo.xPos refers to the position of the char in the font texture
+		float xPos = 0f;
 
-		float textureWidth = 1f / (float) columns;
-		float textureHeight = 1f / (float) rows;
-
-		float fontWidth = 1f / 4f;
-		float fontHeight = 1f / 4f;
+		float fontWidth = fontTexture.getTexture().getWidth();
+		float fontHeight = fontTexture.getTexture().getHeight();
 
 		for (int i=0; i<numberOfCharacters; i++) {
-			int character = characters[i] - 32; // minus 32 because the first 32 chars are control chars that are not in the font texture
-			float xPos = (float) (character % columns);
-			float yPos = (float) (character / columns);
+			CharInfo charInfo = fontTexture.getCharInfo(characters[i]);
+			float charWidth = charInfo.getWidth();
+			float charXPos = charInfo.getxPos();
 
 			// small tile / quad for current character
 
+			System.out.println((charXPos / fontWidth) + " , " + charWidth);
+
 			// top left vertex
-			positions.add(fontWidth * i);
+			positions.add(xPos);
 			positions.add(0f);
 			positions.add(0f);
-			textureCoordinates.add(textureWidth * xPos);
-			textureCoordinates.add(textureHeight * yPos);
+			textureCoordinates.add(charXPos / fontWidth);
+			textureCoordinates.add(0f);
 
 			// bottom left vertex
-			positions.add(fontWidth * i);
+			positions.add(xPos);
 			positions.add(-fontHeight);
 			positions.add(0f);
-			textureCoordinates.add(textureWidth * xPos);
-			textureCoordinates.add(textureHeight * (yPos+1));
+			textureCoordinates.add(charXPos / fontWidth);
+			textureCoordinates.add(1f);
 
 			// top right vertex
-			positions.add(fontWidth * (i+1));
+			positions.add(xPos + charWidth);
 			positions.add(0f);
 			positions.add(0f);
-			textureCoordinates.add(textureWidth * (xPos+1));
-			textureCoordinates.add(textureHeight * yPos);
+			textureCoordinates.add((charXPos + charWidth) / fontWidth);
+			textureCoordinates.add(0f);
 
 			// bottom right vertex
-			positions.add(fontWidth * (i+1));
+			positions.add(xPos + charWidth);
 			positions.add(-fontHeight);
 			positions.add(0f);
-			textureCoordinates.add(textureWidth * (xPos+1));
-			textureCoordinates.add(textureHeight * (yPos+1));
+			textureCoordinates.add((charXPos + charWidth) / fontWidth);
+			textureCoordinates.add(1f);
 
 			// indices
 			indices.add(i*4 + 0);
@@ -89,7 +87,12 @@ public class TextObject extends GraphicalObject {
 			indices.add(i*4 + 2);
 			indices.add(i*4 + 1);
 			indices.add(i*4 + 3);
+
+			xPos += charWidth;
 		}
+
+		width = xPos;
+		height = fontHeight;
 
 		Mesh mesh = new Mesh(
 				FloatConverter.FloatListToFloatArray(positions),
@@ -97,7 +100,7 @@ public class TextObject extends GraphicalObject {
 				normals,
 				FloatConverter.FloatListToFloatArray(textureCoordinates)
 		);
-		mesh.setTexture(texture);
+		mesh.setTexture(fontTexture.getTexture());
 		return mesh;
 	}
 
@@ -111,8 +114,19 @@ public class TextObject extends GraphicalObject {
 
 	public void setText(String text) {
 		this.text = text;
-		Texture texture = mesh.getTexture();
 		mesh.cleanUp();
-		mesh = buildMesh(texture);
+		mesh = buildMesh();
+	}
+
+	public FontTexture getFontTexture() {
+		return fontTexture;
+	}
+
+	public float getWidth() {
+		return width;
+	}
+
+	public float getHeight() {
+		return height;
 	}
 }
