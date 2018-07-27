@@ -1,6 +1,7 @@
 package engine.graphics.renderer;
 
-import engine.graphics.GraphicalConstants;
+import constants.GraphicalConstants;
+import constants.ResourcePathConstants;
 import engine.graphics.gui.HUDInterface;
 import engine.graphics.objects.Scene;
 import engine.graphics.objects.light.*;
@@ -63,8 +64,8 @@ public class Renderer {
 		// loading and linking the shaders
 		try {
 			shaderProgram = new ShaderProgram();
-			shaderProgram.createVertexShader(StringLoader.read("src/main/resources/shaders/vertex.vs"));
-			shaderProgram.createFragmentShader(StringLoader.read("src/main/resources/shaders/fragment.fs"));
+			shaderProgram.createVertexShader(StringLoader.read(ResourcePathConstants.WORLD_VERTEX_SHADER));
+			shaderProgram.createFragmentShader(StringLoader.read(ResourcePathConstants.WORLD_FRAGMENT_SHADER));
 			shaderProgram.link();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -75,8 +76,8 @@ public class Renderer {
 		// loading and linking the shaders
 		try {
 			hudShaderProgram = new ShaderProgram();
-			hudShaderProgram.createVertexShader(StringLoader.read("src/main/resources/shaders/orthoVertex.vs"));
-			hudShaderProgram.createFragmentShader(StringLoader.read("src/main/resources/shaders/orthoFragment.fs"));
+			hudShaderProgram.createVertexShader(StringLoader.read(ResourcePathConstants.HUD_VERTEX_SHADER));
+			hudShaderProgram.createFragmentShader(StringLoader.read(ResourcePathConstants.HUD_FRAGMENT_SHADER));
 			hudShaderProgram.link();
 		} catch (Exception e) {
 			e.printStackTrace();

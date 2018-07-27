@@ -1,4 +1,4 @@
-package engine.graphics;
+package constants;
 
 public class GraphicalConstants {
 

@@ -21,7 +21,7 @@ public class BaseHUD implements HUDInterface {
 
 		FontTexture fontTexture = null;
 		try {
-			fontTexture = new FontTexture(new Font("Arial", Font.PLAIN, 20), "ISO-8859-1"); // UTF-8 , US-ASCII , ISO-8859-1
+			fontTexture = new FontTexture(new Font("Arial", Font.PLAIN, 20), "UTF-16"); // UTF-8 , UTF-16 , US-ASCII , ISO-8859-1
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

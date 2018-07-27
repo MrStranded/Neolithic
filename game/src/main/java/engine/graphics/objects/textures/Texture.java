@@ -23,7 +23,6 @@ public class Texture {
 		this.height = height;
 		try {
 			buffer = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
-			buffer.flip();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

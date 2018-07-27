@@ -1,5 +1,6 @@
 package engine.graphics.objects.textures;
 
+import constants.ResourcePathConstants;
 import load.TextureLoader;
 
 import javax.imageio.ImageIO;
@@ -7,6 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
@@ -31,6 +33,10 @@ public class FontTexture {
 		texture = buildTexture();
 	}
 
+	// ###################################################################################
+	// ################################ Generation #######################################
+	// ###################################################################################
+
 	private Texture buildTexture() throws Exception {
 		// Get the font metrics for each character for the selected font by using an image
 		BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -50,32 +56,26 @@ public class FontTexture {
 		}
 		graphics.dispose();
 
-		// Create the image associated to the charset
-		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		graphics = image.createGraphics();
-		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		graphics.setFont(font);
-		fontMetrics = graphics.getFontMetrics();
+		// Check wheter there already is a corresponding font texture file and create it if necessary
+		String filePath = ResourcePathConstants.FONT_FOLDER + getFontFileName();
 
-		graphics.setColor(Color.WHITE);
-		graphics.drawString(allChars, 0, fontMetrics.getAscent());
-		graphics.dispose();
+		if (!(new File(filePath).exists())) {
+			// Create the image associated to the charset
+			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			graphics = image.createGraphics();
+			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			graphics.setFont(font);
+			fontMetrics = graphics.getFontMetrics();
 
-		// testing
-		ImageIO.write(image, "png", new java.io.File("font.png"));
+			graphics.setColor(Color.WHITE);
+			graphics.drawString(allChars, 0, fontMetrics.getAscent());
+			graphics.dispose();
 
-		// Dump image to a byte buffer
-		/*InputStream inputStream;
-		try (
-			ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-			ImageIO.write(image, "png", out);
-			out.flush();
-			inputStream = new ByteArrayInputStream(out.toByteArray());
+			boolean success = ImageIO.write(image, "png", new java.io.File(filePath));
+			System.out.println("saved image "+success);
 		}
 
-		return new Texture(width, height, inputStream);
-		*/
-		return TextureLoader.loadTexture("font.png");
+		return TextureLoader.loadTexture(filePath);
 	}
 
 	private String getAllAvailableChars(String charSetName) {
@@ -94,6 +94,16 @@ public class FontTexture {
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
+
+	private String getFontFileName() {
+		if (font == null) return "";
+		return
+				font.getFontName() + "_" +
+				font.getStyle() + "_" +
+				font.getSize() + "_" +
+				charSetName +
+				".png";
+	}
 
 	public Texture getTexture() {
 		return texture;

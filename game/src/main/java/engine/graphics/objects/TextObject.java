@@ -50,8 +50,6 @@ public class TextObject extends GraphicalObject {
 
 			// small tile / quad for current character
 
-			System.out.println((charXPos / fontWidth) + " , " + charWidth);
-
 			// top left vertex
 			positions.add(xPos);
 			positions.add(0f);
