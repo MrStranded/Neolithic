@@ -21,13 +21,13 @@ public class BaseHUD implements HUDInterface {
 
 		FontTexture fontTexture = null;
 		try {
-			fontTexture = new FontTexture(new Font("Arial", Font.PLAIN, 20), "UTF-16"); // UTF-8 , UTF-16 , US-ASCII , ISO-8859-1
+			fontTexture = new FontTexture(new Font("Arial", Font.PLAIN, 50), "ISO-8859-1"); // UTF-8 , UTF-16 , US-ASCII , ISO-8859-1 (the utf charsets don't work)
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		objects[0] = new TextObject("Test", fontTexture);
 		//objects[0].setPosition(-1,-1,0);
-		double s = 1d/40d;
+		double s = 1d/100d;
 		objects[0].setScale(s,s,s);
 		//objects[0].getMesh().randomizeTextureCoordinates();
 

@@ -78,7 +78,7 @@ public class Window {
 				self.height = height;
 				GL11.glViewport(0, 0, width, height);
 				if (renderer != null) {
-					renderer.calculateProjectionMatrix();
+					renderer.recalculateAspectRatio();
 				}
 			}
 		});

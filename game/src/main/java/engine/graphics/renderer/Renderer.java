@@ -124,7 +124,12 @@ public class Renderer {
 	// ################################ Calculation ######################################
 	// ###################################################################################
 
-	public void calculateProjectionMatrix() {
+	public void recalculateAspectRatio() {
+		calculateProjectionMatrix();
+		calculateOrthographicMatrix();
+	}
+
+	private void calculateProjectionMatrix() {
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
 
 		// values are multiplied with znear so the size of objects on the screen is independant from the znear value
@@ -138,7 +143,7 @@ public class Renderer {
 		);
 	}
 
-	public void calculateOrthographicMatrix() {
+	private void calculateOrthographicMatrix() {
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
 
 		orthographicMatrix = Projection.createOrthographicProjectionMatrix(-aspectRatio, aspectRatio,1d,-1d,0d,10d);

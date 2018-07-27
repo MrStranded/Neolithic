@@ -71,8 +71,8 @@ public class FontTexture {
 			graphics.drawString(allChars, 0, fontMetrics.getAscent());
 			graphics.dispose();
 
-			boolean success = ImageIO.write(image, "png", new java.io.File(filePath));
-			System.out.println("saved image "+success);
+			boolean success = ImageIO.write(image, "png", new File(filePath));
+			System.out.println("saved image " + filePath + " " + success);
 		}
 
 		return TextureLoader.loadTexture(filePath);
