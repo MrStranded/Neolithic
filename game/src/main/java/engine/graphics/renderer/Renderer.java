@@ -145,7 +145,7 @@ public class Renderer {
 	public void calculateOrthographicMatrix() {
 		double aspectRatio = (double) window.getWidth()/(double) window.getHeight();
 
-		orthographicMatrix = Projection.createOrthographicProjectionMatrix(-1d, 1d,1d,-1d,0d,10d);
+		orthographicMatrix = Projection.createOrthographicProjectionMatrix(-aspectRatio, aspectRatio,1d,-1d,0d,10d);
 	}
 
 	// ###################################################################################

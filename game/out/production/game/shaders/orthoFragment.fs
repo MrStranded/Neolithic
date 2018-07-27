@@ -8,5 +8,10 @@ uniform sampler2D textureSampler;
 uniform vec4 color;
 
 void main() {
-    fragmentColor = color * texture(textureSampler, outTextureCoordinates);
+    vec4 textureColor = texture(textureSampler, outTextureCoordinates);
+    if (textureColor.w == 0.0) {
+        discard;
+    } else {
+        fragmentColor = color * textureColor;
+    }
 }
