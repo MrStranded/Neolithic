@@ -67,7 +67,14 @@ public class PlanetGenerator {
 	}
 
 	private static CompositeMesh createFace(int size, Vector3 corner1, Vector3 corner2, Vector3 corner3) {
+		Vector3 dx = corner2.minus(corner1).times(1d/(double) size);
+		Vector3 dy = corner3.minus(corner1).times(1d/(double) size);
 
+		//CompositeMesh tiles = new CompositeMesh(size*size);
+
+		CompositeMesh tiles = new CompositeMesh(createTile(corner1, corner1.plus(dx), corner1.plus(dy)));
+
+		return tiles;
 	}
 
 	// ###################################################################################
@@ -77,27 +84,29 @@ public class PlanetGenerator {
 	public static CompositeMesh createPlanet(int size) {
 		CompositeMesh faces = new CompositeMesh(20);
 
-		for (int x=0; x<5; x++) { // around globe
-			for (int y=0; y<2; y++) { // upper lower ring
-				for (int f=-1; f<=1; f+=2) { // flip
+		for (int y=0; y<2; y++) { // upper lower ring
+			for (int f=0; f<2; f++) { // flip
+				for (int x=0; x<5; x++) { // around globe
 					Vector3 corner1, corner2, corner3;
 
-					if (f == -1) { // even coordinate sum
+					if (f == 0) { // flipped down
 						corner1 = getCorner(x + 1, y);
 						corner2 = getCorner(x + 1, y + 1);
 						corner3 = getCorner(x, y + 1);
 
-					} else { // odd coordinate sum
-						corner1 = getCorner(x, y);
-						corner2 = getCorner(x + 1, y);
-						corner3 = getCorner(x, y + 1);
+					} else { // flipped up
+						corner1 = getCorner(x, y + 1);
+						corner2 = getCorner(x + 1, y + 1);
+						corner3 = getCorner(x, y + 2);
 
 					}
 
-					faces.setSubMesh(createFace(size, corner1, corner2, corner3), y * 4 + x);
+					faces.setSubMesh(createFace(size, corner1, corner2, corner3), (y*2 + f) * 5 + x);
 				}
 			}
 		}
+
+		return faces;
 	}
 
 	private static float[] createOutwardFacingNormals(float[] vertices) {

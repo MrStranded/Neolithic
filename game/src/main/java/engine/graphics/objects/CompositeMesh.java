@@ -98,7 +98,9 @@ public class CompositeMesh {
 
 		if (subMeshes != null) {
 			for (CompositeMesh compositeMesh : subMeshes) {
-				compositeMesh.cleanUp();
+				if (compositeMesh != null) {
+					compositeMesh.cleanUp();
+				}
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 package engine.graphics.objects;
 
+import constants.GraphicalConstants;
 import engine.graphics.objects.textures.Texture;
 import engine.graphics.objects.movement.MoveableObject;
 import engine.graphics.renderer.shaders.ShaderProgram;
@@ -13,6 +14,9 @@ public class GraphicalObject extends MoveableObject {
 	protected boolean affectedByLight = true;
 	protected boolean isStatic = false; // static objects won't be moved around and are always in the same place around the camera
 
+	public GraphicalObject(CompositeMesh compositeMesh) {
+		this.compositeMesh = compositeMesh;
+	}
 	public GraphicalObject(Mesh mesh) {
 		compositeMesh = new CompositeMesh(mesh);
 	}
