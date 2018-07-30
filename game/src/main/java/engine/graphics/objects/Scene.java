@@ -48,7 +48,7 @@ public class Scene {
 //			e.printStackTrace();
 //		}
 		//objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[1] = new GraphicalObject(PlanetGenerator.createPlanet(2));
+		objects[1] = new GraphicalObject(PlanetGenerator.createPlanet(4));
 		//objects[1].getMesh().setTexture(icoTexture);
 		objects[1].scale(3,3,3);
 		objects[1].rotate(0,0,Math.PI/8);

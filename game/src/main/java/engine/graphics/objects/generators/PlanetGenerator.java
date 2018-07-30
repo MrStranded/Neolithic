@@ -37,9 +37,9 @@ public class PlanetGenerator {
 	private static Mesh createTile(Vector3 corner1, Vector3 corner2, Vector3 corner3) {
 		Vector3 origin = new Vector3(0,0,0);
 
-		//corner1 = corner1.normalize();
-		//corner2 = corner2.normalize();
-		//corner3 = corner3.normalize();
+		corner1 = corner1.normalize();
+		corner2 = corner2.normalize();
+		corner3 = corner3.normalize();
 
 		Vector3[] top = {corner1, corner2, corner3};
 
@@ -52,6 +52,9 @@ public class PlanetGenerator {
 		};
 
 		// ------------------------------------- normals
+
+		// edgy
+		
 		Vector3 normal = corner1.plus(corner2).plus(corner3).normalize();
 		float[] normals = new float[3*3];
 		for (int i=0; i<3; i++) {
@@ -59,6 +62,10 @@ public class PlanetGenerator {
 			normals[i*3 + 1] = (float) normal.getY();
 			normals[i*3 + 2] = (float) normal.getZ();
 		}
+
+		// smooth
+
+		//float[] normals = createOutwardFacingNormals(vertices);
 
 		// ------------------------------------- texture coordinates
 		float[] textureCoordniates = {
