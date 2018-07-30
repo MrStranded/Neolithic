@@ -2,8 +2,8 @@ package engine.graphics.renderer;
 
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
-import engine.graphics.gui.HUDInterface;
-import engine.graphics.objects.HUDObject;
+import engine.graphics.gui.GUIInterface;
+import engine.graphics.objects.GUIObject;
 import engine.graphics.objects.Scene;
 import engine.graphics.objects.light.*;
 import engine.graphics.renderer.projection.Projection;
@@ -37,7 +37,7 @@ public class Renderer {
 
 	/**
 	 * Whenever the aspect ratio has changed, we might need to update the scale of the hud objects.
-	 * This is done in renderHUD().
+	 * This is done in renderGUI().
 	 */
 	private boolean aspectRatioHasChanged = true;
 
@@ -45,6 +45,7 @@ public class Renderer {
 	private KeyboardInput keyboard;
 
 	private double angle = 0;
+	private int relativePosition = 0;
 
 	public Renderer(Window window) {
 		this.window = window;
@@ -217,7 +218,7 @@ public class Renderer {
 	// ################################ Rendering ########################################
 	// ###################################################################################
 
-	public void render(Scene scene, HUDInterface hud) {
+	public void render(Scene scene, GUIInterface hud) {
 		processInput(scene);
 
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -226,7 +227,7 @@ public class Renderer {
 			renderScene(scene);
 		}
 		if (hud != null) {
-			renderHUD(hud);
+			renderGUI(hud);
 		}
 
 		flip();
@@ -282,16 +283,20 @@ public class Renderer {
 		shaderProgram.unbind();
 	}
 
-	private void renderHUD(HUDInterface hud) {
-		hud.getHUDObjects()[0].setPosition(-0.5,Math.cos(angle*16)-0.5,0);
-		hud.getHUDObjects()[1].setPosition(-getAspectRatio(),0,0);
+	private void renderGUI(GUIInterface hud) {
+		hud.getHUDObjects()[1].setRelativeScreenPosition(relativePosition % 3, relativePosition / 3);
+		hud.getHUDObjects()[1].recalculateScale(window.getWidth(), window.getHeight());
+
+		if (Math.random() > 0.9d) {
+			relativePosition = (relativePosition + 1) % 9;
+		}
 
 		hudShaderProgram.bind();
 
 		// set used texture (id = 0)
 		hudShaderProgram.setUniform("textureSampler", 0);
 
-		for (HUDObject object : hud.getHUDObjects()) {
+		for (GUIObject object : hud.getHUDObjects()) {
 			if (object != null) {
 				if (aspectRatioHasChanged) {
 					object.recalculateScale(window.getWidth(), window.getHeight());

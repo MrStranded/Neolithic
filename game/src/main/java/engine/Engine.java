@@ -1,7 +1,7 @@
 package engine;
 
-import engine.graphics.gui.BaseHUD;
-import engine.graphics.gui.HUDInterface;
+import engine.graphics.gui.BaseGUI;
+import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.Scene;
 import engine.graphics.window.Window;
 import engine.graphics.renderer.Renderer;
@@ -16,7 +16,7 @@ public class Engine {
 	private static Renderer renderer;
 	private static Window window;
 	private static Scene scene;
-	private static HUDInterface hud;
+	private static GUIInterface hud;
 
 	public static void initialize() {
 		window = new Window(800,600,"Neolithic");
@@ -27,7 +27,7 @@ public class Engine {
 
 	public static void createWorld() {
 		scene = new Scene();
-		hud = new BaseHUD();
+		hud = new BaseGUI();
 	}
 
 	/**

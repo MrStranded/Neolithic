@@ -1,17 +1,26 @@
 package engine.graphics.gui;
 
-public enum RelativeScreenPosition {
+public class RelativeScreenPosition {
 
-	LEFT_TOP,
-	LEFT_BOTTOM,
-	RIGHT_TOP,
-	RIGHT_BOTTOM,
+	public static final int LEFT = 0;
+	public static final int TOP = 0;
+	public static final int CENTER = 1;
+	public static final int RIGHT = 2;
+	public static final int BOTTOM = 2;
 
-	LEFT_CENTER,
-	RIGHT_CENTER,
-	TOP_CENTER,
-	BOTTOM_CENTER,
+	public static double getOriginX(double windowWidth, double objectWidth, int position) {
+		switch (position) {
+			case CENTER: return (windowWidth - objectWidth) / 2;
+			case RIGHT: return windowWidth - objectWidth;
+			default: return 0;
+		}
+	}
 
-	CENTER
-
+	public static double getOriginY(double windowHeight, double objectHeight, int position) {
+		switch (position) {
+			case CENTER: return (windowHeight - objectHeight) / 2;
+			case BOTTOM: return windowHeight - objectHeight;
+			default: return 0;
+		}
+	}
 }

@@ -3,21 +3,16 @@ package engine.graphics.objects;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.textures.CharInfo;
 import engine.graphics.objects.textures.FontTexture;
-import engine.graphics.objects.textures.Texture;
 import engine.utils.converters.FloatConverter;
 import engine.utils.converters.IntegerConverter;
-import load.TextureLoader;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextObject extends HUDObject {
+public class TextObject extends GUIObject {
 
 	private String text;
 	private FontTexture fontTexture;
-
-	private float width, height;
 
 	public TextObject(String text, FontTexture fontTexture) {
 		this.text = text;
@@ -89,9 +84,6 @@ public class TextObject extends HUDObject {
 			xPos += charWidth;
 		}
 
-		width = xPos;
-		height = fontHeight;
-
 		Mesh mesh = new Mesh(
 				FloatConverter.FloatListToFloatArray(positions),
 				IntegerConverter.IntegerListToIntArray(indices),
@@ -119,13 +111,5 @@ public class TextObject extends HUDObject {
 
 	public FontTexture getFontTexture() {
 		return fontTexture;
-	}
-
-	public float getWidth() {
-		return width;
-	}
-
-	public float getHeight() {
-		return height;
 	}
 }
