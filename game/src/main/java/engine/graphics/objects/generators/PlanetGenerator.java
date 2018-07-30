@@ -37,41 +37,66 @@ public class PlanetGenerator {
 	private static Mesh createTile(Vector3 corner1, Vector3 corner2, Vector3 corner3) {
 		Vector3 origin = new Vector3(0,0,0);
 
+		/*
 		corner1 = corner1.normalize();
 		corner2 = corner2.normalize();
 		corner3 = corner3.normalize();
+		*/
 
-		Vector3[] top = {corner1, corner2, corner3};
+		double f = 1d + Math.random()/10d;
+
+		corner1.timesInplace(f);
+		corner2.timesInplace(f);
+		corner3.timesInplace(f);
+
+		Vector3[] vectorArray = {corner1, corner2, corner3, origin, corner1, corner2, corner3};
 
 		// ------------------------------------- vertices
-		float[] vertices = VectorConverter.Vector3ArrayToFloatArray(top);
+		float[] vertices = VectorConverter.Vector3ArrayToFloatArray(vectorArray);
 
 		// ------------------------------------- indices
 		int[] indices = {
-				0, 1, 2
+				0, 1, 2,
+				3, 5, 4,
+				3, 6, 5,
+				3, 4, 6
 		};
 
 		// ------------------------------------- normals
 
-		// edgy
-		
 		Vector3 normal = corner1.plus(corner2).plus(corner3).normalize();
-		float[] normals = new float[3*3];
+
+		// edgy
+
+		float[] normals = new float[7*3];
+		// top
 		for (int i=0; i<3; i++) {
 			normals[i*3 + 0] = (float) normal.getX();
 			normals[i*3 + 1] = (float) normal.getY();
 			normals[i*3 + 2] = (float) normal.getZ();
 		}
 
+		// origin
+		normals[3*3 + 0] = -(float) normal.getX();
+		normals[3*3 + 1] = -(float) normal.getY();
+		normals[3*3 + 2] = -(float) normal.getZ();
+
 		// smooth
 
 		//float[] normals = createOutwardFacingNormals(vertices);
+
+		/*
+		normals[3*3 + 0] = -(float) normal.getX();
+		normals[3*3 + 1] = -(float) normal.getY();
+		normals[3*3 + 2] = -(float) normal.getZ();
+		*/
 
 		// ------------------------------------- texture coordinates
 		float[] textureCoordniates = {
 				0, 0,
 				0.5f, 1f,
-				1f, 0
+				1f, 0,
+				1f, 1f
 		};
 
 		return new Mesh(vertices, indices, normals, textureCoordniates);
@@ -119,6 +144,34 @@ public class PlanetGenerator {
 	// ###################################################################################
 	// ################################ Planet ###########################################
 	// ###################################################################################
+
+	public static Vector3[] createFaceNormals() {
+		Vector3[] normals = new Vector3[20];
+
+		for (int y=0; y<2; y++) { // upper lower ring
+			for (int f=0; f<2; f++) { // flip
+				for (int x=0; x<5; x++) { // around globe
+					Vector3 corner1, corner2, corner3;
+
+					if (f == 0) { // flipped down
+						corner1 = getCorner(x + 1, y);
+						corner2 = getCorner(x + 1, y + 1);
+						corner3 = getCorner(x, y + 1);
+
+					} else { // flipped up
+						corner1 = getCorner(x, y + 1);
+						corner2 = getCorner(x + 1, y + 1);
+						corner3 = getCorner(x, y + 2);
+
+					}
+
+					normals[(y*2 + f) * 5 + x] = corner1.plus(corner2).plus(corner3).normalize();
+				}
+			}
+		}
+
+		return normals;
+	}
 
 	public static CompositeMesh createPlanet(int size) {
 		CompositeMesh faces = new CompositeMesh(20);

@@ -1,5 +1,6 @@
 package engine.graphics.objects;
 
+import engine.data.Planet;
 import engine.graphics.objects.generators.MeshGenerator;
 import engine.graphics.objects.generators.PlanetGenerator;
 import engine.graphics.objects.light.*;
@@ -42,19 +43,6 @@ public class Scene {
 		objects[0].setStatic(true);
 		objects[0].setUseDepthTest(false);
 
-//		try {
-//			objects[1] = new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj"));
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-		//objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[1] = new GraphicalObject(PlanetGenerator.createPlanet(4));
-		//objects[1].getMesh().setTexture(icoTexture);
-		objects[1].scale(3,3,3);
-		objects[1].rotate(0,0,Math.PI/8);
-		//objects[1].getMesh().getMaterial().setSpecularPower(4);
-		//objects[1].getMesh().getMaterial().setReflectanceStrength(new RGBA(1,0.5,0.5,0));
-
 		objects[2] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		objects[2].scale(1,1,1);
 		objects[2].setPosition(0,0,-sunDistance);
@@ -91,7 +79,9 @@ public class Scene {
 
 	public void cleanUp() {
 		for (GraphicalObject object : objects) {
-			object.cleanUp();
+			if (object != null) {
+				object.cleanUp();
+			}
 		}
 	}
 

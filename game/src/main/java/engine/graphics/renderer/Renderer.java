@@ -2,16 +2,14 @@ package engine.graphics.renderer;
 
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
+import engine.data.Planet;
 import engine.graphics.gui.GUIInterface;
-import engine.graphics.objects.GUIObject;
-import engine.graphics.objects.Scene;
+import engine.graphics.objects.*;
 import engine.graphics.objects.light.*;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.input.KeyboardInput;
 import engine.input.MouseInput;
-import engine.graphics.objects.GraphicalObject;
-import engine.graphics.objects.Camera;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.window.Window;
 import load.StringLoader;
@@ -45,6 +43,7 @@ public class Renderer {
 	private KeyboardInput keyboard;
 
 	private double angle = 0;
+	private PlanetObject planetObject;
 
 	public Renderer(Window window) {
 		this.window = window;
@@ -172,7 +171,6 @@ public class Renderer {
 		GraphicalObject[] objects = scene.getObjects();
 		Camera camera = scene.getCamera();
 
-		objects[1].rotateY(angleStep);
 		objects[2].rotateYAroundOrigin(-angleStep);
 		objects[3].rotateYAroundOrigin(angleStep*2);
 		scene.getDirectionalLight().rotateY(-angleStep);
@@ -212,6 +210,10 @@ public class Renderer {
 
 	public void render(Scene scene, GUIInterface hud) {
 		processInput(scene);
+		if (planetObject == null) {
+			planetObject = new PlanetObject(new Planet(8));
+			planetObject.setScale(3,3,3);
+		}
 
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
@@ -267,6 +269,14 @@ public class Renderer {
 				shaderProgram.setUniform("dynamic", object.isStatic() ? 0 : 1);
 				object.render(shaderProgram, true);
 			}
+		}
+
+		if (planetObject != null) {
+			planetObject.setViewMatrix(camera.getViewMatrix());
+			shaderProgram.setUniform("modelViewMatrix", camera.getViewMatrix().times(planetObject.getWorldMatrix()));
+			shaderProgram.setUniform("affectedByLight", planetObject.isAffectedByLight() ? 1 : 0);
+			shaderProgram.setUniform("dynamic", planetObject.isStatic() ? 0 : 1);
+			planetObject.render(shaderProgram, true);
 		}
 
 		shaderProgram.unbind();
