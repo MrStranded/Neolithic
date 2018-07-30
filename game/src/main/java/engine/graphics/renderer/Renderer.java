@@ -45,7 +45,6 @@ public class Renderer {
 	private KeyboardInput keyboard;
 
 	private double angle = 0;
-	private int relativePosition = 0;
 
 	public Renderer(Window window) {
 		this.window = window;
@@ -205,13 +204,6 @@ public class Renderer {
 		if (keyboard.isPressed(GLFW.GLFW_KEY_F)) { // go farther away
 			camera.changeRadius(camera.getRadius()/100d);
 		}
-
-		if (keyboard.isClicked(GLFW.GLFW_KEY_T)) { // troll tex
-			objects[1].setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png"));
-		}
-		if (keyboard.isClicked(GLFW.GLFW_KEY_G)) { // gras tex
-			objects[1].setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png"));
-		}
 	}
 
 	// ###################################################################################
@@ -270,13 +262,10 @@ public class Renderer {
 
 		for (GraphicalObject object : scene.getObjects()) {
 			if (object != null) {
-				Mesh mesh = object.getMesh();
 				shaderProgram.setUniform("modelViewMatrix", camera.getViewMatrix().times(object.getWorldMatrix()));
-				shaderProgram.setUniform("color", mesh.getColor());
 				shaderProgram.setUniform("affectedByLight", object.isAffectedByLight() ? 1 : 0);
 				shaderProgram.setUniform("dynamic", object.isStatic() ? 0 : 1);
-				shaderProgram.setUniform("material", object.getMesh().getMaterial());
-				object.render();
+				object.render(shaderProgram, true);
 			}
 		}
 
@@ -284,13 +273,6 @@ public class Renderer {
 	}
 
 	private void renderGUI(GUIInterface hud) {
-		hud.getHUDObjects()[1].setRelativeScreenPosition(relativePosition % 3, relativePosition / 3);
-		hud.getHUDObjects()[1].recalculateScale(window.getWidth(), window.getHeight());
-
-		if (Math.random() > 0.9d) {
-			relativePosition = (relativePosition + 1) % 9;
-		}
-
 		hudShaderProgram.bind();
 
 		// set used texture (id = 0)
@@ -303,8 +285,7 @@ public class Renderer {
 				}
 
 				hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
-				hudShaderProgram.setUniform("color", object.getMesh().getColor());
-				object.render();
+				object.render(hudShaderProgram, false);
 			}
 		}
 

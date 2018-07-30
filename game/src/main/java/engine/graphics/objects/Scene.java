@@ -35,7 +35,7 @@ public class Scene {
 
 		// background
 		objects[0] = new GraphicalObject(MeshGenerator.createCube(true));
-		objects[0].setTexture(cubeTexture);
+		objects[0].getMesh().setTexture(cubeTexture);
 		objects[0].scale(sunDistance*2,sunDistance*2,sunDistance*2);
 		objects[0].setAffectedByLight(false);
 		objects[0].setStatic(true);
@@ -47,7 +47,7 @@ public class Scene {
 //			e.printStackTrace();
 //		}
 		objects[1] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[1].setTexture(icoTexture);
+		objects[1].getMesh().setTexture(icoTexture);
 		objects[1].scale(3,3,3);
 		objects[1].rotate(0,0,Math.PI/8);
 		objects[1].getMesh().getMaterial().setSpecularPower(4);
@@ -56,11 +56,11 @@ public class Scene {
 		objects[2] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		objects[2].scale(1,1,1);
 		objects[2].setPosition(0,0,-sunDistance);
-		objects[2].setColor(1,1,0.5f);
+		objects[2].getMesh().setColor(1,1,0.5f);
 		objects[2].setAffectedByLight(false);
 
 		objects[3] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[3].setTexture(icoTexture);
+		objects[3].getMesh().setTexture(icoTexture);
 		objects[3].scale(0.5,0.5,0.5);
 		objects[3].setPosition(5,0,0);
 

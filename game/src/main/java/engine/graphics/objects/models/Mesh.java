@@ -2,6 +2,7 @@ package engine.graphics.objects.models;
 
 import engine.graphics.objects.textures.Texture;
 import engine.graphics.renderer.color.RGBA;
+import engine.graphics.renderer.shaders.ShaderProgram;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.MemoryUtil;
 
@@ -147,7 +148,13 @@ public class Mesh {
 	// ################################ Render ###########################################
 	// ###################################################################################
 
-	public void render(boolean useDepthTest) {
+	public void render(ShaderProgram shaderProgram, boolean sendMaterials, boolean useDepthTest) {
+		// we need to pass the color and material separately for each mesh, thus the carrying of the shaderProgram through the layers
+		shaderProgram.setUniform("color", color);
+		if (sendMaterials) {
+			shaderProgram.setUniform("material", material);
+		}
+
 		// Activate first texture unit
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		// Bind the texture

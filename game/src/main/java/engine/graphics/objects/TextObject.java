@@ -18,7 +18,7 @@ public class TextObject extends GUIObject {
 		this.text = text;
 		this.fontTexture = fontTexture;
 
-		mesh = buildMesh();
+		setMesh(buildMesh());
 	}
 
 	private Mesh buildMesh() {
@@ -105,8 +105,8 @@ public class TextObject extends GUIObject {
 
 	public void setText(String text) {
 		this.text = text;
-		mesh.cleanUp();
-		mesh = buildMesh();
+		compositeMesh.cleanUp();
+		setMesh(buildMesh());
 	}
 
 	public FontTexture getFontTexture() {

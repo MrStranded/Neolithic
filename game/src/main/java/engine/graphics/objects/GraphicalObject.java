@@ -2,18 +2,19 @@ package engine.graphics.objects;
 
 import engine.graphics.objects.textures.Texture;
 import engine.graphics.objects.movement.MoveableObject;
+import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Vector3;
 import engine.graphics.objects.models.Mesh;
 
 public class GraphicalObject extends MoveableObject {
 
-	protected Mesh mesh;
+	protected CompositeMesh compositeMesh;
 	protected boolean useDepthTest = true;
 	protected boolean affectedByLight = true;
 	protected boolean isStatic = false; // static objects won't be moved around and are always in the same place around the camera
 
 	public GraphicalObject(Mesh mesh) {
-		this.mesh = mesh;
+		compositeMesh = new CompositeMesh(mesh);
 	}
 	public GraphicalObject() {}
 
@@ -21,8 +22,8 @@ public class GraphicalObject extends MoveableObject {
 	// ################################ Rendering ########################################
 	// ###################################################################################
 
-	public void render() {
-		mesh.render(useDepthTest);
+	public void render(ShaderProgram shaderProgram, boolean sendMaterial) {
+		compositeMesh.render(shaderProgram, sendMaterial, useDepthTest);
 	}
 
 	// ###################################################################################
@@ -30,26 +31,22 @@ public class GraphicalObject extends MoveableObject {
 	// ###################################################################################
 
 	public void cleanUp() {
-		mesh.cleanUp();
+		compositeMesh.cleanUp();
 	}
 
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public void setColor(float r, float g, float b) {
-		mesh.setColor(r,g,b);
-	}
-	public void setColor(float r, float g, float b, float a) {
-		mesh.setColor(r,g,b,a);
-	}
-
-	public void setTexture(Texture texture) {
-		mesh.setTexture(texture);
+	public CompositeMesh getCompositeMesh() {
+		return compositeMesh;
 	}
 
 	public Mesh getMesh() {
-		return mesh;
+		return compositeMesh.getMesh();
+	}
+	public void setMesh(Mesh mesh) {
+		compositeMesh = new CompositeMesh(mesh);
 	}
 
 	public Vector3 getPosition() {
