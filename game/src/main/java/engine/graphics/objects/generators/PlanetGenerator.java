@@ -37,6 +37,10 @@ public class PlanetGenerator {
 	private static Mesh createTile(Vector3 corner1, Vector3 corner2, Vector3 corner3) {
 		Vector3 origin = new Vector3(0,0,0);
 
+		//corner1 = corner1.normalize();
+		//corner2 = corner2.normalize();
+		//corner3 = corner3.normalize();
+
 		Vector3[] top = {corner1, corner2, corner3};
 
 		// ------------------------------------- vertices
@@ -67,12 +71,40 @@ public class PlanetGenerator {
 	}
 
 	private static CompositeMesh createFace(int size, Vector3 corner1, Vector3 corner2, Vector3 corner3) {
-		Vector3 dx = corner2.minus(corner1).times(1d/(double) size);
-		Vector3 dy = corner3.minus(corner1).times(1d/(double) size);
+		Vector3 edgeX = corner2.minus(corner1);
+		Vector3 edgeY = corner3.minus(corner1);
 
-		//CompositeMesh tiles = new CompositeMesh(size*size);
+		Vector3 dx = edgeX.times(1d/(double) size);
+		Vector3 dy = edgeY.times(1d/(double) size);
 
-		CompositeMesh tiles = new CompositeMesh(createTile(corner1, corner1.plus(dx), corner1.plus(dy)));
+		Vector3 mid = corner1.plus(edgeX.plus(edgeY).times(0.5d));
+
+		CompositeMesh tiles = new CompositeMesh(size*size);
+
+		for (int y=0; y<size; y++) {
+			for (int x=0; x<size; x++) {
+				Vector3 position;
+				if (x+y < size) { // normal tiles
+					position = corner1.plus(dx.times(x)).plus(dy.times(y));
+					tiles.setSubMesh(new CompositeMesh(createTile(
+							position,
+							position.plus(dx),
+							position.plus(dy)
+					)), y*size + x);
+				} else { // hidden tiles
+					position = corner1.plus(dx.times(x)).plus(dy.times(y));
+					position = mid.plus(mid.minus(position));
+					tiles.setSubMesh(new CompositeMesh(createTile(
+							position,
+							position.minus(dx),
+							position.minus(dy)
+					)), y*size + x);
+
+				}
+			}
+		}
+
+		//CompositeMesh tiles = new CompositeMesh(createTile(corner1, corner1.plus(dx), corner1.plus(dy)));
 
 		return tiles;
 	}
