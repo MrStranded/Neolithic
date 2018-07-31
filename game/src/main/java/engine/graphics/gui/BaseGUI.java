@@ -1,7 +1,7 @@
 package engine.graphics.gui;
 
-import engine.graphics.objects.GUIObject;
-import engine.graphics.objects.TextObject;
+import engine.graphics.objects.gui.GUIObject;
+import engine.graphics.objects.gui.TextObject;
 import engine.graphics.objects.generators.MeshGenerator;
 import engine.graphics.objects.textures.FontTexture;
 import load.TextureLoader;
@@ -25,15 +25,21 @@ public class BaseGUI implements GUIInterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		objects[0] = new TextObject("Neolithic - A Stone Age Game", fontTexture);
-		objects[0].setSize(600,30);
-		objects[0].setRelativeScreenPositionX(RelativeScreenPosition.CENTER);
+		objects[1] = new TextObject("Neolithic - A Stone Age Game", fontTexture);
+		objects[1].setSize(600,30);
+		objects[1].setPosition(0,0,0.5d);
+		objects[1].setPosition(0,0,-0.25d);
+		objects[1].setRelativeScreenPositionX(RelativeScreenPosition.CENTER);
 
-		objects[1] = new GUIObject(MeshGenerator.createQuad());
-		objects[1].getMesh().setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png"));
-		objects[1].setSize(100,100);
-		//objects[1].setLocation(200, 400);
-		objects[1].setRelativeScreenPosition(RelativeScreenPosition.RIGHT, RelativeScreenPosition.BOTTOM);
+		objects[0] = new GUIObject(MeshGenerator.createQuad());
+		objects[0].getMesh().setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png"));
+		objects[0].setSize(100,100);
+		//objects[0].setLocation(0,100);
+		objects[0].setPosition(0,0,-0.5d);
+		objects[0].getMesh().setColor(0.5f, 0.5f, 0.5f, 0.5f);
+		//objects[0].setLocation(200, 400);
+		//objects[0].setRelativeScreenPosition(RelativeScreenPosition.RIGHT, RelativeScreenPosition.BOTTOM);
+		objects[0].setRelativeScreenPosition(RelativeScreenPosition.CENTER, RelativeScreenPosition.TOP);
 	}
 
 	// ###################################################################################

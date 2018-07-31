@@ -25,6 +25,9 @@ public class Start {
 
 	public static void main(String[] args) {
 
+		// necessary for AWT and GLFW to run together under OSX
+		System.setProperty("java.awt.headless", "true");
+
 		Engine.initialize();
 		Engine.createWorld();
 

@@ -3,7 +3,7 @@ package engine;
 import engine.graphics.gui.BaseGUI;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.Scene;
-import engine.graphics.window.Window;
+import engine.graphics.gui.window.Window;
 import engine.graphics.renderer.Renderer;
 
 /**

@@ -1,5 +1,6 @@
 package engine.graphics.objects.generators;
 
+import constants.GraphicalConstants;
 import engine.graphics.objects.planet.CompositeMesh;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.FacePart;
@@ -38,17 +39,18 @@ public class PlanetGenerator {
 	private static Mesh createTile(Vector3 corner1, Vector3 corner2, Vector3 corner3) {
 		Vector3 origin = new Vector3(0,0,0);
 
-
+		// a makin' it a round
+		/*
 		corner1 = corner1.normalize();
 		corner2 = corner2.normalize();
 		corner3 = corner3.normalize();
+		*/
 
+		double f = 1d + Math.random()/10d;
 
-		double f = 1d + Math.random()/50d;
-
-		corner1.timesInplace(f);
-		corner2.timesInplace(f);
-		corner3.timesInplace(f);
+		corner1 = corner1.times(f);
+		corner2 = corner2.times(f);
+		corner3 = corner3.times(f);
 
 		Vector3[] vectorArray = {corner1, corner2, corner3, origin, corner1, corner2, corner3};
 
@@ -67,7 +69,7 @@ public class PlanetGenerator {
 
 		Vector3 normal = corner1.plus(corner2).plus(corner3).normalize();
 
-		double normalFactor = 1d / 16d;
+		double normalFactor = 1d / GraphicalConstants.PLANET_CONSTRUCTION_SIDE_NORMAL_QUOTIENT;
 		Vector3 mid = corner1.plus(corner2).plus(corner3).times(1d/3d);
 		Vector3[] midToCorner = new Vector3[3];
 		midToCorner[0] = corner1.minus(mid).plus(normal.times(normalFactor)).normalize();

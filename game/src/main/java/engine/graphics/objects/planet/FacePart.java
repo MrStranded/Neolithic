@@ -32,7 +32,7 @@ public class FacePart {
 		factor = factor * factor / viewVector.lengthSquared();
 		
 		// distance detail falloff
-		double distanceQuotient = distanceVector.length();
+		double distanceQuotient = distanceVector.lengthSquared();
 		if (distanceQuotient < 1d) {
 			distanceQuotient = 1d;
 		}

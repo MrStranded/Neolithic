@@ -48,9 +48,9 @@ public class Vector3 {
 	public Vector3 times(double t) { return new Vector3(x*t,y*t,z*t); }
 
 	public Vector3 timesInplace(double t) {
-		x *= t;
-		y *= t;
-		z *= t;
+		x = x * t;
+		y = y * t;
+		z = z * t;
 		return this;
 	}
 

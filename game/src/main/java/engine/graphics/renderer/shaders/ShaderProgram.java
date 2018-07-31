@@ -22,6 +22,8 @@ public class ShaderProgram {
 	private int vertexShaderId;
 	private int fragmentShaderId;
 
+	FloatBuffer matrixFloatBuffer;
+
 	private final Map<String, Integer> uniforms;
 
 	public ShaderProgram() throws Exception {
@@ -160,12 +162,15 @@ public class ShaderProgram {
 	// ###################################################################################
 
 	public void setUniform(String uniformName, Matrix4 m) {
-		// Dump the matrix into a float buffer
-		try (MemoryStack stack = MemoryStack.stackPush()) {
-			FloatBuffer floatBuffer = stack.mallocFloat(16);
-			MatrixConverter.putMatrix4IntoFloatBuffer(m, floatBuffer);
-			GL20.glUniformMatrix4fv(uniforms.get(uniformName), false, floatBuffer);
+		if (matrixFloatBuffer == null) {
+			// Dump the matrix into a float buffer
+			try (MemoryStack stack = MemoryStack.stackPush()) {
+				matrixFloatBuffer = stack.mallocFloat(16);
+			}
 		}
+
+		MatrixConverter.putMatrix4IntoFloatBuffer(m, matrixFloatBuffer);
+		GL20.glUniformMatrix4fv(uniforms.get(uniformName), false, matrixFloatBuffer);
 	}
 
 	public void setUniform(String uniformName, RGBA color) {

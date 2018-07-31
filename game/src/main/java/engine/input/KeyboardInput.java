@@ -1,6 +1,6 @@
 package engine.input;
 
-import engine.graphics.window.Window;
+import engine.graphics.gui.window.Window;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyboardInput {

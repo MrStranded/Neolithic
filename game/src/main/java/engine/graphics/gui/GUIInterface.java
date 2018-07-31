@@ -1,6 +1,6 @@
 package engine.graphics.gui;
 
-import engine.graphics.objects.GUIObject;
+import engine.graphics.objects.gui.GUIObject;
 
 public interface GUIInterface {
 

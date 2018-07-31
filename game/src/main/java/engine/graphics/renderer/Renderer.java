@@ -5,13 +5,14 @@ import constants.ResourcePathConstants;
 import engine.data.Planet;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.*;
+import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.light.*;
 import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.input.KeyboardInput;
 import engine.input.MouseInput;
-import engine.graphics.window.Window;
+import engine.graphics.gui.window.Window;
 import load.StringLoader;
 import engine.math.numericalObjects.Matrix4;
 import org.lwjgl.glfw.GLFW;
@@ -302,6 +303,7 @@ public class Renderer {
 				}
 
 				hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
+				hudShaderProgram.setUniform("color", object.getMesh().getColor());
 				object.render();
 			}
 		}
