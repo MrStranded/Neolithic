@@ -191,6 +191,6 @@ void main() {
 
         fragmentColor = color * (ambientC * ambientLight + pointLightColor + spotLightColor + directionalLightColor);
     } else {
-        fragmentColor = color * ambientC;
+        fragmentColor = color * ambientC + vec4(outTextureCoordinates, 0.0, 0.0);
     }
 }

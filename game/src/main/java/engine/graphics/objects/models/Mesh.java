@@ -125,7 +125,7 @@ public class Mesh {
 			// Unbind the VAO
 			GL30.glBindVertexArray(0);
 			// Unbind the texture
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+			//GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		} finally {
 
 			// ------------------ buffer clean up
