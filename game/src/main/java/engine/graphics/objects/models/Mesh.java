@@ -15,7 +15,7 @@ public class Mesh {
 	private final int positionsVboId; // Positions Vertex Buffer Object Id
 	private final int indicesVboId; // Indices Vertex Buffer Object Id
 	private final int normalsVboId; // Colors Vertex Buffer Object Id
-	private final int textureId; // Texture Buffer Id
+	//private final int textureId; // Texture Buffer Id
 	private final int textureVboId; // Texture Coordinates Vertex Buffer Object Id
 
 	private Material material; // the Material, containing also the texture
@@ -55,7 +55,7 @@ public class Mesh {
 
 		// ------------------ texture part
 		textureVboId = GL15.glGenBuffers();
-		textureId = GL11.glGenTextures();
+		//textureId = GL11.glGenTextures();
 
 		// register mesh data
 		registerData();
@@ -106,7 +106,7 @@ public class Mesh {
 
 				GL20.glVertexAttribPointer(2, 2, GL11.GL_FLOAT, false, 0, 0);
 
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+				/*GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
 				GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
@@ -115,7 +115,7 @@ public class Mesh {
 						material.getTexture().getHeight(),
 						0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
 						material.getTexture().getBuffer());
-				GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+				GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);*/
 			}
 
 			// ------------------ unbind
@@ -152,7 +152,7 @@ public class Mesh {
 		// Activate first texture unit
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		// Bind the texture
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.hasTexture() ? material.getTexture().getTextureId() : 0 /*textureId*/);
 
 		// Bind to the VAO
 		GL30.glBindVertexArray(vertexArrayObjectId);
@@ -281,7 +281,7 @@ public class Mesh {
 
 	public void setTexture(Texture texture) {
 		material.setTexture(texture);
-		registerData();
+		//registerData();
 	}
 	public Texture getTexture() {
 		return material.getTexture();
@@ -303,10 +303,6 @@ public class Mesh {
 
 	public int getVertexBufferObjectId() {
 		return positionsVboId;
-	}
-
-	public int getTextureId() {
-		return textureId;
 	}
 
 	public int getVertexCount() {
