@@ -99,8 +99,8 @@ j  engine.graphics.objects.models.Mesh.<init>([F[I[F[F)V+58
 j  engine.graphics.objects.generators.PlanetGenerator.createTile(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;)Lengine/graphics/objects/models/Mesh;+317
 j  engine.graphics.objects.generators.PlanetGenerator.createFace(ILengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;)Lengine/graphics/objects/CompositeMesh;+141
 j  engine.graphics.objects.generators.PlanetGenerator.createPlanet(I)Lengine/graphics/objects/CompositeMesh;+112
-j  engine.graphics.objects.PlanetObject.createLODMesh()V+46
-j  engine.graphics.objects.PlanetObject.<init>(Lengine/data/Planet;)V+29
+j  engine.graphics.objects.planet.PlanetObject.createLODMesh()V+46
+j  engine.graphics.objects.planet.PlanetObject.<init>(Lengine/data/Planet;)V+29
 j  engine.graphics.renderer.Renderer.<init>(Lengine/graphics/window/Window;)V+27
 j  engine.Engine.initialize()V+25
 j  Start.main([Ljava/lang/String;)V+0
@@ -118,8 +118,8 @@ j  engine.graphics.objects.models.Mesh.<init>([F[I[F[F)V+58
 j  engine.graphics.objects.generators.PlanetGenerator.createTile(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;)Lengine/graphics/objects/models/Mesh;+317
 j  engine.graphics.objects.generators.PlanetGenerator.createFace(ILengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;)Lengine/graphics/objects/CompositeMesh;+141
 j  engine.graphics.objects.generators.PlanetGenerator.createPlanet(I)Lengine/graphics/objects/CompositeMesh;+112
-j  engine.graphics.objects.PlanetObject.createLODMesh()V+46
-j  engine.graphics.objects.PlanetObject.<init>(Lengine/data/Planet;)V+29
+j  engine.graphics.objects.planet.PlanetObject.createLODMesh()V+46
+j  engine.graphics.objects.planet.PlanetObject.<init>(Lengine/data/Planet;)V+29
 j  engine.graphics.renderer.Renderer.<init>(Lengine/graphics/window/Window;)V+27
 j  engine.Engine.initialize()V+25
 j  Start.main([Ljava/lang/String;)V+0

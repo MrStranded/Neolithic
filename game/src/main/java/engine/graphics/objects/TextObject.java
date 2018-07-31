@@ -105,7 +105,7 @@ public class TextObject extends GUIObject {
 
 	public void setText(String text) {
 		this.text = text;
-		compositeMesh.cleanUp();
+		mesh.cleanUp();
 		setMesh(buildMesh());
 	}
 

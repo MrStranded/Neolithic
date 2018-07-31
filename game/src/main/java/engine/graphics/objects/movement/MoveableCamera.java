@@ -92,4 +92,11 @@ public class MoveableCamera {
 				Transformations.rotateX(-pitch).times(
 				Transformations.rotateY(-yaw))));
 	}
+
+	public Matrix4 getPlanetaryLODMatrix() {
+		return  Transformations.rotateX(tilt).times(
+				Transformations.translate(new Vector3(0,0, -radius)).times(
+				Transformations.rotateX(-pitch).times(
+				Transformations.rotateY(-yaw))));
+	}
 }

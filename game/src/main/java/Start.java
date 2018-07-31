@@ -12,6 +12,13 @@ import engine.Engine;
  *
  * On Windows, this other option may improve performance and stability:
  * -Dsun.java2d.noddraw=true
+ *
+ * To increase Heap Size (crucial):
+ * -Xms<size>        set initial Java heap size
+ * -Xmx<size>        set maximum Java heap size
+ * -Xss<size>        set java thread stack size
+ *
+ * java -Xms1024m -Xmx2048m Start
  */
 
 public class Start {

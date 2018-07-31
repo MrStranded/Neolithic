@@ -1,7 +1,8 @@
 package engine.graphics.objects.generators;
 
-import engine.graphics.objects.CompositeMesh;
+import engine.graphics.objects.planet.CompositeMesh;
 import engine.graphics.objects.models.Mesh;
+import engine.graphics.objects.planet.FacePart;
 import engine.math.numericalObjects.Vector3;
 import engine.utils.converters.VectorConverter;
 
@@ -37,11 +38,11 @@ public class PlanetGenerator {
 	private static Mesh createTile(Vector3 corner1, Vector3 corner2, Vector3 corner3) {
 		Vector3 origin = new Vector3(0,0,0);
 
-		/*
+
 		corner1 = corner1.normalize();
 		corner2 = corner2.normalize();
 		corner3 = corner3.normalize();
-		*/
+
 
 		double f = 1d + Math.random()/10d;
 
@@ -102,20 +103,67 @@ public class PlanetGenerator {
 		return new Mesh(vertices, indices, normals, textureCoordniates);
 	}
 
-	private static CompositeMesh createFace(int size, Vector3 corner1, Vector3 corner2, Vector3 corner3) {
-		Vector3 edgeX = corner2.minus(corner1);
-		Vector3 edgeY = corner3.minus(corner1);
+	private static FacePart createFace(Vector3 corner1, Vector3 corner2, Vector3 corner3, int size, int depth) {
+		Vector3 normal = corner1.plus(corner2).plus(corner3).normalize();
 
-		Vector3 dx = edgeX.times(1d/(double) size);
-		Vector3 dy = edgeY.times(1d/(double) size);
+		Mesh faceMesh = createTile(corner1, corner2, corner3);
 
-		Vector3 mid = corner1.plus(edgeX.plus(edgeY).times(0.5d));
+		FacePart face = new FacePart();
+		face.setNormal(normal);
+		face.setMesh(faceMesh);
+		face.setDepth(depth);
 
-		CompositeMesh tiles = new CompositeMesh(size*size);
+		int newSize = size / 2;
+
+		if (newSize > 0) {
+			Vector3 edgeX = corner2.minus(corner1);
+			Vector3 edgeY = corner3.minus(corner1);
+
+			Vector3 dx = edgeX.times(0.5d);
+			Vector3 dy = edgeY.times(0.5d);
+
+			Vector3 mid = corner1.plus(edgeX.plus(edgeY).times(0.5d));
+
+			FacePart[] subFaces = new FacePart[4];
+
+			subFaces[0] = createFace(
+					corner1,
+					corner1.plus(dx),
+					corner1.plus(dy),
+					newSize,
+					depth + 1
+			);
+			subFaces[1] = createFace(
+					corner1.plus(dx),
+					corner1.plus(dx).plus(dx),
+					corner1.plus(dy).plus(dx),
+					newSize,
+					depth + 1
+			);
+			subFaces[2] = createFace(
+					corner1.plus(dy),
+					corner1.plus(dx).plus(dy),
+					corner1.plus(dy).plus(dy),
+					newSize,
+					depth + 1
+			);
+			subFaces[3] = createFace(
+					corner1.plus(dx),
+					corner1.plus(dx).plus(dy),
+					corner1.plus(dy),
+					newSize,
+					depth + 1
+			);
+
+			face.setQuarterFaces(subFaces);
+		}
+
+		/*CompositeMesh tiles = new CompositeMesh(size*size);
 
 		for (int y=0; y<size; y++) {
 			for (int x=0; x<size; x++) {
 				Vector3 position;
+
 				if (x+y < size) { // normal tiles
 					position = corner1.plus(dx.times(x)).plus(dy.times(y));
 					tiles.setSubMesh(new CompositeMesh(createTile(
@@ -123,6 +171,7 @@ public class PlanetGenerator {
 							position.plus(dx),
 							position.plus(dy)
 					)), y*size + x);
+
 				} else { // hidden tiles
 					position = corner1.plus(dx.times(x)).plus(dy.times(y));
 					position = mid.plus(mid.minus(position));
@@ -134,19 +183,19 @@ public class PlanetGenerator {
 
 				}
 			}
-		}
+		}*/
 
 		//CompositeMesh tiles = new CompositeMesh(createTile(corner1, corner1.plus(dx), corner1.plus(dy)));
 
-		return tiles;
+		return face;
 	}
 
 	// ###################################################################################
 	// ################################ Planet ###########################################
 	// ###################################################################################
 
-	public static Vector3[] createFaceNormals() {
-		Vector3[] normals = new Vector3[20];
+	public static FacePart[] createPlanet(int size) {
+		FacePart[] faces = new FacePart[20];
 
 		for (int y=0; y<2; y++) { // upper lower ring
 			for (int f=0; f<2; f++) { // flip
@@ -165,35 +214,8 @@ public class PlanetGenerator {
 
 					}
 
-					normals[(y*2 + f) * 5 + x] = corner1.plus(corner2).plus(corner3).normalize();
-				}
-			}
-		}
-
-		return normals;
-	}
-
-	public static CompositeMesh createPlanet(int size) {
-		CompositeMesh faces = new CompositeMesh(20);
-
-		for (int y=0; y<2; y++) { // upper lower ring
-			for (int f=0; f<2; f++) { // flip
-				for (int x=0; x<5; x++) { // around globe
-					Vector3 corner1, corner2, corner3;
-
-					if (f == 0) { // flipped down
-						corner1 = getCorner(x + 1, y);
-						corner2 = getCorner(x + 1, y + 1);
-						corner3 = getCorner(x, y + 1);
-
-					} else { // flipped up
-						corner1 = getCorner(x, y + 1);
-						corner2 = getCorner(x + 1, y + 1);
-						corner3 = getCorner(x, y + 2);
-
-					}
-
-					faces.setSubMesh(createFace(size, corner1, corner2, corner3), (y*2 + f) * 5 + x);
+					int face = (y*2 + f) * 5 + x;
+					faces[face] = createFace(corner1, corner2, corner3, size, 0);
 				}
 			}
 		}

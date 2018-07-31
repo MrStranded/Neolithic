@@ -9,16 +9,13 @@ import engine.graphics.objects.models.Mesh;
 
 public class GraphicalObject extends MoveableObject {
 
-	protected CompositeMesh compositeMesh;
+	protected Mesh mesh;
 	protected boolean useDepthTest = true;
 	protected boolean affectedByLight = true;
 	protected boolean isStatic = false; // static objects won't be moved around and are always in the same place around the camera
 
-	public GraphicalObject(CompositeMesh compositeMesh) {
-		this.compositeMesh = compositeMesh;
-	}
 	public GraphicalObject(Mesh mesh) {
-		compositeMesh = new CompositeMesh(mesh);
+		this.mesh = mesh;
 	}
 	public GraphicalObject() {}
 
@@ -27,7 +24,7 @@ public class GraphicalObject extends MoveableObject {
 	// ###################################################################################
 
 	public void render(ShaderProgram shaderProgram, boolean sendMaterial) {
-		compositeMesh.render(shaderProgram, sendMaterial, useDepthTest);
+		mesh.render(shaderProgram, sendMaterial, useDepthTest);
 	}
 
 	// ###################################################################################
@@ -35,22 +32,18 @@ public class GraphicalObject extends MoveableObject {
 	// ###################################################################################
 
 	public void cleanUp() {
-		compositeMesh.cleanUp();
+		mesh.cleanUp();
 	}
 
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public CompositeMesh getCompositeMesh() {
-		return compositeMesh;
-	}
-
 	public Mesh getMesh() {
-		return compositeMesh.getMesh();
+		return mesh;
 	}
 	public void setMesh(Mesh mesh) {
-		compositeMesh = new CompositeMesh(mesh);
+		this.mesh = mesh;
 	}
 
 	public Vector3 getPosition() {

@@ -6,14 +6,13 @@ import engine.data.Planet;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.*;
 import engine.graphics.objects.light.*;
+import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.input.KeyboardInput;
 import engine.input.MouseInput;
-import engine.graphics.objects.models.Mesh;
 import engine.graphics.window.Window;
 import load.StringLoader;
-import load.TextureLoader;
 import engine.math.numericalObjects.Matrix4;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -175,7 +174,7 @@ public class Renderer {
 		objects[3].rotateYAroundOrigin(angleStep*2);
 		scene.getDirectionalLight().rotateY(-angleStep);
 		scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
-		scene.getSpotLights()[5].rotateYAroundOrigin(-angleStep);
+		//scene.getSpotLights()[5].rotateYAroundOrigin(-angleStep);
 		//spotLight.setDirection(spotLight.getPosition().times(-1).normalize());
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
@@ -211,7 +210,7 @@ public class Renderer {
 	public void render(Scene scene, GUIInterface hud) {
 		processInput(scene);
 		if (planetObject == null) {
-			planetObject = new PlanetObject(new Planet(8));
+			planetObject = new PlanetObject(new Planet(64));
 			planetObject.setScale(3,3,3);
 		}
 
@@ -262,9 +261,11 @@ public class Renderer {
 		// set ambient light
 		shaderProgram.setUniform("ambientLight",scene.getAmbientLight().getColor());
 
+		Matrix4 viewMatrix = camera.getViewMatrix();
+
 		for (GraphicalObject object : scene.getObjects()) {
 			if (object != null) {
-				shaderProgram.setUniform("modelViewMatrix", camera.getViewMatrix().times(object.getWorldMatrix()));
+				shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(object.getWorldMatrix()));
 				shaderProgram.setUniform("affectedByLight", object.isAffectedByLight() ? 1 : 0);
 				shaderProgram.setUniform("dynamic", object.isStatic() ? 0 : 1);
 				object.render(shaderProgram, true);
@@ -272,11 +273,10 @@ public class Renderer {
 		}
 
 		if (planetObject != null) {
-			planetObject.setViewMatrix(camera.getViewMatrix());
-			shaderProgram.setUniform("modelViewMatrix", camera.getViewMatrix().times(planetObject.getWorldMatrix()));
-			shaderProgram.setUniform("affectedByLight", planetObject.isAffectedByLight() ? 1 : 0);
-			shaderProgram.setUniform("dynamic", planetObject.isStatic() ? 0 : 1);
-			planetObject.render(shaderProgram, true);
+			shaderProgram.setUniform("modelViewMatrix", camera.getPlanetaryLODMatrix().times(planetObject.getWorldMatrix()));
+			shaderProgram.setUniform("affectedByLight", 1);
+			shaderProgram.setUniform("dynamic", 1);
+			planetObject.render(shaderProgram, true, camera.getViewMatrix());
 		}
 
 		shaderProgram.unbind();
