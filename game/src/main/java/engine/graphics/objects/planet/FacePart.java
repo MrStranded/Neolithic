@@ -21,29 +21,34 @@ public class FacePart {
 	
 	public void render(ShaderProgram shaderProgram, boolean sendMaterial, Matrix4 viewWorldMatrix, int depth) {
 		Vector3 viewVector = viewWorldMatrix.times(new Vector4(normal,0)).extractVector3();//.normalize();
+		Vector3 distanceVector = viewWorldMatrix.times(new Vector4(normal, 1)).extractVector3();
 		
 		double factor = viewVector.dot(cameraDirection);
 		if (factor < 0) {
 			factor = 0;
 		}
 
+		// effect extremification and normalization
 		factor = factor * factor / viewVector.lengthSquared();
+		
+		// distance detail falloff
+		double distanceQuotient = distanceVector.length();
+		if (distanceQuotient < 1d) {
+			distanceQuotient = 1d;
+		}
+		
+		factor = factor / distanceQuotient;
 
 		int detailLevel = (int) ((double) depth*factor);
 		if (detailLevel >= depth) {
 			detailLevel = depth-1;
 		}
 
-		//System.out.println(detailLevel + " in " + this.depth + " from " + depth);
-		if (detailLevel >= this.depth) {
-			if (quarterFaces != null) {
-				for (FacePart facePart : quarterFaces) {
-					if (facePart != null) {
-						facePart.render(shaderProgram, sendMaterial, viewWorldMatrix, depth);
-					}
+		if ((detailLevel >= this.depth) && (quarterFaces != null)) {
+			for (FacePart facePart : quarterFaces) {
+				if (facePart != null) {
+					facePart.render(shaderProgram, sendMaterial, viewWorldMatrix, depth);
 				}
-			//} else {
-			//	mesh.render(shaderProgram, sendMaterial, true);
 			}
 		} else {
 			mesh.render(shaderProgram, sendMaterial, true);

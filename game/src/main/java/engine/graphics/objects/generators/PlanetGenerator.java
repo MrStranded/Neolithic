@@ -44,7 +44,7 @@ public class PlanetGenerator {
 		corner3 = corner3.normalize();
 
 
-		double f = 1d + Math.random()/10d;
+		double f = 1d + Math.random()/50d;
 
 		corner1.timesInplace(f);
 		corner2.timesInplace(f);
@@ -67,7 +67,12 @@ public class PlanetGenerator {
 
 		Vector3 normal = corner1.plus(corner2).plus(corner3).normalize();
 
-		// edgy
+		double normalFactor = 1d / 16d;
+		Vector3 mid = corner1.plus(corner2).plus(corner3).times(1d/3d);
+		Vector3[] midToCorner = new Vector3[3];
+		midToCorner[0] = corner1.minus(mid).plus(normal.times(normalFactor)).normalize();
+		midToCorner[1] = corner2.minus(mid).plus(normal.times(normalFactor)).normalize();
+		midToCorner[2] = corner3.minus(mid).plus(normal.times(normalFactor)).normalize();
 
 		float[] normals = new float[7*3];
 		// top
@@ -78,19 +83,16 @@ public class PlanetGenerator {
 		}
 
 		// origin
-		normals[3*3 + 0] = -(float) normal.getX();
-		normals[3*3 + 1] = -(float) normal.getY();
-		normals[3*3 + 2] = -(float) normal.getZ();
+		normals[3*3 + 0] = (float) normal.getX();
+		normals[3*3 + 1] = (float) normal.getY();
+		normals[3*3 + 2] = (float) normal.getZ();
 
-		// smooth
-
-		//float[] normals = createOutwardFacingNormals(vertices);
-
-		/*
-		normals[3*3 + 0] = -(float) normal.getX();
-		normals[3*3 + 1] = -(float) normal.getY();
-		normals[3*3 + 2] = -(float) normal.getZ();
-		*/
+		// sides
+		for (int i=0; i<3; i++) {
+			normals[(4+i)*3 + 0] = (float) midToCorner[i].getX();
+			normals[(4+i)*3 + 1] = (float) midToCorner[i].getY();
+			normals[(4+i)*3 + 2] = (float) midToCorner[i].getZ();
+		}
 
 		// ------------------------------------- texture coordinates
 		float[] textureCoordniates = {
@@ -158,35 +160,6 @@ public class PlanetGenerator {
 			face.setQuarterFaces(subFaces);
 		}
 
-		/*CompositeMesh tiles = new CompositeMesh(size*size);
-
-		for (int y=0; y<size; y++) {
-			for (int x=0; x<size; x++) {
-				Vector3 position;
-
-				if (x+y < size) { // normal tiles
-					position = corner1.plus(dx.times(x)).plus(dy.times(y));
-					tiles.setSubMesh(new CompositeMesh(createTile(
-							position,
-							position.plus(dx),
-							position.plus(dy)
-					)), y*size + x);
-
-				} else { // hidden tiles
-					position = corner1.plus(dx.times(x)).plus(dy.times(y));
-					position = mid.plus(mid.minus(position));
-					tiles.setSubMesh(new CompositeMesh(createTile(
-							position,
-							position.minus(dx),
-							position.minus(dy)
-					)), y*size + x);
-
-				}
-			}
-		}*/
-
-		//CompositeMesh tiles = new CompositeMesh(createTile(corner1, corner1.plus(dx), corner1.plus(dy)));
-
 		return face;
 	}
 
@@ -221,24 +194,5 @@ public class PlanetGenerator {
 		}
 
 		return faces;
-	}
-
-	private static float[] createOutwardFacingNormals(float[] vertices) {
-		float[] normals = new float[vertices.length];
-
-		for (int i=0; i<normals.length/3; i++) {
-
-			Vector3 normal = new Vector3(vertices[i*3 + 0], vertices[i*3 + 1], vertices[i*3 + 2]);
-			try {
-				normal = normal.normalize();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			normals[i*3 + 0] = (float) normal.getX();
-			normals[i*3 + 1] = (float) normal.getY();
-			normals[i*3 + 2] = (float) normal.getZ();
-		}
-
-		return normals;
 	}
 }

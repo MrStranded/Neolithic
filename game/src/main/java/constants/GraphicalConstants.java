@@ -2,7 +2,7 @@ package constants;
 
 public class GraphicalConstants {
 
-	public static final double ZNEAR = 0.1d;
+	public static final double ZNEAR = 0.001d;
 	public static final double ZFAR = 4000d;
 
 	public static final int MAX_POINT_LIGHTS = 8;
