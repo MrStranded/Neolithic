@@ -46,7 +46,7 @@ public class Scene {
 		// sun
 		objects[2] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		objects[2].scale(10,10,10);
-		objects[2].setPosition(0,0,-sunDistance);
+		objects[2].setPosition(0,0,sunDistance);
 		objects[2].getMesh().setColor(1,1,0.5f);
 		objects[2].setAffectedByLight(false);
 
@@ -59,15 +59,15 @@ public class Scene {
 		// sun lights
 		pointLights[1] = new PointLight(0.5,0,0);
 		pointLights[1].setAttenuation(Attenuation.CONSTANT());
-		pointLights[1].setPosition(0,0,-sunDistance);
+		pointLights[1].setPosition(0,0,sunDistance);
 
 		directionalLight = new DirectionalLight(0.5,1,1);
-		directionalLight.setDirection(new Vector3(0,0,1));
+		directionalLight.setDirection(new Vector3(0,0,-1));
 
 		ambientLight = new AmbientLight(0.5,0.5,0.5);
 
 		camera = new Camera();
-		camera.setRadius(5);
+		camera.setRadius(2);
 	}
 
 	// ###################################################################################

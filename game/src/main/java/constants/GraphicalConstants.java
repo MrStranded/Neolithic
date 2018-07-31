@@ -10,4 +10,6 @@ public class GraphicalConstants {
 
 	public static final int DEFAULT_COMPOSITE_MESH_SIZE = 4;
 	public static final int COMPOSITE_MESH_SIZE_CHANGE = 4;
+
+	public static final double PLANETARY_LOD_MATRIX_TILT_FACTOR = 0.5d;
 }

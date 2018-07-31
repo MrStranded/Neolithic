@@ -210,8 +210,8 @@ public class Renderer {
 	public void render(Scene scene, GUIInterface hud) {
 		processInput(scene);
 		if (planetObject == null) {
-			planetObject = new PlanetObject(new Planet(64));
-			planetObject.setScale(3,3,3);
+			planetObject = new PlanetObject(new Planet(32));
+			//planetObject.setScale(3,3,3);
 		}
 
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -273,10 +273,10 @@ public class Renderer {
 		}
 
 		if (planetObject != null) {
-			shaderProgram.setUniform("modelViewMatrix", camera.getPlanetaryLODMatrix().times(planetObject.getWorldMatrix()));
+			shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(planetObject.getWorldMatrix()));
 			shaderProgram.setUniform("affectedByLight", 1);
 			shaderProgram.setUniform("dynamic", 1);
-			planetObject.render(shaderProgram, true, camera.getViewMatrix());
+			planetObject.render(shaderProgram, true, camera.getPlanetaryLODMatrix());
 		}
 
 		shaderProgram.unbind();

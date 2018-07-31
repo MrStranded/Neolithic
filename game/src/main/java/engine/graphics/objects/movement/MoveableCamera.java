@@ -1,5 +1,7 @@
 package engine.graphics.objects.movement;
 
+import constants.GraphicalConstants;
+import engine.graphics.objects.GraphicalObject;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
 import engine.math.Transformations;
@@ -68,7 +70,7 @@ public class MoveableCamera {
 		if (pitch > TAU) {
 			pitch -= TAU;
 		}
-		if (tilt > TAU) {
+		if (tilt > PI) {
 			tilt -= TAU;
 		}
 		if (yaw < 0) {
@@ -77,7 +79,7 @@ public class MoveableCamera {
 		if (pitch < 0) {
 			pitch += TAU;
 		}
-		if (tilt < 0) {
+		if (tilt < -PI) {
 			tilt += TAU;
 		}
 	}
@@ -94,7 +96,7 @@ public class MoveableCamera {
 	}
 
 	public Matrix4 getPlanetaryLODMatrix() {
-		return  Transformations.rotateX(tilt).times(
+		return  Transformations.rotateX(tilt * GraphicalConstants.PLANETARY_LOD_MATRIX_TILT_FACTOR).times(
 				Transformations.translate(new Vector3(0,0, -radius)).times(
 				Transformations.rotateX(-pitch).times(
 				Transformations.rotateY(-yaw))));
