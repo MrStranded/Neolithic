@@ -20,6 +20,7 @@ public class PlanetObject extends MoveableObject {
 	public PlanetObject(Planet planet) {
 		this.planet = planet;
 
+		depth = 1;
 		int s = planet.getSize();
 		while (s > 1) {
 			s /= 2;

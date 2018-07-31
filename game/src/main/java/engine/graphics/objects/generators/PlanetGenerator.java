@@ -40,11 +40,11 @@ public class PlanetGenerator {
 		Vector3 origin = new Vector3(0,0,0);
 
 		// a makin' it a round
-		/*
-		corner1 = corner1.normalize();
-		corner2 = corner2.normalize();
-		corner3 = corner3.normalize();
-		*/
+		if (false) {
+			corner1 = corner1.normalize();
+			corner2 = corner2.normalize();
+			corner3 = corner3.normalize();
+		}
 
 		double f = 1d + Math.random()/10d;
 
@@ -104,7 +104,13 @@ public class PlanetGenerator {
 				1f, 1f
 		};
 
-		return new Mesh(vertices, indices, normals, textureCoordniates);
+		Mesh tile = new Mesh(vertices, indices, normals, textureCoordniates);
+		tile.setColor(
+				(float) (0.5d + 0.5d*Math.random()),
+				(float) (0.5d + 0.5d*Math.random()),
+				(float) (0.5d + 0.5d*Math.random())
+		);
+		return tile;
 	}
 
 	private static FacePart createFace(Vector3 corner1, Vector3 corner2, Vector3 corner3, int size, int depth) {
@@ -190,7 +196,7 @@ public class PlanetGenerator {
 					}
 
 					int face = (y*2 + f) * 5 + x;
-					faces[face] = createFace(corner1, corner2, corner3, size, 0);
+					faces[face] = createFace(corner1, corner2, corner3, size, 1);
 				}
 			}
 		}
