@@ -61,10 +61,10 @@ public class Scene {
 		pointLights[1].setAttenuation(Attenuation.CONSTANT());
 		pointLights[1].setPosition(0,0,sunDistance);
 
-		directionalLight = new DirectionalLight(0.5,1,1);
+		directionalLight = new DirectionalLight(0.25,0.75,0.75);
 		directionalLight.setDirection(new Vector3(0,0,-1));
 
-		ambientLight = new AmbientLight(0.5,0.5,0.5);
+		ambientLight = new AmbientLight(0.25,0.25,0.25);
 
 		camera = new Camera();
 		camera.setRadius(2);

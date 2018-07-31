@@ -23,8 +23,8 @@ public class GraphicalObject extends MoveableObject {
 	// ################################ Rendering ########################################
 	// ###################################################################################
 
-	public void render(ShaderProgram shaderProgram, boolean sendMaterial) {
-		mesh.render(shaderProgram, sendMaterial, useDepthTest);
+	public void render() {
+		mesh.render(useDepthTest);
 	}
 
 	// ###################################################################################

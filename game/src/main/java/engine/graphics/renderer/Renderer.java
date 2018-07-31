@@ -212,6 +212,8 @@ public class Renderer {
 		if (planetObject == null) {
 			planetObject = new PlanetObject(new Planet(32));
 			//planetObject.setScale(3,3,3);
+		} else {
+			planetObject.rotateY(0.001d);
 		}
 
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -268,7 +270,10 @@ public class Renderer {
 				shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(object.getWorldMatrix()));
 				shaderProgram.setUniform("affectedByLight", object.isAffectedByLight() ? 1 : 0);
 				shaderProgram.setUniform("dynamic", object.isStatic() ? 0 : 1);
-				object.render(shaderProgram, true);
+				shaderProgram.setUniform("color", object.getMesh().getColor());
+				shaderProgram.setUniform("material", object.getMesh().getMaterial());
+
+				object.render();
 			}
 		}
 
@@ -276,7 +281,9 @@ public class Renderer {
 			shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(planetObject.getWorldMatrix()));
 			shaderProgram.setUniform("affectedByLight", 1);
 			shaderProgram.setUniform("dynamic", 1);
-			planetObject.render(shaderProgram, true, camera.getPlanetaryLODMatrix());
+
+			// here we pass the shaderProgram because in FacePart.render() we need set some uniforms
+			planetObject.render(shaderProgram, camera.getPlanetaryLODMatrix());
 		}
 
 		shaderProgram.unbind();
@@ -295,7 +302,7 @@ public class Renderer {
 				}
 
 				hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
-				object.render(hudShaderProgram, false);
+				object.render();
 			}
 		}
 

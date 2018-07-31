@@ -19,7 +19,7 @@ public class FacePart {
 	public FacePart() {
 	}
 	
-	public void render(ShaderProgram shaderProgram, boolean sendMaterial, Matrix4 viewWorldMatrix, int depth) {
+	public void render(ShaderProgram shaderProgram, Matrix4 viewWorldMatrix, int depth) {
 		Vector3 viewVector = viewWorldMatrix.times(new Vector4(normal,0)).extractVector3();//.normalize();
 		Vector3 distanceVector = viewWorldMatrix.times(new Vector4(normal, 1)).extractVector3();
 		
@@ -47,11 +47,16 @@ public class FacePart {
 		if ((detailLevel >= this.depth) && (quarterFaces != null)) {
 			for (FacePart facePart : quarterFaces) {
 				if (facePart != null) {
-					facePart.render(shaderProgram, sendMaterial, viewWorldMatrix, depth);
+					facePart.render(shaderProgram, viewWorldMatrix, depth);
 				}
 			}
 		} else {
-			mesh.render(shaderProgram, sendMaterial, true);
+			shaderProgram.setUniform("color", mesh.getColor());
+			if (mesh.getMaterial() != null) {
+				shaderProgram.setUniform("material", mesh.getMaterial());
+			}
+
+			mesh.render(true);
 		}
 	}
 

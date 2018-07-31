@@ -32,7 +32,7 @@ public class CompositeMesh {
 	 */
 	public void render(ShaderProgram shaderProgram, boolean sendMaterial, boolean useDepthTest) {
 		if (mesh != null) {
-			mesh.render(shaderProgram, sendMaterial, useDepthTest);
+			mesh.render(useDepthTest);
 		}
 		if (subMeshes != null) {
 			for (CompositeMesh compositeMesh : subMeshes) {
