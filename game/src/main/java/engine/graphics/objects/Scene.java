@@ -26,7 +26,7 @@ public class Scene {
 
 	private void initializeTestObjects() {
 		Texture trollFace = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png");
-		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/space_cube.png");
+		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/space_cube2.png");
 		Texture grasTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
 		Texture icoTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/ico_wireframe.png");
 
