@@ -91,7 +91,7 @@ public class TextObject extends GUIObject {
 				FloatConverter.FloatListToFloatArray(textureCoordinates)
 		);
 		mesh.normalize();
-		mesh.setTexture(fontTexture.getTexture());
+		mesh.getMaterial().setTexture(fontTexture.getTexture());
 		return mesh;
 	}
 

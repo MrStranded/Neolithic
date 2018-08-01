@@ -12,6 +12,8 @@ public class ResourcePathConstants {
 	public static final String WORLD_FRAGMENT_SHADER    = SHADER_FOLDER + "fragment.fs";
 	public static final String HUD_VERTEX_SHADER        = SHADER_FOLDER + "orthoVertex.vs";
 	public static final String HUD_FRAGMENT_SHADER      = SHADER_FOLDER + "orthoFragment.fs";
+	public static final String DEPTH_VERTEX_SHADER      = SHADER_FOLDER + "depthVertex.vs";
+	public static final String DEPTH_FRAGMENT_SHADER    = SHADER_FOLDER + "depthFragment.fs";
 
 	public static final String FONT_FOLDER              = RESOURCE_FOLDER + "fonts/";
 }

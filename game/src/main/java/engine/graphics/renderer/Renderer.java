@@ -8,6 +8,7 @@ import engine.graphics.objects.*;
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.light.*;
 import engine.graphics.objects.planet.PlanetObject;
+import engine.graphics.objects.textures.Texture;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.input.KeyboardInput;
@@ -17,6 +18,7 @@ import load.StringLoader;
 import engine.math.numericalObjects.Matrix4;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 
 import static java.lang.System.exit;
 
@@ -27,8 +29,10 @@ import static java.lang.System.exit;
 public class Renderer {
 
 	private Window window;
+
 	private ShaderProgram shaderProgram;
 	private ShaderProgram hudShaderProgram;
+	private ShaderProgram depthShaderProgram;
 
 	private Matrix4 projectionMatrix;
 	private Matrix4 orthographicMatrix;
@@ -59,6 +63,8 @@ public class Renderer {
 
 		initializeShaders();
 		initializeHUDShaders();
+		initializeDepthShaders();
+
 		initializeUniforms();
 		initializeInput();
 
@@ -90,10 +96,22 @@ public class Renderer {
 		}
 	}
 
+	private void initializeDepthShaders() {
+		// loading and linking the shaders
+		try {
+			depthShaderProgram = new ShaderProgram();
+			depthShaderProgram.createVertexShader(StringLoader.read(ResourcePathConstants.DEPTH_VERTEX_SHADER));
+			depthShaderProgram.createFragmentShader(StringLoader.read(ResourcePathConstants.DEPTH_FRAGMENT_SHADER));
+			depthShaderProgram.link();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	private void initializeUniforms() {
 		try {
-			// ---------------------------------------------------------- normal scene
+			// ---------------------------------------------------------- world scene
 			shaderProgram.createUniform("modelViewMatrix");
 			shaderProgram.createUniform("projectionMatrix");
 			shaderProgram.createUniform("textureSampler");
@@ -115,6 +133,10 @@ public class Renderer {
 			hudShaderProgram.createUniform("projectionViewMatrix");
 			hudShaderProgram.createUniform("textureSampler");
 			hudShaderProgram.createUniform("color");
+
+			// ---------------------------------------------------------- shadow maps
+			depthShaderProgram.createUniform("orthographicProjectionMatrix");
+			depthShaderProgram.createUniform("modelLightViewMatrix");
 		} catch (Exception e) {
 			e.printStackTrace();
 			exit(1);
@@ -217,6 +239,17 @@ public class Renderer {
 			planetObject.rotateY(0.001d);
 		}
 
+		// Render depth map before view ports has been set up
+		if (scene.getShadowMaps() != null) {
+			for (ShadowMap shadowMap : scene.getShadowMaps()) {
+				if (shadowMap != null) {
+					renderDepthMap(shadowMap, scene, hud);
+				}
+			}
+		}
+
+		GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
+
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		if (scene != null) {
@@ -233,6 +266,40 @@ public class Renderer {
 			//cleanUp(); // somehow enabling this causes the program to not close properly anymore
 			window.close();
 		}
+	}
+
+	private void renderDepthMap(ShadowMap shadowMap, Scene scene, GUIInterface hud) {
+		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, shadowMap.getDepthMapFBO());
+		GL11.glViewport(0, 0, GraphicalConstants.SHADOWMAP_SIZE, GraphicalConstants.SHADOWMAP_SIZE);
+
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
+		depthShaderProgram.bind();
+
+		Matrix4 viewMatrix = shadowMap.getViewMatrix();
+		double size = 1.25d;
+		Matrix4 orthographicProjectionMatrix = Projection.createOrthographicProjectionMatrix(-size,size,size,-size,0.1d, 104d);
+		depthShaderProgram.setUniform("orthographicProjectionMatrix", orthographicProjectionMatrix);
+
+		for (GraphicalObject object : scene.getObjects()) {
+			if (object != null) {
+				depthShaderProgram.setUniform("modelLightViewMatrix", viewMatrix.times(object.getWorldMatrix()));
+
+				object.render();
+			}
+		}
+
+		if (planetObject != null) {
+			depthShaderProgram.setUniform("modelLightViewMatrix", viewMatrix.times(planetObject.getWorldMatrix()));
+
+			// here we pass the shaderProgram because in FacePart.render() we need set some uniforms
+			planetObject.render(depthShaderProgram, scene.getCamera().getPlanetaryLODMatrix(), false);
+		}
+
+		depthShaderProgram.unbind();
+		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
+
+		hud.getHUDObjects()[0].getMesh().getMaterial().setTexture(shadowMap.getDepthMap());
 	}
 
 	private void renderScene(Scene scene) {
@@ -284,7 +351,7 @@ public class Renderer {
 			shaderProgram.setUniform("dynamic", 1);
 
 			// here we pass the shaderProgram because in FacePart.render() we need set some uniforms
-			planetObject.render(shaderProgram, camera.getPlanetaryLODMatrix());
+			planetObject.render(shaderProgram, camera.getPlanetaryLODMatrix(), true);
 		}
 
 		shaderProgram.unbind();

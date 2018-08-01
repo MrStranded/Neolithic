@@ -18,17 +18,26 @@ public class FacePart {
 
 	public FacePart() {
 	}
-	
-	public void render(ShaderProgram shaderProgram, Matrix4 viewWorldMatrix, int depth) {
 
-		// performance!!!
-		if (quarterFaces == null) {
+	// ###################################################################################
+	// ################################ Rendering ########################################
+	// ###################################################################################
+
+	private void renderSelf(ShaderProgram shaderProgram, boolean putDataIntoShader) {
+		if (putDataIntoShader) {
 			shaderProgram.setUniform("color", mesh.getColor());
 			if (mesh.getMaterial() != null) {
 				shaderProgram.setUniform("material", mesh.getMaterial());
 			}
+		}
 
-			mesh.render(true);
+		mesh.render(true);
+	}
+	
+	public void render(ShaderProgram shaderProgram, Matrix4 viewWorldMatrix, int depth, boolean putDataIntoShader) {
+		// performance!!!
+		if (quarterFaces == null) {
+			renderSelf(shaderProgram, putDataIntoShader);
 			return;
 		}
 
@@ -59,16 +68,11 @@ public class FacePart {
 		if ((detailLevel >= this.depth) && (quarterFaces != null)) {
 			for (FacePart facePart : quarterFaces) {
 				if (facePart != null) {
-					facePart.render(shaderProgram, viewWorldMatrix, depth);
+					facePart.render(shaderProgram, viewWorldMatrix, depth, putDataIntoShader);
 				}
 			}
 		} else {
-			shaderProgram.setUniform("color", mesh.getColor());
-			if (mesh.getMaterial() != null) {
-				shaderProgram.setUniform("material", mesh.getMaterial());
-			}
-
-			mesh.render(true);
+			renderSelf(shaderProgram, putDataIntoShader);
 		}
 	}
 

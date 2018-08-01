@@ -20,6 +20,8 @@ public class Scene {
 
 	private GraphicalObject[] objects;
 
+	private ShadowMap[] shadowMaps;
+
 	public Scene() {
 		initializeTestObjects();
 	}
@@ -52,7 +54,7 @@ public class Scene {
 
 		// moon
 		objects[3] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[3].getMesh().setTexture(icoTexture);
+		objects[3].getMesh().getMaterial().setTexture(icoTexture);
 		//objects[3].scale(2,2,2);
 		objects[3].setPosition(50,0,0);
 
@@ -65,6 +67,15 @@ public class Scene {
 		directionalLight.setDirection(new Vector3(0,0,-1));
 
 		ambientLight = new AmbientLight(0.25,0.25,0.25);
+
+		shadowMaps = new ShadowMap[1];
+		try {
+			shadowMaps[0] = new ShadowMap();
+			shadowMaps[0].setDirection(objects[2].getPosition().normalize().times(-1d));
+			shadowMaps[0].setDistance(52);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		camera = new Camera();
 		camera.setRadius(2);
@@ -126,5 +137,12 @@ public class Scene {
 	}
 	public void setObjects(GraphicalObject[] objects) {
 		this.objects = objects;
+	}
+
+	public ShadowMap[] getShadowMaps() {
+		return shadowMaps;
+	}
+	public void setShadowMaps(ShadowMap[] shadowMaps) {
+		this.shadowMaps = shadowMaps;
 	}
 }
