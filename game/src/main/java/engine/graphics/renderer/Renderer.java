@@ -14,6 +14,7 @@ import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.input.KeyboardInput;
 import engine.input.MouseInput;
 import engine.graphics.gui.window.Window;
+import engine.math.numericalObjects.Vector3;
 import load.StringLoader;
 import engine.math.numericalObjects.Matrix4;
 import org.lwjgl.glfw.GLFW;
@@ -197,6 +198,7 @@ public class Renderer {
 		objects[3].rotateYAroundOrigin(angleStep*2);
 		scene.getDirectionalLight().rotateY(-angleStep);
 		scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
+		//scene.getShadowMaps()[0].setDirection(new Vector3(-Math.sin(angle), 0, -Math.cos(angle)));
 		//scene.getSpotLights()[5].rotateYAroundOrigin(-angleStep);
 		//spotLight.setDirection(spotLight.getPosition().times(-1).normalize());
 
@@ -236,7 +238,7 @@ public class Renderer {
 			planetObject = new PlanetObject(new Planet(32));
 			//planetObject.setScale(3,3,3);
 		} else {
-			planetObject.rotateY(0.001d);
+			//planetObject.rotateY(0.001d);
 		}
 
 		// Render depth map before view ports has been set up

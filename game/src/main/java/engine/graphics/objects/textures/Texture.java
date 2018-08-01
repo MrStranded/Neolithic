@@ -18,6 +18,8 @@ public class Texture {
 	private ByteBuffer buffer = null;
 	private int textureId;
 
+	private boolean shadowMap;
+
 	private boolean initialized = false;
 
 	public Texture(int width, int height, ByteBuffer buffer) {
@@ -36,14 +38,27 @@ public class Texture {
 		}
 	}
 
+	/**
+	 * A constructor used specifically for shadow maps. Do not use it for anything else!
+	 * @param width
+	 * @param height
+	 * @param pixelFormat
+	 */
 	public Texture(int width, int height, int pixelFormat) {
 		this.width = width;
 		this.height = height;
 		this.pixelFormat = pixelFormat;
+
+		shadowMap = true;
 	}
 
 	public void initialize() {
 		if (!initialized) {
+			int dataType = GL11.GL_UNSIGNED_BYTE;
+			if (shadowMap) {
+				dataType = GL11.GL_FLOAT;
+			}
+
 			textureId = GL11.glGenTextures();
 
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
@@ -54,10 +69,15 @@ public class Texture {
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+			if (shadowMap) {
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+			} else {
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+			}
 
-			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, pixelFormat, GL11.GL_UNSIGNED_BYTE, buffer);
+			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, pixelFormat /*GL11.GL_RGBA*/, width, height, 0, pixelFormat, dataType, buffer);
 
 			// texture mip map (not used with GL_NEAREST)
 			//GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
