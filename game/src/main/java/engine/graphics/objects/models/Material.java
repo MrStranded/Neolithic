@@ -60,7 +60,6 @@ public class Material {
 	}
 	public void setTexture(Texture texture) {
 		this.texture = texture;
-		System.out.println("set texture");
 		texture.initialize();
 	}
 

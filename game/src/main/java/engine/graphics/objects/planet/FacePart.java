@@ -20,6 +20,18 @@ public class FacePart {
 	}
 	
 	public void render(ShaderProgram shaderProgram, Matrix4 viewWorldMatrix, int depth) {
+
+		// performance!!!
+		if (quarterFaces == null) {
+			shaderProgram.setUniform("color", mesh.getColor());
+			if (mesh.getMaterial() != null) {
+				shaderProgram.setUniform("material", mesh.getMaterial());
+			}
+
+			mesh.render(true);
+			return;
+		}
+
 		Vector3 viewVector = viewWorldMatrix.times(new Vector4(normal,0)).extractVector3();//.normalize();
 		Vector3 distanceVector = viewWorldMatrix.times(new Vector4(normal, 1)).extractVector3();
 		

@@ -336,8 +336,6 @@ public class Renderer {
 		if (hudShaderProgram != null) {
 			hudShaderProgram.cleanup();
 		}
-
-		window.destroy();
 	}
 
 	// ###################################################################################

@@ -47,6 +47,8 @@ public class Engine {
 		renderer.cleanUp();
 		scene.cleanUp();
 		hud.cleanUp();
+
+		window.destroy();
 	}
 
 }

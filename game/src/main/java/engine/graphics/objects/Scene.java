@@ -37,7 +37,7 @@ public class Scene {
 
 		// background
 		objects[0] = new GraphicalObject(MeshGenerator.createCube(true));
-		objects[0].getMesh().setTexture(cubeTexture);
+		objects[0].getMesh().getMaterial().setTexture(cubeTexture);
 		objects[0].scale(sunDistance*2,sunDistance*2,sunDistance*2);
 		objects[0].setAffectedByLight(false);
 		objects[0].setStatic(true);
