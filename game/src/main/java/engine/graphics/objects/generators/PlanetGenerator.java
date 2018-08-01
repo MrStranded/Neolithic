@@ -40,7 +40,7 @@ public class PlanetGenerator {
 		Vector3 origin = new Vector3(0,0,0);
 
 		// a makin' it a round
-		if (false) {
+		if (true) {
 			corner1 = corner1.normalize();
 			corner2 = corner2.normalize();
 			corner3 = corner3.normalize();

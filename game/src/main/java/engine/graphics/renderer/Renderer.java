@@ -199,6 +199,7 @@ public class Renderer {
 		scene.getDirectionalLight().rotateY(-angleStep);
 		scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
 		//scene.getShadowMaps()[0].setDirection(new Vector3(-Math.sin(angle), 0, -Math.cos(angle)));
+		scene.getShadowMaps()[0].setAngle(-angle);
 		//scene.getSpotLights()[5].rotateYAroundOrigin(-angleStep);
 		//spotLight.setDirection(spotLight.getPosition().times(-1).normalize());
 
@@ -245,7 +246,7 @@ public class Renderer {
 		if (scene.getShadowMaps() != null) {
 			for (ShadowMap shadowMap : scene.getShadowMaps()) {
 				if (shadowMap != null) {
-					renderDepthMap(shadowMap, scene, hud);
+					//renderDepthMap(shadowMap, scene, hud);
 				}
 			}
 		}

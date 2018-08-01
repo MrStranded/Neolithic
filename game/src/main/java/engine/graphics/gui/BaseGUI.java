@@ -33,7 +33,7 @@ public class BaseGUI implements GUIInterface {
 
 		objects[0] = new GUIObject(MeshGenerator.createQuad());
 		objects[0].getMesh().getMaterial().setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png"));
-		objects[0].setSize(400,400);
+		objects[0].setSize(40,40);
 		//objects[0].setLocation(0,100);
 		objects[0].setPosition(0,0,-0.5d);
 		//objects[0].getMesh().setColor(0.5f, 0.5f, 0.5f, 0.5f);

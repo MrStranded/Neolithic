@@ -71,7 +71,7 @@ public class Scene {
 		shadowMaps = new ShadowMap[1];
 		try {
 			shadowMaps[0] = new ShadowMap();
-			shadowMaps[0].setDirection(objects[2].getPosition().normalize().times(-1d));
+			//shadowMaps[0].setDirection(objects[2].getPosition().normalize().times(-1d));
 			shadowMaps[0].setDistance(52);
 		} catch (Exception e) {
 			e.printStackTrace();

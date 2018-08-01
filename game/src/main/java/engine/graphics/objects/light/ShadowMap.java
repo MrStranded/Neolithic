@@ -14,7 +14,8 @@ public class ShadowMap {
 
 	private final Texture depthMap;
 
-	private Vector3 direction;
+	//private Vector3 direction;
+	private double angle = 0d;
 	private double distance = 1d;
 
 	public ShadowMap() throws Exception {
@@ -47,18 +48,21 @@ public class ShadowMap {
 	// ###################################################################################
 
 	public Matrix4 getViewMatrix() {
-		if (direction == null) {
-			return new Matrix4();
-		}
-
-		Vector3 position = direction.times(-distance);
-
-		double lightAngleX = Math.acos(direction.getZ());
-		double lightAngleY = Math.asin(direction.getX());
-		double lightAngleZ = 0;
-
-		return  Transformations.translate(position.times(-1d)).times(
-				Transformations.rotate(new Vector3(-lightAngleX, -lightAngleY, -lightAngleZ))
+//		//if (direction == null) {
+//			return new Matrix4();
+//		//}
+//
+//		//Vector3 position = direction.times(-distance);
+//
+////		double lightAngleX = Math.acos(direction.getZ());
+////		double lightAngleY = Math.asin(direction.getX());
+////		double lightAngleZ = 0;
+//
+//		return  Transformations.translate(position.times(-1d)).times(
+//				Transformations.rotate(new Vector3(-lightAngleX, -lightAngleY, -lightAngleZ))
+//		);
+		return  Transformations.translate(new Vector3(0,0,-distance)).times(
+				Transformations.rotateY(angle)
 		);
 	}
 
@@ -82,11 +86,11 @@ public class ShadowMap {
 		return depthMap;
 	}
 
-	public Vector3 getDirection() {
-		return direction;
+	public double getAngle() {
+		return angle;
 	}
-	public void setDirection(Vector3 direction) {
-		this.direction = direction;
+	public void setAngle(double angle) {
+		this.angle = angle;
 	}
 
 	public double getDistance() {
