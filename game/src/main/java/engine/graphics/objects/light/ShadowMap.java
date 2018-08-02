@@ -2,6 +2,7 @@ package engine.graphics.objects.light;
 
 import constants.GraphicalConstants;
 import engine.graphics.objects.textures.Texture;
+import engine.graphics.renderer.projection.Projection;
 import engine.math.Transformations;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
@@ -11,12 +12,18 @@ import org.lwjgl.opengl.GL30;
 public class ShadowMap {
 
 	private final int depthMapFBO;
-
 	private final Texture depthMap;
 
-	//private Vector3 direction;
+	private Matrix4 orthographicProjection;
+	private Matrix4 viewMatrix;
+
 	private double angle = 0d;
 	private double distance = 1d;
+	private double scale = 1d;
+
+	private double zNear = 1d, zFar = 10d;
+
+	boolean modified = true;
 
 	public ShadowMap() throws Exception {
 		// Create the depth map texture
@@ -47,22 +54,14 @@ public class ShadowMap {
 	// ################################ Calculation ######################################
 	// ###################################################################################
 
-	public Matrix4 getViewMatrix() {
-//		//if (direction == null) {
-//			return new Matrix4();
-//		//}
-//
-//		//Vector3 position = direction.times(-distance);
-//
-////		double lightAngleX = Math.acos(direction.getZ());
-////		double lightAngleY = Math.asin(direction.getX());
-////		double lightAngleZ = 0;
-//
-//		return  Transformations.translate(position.times(-1d)).times(
-//				Transformations.rotate(new Vector3(-lightAngleX, -lightAngleY, -lightAngleZ))
-//		);
-		return  Transformations.translate(new Vector3(0,0,-distance)).times(
-				Transformations.rotateY(angle)
+	private void actualizeMatrices() {
+		viewMatrix =    Transformations.translate(new Vector3(0,0,-distance)).times(
+						Transformations.rotateY(angle)
+		);
+
+		double size = scale * GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
+		orthographicProjection =    Projection.createOrthographicProjectionMatrix(
+									-size, size, -size, size, zNear, zFar
 		);
 	}
 
@@ -78,6 +77,20 @@ public class ShadowMap {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
+	public Matrix4 getViewMatrix() {
+		if (modified) {
+			actualizeMatrices();
+		}
+		return viewMatrix;
+	}
+
+	public Matrix4 getOrthographicProjection() {
+		if (modified) {
+			actualizeMatrices();
+		}
+		return orthographicProjection;
+	}
+
 	public int getDepthMapFBO() {
 		return depthMapFBO;
 	}
@@ -91,6 +104,7 @@ public class ShadowMap {
 	}
 	public void setAngle(double angle) {
 		this.angle = angle;
+		modified = true;
 	}
 
 	public double getDistance() {
@@ -98,5 +112,30 @@ public class ShadowMap {
 	}
 	public void setDistance(double distance) {
 		this.distance = distance;
+		modified = true;
+	}
+
+	public double getScale() {
+		return scale;
+	}
+	public void setScale(double scale) {
+		this.scale = scale;
+		modified = true;
+	}
+
+	public double getzNear() {
+		return zNear;
+	}
+	public void setzNear(double zNear) {
+		this.zNear = zNear;
+		modified = true;
+	}
+
+	public double getzFar() {
+		return zFar;
+	}
+	public void setzFar(double zFar) {
+		this.zFar = zFar;
+		modified = true;
 	}
 }

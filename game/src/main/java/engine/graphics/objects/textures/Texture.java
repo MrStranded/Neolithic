@@ -77,7 +77,7 @@ public class Texture {
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 			}
 
-			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, pixelFormat /*GL11.GL_RGBA*/, width, height, 0, pixelFormat, dataType, buffer);
+			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, pixelFormat, width, height, 0, pixelFormat, dataType, buffer);
 
 			// texture mip map (not used with GL_NEAREST)
 			//GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);

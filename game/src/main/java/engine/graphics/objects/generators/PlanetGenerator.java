@@ -46,7 +46,7 @@ public class PlanetGenerator {
 			corner3 = corner3.normalize();
 		}
 
-		double f = 1d + Math.random()/10d;
+		double f = 1d + Math.random()/42d;
 
 		corner1 = corner1.times(f);
 		corner2 = corner2.times(f);

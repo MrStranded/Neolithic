@@ -19,6 +19,7 @@ import load.StringLoader;
 import engine.math.numericalObjects.Matrix4;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
 import static java.lang.System.exit;
@@ -115,7 +116,12 @@ public class Renderer {
 			// ---------------------------------------------------------- world scene
 			shaderProgram.createUniform("modelViewMatrix");
 			shaderProgram.createUniform("projectionMatrix");
+			shaderProgram.createUniform("modelLightViewMatrix");
+			shaderProgram.createUniform("lightProjectionMatrix");
+
 			shaderProgram.createUniform("textureSampler");
+			shaderProgram.createUniform("shadowSampler");
+
 			shaderProgram.createUniform("color");
 			shaderProgram.createUniform("affectedByLight");
 			shaderProgram.createUniform("dynamic");
@@ -185,7 +191,7 @@ public class Renderer {
 	// ###################################################################################
 
 	private void processInput(Scene scene) {
-		double angleStep = 0.0025d;
+		double angleStep = 0;//0.0025d;
 		angle += angleStep;
 		if (angle > Math.PI*2d) {
 			angle -= Math.PI*2d;
@@ -195,11 +201,12 @@ public class Renderer {
 		Camera camera = scene.getCamera();
 
 		objects[2].rotateYAroundOrigin(-angleStep);
-		objects[3].rotateYAroundOrigin(angleStep*2);
+		objects[3].rotateYAroundOrigin(-angleStep);
+		camera.rotateYaw(-angleStep);
 		scene.getDirectionalLight().rotateY(-angleStep);
 		scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
 		//scene.getShadowMaps()[0].setDirection(new Vector3(-Math.sin(angle), 0, -Math.cos(angle)));
-		scene.getShadowMaps()[0].setAngle(-angle);
+		scene.getShadowMap().setAngle(angle);
 		//scene.getSpotLights()[5].rotateYAroundOrigin(-angleStep);
 		//spotLight.setDirection(spotLight.getPosition().times(-1).normalize());
 
@@ -243,12 +250,8 @@ public class Renderer {
 		}
 
 		// Render depth map before view ports has been set up
-		if (scene.getShadowMaps() != null) {
-			for (ShadowMap shadowMap : scene.getShadowMaps()) {
-				if (shadowMap != null) {
-					//renderDepthMap(shadowMap, scene, hud);
-				}
-			}
+		if (scene.getShadowMap() != null) {
+			renderDepthMap(scene.getShadowMap(), scene, hud);
 		}
 
 		GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
@@ -266,7 +269,7 @@ public class Renderer {
 
 		// closing window
 		if (keyboard.isClicked(GLFW.GLFW_KEY_ESCAPE)) {
-			//cleanUp(); // somehow enabling this causes the program to not close properly anymore
+			//cleanUp(); // somehow enabling this here causes the program to not close properly anymore
 			window.close();
 		}
 	}
@@ -275,13 +278,12 @@ public class Renderer {
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, shadowMap.getDepthMapFBO());
 		GL11.glViewport(0, 0, GraphicalConstants.SHADOWMAP_SIZE, GraphicalConstants.SHADOWMAP_SIZE);
 
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		GL11.glClear(/*GL11.GL_COLOR_BUFFER_BIT | */GL11.GL_DEPTH_BUFFER_BIT);
 
 		depthShaderProgram.bind();
 
 		Matrix4 viewMatrix = shadowMap.getViewMatrix();
-		double size = 1.25d;
-		Matrix4 orthographicProjectionMatrix = Projection.createOrthographicProjectionMatrix(-size,size,size,-size,0.1d, 104d);
+		Matrix4 orthographicProjectionMatrix = shadowMap.getOrthographicProjection();
 		depthShaderProgram.setUniform("orthographicProjectionMatrix", orthographicProjectionMatrix);
 
 		for (GraphicalObject object : scene.getObjects()) {
@@ -333,6 +335,15 @@ public class Renderer {
 		shaderProgram.setUniform("spotLight",scene.getSpotLights());
 		// set ambient light
 		shaderProgram.setUniform("ambientLight",scene.getAmbientLight().getColor());
+		// set shadow matrices
+		ShadowMap shadowMap = scene.getShadowMap();
+		if (shadowMap != null) {
+			GL13.glActiveTexture(GL13.GL_TEXTURE1);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, shadowMap.getDepthMap() != null ? shadowMap.getDepthMap().getTextureId() : 0);
+
+			shaderProgram.setUniform("shadowSampler", 1);
+			shaderProgram.setUniform("lightProjectionMatrix", shadowMap.getOrthographicProjection());
+		}
 
 		Matrix4 viewMatrix = camera.getViewMatrix();
 
@@ -344,6 +355,10 @@ public class Renderer {
 				shaderProgram.setUniform("color", object.getMesh().getColor());
 				shaderProgram.setUniform("material", object.getMesh().getMaterial());
 
+				if (shadowMap != null) {
+					shaderProgram.setUniform("modelLightViewMatrix", shadowMap.getViewMatrix().times(object.getWorldMatrix()));
+				}
+
 				object.render();
 			}
 		}
@@ -352,6 +367,10 @@ public class Renderer {
 			shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(planetObject.getWorldMatrix()));
 			shaderProgram.setUniform("affectedByLight", 1);
 			shaderProgram.setUniform("dynamic", 1);
+
+			if (shadowMap != null) {
+				shaderProgram.setUniform("modelLightViewMatrix", shadowMap.getViewMatrix().times(planetObject.getWorldMatrix()));
+			}
 
 			// here we pass the shaderProgram because in FacePart.render() we need set some uniforms
 			planetObject.render(shaderProgram, camera.getPlanetaryLODMatrix(), true);

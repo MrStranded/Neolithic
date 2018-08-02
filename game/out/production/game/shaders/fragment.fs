@@ -52,11 +52,14 @@ in vec3 outPosition;
 in vec3 outNormal;
 in vec2 outTextureCoordinates;
 
+in vec4 lightPosition;
+
 out vec4 fragmentColor;
 
 // ----------- uniforms
 
 uniform sampler2D textureSampler;
+uniform sampler2D shadowSampler;
 uniform vec4 color;
 uniform int affectedByLight;
 
@@ -88,6 +91,28 @@ void setupColors(Material material, vec2 textureCoordinates) {
         diffuseC = material.diffuse;
         specularC = material.reflectance;
     }
+}
+
+// ----------------------------------------------------------------------------------------------- Calculate Shadow
+
+float calculateShadow(vec4 position) {
+    float shadowFactor = 0.0; // shadow
+
+    // Transform from screen coordinates to texture coordinates
+    vec3 projectionCoordinates = position.xyz * vec3(0.5, 0.5, 0.5) + vec3(0.5, 0.5, 0.5);
+
+    // checkin whether in shadow (>=) or ligth (<) with small epsilon to prevent shadow acne
+    float distance = texture(shadowSampler, projectionCoordinates.xy).r;
+    float epsilon = 0.0001;
+
+    if (projectionCoordinates.z < distance - epsilon) {
+        // Current fragment is in light
+        shadowFactor = 1.0;
+    } else if (projectionCoordinates.z < distance) {
+        shadowFactor = (distance - projectionCoordinates.z) / epsilon;
+    }
+
+    return shadowFactor;
 }
 
 // ----------------------------------------------------------------------------------------------- Calculate Light
@@ -172,25 +197,29 @@ void main() {
 
     if (affectedByLight == 1) {
         vec4 pointLightColor = vec4(0, 0, 0, 0);
-
-        for (int i=0; i<MAX_POINT_LIGHTS; i++) {
-            if (pointLight[i].intensity > 0) {
-                pointLightColor += calculatePointLight(pointLight[i], outPosition, outNormal);
-            }
-        }
-
         vec4 spotLightColor = vec4(0, 0, 0, 0);
+        vec4 directionalLightColor = vec4(0, 0, 0, 0);
 
-        for (int i=0; i<MAX_SPOT_LIGHTS; i++) {
-            if (spotLight[i].intensity > 0) {
-                spotLightColor += calculateSpotLight(spotLight[i], outPosition, outNormal);
+        float shadowFactor = calculateShadow(lightPosition);
+
+        if (shadowFactor > 0.0) {
+            for (int i=0; i<MAX_POINT_LIGHTS; i++) {
+                if (pointLight[i].intensity > 0) {
+                    pointLightColor += calculatePointLight(pointLight[i], outPosition, outNormal);
+                }
             }
+
+            for (int i=0; i<MAX_SPOT_LIGHTS; i++) {
+                if (spotLight[i].intensity > 0) {
+                    spotLightColor += calculateSpotLight(spotLight[i], outPosition, outNormal);
+                }
+            }
+
+            directionalLightColor = calculateDirectionalLight(directionalLight, outNormal);
         }
 
-        vec4 directionalLightColor = calculateDirectionalLight(directionalLight, outNormal);
-
-        fragmentColor = color * (ambientC * ambientLight + pointLightColor + spotLightColor + directionalLightColor);
+        fragmentColor = color * (ambientC * ambientLight + shadowFactor * (pointLightColor + spotLightColor + directionalLightColor));
     } else {
-        fragmentColor = color * ambientC + vec4(outTextureCoordinates, 0.0, 0.0);
+        fragmentColor = color * ambientC;
     }
 }
