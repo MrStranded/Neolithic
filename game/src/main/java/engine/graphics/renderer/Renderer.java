@@ -206,7 +206,8 @@ public class Renderer {
 		scene.getDirectionalLight().rotateY(-angleStep);
 		scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
 		//scene.getShadowMaps()[0].setDirection(new Vector3(-Math.sin(angle), 0, -Math.cos(angle)));
-		scene.getShadowMap().setAngle(angle);
+		scene.getShadowMap().setLightAngle(-angle);
+		scene.getShadowMap().setCameraAngle(-camera.getRotation().getY());
 		//scene.getSpotLights()[5].rotateYAroundOrigin(-angleStep);
 		//spotLight.setDirection(spotLight.getPosition().times(-1).normalize());
 

@@ -17,7 +17,8 @@ public class ShadowMap {
 	private Matrix4 orthographicProjection;
 	private Matrix4 viewMatrix;
 
-	private double angle = 0d;
+	private double lightAngle = 0d;
+	private double cameraAngle = 0d;
 	private double distance = 1d;
 	private double scale = 1d;
 
@@ -55,8 +56,9 @@ public class ShadowMap {
 	// ###################################################################################
 
 	private void actualizeMatrices() {
-		viewMatrix =    Transformations.translate(new Vector3(0,0,-distance)).times(
-						Transformations.rotateY(angle)
+		viewMatrix =    Transformations.rotateY(-cameraAngle).times(
+						Transformations.translate(new Vector3(0,0,-distance)).times(
+						Transformations.rotateY(-lightAngle))
 		);
 
 		double size = scale * GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
@@ -99,11 +101,19 @@ public class ShadowMap {
 		return depthMap;
 	}
 
-	public double getAngle() {
-		return angle;
+	public double getLightAngle() {
+		return lightAngle;
 	}
-	public void setAngle(double angle) {
-		this.angle = angle;
+	public void setLightAngle(double lightAngle) {
+		this.lightAngle = lightAngle;
+		modified = true;
+	}
+
+	public double getCameraAngle() {
+		return cameraAngle;
+	}
+	public void setCameraAngle(double cameraAngle) {
+		this.cameraAngle = cameraAngle;
 		modified = true;
 	}
 

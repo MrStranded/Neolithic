@@ -7,7 +7,7 @@ public class GraphicalConstants {
 	public static final double ZFAR = 4000d; // far viewing distance of camera
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Shadow Map
-	public static final int SHADOWMAP_SIZE = 2048; // width and height of shadow map in pixels
+	public static final int SHADOWMAP_SIZE = 1024; // width and height of shadow map in pixels
 	public static final double SHADOWMAP_SCALE_FACTOR = 1.25; // scale factor of shadowMap.scale for orthographic projection
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Object Counts

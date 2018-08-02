@@ -105,11 +105,11 @@ float calculateShadow(vec4 position) {
     float distance = texture(shadowSampler, projectionCoordinates.xy).r;
     float epsilon = 0.0001;
 
-    if (projectionCoordinates.z < distance - epsilon) {
+    if (projectionCoordinates.z < distance + epsilon) {
         // Current fragment is in light
         shadowFactor = 1.0;
     } else if (projectionCoordinates.z < distance) {
-        shadowFactor = (distance - projectionCoordinates.z) / epsilon;
+        //shadowFactor = (distance - projectionCoordinates.z) / epsilon;
     }
 
     return shadowFactor;
