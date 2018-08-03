@@ -12,11 +12,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Renderer.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Renderer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="215" column="51" selection-start-line="215" selection-start-column="51" selection-end-line="215" selection-end-column="51" />
+            <state relative-caret-position="345">
+              <caret line="254" column="14" selection-start-line="254" selection-start-column="14" selection-end-line="254" selection-end-column="14" />
               <folding>
                 <element signature="e#15365#15366#0" expanded="true" />
                 <element signature="e#15397#15398#0" expanded="true" />
@@ -29,7 +29,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PlanetGenerator.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PlanetGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="150">
@@ -41,8 +41,8 @@
       <file leaf-file-name="fragment.fs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/fragment.fs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="108" column="29" selection-start-line="108" selection-start-column="29" selection-end-line="108" selection-end-column="29" />
+            <state relative-caret-position="100">
+              <caret line="101" column="8" selection-start-line="101" selection-start-column="8" selection-end-line="101" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -278,12 +278,12 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseGUI.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/textures/Texture.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/movement/MoveableCamera.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/shaders/fragment.fs" />
         <option value="$PROJECT_DIR$/src/main/java/constants/GraphicalConstants.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/light/ShadowMap.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/Scene.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/shaders/fragment.fs" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java" />
       </list>
     </option>
   </component>
@@ -754,7 +754,7 @@
       <workItem from="1530620361206" duration="30989000" />
       <workItem from="1530892893991" duration="43929000" />
       <workItem from="1533201063455" duration="9372000" />
-      <workItem from="1533232758072" duration="18165000" />
+      <workItem from="1533232758072" duration="18702000" />
     </task>
     <servers />
   </component>
@@ -791,7 +791,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="310442000" />
+    <option name="totallyTimeSpent" value="310979000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -1212,13 +1212,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/fragment.fs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="108" column="29" selection-start-line="108" selection-start-column="29" selection-end-line="108" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/constants/GraphicalConstants.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -1266,10 +1259,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="42" column="16" selection-start-line="42" selection-start-column="16" selection-end-line="42" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/shaders/fragment.fs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="101" column="8" selection-start-line="101" selection-start-column="8" selection-end-line="101" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="215" column="51" selection-start-line="215" selection-start-column="51" selection-end-line="215" selection-end-column="51" />
+        <state relative-caret-position="345">
+          <caret line="254" column="14" selection-start-line="254" selection-start-column="14" selection-end-line="254" selection-end-column="14" />
           <folding>
             <element signature="e#15365#15366#0" expanded="true" />
             <element signature="e#15397#15398#0" expanded="true" />
@@ -1278,13 +1285,6 @@
             <element signature="e#16166#16167#0" expanded="true" />
             <element signature="e#16236#16237#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="42" column="16" selection-start-line="42" selection-start-column="16" selection-end-line="42" selection-end-column="16" />
         </state>
       </provider>
     </entry>

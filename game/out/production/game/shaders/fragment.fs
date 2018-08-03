@@ -99,20 +99,32 @@ void setupColors(Material material, vec2 textureCoordinates) {
 
 float calculateShadow(vec4 position) {
     float shadowFactor = 1.0; // light
+    vec2 increment = 1.0 / textureSize(shadowSampler, 0);
 
     if (shadowStrength > 0.05) {
         // Transform from screen coordinates to texture coordinates
         vec3 projectionCoordinates = position.xyz * vec3(0.5, 0.5, 0.5) + vec3(0.5, 0.5, 0.5);
 
-        // checkin whether in shadow (>=) or ligth (<) with small epsilon to prevent shadow acne
-        float distance = texture(shadowSampler, projectionCoordinates.xy).r;
         float epsilon = 0.005;
 
-        if (projectionCoordinates.z > distance + epsilon) {
-            // Current fragment is in shadow
-            shadowFactor = 1.0 - shadowStrength;
+        // checkin whether in shadow (>=) or ligth (<) with small epsilon to prevent shadow acne
+        float shadow = 0.0;
+        for (int x=-1; x<=1; x++) {
+            for (int y=-1; y<=1; y++) {
+                float distance = texture(shadowSampler, projectionCoordinates.xy + vec2(x,y)*increment).r;
+                if (projectionCoordinates.z > distance + epsilon) {
+                    shadow += 1.0;
+                }
+            }
         }
-    }
+        shadow /= 9.0;
+        shadowFactor = 1.0 - (shadow * shadowStrength);
+
+        //if (projectionCoordinates.z > distance + epsilon) {
+            // Current fragment is in shadow
+        //    shadowFactor = 1.0 - shadowStrength;
+        //}
+            }
 
     return shadowFactor;
 }
