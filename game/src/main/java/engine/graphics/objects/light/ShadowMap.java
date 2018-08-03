@@ -23,6 +23,7 @@ public class ShadowMap {
 	private Camera camera;
 
 	private float shadowStrength = 1f;
+	private float epsilon = 0.005f;
 
 	private double zNear = -0.5d, zFar = 0.5d;
 
@@ -71,6 +72,24 @@ public class ShadowMap {
 	 */
 	private void actualize() {
 		if (camera != null) {
+			// ---------------------------------------- radius factor
+			double radiusFactor = 0d;
+			if (camera.getRadius() > distance) {
+				radiusFactor = Math.sqrt(Math.sqrt(camera.getRadius() - distance));
+			}
+
+			// ---------------------------------------- epsilon (depth bias)
+			double maxEpsilon = GraphicalConstants.SHADOWMAP_MAX_EPSILON;
+			double minEpsilon = GraphicalConstants.SHADOWMAP_MIN_EPSILON;
+
+			double epsilonD = minEpsilon + radiusFactor*radiusFactor * (maxEpsilon - minEpsilon);
+			if (epsilonD < minEpsilon) {
+				epsilonD = minEpsilon;
+			}
+			if (epsilonD > maxEpsilon) {
+				epsilonD = maxEpsilon;
+			}
+			epsilon = (float) epsilonD;
 
 			// ---------------------------------------- shadow strength
 			double poleShadow = Math.abs(Math.sin(camera.getPitch())); // 1 at poles, 0 at equator
@@ -84,6 +103,7 @@ public class ShadowMap {
 				angle -= Math.PI*2d;
 			}
 			double equatorShadow = (Math.cos(angle) + 1d) / 2d;
+			equatorShadow *= equatorShadow; // square dat fucker yo (in order to weaken shadows in shadow part of planet)
 			if (angle < Math.PI/brightSpot || angle > Math.PI*2d - Math.PI/brightSpot) {
 				equatorShadow = equatorShadow - Math.cos(angle*brightSpot);
 			}
@@ -93,11 +113,6 @@ public class ShadowMap {
 			// ---------------------------------------- scaling factor
 			double max = GraphicalConstants.SHADOWMAP_MAX_SCALING;
 			double min = GraphicalConstants.SHADOWMAP_MIN_SCALING;
-
-			double radiusFactor = 0d;
-			if (camera.getRadius() > distance) {
-				radiusFactor = Math.sqrt(Math.sqrt(camera.getRadius() - distance));
-			}
 
 			double scaleFactor = max - radiusFactor * (max - min);
 			if (scaleFactor > max) {
@@ -110,7 +125,7 @@ public class ShadowMap {
 
 			// ---------------------------------------- position
 			double yaw = camera.getYaw();
-			double pitch = -camera.getPitch();
+			double pitch = -camera.getPitch() + camera.getTilt() * GraphicalConstants.PLANETARY_LOD_MATRIX_TILT_FACTOR;
 			double heightFactor = Math.cos(pitch);
 			Vector3 position = new Vector3(Math.sin(yaw) * heightFactor, Math.sin(pitch), Math.cos(yaw) * heightFactor).times(-distance);
 
@@ -154,6 +169,10 @@ public class ShadowMap {
 			actualize();
 		}
 		return orthographicProjection;
+	}
+
+	public float getEpsilon() {
+		return epsilon;
 	}
 
 	public float getShadowStrength() {

@@ -64,6 +64,7 @@ uniform int affectedByLight;
 
 uniform sampler2D shadowSampler;
 uniform float shadowStrength;
+uniform float shadowEpsilon;
 
 uniform Material material;
 
@@ -105,19 +106,18 @@ float calculateShadow(vec4 position) {
         // Transform from screen coordinates to texture coordinates
         vec3 projectionCoordinates = position.xyz * vec3(0.5, 0.5, 0.5) + vec3(0.5, 0.5, 0.5);
 
-        float epsilon = 0.005;
-
         // checkin whether in shadow (>=) or ligth (<) with small epsilon to prevent shadow acne
         float shadow = 0.0;
-        for (int x=-1; x<=1; x++) {
-            for (int y=-1; y<=1; y++) {
+        int blurSize = 1;
+        for (int x=-blurSize; x<=blurSize; x++) {
+            for (int y=-blurSize; y<=blurSize; y++) {
                 float distance = texture(shadowSampler, projectionCoordinates.xy + vec2(x,y)*increment).r;
-                if (projectionCoordinates.z > distance + epsilon) {
+                if (projectionCoordinates.z > distance + shadowEpsilon) {
                     shadow += 1.0;
                 }
             }
         }
-        shadow /= 9.0;
+        shadow /= (blurSize*2 + 1) * (blurSize*2 + 1);
         shadowFactor = 1.0 - (shadow * shadowStrength);
 
         //if (projectionCoordinates.z > distance + epsilon) {

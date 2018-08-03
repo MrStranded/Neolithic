@@ -123,6 +123,7 @@ public class Renderer {
 
 			shaderProgram.createUniform("shadowSampler");
 			shaderProgram.createUniform("shadowStrength");
+			shaderProgram.createUniform("shadowEpsilon");
 
 			shaderProgram.createUniform("color");
 			shaderProgram.createUniform("affectedByLight");
@@ -353,6 +354,7 @@ public class Renderer {
 
 			shaderProgram.setUniform("shadowSampler", 1);
 			shaderProgram.setUniform("shadowStrength", shadowMap.getShadowStrength());
+			shaderProgram.setUniform("shadowEpsilon", shadowMap.getEpsilon());
 			shaderProgram.setUniform("lightProjectionMatrix", shadowMap.getOrthographicProjection());
 		}
 
