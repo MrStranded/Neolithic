@@ -120,7 +120,9 @@ public class Renderer {
 			shaderProgram.createUniform("lightProjectionMatrix");
 
 			shaderProgram.createUniform("textureSampler");
+
 			shaderProgram.createUniform("shadowSampler");
+			shaderProgram.createUniform("shadowStrength");
 
 			shaderProgram.createUniform("color");
 			shaderProgram.createUniform("affectedByLight");
@@ -205,9 +207,18 @@ public class Renderer {
 		camera.rotateYaw(-angleStep);
 		scene.getDirectionalLight().rotateY(-angleStep);
 		scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
-		//scene.getShadowMaps()[0].setDirection(new Vector3(-Math.sin(angle), 0, -Math.cos(angle)));
+
 		scene.getShadowMap().setLightAngle(-angle);
-		scene.getShadowMap().setCameraAngle(-camera.getRotation().getY());
+		double cameraAngle = camera.getRotation().getY();
+		scene.getShadowMap().setCameraAngle(cameraAngle);
+		double r = camera.getRadius() / 2d;
+		scene.getShadowMap().setScale(r*r);
+
+		//scene.getShadowMap().setDistance(1d + 0.5d*Math.abs(Math.cos(cameraAngle)));
+		//scene.getShadowMap().setzNear(0.1d -Math.abs(Math.sin(cameraAngle)));
+		//scene.getShadowMap().setzNear(0.1d);//0.5d);
+		//scene.getShadowMap().setzFar(1d+1d*Math.abs(Math.sin(cameraAngle)));//104d);
+		//scene.getShadowMap().sx = 1d - 0.5d*Math.abs(Math.sin(cameraAngle));
 		//scene.getSpotLights()[5].rotateYAroundOrigin(-angleStep);
 		//spotLight.setDirection(spotLight.getPosition().times(-1).normalize());
 
@@ -343,6 +354,7 @@ public class Renderer {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, shadowMap.getDepthMap() != null ? shadowMap.getDepthMap().getTextureId() : 0);
 
 			shaderProgram.setUniform("shadowSampler", 1);
+			shaderProgram.setUniform("shadowStrength", 1f);
 			shaderProgram.setUniform("lightProjectionMatrix", shadowMap.getOrthographicProjection());
 		}
 

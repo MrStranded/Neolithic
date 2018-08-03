@@ -56,14 +56,14 @@ public class ShadowMap {
 	// ###################################################################################
 
 	private void actualizeMatrices() {
-		viewMatrix =    Transformations.rotateY(-cameraAngle).times(
+		viewMatrix =    Transformations.rotateY(cameraAngle - lightAngle).times(
 						Transformations.translate(new Vector3(0,0,-distance)).times(
-						Transformations.rotateY(-lightAngle))
+						Transformations.rotateY(-cameraAngle))
 		);
 
 		double size = scale * GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
 		orthographicProjection =    Projection.createOrthographicProjectionMatrix(
-									-size, size, -size, size, zNear, zFar
+									-size, size, size, -size, zNear, zFar
 		);
 	}
 

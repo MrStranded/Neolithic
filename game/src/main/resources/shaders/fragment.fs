@@ -59,9 +59,11 @@ out vec4 fragmentColor;
 // ----------- uniforms
 
 uniform sampler2D textureSampler;
-uniform sampler2D shadowSampler;
 uniform vec4 color;
 uniform int affectedByLight;
+
+uniform sampler2D shadowSampler;
+uniform float shadowStrength;
 
 uniform Material material;
 
@@ -96,20 +98,20 @@ void setupColors(Material material, vec2 textureCoordinates) {
 // ----------------------------------------------------------------------------------------------- Calculate Shadow
 
 float calculateShadow(vec4 position) {
-    float shadowFactor = 0.0; // shadow
+    float shadowFactor = 1.0; // light
 
-    // Transform from screen coordinates to texture coordinates
-    vec3 projectionCoordinates = position.xyz * vec3(0.5, 0.5, 0.5) + vec3(0.5, 0.5, 0.5);
+    if (shadowStrength > 0.0) {
+        // Transform from screen coordinates to texture coordinates
+        vec3 projectionCoordinates = position.xyz * vec3(0.5, 0.5, 0.5) + vec3(0.5, 0.5, 0.5);
 
-    // checkin whether in shadow (>=) or ligth (<) with small epsilon to prevent shadow acne
-    float distance = texture(shadowSampler, projectionCoordinates.xy).r;
-    float epsilon = 0.0001;
+        // checkin whether in shadow (>=) or ligth (<) with small epsilon to prevent shadow acne
+        float distance = texture(shadowSampler, projectionCoordinates.xy).r;
+        float epsilon = 0.002;
 
-    if (projectionCoordinates.z < distance + epsilon) {
-        // Current fragment is in light
-        shadowFactor = 1.0;
-    } else if (projectionCoordinates.z < distance) {
-        //shadowFactor = (distance - projectionCoordinates.z) / epsilon;
+        if (projectionCoordinates.z > distance + epsilon) {
+            // Current fragment is in shadow
+            shadowFactor = 0.0;
+        }
     }
 
     return shadowFactor;
