@@ -198,7 +198,7 @@ public class Renderer {
 	// ###################################################################################
 
 	private void processInput(Scene scene) {
-		double angleStep = 0;//0.0025d;
+		double angleStep = 0.0025d;
 		angle += angleStep;
 		if (angle > Math.PI*2d) {
 			angle -= Math.PI*2d;
@@ -209,7 +209,7 @@ public class Renderer {
 
 		objects[2].rotateYAroundOrigin(-angleStep);
 		objects[3].rotateYAroundOrigin(-angleStep);
-		camera.rotateYaw(-angleStep);
+		//camera.rotateYaw(-angleStep);
 		scene.getDirectionalLight().rotateY(-angleStep);
 		scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
 
@@ -365,7 +365,26 @@ public class Renderer {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, shadowMap.getDepthMap() != null ? shadowMap.getDepthMap().getTextureId() : 0);
 
 			shaderProgram.setUniform("shadowSampler", 1);
-			shaderProgram.setUniform("shadowStrength", 1f);
+			//shaderProgram.setUniform("shadowStrength", (float) ((-Math.cos(angle*2d) + 1d) / 2d)); // shadows strong on sides
+
+			double yFactor = Math.abs(Math.sin(camera.getPitch()));
+
+			double x = 4d;
+			double a = angle + camera.getYaw();
+			if (a < 0) {
+				a += Math.PI*2d;
+			}
+			if (a >= Math.PI*2d) {
+				a -= Math.PI*2d;
+			}
+			double EQshadowStrength = (Math.cos(a) + 1d) / 2d;
+			if (a < Math.PI/x || a > Math.PI*2d - Math.PI/x) {
+				EQshadowStrength = EQshadowStrength - Math.cos(a*x);
+			}
+
+			double shadowStrength = (1d - yFactor) * EQshadowStrength + yFactor;
+
+			shaderProgram.setUniform("shadowStrength", (float) shadowStrength);
 			shaderProgram.setUniform("lightProjectionMatrix", shadowMap.getOrthographicProjection());
 		}
 

@@ -66,26 +66,46 @@ public class ShadowMap {
 
 	private void actualizeMatrices() {
 		if (camera != null) {
-			double max = 20d;
+			double max = 12d;
 			double min = 1d;
-			double scaleFactor = max - (camera.getRadius() - 1d) * (max - min);
+
+			double zmax = 0.5d;
+			double zmin = 0.01d;
+
+			double radiusFactor = 0d;
+			if (camera.getRadius() > 1d) {
+				radiusFactor = Math.sqrt(Math.sqrt(camera.getRadius() - 1d));
+			}
+
+			double scaleFactor = max - radiusFactor * (max - min);
 			if (scaleFactor > max) {
 				scaleFactor = max;
 			}
 			if (scaleFactor < min) {
 				scaleFactor = min;
 			}
-			Vector3 shadowScale = new Vector3(scale * scaleFactor, scale * scaleFactor, 1d);
+			Vector3 shadowScale = new Vector3(scale * scaleFactor, scale * scaleFactor, scale);
+
+			double zFactor = zmin + radiusFactor * (zmax - zmin);
+			if (zFactor < zmin) {
+				zFactor = zmin;
+			}
+			if (zFactor > zmax) {
+				zFactor = zmax;
+			}
+
+			//zNear = -zFactor;
+			//zFar = zFactor;
 
 			double yaw = camera.getYaw();
-			double pitch = -camera.getPitch();
+			double pitch = -camera.getPitch();// + camera.getTilt()/4d;
 			double heightFactor = Math.cos(pitch);
 			Vector3 position = new Vector3(Math.sin(yaw) * heightFactor, Math.sin(pitch), Math.cos(yaw) * heightFactor).times(-distance);
 
 			viewMatrix =
-							Transformations.scale(shadowScale).times(
-							Transformations.translate(position).times(
-							Transformations.rotateY(lightAngle)
+					Transformations.scale(shadowScale).times(
+					Transformations.rotateY(-lightAngle).times(
+							Transformations.translate(position)
 			));
 		} else {
 			viewMatrix = new Matrix4();
