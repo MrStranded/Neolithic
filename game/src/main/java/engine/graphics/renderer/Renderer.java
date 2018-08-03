@@ -214,20 +214,7 @@ public class Renderer {
 		scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
 
 		scene.getShadowMap().setLightAngle(-angle);
-//		double cameraAngle = camera.getRotation().getY();
-//		scene.getShadowMap().setCameraAngle(cameraAngle);
-//		double r = camera.getRadius() / 2d;
-//		scene.getShadowMap().setScale(r*r);
-		scene.getShadowMap().setCamera(camera);
 		scene.getShadowMap().cameraChangedPosition();
-
-		//scene.getShadowMap().setDistance(1d + 0.5d*Math.abs(Math.cos(cameraAngle)));
-		//scene.getShadowMap().setzNear(0.1d -Math.abs(Math.sin(cameraAngle)));
-		//scene.getShadowMap().setzNear(0.1d);//0.5d);
-		//scene.getShadowMap().setzFar(1d+1d*Math.abs(Math.sin(cameraAngle)));//104d);
-		//scene.getShadowMap().sx = 1d - 0.5d*Math.abs(Math.sin(cameraAngle));
-		//scene.getSpotLights()[5].rotateYAroundOrigin(-angleStep);
-		//spotLight.setDirection(spotLight.getPosition().times(-1).normalize());
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
 			camera.rotateYaw(-0.01d);
@@ -265,7 +252,7 @@ public class Renderer {
 		if (planetObject == null) {
 			planetObject = new PlanetObject(new Planet(32));
 		} else {
-			//planetObject.rotateY(0.001d);
+			planetObject.rotateY(0.001d);
 		}
 
 		// Render depth map before view ports has been set up
@@ -365,26 +352,7 @@ public class Renderer {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, shadowMap.getDepthMap() != null ? shadowMap.getDepthMap().getTextureId() : 0);
 
 			shaderProgram.setUniform("shadowSampler", 1);
-			//shaderProgram.setUniform("shadowStrength", (float) ((-Math.cos(angle*2d) + 1d) / 2d)); // shadows strong on sides
-
-			double yFactor = Math.abs(Math.sin(camera.getPitch()));
-
-			double x = 4d;
-			double a = angle + camera.getYaw();
-			if (a < 0) {
-				a += Math.PI*2d;
-			}
-			if (a >= Math.PI*2d) {
-				a -= Math.PI*2d;
-			}
-			double EQshadowStrength = (Math.cos(a) + 1d) / 2d;
-			if (a < Math.PI/x || a > Math.PI*2d - Math.PI/x) {
-				EQshadowStrength = EQshadowStrength - Math.cos(a*x);
-			}
-
-			double shadowStrength = (1d - yFactor) * EQshadowStrength + yFactor;
-
-			shaderProgram.setUniform("shadowStrength", (float) shadowStrength);
+			shaderProgram.setUniform("shadowStrength", shadowMap.getShadowStrength());
 			shaderProgram.setUniform("lightProjectionMatrix", shadowMap.getOrthographicProjection());
 		}
 

@@ -20,10 +20,11 @@ public class ShadowMap {
 
 	private double lightAngle = 0d;
 	private double distance = 1d;
-	private double scale = 1d;
 	private Camera camera;
 
-	private double zNear = 1d, zFar = 10d;
+	private float shadowStrength = 1f;
+
+	private double zNear = -0.5d, zFar = 0.5d;
 
 	boolean modified = true;
 
@@ -64,17 +65,38 @@ public class ShadowMap {
 	// ################################ Calculation ######################################
 	// ###################################################################################
 
-	private void actualizeMatrices() {
+	/**
+	 * The calculation of the values is extremely specific to the given planet situation.
+	 * These Shadow Maps really only work in the one scenario of a planet being lit.
+	 */
+	private void actualize() {
 		if (camera != null) {
-			double max = 12d;
-			double min = 1d;
 
-			double zmax = 0.5d;
-			double zmin = 0.01d;
+			// ---------------------------------------- shadow strength
+			double poleShadow = Math.abs(Math.sin(camera.getPitch())); // 1 at poles, 0 at equator
+
+			double brightSpot = GraphicalConstants.SHADOWMAP_BRIGHT_SPOT_SIZE;
+			double angle = lightAngle + camera.getYaw();
+			if (angle < 0) {
+				angle += Math.PI*2d;
+			}
+			if (angle >= Math.PI*2d) {
+				angle -= Math.PI*2d;
+			}
+			double equatorShadow = (Math.cos(angle) + 1d) / 2d;
+			if (angle < Math.PI/brightSpot || angle > Math.PI*2d - Math.PI/brightSpot) {
+				equatorShadow = equatorShadow - Math.cos(angle*brightSpot);
+			}
+
+			shadowStrength = (float) ((1d - poleShadow) * equatorShadow + poleShadow);
+
+			// ---------------------------------------- scaling factor
+			double max = GraphicalConstants.SHADOWMAP_MAX_SCALING;
+			double min = GraphicalConstants.SHADOWMAP_MIN_SCALING;
 
 			double radiusFactor = 0d;
-			if (camera.getRadius() > 1d) {
-				radiusFactor = Math.sqrt(Math.sqrt(camera.getRadius() - 1d));
+			if (camera.getRadius() > distance) {
+				radiusFactor = Math.sqrt(Math.sqrt(camera.getRadius() - distance));
 			}
 
 			double scaleFactor = max - radiusFactor * (max - min);
@@ -84,36 +106,27 @@ public class ShadowMap {
 			if (scaleFactor < min) {
 				scaleFactor = min;
 			}
-			Vector3 shadowScale = new Vector3(scale * scaleFactor, scale * scaleFactor, scale);
+			Vector3 shadowScale = new Vector3(scaleFactor, scaleFactor, 1d);
 
-			double zFactor = zmin + radiusFactor * (zmax - zmin);
-			if (zFactor < zmin) {
-				zFactor = zmin;
-			}
-			if (zFactor > zmax) {
-				zFactor = zmax;
-			}
-
-			//zNear = -zFactor;
-			//zFar = zFactor;
-
+			// ---------------------------------------- position
 			double yaw = camera.getYaw();
-			double pitch = -camera.getPitch();// + camera.getTilt()/4d;
+			double pitch = -camera.getPitch();
 			double heightFactor = Math.cos(pitch);
 			Vector3 position = new Vector3(Math.sin(yaw) * heightFactor, Math.sin(pitch), Math.cos(yaw) * heightFactor).times(-distance);
 
-			viewMatrix =
-					Transformations.scale(shadowScale).times(
-					Transformations.rotateY(-lightAngle).times(
+			viewMatrix =    Transformations.scale(shadowScale).times(
+							Transformations.rotateY(-lightAngle).times(
 							Transformations.translate(position)
 			));
 		} else {
+			shadowStrength = 0f;
+
 			viewMatrix = new Matrix4();
 		}
 
-		double size = GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
+		double size = distance * GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
 		orthographicProjection =    Projection.createOrthographicProjectionMatrix(
-									-size, size, size, -size, zNear, zFar
+									-size, size, size, -size, zNear*distance, zFar*distance
 		);
 	}
 
@@ -131,16 +144,20 @@ public class ShadowMap {
 
 	public Matrix4 getViewMatrix() {
 		if (modified) {
-			actualizeMatrices();
+			actualize();
 		}
 		return viewMatrix;
 	}
 
 	public Matrix4 getOrthographicProjection() {
 		if (modified) {
-			actualizeMatrices();
+			actualize();
 		}
 		return orthographicProjection;
+	}
+
+	public float getShadowStrength() {
+		return shadowStrength;
 	}
 
 	public int getDepthMapFBO() {
@@ -168,14 +185,6 @@ public class ShadowMap {
 	}
 	public void setDistance(double distance) {
 		this.distance = distance;
-		modified = true;
-	}
-
-	public double getScale() {
-		return scale;
-	}
-	public void setScale(double scale) {
-		this.scale = scale;
 		modified = true;
 	}
 

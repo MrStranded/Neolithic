@@ -71,16 +71,15 @@ public class Scene {
 
 		try {
 			shadowMap = new ShadowMap();
-			//shadowMaps[0].setDirection(objects[2].getPosition().normalize().times(-1d));
-			shadowMap.setDistance(1d);//52d);
-			shadowMap.setzNear(-0.5d);//0.5d);
-			shadowMap.setzFar(0.5d);//104d);
+			shadowMap.setDistance(1d);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		camera = new Camera();
 		camera.setRadius(2);
+
+		shadowMap.setCamera(camera);
 	}
 
 	// ###################################################################################
