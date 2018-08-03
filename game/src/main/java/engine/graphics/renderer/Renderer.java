@@ -185,7 +185,12 @@ public class Renderer {
 	private void calculateOrthographicMatrix() {
 		double aspectRatio = getAspectRatio();
 
-		orthographicMatrix = Projection.createOrthographicProjectionMatrix(-aspectRatio, aspectRatio,1d,-1d,0d,10d);
+		orthographicMatrix = Projection.createOrthographicProjectionMatrix(
+				-aspectRatio, aspectRatio,
+				1d,-1d,
+				GraphicalConstants.GUI_ZNEAR,
+				GraphicalConstants.GUI_ZFAR
+		);
 	}
 
 	// ###################################################################################
@@ -209,10 +214,12 @@ public class Renderer {
 		scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
 
 		scene.getShadowMap().setLightAngle(-angle);
-		double cameraAngle = camera.getRotation().getY();
-		scene.getShadowMap().setCameraAngle(cameraAngle);
-		double r = camera.getRadius() / 2d;
-		scene.getShadowMap().setScale(r*r);
+//		double cameraAngle = camera.getRotation().getY();
+//		scene.getShadowMap().setCameraAngle(cameraAngle);
+//		double r = camera.getRadius() / 2d;
+//		scene.getShadowMap().setScale(r*r);
+		scene.getShadowMap().setCamera(camera);
+		scene.getShadowMap().cameraChangedPosition();
 
 		//scene.getShadowMap().setDistance(1d + 0.5d*Math.abs(Math.cos(cameraAngle)));
 		//scene.getShadowMap().setzNear(0.1d -Math.abs(Math.sin(cameraAngle)));
@@ -254,9 +261,9 @@ public class Renderer {
 
 	public void render(Scene scene, GUIInterface hud) {
 		processInput(scene);
+
 		if (planetObject == null) {
 			planetObject = new PlanetObject(new Planet(32));
-			//planetObject.setScale(3,3,3);
 		} else {
 			//planetObject.rotateY(0.001d);
 		}
@@ -286,11 +293,13 @@ public class Renderer {
 		}
 	}
 
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Depth Map
+
 	private void renderDepthMap(ShadowMap shadowMap, Scene scene, GUIInterface hud) {
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, shadowMap.getDepthMapFBO());
 		GL11.glViewport(0, 0, GraphicalConstants.SHADOWMAP_SIZE, GraphicalConstants.SHADOWMAP_SIZE);
 
-		GL11.glClear(/*GL11.GL_COLOR_BUFFER_BIT | */GL11.GL_DEPTH_BUFFER_BIT);
+		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 
 		depthShaderProgram.bind();
 
@@ -318,6 +327,8 @@ public class Renderer {
 
 		hud.getHUDObjects()[0].getMesh().getMaterial().setTexture(shadowMap.getDepthMap());
 	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Scene
 
 	private void renderScene(Scene scene) {
 		shaderProgram.bind();
@@ -391,6 +402,8 @@ public class Renderer {
 
 		shaderProgram.unbind();
 	}
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GUI
 
 	private void renderGUI(GUIInterface hud) {
 		hudShaderProgram.bind();

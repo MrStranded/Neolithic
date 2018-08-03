@@ -1,6 +1,7 @@
 package engine.graphics.objects.light;
 
 import constants.GraphicalConstants;
+import engine.graphics.objects.Camera;
 import engine.graphics.objects.textures.Texture;
 import engine.graphics.renderer.projection.Projection;
 import engine.math.Transformations;
@@ -18,9 +19,9 @@ public class ShadowMap {
 	private Matrix4 viewMatrix;
 
 	private double lightAngle = 0d;
-	private double cameraAngle = 0d;
 	private double distance = 1d;
 	private double scale = 1d;
+	private Camera camera;
 
 	private double zNear = 1d, zFar = 10d;
 
@@ -52,16 +53,45 @@ public class ShadowMap {
 	}
 
 	// ###################################################################################
+	// ################################ Camera Movement ##################################
+	// ###################################################################################
+
+	public void cameraChangedPosition() {
+		modified = true;
+	}
+
+	// ###################################################################################
 	// ################################ Calculation ######################################
 	// ###################################################################################
 
 	private void actualizeMatrices() {
-		viewMatrix =    Transformations.rotateY(cameraAngle - lightAngle).times(
-						Transformations.translate(new Vector3(0,0,-distance)).times(
-						Transformations.rotateY(-cameraAngle))
-		);
+		if (camera != null) {
+			double max = 20d;
+			double min = 1d;
+			double scaleFactor = max - (camera.getRadius() - 1d) * (max - min);
+			if (scaleFactor > max) {
+				scaleFactor = max;
+			}
+			if (scaleFactor < min) {
+				scaleFactor = min;
+			}
+			Vector3 shadowScale = new Vector3(scale * scaleFactor, scale * scaleFactor, 1d);
 
-		double size = scale * GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
+			double yaw = camera.getYaw();
+			double pitch = -camera.getPitch();
+			double heightFactor = Math.cos(pitch);
+			Vector3 position = new Vector3(Math.sin(yaw) * heightFactor, Math.sin(pitch), Math.cos(yaw) * heightFactor).times(-distance);
+
+			viewMatrix =
+							Transformations.scale(shadowScale).times(
+							Transformations.translate(position).times(
+							Transformations.rotateY(lightAngle)
+			));
+		} else {
+			viewMatrix = new Matrix4();
+		}
+
+		double size = GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
 		orthographicProjection =    Projection.createOrthographicProjectionMatrix(
 									-size, size, size, -size, zNear, zFar
 		);
@@ -109,12 +139,8 @@ public class ShadowMap {
 		modified = true;
 	}
 
-	public double getCameraAngle() {
-		return cameraAngle;
-	}
-	public void setCameraAngle(double cameraAngle) {
-		this.cameraAngle = cameraAngle;
-		modified = true;
+	public void setCamera(Camera camera) {
+		this.camera = camera;
 	}
 
 	public double getDistance() {

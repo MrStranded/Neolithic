@@ -95,10 +95,49 @@ public class MoveableCamera {
 				Transformations.rotateY(-yaw))));
 	}
 
+	/**
+	 * Almost the same as the viewMatrix, but with different handling of camera tilt.
+	 * This matrix is used to check FaceParts for their detail level depending on camera position and tilt.
+	 * @return planetary LOD Matrix
+	 */
 	public Matrix4 getPlanetaryLODMatrix() {
 		return  Transformations.rotateX(tilt * GraphicalConstants.PLANETARY_LOD_MATRIX_TILT_FACTOR).times(
 				Transformations.translate(new Vector3(0,0, -radius)).times(
 				Transformations.rotateX(-pitch).times(
 				Transformations.rotateY(-yaw))));
+	}
+
+	// ###################################################################################
+	// ################################ Getters and Setters ##############################
+	// ###################################################################################
+
+	/**
+	 * @return Rotation around Y axis in radian.
+	 */
+	public double getYaw() {
+		return yaw;
+	}
+	public void setYaw(double yaw) {
+		this.yaw = yaw;
+	}
+
+	/**
+	 * @return Rotation around X axis in radian.
+	 */
+	public double getPitch() {
+		return pitch;
+	}
+	public void setPitch(double pitch) {
+		this.pitch = pitch;
+	}
+
+	/**
+	 * @return Rotaion in place around Y axis in radian.
+	 */
+	public double getTilt() {
+		return tilt;
+	}
+	public void setTilt(double tilt) {
+		this.tilt = tilt;
 	}
 }

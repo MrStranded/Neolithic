@@ -106,7 +106,7 @@ float calculateShadow(vec4 position) {
 
         // checkin whether in shadow (>=) or ligth (<) with small epsilon to prevent shadow acne
         float distance = texture(shadowSampler, projectionCoordinates.xy).r;
-        float epsilon = 0.002;
+        float epsilon = 0.0004;
 
         if (projectionCoordinates.z > distance + epsilon) {
             // Current fragment is in shadow

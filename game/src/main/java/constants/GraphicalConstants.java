@@ -6,9 +6,13 @@ public class GraphicalConstants {
 	public static final double ZNEAR = 0.001d; // near viewing distance of camera
 	public static final double ZFAR = 4000d; // far viewing distance of camera
 
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GUI Rendering
+	public static final double GUI_ZNEAR = 0d; // near viewing distance of camera for gui
+	public static final double GUI_ZFAR = 10d; // far viewing distance of camera for gui
+
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Shadow Map
 	public static final int SHADOWMAP_SIZE = 1024; // width and height of shadow map in pixels
-	public static final double SHADOWMAP_SCALE_FACTOR = 0.25; // scale factor of shadowMap.scale for orthographic projection
+	public static final double SHADOWMAP_SCALE_FACTOR = 1.25; // scale factor of shadowMap.scale for orthographic projection
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Object Counts
 	public static final int MAX_POINT_LIGHTS = 8; // maximum number of point lights in a scene
