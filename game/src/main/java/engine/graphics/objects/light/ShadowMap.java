@@ -12,6 +12,8 @@ import org.lwjgl.opengl.GL30;
 
 public class ShadowMap {
 
+	private final double TAU = Math.PI*2d;
+
 	private final int depthMapFBO;
 	private final Texture depthMap;
 
@@ -25,7 +27,7 @@ public class ShadowMap {
 	private float shadowStrength = 1f;
 	private float epsilon = 0.005f;
 
-	private double zNear = -0.5d, zFar = 0.5d;
+	private double zNear = -0.25d, zFar = 0.125d;
 
 	boolean modified = true;
 
@@ -74,21 +76,26 @@ public class ShadowMap {
 		if (camera != null) {
 			// ---------------------------------------- radius factor
 			double radiusFactor = 0d;
-			if (camera.getRadius() > distance) {
-				radiusFactor = Math.sqrt(Math.sqrt(camera.getRadius() - distance));
+			double radiusScope = GraphicalConstants.SHADOWMAP_RADIUS_SCOPE;
+			double radius = Math.min(camera.getRadius(), distance + radiusScope); // to ensure that radiusFactor is between 0 and 1
+			if (radius > distance) {
+				radiusFactor = Math.sqrt(Math.sqrt((radius - distance) / radiusScope));
 			}
+
+			// ---------------------------------------- znear / zfar
+			double zValue = Math.min(
+					GraphicalConstants.SHADOWMAP_MIN_ZVALUE +
+					(GraphicalConstants.SHADOWMAP_MAX_ZVALUE - GraphicalConstants.SHADOWMAP_MIN_ZVALUE) * radiusFactor,
+					0.5d);
+			zNear = -zValue;
+			zFar = zValue;
 
 			// ---------------------------------------- epsilon (depth bias)
 			double maxEpsilon = GraphicalConstants.SHADOWMAP_MAX_EPSILON;
 			double minEpsilon = GraphicalConstants.SHADOWMAP_MIN_EPSILON;
 
 			double epsilonD = minEpsilon + radiusFactor*radiusFactor * (maxEpsilon - minEpsilon);
-			if (epsilonD < minEpsilon) {
-				epsilonD = minEpsilon;
-			}
-			if (epsilonD > maxEpsilon) {
-				epsilonD = maxEpsilon;
-			}
+			epsilonD = Math.min(maxEpsilon, Math.max(minEpsilon, epsilonD));
 			epsilon = (float) epsilonD;
 
 			// ---------------------------------------- shadow strength
@@ -97,35 +104,34 @@ public class ShadowMap {
 			double brightSpot = GraphicalConstants.SHADOWMAP_BRIGHT_SPOT_SIZE;
 			double angle = lightAngle + camera.getYaw();
 			if (angle < 0) {
-				angle += Math.PI*2d;
+				angle += TAU;
 			}
-			if (angle >= Math.PI*2d) {
-				angle -= Math.PI*2d;
+			if (angle >= TAU) {
+				angle -= TAU;
 			}
 			double equatorShadow = (Math.cos(angle) + 1d) / 2d;
-			equatorShadow *= equatorShadow; // square dat fucker yo (in order to weaken shadows in shadow part of planet)
-			if (angle < Math.PI/brightSpot || angle > Math.PI*2d - Math.PI/brightSpot) {
-				equatorShadow = equatorShadow - Math.cos(angle*brightSpot);
+			//equatorShadow *= equatorShadow; // square dat fucker yo (in order to weaken shadows in shadow part of planet)
+			if (angle < Math.PI/brightSpot || angle > TAU - Math.PI/brightSpot) {
+				equatorShadow = equatorShadow - (Math.cos(angle*brightSpot) + 1d) / 2d;
+			}
+			double distanceShadowWeakening = 0d;
+			if (camera.getRadius() > distance + radiusScope) {
+				distanceShadowWeakening = camera.getRadius() - (distance + radiusScope);
 			}
 
-			shadowStrength = (float) ((1d - poleShadow) * equatorShadow + poleShadow);
+			shadowStrength = (float) Math.max((1d - poleShadow) * equatorShadow + poleShadow - distanceShadowWeakening, 0d);
 
 			// ---------------------------------------- scaling factor
 			double max = GraphicalConstants.SHADOWMAP_MAX_SCALING;
 			double min = GraphicalConstants.SHADOWMAP_MIN_SCALING;
 
 			double scaleFactor = max - radiusFactor * (max - min);
-			if (scaleFactor > max) {
-				scaleFactor = max;
-			}
-			if (scaleFactor < min) {
-				scaleFactor = min;
-			}
+			scaleFactor = Math.min(max, Math.max(min, scaleFactor));
 			Vector3 shadowScale = new Vector3(scaleFactor, scaleFactor, 1d);
 
 			// ---------------------------------------- position
 			double yaw = camera.getYaw();
-			double pitch = -camera.getPitch() + camera.getTilt() * GraphicalConstants.PLANETARY_LOD_MATRIX_TILT_FACTOR;
+			double pitch = -camera.getPitch() + camera.getTilt() * GraphicalConstants.PLANETARY_LOD_MATRIX_TILT_FACTOR * 0.5d;
 			double heightFactor = Math.cos(pitch);
 			Vector3 position = new Vector3(Math.sin(yaw) * heightFactor, Math.sin(pitch), Math.cos(yaw) * heightFactor).times(-distance);
 

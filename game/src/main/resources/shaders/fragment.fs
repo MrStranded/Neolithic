@@ -119,12 +119,7 @@ float calculateShadow(vec4 position) {
         }
         shadow /= (blurSize*2 + 1) * (blurSize*2 + 1);
         shadowFactor = 1.0 - (shadow * shadowStrength);
-
-        //if (projectionCoordinates.z > distance + epsilon) {
-            // Current fragment is in shadow
-        //    shadowFactor = 1.0 - shadowStrength;
-        //}
-            }
+    }
 
     return shadowFactor;
 }

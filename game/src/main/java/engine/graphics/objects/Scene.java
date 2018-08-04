@@ -55,8 +55,8 @@ public class Scene {
 		// moon
 		objects[3] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		objects[3].getMesh().getMaterial().setTexture(icoTexture);
-		objects[3].scale(0.5, 1, 0.5);
-		objects[3].setPosition(0,1,50);
+		objects[3].scale(0.5, 0.5, 0.5);
+		objects[3].setPosition(0,0,50);
 		objects[3].setRotation(0,0,Math.PI/8);
 
 		// sun lights
@@ -71,7 +71,7 @@ public class Scene {
 
 		try {
 			shadowMap = new ShadowMap();
-			shadowMap.setDistance(1d);
+			shadowMap.setDistance(1.125d);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -199,7 +199,7 @@ public class Renderer {
 	// ###################################################################################
 
 	private void processInput(Scene scene) {
-		double angleStep = 0;//0.0025d;
+		double angleStep = 0.0025d;
 		angle += angleStep;
 		if (angle > Math.PI*2d) {
 			angle -= Math.PI*2d;
@@ -209,7 +209,7 @@ public class Renderer {
 		Camera camera = scene.getCamera();
 
 		objects[2].rotateYAroundOrigin(-angleStep);
-		objects[3].rotateYAroundOrigin(-angleStep);
+		objects[3].rotateYAroundOrigin(angleStep*2d);
 		//camera.rotateYaw(-angleStep);
 		scene.getDirectionalLight().rotateY(-angleStep);
 		scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
@@ -252,8 +252,9 @@ public class Renderer {
 
 		if (planetObject == null) {
 			planetObject = new PlanetObject(new Planet(32));
+			planetObject.rotateX(Math.PI/16d);
 		} else {
-			//planetObject.rotateY(0.001d);
+			planetObject.rotateY(0.001d);
 		}
 
 		// Render depth map before view ports has been set up
