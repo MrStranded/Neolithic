@@ -102,13 +102,14 @@ public class ShadowMap {
 			double poleShadow = Math.abs(Math.sin(camera.getPitch())); // 1 at poles, 0 at equator
 
 			double brightSpot = GraphicalConstants.SHADOWMAP_BRIGHT_SPOT_SIZE;
-			double angle = lightAngle + camera.getYaw();
+			double angle = -lightAngle + camera.getYaw();
 			if (angle < 0) {
 				angle += TAU;
 			}
 			if (angle >= TAU) {
 				angle -= TAU;
 			}
+			System.out.println(angle/TAU*360d);
 			double equatorShadow = (Math.cos(angle) + 1d) / 2d;
 			//equatorShadow *= equatorShadow; // square dat fucker yo (in order to weaken shadows in shadow part of planet)
 			if (angle < Math.PI/brightSpot || angle > TAU - Math.PI/brightSpot) {
