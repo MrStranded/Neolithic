@@ -33,7 +33,7 @@ public class PlanetObject extends MoveableObject {
 	}
 
 	private void createLODMesh() {
-		faceParts = PlanetGenerator.createPlanet(planet.getSize());
+		faceParts = PlanetGenerator.createPlanet(planet);
 	}
 
 	public void render(ShaderProgram shaderProgram, Matrix4 viewMatrix, boolean putDataIntoShader) {

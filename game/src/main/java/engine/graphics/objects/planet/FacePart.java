@@ -13,6 +13,7 @@ public class FacePart {
 	private Mesh mesh;
 	private Vector3 normal;
 	private FacePart[] quarterFaces;
+	private double height;
 
 	private int depth;
 
@@ -79,6 +80,14 @@ public class FacePart {
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
+
+
+	public double getHeight() {
+		return height;
+	}
+	public void setHeight(double height) {
+		this.height = height;
+	}
 
 	public Mesh getMesh() {
 		return mesh;

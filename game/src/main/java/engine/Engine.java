@@ -1,10 +1,12 @@
 package engine;
 
+import engine.data.Planet;
 import engine.graphics.gui.BaseGUI;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.Scene;
 import engine.graphics.gui.window.Window;
 import engine.graphics.renderer.Renderer;
+import engine.logic.TopologyGenerator;
 
 /**
  * The engine binds the whole thing together.
@@ -18,6 +20,8 @@ public class Engine {
 	private static Scene scene;
 	private static GUIInterface hud;
 
+	private static Planet gaia;
+
 	public static void initialize() {
 		window = new Window(800,600,"Neolithic");
 
@@ -28,6 +32,9 @@ public class Engine {
 	public static void createWorld() {
 		scene = new Scene();
 		hud = new BaseGUI();
+
+		gaia = new Planet(32);
+		TopologyGenerator.formTopology(gaia);
 	}
 
 	/**
@@ -39,7 +46,7 @@ public class Engine {
 
 	private static void renderLoop() {
 		while (renderer.displayExists()) {
-			renderer.render(scene, hud);
+			renderer.render(scene, hud, gaia);
 		}
 	}
 

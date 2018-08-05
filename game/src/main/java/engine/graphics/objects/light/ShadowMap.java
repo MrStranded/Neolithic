@@ -1,6 +1,7 @@
 package engine.graphics.objects.light;
 
 import constants.GraphicalConstants;
+import constants.TopologyConstants;
 import engine.graphics.objects.Camera;
 import engine.graphics.objects.textures.Texture;
 import engine.graphics.renderer.projection.Projection;
@@ -109,7 +110,6 @@ public class ShadowMap {
 			if (angle >= TAU) {
 				angle -= TAU;
 			}
-			System.out.println(angle/TAU*360d);
 			double equatorShadow = (Math.cos(angle) + 1d) / 2d;
 			//equatorShadow *= equatorShadow; // square dat fucker yo (in order to weaken shadows in shadow part of planet)
 			if (angle < Math.PI/brightSpot || angle > TAU - Math.PI/brightSpot) {
@@ -146,7 +146,7 @@ public class ShadowMap {
 			viewMatrix = new Matrix4();
 		}
 
-		double size = distance * GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
+		double size = distance * (TopologyConstants.PLANET_MINIMUM_HEIGHT + (double) TopologyConstants.PLANET_MAXIMUM_HEIGHT) / TopologyConstants.PLANET_MINIMUM_HEIGHT;//GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
 		orthographicProjection =    Projection.createOrthographicProjectionMatrix(
 									-size, size, size, -size, zNear*distance, zFar*distance
 		);

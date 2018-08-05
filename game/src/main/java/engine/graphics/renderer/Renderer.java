@@ -49,7 +49,6 @@ public class Renderer {
 	private KeyboardInput keyboard;
 
 	private double angle = 0;
-	private PlanetObject planetObject;
 
 	public Renderer(Window window) {
 		this.window = window;
@@ -247,19 +246,14 @@ public class Renderer {
 	// ################################ Rendering ########################################
 	// ###################################################################################
 
-	public void render(Scene scene, GUIInterface hud) {
+	public void render(Scene scene, GUIInterface hud, Planet planet) {
 		processInput(scene);
 
-		if (planetObject == null) {
-			planetObject = new PlanetObject(new Planet(32));
-			planetObject.rotateX(Math.PI/16d);
-		} else {
-			planetObject.rotateY(0.001d);
-		}
+		PlanetObject planetObject = planet.getPlanetObject();
 
 		// Render depth map before view ports has been set up
 		if (scene.getShadowMap() != null) {
-			renderDepthMap(scene.getShadowMap(), scene, hud);
+			renderDepthMap(scene.getShadowMap(), scene, hud, planetObject);
 		}
 
 		GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
@@ -267,7 +261,7 @@ public class Renderer {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		if (scene != null) {
-			renderScene(scene);
+			renderScene(scene, planetObject);
 		}
 		if (hud != null) {
 			renderGUI(hud);
@@ -284,7 +278,7 @@ public class Renderer {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Depth Map
 
-	private void renderDepthMap(ShadowMap shadowMap, Scene scene, GUIInterface hud) {
+	private void renderDepthMap(ShadowMap shadowMap, Scene scene, GUIInterface hud, PlanetObject planetObject) {
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, shadowMap.getDepthMapFBO());
 		GL11.glViewport(0, 0, GraphicalConstants.SHADOWMAP_SIZE, GraphicalConstants.SHADOWMAP_SIZE);
 
@@ -319,7 +313,7 @@ public class Renderer {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Scene
 
-	private void renderScene(Scene scene) {
+	private void renderScene(Scene scene, PlanetObject planetObject) {
 		shaderProgram.bind();
 
 		Camera camera = scene.getCamera();
