@@ -15,9 +15,14 @@ public class FacePart {
 	private FacePart[] quarterFaces;
 	private double height;
 
+	private Vector3 corner1, corner2, corner3;
+
 	private int depth;
 
-	public FacePart() {
+	public FacePart(Vector3 corner1, Vector3 corner2, Vector3 corner3) {
+		this.corner1 = corner1;
+		this.corner2 = corner2;
+		this.corner3 = corner3;
 	}
 
 	// ###################################################################################
@@ -81,6 +86,15 @@ public class FacePart {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
+	public Vector3 getCorner1() {
+		return corner1;
+	}
+	public Vector3 getCorner2() {
+		return corner2;
+	}
+	public Vector3 getCorner3() {
+		return corner3;
+	}
 
 	public double getHeight() {
 		return height;

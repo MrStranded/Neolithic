@@ -3,11 +3,16 @@ package engine.graphics.objects.generators;
 import constants.GraphicalConstants;
 import constants.TopologyConstants;
 import engine.data.Planet;
+import engine.data.Tile;
 import engine.graphics.objects.planet.CompositeMesh;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.FacePart;
+import engine.logic.Neighbour;
 import engine.math.numericalObjects.Vector3;
 import engine.utils.converters.VectorConverter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlanetGenerator {
 
@@ -40,25 +45,29 @@ public class PlanetGenerator {
 		return new Vector3(0,0,0);
 	}
 
+	private static double getHeightFactor(double height) {
+		return (TopologyConstants.PLANET_MINIMUM_HEIGHT + height) / TopologyConstants.PLANET_MINIMUM_HEIGHT;
+	}
+
 	// ###################################################################################
 	// ################################ Tile #############################################
 	// ###################################################################################
 
-	private static Mesh createTile(Vector3 corner1, Vector3 corner2, Vector3 corner3, double height) {
+	private static Mesh createTile(Vector3 corner1, Vector3 corner2, Vector3 corner3, double height, Tile tile) {
 		Vector3 origin = new Vector3(0,0,0);
 
-		// a makin' it a round
-		if (true) {
-			corner1 = corner1.normalize();
-			corner2 = corner2.normalize();
-			corner3 = corner3.normalize();
-		}
-
-		double f = (TopologyConstants.PLANET_MINIMUM_HEIGHT + height) / TopologyConstants.PLANET_MINIMUM_HEIGHT;
+		double f = getHeightFactor(height);
 
 		corner1 = corner1.times(f);
 		corner2 = corner2.times(f);
 		corner3 = corner3.times(f);
+
+		/*List<Vector3> vectorList = new ArrayList<>(12);
+		vectorList.add(corner1);
+		vectorList.add(corner2);
+		vectorList.add(corner3);
+
+		Tile[] neighbours = Neighbour.getNeighbours(tile);*/
 
 		Vector3[] vectorArray = {corner1, corner2, corner3, origin, corner1, corner2, corner3};
 
@@ -112,13 +121,13 @@ public class PlanetGenerator {
 				1f, 1f
 		};
 
-		Mesh tile = new Mesh(vertices, indices, normals, textureCoordniates);
-		tile.setColor(
+		Mesh tileMesh = new Mesh(vertices, indices, normals, textureCoordniates);
+		tileMesh.setColor(
 				(float) (0.5d + 0.5d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
 				(float) (0.5d + 0.25d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
 				(float) (0.5d + 0.125d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT)
 		);
-		return tile;
+		return tileMesh;
 	}
 
 	// ###################################################################################
@@ -130,9 +139,13 @@ public class PlanetGenerator {
 	}
 
 	private static FacePart createFace(Vector3 corner1, Vector3 corner2, Vector3 corner3, int size, int depth, int facePos, int tileX, int tileY) {
+		corner1 = corner1.normalize();
+		corner2 = corner2.normalize();
+		corner3 = corner3.normalize();
+
 		Vector3 normal = corner1.plus(corner2).plus(corner3).normalize();
 
-		FacePart face = new FacePart();
+		FacePart face = new FacePart(corner1, corner2, corner3);
 		face.setNormal(normal);
 		face.setDepth(depth);
 
@@ -197,7 +210,7 @@ public class PlanetGenerator {
 
 		}
 
-		Mesh faceMesh = createTile(corner1, corner2, corner3, face.getHeight());
+		Mesh faceMesh = createTile(corner1, corner2, corner3, face.getHeight(), planet.getFace(facePos).getTile(tileX, tileY));
 		face.setMesh(faceMesh);
 
 		return face;
