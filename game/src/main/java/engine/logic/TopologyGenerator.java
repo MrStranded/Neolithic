@@ -11,7 +11,7 @@ public class TopologyGenerator {
 
 		//liftTile(planet.getFace(0,0).getTile(0,0),255);
 		///*
-		for (int i=0; i<10; i++) {
+		for (int i=0; i<100; i++) {
 			int faceX = (int) (5d * Math.random());
 			int faceY = (int) (4d * Math.random());
 

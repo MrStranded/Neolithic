@@ -56,10 +56,6 @@ public class PlanetGenerator {
 
 		double f = (TopologyConstants.PLANET_MINIMUM_HEIGHT + height) / TopologyConstants.PLANET_MINIMUM_HEIGHT;
 
-		if (f > (TopologyConstants.PLANET_MINIMUM_HEIGHT + TopologyConstants.PLANET_MAXIMUM_HEIGHT) / TopologyConstants.PLANET_MINIMUM_HEIGHT) {
-			System.out.println("impossibru");
-		}
-
 		corner1 = corner1.times(f);
 		corner2 = corner2.times(f);
 		corner3 = corner3.times(f);
@@ -149,8 +145,6 @@ public class PlanetGenerator {
 			Vector3 dx = edgeX.times(0.5d);
 			Vector3 dy = edgeY.times(0.5d);
 
-			Vector3 mid = corner1.plus(edgeX.plus(edgeY).times(0.5d));
-
 			FacePart[] subFaces = new FacePart[4];
 
 			subFaces[0] = createFace(
@@ -190,9 +184,12 @@ public class PlanetGenerator {
 
 			double height = 0d;
 			for (int i=0; i<4; i++) {
-				height += subFaces[i].getHeight();
+				//height += subFaces[i].getHeight();
+				if (subFaces[i].getHeight() > height) {
+					height = subFaces[i].getHeight();
+				}
 			}
-			height /= 4d;
+			//height /= 4d;
 			face.setHeight(height);
 
 		} else {
