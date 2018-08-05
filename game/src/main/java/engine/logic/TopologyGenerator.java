@@ -9,19 +9,22 @@ public class TopologyGenerator {
 	public static void formTopology(Planet planet) {
 		int size = planet.getSize();
 
+		//liftTile(planet.getFace(0,0).getTile(0,0),255);
+		///*
 		for (int i=0; i<10; i++) {
 			int faceX = (int) (5d * Math.random());
 			int faceY = (int) (4d * Math.random());
 
-			int tileX = (int) (size * Math.random());
-			int tileY = (int) (size * Math.random());
+			int tileX = (int) ((double) size * Math.random());
+			int tileY = (int) ((double) size * Math.random());
 
-			int height = (int) (256 * Math.random());
+			int height = (int) (128d + 128d * Math.random());
 
 			Tile tile = planet.getFace(faceX, faceY).getTile(tileX, tileY);
 
 			liftTile(tile, height);
 		}
+		//*/
 	}
 
 	private static void liftTile(Tile tile, int height) {

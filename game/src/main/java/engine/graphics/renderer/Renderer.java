@@ -236,6 +236,9 @@ public class Renderer {
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_R)) { // go closer
 			camera.changeRadius(-camera.getRadius()/100d);
+			if (camera.getRadius() < 1d + GraphicalConstants.ZNEAR) {
+				camera.setRadius(1d + GraphicalConstants.ZNEAR);
+			}
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_F)) { // go farther away
 			camera.changeRadius(camera.getRadius()/100d);

@@ -221,9 +221,9 @@ public class PlanetGenerator {
 					Vector3 corner1, corner2, corner3;
 
 					if (f == 0) { // flipped down
-						corner1 = getCorner(x + 1, y);
-						corner2 = getCorner(x + 1, y + 1);
-						corner3 = getCorner(x, y + 1);
+						corner1 = getCorner(x + 1, y + 1);
+						corner2 = getCorner(x, y + 1);
+						corner3 = getCorner(x + 1, y);
 
 					} else { // flipped up
 						corner1 = getCorner(x, y + 1);

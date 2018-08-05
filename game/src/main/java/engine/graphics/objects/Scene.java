@@ -67,7 +67,8 @@ public class Scene {
 		directionalLight = new DirectionalLight(0.25,0.75,0.75);
 		directionalLight.setDirection(new Vector3(0,0,-1));
 
-		ambientLight = new AmbientLight(0.25,0.25,0.25);
+		//ambientLight = new AmbientLight(0.25,0.25,0.25);
+		ambientLight = new AmbientLight(0.75,0.75,0.75);
 
 		try {
 			shadowMap = new ShadowMap();

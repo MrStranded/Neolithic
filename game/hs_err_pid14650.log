@@ -1,0 +1,866 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007feecd8186ec, pid=14650, tid=0x00007feeefe5f700
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0_121-b13) (build 1.8.0_121-b13)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.121-b13 mixed mode linux-amd64 compressed oops)
+# Problematic frame:
+# C  [liblwjgl_opengl.so+0x446ec]  Java_org_lwjgl_opengl_GL30_nglGenVertexArrays__IJ+0xc
+#
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00007feee800e000):  JavaThread "main" [_thread_in_native, id=14651, stack(0x00007feeefd5f000,0x00007feeefe60000)]
+
+siginfo: si_signo: 11 (SIGSEGV), si_code: 1 (SEGV_MAPERR), si_addr: 0x0000000000000f70
+
+Registers:
+RAX=0x0000000000000000, RBX=0x00007feed058a680, RCX=0x00007feee861f1ec, RDX=0x0000000000000001
+RSP=0x00007feeefe5c148, RBP=0x00007feeefe5c1a8, RSI=0x00007feee861f1ec, RDI=0x0000000000000001
+R8 =0x0000000000000000, R9 =0x0000000000000009, R10=0x00007feed9017a08, R11=0x00007feeeec3aea0
+R12=0x0000000000000000, R13=0x00007feed058a680, R14=0x00007feeefe5c1d8, R15=0x00007feee800e000
+RIP=0x00007feecd8186ec, EFLAGS=0x0000000000010283, CSGSFS=0x0000000000000033, ERR=0x0000000000000004
+  TRAPNO=0x000000000000000e
+
+Top of Stack: (sp=0x00007feeefe5c148)
+0x00007feeefe5c148:   00007feed9017a34 00007feeefe5c1a8
+0x00007feeefe5c158:   00007feed90177c7 00007feed9017782
+0x00007feeefe5c168:   00007feeefe5c168 00007feed058a680
+0x00007feeefe5c178:   00007feeefe5c1d8 00007feed05a32a8
+0x00007feeefe5c188:   0000000000000000 00007feed058a680
+0x00007feeefe5c198:   0000000000000000 00007feeefe5c1c8
+0x00007feeefe5c1a8:   00007feeefe5c220 00007feed90082bd
+0x00007feeefe5c1b8:   00000007705ad398 00007feed9011538
+0x00007feeefe5c1c8:   00007feee861f1ec 000000077093ba38
+0x00007feeefe5c1d8:   0000000000000001 00007feeefe5c1e0
+0x00007feeefe5c1e8:   00007feed058a7f4 00007feeefe5c250
+0x00007feeefe5c1f8:   00007feed05a32a8 0000000000000000
+0x00007feeefe5c208:   00007feed058a860 00007feeefe5c1c8
+0x00007feeefe5c218:   00007feeefe5c258 00007feeefe5c2a0
+0x00007feeefe5c228:   00007feed9007d00 0000000000000000
+0x00007feeefe5c238:   0000000000000000 000000077093ba38
+0x00007feeefe5c248:   0000000000010000 0000000770862948
+0x00007feeefe5c258:   00000007705695c8 00007feeefe5c260
+0x00007feeefe5c268:   00007feed057886a 00007feeefe5c2d0
+0x00007feeefe5c278:   00007feed05795b0 0000000000000000
+0x00007feeefe5c288:   00007feed05788e8 00007feeefe5c258
+0x00007feeefe5c298:   00007feeefe5c2b0 00007feeefe5c320
+0x00007feeefe5c2a8:   00007feed90082bd 000000077055f5b0
+0x00007feeefe5c2b8:   000000077055f548 000000077055f218
+0x00007feeefe5c2c8:   000000077055f1b0 00000007705695c8
+0x00007feeefe5c2d8:   00000007705695c8 00007feeefe5c2e0
+0x00007feeefe5c2e8:   00007feed05764f0 00007feeefe5c3c0
+0x00007feeefe5c2f8:   00007feed0576e48 0000000000000000
+0x00007feeefe5c308:   00007feed0576638 00007feeefe5c2b0
+0x00007feeefe5c318:   00007feeefe5c3a0 00007feeefe5c408
+0x00007feeefe5c328:   00007feed9008040 0000000000000000
+0x00007feeefe5c338:   000000077055f5b0 000000077055f548 
+
+Instructions: (pc=0x00007feecd8186ec)
+0x00007feecd8186cc:   78 1c 00 00 ff e0 66 66 66 66 66 2e 0f 1f 84 00
+0x00007feecd8186dc:   00 00 00 00 48 8b 07 48 89 ce 89 d7 48 8b 40 18
+0x00007feecd8186ec:   48 8b 80 70 0f 00 00 ff e0 66 66 2e 0f 1f 84 00
+0x00007feecd8186fc:   00 00 00 00 48 8b 07 48 89 ce 89 d7 48 8b 40 18 
+
+Register to memory mapping:
+
+RAX=0x0000000000000000 is an unknown value
+RBX={method} {0x00007feed058a680} 'nglGenVertexArrays' '(IJ)V' in 'org/lwjgl/opengl/GL30'
+RCX=0x00007feee861f1ec is an unknown value
+RDX=0x0000000000000001 is an unknown value
+RSP=0x00007feeefe5c148 is pointing into the stack for thread: 0x00007feee800e000
+RBP=0x00007feeefe5c1a8 is pointing into the stack for thread: 0x00007feee800e000
+RSI=0x00007feee861f1ec is an unknown value
+RDI=0x0000000000000001 is an unknown value
+R8 =0x0000000000000000 is an unknown value
+R9 =0x0000000000000009 is an unknown value
+R10=0x00007feed9017a08 is at code_begin+808 in an Interpreter codelet
+method entry point (kind = native)  [0x00007feed90176e0, 0x00007feed9017fe0]  2304 bytes
+R11=0x00007feeeec3aea0: <offset 0x9c3ea0> in /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/server/libjvm.so at 0x00007feeee277000
+R12=0x0000000000000000 is an unknown value
+R13={method} {0x00007feed058a680} 'nglGenVertexArrays' '(IJ)V' in 'org/lwjgl/opengl/GL30'
+R14=0x00007feeefe5c1d8 is pointing into the stack for thread: 0x00007feee800e000
+R15=0x00007feee800e000 is a thread
+
+
+Stack: [0x00007feeefd5f000,0x00007feeefe60000],  sp=0x00007feeefe5c148,  free space=1012k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [liblwjgl_opengl.so+0x446ec]  Java_org_lwjgl_opengl_GL30_nglGenVertexArrays__IJ+0xc
+j  org.lwjgl.opengl.GL30.glGenVertexArrays()I+20
+j  engine.graphics.objects.models.Mesh.<init>([F[I[F[F)V+58
+j  engine.graphics.objects.generators.PlanetGenerator.createTile(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;D)Lengine/graphics/objects/models/Mesh;+520
+j  engine.graphics.objects.generators.PlanetGenerator.createFace(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;IIIII)Lengine/graphics/objects/planet/FacePart;+388
+j  engine.graphics.objects.generators.PlanetGenerator.createFace(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;IIIII)Lengine/graphics/objects/planet/FacePart;+134
+j  engine.graphics.objects.generators.PlanetGenerator.createFace(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;IIIII)Lengine/graphics/objects/planet/FacePart;+134
+j  engine.graphics.objects.generators.PlanetGenerator.createFace(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;IIIII)Lengine/graphics/objects/planet/FacePart;+134
+j  engine.graphics.objects.generators.PlanetGenerator.createTopFace(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;I)Lengine/graphics/objects/planet/FacePart;+13
+j  engine.graphics.objects.generators.PlanetGenerator.createPlanet(Lengine/data/Planet;)[Lengine/graphics/objects/planet/FacePart;+138
+j  engine.graphics.objects.planet.PlanetObject.createLODMesh()V+5
+j  engine.graphics.objects.planet.PlanetObject.<init>(Lengine/data/Planet;)V+56
+j  engine.data.Planet.<init>(I)V+83
+j  logic.NeighbourTest.testFaceNeighbours()V+6
+v  ~StubRoutines::call_stub
+V  [libjvm.so+0x690dd6]  JavaCalls::call_helper(JavaValue*, methodHandle*, JavaCallArguments*, Thread*)+0x1056
+V  [libjvm.so+0x99c357]  Reflection::invoke(instanceKlassHandle, methodHandle, Handle, bool, objArrayHandle, BasicType, objArrayHandle, bool, Thread*)+0x5d7
+V  [libjvm.so+0x99fa67]  Reflection::invoke_method(oopDesc*, Handle, objArrayHandle, Thread*)+0x147
+V  [libjvm.so+0x72447b]  JVM_InvokeMethod+0x26b
+j  sun.reflect.NativeMethodAccessorImpl.invoke0(Ljava/lang/reflect/Method;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+0
+j  sun.reflect.NativeMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+100
+j  sun.reflect.DelegatingMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+6
+j  java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+56
+j  org.junit.platform.commons.util.ReflectionUtils.invokeMethod(Ljava/lang/reflect/Method;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+41
+j  org.junit.jupiter.engine.execution.ExecutableInvoker.invoke(Ljava/lang/reflect/Method;Ljava/lang/Object;Lorg/junit/jupiter/api/extension/ExtensionContext;Lorg/junit/jupiter/engine/extension/ExtensionRegistry;)Ljava/lang/Object;+32
+j  org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$6(Lorg/junit/jupiter/api/extension/ExtensionContext;Lorg/junit/jupiter/engine/execution/JupiterEngineExecutionContext;)V+24
+j  org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor$$Lambda$143.execute()V+12
+j  org.junit.jupiter.engine.execution.ThrowableCollector.execute(Lorg/junit/jupiter/api/function/Executable;)V+1
+j  org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(Lorg/junit/jupiter/engine/execution/JupiterEngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/Node$DynamicTestExecutor;)V+21
+j  org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(Lorg/junit/jupiter/engine/execution/JupiterEngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/Node$DynamicTestExecutor;)Lorg/junit/jupiter/engine/execution/JupiterEngineExecutionContext;+44
+j  org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/Node$DynamicTestExecutor;)Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;+6
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.lambda$execute$3(Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/Node;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;Lorg/junit/platform/engine/TestDescriptor;)V+29
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor$$Lambda$105.execute()V+20
+j  org.junit.platform.engine.support.hierarchical.SingleTestExecutor.executeSafely(Lorg/junit/platform/engine/support/hierarchical/SingleTestExecutor$Executable;)Lorg/junit/platform/engine/TestExecutionResult;+1
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(Lorg/junit/platform/engine/TestDescriptor;Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;)V+126
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.lambda$null$2(Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;Lorg/junit/platform/engine/TestDescriptor;)V+4
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor$$Lambda$108.accept(Ljava/lang/Object;)V+16
+j  java.util.stream.ForEachOps$ForEachOp$OfRef.accept(Ljava/lang/Object;)V+5
+j  java.util.stream.ReferencePipeline$2$1.accept(Ljava/lang/Object;)V+21
+j  java.util.Iterator.forEachRemaining(Ljava/util/function/Consumer;)V+21
+j  java.util.Spliterators$IteratorSpliterator.forEachRemaining(Ljava/util/function/Consumer;)V+52
+j  java.util.stream.AbstractPipeline.copyInto(Ljava/util/stream/Sink;Ljava/util/Spliterator;)V+32
+j  java.util.stream.AbstractPipeline.wrapAndCopyInto(Ljava/util/stream/Sink;Ljava/util/Spliterator;)Ljava/util/stream/Sink;+13
+j  java.util.stream.ForEachOps$ForEachOp.evaluateSequential(Ljava/util/stream/PipelineHelper;Ljava/util/Spliterator;)Ljava/lang/Void;+3
+j  java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(Ljava/util/stream/PipelineHelper;Ljava/util/Spliterator;)Ljava/lang/Object;+3
+j  java.util.stream.AbstractPipeline.evaluate(Ljava/util/stream/TerminalOp;)Ljava/lang/Object;+88
+j  java.util.stream.ReferencePipeline.forEach(Ljava/util/function/Consumer;)V+6
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.lambda$execute$3(Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/Node;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;Lorg/junit/platform/engine/TestDescriptor;)V+72
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor$$Lambda$105.execute()V+20
+j  org.junit.platform.engine.support.hierarchical.SingleTestExecutor.executeSafely(Lorg/junit/platform/engine/support/hierarchical/SingleTestExecutor$Executable;)Lorg/junit/platform/engine/TestExecutionResult;+1
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(Lorg/junit/platform/engine/TestDescriptor;Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;)V+126
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.lambda$null$2(Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;Lorg/junit/platform/engine/TestDescriptor;)V+4
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor$$Lambda$108.accept(Ljava/lang/Object;)V+16
+j  java.util.stream.ForEachOps$ForEachOp$OfRef.accept(Ljava/lang/Object;)V+5
+j  java.util.stream.ReferencePipeline$2$1.accept(Ljava/lang/Object;)V+21
+j  java.util.Iterator.forEachRemaining(Ljava/util/function/Consumer;)V+21
+j  java.util.Spliterators$IteratorSpliterator.forEachRemaining(Ljava/util/function/Consumer;)V+52
+j  java.util.stream.AbstractPipeline.copyInto(Ljava/util/stream/Sink;Ljava/util/Spliterator;)V+32
+j  java.util.stream.AbstractPipeline.wrapAndCopyInto(Ljava/util/stream/Sink;Ljava/util/Spliterator;)Ljava/util/stream/Sink;+13
+j  java.util.stream.ForEachOps$ForEachOp.evaluateSequential(Ljava/util/stream/PipelineHelper;Ljava/util/Spliterator;)Ljava/lang/Void;+3
+j  java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(Ljava/util/stream/PipelineHelper;Ljava/util/Spliterator;)Ljava/lang/Object;+3
+j  java.util.stream.AbstractPipeline.evaluate(Ljava/util/stream/TerminalOp;)Ljava/lang/Object;+88
+j  java.util.stream.ReferencePipeline.forEach(Ljava/util/function/Consumer;)V+6
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.lambda$execute$3(Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/Node;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;Lorg/junit/platform/engine/TestDescriptor;)V+72
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor$$Lambda$105.execute()V+20
+j  org.junit.platform.engine.support.hierarchical.SingleTestExecutor.executeSafely(Lorg/junit/platform/engine/support/hierarchical/SingleTestExecutor$Executable;)Lorg/junit/platform/engine/TestExecutionResult;+1
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(Lorg/junit/platform/engine/TestDescriptor;Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;)V+126
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute()V+16
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(Lorg/junit/platform/engine/ExecutionRequest;)V+13
+j  org.junit.platform.launcher.core.DefaultLauncher.execute(Lorg/junit/platform/engine/TestEngine;Lorg/junit/platform/engine/ExecutionRequest;)V+2
+j  org.junit.platform.launcher.core.DefaultLauncher.execute(Lorg/junit/platform/launcher/core/Root;Lorg/junit/platform/engine/ConfigurationParameters;[Lorg/junit/platform/launcher/TestExecutionListener;)V+101
+j  org.junit.platform.launcher.core.DefaultLauncher.execute(Lorg/junit/platform/launcher/LauncherDiscoveryRequest;[Lorg/junit/platform/launcher/TestExecutionListener;)V+36
+j  com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs([Ljava/lang/String;Ljava/lang/String;IZ)I+240
+j  com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(Lcom/intellij/rt/execution/junit/IdeaTestRunner;[Ljava/lang/String;Ljava/util/ArrayList;Ljava/lang/String;IZ)I+22
+j  com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart([Ljava/lang/String;Ljava/lang/String;Ljava/util/ArrayList;Ljava/lang/String;)I+116
+j  com.intellij.rt.execution.junit.JUnitStarter.main([Ljava/lang/String;)V+116
+v  ~StubRoutines::call_stub
+V  [libjvm.so+0x690dd6]  JavaCalls::call_helper(JavaValue*, methodHandle*, JavaCallArguments*, Thread*)+0x1056
+V  [libjvm.so+0x6d21e2]  jni_invoke_static(JNIEnv_*, JavaValue*, _jobject*, JNICallType, _jmethodID*, JNI_ArgumentPusher*, Thread*)+0x362
+V  [libjvm.so+0x6eea4a]  jni_CallStaticVoidMethod+0x17a
+C  [libjli.so+0x7bdf]  JavaMain+0x81f
+C  [libpthread.so.0+0x76ba]  start_thread+0xca
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+j  org.lwjgl.opengl.GL30.nglGenVertexArrays(IJ)V+0
+j  org.lwjgl.opengl.GL30.glGenVertexArrays()I+20
+j  engine.graphics.objects.models.Mesh.<init>([F[I[F[F)V+58
+j  engine.graphics.objects.generators.PlanetGenerator.createTile(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;D)Lengine/graphics/objects/models/Mesh;+520
+j  engine.graphics.objects.generators.PlanetGenerator.createFace(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;IIIII)Lengine/graphics/objects/planet/FacePart;+388
+j  engine.graphics.objects.generators.PlanetGenerator.createFace(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;IIIII)Lengine/graphics/objects/planet/FacePart;+134
+j  engine.graphics.objects.generators.PlanetGenerator.createFace(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;IIIII)Lengine/graphics/objects/planet/FacePart;+134
+j  engine.graphics.objects.generators.PlanetGenerator.createFace(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;IIIII)Lengine/graphics/objects/planet/FacePart;+134
+j  engine.graphics.objects.generators.PlanetGenerator.createTopFace(Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;Lengine/math/numericalObjects/Vector3;I)Lengine/graphics/objects/planet/FacePart;+13
+j  engine.graphics.objects.generators.PlanetGenerator.createPlanet(Lengine/data/Planet;)[Lengine/graphics/objects/planet/FacePart;+138
+j  engine.graphics.objects.planet.PlanetObject.createLODMesh()V+5
+j  engine.graphics.objects.planet.PlanetObject.<init>(Lengine/data/Planet;)V+56
+j  engine.data.Planet.<init>(I)V+83
+j  logic.NeighbourTest.testFaceNeighbours()V+6
+v  ~StubRoutines::call_stub
+j  sun.reflect.NativeMethodAccessorImpl.invoke0(Ljava/lang/reflect/Method;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+0
+j  sun.reflect.NativeMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+100
+j  sun.reflect.DelegatingMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+6
+j  java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+56
+j  org.junit.platform.commons.util.ReflectionUtils.invokeMethod(Ljava/lang/reflect/Method;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+41
+j  org.junit.jupiter.engine.execution.ExecutableInvoker.invoke(Ljava/lang/reflect/Method;Ljava/lang/Object;Lorg/junit/jupiter/api/extension/ExtensionContext;Lorg/junit/jupiter/engine/extension/ExtensionRegistry;)Ljava/lang/Object;+32
+j  org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$6(Lorg/junit/jupiter/api/extension/ExtensionContext;Lorg/junit/jupiter/engine/execution/JupiterEngineExecutionContext;)V+24
+j  org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor$$Lambda$143.execute()V+12
+j  org.junit.jupiter.engine.execution.ThrowableCollector.execute(Lorg/junit/jupiter/api/function/Executable;)V+1
+j  org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(Lorg/junit/jupiter/engine/execution/JupiterEngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/Node$DynamicTestExecutor;)V+21
+j  org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(Lorg/junit/jupiter/engine/execution/JupiterEngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/Node$DynamicTestExecutor;)Lorg/junit/jupiter/engine/execution/JupiterEngineExecutionContext;+44
+j  org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/Node$DynamicTestExecutor;)Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;+6
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.lambda$execute$3(Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/Node;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;Lorg/junit/platform/engine/TestDescriptor;)V+29
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor$$Lambda$105.execute()V+20
+j  org.junit.platform.engine.support.hierarchical.SingleTestExecutor.executeSafely(Lorg/junit/platform/engine/support/hierarchical/SingleTestExecutor$Executable;)Lorg/junit/platform/engine/TestExecutionResult;+1
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(Lorg/junit/platform/engine/TestDescriptor;Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;)V+126
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.lambda$null$2(Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;Lorg/junit/platform/engine/TestDescriptor;)V+4
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor$$Lambda$108.accept(Ljava/lang/Object;)V+16
+j  java.util.stream.ForEachOps$ForEachOp$OfRef.accept(Ljava/lang/Object;)V+5
+j  java.util.stream.ReferencePipeline$2$1.accept(Ljava/lang/Object;)V+21
+j  java.util.Iterator.forEachRemaining(Ljava/util/function/Consumer;)V+21
+j  java.util.Spliterators$IteratorSpliterator.forEachRemaining(Ljava/util/function/Consumer;)V+52
+j  java.util.stream.AbstractPipeline.copyInto(Ljava/util/stream/Sink;Ljava/util/Spliterator;)V+32
+j  java.util.stream.AbstractPipeline.wrapAndCopyInto(Ljava/util/stream/Sink;Ljava/util/Spliterator;)Ljava/util/stream/Sink;+13
+j  java.util.stream.ForEachOps$ForEachOp.evaluateSequential(Ljava/util/stream/PipelineHelper;Ljava/util/Spliterator;)Ljava/lang/Void;+3
+j  java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(Ljava/util/stream/PipelineHelper;Ljava/util/Spliterator;)Ljava/lang/Object;+3
+j  java.util.stream.AbstractPipeline.evaluate(Ljava/util/stream/TerminalOp;)Ljava/lang/Object;+88
+j  java.util.stream.ReferencePipeline.forEach(Ljava/util/function/Consumer;)V+6
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.lambda$execute$3(Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/Node;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;Lorg/junit/platform/engine/TestDescriptor;)V+72
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor$$Lambda$105.execute()V+20
+j  org.junit.platform.engine.support.hierarchical.SingleTestExecutor.executeSafely(Lorg/junit/platform/engine/support/hierarchical/SingleTestExecutor$Executable;)Lorg/junit/platform/engine/TestExecutionResult;+1
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(Lorg/junit/platform/engine/TestDescriptor;Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;)V+126
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.lambda$null$2(Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;Lorg/junit/platform/engine/TestDescriptor;)V+4
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor$$Lambda$108.accept(Ljava/lang/Object;)V+16
+j  java.util.stream.ForEachOps$ForEachOp$OfRef.accept(Ljava/lang/Object;)V+5
+j  java.util.stream.ReferencePipeline$2$1.accept(Ljava/lang/Object;)V+21
+j  java.util.Iterator.forEachRemaining(Ljava/util/function/Consumer;)V+21
+j  java.util.Spliterators$IteratorSpliterator.forEachRemaining(Ljava/util/function/Consumer;)V+52
+j  java.util.stream.AbstractPipeline.copyInto(Ljava/util/stream/Sink;Ljava/util/Spliterator;)V+32
+j  java.util.stream.AbstractPipeline.wrapAndCopyInto(Ljava/util/stream/Sink;Ljava/util/Spliterator;)Ljava/util/stream/Sink;+13
+j  java.util.stream.ForEachOps$ForEachOp.evaluateSequential(Ljava/util/stream/PipelineHelper;Ljava/util/Spliterator;)Ljava/lang/Void;+3
+j  java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(Ljava/util/stream/PipelineHelper;Ljava/util/Spliterator;)Ljava/lang/Object;+3
+j  java.util.stream.AbstractPipeline.evaluate(Ljava/util/stream/TerminalOp;)Ljava/lang/Object;+88
+j  java.util.stream.ReferencePipeline.forEach(Ljava/util/function/Consumer;)V+6
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.lambda$execute$3(Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/Node;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;Lorg/junit/platform/engine/TestDescriptor;)V+72
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor$$Lambda$105.execute()V+20
+j  org.junit.platform.engine.support.hierarchical.SingleTestExecutor.executeSafely(Lorg/junit/platform/engine/support/hierarchical/SingleTestExecutor$Executable;)Lorg/junit/platform/engine/TestExecutionResult;+1
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(Lorg/junit/platform/engine/TestDescriptor;Lorg/junit/platform/engine/support/hierarchical/EngineExecutionContext;Lorg/junit/platform/engine/support/hierarchical/ExecutionTracker;)V+126
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute()V+16
+j  org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(Lorg/junit/platform/engine/ExecutionRequest;)V+13
+j  org.junit.platform.launcher.core.DefaultLauncher.execute(Lorg/junit/platform/engine/TestEngine;Lorg/junit/platform/engine/ExecutionRequest;)V+2
+j  org.junit.platform.launcher.core.DefaultLauncher.execute(Lorg/junit/platform/launcher/core/Root;Lorg/junit/platform/engine/ConfigurationParameters;[Lorg/junit/platform/launcher/TestExecutionListener;)V+101
+j  org.junit.platform.launcher.core.DefaultLauncher.execute(Lorg/junit/platform/launcher/LauncherDiscoveryRequest;[Lorg/junit/platform/launcher/TestExecutionListener;)V+36
+j  com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs([Ljava/lang/String;Ljava/lang/String;IZ)I+240
+j  com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(Lcom/intellij/rt/execution/junit/IdeaTestRunner;[Ljava/lang/String;Ljava/util/ArrayList;Ljava/lang/String;IZ)I+22
+j  com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart([Ljava/lang/String;Ljava/lang/String;Ljava/util/ArrayList;Ljava/lang/String;)I+116
+j  com.intellij.rt.execution.junit.JUnitStarter.main([Ljava/lang/String;)V+116
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x00007feee81be800 JavaThread "Service Thread" daemon [_thread_blocked, id=14664, stack(0x00007feece00b000,0x00007feece10c000)]
+  0x00007feee81bb800 JavaThread "C1 CompilerThread2" daemon [_thread_blocked, id=14663, stack(0x00007feece10c000,0x00007feece20d000)]
+  0x00007feee81b9000 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=14662, stack(0x00007feece20d000,0x00007feece30e000)]
+  0x00007feee81b7800 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=14661, stack(0x00007feece525000,0x00007feece626000)]
+  0x00007feee81b5800 JavaThread "Monitor Ctrl-Break" daemon [_thread_in_native, id=14660, stack(0x00007feece626000,0x00007feece727000)]
+  0x00007feee8183800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=14659, stack(0x00007feece727000,0x00007feece828000)]
+  0x00007feee814f800 JavaThread "Finalizer" daemon [_thread_blocked, id=14658, stack(0x00007feeceb01000,0x00007feecec02000)]
+  0x00007feee814a800 JavaThread "Reference Handler" daemon [_thread_blocked, id=14657, stack(0x00007feecec02000,0x00007feeced03000)]
+=>0x00007feee800e000 JavaThread "main" [_thread_in_native, id=14651, stack(0x00007feeefd5f000,0x00007feeefe60000)]
+
+Other Threads:
+  0x00007feee8143000 VMThread [stack: 0x00007feeced03000,0x00007feecee04000] [id=14656]
+  0x00007feee81c3800 WatcherThread [stack: 0x00007feecdf0a000,0x00007feece00b000] [id=14665]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap:
+ PSYoungGen      total 72192K, used 21071K [0x000000076f580000, 0x0000000774600000, 0x00000007c0000000)
+  eden space 61952K, 34% used [0x000000076f580000,0x0000000770a13f00,0x0000000773200000)
+  from space 10240K, 0% used [0x0000000773c00000,0x0000000773c00000,0x0000000774600000)
+  to   space 10240K, 0% used [0x0000000773200000,0x0000000773200000,0x0000000773c00000)
+ ParOldGen       total 165376K, used 0K [0x00000006ce000000, 0x00000006d8180000, 0x000000076f580000)
+  object space 165376K, 0% used [0x00000006ce000000,0x00000006ce000000,0x00000006d8180000)
+ Metaspace       used 7788K, capacity 8432K, committed 8704K, reserved 1056768K
+  class space    used 978K, capacity 1160K, committed 1280K, reserved 1048576K
+
+Card table byte_map: [0x00007feeec176000,0x00007feeec907000] byte_map_base: 0x00007feee8b06000
+
+Marking Bits: (ParMarkBitMap*) 0x00007feeef23bc80
+ Begin Bits: [0x00007feed0ef2000, 0x00007feed4b72000)
+ End Bits:   [0x00007feed4b72000, 0x00007feed87f2000)
+
+Polling page: 0x00007feeefe8e000
+
+CodeCache: size=245760Kb used=2773Kb max_used=2789Kb free=242986Kb
+ bounds [0x00007feed9000000, 0x00007feed92c0000, 0x00007feee8000000]
+ total_blobs=1092 nmethods=759 adapters=247
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 0,754 Thread 0x00007feee81bb800 nmethod 755 0x00007feed92abed0 code [0x00007feed92ac060, 0x00007feed92ac488]
+Event: 0,754 Thread 0x00007feee81bb800  756       3       java.util.jar.JarFile$JarEntryIterator::nextElement (5 bytes)
+Event: 0,754 Thread 0x00007feee81bb800 nmethod 756 0x00007feed92ab510 code [0x00007feed92ab6c0, 0x00007feed92abc38]
+Event: 0,754 Thread 0x00007feee81bb800  757       3       java.util.jar.JarFile$JarEntryIterator::nextElement (5 bytes)
+Event: 0,755 Thread 0x00007feee81bb800 nmethod 757 0x00007feed92aac10 code [0x00007feed92aadc0, 0x00007feed92ab2d8]
+Event: 0,756 Thread 0x00007feee81bb800  758       3       java.lang.StringCoding::deref (19 bytes)
+Event: 0,757 Thread 0x00007feee81bb800 nmethod 758 0x00007feed92b6810 code [0x00007feed92b69a0, 0x00007feed92b6e48]
+Event: 0,758 Thread 0x00007feee81b7800 nmethod 713 0x00007feed92b6f90 code [0x00007feed92b72c0, 0x00007feed92b89f0]
+Event: 0,763 Thread 0x00007feee81bb800  759       3       java.util.zip.ZipEntry::getSize (5 bytes)
+Event: 0,764 Thread 0x00007feee81bb800 nmethod 759 0x00007feed92aa910 code [0x00007feed92aaa60, 0x00007feed92aabb0]
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (1 events):
+Event: 0,485 Thread 0x00007feee800e000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00007feed91b30dc method=java.lang.String.replace(CC)Ljava/lang/String; @ 26
+
+Internal exceptions (10 events):
+Event: 0,406 Thread 0x00007feee800e000 Exception <a 'java/security/PrivilegedActionException'> (0x000000076fbdbb38) thrown at [/HUDSON3/workspace/8-2-build-linux-amd64/jdk8u121/8372/hotspot/src/share/vm/prims/jvm.cpp, line 1390]
+Event: 0,406 Thread 0x00007feee800e000 Exception <a 'java/security/PrivilegedActionException'> (0x000000076fbdbd48) thrown at [/HUDSON3/workspace/8-2-build-linux-amd64/jdk8u121/8372/hotspot/src/share/vm/prims/jvm.cpp, line 1390]
+Event: 0,460 Thread 0x00007feee800e000 Exception <a 'java/lang/NoSuchMethodError': java.lang.Object.lambda$or$2(Ljava/util/function/Predicate;Ljava/lang/Object;)Z> (0x000000076ff031b8) thrown at [/HUDSON3/workspace/8-2-build-linux-amd64/jdk8u121/8372/hotspot/src/share/vm/interpreter/linkResolv
+Event: 0,501 Thread 0x00007feee800e000 Exception <a 'java/lang/IncompatibleClassChangeError': Found class java.lang.Object, but interface was expected> (0x000000077007e7b8) thrown at [/HUDSON3/workspace/8-2-build-linux-amd64/jdk8u121/8372/hotspot/src/share/vm/interpreter/linkResolver.cpp, line
+Event: 0,545 Thread 0x00007feee800e000 Exception <a 'java/lang/IncompatibleClassChangeError': Found class java.lang.Object, but interface was expected> (0x00000007701ff780) thrown at [/HUDSON3/workspace/8-2-build-linux-amd64/jdk8u121/8372/hotspot/src/share/vm/interpreter/linkResolver.cpp, line
+Event: 0,546 Thread 0x00007feee800e000 Exception <a 'java/lang/NoSuchMethodError': java.lang.Object.lambda$accept$0(Lorg/junit/platform/engine/TestDescriptor$Visitor;Lorg/junit/platform/engine/TestDescriptor;)V> (0x0000000770205120) thrown at [/HUDSON3/workspace/8-2-build-linux-amd64/jdk8u121/
+Event: 0,547 Thread 0x00007feee800e000 Exception <a 'java/lang/NoSuchMethodError': java.lang.Object.containsTests(Lorg/junit/platform/engine/TestDescriptor;)Z> (0x000000077020d4e8) thrown at [/HUDSON3/workspace/8-2-build-linux-amd64/jdk8u121/8372/hotspot/src/share/vm/interpreter/linkResolver.c
+Event: 0,602 Thread 0x00007feee800e000 Exception <a 'java/lang/NoSuchMethodError': java.lang.Object.lambda$andThen$1(Ljava/util/function/Function;Ljava/lang/Object;)Ljava/lang/Object;> (0x000000077040e3f0) thrown at [/HUDSON3/workspace/8-2-build-linux-amd64/jdk8u121/8372/hotspot/src/share/vm/i
+Event: 0,684 Thread 0x00007feee800e000 Exception <a 'java/lang/NoSuchMethodError': java.lang.Object.lambda$static$0(Ljava/lang/String;)Ljava/lang/Boolean;> (0x0000000770701d48) thrown at [/HUDSON3/workspace/8-2-build-linux-amd64/jdk8u121/8372/hotspot/src/share/vm/interpreter/linkResolver.cpp, 
+Event: 0,727 Thread 0x00007feee800e000 Exception <a 'sun/nio/fs/UnixException'> (0x0000000770807400) thrown at [/HUDSON3/workspace/8-2-build-linux-amd64/jdk8u121/8372/hotspot/src/share/vm/prims/jni.cpp, line 709]
+
+Events (10 events):
+Event: 0,761 loading class org/lwjgl/system/jni/JNINativeInterface
+Event: 0,761 loading class org/lwjgl/system/jni/JNINativeInterface done
+Event: 0,763 loading class org/lwjgl/system/linux/DynamicLinkLoader
+Event: 0,763 loading class org/lwjgl/system/linux/DynamicLinkLoader done
+Event: 0,765 loading class org/lwjgl/opengl/GL$2
+Event: 0,765 loading class org/lwjgl/opengl/GL$2 done
+Event: 0,766 loading class org/lwjgl/opengl/GL$SharedLibraryGL
+Event: 0,766 loading class org/lwjgl/opengl/GL$SharedLibraryGL done
+Event: 0,766 loading class org/lwjgl/system/SharedLibrary$Delegate
+Event: 0,766 loading class org/lwjgl/system/SharedLibrary$Delegate done
+
+
+Dynamic libraries:
+00400000-00401000 r-xp 00000000 08:01 24119309                           /home/michael1337/Programs/jdk/jdk1.8.0_121/bin/java
+00600000-00601000 rw-p 00000000 08:01 24119309                           /home/michael1337/Programs/jdk/jdk1.8.0_121/bin/java
+01f60000-01f81000 rw-p 00000000 00:00 0                                  [heap]
+6ce000000-6d8180000 rw-p 00000000 00:00 0 
+6d8180000-76f580000 ---p 00000000 00:00 0 
+76f580000-774600000 rw-p 00000000 00:00 0 
+774600000-7c0000000 ---p 00000000 00:00 0 
+7c0000000-7c0140000 rw-p 00000000 00:00 0 
+7c0140000-800000000 ---p 00000000 00:00 0 
+7fee8fbf6000-7fee8fbfb000 r-xp 00000000 08:01 4464746                    /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+7fee8fbfb000-7fee8fdfa000 ---p 00005000 08:01 4464746                    /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+7fee8fdfa000-7fee8fdfb000 r--p 00004000 08:01 4464746                    /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+7fee8fdfb000-7fee8fdfc000 rw-p 00005000 08:01 4464746                    /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+7fee8fdfc000-7fee8fdfe000 r-xp 00000000 08:01 4464735                    /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+7fee8fdfe000-7fee8fffe000 ---p 00002000 08:01 4464735                    /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+7fee8fffe000-7fee8ffff000 r--p 00002000 08:01 4464735                    /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+7fee8ffff000-7fee90000000 rw-p 00003000 08:01 4464735                    /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+7fee90000000-7fee90021000 rw-p 00000000 00:00 0 
+7fee90021000-7fee94000000 ---p 00000000 00:00 0 
+7fee94000000-7fee94021000 rw-p 00000000 00:00 0 
+7fee94021000-7fee98000000 ---p 00000000 00:00 0 
+7fee98000000-7fee981dd000 rw-p 00000000 00:00 0 
+7fee981dd000-7fee9c000000 ---p 00000000 00:00 0 
+7fee9c000000-7fee9c2e9000 rw-p 00000000 00:00 0 
+7fee9c2e9000-7feea0000000 ---p 00000000 00:00 0 
+7feea0000000-7feea0231000 rw-p 00000000 00:00 0 
+7feea0231000-7feea4000000 ---p 00000000 00:00 0 
+7feea406b000-7feea407b000 r-xp 00000000 08:01 4460530                    /usr/lib/x86_64-linux-gnu/libdrm.so.2.4.0
+7feea407b000-7feea427b000 ---p 00010000 08:01 4460530                    /usr/lib/x86_64-linux-gnu/libdrm.so.2.4.0
+7feea427b000-7feea427c000 r--p 00010000 08:01 4460530                    /usr/lib/x86_64-linux-gnu/libdrm.so.2.4.0
+7feea427c000-7feea427d000 rw-p 00011000 08:01 4460530                    /usr/lib/x86_64-linux-gnu/libdrm.so.2.4.0
+7feea427d000-7feea4282000 r-xp 00000000 08:01 4464784                    /usr/lib/x86_64-linux-gnu/libXxf86vm.so.1.0.0
+7feea4282000-7feea4481000 ---p 00005000 08:01 4464784                    /usr/lib/x86_64-linux-gnu/libXxf86vm.so.1.0.0
+7feea4481000-7feea4482000 r--p 00004000 08:01 4464784                    /usr/lib/x86_64-linux-gnu/libXxf86vm.so.1.0.0
+7feea4482000-7feea4483000 rw-p 00005000 08:01 4464784                    /usr/lib/x86_64-linux-gnu/libXxf86vm.so.1.0.0
+7feea4483000-7feea44a4000 r-xp 00000000 08:01 4466084                    /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+7feea44a4000-7feea46a3000 ---p 00021000 08:01 4466084                    /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+7feea46a3000-7feea46a4000 r--p 00020000 08:01 4466084                    /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+7feea46a4000-7feea46a5000 rw-p 00021000 08:01 4466084                    /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+7feea46a5000-7feea46a9000 r-xp 00000000 08:01 4466048                    /usr/lib/x86_64-linux-gnu/libxcb-dri2.so.0.0.0
+7feea46a9000-7feea48a8000 ---p 00004000 08:01 4466048                    /usr/lib/x86_64-linux-gnu/libxcb-dri2.so.0.0.0
+7feea48a8000-7feea48a9000 r--p 00003000 08:01 4466048                    /usr/lib/x86_64-linux-gnu/libxcb-dri2.so.0.0.0
+7feea48a9000-7feea48aa000 rw-p 00004000 08:01 4466048                    /usr/lib/x86_64-linux-gnu/libxcb-dri2.so.0.0.0
+7feea48aa000-7feea48c1000 r-xp 00000000 08:01 4466052                    /usr/lib/x86_64-linux-gnu/libxcb-glx.so.0.0.0
+7feea48c1000-7feea4ac0000 ---p 00017000 08:01 4466052                    /usr/lib/x86_64-linux-gnu/libxcb-glx.so.0.0.0
+7feea4ac0000-7feea4ac2000 r--p 00016000 08:01 4466052                    /usr/lib/x86_64-linux-gnu/libxcb-glx.so.0.0.0
+7feea4ac2000-7feea4ac3000 rw-p 00018000 08:01 4466052                    /usr/lib/x86_64-linux-gnu/libxcb-glx.so.0.0.0
+7feea4ac3000-7feea4bf8000 r-xp 00000000 08:01 4464731                    /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7feea4bf8000-7feea4df8000 ---p 00135000 08:01 4464731                    /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7feea4df8000-7feea4df9000 r--p 00135000 08:01 4464731                    /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7feea4df9000-7feea4dfd000 rw-p 00136000 08:01 4464731                    /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7feea4dfd000-7feea4dfe000 r-xp 00000000 08:01 4464729                    /usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0
+7feea4dfe000-7feea4ffd000 ---p 00001000 08:01 4464729                    /usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0
+7feea4ffd000-7feea4ffe000 r--p 00000000 08:01 4464729                    /usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0
+7feea4ffe000-7feea4fff000 rw-p 00001000 08:01 4464729                    /usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0
+7feea4fff000-7feea8000000 rw-p 00000000 00:00 0 
+7feea8000000-7feea8021000 rw-p 00000000 00:00 0 
+7feea8021000-7feeac000000 ---p 00000000 00:00 0 
+7feeac000000-7feeac021000 rw-p 00000000 00:00 0 
+7feeac021000-7feeb0000000 ---p 00000000 00:00 0 
+7feeb0000000-7feeb0021000 rw-p 00000000 00:00 0 
+7feeb0021000-7feeb4000000 ---p 00000000 00:00 0 
+7feeb4000000-7feeb4021000 rw-p 00000000 00:00 0 
+7feeb4021000-7feeb8000000 ---p 00000000 00:00 0 
+7feeb8000000-7feeb8021000 rw-p 00000000 00:00 0 
+7feeb8021000-7feebc000000 ---p 00000000 00:00 0 
+7feebc000000-7feebc021000 rw-p 00000000 00:00 0 
+7feebc021000-7feec0000000 ---p 00000000 00:00 0 
+7feec0000000-7feec0021000 rw-p 00000000 00:00 0 
+7feec0021000-7feec4000000 ---p 00000000 00:00 0 
+7feec4000000-7feec4021000 rw-p 00000000 00:00 0 
+7feec4021000-7feec8000000 ---p 00000000 00:00 0 
+7feec8000000-7feec8021000 rw-p 00000000 00:00 0 
+7feec8021000-7feecc000000 ---p 00000000 00:00 0 
+7feecc097000-7feecc09c000 r-xp 00000000 08:01 4464750                    /usr/lib/x86_64-linux-gnu/libXfixes.so.3.1.0
+7feecc09c000-7feecc29b000 ---p 00005000 08:01 4464750                    /usr/lib/x86_64-linux-gnu/libXfixes.so.3.1.0
+7feecc29b000-7feecc29c000 r--p 00004000 08:01 4464750                    /usr/lib/x86_64-linux-gnu/libXfixes.so.3.1.0
+7feecc29c000-7feecc29d000 rw-p 00005000 08:01 4464750                    /usr/lib/x86_64-linux-gnu/libXfixes.so.3.1.0
+7feecc29d000-7feecc29f000 r-xp 00000000 08:01 4464744                    /usr/lib/x86_64-linux-gnu/libXdamage.so.1.1.0
+7feecc29f000-7feecc49e000 ---p 00002000 08:01 4464744                    /usr/lib/x86_64-linux-gnu/libXdamage.so.1.1.0
+7feecc49e000-7feecc49f000 r--p 00001000 08:01 4464744                    /usr/lib/x86_64-linux-gnu/libXdamage.so.1.1.0
+7feecc49f000-7feecc4a0000 rw-p 00002000 08:01 4464744                    /usr/lib/x86_64-linux-gnu/libXdamage.so.1.1.0
+7feecc4a0000-7feecc4b1000 r-xp 00000000 08:01 4464748                    /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+7feecc4b1000-7feecc6b0000 ---p 00011000 08:01 4464748                    /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+7feecc6b0000-7feecc6b1000 r--p 00010000 08:01 4464748                    /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+7feecc6b1000-7feecc6b2000 rw-p 00011000 08:01 4464748                    /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+7feecc6b2000-7feecc6de000 r-xp 00000000 08:01 4464119                    /usr/lib/x86_64-linux-gnu/libglapi.so.0.0.0
+7feecc6de000-7feecc8dd000 ---p 0002c000 08:01 4464119                    /usr/lib/x86_64-linux-gnu/libglapi.so.0.0.0
+7feecc8dd000-7feecc8e1000 r--p 0002b000 08:01 4464119                    /usr/lib/x86_64-linux-gnu/libglapi.so.0.0.0
+7feecc8e1000-7feecc8e2000 rw-p 0002f000 08:01 4464119                    /usr/lib/x86_64-linux-gnu/libglapi.so.0.0.0
+7feecc8e2000-7feecc8e3000 rw-p 00000000 00:00 0 
+7feecc8e3000-7feecc8e4000 r-xp 00000000 08:01 4466096                    /usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0
+7feecc8e4000-7feeccae4000 ---p 00001000 08:01 4466096                    /usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0
+7feeccae4000-7feeccae5000 r--p 00001000 08:01 4466096                    /usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0
+7feeccae5000-7feeccae6000 rw-p 00002000 08:01 4466096                    /usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0
+7feeccae6000-7feeccaeb000 r-xp 00000000 08:01 4466072                    /usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0
+7feeccaeb000-7feeccceb000 ---p 00005000 08:01 4466072                    /usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0
+7feeccceb000-7feecccec000 r--p 00005000 08:01 4466072                    /usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0
+7feecccec000-7feeccced000 rw-p 00006000 08:01 4466072                    /usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0
+7feeccced000-7feecccef000 r-xp 00000000 08:01 4466060                    /usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0
+7feecccef000-7feecceee000 ---p 00002000 08:01 4466060                    /usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0
+7feecceee000-7feecceef000 r--p 00001000 08:01 4466060                    /usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0
+7feecceef000-7feeccef0000 rw-p 00002000 08:01 4466060                    /usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0
+7feeccef0000-7feeccef2000 r-xp 00000000 08:01 4466050                    /usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.0.0
+7feeccef2000-7feecd0f1000 ---p 00002000 08:01 4466050                    /usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.0.0
+7feecd0f1000-7feecd0f2000 r--p 00001000 08:01 4466050                    /usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.0.0
+7feecd0f2000-7feecd0f3000 rw-p 00002000 08:01 4466050                    /usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.0.0
+7feecd0f3000-7feecd119000 r-xp 00000000 08:01 20840649                   /lib/x86_64-linux-gnu/libexpat.so.1.6.0
+7feecd119000-7feecd319000 ---p 00026000 08:01 20840649                   /lib/x86_64-linux-gnu/libexpat.so.1.6.0
+7feecd319000-7feecd31b000 r--p 00026000 08:01 20840649                   /lib/x86_64-linux-gnu/libexpat.so.1.6.0
+7feecd31b000-7feecd31c000 rw-p 00028000 08:01 20840649                   /lib/x86_64-linux-gnu/libexpat.so.1.6.0
+7feecd31c000-7feecd335000 r-xp 00000000 08:01 20844854                   /lib/x86_64-linux-gnu/libz.so.1.2.8
+7feecd335000-7feecd534000 ---p 00019000 08:01 20844854                   /lib/x86_64-linux-gnu/libz.so.1.2.8
+7feecd534000-7feecd535000 r--p 00018000 08:01 20844854                   /lib/x86_64-linux-gnu/libz.so.1.2.8
+7feecd535000-7feecd536000 rw-p 00019000 08:01 20844854                   /lib/x86_64-linux-gnu/libz.so.1.2.8
+7feecd536000-7feecd5a6000 r-xp 00000000 08:01 4718962                    /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2.0
+7feecd5a6000-7feecd7a5000 ---p 00070000 08:01 4718962                    /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2.0
+7feecd7a5000-7feecd7a8000 r--p 0006f000 08:01 4718962                    /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2.0
+7feecd7a8000-7feecd7a9000 rw-p 00072000 08:01 4718962                    /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2.0
+7feecd7a9000-7feecd7aa000 rw-p 00000000 00:00 0 
+7feecd7d4000-7feecd83f000 r-xp 00000000 08:01 25701753                   /tmp/lwjglmichael1337/3.1.6-build-14/liblwjgl_opengl.so
+7feecd83f000-7feecda3e000 ---p 0006b000 08:01 25701753                   /tmp/lwjglmichael1337/3.1.6-build-14/liblwjgl_opengl.so
+7feecda3e000-7feecda3f000 r--p 0006a000 08:01 25701753                   /tmp/lwjglmichael1337/3.1.6-build-14/liblwjgl_opengl.so
+7feecda3f000-7feecda40000 rw-p 0006b000 08:01 25701753                   /tmp/lwjglmichael1337/3.1.6-build-14/liblwjgl_opengl.so
+7feecda40000-7feecda94000 r-xp 00000000 08:01 25701720                   /tmp/lwjglmichael1337/3.1.6-build-14/liblwjgl.so
+7feecda94000-7feecdc94000 ---p 00054000 08:01 25701720                   /tmp/lwjglmichael1337/3.1.6-build-14/liblwjgl.so
+7feecdc94000-7feecdc95000 r--p 00054000 08:01 25701720                   /tmp/lwjglmichael1337/3.1.6-build-14/liblwjgl.so
+7feecdc95000-7feecdc96000 rw-p 00055000 08:01 25701720                   /tmp/lwjglmichael1337/3.1.6-build-14/liblwjgl.so
+7feecdc96000-7feecdca7000 r-xp 00000000 08:01 24119418                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libnio.so
+7feecdca7000-7feecdea6000 ---p 00011000 08:01 24119418                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libnio.so
+7feecdea6000-7feecdea7000 rw-p 00010000 08:01 24119418                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libnio.so
+7feecdea7000-7feecdeba000 r--s 00345000 08:01 24119617                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/resources.jar
+7feecdeba000-7feecdebe000 r--s 00031000 08:01 27009233                   /home/michael1337/Documents/Neolithic/game/lib/commons-io-2.6/commons-io-2.6.jar
+7feecdebe000-7feecdec5000 r--s 00058000 08:01 27009231                   /home/michael1337/Documents/Neolithic/game/lib/commons-io-2.6/commons-io-2.6-tests.jar
+7feecdec5000-7feecdec6000 r--s 00002000 08:01 25701703                   /home/michael1337/Documents/Neolithic/game/lib/PNGDecoder.jar
+7feecdec6000-7feecdecb000 r--s 00045000 08:01 26222668                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl.jar
+7feecdecb000-7feecdede000 r--s 0014d000 08:01 26222592                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-vulkan.jar
+7feecdede000-7feecdee0000 r--s 00018000 08:01 26221583                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-stb.jar
+7feecdee0000-7feecdee1000 r--s 0006f000 08:01 26221581                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-stb-natives-windows.jar
+7feecdee1000-7feecdee2000 r--s 0002a000 08:01 26221580                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-stb-natives-macos.jar
+7feecdee2000-7feecdee3000 r--s 00031000 08:01 26221579                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-stb-natives-linux.jar
+7feecdee3000-7feecdee4000 r--s 00002000 08:01 26221577                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-par.jar
+7feecdee4000-7feecdee5000 r--s 00031000 08:01 26221574                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-par-natives-windows.jar
+7feecdee5000-7feecdee6000 r--s 00004000 08:01 26222670                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-par-natives-macos.jar
+7feecdee6000-7feecdee7000 r--s 00005000 08:01 26221573                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-par-natives-linux.jar
+7feecdee7000-7feecdef1000 r--s 000bf000 08:01 26221572                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-opengl.jar
+7feecdef1000-7feecdef2000 r--s 0002a000 08:01 26221570                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-opengl-natives-windows.jar
+7feecdef2000-7feecdef3000 r--s 0000b000 08:01 26221569                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-opengl-natives-macos.jar
+7feecdef3000-7feecdef4000 r--s 00016000 08:01 26221568                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-opengl-natives-linux.jar
+7feecdef4000-7feecdef7000 r--s 00011000 08:01 26221566                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-openal.jar
+7feecdef7000-7feecdef8000 r--s 00105000 08:01 26221562                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-openal-natives-windows.jar
+7feecdef8000-7feecdef9000 r--s 00064000 08:01 26221560                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-openal-natives-macos.jar
+7feecdef9000-7feecdefa000 r--s 00077000 08:01 26221559                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-openal-natives-linux.jar
+7feecdefa000-7feecdeff000 r--s 0005f000 08:01 26221557                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-nuklear.jar
+7feecdeff000-7feecdf00000 r--s 00041000 08:01 26221556                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-nuklear-natives-windows.jar
+7feecdf00000-7feecdf01000 r--s 0002e000 08:01 26221561                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-nuklear-natives-macos.jar
+7feecdf01000-7feecdf02000 r--s 00022000 08:01 26221554                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-nuklear-natives-linux.jar
+7feecdf02000-7feecdf03000 r--s 00039000 08:01 26222669                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-natives-windows.jar
+7feecdf03000-7feecdf05000 r--s 00008000 08:01 26222596                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-natives-macos.jar
+7feecdf05000-7feecdf06000 r--s 00013000 08:01 26222595                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-natives-linux.jar
+7feecdf06000-7feecdf08000 r--s 0000e000 08:01 26221549                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-nanovg.jar
+7feecdf08000-7feecdf0a000 r--s 00026000 08:01 26221553                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-nanovg-natives-macos.jar
+7feecdf0a000-7feecdf0b000 ---p 00000000 00:00 0 
+7feecdf0b000-7feece00b000 rw-p 00000000 00:00 0 
+7feece00b000-7feece00e000 ---p 00000000 00:00 0 
+7feece00e000-7feece10c000 rw-p 00000000 00:00 0 
+7feece10c000-7feece10f000 ---p 00000000 00:00 0 
+7feece10f000-7feece20d000 rw-p 00000000 00:00 0 
+7feece20d000-7feece210000 ---p 00000000 00:00 0 
+7feece210000-7feece30e000 rw-p 00000000 00:00 0 
+7feece30e000-7feece324000 r-xp 00000000 08:01 24119393                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libnet.so
+7feece324000-7feece524000 ---p 00016000 08:01 24119393                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libnet.so
+7feece524000-7feece525000 rw-p 00016000 08:01 24119393                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libnet.so
+7feece525000-7feece528000 ---p 00000000 00:00 0 
+7feece528000-7feece626000 rw-p 00000000 00:00 0 
+7feece626000-7feece629000 ---p 00000000 00:00 0 
+7feece629000-7feece727000 rw-p 00000000 00:00 0 
+7feece727000-7feece72a000 ---p 00000000 00:00 0 
+7feece72a000-7feece828000 rw-p 00000000 00:00 0 
+7feece828000-7feeceb01000 r--p 00000000 08:01 4457405                    /usr/lib/locale/locale-archive
+7feeceb01000-7feeceb04000 ---p 00000000 00:00 0 
+7feeceb04000-7feecec02000 rw-p 00000000 00:00 0 
+7feecec02000-7feecec05000 ---p 00000000 00:00 0 
+7feecec05000-7feeced03000 rw-p 00000000 00:00 0 
+7feeced03000-7feeced04000 ---p 00000000 00:00 0 
+7feeced04000-7feecfd13000 rw-p 00000000 00:00 0 
+7feecfd13000-7feecfeec000 r--s 03d3e000 08:01 24119385                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/rt.jar
+7feecfeec000-7feed06a2000 rw-p 00000000 00:00 0 
+7feed06a2000-7feed0762000 ---p 00000000 00:00 0 
+7feed0762000-7feed87f2000 rw-p 00000000 00:00 0 
+7feed87f2000-7feed87f3000 ---p 00000000 00:00 0 
+7feed87f3000-7feed88f3000 rw-p 00000000 00:00 0 
+7feed88f3000-7feed88f4000 ---p 00000000 00:00 0 
+7feed88f4000-7feed89f4000 rw-p 00000000 00:00 0 
+7feed89f4000-7feed89f5000 ---p 00000000 00:00 0 
+7feed89f5000-7feed8b46000 rw-p 00000000 00:00 0 
+7feed8b46000-7feed9000000 ---p 00000000 00:00 0 
+7feed9000000-7feed92c0000 rwxp 00000000 00:00 0 
+7feed92c0000-7feee8000000 ---p 00000000 00:00 0 
+7feee8000000-7feee88c9000 rw-p 00000000 00:00 0 
+7feee88c9000-7feeec000000 ---p 00000000 00:00 0 
+7feeec000000-7feeec001000 r--s 00068000 08:01 26221547                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-nanovg-natives-windows.jar
+7feeec001000-7feeec002000 r--s 00029000 08:01 26221546                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-nanovg-natives-linux.jar
+7feeec002000-7feeec005000 r--s 00019000 08:01 26221542                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-glfw.jar
+7feeec005000-7feeec006000 r--s 0003d000 08:01 26221544                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-glfw-natives-windows.jar
+7feeec006000-7feeec007000 r--s 0000e000 08:01 26221540                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-glfw-natives-macos.jar
+7feeec007000-7feeec009000 r--s 00022000 08:01 26221539                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-glfw-natives-linux.jar
+7feeec009000-7feeec00d000 r--s 00027000 08:01 26221534                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-bgfx.jar
+7feeec00d000-7feeec00e000 r--s 0009f000 08:01 26221533                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-bgfx-natives-windows.jar
+7feeec00e000-7feeec00f000 r--s 00041000 08:01 26221541                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-bgfx-natives-macos.jar
+7feeec00f000-7feeec010000 r--s 00051000 08:01 26221532                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-bgfx-natives-linux.jar
+7feeec010000-7feeec014000 r--s 0002e000 08:01 26221528                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-assimp.jar
+7feeec014000-7feeec026000 r--s 000d6000 08:01 24119616                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/plugin.jar
+7feeec026000-7feeec075000 rw-p 00000000 00:00 0 
+7feeec075000-7feeec076000 ---p 00000000 00:00 0 
+7feeec076000-7feeec1c7000 rw-p 00000000 00:00 0 
+7feeec1c7000-7feeec680000 ---p 00000000 00:00 0 
+7feeec680000-7feeec6a9000 rw-p 00000000 00:00 0 
+7feeec6a9000-7feeec906000 ---p 00000000 00:00 0 
+7feeec906000-7feeec912000 rw-p 00000000 00:00 0 
+7feeec912000-7feeeccc7000 ---p 00000000 00:00 0 
+7feeeccc7000-7feeecce1000 r-xp 00000000 08:01 24119416                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libzip.so
+7feeecce1000-7feeecee1000 ---p 0001a000 08:01 24119416                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libzip.so
+7feeecee1000-7feeecee2000 rw-p 0001a000 08:01 24119416                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libzip.so
+7feeecee2000-7feeeceed000 r-xp 00000000 08:01 20845377                   /lib/x86_64-linux-gnu/libnss_files-2.23.so
+7feeeceed000-7feeed0ec000 ---p 0000b000 08:01 20845377                   /lib/x86_64-linux-gnu/libnss_files-2.23.so
+7feeed0ec000-7feeed0ed000 r--p 0000a000 08:01 20845377                   /lib/x86_64-linux-gnu/libnss_files-2.23.so
+7feeed0ed000-7feeed0ee000 rw-p 0000b000 08:01 20845377                   /lib/x86_64-linux-gnu/libnss_files-2.23.so
+7feeed0ee000-7feeed0f4000 rw-p 00000000 00:00 0 
+7feeed0f4000-7feeed0ff000 r-xp 00000000 08:01 20845381                   /lib/x86_64-linux-gnu/libnss_nis-2.23.so
+7feeed0ff000-7feeed2fe000 ---p 0000b000 08:01 20845381                   /lib/x86_64-linux-gnu/libnss_nis-2.23.so
+7feeed2fe000-7feeed2ff000 r--p 0000a000 08:01 20845381                   /lib/x86_64-linux-gnu/libnss_nis-2.23.so
+7feeed2ff000-7feeed300000 rw-p 0000b000 08:01 20845381                   /lib/x86_64-linux-gnu/libnss_nis-2.23.so
+7feeed300000-7feeed316000 r-xp 00000000 08:01 20845361                   /lib/x86_64-linux-gnu/libnsl-2.23.so
+7feeed316000-7feeed515000 ---p 00016000 08:01 20845361                   /lib/x86_64-linux-gnu/libnsl-2.23.so
+7feeed515000-7feeed516000 r--p 00015000 08:01 20845361                   /lib/x86_64-linux-gnu/libnsl-2.23.so
+7feeed516000-7feeed517000 rw-p 00016000 08:01 20845361                   /lib/x86_64-linux-gnu/libnsl-2.23.so
+7feeed517000-7feeed519000 rw-p 00000000 00:00 0 
+7feeed519000-7feeed521000 r-xp 00000000 08:01 20845372                   /lib/x86_64-linux-gnu/libnss_compat-2.23.so
+7feeed521000-7feeed720000 ---p 00008000 08:01 20845372                   /lib/x86_64-linux-gnu/libnss_compat-2.23.so
+7feeed720000-7feeed721000 r--p 00007000 08:01 20845372                   /lib/x86_64-linux-gnu/libnss_compat-2.23.so
+7feeed721000-7feeed722000 rw-p 00008000 08:01 20845372                   /lib/x86_64-linux-gnu/libnss_compat-2.23.so
+7feeed722000-7feeed72c000 r-xp 00000000 08:01 24119454                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libinstrument.so
+7feeed72c000-7feeed92b000 ---p 0000a000 08:01 24119454                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libinstrument.so
+7feeed92b000-7feeed92c000 rw-p 00009000 08:01 24119454                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libinstrument.so
+7feeed92c000-7feeed957000 r-xp 00000000 08:01 24119443                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libjava.so
+7feeed957000-7feeedb56000 ---p 0002b000 08:01 24119443                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libjava.so
+7feeedb56000-7feeedb58000 rw-p 0002a000 08:01 24119443                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libjava.so
+7feeedb58000-7feeedb65000 r-xp 00000000 08:01 24119394                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libverify.so
+7feeedb65000-7feeedd64000 ---p 0000d000 08:01 24119394                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libverify.so
+7feeedd64000-7feeedd66000 rw-p 0000c000 08:01 24119394                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/libverify.so
+7feeedd66000-7feeedd6d000 r-xp 00000000 08:01 20845382                   /lib/x86_64-linux-gnu/librt-2.23.so
+7feeedd6d000-7feeedf6c000 ---p 00007000 08:01 20845382                   /lib/x86_64-linux-gnu/librt-2.23.so
+7feeedf6c000-7feeedf6d000 r--p 00006000 08:01 20845382                   /lib/x86_64-linux-gnu/librt-2.23.so
+7feeedf6d000-7feeedf6e000 rw-p 00007000 08:01 20845382                   /lib/x86_64-linux-gnu/librt-2.23.so
+7feeedf6e000-7feeee076000 r-xp 00000000 08:01 20845355                   /lib/x86_64-linux-gnu/libm-2.23.so
+7feeee076000-7feeee275000 ---p 00108000 08:01 20845355                   /lib/x86_64-linux-gnu/libm-2.23.so
+7feeee275000-7feeee276000 r--p 00107000 08:01 20845355                   /lib/x86_64-linux-gnu/libm-2.23.so
+7feeee276000-7feeee277000 rw-p 00108000 08:01 20845355                   /lib/x86_64-linux-gnu/libm-2.23.so
+7feeee277000-7feeeef45000 r-xp 00000000 08:01 24119447                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/server/libjvm.so
+7feeeef45000-7feeef145000 ---p 00cce000 08:01 24119447                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/server/libjvm.so
+7feeef145000-7feeef21e000 rw-p 00cce000 08:01 24119447                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/amd64/server/libjvm.so
+7feeef21e000-7feeef269000 rw-p 00000000 00:00 0 
+7feeef269000-7feeef429000 r-xp 00000000 08:01 20845364                   /lib/x86_64-linux-gnu/libc-2.23.so
+7feeef429000-7feeef629000 ---p 001c0000 08:01 20845364                   /lib/x86_64-linux-gnu/libc-2.23.so
+7feeef629000-7feeef62d000 r--p 001c0000 08:01 20845364                   /lib/x86_64-linux-gnu/libc-2.23.so
+7feeef62d000-7feeef62f000 rw-p 001c4000 08:01 20845364                   /lib/x86_64-linux-gnu/libc-2.23.so
+7feeef62f000-7feeef633000 rw-p 00000000 00:00 0 
+7feeef633000-7feeef636000 r-xp 00000000 08:01 20845366                   /lib/x86_64-linux-gnu/libdl-2.23.so
+7feeef636000-7feeef835000 ---p 00003000 08:01 20845366                   /lib/x86_64-linux-gnu/libdl-2.23.so
+7feeef835000-7feeef836000 r--p 00002000 08:01 20845366                   /lib/x86_64-linux-gnu/libdl-2.23.so
+7feeef836000-7feeef837000 rw-p 00003000 08:01 20845366                   /lib/x86_64-linux-gnu/libdl-2.23.so
+7feeef837000-7feeef84c000 r-xp 00000000 08:01 24118528                   /home/michael1337/Programs/jdk/jdk1.8.0_121/lib/amd64/jli/libjli.so
+7feeef84c000-7feeefa4c000 ---p 00015000 08:01 24118528                   /home/michael1337/Programs/jdk/jdk1.8.0_121/lib/amd64/jli/libjli.so
+7feeefa4c000-7feeefa4d000 rw-p 00015000 08:01 24118528                   /home/michael1337/Programs/jdk/jdk1.8.0_121/lib/amd64/jli/libjli.so
+7feeefa4d000-7feeefa65000 r-xp 00000000 08:01 20845363                   /lib/x86_64-linux-gnu/libpthread-2.23.so
+7feeefa65000-7feeefc64000 ---p 00018000 08:01 20845363                   /lib/x86_64-linux-gnu/libpthread-2.23.so
+7feeefc64000-7feeefc65000 r--p 00017000 08:01 20845363                   /lib/x86_64-linux-gnu/libpthread-2.23.so
+7feeefc65000-7feeefc66000 rw-p 00018000 08:01 20845363                   /lib/x86_64-linux-gnu/libpthread-2.23.so
+7feeefc66000-7feeefc6a000 rw-p 00000000 00:00 0 
+7feeefc6a000-7feeefc90000 r-xp 00000000 08:01 20845362                   /lib/x86_64-linux-gnu/ld-2.23.so
+7feeefc90000-7feeefc91000 r--s 003ca000 08:01 26221526                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-assimp-natives-windows.jar
+7feeefc91000-7feeefc92000 r--s 00230000 08:01 26221537                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-assimp-natives-macos.jar
+7feeefc92000-7feeefc93000 r--s 002ed000 08:01 26221523                   /home/michael1337/Documents/Neolithic/game/lib/lwjgl/lwjgl-assimp-natives-linux.jar
+7feeefc93000-7feeefc95000 r--s 0000e000 08:01 26092762                   /home/michael1337/Documents/Neolithic/game/lib/junit-platform-commons-1.0.0.jar
+7feeefc95000-7feeefc96000 r--s 00001000 08:01 26092761                   /home/michael1337/Documents/Neolithic/game/lib/opentest4j-1.0.0.jar
+7feeefc96000-7feeefc97000 r--s 00000000 08:01 26092760                   /home/michael1337/Documents/Neolithic/game/lib/apiguardian-api-1.0.0.jar
+7feeefc97000-7feeefc9a000 r--s 00010000 08:01 26092759                   /home/michael1337/Documents/Neolithic/game/lib/junit-jupiter-api-5.0.0.jar
+7feeefc9a000-7feeefc9b000 r--s 00000000 08:01 24119464                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/management-agent.jar
+7feeefc9b000-7feeefc9d000 r--s 00007000 08:01 24119458                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/jfxswt.jar
+7feeefc9d000-7feeefcb8000 r--s 00209000 08:01 24119501                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/deploy.jar
+7feeefcb8000-7feeefd5f000 rw-p 00000000 00:00 0 
+7feeefd5f000-7feeefd62000 ---p 00000000 00:00 0 
+7feeefd62000-7feeefe65000 rw-p 00000000 00:00 0 
+7feeefe65000-7feeefe6f000 r--s 0006c000 08:01 24119500                   /home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/javaws.jar
+7feeefe6f000-7feeefe72000 r--s 00010000 08:01 26877196                   /home/michael1337/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.0.0/junit-jupiter-api-5.0.0.jar
+7feeefe72000-7feeefe75000 r--s 0001a000 08:01 27401819                   /home/michael1337/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.0.0/junit-jupiter-engine-5.0.0.jar
+7feeefe75000-7feeefe76000 r--s 00001000 08:01 27401792                   /home/michael1337/.m2/repository/org/opentest4j/opentest4j/1.0.0/opentest4j-1.0.0.jar
+7feeefe76000-7feeefe78000 r--s 0000e000 08:01 27401794                   /home/michael1337/.m2/repository/org/junit/platform/junit-platform-commons/1.0.0/junit-platform-commons-1.0.0.jar
+7feeefe78000-7feeefe7b000 r--s 00013000 08:01 27401812                   /home/michael1337/.m2/repository/org/junit/platform/junit-platform-engine/1.0.0/junit-platform-engine-1.0.0.jar
+7feeefe7b000-7feeefe7c000 r--s 00000000 08:01 27401790                   /home/michael1337/.m2/repository/org/apiguardian/apiguardian-api/1.0.0/apiguardian-api-1.0.0.jar
+7feeefe7c000-7feeefe7e000 r--s 0000c000 08:01 27401810                   /home/michael1337/.m2/repository/org/junit/platform/junit-platform-launcher/1.0.0/junit-platform-launcher-1.0.0.jar
+7feeefe7e000-7feeefe80000 r--s 00008000 08:01 27267600                   /home/michael1337/Programs/intellij/idea-IU-181.5281.24/plugins/junit/lib/junit5-rt.jar
+7feeefe80000-7feeefe83000 r--s 0001f000 08:01 27267599                   /home/michael1337/Programs/intellij/idea-IU-181.5281.24/plugins/junit/lib/junit-rt.jar
+7feeefe83000-7feeefe85000 r--s 0001a000 08:01 24788587                   /home/michael1337/Programs/intellij/idea-IU-181.5281.24/lib/idea_rt.jar
+7feeefe85000-7feeefe8d000 rw-s 00000000 08:01 25568108                   /tmp/hsperfdata_michael1337/14650
+7feeefe8d000-7feeefe8e000 rw-p 00000000 00:00 0 
+7feeefe8e000-7feeefe8f000 r--p 00000000 00:00 0 
+7feeefe8f000-7feeefe90000 r--p 00025000 08:01 20845362                   /lib/x86_64-linux-gnu/ld-2.23.so
+7feeefe90000-7feeefe91000 rw-p 00026000 08:01 20845362                   /lib/x86_64-linux-gnu/ld-2.23.so
+7feeefe91000-7feeefe92000 rw-p 00000000 00:00 0 
+7ffc23690000-7ffc236b3000 rw-p 00000000 00:00 0                          [stack]
+7ffc236c8000-7ffc236cb000 r--p 00000000 00:00 0                          [vvar]
+7ffc236cb000-7ffc236cd000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+
+VM Arguments:
+jvm_args: -ea -Didea.test.cyclic.buffer.size=1048576 -javaagent:/home/michael1337/Programs/intellij/idea-IU-181.5281.24/lib/idea_rt.jar=34982:/home/michael1337/Programs/intellij/idea-IU-181.5281.24/bin -Dfile.encoding=UTF-8 
+java_command: com.intellij.rt.execution.junit.JUnitStarter -ideVersion5 -junit5 logic.NeighbourTest,testFaceNeighbours
+java_class_path (initial): /home/michael1337/Programs/intellij/idea-IU-181.5281.24/lib/idea_rt.jar:/home/michael1337/Programs/intellij/idea-IU-181.5281.24/plugins/junit/lib/junit-rt.jar:/home/michael1337/Programs/intellij/idea-IU-181.5281.24/plugins/junit/lib/junit5-rt.jar:/home/michael1337/.m2/repository/org/junit/platform/junit-platform-launcher/1.0.0/junit-platform-launcher-1.0.0.jar:/home/michael1337/.m2/repository/org/apiguardian/apiguardian-api/1.0.0/apiguardian-api-1.0.0.jar:/home/michael1337/.m2/repository/org/junit/platform/junit-platform-engine/1.0.0/junit-platform-engine-1.0.0.jar:/home/michael1337/.m2/repository/org/junit/platform/junit-platform-commons/1.0.0/junit-platform-commons-1.0.0.jar:/home/michael1337/.m2/repository/org/opentest4j/opentest4j/1.0.0/opentest4j-1.0.0.jar:/home/michael1337/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.0.0/junit-jupiter-engine-5.0.0.jar:/home/michael1337/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.0.0/junit-jupiter-api-5.0.0.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/charsets.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/deploy.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/ext/cldrdata.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/ext/dnsns.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/ext/jaccess.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/ext/jfxrt.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/ext/localedata.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/ext/nashorn.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/ext/sunec.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/ext/sunjce_provider.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/ext/sunpkcs11.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/ext/zipfs.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/javaws.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/lib/jce.jar:/home/michael1337/Programs/jdk/jdk1.8.0_121/jre/li
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=/home/michael1337/Programs/jdk/jdk1.8.0_121
+PATH=/home/michael1337/Programs/Spin/Spin/Src6.4.8:/home/michael1337/anaconda3/bin:/home/michael1337/bin:/home/michael1337/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/michael1337/Programs/jdk/jdk1.8.0_121
+USERNAME=michael1337
+SHELL=/bin/bash
+DISPLAY=:1
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0xac78c0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGBUS: [libjvm.so+0xac78c0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGFPE: [libjvm.so+0x920ac0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGPIPE: [libjvm.so+0x920ac0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGXFSZ: [libjvm.so+0x920ac0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGILL: [libjvm.so+0x920ac0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGUSR1: SIG_DFL, sa_mask[0]=00000000000000000000000000000000, sa_flags=none
+SIGUSR2: [libjvm.so+0x922300], sa_mask[0]=00100000000000000000000000000000, sa_flags=SA_RESTART|SA_SIGINFO
+SIGHUP: [libjvm.so+0x923700], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGINT: [libjvm.so+0x923700], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGTERM: [libjvm.so+0x923700], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGQUIT: [libjvm.so+0x923700], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+
+
+---------------  S Y S T E M  ---------------
+
+OS:DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=16.04
+DISTRIB_CODENAME=xenial
+DISTRIB_DESCRIPTION="Ubuntu 16.04.5 LTS"
+
+uname:Linux 4.4.0-130-generic #156-Ubuntu SMP Thu Jun 14 08:53:28 UTC 2018 x86_64
+libc:glibc 2.23 NPTL 2.23 
+rlimit: STACK 8192k, CORE 0k, NPROC 61761, NOFILE 1048576, AS infinity
+load average:1,18 0,74 0,76
+
+/proc/meminfo:
+MemTotal:       15852036 kB
+MemFree:         1404748 kB
+MemAvailable:   10311896 kB
+Buffers:          175652 kB
+Cached:          8546136 kB
+SwapCached:         1504 kB
+Active:          7986364 kB
+Inactive:        5303684 kB
+Active(anon):    3816844 kB
+Inactive(anon):  1145056 kB
+Active(file):    4169520 kB
+Inactive(file):  4158628 kB
+Unevictable:          16 kB
+Mlocked:              16 kB
+SwapTotal:      16189436 kB
+SwapFree:       15945172 kB
+Dirty:             23060 kB
+Writeback:             0 kB
+AnonPages:       4567052 kB
+Mapped:           465988 kB
+Shmem:            393640 kB
+Slab:             985136 kB
+SReclaimable:     915452 kB
+SUnreclaim:        69684 kB
+KernelStack:       15088 kB
+PageTables:        67524 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    24115452 kB
+Committed_AS:   35652884 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:           0 kB
+VmallocChunk:          0 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:         0 kB
+CmaTotal:              0 kB
+CmaFree:               0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+DirectMap4k:      618180 kB
+DirectMap2M:    15572992 kB
+DirectMap1G:           0 kB
+
+
+CPU:total 4 (2 cores per cpu, 2 threads per core) family 6 model 78 stepping 3, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, 3dnowpref, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2, adx
+
+/proc/cpuinfo:
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 78
+model name	: Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+stepping	: 3
+microcode	: 0xc2
+cpu MHz		: 2799.976
+cache size	: 4096 KB
+physical id	: 0
+siblings	: 4
+core id		: 0
+cpu cores	: 2
+apicid		: 0
+initial apicid	: 0
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb invpcid_single intel_pt ibrs ibpb stibp kaiser tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass
+bogomips	: 5184.48
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 1
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 78
+model name	: Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+stepping	: 3
+microcode	: 0xc2
+cpu MHz		: 2799.976
+cache size	: 4096 KB
+physical id	: 0
+siblings	: 4
+core id		: 1
+cpu cores	: 2
+apicid		: 2
+initial apicid	: 2
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb invpcid_single intel_pt ibrs ibpb stibp kaiser tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass
+bogomips	: 5184.48
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 2
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 78
+model name	: Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+stepping	: 3
+microcode	: 0xc2
+cpu MHz		: 2799.976
+cache size	: 4096 KB
+physical id	: 0
+siblings	: 4
+core id		: 0
+cpu cores	: 2
+apicid		: 1
+initial apicid	: 1
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb invpcid_single intel_pt ibrs ibpb stibp kaiser tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass
+bogomips	: 5184.48
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 3
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 78
+model name	: Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+stepping	: 3
+microcode	: 0xc2
+cpu MHz		: 2799.976
+cache size	: 4096 KB
+physical id	: 0
+siblings	: 4
+core id		: 1
+cpu cores	: 2
+apicid		: 3
+initial apicid	: 3
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb invpcid_single intel_pt ibrs ibpb stibp kaiser tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass
+bogomips	: 5184.48
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+
+
+Memory: 4k page, physical 15852036k(1404748k free), swap 16189436k(15945172k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.121-b13) for linux-amd64 JRE (1.8.0_121-b13), built on Dec 12 2016 16:36:53 by "java_re" with gcc 4.3.0 20080428 (Red Hat 4.3.0-8)
+
+time: Sun Aug  5 16:13:50 2018
+elapsed time: 0 seconds (0d 0h 0m 0s)
+

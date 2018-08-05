@@ -35,6 +35,7 @@ public class Engine {
 
 		gaia = new Planet(32);
 		TopologyGenerator.formTopology(gaia);
+		gaia.generatePlanetMesh();
 	}
 
 	/**

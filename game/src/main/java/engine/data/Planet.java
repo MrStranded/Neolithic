@@ -22,8 +22,9 @@ public class Planet {
 				faces[i] = new Face(x, y, this);
 			}
 		}
+	}
 
-		TopologyGenerator.formTopology(this);
+	public void generatePlanetMesh() {
 		planetObject = new PlanetObject(this);
 	}
 
