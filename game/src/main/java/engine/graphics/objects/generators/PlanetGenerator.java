@@ -9,6 +9,7 @@ import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.FacePart;
 import engine.logic.Neighbour;
 import engine.math.numericalObjects.Vector3;
+import engine.utils.converters.IntegerConverter;
 import engine.utils.converters.VectorConverter;
 
 import java.util.ArrayList;
@@ -54,72 +55,97 @@ public class PlanetGenerator {
 	// ###################################################################################
 
 	private static Mesh createTile(Vector3 corner1, Vector3 corner2, Vector3 corner3, double height, Tile tile) {
-		Vector3 origin = new Vector3(0,0,0);
-
 		double f = getHeightFactor(height);
 
-		corner1 = corner1.times(f);
-		corner2 = corner2.times(f);
-		corner3 = corner3.times(f);
+		Vector3[] upper = new Vector3[3];
 
-		/*List<Vector3> vectorList = new ArrayList<>(12);
-		vectorList.add(corner1);
-		vectorList.add(corner2);
-		vectorList.add(corner3);
-
-		Tile[] neighbours = Neighbour.getNeighbours(tile);*/
-
-		Vector3[] vectorArray = {corner1, corner2, corner3, origin, corner1, corner2, corner3};
-
-		// ------------------------------------- vertices
-		float[] vertices = VectorConverter.Vector3ArrayToFloatArray(vectorArray);
-
-		// ------------------------------------- indices
-		int[] indices = {
-				0, 1, 2,
-				3, 5, 4,
-				3, 6, 5,
-				3, 4, 6
-		};
-
-		// ------------------------------------- normals
+		upper[0] = corner1.times(f);
+		upper[1] = corner2.times(f);
+		upper[2] = corner3.times(f);
 
 		Vector3 normal = corner1.plus(corner2).plus(corner3).normalize();
+		Vector3 mid = corner1.plus(corner2).plus(corner3).times(1d/3d);
 
 		double normalFactor = 1d / GraphicalConstants.PLANET_CONSTRUCTION_SIDE_NORMAL_QUOTIENT;
-		Vector3 mid = corner1.plus(corner2).plus(corner3).times(1d/3d);
+
 		Vector3[] midToCorner = new Vector3[3];
 		midToCorner[0] = corner1.minus(mid).plus(normal.times(normalFactor)).normalize();
 		midToCorner[1] = corner2.minus(mid).plus(normal.times(normalFactor)).normalize();
 		midToCorner[2] = corner3.minus(mid).plus(normal.times(normalFactor)).normalize();
 
-		float[] normals = new float[7*3];
-		// top
-		for (int i=0; i<3; i++) {
-			normals[i*3 + 0] = (float) normal.getX();
-			normals[i*3 + 1] = (float) normal.getY();
-			normals[i*3 + 2] = (float) normal.getZ();
+		// ------------------------------------- vertices set up (top triangle)
+		List<Vector3> vectorList = new ArrayList<>(15);
+		vectorList.add(upper[0]);
+		vectorList.add(upper[1]);
+		vectorList.add(upper[2]);
+
+		// ------------------------------------- indices set up (top triangle)
+		List<Integer> indicesList = new ArrayList<>(15);
+		indicesList.add(0);
+		indicesList.add(1);
+		indicesList.add(2);
+
+		// ------------------------------------- normals set up (top triangle)
+		List<Vector3> normalList = new ArrayList<>(15);
+		normalList.add(normal);
+		normalList.add(normal);
+		normalList.add(normal);
+
+		// ------------------------------------- neighbour retrieval and side mesh build up
+		Tile[] neighbours = Neighbour.getNeighbours(tile);
+
+		int index = 3;
+		Vector3[] lower = new Vector3[3];
+
+		for (int i=0; i<1; i++) {
+			if (neighbours[i].getHeight() < tile.getHeight()) {
+				double lowerFactor = getHeightFactor(neighbours[i].getHeight());
+
+				lower[0] = corner1.times(lowerFactor);
+				lower[1] = corner2.times(lowerFactor);
+				lower[2] = corner3.times(lowerFactor);
+
+				int first = i-1;
+				int last = i;
+				if (first < 0) {
+					first += 3;
+				}
+
+				// side mesh vertices
+				vectorList.add(upper[first]);
+				vectorList.add(lower[first]);
+				vectorList.add(upper[last]);
+				vectorList.add(lower[last]);
+
+				// side mesh normals
+				normalList.add(midToCorner[first]);
+				normalList.add(midToCorner[first]);
+				normalList.add(midToCorner[last]);
+				normalList.add(midToCorner[last]);
+
+				// side mesh indices
+				indicesList.add(index);
+				indicesList.add(index + 1);
+				indicesList.add(index + 2);
+				indicesList.add(index + 1);
+				indicesList.add(index + 3);
+				indicesList.add(index + 2);
+
+				index += 6;
+			}
 		}
 
-		// origin
-		normals[3*3 + 0] = (float) normal.getX();
-		normals[3*3 + 1] = (float) normal.getY();
-		normals[3*3 + 2] = (float) normal.getZ();
+		// ------------------------------------- vertices
+		float[] vertices = VectorConverter.Vector3ListToFloatArray(vectorList);
 
-		// sides
-		for (int i=0; i<3; i++) {
-			normals[(4+i)*3 + 0] = (float) midToCorner[i].getX();
-			normals[(4+i)*3 + 1] = (float) midToCorner[i].getY();
-			normals[(4+i)*3 + 2] = (float) midToCorner[i].getZ();
-		}
+		// ------------------------------------- indices
+		int[] indices = IntegerConverter.IntegerListToIntArray(indicesList);
+
+		// ------------------------------------- normals
+		float[] normals = VectorConverter.Vector3ListToFloatArray(normalList);
 
 		// ------------------------------------- texture coordinates
-		float[] textureCoordniates = {
-				0, 0,
-				0.5f, 1f,
-				1f, 0,
-				1f, 1f
-		};
+		float[] textureCoordniates = new float[vertices.length]; // no texture support for planets so far
 
 		Mesh tileMesh = new Mesh(vertices, indices, normals, textureCoordniates);
 		tileMesh.setColor(
