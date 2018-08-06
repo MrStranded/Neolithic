@@ -305,7 +305,7 @@ public class Renderer {
 			depthShaderProgram.setUniform("modelLightViewMatrix", viewMatrix.times(planetObject.getWorldMatrix()));
 
 			// here we pass the shaderProgram because in FacePart.render() we need set some uniforms
-			planetObject.render(depthShaderProgram, scene.getCamera().getPlanetaryLODMatrix(), false);
+			planetObject.render(depthShaderProgram, scene.getCamera().getPlanetaryLODMatrix(), false, false);
 		}
 
 		depthShaderProgram.unbind();
@@ -384,7 +384,7 @@ public class Renderer {
 			}
 
 			// here we pass the shaderProgram because in FacePart.render() we need set some uniforms
-			planetObject.render(shaderProgram, camera.getPlanetaryLODMatrix(), true);
+			planetObject.render(shaderProgram, camera.getPlanetaryLODMatrix(), true, true);
 		}
 
 		shaderProgram.unbind();

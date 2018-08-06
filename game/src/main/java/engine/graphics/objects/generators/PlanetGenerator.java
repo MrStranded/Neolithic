@@ -4,9 +4,11 @@ import constants.GraphicalConstants;
 import constants.TopologyConstants;
 import engine.data.Planet;
 import engine.data.Tile;
+import engine.graphics.objects.models.Material;
 import engine.graphics.objects.planet.CompositeMesh;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.FacePart;
+import engine.graphics.renderer.color.RGBA;
 import engine.logic.Neighbour;
 import engine.math.numericalObjects.Vector3;
 import engine.utils.converters.IntegerConverter;
@@ -27,6 +29,7 @@ public class PlanetGenerator {
 	private static final double HALFANGLE = ANGLE / 2f;
 
 	private static Planet planet;
+	private static Material waterMaterial;
 
 	// ###################################################################################
 	// ################################ Construction Helpers #############################
@@ -66,14 +69,8 @@ public class PlanetGenerator {
 		Vector3 normal = corner1.plus(corner2).plus(corner3).normalize();
 		Vector3 mid = corner1.plus(corner2).plus(corner3).times(1d/3d);
 
-		double normalFactor = 1d / GraphicalConstants.PLANET_CONSTRUCTION_SIDE_NORMAL_QUOTIENT;
+		//double normalFactor = 1d / GraphicalConstants.PLANET_CONSTRUCTION_SIDE_NORMAL_QUOTIENT;
 
-		/*
-		Vector3[] midToCorner = new Vector3[3];
-		midToCorner[0] = corner1.minus(mid).plus(normal.times(normalFactor)).normalize();
-		midToCorner[1] = corner2.minus(mid).plus(normal.times(normalFactor)).normalize();
-		midToCorner[2] = corner3.minus(mid).plus(normal.times(normalFactor)).normalize();
-		*/
 		Vector3[] midToSide = new Vector3[3];
 		midToSide[0] = corner1.plus(corner2).minus(mid).normalize();
 		midToSide[1] = corner2.plus(corner3).minus(mid).normalize();
@@ -131,13 +128,6 @@ public class PlanetGenerator {
 				vectorList.add(upper[last]);
 				vectorList.add(lower[last]);
 
-				// side mesh normals
-				/*
-				normalList.add(midToCorner[first]);
-				normalList.add(midToCorner[first]);
-				normalList.add(midToCorner[last]);
-				normalList.add(midToCorner[last]);
-				*/
 				normalList.add(midToSide[i]);
 				normalList.add(midToSide[i]);
 				normalList.add(midToSide[i]);
@@ -173,7 +163,65 @@ public class PlanetGenerator {
 				(float) (0.5d + 0.25d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
 				(float) (0.5d + 0.125d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT)
 		);
+
 		return tileMesh;
+	}
+
+	// ###################################################################################
+	// ################################ Water ############################################
+	// ###################################################################################
+
+	private static Mesh createWater(Vector3 corner1, Vector3 corner2, Vector3 corner3, double height) {
+		double f = getHeightFactor(height);
+
+		Vector3[] upper = new Vector3[3];
+
+		upper[0] = corner1.times(f);
+		upper[1] = corner2.times(f);
+		upper[2] = corner3.times(f);
+
+		Vector3 normal = corner1.plus(corner2).plus(corner3).normalize();
+
+		// ------------------------------------- vertices set up (top triangle)
+		List<Vector3> vectorList = new ArrayList<>(15);
+		vectorList.add(upper[0]);
+		vectorList.add(upper[1]);
+		vectorList.add(upper[2]);
+
+		// ------------------------------------- indices set up (top triangle)
+		List<Integer> indicesList = new ArrayList<>(15);
+		indicesList.add(0);
+		indicesList.add(1);
+		indicesList.add(2);
+
+		// ------------------------------------- normals set up (top triangle)
+		List<Vector3> normalList = new ArrayList<>(15);
+		normalList.add(normal);
+		normalList.add(normal);
+		normalList.add(normal);
+
+		// ------------------------------------- vertices
+		float[] vertices = VectorConverter.Vector3ListToFloatArray(vectorList);
+
+		// ------------------------------------- indices
+		int[] indices = IntegerConverter.IntegerListToIntArray(indicesList);
+
+		// ------------------------------------- normals
+		float[] normals = VectorConverter.Vector3ListToFloatArray(normalList);
+
+		// ------------------------------------- texture coordinates
+		float[] textureCoordniates = new float[vertices.length]; // no texture support for planets so far
+
+		Mesh waterMesh = new Mesh(vertices, indices, normals, textureCoordniates);
+		waterMesh.setColor(
+				(float) (0.25d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
+				(float) (0.5d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
+				(float) (0.75d + 0.25d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
+				GraphicalConstants.WATER_ALPHA
+		);
+		waterMesh.setMaterial(waterMaterial);
+
+		return waterMesh;
 	}
 
 	// ###################################################################################
@@ -234,15 +282,17 @@ public class PlanetGenerator {
 
 			face.setQuarterFaces(subFaces);
 
-			double height = 0d;
+			double maxHeight = 0d;
+			double sumHeight = 0d;
 			for (int i=0; i<4; i++) {
 				if (subFaces[i] != null) {
-					if (subFaces[i].getHeight() > height) {
-						height = subFaces[i].getHeight();
+					if (subFaces[i].getHeight() > maxHeight) {
+						maxHeight = subFaces[i].getHeight();
 					}
+					sumHeight += subFaces[i].getHeight();
 				}
 			}
-			face.setHeight(height);
+			face.setHeight(maxHeight/4d + sumHeight*3d/16d);
 
 		} else {
 			face.setHeight(planet.getFace(facePos).getTile(tileX, tileY).getHeight());
@@ -251,6 +301,11 @@ public class PlanetGenerator {
 
 		Mesh faceMesh = createTile(corner1, corner2, corner3, face.getHeight(), planet.getFace(facePos).getTile(tileX, tileY), (newSize == 0));
 		face.setMesh(faceMesh);
+
+		if (face.getHeight() < TopologyConstants.PLANET_OZEAN_HEIGHT) {
+			Mesh waterMesh = createWater(corner1, corner2, corner3, TopologyConstants.PLANET_OZEAN_HEIGHT);
+			face.setWaterMesh(waterMesh);
+		}
 
 		return face;
 	}
@@ -261,6 +316,9 @@ public class PlanetGenerator {
 
 	public static FacePart[] createPlanet(Planet thePlanet) {
 		planet = thePlanet;
+		waterMaterial = new Material();
+		waterMaterial.setReflectanceStrength(new RGBA(1,1,1,1));
+		waterMaterial.setSpecularPower(4);
 		FacePart[] faces = new FacePart[20];
 
 		for (int y=0; y<2; y++) { // upper lower ring

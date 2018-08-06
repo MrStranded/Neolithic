@@ -36,13 +36,21 @@ public class PlanetObject extends MoveableObject {
 		faceParts = PlanetGenerator.createPlanet(planet);
 	}
 
-	public void render(ShaderProgram shaderProgram, Matrix4 viewMatrix, boolean putDataIntoShader) {
+	public void render(ShaderProgram shaderProgram, Matrix4 viewMatrix, boolean putDataIntoShader, boolean drawWater) {
 		Matrix4 viewWorldMatrix = viewMatrix.times(getWorldMatrix());
 
 		if (faceParts != null) {
 			for (int i=0; i<20; i++) {
 				if (faceParts[i] != null) {
-					faceParts[i].render(shaderProgram, viewWorldMatrix, depth, putDataIntoShader);
+					faceParts[i].render(shaderProgram, viewWorldMatrix, depth, putDataIntoShader, false);
+				}
+			}
+
+			if (drawWater) {
+				for (int i=0; i<20; i++) {
+					if (faceParts[i] != null) {
+						faceParts[i].render(shaderProgram, viewWorldMatrix, depth, putDataIntoShader, true);
+					}
 				}
 			}
 		}

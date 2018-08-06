@@ -11,6 +11,7 @@ public class FacePart {
 	private static final Vector3 cameraDirection = new Vector3(0,0,1);
 	
 	private Mesh mesh;
+	private Mesh waterMesh;
 	private Vector3 normal;
 	private FacePart[] quarterFaces;
 	private double height;
@@ -31,21 +32,34 @@ public class FacePart {
 	// ################################ Rendering ########################################
 	// ###################################################################################
 
-	private void renderSelf(ShaderProgram shaderProgram, boolean putDataIntoShader) {
-		if (putDataIntoShader) {
-			shaderProgram.setUniform("color", mesh.getColor());
-			if (mesh.getMaterial() != null) {
-				shaderProgram.setUniform("material", mesh.getMaterial());
+	private void renderSelf(ShaderProgram shaderProgram, boolean putDataIntoShader, boolean drawWater) {
+		if (drawWater) {
+			if (waterMesh != null) {
+				if (putDataIntoShader) {
+					shaderProgram.setUniform("color", waterMesh.getColor());
+					if (waterMesh.getMaterial() != null) {
+						shaderProgram.setUniform("material", waterMesh.getMaterial());
+					}
+				}
+				waterMesh.render(true);
 			}
-		}
 
-		mesh.render(true);
+		} else {
+			if (putDataIntoShader) {
+				shaderProgram.setUniform("color", mesh.getColor());
+				if (mesh.getMaterial() != null) {
+					shaderProgram.setUniform("material", mesh.getMaterial());
+				}
+			}
+			mesh.render(true);
+
+		}
 	}
 	
-	public void render(ShaderProgram shaderProgram, Matrix4 viewWorldMatrix, int depth, boolean putDataIntoShader) {
+	public void render(ShaderProgram shaderProgram, Matrix4 viewWorldMatrix, int depth, boolean putDataIntoShader, boolean drawWater) {
 		// performance!!!
 		if (quarterFaces == null) {
-			renderSelf(shaderProgram, putDataIntoShader);
+			renderSelf(shaderProgram, putDataIntoShader,drawWater);
 			return;
 		}
 
@@ -58,7 +72,7 @@ public class FacePart {
 		}
 
 		// effect extremification and normalization
-		factor = factor * factor / viewVector.lengthSquared();
+		factor = factor /** factor*/ / viewVector.lengthSquared();
 		
 		// distance detail falloff
 		double distanceQuotient = distanceVector.lengthSquared();
@@ -76,11 +90,11 @@ public class FacePart {
 		if ((detailLevel >= this.depth) && (quarterFaces != null)) {
 			for (FacePart facePart : quarterFaces) {
 				if (facePart != null) {
-					facePart.render(shaderProgram, viewWorldMatrix, depth, putDataIntoShader);
+					facePart.render(shaderProgram, viewWorldMatrix, depth, putDataIntoShader, drawWater);
 				}
 			}
 		} else {
-			renderSelf(shaderProgram, putDataIntoShader);
+			renderSelf(shaderProgram, putDataIntoShader, drawWater);
 		}
 	}
 
@@ -103,6 +117,13 @@ public class FacePart {
 	}
 	public void setHeight(double height) {
 		this.height = height;
+	}
+
+	public Mesh getWaterMesh() {
+		return waterMesh;
+	}
+	public void setWaterMesh(Mesh waterMesh) {
+		this.waterMesh = waterMesh;
 	}
 
 	public Mesh getMesh() {
