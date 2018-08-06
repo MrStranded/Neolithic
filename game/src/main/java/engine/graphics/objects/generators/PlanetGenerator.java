@@ -98,18 +98,21 @@ public class PlanetGenerator {
 		normalList.add(normal);
 
 		// ------------------------------------- neighbour retrieval and side mesh build up
-		Tile[] neighbours = Neighbour.getNeighbours(tile);
+		Tile[] neighbours = null;
+		if (smallest) {
+			neighbours = Neighbour.getNeighbours(tile);
+		}
 
 		int index = 3;
 		Vector3[] lower = new Vector3[3];
 
 		for (int i=0; i<3; i++) {
-			double otherHeight = neighbours[i].getHeight();
-			if (!smallest) {
-				otherHeight = 0;
+			double otherHeight = 0;
+			if (smallest) {
+				otherHeight = neighbours[i].getHeight();
 			}
 
-			if (otherHeight < tile.getHeight()) {
+			if (otherHeight < height) {
 				double lowerFactor = getHeightFactor(otherHeight);
 
 				lower[0] = corner1.times(lowerFactor);
