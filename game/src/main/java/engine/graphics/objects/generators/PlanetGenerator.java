@@ -68,10 +68,16 @@ public class PlanetGenerator {
 
 		double normalFactor = 1d / GraphicalConstants.PLANET_CONSTRUCTION_SIDE_NORMAL_QUOTIENT;
 
+		/*
 		Vector3[] midToCorner = new Vector3[3];
 		midToCorner[0] = corner1.minus(mid).plus(normal.times(normalFactor)).normalize();
 		midToCorner[1] = corner2.minus(mid).plus(normal.times(normalFactor)).normalize();
 		midToCorner[2] = corner3.minus(mid).plus(normal.times(normalFactor)).normalize();
+		*/
+		Vector3[] midToSide = new Vector3[3];
+		midToSide[0] = corner1.plus(corner2).minus(mid).normalize();
+		midToSide[1] = corner2.plus(corner3).minus(mid).normalize();
+		midToSide[2] = corner3.plus(corner1).minus(mid).normalize();
 
 		// ------------------------------------- vertices set up (top triangle)
 		List<Vector3> vectorList = new ArrayList<>(15);
@@ -123,10 +129,16 @@ public class PlanetGenerator {
 				vectorList.add(lower[last]);
 
 				// side mesh normals
+				/*
 				normalList.add(midToCorner[first]);
 				normalList.add(midToCorner[first]);
 				normalList.add(midToCorner[last]);
 				normalList.add(midToCorner[last]);
+				*/
+				normalList.add(midToSide[i]);
+				normalList.add(midToSide[i]);
+				normalList.add(midToSide[i]);
+				normalList.add(midToSide[i]);
 
 				// side mesh indices
 				indicesList.add(index);

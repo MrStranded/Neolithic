@@ -212,22 +212,22 @@ void main() {
         float shadowFactor = calculateShadow(lightPosition);
 
         if (shadowFactor > 0.0) {
-            for (int i=0; i<MAX_POINT_LIGHTS; i++) {
-                if (pointLight[i].intensity > 0) {
-                    pointLightColor += calculatePointLight(pointLight[i], outPosition, outNormal);
-                }
-            }
-
-            for (int i=0; i<MAX_SPOT_LIGHTS; i++) {
-                if (spotLight[i].intensity > 0) {
-                    spotLightColor += calculateSpotLight(spotLight[i], outPosition, outNormal);
-                }
-            }
-
             directionalLightColor = calculateDirectionalLight(directionalLight, outNormal);
         }
 
-        fragmentColor = color * (ambientC * ambientLight + shadowFactor * (pointLightColor + spotLightColor + directionalLightColor));
+        for (int i=0; i<MAX_POINT_LIGHTS; i++) {
+            if (pointLight[i].intensity > 0) {
+                pointLightColor += calculatePointLight(pointLight[i], outPosition, outNormal);
+            }
+        }
+
+        for (int i=0; i<MAX_SPOT_LIGHTS; i++) {
+            if (spotLight[i].intensity > 0) {
+                spotLightColor += calculateSpotLight(spotLight[i], outPosition, outNormal);
+            }
+        }
+
+        fragmentColor = color * (ambientC * ambientLight + pointLightColor + spotLightColor + shadowFactor * directionalLightColor);
     } else {
         fragmentColor = color * ambientC;
     }
