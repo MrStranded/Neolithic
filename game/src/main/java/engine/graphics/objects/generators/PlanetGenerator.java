@@ -110,10 +110,10 @@ public class PlanetGenerator {
 				lower[1] = corner2.times(lowerFactor);
 				lower[2] = corner3.times(lowerFactor);
 
-				int first = i-1;
-				int last = i;
-				if (first < 0) {
-					first += 3;
+				int first = i;
+				int last = i+1;
+				if (last >= 3) {
+					last -= 3;
 				}
 
 				// side mesh vertices
@@ -136,7 +136,7 @@ public class PlanetGenerator {
 				indicesList.add(index + 3);
 				indicesList.add(index + 2);
 
-				index += 6;
+				index += 4;
 			}
 		}
 
