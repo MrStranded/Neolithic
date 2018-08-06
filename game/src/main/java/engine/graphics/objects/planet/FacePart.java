@@ -23,6 +23,8 @@ public class FacePart {
 		this.corner1 = corner1;
 		this.corner2 = corner2;
 		this.corner3 = corner3;
+
+		normal = corner1.plus(corner2).plus(corner3).normalize();
 	}
 
 	// ###################################################################################
