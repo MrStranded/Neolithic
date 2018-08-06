@@ -30,7 +30,7 @@ public class Scene {
 		Texture trollFace = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png");
 		Texture cubeTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/space_cube2.png");
 		Texture grasTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
-		Texture icoTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/ico_wireframe.png");
+		Texture moonTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/moon.png");
 
 		objects = new GraphicalObject[4];
 		pointLights = new PointLight[3];
@@ -54,21 +54,21 @@ public class Scene {
 
 		// moon
 		objects[3] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[3].getMesh().getMaterial().setTexture(icoTexture);
+		objects[3].getMesh().getMaterial().setTexture(moonTexture);
 		objects[3].scale(0.5, 0.5, 0.5);
 		objects[3].setPosition(0,0,50);
 		objects[3].setRotation(0,0,Math.PI/8);
 
 		// sun lights
-		pointLights[1] = new PointLight(0.5,0,0);
+		pointLights[1] = new PointLight(0.25,0,0);
 		pointLights[1].setAttenuation(Attenuation.CONSTANT());
 		pointLights[1].setPosition(0,0,sunDistance);
 
-		directionalLight = new DirectionalLight(0.25,0.75,0.75);
+		directionalLight = new DirectionalLight(0.5,0.5,0.5);
 		directionalLight.setDirection(new Vector3(0,0,-1));
 
-		//ambientLight = new AmbientLight(0.25,0.25,0.25);
-		ambientLight = new AmbientLight(0.75,0.75,0.75);
+		ambientLight = new AmbientLight(0.5,0.5,0.5);
+		//ambientLight = new AmbientLight(0.75,0.75,0.75);
 
 		try {
 			shadowMap = new ShadowMap();
