@@ -13,7 +13,7 @@ public class TopologyGenerator {
 			Tile tile = GeographicCoordinates.getTile(planet, i*2, i);
 			tile.setHeight(255);
 
-			System.out.println("real: "+i*2d+" tile: "+GeographicCoordinates.getLongitude(tile));
+			System.out.println("real: "+i+" tile: "+GeographicCoordinates.getLatitude(tile));
 		}
 		//liftTile(planet.getFace(0,0).getTile(0,0),255);
 		/*

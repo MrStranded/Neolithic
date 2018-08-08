@@ -58,9 +58,24 @@ public class GeographicCoordinates {
 	public static double getLongitude(Tile tile) {
 		FacePart facePart = tile.getTileMesh();
 
-		double yaw = -2d * Math.atan2(facePart.getNormal().getY(), facePart.getNormal().getX());
+		double x = facePart.getNormal().getX();
+		double z = facePart.getNormal().getZ();
+
+		double yaw = Math.atan2(z, x);
 
 		return Math.toDegrees(yaw);
+	}
+
+	public static double getLatitude(Tile tile) {
+		FacePart facePart = tile.getTileMesh();
+
+		double x = facePart.getNormal().getX();
+		double y = facePart.getNormal().getY();
+		double z = facePart.getNormal().getZ();
+
+		double pitch = -Math.atan2(y, Math.sqrt(x*x + z*z));
+
+		return Math.toDegrees(pitch);
 	}
 
 }
