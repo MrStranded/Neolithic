@@ -1,5 +1,6 @@
 package engine.graphics.objects.planet;
 
+import engine.data.Tile;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
@@ -15,6 +16,8 @@ public class FacePart {
 	private Vector3 normal;
 	private FacePart[] quarterFaces;
 	private double height;
+
+	private Tile tile;
 
 	private Vector3 corner1, corner2, corner3;
 
@@ -101,6 +104,13 @@ public class FacePart {
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
+
+	public Tile getTile() {
+		return tile;
+	}
+	public void setTile(Tile tile) {
+		this.tile = tile;
+	}
 
 	public Vector3 getCorner1() {
 		return corner1;

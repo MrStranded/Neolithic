@@ -161,7 +161,7 @@ public class PlanetGenerator {
 		tileMesh.setColor(
 				(float) (0.5d + 0.5d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
 				(float) (0.5d + 0.25d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
-				(float) (0.5d + 0.125d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT)
+				(float) tile.getX() / (float) tile.getFace().getSize()//(float) (0.5d + 0.125d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT)
 		);
 
 		return tileMesh;
@@ -299,8 +299,10 @@ public class PlanetGenerator {
 
 		}
 
-		Mesh faceMesh = createTile(corner1, corner2, corner3, face.getHeight(), planet.getFace(facePos).getTile(tileX, tileY), (newSize == 0));
+		Tile tile = planet.getFace(facePos).getTile(tileX, tileY);
+		Mesh faceMesh = createTile(corner1, corner2, corner3, face.getHeight(), tile, (newSize == 0));
 		face.setMesh(faceMesh);
+		face.setTile(tile);
 
 		if (face.getHeight() < TopologyConstants.PLANET_OZEAN_HEIGHT) {
 			Mesh waterMesh = createWater(corner1, corner2, corner3, TopologyConstants.PLANET_OZEAN_HEIGHT);

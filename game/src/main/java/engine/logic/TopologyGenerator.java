@@ -9,8 +9,14 @@ public class TopologyGenerator {
 	public static void formTopology(Planet planet) {
 		int size = planet.getSize();
 
+		for (int i=-90; i<=90; i+=1) {
+			long time = System.nanoTime();
+			Tile tile = GeographicCoordinates.getTile(planet, i*2, i);
+			System.out.println("geo search took: " + (System.nanoTime()-time)/1000000d + " ms");
+			tile.setHeight(255);
+		}
 		//liftTile(planet.getFace(0,0).getTile(0,0),255);
-		///*
+		/*
 		for (int i=0; i<100; i++) {
 			int faceX = (int) (5d * Math.random());
 			int faceY = (int) (4d * Math.random());
@@ -24,7 +30,7 @@ public class TopologyGenerator {
 
 			liftTile(tile, height);
 		}
-		//*/
+		*/
 	}
 
 	private static void liftTile(Tile tile, int height) {

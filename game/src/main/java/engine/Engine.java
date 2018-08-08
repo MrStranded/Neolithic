@@ -34,6 +34,7 @@ public class Engine {
 		hud = new BaseGUI();
 
 		gaia = new Planet(32);
+		gaia.generatePlanetMesh();
 		TopologyGenerator.formTopology(gaia);
 		gaia.generatePlanetMesh();
 	}

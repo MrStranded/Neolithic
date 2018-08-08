@@ -1,0 +1,19 @@
+WorldGen: genContinental {
+	String: name = "Continental";
+	Int: waterLevel = 50;
+	
+	Formation: formMountain {
+		Script: place(Tile: tile) {
+			liftTiles(tile, 255, -10, -5, 5);
+		}
+	}
+
+	Script: start {
+		setWaterLevel(waterLevel);
+
+		for (Int: i = 0; i<20; i++) {
+			Formation: f = create(formMountain);
+			f.place(randomTile());
+		}
+	}
+}
