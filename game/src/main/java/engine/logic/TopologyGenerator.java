@@ -9,11 +9,11 @@ public class TopologyGenerator {
 	public static void formTopology(Planet planet) {
 		int size = planet.getSize();
 
-		for (int i=-90; i<=90; i+=1) {
-			long time = System.nanoTime();
+		for (double i=-90d; i<=90d; i+=1d) {
 			Tile tile = GeographicCoordinates.getTile(planet, i*2, i);
-			//System.out.println("geo search took: " + (System.nanoTime()-time)/1000000d + " ms");
 			tile.setHeight(255);
+
+			System.out.println("real: "+i*2d+" tile: "+GeographicCoordinates.getLongitude(tile));
 		}
 		//liftTile(planet.getFace(0,0).getTile(0,0),255);
 		/*

@@ -15,8 +15,8 @@
       <file leaf-file-name="PlanetGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="164" column="16" lean-forward="true" selection-start-line="164" selection-start-column="16" selection-end-line="164" selection-end-column="16" />
+            <state relative-caret-position="424">
+              <caret line="291" column="34" selection-start-line="291" selection-start-column="34" selection-end-line="291" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -24,7 +24,7 @@
       <file leaf-file-name="PlanetObject.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/PlanetObject.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
+            <state relative-caret-position="255">
               <caret line="38" column="10" selection-start-line="38" selection-start-column="10" selection-end-line="38" selection-end-column="10" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -40,8 +40,8 @@
       <file leaf-file-name="FacePart.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/FacePart.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="13">
-              <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
+            <state relative-caret-position="28">
+              <caret line="103" column="90" lean-forward="true" selection-start-line="103" selection-start-column="90" selection-end-line="103" selection-end-column="90" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -70,11 +70,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Engine.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Engine.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/Engine.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="478">
-              <caret line="47" column="50" selection-start-line="47" selection-start-column="50" selection-end-line="47" selection-end-column="50" />
+            <state relative-caret-position="463">
+              <caret line="46" column="8" selection-start-line="46" selection-start-column="8" selection-end-line="46" selection-end-column="8" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -98,11 +98,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TopologyGenerator.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="TopologyGenerator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/logic/TopologyGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="208">
-              <caret line="14" column="14" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
+            <state relative-caret-position="223">
+              <caret line="15" column="44" selection-start-line="15" selection-start-column="44" selection-end-line="15" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -113,8 +113,8 @@
       <file leaf-file-name="GeographicCoordinates.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/logic/GeographicCoordinates.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="19" column="102" selection-start-line="19" selection-start-column="102" selection-end-line="19" selection-end-column="102" />
+            <state relative-caret-position="373">
+              <caret line="60" column="22" selection-start-line="60" selection-start-column="22" selection-end-line="60" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -125,8 +125,8 @@
       <file leaf-file-name="Tile.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/Tile.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
+            <state relative-caret-position="300">
+              <caret line="20" column="90" selection-start-line="20" selection-start-column="90" selection-end-line="20" selection-end-column="90" />
             </state>
           </provider>
         </entry>
@@ -243,7 +243,6 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseGUI.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/textures/Texture.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/movement/MoveableCamera.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/data/Tile.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/Face.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/utils/converters/VectorConverter.java" />
         <option value="$PROJECT_DIR$/src/test/java/logic/NeighbourTest.java" />
@@ -256,12 +255,13 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/Scene.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/movement/MoveableObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/FacePart.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/logic/GeographicCoordinates.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/PlanetObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/Planet.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/logic/TopologyGenerator.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/Engine.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/data/Tile.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/logic/GeographicCoordinates.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/logic/TopologyGenerator.java" />
       </list>
     </option>
   </component>
@@ -687,7 +687,7 @@
       <workItem from="1530892893991" duration="43929000" />
       <workItem from="1533201063455" duration="9372000" />
       <workItem from="1533232758072" duration="27942000" />
-      <workItem from="1533659017121" duration="6394000" />
+      <workItem from="1533659017121" duration="7842000" />
     </task>
     <servers />
   </component>
@@ -724,7 +724,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="362840000" />
+    <option name="totallyTimeSpent" value="364288000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -1087,27 +1087,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/Tile.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/Engine.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/FacePart.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="13">
-          <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/logic/GeographicCoordinates.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="19" column="102" selection-start-line="19" selection-start-column="102" selection-end-line="19" selection-end-column="102" />
+        <state relative-caret-position="463">
+          <caret line="46" column="8" selection-start-line="46" selection-start-column="8" selection-end-line="46" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1128,9 +1111,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/FacePart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="28">
+          <caret line="103" column="90" lean-forward="true" selection-start-line="103" selection-start-column="90" selection-end-line="103" selection-end-column="90" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/Tile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="90" selection-start-line="20" selection-start-column="90" selection-end-line="20" selection-end-column="90" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/PlanetObject.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
+        <state relative-caret-position="255">
           <caret line="38" column="10" selection-start-line="38" selection-start-column="10" selection-end-line="38" selection-end-column="10" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1144,25 +1144,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="164" column="16" lean-forward="true" selection-start-line="164" selection-start-column="16" selection-end-line="164" selection-end-column="16" />
+        <state relative-caret-position="424">
+          <caret line="291" column="34" selection-start-line="291" selection-start-column="34" selection-end-line="291" selection-end-column="34" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/logic/TopologyGenerator.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/logic/GeographicCoordinates.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="14" column="14" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
+        <state relative-caret-position="373">
+          <caret line="60" column="22" selection-start-line="60" selection-start-column="22" selection-end-line="60" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/Engine.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/logic/TopologyGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="478">
-          <caret line="47" column="50" selection-start-line="47" selection-start-column="50" selection-end-line="47" selection-end-column="50" />
+        <state relative-caret-position="223">
+          <caret line="15" column="44" selection-start-line="15" selection-start-column="44" selection-end-line="15" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

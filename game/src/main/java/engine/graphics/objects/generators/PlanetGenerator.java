@@ -288,6 +288,9 @@ public class PlanetGenerator {
 		Mesh faceMesh = createTile(corner1, corner2, corner3, face.getHeight(), tile, (newSize == 0));
 		face.setMesh(faceMesh);
 		face.setTile(tile);
+		if (newSize == 0) {
+			tile.setTileMesh(face);
+		}
 
 		return face;
 	}

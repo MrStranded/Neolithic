@@ -55,4 +55,12 @@ public class GeographicCoordinates {
 		return closest.getTile();
 	}
 
+	public static double getLongitude(Tile tile) {
+		FacePart facePart = tile.getTileMesh();
+
+		double yaw = -2d * Math.atan2(facePart.getNormal().getY(), facePart.getNormal().getX());
+
+		return Math.toDegrees(yaw);
+	}
+
 }
