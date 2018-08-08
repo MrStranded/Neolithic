@@ -28,6 +28,10 @@ public class Planet {
 		planetObject = new PlanetObject(this);
 	}
 
+	public void updatePlanetMesh() {
+		planetObject.updateLODMesh();
+	}
+
 	public PlanetObject getPlanetObject() {
 		return planetObject;
 	}

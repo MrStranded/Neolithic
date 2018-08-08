@@ -12,7 +12,7 @@ public class TopologyGenerator {
 		for (int i=-90; i<=90; i+=1) {
 			long time = System.nanoTime();
 			Tile tile = GeographicCoordinates.getTile(planet, i*2, i);
-			System.out.println("geo search took: " + (System.nanoTime()-time)/1000000d + " ms");
+			//System.out.println("geo search took: " + (System.nanoTime()-time)/1000000d + " ms");
 			tile.setHeight(255);
 		}
 		//liftTile(planet.getFace(0,0).getTile(0,0),255);

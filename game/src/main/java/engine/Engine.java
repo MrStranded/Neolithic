@@ -34,9 +34,18 @@ public class Engine {
 		hud = new BaseGUI();
 
 		gaia = new Planet(32);
+
+		long time = System.currentTimeMillis();
 		gaia.generatePlanetMesh();
+		System.out.println("Generating LOD Mesh took: "+(System.currentTimeMillis()-time)+" ms");
+
+		time = System.currentTimeMillis();
 		TopologyGenerator.formTopology(gaia);
-		gaia.generatePlanetMesh();
+		System.out.println("Forming Topology took: "+(System.currentTimeMillis()-time)+" ms");
+
+		time = System.currentTimeMillis();
+		gaia.updatePlanetMesh();
+		System.out.println("Updating LOD Mesh took: "+(System.currentTimeMillis()-time)+" ms");
 	}
 
 	/**

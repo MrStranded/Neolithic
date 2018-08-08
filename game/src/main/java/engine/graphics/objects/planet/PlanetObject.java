@@ -33,7 +33,11 @@ public class PlanetObject extends MoveableObject {
 	}
 
 	private void createLODMesh() {
-		faceParts = PlanetGenerator.createPlanet(planet);
+		faceParts = PlanetGenerator.createPlanet(this);
+	}
+
+	public void updateLODMesh() {
+		PlanetGenerator.updatePlanet(this);
 	}
 
 	public void render(ShaderProgram shaderProgram, Matrix4 viewMatrix, boolean putDataIntoShader, boolean drawWater) {
@@ -59,6 +63,10 @@ public class PlanetObject extends MoveableObject {
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
+
+	public Planet getPlanet() {
+		return planet;
+	}
 
 	public FacePart[] getFaceParts() {
 		return faceParts;

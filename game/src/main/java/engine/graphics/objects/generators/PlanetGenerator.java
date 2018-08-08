@@ -8,6 +8,7 @@ import engine.graphics.objects.models.Material;
 import engine.graphics.objects.planet.CompositeMesh;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.FacePart;
+import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.color.RGBA;
 import engine.logic.Neighbour;
 import engine.math.numericalObjects.Vector3;
@@ -161,7 +162,7 @@ public class PlanetGenerator {
 		tileMesh.setColor(
 				(float) (0.5d + 0.5d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
 				(float) (0.5d + 0.25d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
-				(float) tile.getX() / (float) tile.getFace().getSize()//(float) (0.5d + 0.125d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT)
+				(float) (0.5d + 0.125d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT)
 		);
 
 		return tileMesh;
@@ -281,22 +282,6 @@ public class PlanetGenerator {
 			);
 
 			face.setQuarterFaces(subFaces);
-
-			double maxHeight = 0d;
-			double sumHeight = 0d;
-			for (int i=0; i<4; i++) {
-				if (subFaces[i] != null) {
-					if (subFaces[i].getHeight() > maxHeight) {
-						maxHeight = subFaces[i].getHeight();
-					}
-					sumHeight += subFaces[i].getHeight();
-				}
-			}
-			face.setHeight(maxHeight/4d + sumHeight*3d/16d);
-
-		} else {
-			face.setHeight(planet.getFace(facePos).getTile(tileX, tileY).getHeight());
-
 		}
 
 		Tile tile = planet.getFace(facePos).getTile(tileX, tileY);
@@ -304,20 +289,55 @@ public class PlanetGenerator {
 		face.setMesh(faceMesh);
 		face.setTile(tile);
 
-		if (face.getHeight() < TopologyConstants.PLANET_OZEAN_HEIGHT) {
-			Mesh waterMesh = createWater(corner1, corner2, corner3, TopologyConstants.PLANET_OZEAN_HEIGHT);
-			face.setWaterMesh(waterMesh);
+		return face;
+	}
+
+	private static void updateFace(FacePart facePart) {
+		Tile tile = null;
+		boolean smallest = false;
+
+		if (facePart.getQuarterFaces() != null) {
+			double maxHeight = 0d;
+			double sumHeight = 0d;
+
+			for (FacePart subFace : facePart.getQuarterFaces()) {
+				if (subFace != null) {
+					updateFace(subFace);
+
+					if (subFace.getHeight() > maxHeight) {
+						maxHeight = subFace.getHeight();
+					}
+					sumHeight += subFace.getHeight();
+				}
+			}
+
+			facePart.setHeight(maxHeight/4d + sumHeight*3d/16d);
+
+		} else {
+			tile = facePart.getTile();
+			smallest = true;
+
+			facePart.setHeight(tile.getHeight());
+
 		}
 
-		return face;
+		Mesh faceMesh = createTile(facePart.getCorner1(), facePart.getCorner2(), facePart.getCorner3(), facePart.getHeight(), tile, smallest);
+		facePart.setMesh(faceMesh);
+
+		if (facePart.getHeight() < TopologyConstants.PLANET_OZEAN_HEIGHT) {
+			Mesh waterMesh = createWater(facePart.getCorner1(), facePart.getCorner2(), facePart.getCorner3(), TopologyConstants.PLANET_OZEAN_HEIGHT);
+			facePart.setWaterMesh(waterMesh);
+		} else {
+			facePart.setWaterMesh(null);
+		}
 	}
 
 	// ###################################################################################
 	// ################################ Planet ###########################################
 	// ###################################################################################
 
-	public static FacePart[] createPlanet(Planet thePlanet) {
-		planet = thePlanet;
+	public static FacePart[] createPlanet(PlanetObject planetObject) {
+		planet = planetObject.getPlanet();
 		waterMaterial = new Material();
 		waterMaterial.setReflectanceStrength(new RGBA(1,1,1,1));
 		waterMaterial.setSpecularPower(4);
@@ -347,5 +367,11 @@ public class PlanetGenerator {
 		}
 
 		return faces;
+	}
+
+	public static void updatePlanet(PlanetObject planetObject) {
+		for (FacePart facePart : planetObject.getFaceParts()) {
+			updateFace(facePart);
+		}
 	}
 }
