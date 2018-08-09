@@ -41,6 +41,10 @@ public class Face {
 		return size;
 	}
 
+	public Tile[] getTiles() {
+		return tiles;
+	}
+
 	public Tile getTile(int x, int y) {
 		int i = y*size + x;
 		return tiles[i];

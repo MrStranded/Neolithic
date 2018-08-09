@@ -2,8 +2,10 @@ package engine.graphics.objects.planet;
 
 import engine.data.Planet;
 import engine.graphics.objects.generators.PlanetGenerator;
+import engine.graphics.objects.models.Material;
 import engine.graphics.objects.movement.MoveableObject;
 import engine.graphics.objects.planet.CompositeMesh;
+import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
@@ -14,6 +16,7 @@ public class PlanetObject extends MoveableObject {
 	private Planet planet;
 
 	private FacePart[] faceParts;
+	private PlanetGenerator planetGenerator;
 
 	private int depth = 0;
 
@@ -29,15 +32,21 @@ public class PlanetObject extends MoveableObject {
 
 		faceParts = new FacePart[20];
 
+		Material waterMaterial = new Material();
+		waterMaterial.setReflectanceStrength(new RGBA(1,1,1,1));
+		waterMaterial.setSpecularPower(4);
+
+		planetGenerator = new PlanetGenerator(this, waterMaterial);
+
 		createLODMesh();
 	}
 
 	private void createLODMesh() {
-		faceParts = PlanetGenerator.createPlanet(this);
+		faceParts = planetGenerator.createPlanet();
 	}
 
 	public void updateLODMesh() {
-		PlanetGenerator.updatePlanet(this);
+		planetGenerator.updatePlanet();
 	}
 
 	public void render(ShaderProgram shaderProgram, Matrix4 viewMatrix, boolean putDataIntoShader, boolean drawWater) {

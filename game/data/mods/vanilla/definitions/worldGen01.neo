@@ -1,19 +1,75 @@
 WorldGen: genContinental {
-	String: name = "Continental";
-	Int: waterLevel = 50;
-	
-	Formation: formMountain {
-		Script: place(Tile: tile) {
-			liftTiles(tile, 255, -10, -5, 5);
-		}
-	}
+	name = "Continental";
+	waterLevel = 50;
 
 	Script: start {
+		disableWorldMeshUpdates();
+
 		setWaterLevel(waterLevel);
 
-		for (Int: i = 0; i<20; i++) {
-			Formation: f = create(formMountain);
-			f.place(randomTile());
+		t = randomTile();
+		createFormation(formMountain, t);
+
+		enableWorldMeshUpdates();
+	}
+}
+
+Formation: formMountain {
+	Script: place(Tile: tile) {
+		height = random(100,255);
+		self.lift(tile, height);
+	}
+
+	Script: lift(tile, height) {
+		if (height > 0) {
+			setHeight(tile, height);
+
+			deviation = random(0,10);
+			self.lift(getNeighbour(tile, 0), height-deviation);
+
+			deviation = random(0,10);
+			self.lift(getNeighbour(tile, 1), height-deviation);
+
+			deviation = random(0,10);
+			self.lift(getNeighbour(tile, 2), height-deviation);
 		}
 	}
+}
+
+Process: proEat {
+	Script: condition(actor) {
+		require(getAttribute(actor, attHunger) > 0);
+		require(hasItemType(actor, typeFood)); // any value != 0 is interpreted as true
+	}
+	Script: action(actor) {
+		playSound("munch.mp3");
+
+		food = getItemOfType(actor, typeFood);
+	}
+	Script: result(actor) {
+		provide(attHunger);
+
+		modifiyAttribute(actor, attHunger, -getAttribute(food, attNutrition));
+
+		food.consume();
+	}
+}
+
+Item: itBread {
+	name = "Bread";
+	
+	Script: start {
+		setAttribute(self, attNutrition, 10);
+	}
+
+	Script: consume {
+		destroy(self);
+	}
+}
+
+Attribute: attHunger {
+	name = "Hunger";
+}
+Attribute: attNutrition {
+	name = "Nutrition";
 }

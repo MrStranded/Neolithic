@@ -1,7 +1,9 @@
 package engine.graphics.objects.planet;
 
+import constants.TopologyConstants;
 import engine.data.Tile;
 import engine.graphics.objects.models.Mesh;
+import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
@@ -14,10 +16,12 @@ public class FacePart {
 	private Mesh mesh;
 	private Mesh waterMesh;
 	private Vector3 normal;
-	private FacePart[] quarterFaces;
-	private double height;
 
+	private FacePart[] quarterFaces;
+
+	private double height;
 	private Tile tile;
+	private RGBA color = TopologyConstants.TILE_DEFAULT_COLOR;
 
 	private Vector3 corner1, corner2, corner3;
 
@@ -48,13 +52,15 @@ public class FacePart {
 			}
 
 		} else {
-			if (putDataIntoShader) {
-				shaderProgram.setUniform("color", mesh.getColor());
-				if (mesh.getMaterial() != null) {
-					shaderProgram.setUniform("material", mesh.getMaterial());
+			if (waterMesh == null) {
+				if (putDataIntoShader) {
+					shaderProgram.setUniform("color", mesh.getColor());
+					if (mesh.getMaterial() != null) {
+						shaderProgram.setUniform("material", mesh.getMaterial());
+					}
 				}
+				mesh.render(true);
 			}
-			mesh.render(true);
 
 		}
 	}
@@ -127,6 +133,13 @@ public class FacePart {
 	}
 	public void setHeight(double height) {
 		this.height = height;
+	}
+
+	public RGBA getColor() {
+		return color;
+	}
+	public void setColor(RGBA color) {
+		this.color = color;
 	}
 
 	public Mesh getWaterMesh() {

@@ -21,22 +21,30 @@ import java.util.List;
 public class PlanetGenerator {
 
 	// Icosahedron constants
-	private static final double HEIGHT = 1f;
-	private static final double PHI = 0.5f * (1f + Math.sqrt(5f));
-	private static final double ALPHA = 2f * Math.atan(1f / PHI);
-	private static final double RADIUS = HEIGHT * Math.sin(ALPHA);
-	private static final double Y = HEIGHT * Math.cos(ALPHA); // y position of upper/lower ring
-	private static final double ANGLE = 2f * Math.PI / 5f;
-	private static final double HALFANGLE = ANGLE / 2f;
+	private final double HEIGHT = 1f;
+	private final double PHI = 0.5f * (1f + Math.sqrt(5f));
+	private final double ALPHA = 2f * Math.atan(1f / PHI);
+	private final double RADIUS = HEIGHT * Math.sin(ALPHA);
+	private final double Y = HEIGHT * Math.cos(ALPHA); // y position of upper/lower ring
+	private final double ANGLE = 2f * Math.PI / 5f;
+	private final double HALFANGLE = ANGLE / 2f;
 
-	private static Planet planet;
-	private static Material waterMaterial;
+	private PlanetObject planetObject;
+	private Planet planet;
+	private Material waterMaterial;
+	
+	public PlanetGenerator(PlanetObject planetObject, Material waterMaterial) {
+		this.planetObject = planetObject;
+		planet = planetObject.getPlanet();
+
+		this.waterMaterial = waterMaterial;
+	}
 
 	// ###################################################################################
 	// ################################ Construction Helpers #############################
 	// ###################################################################################
 
-	private static Vector3 getCorner(int x, int y) {
+	private Vector3 getCorner(int x, int y) {
 		switch (y) {
 			case 0: // south pole
 				return new Vector3(0, -HEIGHT,0);
@@ -50,7 +58,7 @@ public class PlanetGenerator {
 		return new Vector3(0,0,0);
 	}
 
-	private static double getHeightFactor(double height) {
+	private double getHeightFactor(double height) {
 		return (TopologyConstants.PLANET_MINIMUM_HEIGHT + height) / TopologyConstants.PLANET_MINIMUM_HEIGHT;
 	}
 
@@ -58,7 +66,7 @@ public class PlanetGenerator {
 	// ################################ Tile #############################################
 	// ###################################################################################
 
-	private static Mesh createTile(Vector3 corner1, Vector3 corner2, Vector3 corner3, double height, Tile tile, boolean smallest) {
+	private Mesh createTile(Vector3 corner1, Vector3 corner2, Vector3 corner3, double height, Tile tile, boolean smallest) {
 		double f = getHeightFactor(height);
 
 		Vector3[] upper = new Vector3[3];
@@ -159,11 +167,11 @@ public class PlanetGenerator {
 		float[] textureCoordniates = new float[vertices.length]; // no texture support for planets so far
 
 		Mesh tileMesh = new Mesh(vertices, indices, normals, textureCoordniates);
-		tileMesh.setColor(
-				(float) (0.5d + 0.5d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
-				(float) (0.5d + 0.25d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
-				(float) (0.5d + 0.125d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT)
-		);
+		if (tile != null) {
+			tileMesh.setColor(tile.getColor());
+		} else {
+			tileMesh.setColor(TopologyConstants.TILE_DEFAULT_COLOR);
+		}
 
 		return tileMesh;
 	}
@@ -172,7 +180,7 @@ public class PlanetGenerator {
 	// ################################ Water ############################################
 	// ###################################################################################
 
-	private static Mesh createWater(Vector3 corner1, Vector3 corner2, Vector3 corner3, double height) {
+	private Mesh createWater(Vector3 corner1, Vector3 corner2, Vector3 corner3, double height) {
 		double f = getHeightFactor(height);
 
 		Vector3[] upper = new Vector3[3];
@@ -229,7 +237,7 @@ public class PlanetGenerator {
 	// ################################ Face #############################################
 	// ###################################################################################
 
-	private static FacePart createFace(Vector3 corner1, Vector3 corner2, Vector3 corner3, int size, int depth, int facePos, int tileX, int tileY) {
+	private FacePart createFace(Vector3 corner1, Vector3 corner2, Vector3 corner3, int size, int depth, int facePos, int tileX, int tileY) {
 		corner1 = corner1.normalize();
 		corner2 = corner2.normalize();
 		corner3 = corner3.normalize();
@@ -295,13 +303,14 @@ public class PlanetGenerator {
 		return face;
 	}
 
-	private static void updateFace(FacePart facePart) {
+	private void updateFace(FacePart facePart) {
 		Tile tile = null;
 		boolean smallest = false;
 
 		if (facePart.getQuarterFaces() != null) {
 			double maxHeight = 0d;
 			double sumHeight = 0d;
+			RGBA sumColor = new RGBA(0,0,0,1);
 
 			for (FacePart subFace : facePart.getQuarterFaces()) {
 				if (subFace != null) {
@@ -311,10 +320,13 @@ public class PlanetGenerator {
 						maxHeight = subFace.getHeight();
 					}
 					sumHeight += subFace.getHeight();
+
+					sumColor.plusInplace(subFace.getColor());
 				}
 			}
 
 			facePart.setHeight(maxHeight/4d + sumHeight*3d/16d);
+			facePart.setColor(sumColor.timesInplace(0.25d));
 
 		} else {
 			tile = facePart.getTile();
@@ -327,8 +339,20 @@ public class PlanetGenerator {
 		Mesh faceMesh = createTile(facePart.getCorner1(), facePart.getCorner2(), facePart.getCorner3(), facePart.getHeight(), tile, smallest);
 		facePart.setMesh(faceMesh);
 
-		if (facePart.getHeight() < TopologyConstants.PLANET_OZEAN_HEIGHT) {
-			Mesh waterMesh = createWater(facePart.getCorner1(), facePart.getCorner2(), facePart.getCorner3(), TopologyConstants.PLANET_OZEAN_HEIGHT);
+		double waterHeight = 0d;
+
+		if (smallest) {
+			if (tile.getHeight() < tile.getWaterHeight()) {
+				waterHeight = tile.getWaterHeight();
+			}
+		} else {
+			if (facePart.getHeight() < TopologyConstants.PLANET_OZEAN_HEIGHT) {
+				waterHeight = TopologyConstants.PLANET_OZEAN_HEIGHT;
+			}
+		}
+
+		if (waterHeight > 0d) {
+			Mesh waterMesh = createWater(facePart.getCorner1(), facePart.getCorner2(), facePart.getCorner3(), waterHeight);
 			facePart.setWaterMesh(waterMesh);
 		} else {
 			facePart.setWaterMesh(null);
@@ -339,11 +363,7 @@ public class PlanetGenerator {
 	// ################################ Planet ###########################################
 	// ###################################################################################
 
-	public static FacePart[] createPlanet(PlanetObject planetObject) {
-		planet = planetObject.getPlanet();
-		waterMaterial = new Material();
-		waterMaterial.setReflectanceStrength(new RGBA(1,1,1,1));
-		waterMaterial.setSpecularPower(4);
+	public FacePart[] createPlanet() {
 		FacePart[] faces = new FacePart[20];
 
 		for (int y=0; y<2; y++) { // upper lower ring
@@ -372,7 +392,7 @@ public class PlanetGenerator {
 		return faces;
 	}
 
-	public static void updatePlanet(PlanetObject planetObject) {
+	public void updatePlanet() {
 		for (FacePart facePart : planetObject.getFaceParts()) {
 			updateFace(facePart);
 		}

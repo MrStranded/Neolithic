@@ -1,11 +1,16 @@
 package engine.data;
 
+import constants.TopologyConstants;
 import engine.graphics.objects.planet.FacePart;
+import engine.graphics.renderer.color.RGBA;
 
 public class Tile {
 
 	private int xPos,yPos;
 	private int height = 0;
+	private int waterHeight = TopologyConstants.PLANET_OZEAN_HEIGHT;
+
+	private RGBA color = TopologyConstants.TILE_DEFAULT_COLOR;
 
 	private Face face;
 	private FacePart tileMesh;
@@ -44,5 +49,19 @@ public class Tile {
 	}
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+	public int getWaterHeight() {
+		return waterHeight;
+	}
+	public void setWaterHeight(int waterHeight) {
+		this.waterHeight = waterHeight;
+	}
+
+	public RGBA getColor() {
+		return color;
+	}
+	public void setColor(RGBA color) {
+		this.color = color;
 	}
 }

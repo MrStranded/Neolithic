@@ -47,6 +47,10 @@ public class Planet {
 		return faces[i];
 	}
 
+	public Face[] getFaces() {
+		return faces;
+	}
+
 	public Face getFace(int facePosition) {
 		return faces[facePosition];
 	}

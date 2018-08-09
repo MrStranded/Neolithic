@@ -6,7 +6,7 @@ import engine.graphics.objects.planet.FacePart;
 import engine.graphics.objects.planet.PlanetObject;
 import engine.math.numericalObjects.Vector3;
 
-public class GeographicCoordinates {
+public interface GeographicCoordinates {
 
 	/**
 	 * Calculates the corresponding Tile to geographic coordinates given as longitude and latitude in degrees.
@@ -15,7 +15,7 @@ public class GeographicCoordinates {
 	 * @param latitude (y) in degrees
 	 * @return Tile with given coordinates
 	 */
-	public static Tile getTile(Planet planet, double longitude, double latitude) {
+	static Tile getTile(Planet planet, double longitude, double latitude) {
 		double yaw = Math.toRadians(longitude);
 		double pitch = -Math.toRadians(latitude); // minus because i want positive pitches to go north
 
@@ -33,7 +33,7 @@ public class GeographicCoordinates {
 		for (FacePart facePart : planetObject.getFaceParts()) {
 			double value = search.dot(facePart.getNormal());
 
-			if ((closest == null) || (value > closestValue)) {
+			if (value > closestValue) {
 				closest = facePart;
 				closestValue = value;
 			}
@@ -55,7 +55,7 @@ public class GeographicCoordinates {
 		return closest.getTile();
 	}
 
-	public static double getLongitude(Tile tile) {
+	static double getLongitude(Tile tile) {
 		FacePart facePart = tile.getTileMesh();
 
 		double x = facePart.getNormal().getX();
@@ -66,7 +66,7 @@ public class GeographicCoordinates {
 		return Math.toDegrees(yaw);
 	}
 
-	public static double getLatitude(Tile tile) {
+	static double getLatitude(Tile tile) {
 		FacePart facePart = tile.getTileMesh();
 
 		double x = facePart.getNormal().getX();
