@@ -66,24 +66,24 @@ public class PlanetGenerator {
 	// ################################ Tile #############################################
 	// ###################################################################################
 
-	private Mesh createTile(Vector3 corner1, Vector3 corner2, Vector3 corner3, double height, Tile tile, boolean smallest) {
-		double f = getHeightFactor(height);
+	private Mesh createTile(FacePart facePart, Tile tile, boolean smallest) {
+		double f = getHeightFactor(facePart.getHeight());
 
 		Vector3[] upper = new Vector3[3];
 
-		upper[0] = corner1.times(f);
-		upper[1] = corner2.times(f);
-		upper[2] = corner3.times(f);
+		upper[0] = facePart.getCorner1().times(f);
+		upper[1] = facePart.getCorner2().times(f);
+		upper[2] = facePart.getCorner3().times(f);
 
-		Vector3 normal = corner1.plus(corner2).plus(corner3).normalize();
-		Vector3 mid = corner1.plus(corner2).plus(corner3).times(1d/3d);
+		Vector3 normal = facePart.getCorner1().plus(facePart.getCorner2()).plus(facePart.getCorner3()).normalize();
+		Vector3 mid = facePart.getCorner1().plus(facePart.getCorner2()).plus(facePart.getCorner3()).times(1d/3d);
 
 		//double normalFactor = 1d / GraphicalConstants.PLANET_CONSTRUCTION_SIDE_NORMAL_QUOTIENT;
 
 		Vector3[] midToSide = new Vector3[3];
-		midToSide[0] = corner1.plus(corner2).minus(mid).normalize();
-		midToSide[1] = corner2.plus(corner3).minus(mid).normalize();
-		midToSide[2] = corner3.plus(corner1).minus(mid).normalize();
+		midToSide[0] = facePart.getCorner1().plus(facePart.getCorner2()).minus(mid).normalize();
+		midToSide[1] = facePart.getCorner2().plus(facePart.getCorner3()).minus(mid).normalize();
+		midToSide[2] = facePart.getCorner3().plus(facePart.getCorner1()).minus(mid).normalize();
 
 		// ------------------------------------- vertices set up (top triangle)
 		List<Vector3> vectorList = new ArrayList<>(15);
@@ -118,12 +118,12 @@ public class PlanetGenerator {
 				otherHeight = neighbours[i].getHeight();
 			}
 
-			if (otherHeight < height) {
+			if (otherHeight < facePart.getHeight()) {
 				double lowerFactor = getHeightFactor(otherHeight);
 
-				lower[0] = corner1.times(lowerFactor);
-				lower[1] = corner2.times(lowerFactor);
-				lower[2] = corner3.times(lowerFactor);
+				lower[0] = facePart.getCorner1().times(lowerFactor);
+				lower[1] = facePart.getCorner2().times(lowerFactor);
+				lower[2] = facePart.getCorner3().times(lowerFactor);
 
 				int first = i;
 				int last = i+1;
@@ -167,8 +167,8 @@ public class PlanetGenerator {
 		float[] textureCoordniates = new float[vertices.length]; // no texture support for planets so far
 
 		Mesh tileMesh = new Mesh(vertices, indices, normals, textureCoordniates);
-		if (tile != null) {
-			tileMesh.setColor(tile.getColor());
+		if (facePart.getColor() != null) {
+			tileMesh.setColor(facePart.getColor());
 		} else {
 			tileMesh.setColor(TopologyConstants.TILE_DEFAULT_COLOR);
 		}
@@ -242,8 +242,8 @@ public class PlanetGenerator {
 		corner2 = corner2.normalize();
 		corner3 = corner3.normalize();
 
-		FacePart face = new FacePart(corner1, corner2, corner3);
-		face.setDepth(depth);
+		FacePart facePart = new FacePart(corner1, corner2, corner3);
+		facePart.setDepth(depth);
 
 		int newSize = size / 2;
 
@@ -289,18 +289,18 @@ public class PlanetGenerator {
 					facePos, planet.getSize() - newSize - tileX, planet.getSize() - newSize - tileY
 			);
 
-			face.setQuarterFaces(subFaces);
+			facePart.setQuarterFaces(subFaces);
 		}
 
 		Tile tile = planet.getFace(facePos).getTile(tileX, tileY);
-		Mesh faceMesh = createTile(corner1, corner2, corner3, face.getHeight(), tile, (newSize == 0));
-		face.setMesh(faceMesh);
-		face.setTile(tile);
+		Mesh faceMesh = createTile(facePart, tile, (newSize == 0));
+		facePart.setMesh(faceMesh);
+		facePart.setTile(tile);
 		if (newSize == 0) {
-			tile.setTileMesh(face);
+			tile.setTileMesh(facePart);
 		}
 
-		return face;
+		return facePart;
 	}
 
 	private void updateFace(FacePart facePart) {
@@ -321,22 +321,23 @@ public class PlanetGenerator {
 					}
 					sumHeight += subFace.getHeight();
 
-					sumColor.plusInplace(subFace.getColor());
+					sumColor = sumColor.plus(subFace.getColor());
 				}
 			}
 
 			facePart.setHeight(maxHeight/4d + sumHeight*3d/16d);
-			facePart.setColor(sumColor.timesInplace(0.25d));
+			facePart.setColor(sumColor.times(0.25d));
 
 		} else {
 			tile = facePart.getTile();
 			smallest = true;
 
 			facePart.setHeight(tile.getHeight());
+			facePart.setColor(tile.getColor());
 
 		}
 
-		Mesh faceMesh = createTile(facePart.getCorner1(), facePart.getCorner2(), facePart.getCorner3(), facePart.getHeight(), tile, smallest);
+		Mesh faceMesh = createTile(facePart, tile, smallest);
 		facePart.setMesh(faceMesh);
 
 		double waterHeight = 0d;

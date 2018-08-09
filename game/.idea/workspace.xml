@@ -15,8 +15,8 @@
       <file leaf-file-name="PlanetGenerator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
-              <caret line="328" column="59" selection-start-line="328" selection-start-column="59" selection-end-line="328" selection-end-column="59" />
+            <state relative-caret-position="319">
+              <caret line="328" column="53" lean-forward="true" selection-start-line="328" selection-start-column="53" selection-end-line="328" selection-end-column="53" />
             </state>
           </provider>
         </entry>
@@ -740,7 +740,7 @@
       <workItem from="1533232758072" duration="27942000" />
       <workItem from="1533659017121" duration="8999000" />
       <workItem from="1533806256248" duration="86000" />
-      <workItem from="1533806405523" duration="4829000" />
+      <workItem from="1533806405523" duration="5259000" />
     </task>
     <servers />
   </component>
@@ -777,7 +777,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="370360000" />
+    <option name="totallyTimeSpent" value="370790000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -1254,8 +1254,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="328" column="59" selection-start-line="328" selection-start-column="59" selection-end-line="328" selection-end-column="59" />
+        <state relative-caret-position="319">
+          <caret line="328" column="53" lean-forward="true" selection-start-line="328" selection-start-column="53" selection-end-line="328" selection-end-column="53" />
         </state>
       </provider>
     </entry>
