@@ -66,8 +66,14 @@ public class PlanetGenerator {
 	// ################################ Tile #############################################
 	// ###################################################################################
 
-	private Mesh createTile(FacePart facePart, Tile tile, boolean smallest) {
-		double f = getHeightFactor(facePart.getHeight());
+	private Mesh createTile(FacePart facePart, Tile tile, boolean smallest, boolean water) {
+		double height = 0;
+		if (water) {
+			height = facePart.getWaterHeight();
+		} else {
+			height = facePart.getHeight();
+		}
+		double f = getHeightFactor(height);
 
 		Vector3[] upper = new Vector3[3];
 
@@ -115,10 +121,14 @@ public class PlanetGenerator {
 		for (int i=0; i<3; i++) {
 			double otherHeight = 0;
 			if (smallest) {
-				otherHeight = neighbours[i].getHeight();
+				if (water) {
+					otherHeight = Math.max(neighbours[i].getHeight(), neighbours[i].getWaterHeight());
+				} else {
+					otherHeight = neighbours[i].getHeight();
+				}
 			}
 
-			if (otherHeight < facePart.getHeight()) {
+			if (otherHeight < height) {
 				double lowerFactor = getHeightFactor(otherHeight);
 
 				lower[0] = facePart.getCorner1().times(lowerFactor);
@@ -166,71 +176,23 @@ public class PlanetGenerator {
 		// ------------------------------------- texture coordinates
 		float[] textureCoordniates = new float[vertices.length]; // no texture support for planets so far
 
-		Mesh tileMesh = new Mesh(vertices, indices, normals, textureCoordniates);
-		if (facePart.getColor() != null) {
-			tileMesh.setColor(facePart.getColor());
-		} else {
-			tileMesh.setColor(TopologyConstants.TILE_DEFAULT_COLOR);
+		Mesh mesh;
+		if (water) { // create water mesh
+			mesh = new Mesh(vertices, indices, normals, textureCoordniates);
+			mesh.setColor(TopologyConstants.WATER_DEFAULT_COLOR);
+			mesh.setMaterial(waterMaterial);
+
+		} else { // create land mesh
+			mesh = new Mesh(vertices, indices, normals, textureCoordniates);
+			if (facePart.getColor() != null) {
+				mesh.setColor(facePart.getColor());
+			} else {
+				mesh.setColor(TopologyConstants.TILE_DEFAULT_COLOR);
+			}
+
 		}
 
-		return tileMesh;
-	}
-
-	// ###################################################################################
-	// ################################ Water ############################################
-	// ###################################################################################
-
-	private Mesh createWater(Vector3 corner1, Vector3 corner2, Vector3 corner3, double height) {
-		double f = getHeightFactor(height);
-
-		Vector3[] upper = new Vector3[3];
-
-		upper[0] = corner1.times(f);
-		upper[1] = corner2.times(f);
-		upper[2] = corner3.times(f);
-
-		Vector3 normal = corner1.plus(corner2).plus(corner3).normalize();
-
-		// ------------------------------------- vertices set up (top triangle)
-		List<Vector3> vectorList = new ArrayList<>(15);
-		vectorList.add(upper[0]);
-		vectorList.add(upper[1]);
-		vectorList.add(upper[2]);
-
-		// ------------------------------------- indices set up (top triangle)
-		List<Integer> indicesList = new ArrayList<>(15);
-		indicesList.add(0);
-		indicesList.add(1);
-		indicesList.add(2);
-
-		// ------------------------------------- normals set up (top triangle)
-		List<Vector3> normalList = new ArrayList<>(15);
-		normalList.add(normal);
-		normalList.add(normal);
-		normalList.add(normal);
-
-		// ------------------------------------- vertices
-		float[] vertices = VectorConverter.Vector3ListToFloatArray(vectorList);
-
-		// ------------------------------------- indices
-		int[] indices = IntegerConverter.IntegerListToIntArray(indicesList);
-
-		// ------------------------------------- normals
-		float[] normals = VectorConverter.Vector3ListToFloatArray(normalList);
-
-		// ------------------------------------- texture coordinates
-		float[] textureCoordniates = new float[vertices.length]; // no texture support for planets so far
-
-		Mesh waterMesh = new Mesh(vertices, indices, normals, textureCoordniates);
-		waterMesh.setColor(
-				(float) (0.25d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
-				(float) (0.5d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
-				(float) (0.75d + 0.25d * height / TopologyConstants.PLANET_MAXIMUM_HEIGHT),
-				GraphicalConstants.WATER_ALPHA
-		);
-		waterMesh.setMaterial(waterMaterial);
-
-		return waterMesh;
+		return mesh;
 	}
 
 	// ###################################################################################
@@ -293,7 +255,7 @@ public class PlanetGenerator {
 		}
 
 		Tile tile = planet.getFace(facePos).getTile(tileX, tileY);
-		Mesh faceMesh = createTile(facePart, tile, (newSize == 0));
+		Mesh faceMesh = createTile(facePart, tile, (newSize == 0), false);
 		facePart.setMesh(faceMesh);
 		facePart.setTile(tile);
 		if (newSize == 0) {
@@ -326,6 +288,7 @@ public class PlanetGenerator {
 			}
 
 			facePart.setHeight(maxHeight/4d + sumHeight*3d/16d);
+			facePart.setWaterHeight(TopologyConstants.PLANET_OZEAN_HEIGHT);
 			facePart.setColor(sumColor.times(0.25d));
 
 		} else {
@@ -333,11 +296,12 @@ public class PlanetGenerator {
 			smallest = true;
 
 			facePart.setHeight(tile.getHeight());
+			facePart.setWaterHeight(tile.getWaterHeight());
 			facePart.setColor(tile.getColor());
 
 		}
 
-		Mesh faceMesh = createTile(facePart, tile, smallest);
+		Mesh faceMesh = createTile(facePart, tile, smallest, false);
 		facePart.setMesh(faceMesh);
 
 		double waterHeight = 0d;
@@ -353,7 +317,7 @@ public class PlanetGenerator {
 		}
 
 		if (waterHeight > 0d) {
-			Mesh waterMesh = createWater(facePart.getCorner1(), facePart.getCorner2(), facePart.getCorner3(), waterHeight);
+			Mesh waterMesh = createTile(facePart, tile, smallest, true);
 			facePart.setWaterMesh(waterMesh);
 		} else {
 			facePart.setWaterMesh(null);

@@ -19,7 +19,9 @@ public class FacePart {
 
 	private FacePart[] quarterFaces;
 
-	private double height;
+	private double height = 0;
+	private double waterHeight = TopologyConstants.PLANET_OZEAN_HEIGHT;
+
 	private Tile tile;
 	private RGBA color = TopologyConstants.TILE_DEFAULT_COLOR;
 
@@ -133,6 +135,13 @@ public class FacePart {
 	}
 	public void setHeight(double height) {
 		this.height = height;
+	}
+
+	public double getWaterHeight() {
+		return waterHeight;
+	}
+	public void setWaterHeight(double waterHeight) {
+		this.waterHeight = waterHeight;
 	}
 
 	public RGBA getColor() {
