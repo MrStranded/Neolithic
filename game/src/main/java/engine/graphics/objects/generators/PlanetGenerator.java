@@ -1,11 +1,9 @@
 package engine.graphics.objects.generators;
 
-import constants.GraphicalConstants;
 import constants.TopologyConstants;
-import engine.data.Planet;
-import engine.data.Tile;
+import engine.data.planetary.Planet;
+import engine.data.planetary.Tile;
 import engine.graphics.objects.models.Material;
-import engine.graphics.objects.planet.CompositeMesh;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.objects.planet.PlanetObject;

@@ -1,7 +1,7 @@
 package logic;
 
-import engine.data.Planet;
-import engine.data.Tile;
+import engine.data.planetary.Planet;
+import engine.data.planetary.Tile;
 import engine.logic.Neighbour;
 import org.junit.jupiter.api.Test;
 

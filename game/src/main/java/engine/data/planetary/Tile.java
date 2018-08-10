@@ -1,4 +1,4 @@
-package engine.data;
+package engine.data.planetary;
 
 import constants.TopologyConstants;
 import engine.graphics.objects.planet.FacePart;

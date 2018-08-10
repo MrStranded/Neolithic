@@ -1,8 +1,8 @@
 package engine.logic;
 
-import engine.data.Face;
-import engine.data.Planet;
-import engine.data.Tile;
+import engine.data.planetary.Face;
+import engine.data.planetary.Planet;
+import engine.data.planetary.Tile;
 
 public class Neighbour {
 

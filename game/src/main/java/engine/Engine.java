@@ -1,6 +1,6 @@
 package engine;
 
-import engine.data.Planet;
+import engine.data.planetary.Planet;
 import engine.graphics.gui.BaseGUI;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.Scene;

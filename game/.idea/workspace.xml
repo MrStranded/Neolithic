@@ -16,7 +16,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="435">
-              <caret line="298" column="57" selection-start-line="298" selection-start-column="57" selection-end-line="298" selection-end-column="57" />
+              <caret line="296" column="57" selection-start-line="296" selection-start-column="57" selection-end-line="296" selection-end-column="57" />
             </state>
           </provider>
         </entry>
@@ -33,65 +33,65 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GraphicalConstants.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/constants/GraphicalConstants.java">
+      <file leaf-file-name="FacePart.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/FacePart.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="433">
-              <caret line="37" column="45" selection-start-line="37" selection-start-column="45" selection-end-line="37" selection-end-column="45" />
+            <state relative-caret-position="120">
+              <caret line="77" column="76" selection-start-line="77" selection-start-column="76" selection-end-line="77" selection-end-column="76" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#3543#3544#0" expanded="true" />
+                <element signature="e#3561#3562#0" expanded="true" />
+                <element signature="e#3595#3596#0" expanded="true" />
+                <element signature="e#3618#3619#0" expanded="true" />
+                <element signature="e#3650#3651#0" expanded="true" />
+                <element signature="e#3671#3672#0" expanded="true" />
+                <element signature="e#3702#3703#0" expanded="true" />
+                <element signature="e#3723#3724#0" expanded="true" />
+                <element signature="e#3754#3755#0" expanded="true" />
+                <element signature="e#3775#3776#0" expanded="true" />
+                <element signature="e#3805#3806#0" expanded="true" />
+                <element signature="e#3825#3826#0" expanded="true" />
+                <element signature="e#3865#3866#0" expanded="true" />
+                <element signature="e#3892#3893#0" expanded="true" />
+                <element signature="e#3927#3928#0" expanded="true" />
+                <element signature="e#3952#3953#0" expanded="true" />
+                <element signature="e#4002#4003#0" expanded="true" />
+                <element signature="e#4039#4040#0" expanded="true" />
+                <element signature="e#4066#4067#0" expanded="true" />
+                <element signature="e#4085#4086#0" expanded="true" />
+                <element signature="e#4121#4122#0" expanded="true" />
+                <element signature="e#4146#4147#0" expanded="true" />
+                <element signature="e#4177#4178#0" expanded="true" />
+                <element signature="e#4200#4201#0" expanded="true" />
+                <element signature="e#4244#4245#0" expanded="true" />
+                <element signature="e#4277#4278#0" expanded="true" />
+                <element signature="e#4303#4304#0" expanded="true" />
+                <element signature="e#4321#4322#0" expanded="true" />
+                <element signature="e#4355#4356#0" expanded="true" />
+                <element signature="e#4378#4379#0" expanded="true" />
+                <element signature="e#4409#4410#0" expanded="true" />
+                <element signature="e#4429#4430#0" expanded="true" />
+                <element signature="e#4470#4471#0" expanded="true" />
+                <element signature="e#4497#4498#0" expanded="true" />
+                <element signature="e#4537#4538#0" expanded="true" />
+                <element signature="e#4563#4564#0" expanded="true" />
+                <element signature="e#4619#4620#0" expanded="true" />
+                <element signature="e#4658#4659#0" expanded="true" />
+                <element signature="e#4684#4685#0" expanded="true" />
+                <element signature="e#4703#4704#0" expanded="true" />
+                <element signature="e#4738#4739#0" expanded="true" />
+                <element signature="e#4763#4764#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FacePart.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/FacePart.java">
+      <file leaf-file-name="Entity.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/entities/Entity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="22" column="70" selection-start-line="22" selection-start-column="70" selection-end-line="22" selection-end-column="70" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#3332#3333#0" expanded="true" />
-                <element signature="e#3350#3351#0" expanded="true" />
-                <element signature="e#3384#3385#0" expanded="true" />
-                <element signature="e#3407#3408#0" expanded="true" />
-                <element signature="e#3439#3440#0" expanded="true" />
-                <element signature="e#3460#3461#0" expanded="true" />
-                <element signature="e#3491#3492#0" expanded="true" />
-                <element signature="e#3512#3513#0" expanded="true" />
-                <element signature="e#3543#3544#0" expanded="true" />
-                <element signature="e#3564#3565#0" expanded="true" />
-                <element signature="e#3594#3595#0" expanded="true" />
-                <element signature="e#3614#3615#0" expanded="true" />
-                <element signature="e#3654#3655#0" expanded="true" />
-                <element signature="e#3681#3682#0" expanded="true" />
-                <element signature="e#3888#3889#0" expanded="true" />
-                <element signature="e#3913#3914#0" expanded="true" />
-                <element signature="e#3964#3965#0" expanded="true" />
-                <element signature="e#4001#4002#0" expanded="true" />
-                <element signature="e#3851#3852#0" expanded="true" />
-                <element signature="e#3870#3871#0" expanded="true" />
-                <element signature="e#3907#3908#0" expanded="true" />
-                <element signature="e#3932#3933#0" expanded="true" />
-                <element signature="e#3712#3713#0" expanded="true" />
-                <element signature="e#3735#3736#0" expanded="true" />
-                <element signature="e#3779#3780#0" expanded="true" />
-                <element signature="e#3812#3813#0" expanded="true" />
-                <element signature="e#3838#3839#0" expanded="true" />
-                <element signature="e#3856#3857#0" expanded="true" />
-                <element signature="e#3890#3891#0" expanded="true" />
-                <element signature="e#3913#3914#0" expanded="true" />
-                <element signature="e#3944#3945#0" expanded="true" />
-                <element signature="e#3964#3965#0" expanded="true" />
-                <element signature="e#4005#4006#0" expanded="true" />
-                <element signature="e#4032#4033#0" expanded="true" />
-                <element signature="e#4072#4073#0" expanded="true" />
-                <element signature="e#4098#4099#0" expanded="true" />
-                <element signature="e#4154#4155#0" expanded="true" />
-                <element signature="e#4193#4194#0" expanded="true" />
-                <element signature="e#4219#4220#0" expanded="true" />
-                <element signature="e#4238#4239#0" expanded="true" />
-                <element signature="e#4273#4274#0" expanded="true" />
-                <element signature="e#4298#4299#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="30">
+              <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -109,10 +109,10 @@
         </entry>
       </file>
       <file leaf-file-name="Planet.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/Planet.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/planetary/Planet.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="407">
-              <caret line="50" column="21" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="21" />
+              <caret line="49" column="21" selection-start-line="49" selection-start-column="21" selection-end-line="49" selection-end-column="21" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#481#482#0" expanded="true" />
@@ -125,8 +125,8 @@
       <file leaf-file-name="TopologyGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/logic/TopologyGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="298">
-              <caret line="56" column="62" selection-start-line="56" selection-start-column="62" selection-end-line="56" selection-end-column="62" />
+            <state relative-caret-position="463">
+              <caret line="105" column="12" selection-start-line="105" selection-start-column="12" selection-end-line="105" selection-end-column="12" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -135,16 +135,16 @@
         </entry>
       </file>
       <file leaf-file-name="Face.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/Face.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/planetary/Face.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="417">
-              <caret line="44" column="21" selection-start-line="44" selection-start-column="21" selection-end-line="44" selection-end-column="21" />
+              <caret line="42" column="21" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="Tile.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/Tile.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/planetary/Tile.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="373">
               <caret line="55" column="5" selection-start-line="55" selection-start-column="5" selection-end-line="55" selection-end-column="5" />
@@ -155,7 +155,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TopologyConstants.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TopologyConstants.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/constants/TopologyConstants.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
@@ -291,10 +291,10 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/data/Planet.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/Face.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/models/Mesh.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/FacePart.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/logic/TopologyGenerator.java" />
         <option value="$PROJECT_DIR$/src/main/java/constants/TopologyConstants.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/logic/TopologyGenerator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/FacePart.java" />
       </list>
     </option>
   </component>
@@ -376,100 +376,8 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="engine" type="462c0819:PsiDirectoryNode" />
-              <item name="graphics" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="engine" type="462c0819:PsiDirectoryNode" />
-              <item name="graphics" type="462c0819:PsiDirectoryNode" />
-              <item name="objects" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="engine" type="462c0819:PsiDirectoryNode" />
-              <item name="graphics" type="462c0819:PsiDirectoryNode" />
-              <item name="objects" type="462c0819:PsiDirectoryNode" />
-              <item name="generators" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="engine" type="462c0819:PsiDirectoryNode" />
-              <item name="graphics" type="462c0819:PsiDirectoryNode" />
-              <item name="objects" type="462c0819:PsiDirectoryNode" />
-              <item name="light" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="engine" type="462c0819:PsiDirectoryNode" />
-              <item name="graphics" type="462c0819:PsiDirectoryNode" />
-              <item name="objects" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="engine" type="462c0819:PsiDirectoryNode" />
-              <item name="graphics" type="462c0819:PsiDirectoryNode" />
-              <item name="objects" type="462c0819:PsiDirectoryNode" />
-              <item name="movement" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="engine" type="462c0819:PsiDirectoryNode" />
-              <item name="graphics" type="462c0819:PsiDirectoryNode" />
-              <item name="objects" type="462c0819:PsiDirectoryNode" />
-              <item name="planet" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="engine" type="462c0819:PsiDirectoryNode" />
-              <item name="graphics" type="462c0819:PsiDirectoryNode" />
-              <item name="renderer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="engine" type="462c0819:PsiDirectoryNode" />
-              <item name="logic" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="engine" type="462c0819:PsiDirectoryNode" />
-              <item name="converters" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="entities" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
@@ -535,14 +443,15 @@
     <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/engine/graphics/" />
+      <recent name="$PROJECT_DIR$/src/main/resources/shaders" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="engine.data" />
       <recent name="renderer" />
       <recent name="math" />
       <recent name="" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/resources/shaders" />
-      <recent name="$PROJECT_DIR$/src/main/java/math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="engine.graphics.objects.generators" />
@@ -551,9 +460,9 @@
       <recent name="engine.objects" />
       <recent name="math" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/java/engine/graphics/" />
+    <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources/shaders" />
+      <recent name="$PROJECT_DIR$/src/main/java/math" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -744,7 +653,7 @@
       <workItem from="1533232758072" duration="27942000" />
       <workItem from="1533659017121" duration="8999000" />
       <workItem from="1533806256248" duration="86000" />
-      <workItem from="1533806405523" duration="7837000" />
+      <workItem from="1533806405523" duration="9814000" />
     </task>
     <servers />
   </component>
@@ -781,11 +690,10 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="373368000" />
+    <option name="totallyTimeSpent" value="375345000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -797,11 +705,11 @@
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32894737" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32894737" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26923078" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26923078" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -831,13 +739,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/renderer/projection/Projection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="32" column="18" selection-start-line="32" selection-start-column="18" selection-end-line="32" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/utils/converters/FloatConverter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -1152,10 +1053,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/Planet.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/planetary/Planet.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="407">
-          <caret line="50" column="21" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="21" />
+          <caret line="49" column="21" selection-start-line="49" selection-start-column="21" selection-end-line="49" selection-end-column="21" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#481#482#0" expanded="true" />
@@ -1164,10 +1065,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/Face.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/planetary/Face.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="417">
-          <caret line="44" column="21" selection-start-line="44" selection-start-column="21" selection-end-line="44" selection-end-column="21" />
+          <caret line="42" column="21" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -1181,7 +1082,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/Tile.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/planetary/Tile.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="373">
           <caret line="55" column="5" selection-start-line="55" selection-start-column="5" selection-end-line="55" selection-end-column="5" />
@@ -1191,72 +1092,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/FacePart.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="22" column="70" selection-start-line="22" selection-start-column="70" selection-end-line="22" selection-end-column="70" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3332#3333#0" expanded="true" />
-            <element signature="e#3350#3351#0" expanded="true" />
-            <element signature="e#3384#3385#0" expanded="true" />
-            <element signature="e#3407#3408#0" expanded="true" />
-            <element signature="e#3439#3440#0" expanded="true" />
-            <element signature="e#3460#3461#0" expanded="true" />
-            <element signature="e#3491#3492#0" expanded="true" />
-            <element signature="e#3512#3513#0" expanded="true" />
-            <element signature="e#3543#3544#0" expanded="true" />
-            <element signature="e#3564#3565#0" expanded="true" />
-            <element signature="e#3594#3595#0" expanded="true" />
-            <element signature="e#3614#3615#0" expanded="true" />
-            <element signature="e#3654#3655#0" expanded="true" />
-            <element signature="e#3681#3682#0" expanded="true" />
-            <element signature="e#3888#3889#0" expanded="true" />
-            <element signature="e#3913#3914#0" expanded="true" />
-            <element signature="e#3964#3965#0" expanded="true" />
-            <element signature="e#4001#4002#0" expanded="true" />
-            <element signature="e#3851#3852#0" expanded="true" />
-            <element signature="e#3870#3871#0" expanded="true" />
-            <element signature="e#3907#3908#0" expanded="true" />
-            <element signature="e#3932#3933#0" expanded="true" />
-            <element signature="e#3712#3713#0" expanded="true" />
-            <element signature="e#3735#3736#0" expanded="true" />
-            <element signature="e#3779#3780#0" expanded="true" />
-            <element signature="e#3812#3813#0" expanded="true" />
-            <element signature="e#3838#3839#0" expanded="true" />
-            <element signature="e#3856#3857#0" expanded="true" />
-            <element signature="e#3890#3891#0" expanded="true" />
-            <element signature="e#3913#3914#0" expanded="true" />
-            <element signature="e#3944#3945#0" expanded="true" />
-            <element signature="e#3964#3965#0" expanded="true" />
-            <element signature="e#4005#4006#0" expanded="true" />
-            <element signature="e#4032#4033#0" expanded="true" />
-            <element signature="e#4072#4073#0" expanded="true" />
-            <element signature="e#4098#4099#0" expanded="true" />
-            <element signature="e#4154#4155#0" expanded="true" />
-            <element signature="e#4193#4194#0" expanded="true" />
-            <element signature="e#4219#4220#0" expanded="true" />
-            <element signature="e#4238#4239#0" expanded="true" />
-            <element signature="e#4273#4274#0" expanded="true" />
-            <element signature="e#4298#4299#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
-          <caret line="298" column="57" selection-start-line="298" selection-start-column="57" selection-end-line="298" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/logic/TopologyGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="56" column="62" selection-start-line="56" selection-start-column="62" selection-end-line="56" selection-end-column="62" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <caret line="296" column="57" selection-start-line="296" selection-start-column="57" selection-end-line="296" selection-end-column="57" />
         </state>
       </provider>
     </entry>
@@ -1264,6 +1103,75 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" column="53" selection-start-line="9" selection-start-column="53" selection-end-line="9" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/logic/TopologyGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="463">
+          <caret line="105" column="12" selection-start-line="105" selection-start-column="12" selection-end-line="105" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/FacePart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="77" column="76" selection-start-line="77" selection-start-column="76" selection-end-line="77" selection-end-column="76" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3543#3544#0" expanded="true" />
+            <element signature="e#3561#3562#0" expanded="true" />
+            <element signature="e#3595#3596#0" expanded="true" />
+            <element signature="e#3618#3619#0" expanded="true" />
+            <element signature="e#3650#3651#0" expanded="true" />
+            <element signature="e#3671#3672#0" expanded="true" />
+            <element signature="e#3702#3703#0" expanded="true" />
+            <element signature="e#3723#3724#0" expanded="true" />
+            <element signature="e#3754#3755#0" expanded="true" />
+            <element signature="e#3775#3776#0" expanded="true" />
+            <element signature="e#3805#3806#0" expanded="true" />
+            <element signature="e#3825#3826#0" expanded="true" />
+            <element signature="e#3865#3866#0" expanded="true" />
+            <element signature="e#3892#3893#0" expanded="true" />
+            <element signature="e#3927#3928#0" expanded="true" />
+            <element signature="e#3952#3953#0" expanded="true" />
+            <element signature="e#4002#4003#0" expanded="true" />
+            <element signature="e#4039#4040#0" expanded="true" />
+            <element signature="e#4066#4067#0" expanded="true" />
+            <element signature="e#4085#4086#0" expanded="true" />
+            <element signature="e#4121#4122#0" expanded="true" />
+            <element signature="e#4146#4147#0" expanded="true" />
+            <element signature="e#4177#4178#0" expanded="true" />
+            <element signature="e#4200#4201#0" expanded="true" />
+            <element signature="e#4244#4245#0" expanded="true" />
+            <element signature="e#4277#4278#0" expanded="true" />
+            <element signature="e#4303#4304#0" expanded="true" />
+            <element signature="e#4321#4322#0" expanded="true" />
+            <element signature="e#4355#4356#0" expanded="true" />
+            <element signature="e#4378#4379#0" expanded="true" />
+            <element signature="e#4409#4410#0" expanded="true" />
+            <element signature="e#4429#4430#0" expanded="true" />
+            <element signature="e#4470#4471#0" expanded="true" />
+            <element signature="e#4497#4498#0" expanded="true" />
+            <element signature="e#4537#4538#0" expanded="true" />
+            <element signature="e#4563#4564#0" expanded="true" />
+            <element signature="e#4619#4620#0" expanded="true" />
+            <element signature="e#4658#4659#0" expanded="true" />
+            <element signature="e#4684#4685#0" expanded="true" />
+            <element signature="e#4703#4704#0" expanded="true" />
+            <element signature="e#4738#4739#0" expanded="true" />
+            <element signature="e#4763#4764#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/entities/Entity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
         </state>
       </provider>
     </entry>

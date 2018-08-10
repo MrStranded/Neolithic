@@ -1,6 +1,4 @@
-package engine.data;
-
-import org.lwjgl.system.CallbackI;
+package engine.data.planetary;
 
 public class Face {
 

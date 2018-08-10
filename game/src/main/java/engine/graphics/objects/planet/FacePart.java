@@ -1,7 +1,7 @@
 package engine.graphics.objects.planet;
 
 import constants.TopologyConstants;
-import engine.data.Tile;
+import engine.data.planetary.Tile;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.shaders.ShaderProgram;
@@ -83,7 +83,7 @@ public class FacePart {
 		}
 
 		// effect extremification and normalization
-		factor = factor /** factor*/ / viewVector.lengthSquared();
+		factor = factor * factor / viewVector.lengthSquared();
 		
 		// distance detail falloff
 		double distanceQuotient = distanceVector.lengthSquared();

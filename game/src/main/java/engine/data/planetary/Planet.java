@@ -1,7 +1,6 @@
-package engine.data;
+package engine.data.planetary;
 
 import engine.graphics.objects.planet.PlanetObject;
-import engine.logic.TopologyGenerator;
 
 public class Planet {
 

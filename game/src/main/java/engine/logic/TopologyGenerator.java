@@ -1,11 +1,10 @@
 package engine.logic;
 
 import constants.TopologyConstants;
-import engine.data.Face;
-import engine.data.Planet;
-import engine.data.Tile;
+import engine.data.planetary.Face;
+import engine.data.planetary.Planet;
+import engine.data.planetary.Tile;
 import engine.graphics.renderer.color.RGBA;
-import engine.math.numericalObjects.Matrix4;
 
 public class TopologyGenerator {
 
@@ -98,13 +97,13 @@ public class TopologyGenerator {
 		int lowestHeight = height;
 
 		for (Tile t : Neighbour.getNeighbours(tile)) {
-			if ((t.getHeight() < lowestHeight) && (t.getWaterHeight() < waterHeight + riverdepth)) {
+			if ((t.getHeight() <= lowestHeight) && (t.getWaterHeight() < waterHeight)) {
 				lowest = t;
 				lowestHeight = t.getHeight();
 			}
 		}
 
-		if ((lowest != null) && (lowestHeight > TopologyConstants.PLANET_OZEAN_HEIGHT - riverdepth)) {
+		if (lowest != null) {
 			carveRiver(lowest);
 		}
 	}

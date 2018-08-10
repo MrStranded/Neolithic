@@ -1,11 +1,8 @@
 package engine.graphics.objects;
 
-import engine.data.Planet;
 import engine.graphics.objects.generators.MeshGenerator;
-import engine.graphics.objects.generators.PlanetGenerator;
 import engine.graphics.objects.light.*;
 import engine.graphics.objects.textures.Texture;
-import engine.graphics.renderer.color.RGBA;
 import engine.math.numericalObjects.Vector3;
 import load.TextureLoader;
 
