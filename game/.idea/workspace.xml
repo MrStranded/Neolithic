@@ -21,23 +21,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Mesh.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/models/Mesh.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="254" column="27" selection-start-line="254" selection-start-column="27" selection-end-line="254" selection-end-column="27" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="FacePart.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/FacePart.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="77" column="76" selection-start-line="77" selection-start-column="76" selection-end-line="77" selection-end-column="76" />
+            <state relative-caret-position="283">
+              <caret line="110" lean-forward="true" selection-start-line="110" selection-end-line="110" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3543#3544#0" expanded="true" />
@@ -87,7 +75,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Entity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Entity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/entities/Entity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="30">
@@ -96,11 +84,51 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Engine.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/Engine.java">
+      <file leaf-file-name="IDInterface.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/IDInterface.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
-              <caret line="47" column="95" selection-start-line="47" selection-start-column="95" selection-end-line="47" selection-end-column="95" />
+            <state relative-caret-position="90">
+              <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Attribute.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/attributes/Attribute.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
+              <folding>
+                <element signature="e#157#158#0" expanded="true" />
+                <element signature="e#176#177#0" expanded="true" />
+                <element signature="e#204#205#0" expanded="true" />
+                <element signature="e#220#221#0" expanded="true" />
+                <element signature="e#276#277#0" expanded="true" />
+                <element signature="e#294#295#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BinaryTree.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/structures/BinaryTree.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="454">
+              <caret line="85" column="47" lean-forward="true" selection-start-line="85" selection-start-column="47" selection-end-line="85" selection-end-column="47" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#4312#4313#0" expanded="true" />
+                <element signature="e#4341#4342#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BinaryTreeTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/data/BinaryTreeTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="25" column="36" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -108,15 +136,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Planet.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/planetary/Planet.java">
+      <file leaf-file-name="BinaryTreeNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/structures/BinaryTreeNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
-              <caret line="49" column="21" selection-start-line="49" selection-start-column="21" selection-end-line="49" selection-end-column="21" />
+            <state relative-caret-position="270">
+              <caret line="18" selection-start-line="18" selection-end-line="18" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#481#482#0" expanded="true" />
-                <element signature="e#525#526#0" expanded="true" />
+                <element signature="e#218#219#0" expanded="true" />
+                <element signature="e#250#251#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -127,27 +155,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="463">
               <caret line="105" column="12" selection-start-line="105" selection-start-column="12" selection-end-line="105" selection-end-column="12" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Face.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/planetary/Face.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="417">
-              <caret line="42" column="21" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Tile.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/planetary/Tile.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="55" column="5" selection-start-line="55" selection-start-column="5" selection-end-line="55" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -169,8 +176,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Enum" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -244,12 +251,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/GraphicalConstants.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/shaders/orthoVertex.vs" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/Camera.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/textures/CharInfo.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/shaders/orthoFragment.fs" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/textures/FontTexture.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/gui/HUDInterface.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/HUDObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseHUD.java" />
@@ -295,6 +296,12 @@
         <option value="$PROJECT_DIR$/src/main/java/constants/TopologyConstants.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/logic/TopologyGenerator.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/FacePart.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/data/structures/BinaryAttributeTree.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/data/IDInterface.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/data/attributes/Attribute.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/data/structures/BinaryTreeNode.java" />
+        <option value="$PROJECT_DIR$/src/test/java/data/BinaryTreeTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/data/structures/BinaryTree.java" />
       </list>
     </option>
   </component>
@@ -377,7 +384,27 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="engine" type="462c0819:PsiDirectoryNode" />
               <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="attributes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
               <item name="entities" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="structures" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
@@ -477,7 +504,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Start">
+  <component name="RunManager" selected="JUnit.BinaryTreeTest.testBinaryTreeCreation">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
     </configuration>
@@ -490,19 +517,19 @@
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     </configuration>
-    <configuration name="Matrix3Test.testIdentityMatrix" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BinaryTreeTest.testBinaryTreeCreation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="game" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="math.*" />
+          <option name="PATTERN" value="data.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="math" />
-      <option name="MAIN_CLASS_NAME" value="math.Matrix3Test" />
-      <option name="METHOD_NAME" value="testIdentityMatrix" />
+      <option name="PACKAGE_NAME" value="data" />
+      <option name="MAIN_CLASS_NAME" value="data.BinaryTreeTest" />
+      <option name="METHOD_NAME" value="testBinaryTreeCreation" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -623,17 +650,17 @@
     <list>
       <item itemvalue="Application.Start" />
       <item itemvalue="JUnit.NeighbourTest.testFaceNeighbours" />
-      <item itemvalue="JUnit.Matrix3Test.testIdentityMatrix" />
       <item itemvalue="JUnit.NeighbourTest.testFaceNeighboursOnDifferentFace" />
       <item itemvalue="JUnit.NeighbourTest" />
+      <item itemvalue="JUnit.BinaryTreeTest.testBinaryTreeCreation" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.BinaryTreeTest.testBinaryTreeCreation" />
         <item itemvalue="Application.Start" />
         <item itemvalue="JUnit.NeighbourTest" />
         <item itemvalue="JUnit.NeighbourTest.testFaceNeighboursOnDifferentFace" />
         <item itemvalue="JUnit.NeighbourTest.testFaceNeighbours" />
-        <item itemvalue="JUnit.Matrix3Test.testIdentityMatrix" />
       </list>
     </recent_temporary>
   </component>
@@ -653,47 +680,48 @@
       <workItem from="1533232758072" duration="27942000" />
       <workItem from="1533659017121" duration="8999000" />
       <workItem from="1533806256248" duration="86000" />
-      <workItem from="1533806405523" duration="9814000" />
+      <workItem from="1533806405523" duration="21970000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="NeighbourTest_testFaceNeighboursOnDifferentFace - 2018.08.05 at 16h 25m 54s.xml">
-      <configuration name="NeighbourTest.testFaceNeighboursOnDifferentFace" configurationId="JUnit" />
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 38m 57s.xml">
+      <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="NeighbourTest_testFaceNeighboursOnDifferentFace - 2018.08.05 at 16h 27m 40s.xml">
-      <configuration name="NeighbourTest.testFaceNeighboursOnDifferentFace" configurationId="JUnit" />
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 40m 32s.xml">
+      <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="NeighbourTest_testFaceNeighboursOnDifferentFace - 2018.08.05 at 16h 28m 01s.xml">
-      <configuration name="NeighbourTest.testFaceNeighboursOnDifferentFace" configurationId="JUnit" />
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 41m 28s.xml">
+      <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="NeighbourTest_testFaceNeighboursOnDifferentFace - 2018.08.05 at 16h 28m 45s.xml">
-      <configuration name="NeighbourTest.testFaceNeighboursOnDifferentFace" configurationId="JUnit" />
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 45m 45s.xml">
+      <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="NeighbourTest_testFaceNeighboursOnDifferentFace - 2018.08.05 at 16h 34m 31s.xml">
-      <configuration name="NeighbourTest.testFaceNeighboursOnDifferentFace" configurationId="JUnit" />
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 46m 04s.xml">
+      <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="NeighbourTest_testFaceNeighboursOnDifferentFace - 2018.08.05 at 16h 34m 57s.xml">
-      <configuration name="NeighbourTest.testFaceNeighboursOnDifferentFace" configurationId="JUnit" />
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 46m 59s.xml">
+      <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="NeighbourTest - 2018.08.05 at 16h 35m 26s.xml">
-      <configuration name="NeighbourTest" configurationId="JUnit" />
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 47m 46s.xml">
+      <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="NeighbourTest - 2018.08.06 at 11h 54m 04s.xml">
-      <configuration name="NeighbourTest" configurationId="JUnit" />
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.12 at 15h 03m 17s.xml">
+      <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="NeighbourTest - 2018.08.06 at 11h 56m 32s.xml">
-      <configuration name="NeighbourTest" configurationId="JUnit" />
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.12 at 15h 10m 51s.xml">
+      <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="NeighbourTest - 2018.08.06 at 11h 58m 40s.xml">
-      <configuration name="NeighbourTest" configurationId="JUnit" />
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.12 at 15h 14m 18s.xml">
+      <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="375345000" />
+    <option name="totallyTimeSpent" value="387501000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -705,11 +733,11 @@
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32894737" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32894737" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26923078" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26923078" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -739,41 +767,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/utils/converters/FloatConverter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/textures/CharInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/gui/GUIInterface.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="28" selection-start-line="10" selection-start-column="28" selection-end-line="10" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/textures/FontTexture.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="92" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/gui/RelativeScreenPosition.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="79" selection-start-line="10" selection-start-column="79" selection-end-line="10" selection-end-column="79" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/MeshGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="940">
@@ -1116,10 +1109,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/entities/Entity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/FacePart.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="77" column="76" selection-start-line="77" selection-start-column="76" selection-end-line="77" selection-end-column="76" />
+        <state relative-caret-position="283">
+          <caret line="110" lean-forward="true" selection-start-line="110" selection-end-line="110" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3543#3544#0" expanded="true" />
@@ -1168,10 +1168,59 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/entities/Entity.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/IDInterface.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+        <state relative-caret-position="90">
+          <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/attributes/Attribute.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
+          <folding>
+            <element signature="e#157#158#0" expanded="true" />
+            <element signature="e#176#177#0" expanded="true" />
+            <element signature="e#204#205#0" expanded="true" />
+            <element signature="e#220#221#0" expanded="true" />
+            <element signature="e#276#277#0" expanded="true" />
+            <element signature="e#294#295#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/structures/BinaryTreeNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#218#219#0" expanded="true" />
+            <element signature="e#250#251#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/data/BinaryTreeTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="36" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/structures/BinaryTree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="454">
+          <caret line="85" column="47" lean-forward="true" selection-start-line="85" selection-start-column="47" selection-end-line="85" selection-end-column="47" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4312#4313#0" expanded="true" />
+            <element signature="e#4341#4342#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
