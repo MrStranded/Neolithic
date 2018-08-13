@@ -9,6 +9,7 @@ out vec3 outNormal;
 out vec2 outTextureCoordinates;
 
 out vec4 lightPosition;
+out vec3 lightNormal;
 
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
@@ -25,4 +26,5 @@ void main() {
     outTextureCoordinates = inTextureCoordinates;
 
     lightPosition = lightProjectionMatrix * modelLightViewMatrix * vec4(inPosition, 1.0);
+    lightNormal = (lightProjectionMatrix * modelLightViewMatrix * vec4(inNormal, 0.0)).xyz;
 }

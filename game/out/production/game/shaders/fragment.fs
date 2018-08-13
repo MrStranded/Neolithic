@@ -53,6 +53,7 @@ in vec3 outNormal;
 in vec2 outTextureCoordinates;
 
 in vec4 lightPosition;
+in vec3 lightNormal;
 
 out vec4 fragmentColor;
 
@@ -98,7 +99,7 @@ void setupColors(Material material, vec2 textureCoordinates) {
 
 // ----------------------------------------------------------------------------------------------- Calculate Shadow
 
-float calculateShadow(vec4 position) {
+float calculateShadow(vec4 position, vec3 normal) {
     float shadowFactor = 1.0; // light
     vec2 increment = 1.0 / textureSize(shadowSampler, 0);
 
@@ -106,6 +107,9 @@ float calculateShadow(vec4 position) {
         // Transform from screen coordinates to texture coordinates
         vec3 projectionCoordinates = position.xyz * vec3(0.5, 0.5, 0.5) + vec3(0.5, 0.5, 0.5);
 
+        float facingLight = max(dot(normal, vec3(0.0, 0.0, -1.0)), 0.0);//texture(shadowSampler, projectionCoordinates.xy).b;
+
+if (facingLight > 0.1) {
         // checkin whether in shadow (>=) or ligth (<) with small epsilon to prevent shadow acne
         float shadow = 0.0;
         int blurSize = 1;
@@ -119,6 +123,7 @@ float calculateShadow(vec4 position) {
         }
         shadow /= (blurSize*2 + 1) * (blurSize*2 + 1);
         shadowFactor = 1.0 - (shadow * shadowStrength);
+        }
     }
 
     return shadowFactor;
@@ -209,7 +214,7 @@ void main() {
         vec4 spotLightColor = vec4(0, 0, 0, 0);
         vec4 directionalLightColor = vec4(0, 0, 0, 0);
 
-        float shadowFactor = calculateShadow(lightPosition);
+        float shadowFactor = calculateShadow(lightPosition, lightNormal);
 
         if (shadowFactor > 0.0) {
             directionalLightColor = calculateDirectionalLight(directionalLight, outNormal);
