@@ -2,11 +2,26 @@ package engine.utils.converters;
 
 import engine.math.numericalObjects.Vector2;
 import engine.math.numericalObjects.Vector3;
+import org.lwjgl.system.CallbackI;
+
+import java.util.List;
 
 public class VectorConverter {
 
-	public static float[] Vector3ArrayToFloatArray(Vector3[] vectors) {
+	public static float[] Vector3ListToFloatArray(List<Vector3> vectors) {
+		float[] floats = new float[vectors.size()*3];
 
+		int i=0;
+		for (Vector3 vector: vectors) {
+			floats[i++] = (float) vector.getX();
+			floats[i++] = (float) vector.getY();
+			floats[i++] = (float) vector.getZ();
+		}
+
+		return floats;
+	}
+
+	public static float[] Vector3ArrayToFloatArray(Vector3[] vectors) {
 		float[] floats = new float[vectors.length*3];
 
 		for (int i=0; i<vectors.length; i++) {
@@ -20,7 +35,6 @@ public class VectorConverter {
 	}
 
 	public static float[] Vector2ArrayToFloatArray(Vector2[] vectors) {
-
 		float[] floats = new float[vectors.length*2];
 
 		for (int i=0; i<vectors.length; i++) {

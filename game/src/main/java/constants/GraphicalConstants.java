@@ -11,16 +11,16 @@ public class GraphicalConstants {
 	public static final double GUI_ZFAR = 10d; // far viewing distance of camera for gui
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Shadow Map %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	public static final int SHADOWMAP_SIZE = 512; // width and height of shadow map in pixels
-	public static final double SHADOWMAP_SCALE_FACTOR = 1.25; // scale factor of shadowMap.scale for orthographic projection
+	public static final int SHADOWMAP_SIZE = 1024; // width and height of shadow map in pixels
+	public static final double SHADOWMAP_SCALE_FACTOR = 1.25; // scale factor of shadowMap for orthographic projection
 	public static final double SHADOWMAP_MIN_SCALING = 1d; // how much the shadowmap gets scaled at least when zooming out
 	public static final double SHADOWMAP_MAX_SCALING = 12d; // the maximal scaling of the shadowmap when zooming in
 	public static final double SHADOWMAP_BRIGHT_SPOT_SIZE = 8d; // the inverse multiplied with PI is the size in radian
 	public static final double SHADOWMAP_MIN_EPSILON = 0.001d; // the minimum epsilon (bias) value for distance checks when close
 	public static final double SHADOWMAP_MAX_EPSILON = 0.01d; // the maximum epsilon (bias) value for distance checks when far away
-	public static final double SHADOWMAP_RADIUS_SCOPE = 1d; // from distance to distance + scope, various values change based on camera radius
+	public static final double SHADOWMAP_RADIUS_SCOPE = 0.5d; // from distance to distance + scope, various values change based on camera radius
 	public static final double SHADOWMAP_MIN_ZVALUE = 0.25d; // the minimal zNear and zFar values when close
-	public static final double SHADOWMAP_MAX_ZVALUE = 0.5d; // the maximal zNear and zFar values when far away
+	public static final double SHADOWMAP_MAX_ZVALUE = 1.0d; // the maximal zNear and zFar values when far away
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Object Counts %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public static final int MAX_POINT_LIGHTS = 8; // maximum number of point lights in a scene
@@ -35,4 +35,5 @@ public class GraphicalConstants {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Planet Construction %%%%%%%%%%%%%%%%%%%%%%%%
 	public static final double PLANET_CONSTRUCTION_SIDE_NORMAL_QUOTIENT = 16d; // inverse percentage of top normal that is added to side normals
+	public static final float WATER_ALPHA = 1f;
 }

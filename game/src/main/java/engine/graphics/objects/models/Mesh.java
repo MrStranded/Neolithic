@@ -251,6 +251,9 @@ public class Mesh {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
+	public void setColor(RGBA color) {
+		this.color = color;
+	}
 	public void setColor(float r, float g, float b) {
 		color = new RGBA(r,g,b);
 	}

@@ -1,28 +1,48 @@
 package engine.graphics.objects.generators;
 
-import constants.GraphicalConstants;
-import engine.graphics.objects.planet.CompositeMesh;
+import constants.TopologyConstants;
+import engine.data.planetary.Planet;
+import engine.data.planetary.Tile;
+import engine.graphics.objects.models.Material;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.FacePart;
+import engine.graphics.objects.planet.PlanetObject;
+import engine.graphics.renderer.color.RGBA;
+import engine.logic.Neighbour;
 import engine.math.numericalObjects.Vector3;
+import engine.utils.converters.IntegerConverter;
 import engine.utils.converters.VectorConverter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlanetGenerator {
 
 	// Icosahedron constants
-	private static final double HEIGHT = 1f;
-	private static final double PHI = 0.5f * (1f + Math.sqrt(5f));
-	private static final double ALPHA = 2f * Math.atan(1f / PHI);
-	private static final double RADIUS = HEIGHT * Math.sin(ALPHA);
-	private static final double Y = HEIGHT * Math.cos(ALPHA); // y position of upper/lower ring
-	private static final double ANGLE = 2f * Math.PI / 5f;
-	private static final double HALFANGLE = ANGLE / 2f;
+	private final double HEIGHT = 1f;
+	private final double PHI = 0.5f * (1f + Math.sqrt(5f));
+	private final double ALPHA = 2f * Math.atan(1f / PHI);
+	private final double RADIUS = HEIGHT * Math.sin(ALPHA);
+	private final double Y = HEIGHT * Math.cos(ALPHA); // y position of upper/lower ring
+	private final double ANGLE = 2f * Math.PI / 5f;
+	private final double HALFANGLE = ANGLE / 2f;
+
+	private PlanetObject planetObject;
+	private Planet planet;
+	private Material waterMaterial;
+	
+	public PlanetGenerator(PlanetObject planetObject, Material waterMaterial) {
+		this.planetObject = planetObject;
+		planet = planetObject.getPlanet();
+
+		this.waterMaterial = waterMaterial;
+	}
 
 	// ###################################################################################
 	// ################################ Construction Helpers #############################
 	// ###################################################################################
 
-	private static Vector3 getCorner(int x, int y) {
+	private Vector3 getCorner(int x, int y) {
 		switch (y) {
 			case 0: // south pole
 				return new Vector3(0, -HEIGHT,0);
@@ -36,92 +56,154 @@ public class PlanetGenerator {
 		return new Vector3(0,0,0);
 	}
 
-	private static Mesh createTile(Vector3 corner1, Vector3 corner2, Vector3 corner3) {
-		Vector3 origin = new Vector3(0,0,0);
-
-		// a makin' it a round
-		if (true) {
-			corner1 = corner1.normalize();
-			corner2 = corner2.normalize();
-			corner3 = corner3.normalize();
-		}
-
-		double f = 1d + Math.random()*0.125d;
-
-		corner1 = corner1.times(f);
-		corner2 = corner2.times(f);
-		corner3 = corner3.times(f);
-
-		Vector3[] vectorArray = {corner1, corner2, corner3, origin, corner1, corner2, corner3};
-
-		// ------------------------------------- vertices
-		float[] vertices = VectorConverter.Vector3ArrayToFloatArray(vectorArray);
-
-		// ------------------------------------- indices
-		int[] indices = {
-				0, 1, 2,
-				3, 5, 4,
-				3, 6, 5,
-				3, 4, 6
-		};
-
-		// ------------------------------------- normals
-
-		Vector3 normal = corner1.plus(corner2).plus(corner3).normalize();
-
-		double normalFactor = 1d / GraphicalConstants.PLANET_CONSTRUCTION_SIDE_NORMAL_QUOTIENT;
-		Vector3 mid = corner1.plus(corner2).plus(corner3).times(1d/3d);
-		Vector3[] midToCorner = new Vector3[3];
-		midToCorner[0] = corner1.minus(mid).plus(normal.times(normalFactor)).normalize();
-		midToCorner[1] = corner2.minus(mid).plus(normal.times(normalFactor)).normalize();
-		midToCorner[2] = corner3.minus(mid).plus(normal.times(normalFactor)).normalize();
-
-		float[] normals = new float[7*3];
-		// top
-		for (int i=0; i<3; i++) {
-			normals[i*3 + 0] = (float) normal.getX();
-			normals[i*3 + 1] = (float) normal.getY();
-			normals[i*3 + 2] = (float) normal.getZ();
-		}
-
-		// origin
-		normals[3*3 + 0] = (float) normal.getX();
-		normals[3*3 + 1] = (float) normal.getY();
-		normals[3*3 + 2] = (float) normal.getZ();
-
-		// sides
-		for (int i=0; i<3; i++) {
-			normals[(4+i)*3 + 0] = (float) midToCorner[i].getX();
-			normals[(4+i)*3 + 1] = (float) midToCorner[i].getY();
-			normals[(4+i)*3 + 2] = (float) midToCorner[i].getZ();
-		}
-
-		// ------------------------------------- texture coordinates
-		float[] textureCoordniates = {
-				0, 0,
-				0.5f, 1f,
-				1f, 0,
-				1f, 1f
-		};
-
-		Mesh tile = new Mesh(vertices, indices, normals, textureCoordniates);
-		tile.setColor(
-				(float) (0.5d + 0.5d*Math.random()),
-				(float) (0.5d + 0.5d*Math.random()),
-				(float) (0.5d + 0.5d*Math.random())
-		);
-		return tile;
+	private double getHeightFactor(double height) {
+		return (TopologyConstants.PLANET_MINIMUM_HEIGHT + height) / TopologyConstants.PLANET_MINIMUM_HEIGHT;
 	}
 
-	private static FacePart createFace(Vector3 corner1, Vector3 corner2, Vector3 corner3, int size, int depth) {
-		Vector3 normal = corner1.plus(corner2).plus(corner3).normalize();
+	// ###################################################################################
+	// ################################ Tile #############################################
+	// ###################################################################################
 
-		Mesh faceMesh = createTile(corner1, corner2, corner3);
+	private Mesh createTile(FacePart facePart, Tile tile, boolean smallest, boolean water) {
+		double height = 0;
+		if (water) {
+			height = facePart.getWaterHeight();
+		} else {
+			height = facePart.getHeight();
+		}
+		double f = getHeightFactor(height);
 
-		FacePart face = new FacePart();
-		face.setNormal(normal);
-		face.setMesh(faceMesh);
-		face.setDepth(depth);
+		Vector3[] upper = new Vector3[3];
+
+		upper[0] = facePart.getCorner1().times(f);
+		upper[1] = facePart.getCorner2().times(f);
+		upper[2] = facePart.getCorner3().times(f);
+
+		Vector3 normal = facePart.getCorner1().plus(facePart.getCorner2()).plus(facePart.getCorner3()).normalize();
+		Vector3 mid = facePart.getCorner1().plus(facePart.getCorner2()).plus(facePart.getCorner3()).times(1d/3d);
+
+		//double normalFactor = 1d / GraphicalConstants.PLANET_CONSTRUCTION_SIDE_NORMAL_QUOTIENT;
+
+		Vector3[] midToSide = new Vector3[3];
+		midToSide[0] = facePart.getCorner1().plus(facePart.getCorner2()).minus(mid).normalize();
+		midToSide[1] = facePart.getCorner2().plus(facePart.getCorner3()).minus(mid).normalize();
+		midToSide[2] = facePart.getCorner3().plus(facePart.getCorner1()).minus(mid).normalize();
+
+		// ------------------------------------- vertices set up (top triangle)
+		List<Vector3> vectorList = new ArrayList<>(15);
+		vectorList.add(upper[0]);
+		vectorList.add(upper[1]);
+		vectorList.add(upper[2]);
+
+		// ------------------------------------- indices set up (top triangle)
+		List<Integer> indicesList = new ArrayList<>(15);
+		indicesList.add(0);
+		indicesList.add(1);
+		indicesList.add(2);
+
+		// ------------------------------------- normals set up (top triangle)
+		List<Vector3> normalList = new ArrayList<>(15);
+		normalList.add(normal);
+		normalList.add(normal);
+		normalList.add(normal);
+
+		// ------------------------------------- neighbour retrieval and side mesh build up
+		Tile[] neighbours = null;
+		if (smallest) {
+			neighbours = Neighbour.getNeighbours(tile);
+		}
+
+		int index = 3;
+		Vector3[] lower = new Vector3[3];
+
+		for (int i=0; i<3; i++) {
+			double otherHeight = 0;
+			if (smallest) {
+				if (water) {
+					otherHeight = Math.max(neighbours[i].getHeight(), neighbours[i].getWaterHeight());
+				} else {
+					otherHeight = neighbours[i].getHeight();
+				}
+			}
+
+			if (otherHeight < height) {
+				double lowerFactor = getHeightFactor(otherHeight);
+
+				lower[0] = facePart.getCorner1().times(lowerFactor);
+				lower[1] = facePart.getCorner2().times(lowerFactor);
+				lower[2] = facePart.getCorner3().times(lowerFactor);
+
+				int first = i;
+				int last = i+1;
+				if (last >= 3) {
+					last -= 3;
+				}
+
+				// side mesh vertices
+				vectorList.add(upper[first]);
+				vectorList.add(lower[first]);
+				vectorList.add(upper[last]);
+				vectorList.add(lower[last]);
+
+				normalList.add(midToSide[i]);
+				normalList.add(midToSide[i]);
+				normalList.add(midToSide[i]);
+				normalList.add(midToSide[i]);
+
+				// side mesh indices
+				indicesList.add(index);
+				indicesList.add(index + 1);
+				indicesList.add(index + 2);
+				indicesList.add(index + 1);
+				indicesList.add(index + 3);
+				indicesList.add(index + 2);
+
+				index += 4;
+			}
+		}
+
+		// ------------------------------------- vertices
+		float[] vertices = VectorConverter.Vector3ListToFloatArray(vectorList);
+
+		// ------------------------------------- indices
+		int[] indices = IntegerConverter.IntegerListToIntArray(indicesList);
+
+		// ------------------------------------- normals
+		float[] normals = VectorConverter.Vector3ListToFloatArray(normalList);
+
+		// ------------------------------------- texture coordinates
+		float[] textureCoordniates = new float[vertices.length]; // no texture support for planets so far
+
+		Mesh mesh;
+		if (water) { // create water mesh
+			mesh = new Mesh(vertices, indices, normals, textureCoordniates);
+			mesh.setColor(TopologyConstants.WATER_DEFAULT_COLOR);
+			mesh.setMaterial(waterMaterial);
+
+		} else { // create land mesh
+			mesh = new Mesh(vertices, indices, normals, textureCoordniates);
+			if (facePart.getColor() != null) {
+				mesh.setColor(facePart.getColor());
+			} else {
+				mesh.setColor(TopologyConstants.TILE_DEFAULT_COLOR);
+			}
+
+		}
+
+		return mesh;
+	}
+
+	// ###################################################################################
+	// ################################ Face #############################################
+	// ###################################################################################
+
+	private FacePart createFace(Vector3 corner1, Vector3 corner2, Vector3 corner3, int size, int depth, int facePos, int tileX, int tileY) {
+		corner1 = corner1.normalize();
+		corner2 = corner2.normalize();
+		corner3 = corner3.normalize();
+
+		FacePart facePart = new FacePart(corner1, corner2, corner3);
+		facePart.setDepth(depth);
 
 		int newSize = size / 2;
 
@@ -132,8 +214,6 @@ public class PlanetGenerator {
 			Vector3 dx = edgeX.times(0.5d);
 			Vector3 dy = edgeY.times(0.5d);
 
-			Vector3 mid = corner1.plus(edgeX.plus(edgeY).times(0.5d));
-
 			FacePart[] subFaces = new FacePart[4];
 
 			subFaces[0] = createFace(
@@ -141,41 +221,112 @@ public class PlanetGenerator {
 					corner1.plus(dx),
 					corner1.plus(dy),
 					newSize,
-					depth + 1
+					depth + 1,
+					facePos, tileX, tileY
 			);
 			subFaces[1] = createFace(
 					corner1.plus(dx),
 					corner1.plus(dx).plus(dx),
 					corner1.plus(dy).plus(dx),
 					newSize,
-					depth + 1
+					depth + 1,
+					facePos, tileX + newSize, tileY
 			);
 			subFaces[2] = createFace(
 					corner1.plus(dy),
 					corner1.plus(dx).plus(dy),
 					corner1.plus(dy).plus(dy),
 					newSize,
-					depth + 1
+					depth + 1,
+					facePos, tileX, tileY + newSize
 			);
 			subFaces[3] = createFace(
-					corner1.plus(dx),
 					corner1.plus(dx).plus(dy),
 					corner1.plus(dy),
+					corner1.plus(dx),
 					newSize,
-					depth + 1
+					depth + 1,
+					facePos, planet.getSize() - newSize - tileX, planet.getSize() - newSize - tileY
 			);
 
-			face.setQuarterFaces(subFaces);
+			facePart.setQuarterFaces(subFaces);
 		}
 
-		return face;
+		Tile tile = planet.getFace(facePos).getTile(tileX, tileY);
+		Mesh faceMesh = createTile(facePart, tile, (newSize == 0), false);
+		facePart.setMesh(faceMesh);
+		facePart.setTile(tile);
+		if (newSize == 0) {
+			tile.setTileMesh(facePart);
+		}
+
+		return facePart;
+	}
+
+	private void updateFace(FacePart facePart) {
+		Tile tile = null;
+		boolean smallest = false;
+
+		if (facePart.getQuarterFaces() != null) {
+			double maxHeight = 0d;
+			double sumHeight = 0d;
+			RGBA sumColor = new RGBA(0,0,0,1);
+
+			for (FacePart subFace : facePart.getQuarterFaces()) {
+				if (subFace != null) {
+					updateFace(subFace);
+
+					if (subFace.getHeight() > maxHeight) {
+						maxHeight = subFace.getHeight();
+					}
+					sumHeight += subFace.getHeight();
+
+					sumColor = sumColor.plus(subFace.getColor());
+				}
+			}
+
+			facePart.setHeight(maxHeight/4d + sumHeight*3d/16d);
+			facePart.setWaterHeight(TopologyConstants.PLANET_OZEAN_HEIGHT);
+			facePart.setColor(sumColor.times(0.25d));
+
+		} else {
+			tile = facePart.getTile();
+			smallest = true;
+
+			facePart.setHeight(tile.getHeight());
+			facePart.setWaterHeight(tile.getWaterHeight());
+			facePart.setColor(tile.getColor());
+
+		}
+
+		Mesh faceMesh = createTile(facePart, tile, smallest, false);
+		facePart.setMesh(faceMesh);
+
+		double waterHeight = 0d;
+
+		if (smallest) {
+			if (tile.getHeight() < tile.getWaterHeight()) {
+				waterHeight = tile.getWaterHeight();
+			}
+		} else {
+			if (facePart.getHeight() < TopologyConstants.PLANET_OZEAN_HEIGHT) {
+				waterHeight = TopologyConstants.PLANET_OZEAN_HEIGHT;
+			}
+		}
+
+		if (waterHeight > 0d) {
+			Mesh waterMesh = createTile(facePart, tile, smallest, true);
+			facePart.setWaterMesh(waterMesh);
+		} else {
+			facePart.setWaterMesh(null);
+		}
 	}
 
 	// ###################################################################################
 	// ################################ Planet ###########################################
 	// ###################################################################################
 
-	public static FacePart[] createPlanet(int size) {
+	public FacePart[] createPlanet() {
 		FacePart[] faces = new FacePart[20];
 
 		for (int y=0; y<2; y++) { // upper lower ring
@@ -184,9 +335,9 @@ public class PlanetGenerator {
 					Vector3 corner1, corner2, corner3;
 
 					if (f == 0) { // flipped down
-						corner1 = getCorner(x + 1, y);
-						corner2 = getCorner(x + 1, y + 1);
-						corner3 = getCorner(x, y + 1);
+						corner1 = getCorner(x + 1, y + 1);
+						corner2 = getCorner(x, y + 1);
+						corner3 = getCorner(x + 1, y);
 
 					} else { // flipped up
 						corner1 = getCorner(x, y + 1);
@@ -196,11 +347,17 @@ public class PlanetGenerator {
 					}
 
 					int face = (y*2 + f) * 5 + x;
-					faces[face] = createFace(corner1, corner2, corner3, size, 1);
+					faces[face] = createFace(corner1, corner2, corner3, planet.getSize(), 1, face, 0, 0);
 				}
 			}
 		}
 
 		return faces;
+	}
+
+	public void updatePlanet() {
+		for (FacePart facePart : planetObject.getFaceParts()) {
+			updateFace(facePart);
+		}
 	}
 }

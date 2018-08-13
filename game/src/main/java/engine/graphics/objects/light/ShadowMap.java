@@ -1,6 +1,7 @@
 package engine.graphics.objects.light;
 
 import constants.GraphicalConstants;
+import constants.TopologyConstants;
 import engine.graphics.objects.Camera;
 import engine.graphics.objects.textures.Texture;
 import engine.graphics.renderer.projection.Projection;
@@ -117,7 +118,7 @@ public class ShadowMap {
 			double poleShadow = Math.abs(Math.sin(camera.getPitch())); // 1 at poles, 0 at equator
 
 			double brightSpot = GraphicalConstants.SHADOWMAP_BRIGHT_SPOT_SIZE;
-			double angle = lightAngle + camera.getYaw();
+			double angle = -lightAngle + camera.getYaw();
 			if (angle < 0) {
 				angle += TAU;
 			}
@@ -160,7 +161,7 @@ public class ShadowMap {
 			viewMatrix = new Matrix4();
 		}
 
-		double size = distance * GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
+		double size = distance * (TopologyConstants.PLANET_MINIMUM_HEIGHT + (double) TopologyConstants.PLANET_MAXIMUM_HEIGHT) / TopologyConstants.PLANET_MINIMUM_HEIGHT;//GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
 		orthographicProjection =    Projection.createOrthographicProjectionMatrix(
 									-size, size, size, -size, zNear*distance, zFar*distance
 		);
