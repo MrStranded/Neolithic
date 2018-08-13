@@ -110,25 +110,29 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BinaryTree.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BinaryTree.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/structures/BinaryTree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="454">
-              <caret line="85" column="47" lean-forward="true" selection-start-line="85" selection-start-column="47" selection-end-line="85" selection-end-column="47" />
+            <state relative-caret-position="-62">
+              <caret line="31" column="23" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4312#4313#0" expanded="true" />
-                <element signature="e#4341#4342#0" expanded="true" />
+                <element signature="e#1733#1734#0" expanded="true" />
+                <element signature="e#1762#1763#0" expanded="true" />
+                <element signature="e#3520#3521#0" expanded="true" />
+                <element signature="e#3548#3549#0" expanded="true" />
+                <element signature="e#4922#4923#0" expanded="true" />
+                <element signature="e#4951#4952#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BinaryTreeTest.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BinaryTreeTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/data/BinaryTreeTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="25" column="36" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
+            <state relative-caret-position="225">
+              <caret line="15" column="18" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -300,8 +304,8 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/data/IDInterface.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/attributes/Attribute.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/structures/BinaryTreeNode.java" />
-        <option value="$PROJECT_DIR$/src/test/java/data/BinaryTreeTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/structures/BinaryTree.java" />
+        <option value="$PROJECT_DIR$/src/test/java/data/BinaryTreeTest.java" />
       </list>
     </option>
   </component>
@@ -680,44 +684,44 @@
       <workItem from="1533232758072" duration="27942000" />
       <workItem from="1533659017121" duration="8999000" />
       <workItem from="1533806256248" duration="86000" />
-      <workItem from="1533806405523" duration="21970000" />
+      <workItem from="1533806405523" duration="27359000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 38m 57s.xml">
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.13 at 11h 22m 24s.xml">
       <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 40m 32s.xml">
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.13 at 11h 24m 41s.xml">
       <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 41m 28s.xml">
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.13 at 11h 26m 28s.xml">
       <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 45m 45s.xml">
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.13 at 11h 27m 22s.xml">
       <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 46m 04s.xml">
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.13 at 11h 42m 02s.xml">
       <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 46m 59s.xml">
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.13 at 11h 43m 26s.xml">
       <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.10 at 16h 47m 46s.xml">
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.13 at 11h 43m 42s.xml">
       <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.12 at 15h 03m 17s.xml">
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.13 at 11h 44m 38s.xml">
       <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.12 at 15h 10m 51s.xml">
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.13 at 11h 45m 10s.xml">
       <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.12 at 15h 14m 18s.xml">
+    <history-entry file="BinaryTreeTest_testBinaryTreeCreation - 2018.08.13 at 11h 45m 51s.xml">
       <configuration name="BinaryTreeTest.testBinaryTreeCreation" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="387501000" />
+    <option name="totallyTimeSpent" value="392890000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -1202,24 +1206,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/data/BinaryTreeTest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/structures/BinaryTree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="36" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
+        <state relative-caret-position="-62">
+          <caret line="31" column="23" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1733#1734#0" expanded="true" />
+            <element signature="e#1762#1763#0" expanded="true" />
+            <element signature="e#3520#3521#0" expanded="true" />
+            <element signature="e#3548#3549#0" expanded="true" />
+            <element signature="e#4922#4923#0" expanded="true" />
+            <element signature="e#4951#4952#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/structures/BinaryTree.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/data/BinaryTreeTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="454">
-          <caret line="85" column="47" lean-forward="true" selection-start-line="85" selection-start-column="47" selection-end-line="85" selection-end-column="47" />
+        <state relative-caret-position="225">
+          <caret line="15" column="18" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4312#4313#0" expanded="true" />
-            <element signature="e#4341#4342#0" expanded="true" />
           </folding>
         </state>
       </provider>

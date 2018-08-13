@@ -11,7 +11,7 @@ public class BinaryTree<T extends IDInterface> {
 	private BinaryTreeNode root;
 
 	private static final int LEFT = 0;
-	private static final int RIGHT = 0;
+	private static final int RIGHT = 1;
 
 	public BinaryTree() {
 	}
@@ -29,7 +29,7 @@ public class BinaryTree<T extends IDInterface> {
 			root = new BinaryTreeNode(value);
 		} else {
 			insert(value, root);
-			root = checkNode(root);
+			sanitize();
 		}
 	}
 
@@ -37,18 +37,14 @@ public class BinaryTree<T extends IDInterface> {
 		if (value.getId() < node.getValue().getId()) {
 			if (node.getLeft() == null) {
 				node.setLeft(new BinaryTreeNode(value));
-				recalculateDepth(root);
 			} else {
 				insert(value, node.getLeft());
-				node.setLeft(checkNode(node.getLeft()));
 			}
 		} else if (value.getId() > node.getValue().getId()) {
 			if (node.getRight() == null) {
 				node.setRight(new BinaryTreeNode(value));
-				recalculateDepth(root);
 			} else {
 				insert(value, node.getRight());
-				node.setRight(checkNode(node.getRight()));
 			}
 		} else { // ids are equal -> merge
 			node.setValue(node.getValue().merge(value));
@@ -59,32 +55,39 @@ public class BinaryTree<T extends IDInterface> {
 	// ################################ Balancing ########################################
 	// ###################################################################################
 
+	public void sanitize() {
+		root = checkNode(root);
+	}
+
 	private BinaryTreeNode checkNode(BinaryTreeNode node) {
+		if (node.getRight() != null) { // make a sub balancing act
+			node.setRight(checkNode(node.getRight()));
+		}
+		if (node.getLeft() != null) { // make a sub balancing act
+			node.setLeft(node.getLeft());
+		}
+
 		int difference = getDepth(node.getRight()) - getDepth(node.getLeft());
 		if (difference > 1) { // right arm is too long
-			System.out.println("right inba "+node.getValue().getId());
-
-			if (node.getLeft() == null) {
-				return rotateNode(node, LEFT);
-			} else {
-				int subDifference = getDepth(node.getLeft().getRight()) - getDepth(node.getLeft().getLeft());
-				if (subDifference < 0) {
-					node.setLeft(rotateNode(node.getLeft(), RIGHT));
-				}
-				return rotateNode(node, LEFT);
+			// maybe we first have to rotate sub tree
+			int subDifference = getDepth(node.getRight().getRight()) - getDepth(node.getRight().getLeft());
+			if (subDifference < 0) {
+				node.setRight(rotateNode(node.getRight(), RIGHT));
 			}
+
+			BinaryTreeNode result = rotateNode(node, LEFT);
+			result.setLeft(checkNode(result.getLeft())); // errors might have entered the left sub tree
+			return result;
 		} else if (difference < -1) { // left arm is too long
-			System.out.println("left inba"+node.getValue().getId());
-
-			if (node.getRight() == null) {
-				return rotateNode(node, RIGHT);
-			} else {
-				int subDifference = getDepth(node.getLeft().getRight()) - getDepth(node.getLeft().getLeft());
-				if (subDifference > 0) {
-					node.setRight(rotateNode(node.getRight(), LEFT));
-				}
-				return rotateNode(node, RIGHT);
+			// maybe we first have to rotate sub tree
+			int subDifference = getDepth(node.getLeft().getRight()) - getDepth(node.getLeft().getLeft());
+			if (subDifference > 0) {
+				node.setLeft(rotateNode(node.getLeft(), LEFT));
 			}
+
+			BinaryTreeNode result = rotateNode(node, RIGHT);
+			result.setRight(checkNode(result.getRight())); // errors might have entered the right sub tree
+			return result;
 		}
 
 		return node;
@@ -110,16 +113,11 @@ public class BinaryTree<T extends IDInterface> {
 		if (node == null) {
 			return 0;
 		}
-		return node.getDepth();
+		return Math.max(getDepth(node.getLeft()), getDepth(node.getRight())) + 1;
 	}
 
-	private int recalculateDepth(BinaryTreeNode node) {
-		if (node == null) {
-			return 0;
-		}
-		int depth = Math.max(recalculateDepth(node.getLeft()), recalculateDepth(node.getRight())) + 1;
-		node.setDepth(depth);
-		return depth;
+	public int getDepth() {
+		return getDepth(root);
 	}
 
 	// ###################################################################################
@@ -148,6 +146,17 @@ public class BinaryTree<T extends IDInterface> {
 		}
 	}
 
+	public int size() {
+		return size(root);
+	}
+
+	private int size(BinaryTreeNode node) {
+		if (node == null) {
+			return 0;
+		}
+		return size(node.getLeft()) + size(node.getRight()) + 1;
+	}
+
 	// ###################################################################################
 	// ################################ String Output ####################################
 	// ###################################################################################
@@ -161,7 +170,7 @@ public class BinaryTree<T extends IDInterface> {
 			return ".";
 		} else {
 			if (node.getLeft() != null || node.getRight() != null) {
-				return node.getValue().getId() + ": (" + subString(node.getLeft()) + " , " + subString(node.getRight()) + ")";
+				return node.getValue().getId() + "<" + getDepth(node) + ">: (" + subString(node.getLeft()) + " , " + subString(node.getRight()) + ")";
 			} else {
 				return String.valueOf(node.getValue().getId());
 			}

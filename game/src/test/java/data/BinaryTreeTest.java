@@ -3,6 +3,7 @@ package data;
 import engine.data.attributes.Attribute;
 import engine.data.structures.BinaryTree;
 import org.junit.jupiter.api.Test;
+import org.lwjgl.system.CallbackI;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -12,20 +13,18 @@ public class BinaryTreeTest {
 	public void testBinaryTreeCreation() {
 		BinaryTree tree = new BinaryTree();
 
-		tree.insert(new Attribute(1));
-		tree.insert(new Attribute(2));
-		tree.insert(new Attribute(3));
-		tree.insert(new Attribute(4));
-		tree.insert(new Attribute(5));
-		tree.insert(new Attribute(6));
-		tree.insert(new Attribute(7));
-		tree.insert(new Attribute(8));
-		tree.insert(new Attribute(9));
-		tree.insert(new Attribute(10));
-		tree.insert(new Attribute(11));
-		tree.insert(new Attribute(12));
+		int n = 100;
+		long time = System.nanoTime();
+		for (int i=0; i<n; i++) {
+			int m = 1;//((i & 1) == 1)? -1 : 1;
+			tree.insert(new Attribute(i*m));
+		}
+		time = System.nanoTime() - time;
 
 		System.out.println(tree);
+		System.out.println("inserting " + n + " attributes took " + (time/1000000d) + " ms");
+		System.out.println("depth: " + tree.getDepth());
+		System.out.println("size: " + tree.size());
 
 		assertTrue(true);
 	}
