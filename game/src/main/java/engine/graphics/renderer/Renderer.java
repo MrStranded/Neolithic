@@ -2,19 +2,17 @@ package engine.graphics.renderer;
 
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
-import engine.data.Planet;
+import engine.data.planetary.Planet;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.*;
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.light.*;
 import engine.graphics.objects.planet.PlanetObject;
-import engine.graphics.objects.textures.Texture;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.input.KeyboardInput;
 import engine.input.MouseInput;
 import engine.graphics.gui.window.Window;
-import engine.math.numericalObjects.Vector3;
 import load.StringLoader;
 import engine.math.numericalObjects.Matrix4;
 import org.lwjgl.glfw.GLFW;
@@ -49,7 +47,6 @@ public class Renderer {
 	private KeyboardInput keyboard;
 
 	private double angle = 0;
-	private PlanetObject planetObject;
 
 	public Renderer(Window window) {
 		this.window = window;
@@ -237,6 +234,9 @@ public class Renderer {
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_R)) { // go closer
 			camera.changeRadius(-camera.getRadius()/100d);
+			if (camera.getRadius() < 1d + GraphicalConstants.ZNEAR) {
+				camera.setRadius(1d + GraphicalConstants.ZNEAR);
+			}
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_F)) { // go farther away
 			camera.changeRadius(camera.getRadius()/100d);
@@ -247,19 +247,14 @@ public class Renderer {
 	// ################################ Rendering ########################################
 	// ###################################################################################
 
-	public void render(Scene scene, GUIInterface hud) {
+	public void render(Scene scene, GUIInterface hud, Planet planet) {
 		processInput(scene);
 
-		if (planetObject == null) {
-			planetObject = new PlanetObject(new Planet(32));
-			planetObject.rotateX(Math.PI/16d);
-		} else {
-			planetObject.rotateY(0.001d);
-		}
+		PlanetObject planetObject = planet.getPlanetObject();
 
 		// Render depth map before view ports has been set up
 		if (scene.getShadowMap() != null) {
-			renderDepthMap(scene.getShadowMap(), scene, hud);
+			renderDepthMap(scene.getShadowMap(), scene, hud, planetObject);
 		}
 
 		GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
@@ -267,7 +262,7 @@ public class Renderer {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		if (scene != null) {
-			renderScene(scene);
+			renderScene(scene, planetObject);
 		}
 		if (hud != null) {
 			renderGUI(hud);
@@ -284,11 +279,11 @@ public class Renderer {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Depth Map
 
-	private void renderDepthMap(ShadowMap shadowMap, Scene scene, GUIInterface hud) {
+	private void renderDepthMap(ShadowMap shadowMap, Scene scene, GUIInterface hud, PlanetObject planetObject) {
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, shadowMap.getDepthMapFBO());
 		GL11.glViewport(0, 0, GraphicalConstants.SHADOWMAP_SIZE, GraphicalConstants.SHADOWMAP_SIZE);
 
-		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		depthShaderProgram.bind();
 
@@ -308,7 +303,7 @@ public class Renderer {
 			depthShaderProgram.setUniform("modelLightViewMatrix", viewMatrix.times(planetObject.getWorldMatrix()));
 
 			// here we pass the shaderProgram because in FacePart.render() we need set some uniforms
-			planetObject.render(depthShaderProgram, scene.getCamera().getPlanetaryLODMatrix(), false);
+			planetObject.render(depthShaderProgram, scene.getCamera().getPlanetaryLODMatrix(), false, false);
 		}
 
 		depthShaderProgram.unbind();
@@ -319,7 +314,7 @@ public class Renderer {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Scene
 
-	private void renderScene(Scene scene) {
+	private void renderScene(Scene scene, PlanetObject planetObject) {
 		shaderProgram.bind();
 
 		Camera camera = scene.getCamera();
@@ -387,7 +382,7 @@ public class Renderer {
 			}
 
 			// here we pass the shaderProgram because in FacePart.render() we need set some uniforms
-			planetObject.render(shaderProgram, camera.getPlanetaryLODMatrix(), true);
+			planetObject.render(shaderProgram, camera.getPlanetaryLODMatrix(), true, true);
 		}
 
 		shaderProgram.unbind();

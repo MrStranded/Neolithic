@@ -1,6 +1,9 @@
 package engine.graphics.objects.planet;
 
+import constants.TopologyConstants;
+import engine.data.planetary.Tile;
 import engine.graphics.objects.models.Mesh;
+import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
@@ -11,33 +14,63 @@ public class FacePart {
 	private static final Vector3 cameraDirection = new Vector3(0,0,1);
 	
 	private Mesh mesh;
+	private Mesh waterMesh;
 	private Vector3 normal;
+
 	private FacePart[] quarterFaces;
+
+	private double height = 0;
+	private double waterHeight = TopologyConstants.PLANET_OZEAN_HEIGHT;
+
+	private Tile tile;
+	private RGBA color = TopologyConstants.TILE_DEFAULT_COLOR;
+
+	private Vector3 corner1, corner2, corner3;
 
 	private int depth;
 
-	public FacePart() {
+	public FacePart(Vector3 corner1, Vector3 corner2, Vector3 corner3) {
+		this.corner1 = corner1;
+		this.corner2 = corner2;
+		this.corner3 = corner3;
+
+		normal = corner1.plus(corner2).plus(corner3).normalize();
 	}
 
 	// ###################################################################################
 	// ################################ Rendering ########################################
 	// ###################################################################################
 
-	private void renderSelf(ShaderProgram shaderProgram, boolean putDataIntoShader) {
-		if (putDataIntoShader) {
-			shaderProgram.setUniform("color", mesh.getColor());
-			if (mesh.getMaterial() != null) {
-				shaderProgram.setUniform("material", mesh.getMaterial());
+	private void renderSelf(ShaderProgram shaderProgram, boolean putDataIntoShader, boolean drawWater) {
+		if (drawWater) {
+			if (waterMesh != null) {
+				if (putDataIntoShader) {
+					shaderProgram.setUniform("color", waterMesh.getColor());
+					if (waterMesh.getMaterial() != null) {
+						shaderProgram.setUniform("material", waterMesh.getMaterial());
+					}
+				}
+				waterMesh.render(true);
 			}
-		}
 
-		mesh.render(true);
+		} else {
+			if (waterMesh == null) {
+				if (putDataIntoShader) {
+					shaderProgram.setUniform("color", mesh.getColor());
+					if (mesh.getMaterial() != null) {
+						shaderProgram.setUniform("material", mesh.getMaterial());
+					}
+				}
+				mesh.render(true);
+			}
+
+		}
 	}
 	
-	public void render(ShaderProgram shaderProgram, Matrix4 viewWorldMatrix, int depth, boolean putDataIntoShader) {
+	public void render(ShaderProgram shaderProgram, Matrix4 viewWorldMatrix, int depth, boolean putDataIntoShader, boolean drawWater) {
 		// performance!!!
 		if (quarterFaces == null) {
-			renderSelf(shaderProgram, putDataIntoShader);
+			renderSelf(shaderProgram, putDataIntoShader,drawWater);
 			return;
 		}
 
@@ -68,17 +101,62 @@ public class FacePart {
 		if ((detailLevel >= this.depth) && (quarterFaces != null)) {
 			for (FacePart facePart : quarterFaces) {
 				if (facePart != null) {
-					facePart.render(shaderProgram, viewWorldMatrix, depth, putDataIntoShader);
+					facePart.render(shaderProgram, viewWorldMatrix, depth, putDataIntoShader, drawWater);
 				}
 			}
 		} else {
-			renderSelf(shaderProgram, putDataIntoShader);
+			renderSelf(shaderProgram, putDataIntoShader, drawWater);
 		}
 	}
 
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
+
+	public Tile getTile() {
+		return tile;
+	}
+	public void setTile(Tile tile) {
+		this.tile = tile;
+	}
+
+	public Vector3 getCorner1() {
+		return corner1;
+	}
+	public Vector3 getCorner2() {
+		return corner2;
+	}
+	public Vector3 getCorner3() {
+		return corner3;
+	}
+
+	public double getHeight() {
+		return height;
+	}
+	public void setHeight(double height) {
+		this.height = height;
+	}
+
+	public double getWaterHeight() {
+		return waterHeight;
+	}
+	public void setWaterHeight(double waterHeight) {
+		this.waterHeight = waterHeight;
+	}
+
+	public RGBA getColor() {
+		return color;
+	}
+	public void setColor(RGBA color) {
+		this.color = color;
+	}
+
+	public Mesh getWaterMesh() {
+		return waterMesh;
+	}
+	public void setWaterMesh(Mesh waterMesh) {
+		this.waterMesh = waterMesh;
+	}
 
 	public Mesh getMesh() {
 		return mesh;

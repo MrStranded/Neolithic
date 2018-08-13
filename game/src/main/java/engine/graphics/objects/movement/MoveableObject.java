@@ -11,6 +11,8 @@ public class MoveableObject {
 	protected Vector3 scale = new Vector3(1,1,1);
 	protected Vector3 rotation = new Vector3(0,0,0);
 
+	private Matrix4 matrix;
+
 	// TAU constant
 	private static final double TAU = Math.PI*2d;
 

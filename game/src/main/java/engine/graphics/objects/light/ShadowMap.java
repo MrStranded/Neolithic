@@ -1,6 +1,7 @@
 package engine.graphics.objects.light;
 
 import constants.GraphicalConstants;
+import constants.TopologyConstants;
 import engine.graphics.objects.Camera;
 import engine.graphics.objects.textures.Texture;
 import engine.graphics.renderer.projection.Projection;
@@ -33,7 +34,7 @@ public class ShadowMap {
 
 	public ShadowMap() throws Exception {
 		// Create the depth map texture
-		depthMap = new Texture(GraphicalConstants.SHADOWMAP_SIZE, GraphicalConstants.SHADOWMAP_SIZE, /*GL11.GL_RGBA*/ GL11.GL_DEPTH_COMPONENT);
+		depthMap = new Texture(GraphicalConstants.SHADOWMAP_SIZE, GraphicalConstants.SHADOWMAP_SIZE, GL11.GL_RGBA /*GL11.GL_DEPTH_COMPONENT*/);
 		depthMap.initialize();
 
 		// Create a FBO to render the depth map
@@ -42,11 +43,26 @@ public class ShadowMap {
 		// Attach the depth map texture to the FBO
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, depthMapFBO);
 
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, /*GL30.GL_COLOR_ATTACHMENT0*/ GL30.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, depthMap.getTextureId(), 0);
+		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0 /*GL30.GL_DEPTH_ATTACHMENT*/, GL11.GL_TEXTURE_2D, depthMap.getTextureId(), 0);
+
+
+// create a renderbuffer object to store depth info
+		int[] rboId = new int[1];
+		GL30.glGenRenderbuffers(rboId);
+		GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, rboId[0]);
+		GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL11.GL_DEPTH_COMPONENT,
+				GraphicalConstants.SHADOWMAP_SIZE, GraphicalConstants.SHADOWMAP_SIZE);
+		GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, 0);
+
+// attach the renderbuffer to depth attachment point
+		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER,      // 1. fbo target: GL_FRAMEBUFFER
+				GL30.GL_DEPTH_ATTACHMENT, // 2. attachment point
+				GL30.GL_RENDERBUFFER,     // 3. rbo target: GL_RENDERBUFFER
+				rboId[0]);              // 4. rbo ID
 
 		// Set only depth
-		GL11.glDrawBuffer(/*GL30.GL_COLOR_ATTACHMENT0*/ GL11.GL_NONE);
-		GL11.glReadBuffer(/*GL30.GL_COLOR_ATTACHMENT0*/ GL11.GL_NONE);
+		GL11.glDrawBuffer(GL30.GL_COLOR_ATTACHMENT0 /*GL11.GL_NONE*/);
+		GL11.glReadBuffer(GL30.GL_COLOR_ATTACHMENT0 /*GL11.GL_NONE*/);
 
 		if (GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER) != GL30.GL_FRAMEBUFFER_COMPLETE) {
 			throw new Exception("Could not create FrameBuffer. Error code: " + GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER));
@@ -102,7 +118,7 @@ public class ShadowMap {
 			double poleShadow = Math.abs(Math.sin(camera.getPitch())); // 1 at poles, 0 at equator
 
 			double brightSpot = GraphicalConstants.SHADOWMAP_BRIGHT_SPOT_SIZE;
-			double angle = lightAngle + camera.getYaw();
+			double angle = -lightAngle + camera.getYaw();
 			if (angle < 0) {
 				angle += TAU;
 			}
@@ -145,7 +161,7 @@ public class ShadowMap {
 			viewMatrix = new Matrix4();
 		}
 
-		double size = distance * GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
+		double size = distance * (TopologyConstants.PLANET_MINIMUM_HEIGHT + (double) TopologyConstants.PLANET_MAXIMUM_HEIGHT) / TopologyConstants.PLANET_MINIMUM_HEIGHT;//GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
 		orthographicProjection =    Projection.createOrthographicProjectionMatrix(
 									-size, size, size, -size, zNear*distance, zFar*distance
 		);
