@@ -53,6 +53,26 @@ public class BinaryTreeTest {
 	}
 
 	@Test
+	public void testBinaryTreeMergeWithTree() {
+		BinaryTree t1 = new BinaryTree();
+
+		t1.insert(new Attribute(0));
+		t1.insert(new Attribute(1));
+		t1.insert(new Attribute(2));
+
+		BinaryTree t2 = new BinaryTree();
+
+		t2.insert(new Attribute(1));
+		t2.insert(new Attribute(3));
+		t2.insert(new Attribute(-1));
+
+		t1.insert(t2);
+
+		assertTrue(t1.get(3) != null);
+		assertEquals(5, t1.size());
+	}
+
+	@Test
 	public void testBinaryTreeRetrieval() {
 		BinaryTree tree = new BinaryTree();
 

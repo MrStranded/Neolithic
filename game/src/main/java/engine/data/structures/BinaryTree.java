@@ -60,6 +60,28 @@ public class BinaryTree<T extends IDInterface> {
 		sanitize();
 	}
 
+	/**
+	 * Inserts the contents of another Binary Tree into this tree.
+	 * Afterwards the tree is being balanced.
+	 * @param tree whose values to insert
+	 */
+	public void insert(BinaryTree<T> tree) {
+		if (tree != null) {
+			insertNode(tree.root);
+			sanitize();
+		}
+	}
+
+	private void insertNode(BinaryTreeNode<T> node) {
+		if (node == null) {
+			return;
+		}
+
+		insert(node.getValue());
+		insertNode(node.getRight());
+		insertNode(node.getLeft());
+	}
+
 	private void insert(T value, BinaryTreeNode<T> node) {
 		if (value.getId() < node.getValue().getId()) {
 			if (node.getLeft() == null) {
