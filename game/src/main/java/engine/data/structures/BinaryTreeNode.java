@@ -5,11 +5,11 @@ import engine.data.attributes.Attribute;
 
 public class BinaryTreeNode<T extends IDInterface> {
 
-	private BinaryTreeNode left, right;
+	private BinaryTreeNode<T> left, right;
 	private T value;
 	private int depth = 0;
 
-	public BinaryTreeNode(T value) {
+	BinaryTreeNode(T value) {
 		this.value = value;
 	}
 
@@ -24,17 +24,17 @@ public class BinaryTreeNode<T extends IDInterface> {
 		this.depth = depth;
 	}
 
-	public BinaryTreeNode getLeft() {
+	public BinaryTreeNode<T> getLeft() {
 		return left;
 	}
-	public void setLeft(BinaryTreeNode left) {
+	public void setLeft(BinaryTreeNode<T> left) {
 		this.left = left;
 	}
 
-	public BinaryTreeNode getRight() {
+	public BinaryTreeNode<T> getRight() {
 		return right;
 	}
-	public void setRight(BinaryTreeNode right) {
+	public void setRight(BinaryTreeNode<T> right) {
 		this.right = right;
 	}
 

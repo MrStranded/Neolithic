@@ -1,5 +1,6 @@
 package data;
 
+import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.structures.BinaryTree;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,17 @@ public class BinaryTreeTest {
 		assertTrue(tree.get(-100) != null);
 
 		assertTrue(tree.get(3) == null);
+
+		Attribute[] attributes = new Attribute[5];
+		attributes[0] = new Attribute(8);
+		attributes[2] = new Attribute(14);
+		attributes[3] = new Attribute(-1);
+
+		tree.insert(attributes);
+
+		assertTrue(tree.get(8) != null);
+		assertTrue(tree.get(14) != null);
+		assertTrue(tree.get(-1) != null);
 	}
 
 	@Test
@@ -52,6 +64,7 @@ public class BinaryTreeTest {
 
 		assertEquals(a1, tree.get(123));
 		assertEquals(a2, tree.get(-123));
+		assertEquals(null, tree.get(0));
 	}
 
 	@Test
@@ -71,5 +84,45 @@ public class BinaryTreeTest {
 		tree.insert(new Attribute(100));
 
 		assertEquals(8, tree.size());
+	}
+
+	@Test
+	public void testBinaryTreeRemoval() {
+		BinaryTree tree = new BinaryTree();
+
+		tree.insert(new Attribute(0));
+		tree.insert(new Attribute(1));
+		tree.insert(new Attribute(2));
+		tree.insert(new Attribute(3));
+		tree.insert(new Attribute(4));
+
+		tree.remove(1);
+		tree.remove(3);
+		tree.remove(4);
+		tree.remove(0);
+		tree.remove(2);
+		tree.remove(1);
+
+		assertEquals(0, tree.size());
+	}
+
+	@Test
+	public void testBinaryTreeToArray() {
+		BinaryTree<Attribute> tree = new BinaryTree();
+
+		tree.insert(new Attribute(100));
+		tree.insert(new Attribute(-21));
+		tree.insert(new Attribute(11));
+		tree.insert(new Attribute(31));
+		tree.insert(new Attribute(0));
+
+		IDInterface[] attributes = tree.toArray();
+
+		// checking wheter the array is sorted from lowest to highest
+		for (int i=0; i<attributes.length-1; i++) {
+			assertTrue(attributes[i].getId() < attributes[i+1].getId());
+		}
+
+		assertEquals(attributes.length, tree.size());
 	}
 }
