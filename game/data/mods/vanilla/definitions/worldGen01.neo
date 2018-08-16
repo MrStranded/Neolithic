@@ -1,6 +1,6 @@
 WorldGen: genContinental {
-	name = "Continental";
-	waterLevel = 50;
+	name: "Continental";
+	waterLevel: 50;
 
 	Script: start {
 		disableWorldMeshUpdates();
@@ -17,7 +17,7 @@ WorldGen: genContinental {
 Formation: formMountain {
 	Script: place(Tile: tile) {
 		height = random(100,255);
-		self.lift(tile, height);
+		lift(tile, height);
 	}
 
 	Script: lift(tile, height) {
@@ -25,13 +25,13 @@ Formation: formMountain {
 			setHeight(tile, height);
 
 			deviation = random(0,10);
-			self.lift(getNeighbour(tile, 0), height-deviation);
+			lift(getNeighbour(tile, 0), height-deviation);
 
 			deviation = random(0,10);
-			self.lift(getNeighbour(tile, 1), height-deviation);
+			lift(getNeighbour(tile, 1), height-deviation);
 
 			deviation = random(0,10);
-			self.lift(getNeighbour(tile, 2), height-deviation);
+			lift(getNeighbour(tile, 2), height-deviation);
 		}
 	}
 }
@@ -56,7 +56,7 @@ Process: proEat {
 }
 
 Item: itBread {
-	name = "Bread";
+	name: "Bread";
 	
 	Script: start {
 		setAttribute(self, attNutrition, 10);
@@ -68,8 +68,8 @@ Item: itBread {
 }
 
 Attribute: attHunger {
-	name = "Hunger";
+	name: "Hunger";
 }
 Attribute: attNutrition {
-	name = "Nutrition";
+	name: "Nutrition";
 }

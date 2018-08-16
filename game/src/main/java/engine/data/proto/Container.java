@@ -10,7 +10,6 @@ import engine.graphics.objects.models.Mesh;
 public class Container {
 
 	// classification
-	private int id;
 	private String textID;
 
 	// graphical
@@ -20,8 +19,7 @@ public class Container {
 	private String name = "[NAME]";
 	private Effect commonEffect = null;
 
-	public Container(int id, String textID) {
-		this.id = id;
+	public Container(String textID) {
 		this.textID = textID;
 	}
 
@@ -29,11 +27,16 @@ public class Container {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public int getId() {
-		return id;
+	public int getAttribute(int attributeID) {
+		return commonEffect != null? commonEffect.getValue(attributeID) : 0;
 	}
 
 	public String getTextID() {
 		return textID;
+	}
+
+	public void setCommonEffect(Effect effect) {
+		commonEffect = effect;
+		commonEffect.setEternal();
 	}
 }

@@ -29,6 +29,7 @@ public class Start {
 		System.setProperty("java.awt.headless", "true");
 
 		Engine.initialize();
+		Engine.loadData();
 		Engine.createWorld();
 
 		Engine.start();

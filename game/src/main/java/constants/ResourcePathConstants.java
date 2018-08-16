@@ -16,4 +16,11 @@ public class ResourcePathConstants {
 	public static final String DEPTH_FRAGMENT_SHADER    = SHADER_FOLDER + "depthFragment.fs";
 
 	public static final String FONT_FOLDER              = RESOURCE_FOLDER + "fonts/";
+
+	public static final String MOD_FOLDER               = "data/";
+
+	public static final String MOD_LOAD_ORDER_FILE      = MOD_FOLDER + "loadorder.txt";
+
+	public static final String DEFINITIONS_FOLDER       = "definitions/";
+	public static final String ASSETS_FOLDER            = "assets/";
 }

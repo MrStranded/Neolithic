@@ -7,8 +7,8 @@ import engine.data.time.GameTime;
 public class Effect implements IDInterface {
 
 	private int id;
-	private GameTime creation;
-	private GameTime duration = null;
+	private GameTime creation; // the creation time is necessary - can never be null
+	private GameTime duration = null; // when duration is null, this means that this effect does not expire
 	private BinaryTree<Attribute> attributes;
 
 	public Effect(int id, GameTime creation) {
@@ -41,6 +41,10 @@ public class Effect implements IDInterface {
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
+
+	public void setEternal() {
+		duration = null;
+	}
 
 	@Override
 	public int getId() {

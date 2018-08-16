@@ -1,0 +1,32 @@
+Attribute: attLife {
+	name: "Life";
+}
+
+Attribute: attSpeed {
+	name: "Speed";
+	mutationChance: 0.5;
+}
+
+Attribute: attWeight {
+	name: "Weight";
+}
+
+Creature: creHuman {
+	name: "Human";
+
+	process: proEat;
+
+	Effect: common {
+		attribute: attLife, 100;
+		attribute: attSpeed, 2;
+		attribute: attWeight, 70;
+	}
+}
+
+Entity: entRock {
+	name: "Rock";
+
+	Effect: common {
+		attribute: attWeight, 10;
+	}
+}

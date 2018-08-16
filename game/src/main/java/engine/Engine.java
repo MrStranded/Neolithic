@@ -1,12 +1,14 @@
 package engine;
 
 import engine.data.planetary.Planet;
+import engine.data.proto.Data;
 import engine.graphics.gui.BaseGUI;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.Scene;
 import engine.graphics.gui.window.Window;
 import engine.graphics.renderer.Renderer;
 import engine.logic.TopologyGenerator;
+import engine.parser.Parser;
 
 /**
  * The engine binds the whole thing together.
@@ -27,6 +29,14 @@ public class Engine {
 
 		renderer = new Renderer(window);
 		renderer.initialize();
+	}
+
+	public static void loadData() {
+		Parser parser = new Parser();
+
+		parser.load();
+
+		//Data.initialize();
 	}
 
 	public static void createWorld() {
