@@ -7,12 +7,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModLoader {
+public class ModOrderLoader {
 
 	public static List<String> loadMods() {
 		List<String> mods = new ArrayList<>(4);
 
-		File modFolder = new File(ResourcePathConstants.MOD_FOLDER);
+		File modFolder = new File(ResourcePathConstants.DATA_FOLDER);
 
 		if (modFolder.exists()) {
 			File modFile = new File(ResourcePathConstants.MOD_LOAD_ORDER_FILE);

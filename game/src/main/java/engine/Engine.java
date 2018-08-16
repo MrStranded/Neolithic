@@ -72,11 +72,11 @@ public class Engine {
 	}
 
 	public static void cleanUp() {
-		renderer.cleanUp();
-		scene.cleanUp();
-		hud.cleanUp();
+		if (renderer != null) { renderer.cleanUp(); }
+		if (scene != null) { scene.cleanUp(); }
+		if (hud != null) { hud.cleanUp(); }
 
-		window.destroy();
+		if (window != null) { window.destroy(); }
 	}
 
 }
