@@ -1,1 +1,8 @@
-17+1;
+Script: sMove {
+	// Comment01
+	17+1;
+	/* Test02 */
+	var02_brütül = "swagdaddy" + 0.001.3;
+	/* lol // r"o"fl\"\\\" */ b"l"u\"b\\\ // wtf
+	28/ 4;
+}

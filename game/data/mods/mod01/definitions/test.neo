@@ -1,32 +1,46 @@
-Attribute: attLife {
+Attribute attLife {
 	name: "Life";
 }
 
-Attribute: attSpeed {
+Attribute attSpeed {
 	name: "Speed";
 	mutationChance: 0.5;
 }
 
-Attribute: attWeight {
+Attribute attWeight {
 	name: "Weight";
 }
 
-Creature: creHuman {
+Entity entHuman {
 	name: "Human";
 
-	process: proEat;
+	knowledge {
+		proEat;
+		proMove;
+	}
 
-	Effect: common {
-		attribute: attLife, 100;
-		attribute: attSpeed, 2;
-		attribute: attWeight, 70;
+	attributes {
+		attLife, 7*20 - 80/2;
+		attSpeed, random(1,2);
+		attWeight, 70;
+	}
+
+	on start {
+		sHumanBirthEvent;
 	}
 }
 
-Entity: entRock {
+Script sHumanBirthEvent(human) {
+	print ("a human has been born " + human.name);
+	if (human.attLife > 1) {
+		print ("and " + human.name + " is fast");
+	} else {
+		print ("but he/she is very slow");
+	}
+}
+
+Entity entRock {
 	name: "Rock";
 
-	Effect: common {
-		attribute: attWeight, 10;
-	}
+	attributes { attWeight, 10; }
 }

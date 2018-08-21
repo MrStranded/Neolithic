@@ -5,6 +5,9 @@ import constants.ScriptConstants;
 import load.ModOrderLoader;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -46,6 +49,11 @@ public class Parser {
 		for (File file : definitionsFolder.listFiles()) {
 			if (file.isFile() && file.getName().endsWith(ScriptConstants.SCRIPT_FILE_SUFFIX)) {
 				System.out.println("load file: " + file.getName());
+				try {
+					Tokenizer.tokenize(new FileReader(file));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -54,7 +62,7 @@ public class Parser {
 	// ################################ Load Files #######################################
 	// ###################################################################################
 
-	
+
 
 	// ###################################################################################
 	// ################################ Parse ############################################
