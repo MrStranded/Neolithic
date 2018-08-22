@@ -1,0 +1,27 @@
+Entity: ent {
+
+}
+
+Entity: entTree {
+	name = "Tree";
+
+	knowledge {
+		proPhotoSynthesis;
+	}
+}
+
+Process: proPhotoSynthesis {
+	Script: educt(actor) {
+		require(getLightLevel(actor) + actor.attLightLevel >= 50);
+		require(getTile(actor).attHumidity >= 20);
+	}
+	Script: product(actor) {
+		getTile(actor).attHumidity -= 5;
+		actor.attNutrition += 5;
+	}
+
+	alternatives {} // there is no way for a plant to create light (currently?)
+
+	Script: discovery(actor) { // there is no way for an entity to learn photosynthesisis
+	}
+}

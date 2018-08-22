@@ -6,7 +6,6 @@ import engine.parser.constants.TokenType;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,7 +171,7 @@ public class Tokenizer {
 		if (inString) { // unclosed String!
 			Logger.error("Unclosed String!");
 		}
-		
+
 		return tokens;
 	}
 
