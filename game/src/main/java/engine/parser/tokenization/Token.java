@@ -1,4 +1,4 @@
-package engine.parser;
+package engine.parser.tokenization;
 
 import engine.parser.constants.TokenType;
 

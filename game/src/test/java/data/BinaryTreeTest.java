@@ -2,9 +2,8 @@ package data;
 
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
-import engine.data.structures.BinaryTree;
+import engine.data.structures.trees.binary.BinaryTree;
 import org.junit.jupiter.api.Test;
-import org.lwjgl.system.CallbackI;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

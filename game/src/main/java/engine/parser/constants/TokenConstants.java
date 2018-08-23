@@ -1,13 +1,14 @@
 package engine.parser.constants;
 
-import engine.parser.Token;
+import engine.parser.tokenization.Token;
 
 public enum TokenConstants {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% KeyWords
 	// -------------------------------------------------- Constructors
 	ATTRIBUTE   (TokenType.KEYWORD, "Attribute"),
-	ENTITY      (TokenType.KEYWORD, "Entity"),
+	TILE        (TokenType.KEYWORD, "Tile"),
+	ENTITY      (TokenType.KEYWORD, "Instance"),
 	SCRIPT      (TokenType.KEYWORD, "Script"),
 	PROCESS     (TokenType.KEYWORD, "Process"),
 
@@ -104,6 +105,10 @@ public enum TokenConstants {
 
 	public boolean equals(TokenType type, String value) {
 		return (getType() == type) && (getValue().equals(value));
+	}
+
+	public boolean equals(Token t) {
+		return (getType() == t.getType()) && (getValue().equals(t.getValue()));
 	}
 
 	// ###################################################################################

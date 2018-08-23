@@ -1,10 +1,11 @@
 package engine.data.planetary;
 
 import constants.TopologyConstants;
+import engine.data.entities.Instance;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.renderer.color.RGBA;
 
-public class Tile {
+public class Tile extends Instance {
 
 	private int xPos,yPos;
 	private int height = 0;
@@ -15,7 +16,8 @@ public class Tile {
 	private Face face;
 	private FacePart tileMesh;
 
-	public Tile(int xPos, int yPos, Face face) {
+	public Tile(int id, int xPos, int yPos, Face face) {
+		super(id);
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.face = face;

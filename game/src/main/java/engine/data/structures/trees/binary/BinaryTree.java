@@ -1,7 +1,6 @@
-package engine.data.structures;
+package engine.data.structures.trees.binary;
 
 import engine.data.IDInterface;
-import engine.data.attributes.Attribute;
 
 /**
  * My own implementation of an AVL tree.

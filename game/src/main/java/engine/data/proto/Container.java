@@ -1,6 +1,8 @@
 package engine.data.proto;
 
 import engine.data.attributes.Effect;
+import engine.data.structures.Script;
+import engine.data.structures.trees.binary.BinaryTree;
 import engine.graphics.objects.models.Mesh;
 
 /**
@@ -18,9 +20,11 @@ public class Container {
 	// game logic
 	private String name = "[NAME]";
 	private Effect commonEffect = null;
+	private BinaryTree<Script> scripts;
 
 	public Container(String textID) {
 		this.textID = textID;
+		scripts = new BinaryTree<>();
 	}
 
 	// ###################################################################################

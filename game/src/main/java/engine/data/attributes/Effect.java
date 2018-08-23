@@ -1,7 +1,7 @@
 package engine.data.attributes;
 
 import engine.data.IDInterface;
-import engine.data.structures.BinaryTree;
+import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.time.GameTime;
 
 public class Effect implements IDInterface {

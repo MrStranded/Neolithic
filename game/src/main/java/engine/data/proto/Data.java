@@ -1,5 +1,6 @@
 package engine.data.proto;
 
+import constants.GameConstants;
 import engine.data.attributes.Attribute;
 
 public class Data {
@@ -8,13 +9,7 @@ public class Data {
 	private static int containerID = 0;
 
 	public static void initialize() {
-		// this is all mock up
-		containers = new Container[3];
-		containers[0] = new Container("tree");
-		containers[1] = new Container("rock");
-		containers[2] = new Container("dove");
-
-		Attribute attLife = new Attribute(0);
+		containers = new Container[GameConstants.MAX_CONTAINERS];
 	}
 
 	public static Container get(int id) {
@@ -24,6 +19,11 @@ public class Data {
 		return null;
 	}
 
+	/**
+	 * Could be more efficient with a hash map, but maybe there is no need to waste the memory if ids are only asked for at the start of the program.
+	 * @param textID
+	 * @return
+	 */
 	public static int getID(String textID) {
 		for (int i=0; i<containers.length; i++) {
 			Container container = containers[i];

@@ -1,5 +1,6 @@
-package engine.parser;
+package engine.parser.tokenization;
 
+import engine.parser.Logger;
 import engine.parser.constants.CharacterClass;
 import engine.parser.constants.TokenConstants;
 import engine.parser.constants.TokenType;

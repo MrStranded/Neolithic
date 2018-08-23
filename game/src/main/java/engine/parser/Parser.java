@@ -2,27 +2,23 @@ package engine.parser;
 
 import constants.ResourcePathConstants;
 import constants.ScriptConstants;
+import engine.parser.interpretation.Interpreter;
+import engine.parser.tokenization.Token;
+import engine.parser.tokenization.Tokenizer;
 import load.ModOrderLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class Parser {
 
 	private double progress = 0; // ranging from 0 to 1
 
 	private List<String> mods;
-	private List<CodeBlock> blocks;
-	private Stack<CodeBlock> blockStack;
 
 	public Parser() {
-		blocks = new ArrayList<>(16);
-		blockStack = new Stack<>();
 	}
 
 	// ###################################################################################
@@ -48,11 +44,22 @@ public class Parser {
 
 		for (File file : definitionsFolder.listFiles()) {
 			if (file.isFile() && file.getName().endsWith(ScriptConstants.SCRIPT_FILE_SUFFIX)) {
-				System.out.println("load file: " + file.getName());
-				try {
-					Tokenizer.tokenize(new FileReader(file));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
+				// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Big Temporary Hack
+				if (file.getName().equals("smallestGame.neo")) { // <- this right here
+					System.out.println("load file: " + file.getName());
+					try {
+						List<Token> tokens = Tokenizer.tokenize(new FileReader(file));
+
+						try {
+							Interpreter interpreter = new Interpreter(tokens);
+							interpreter.interpret();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}

@@ -3,20 +3,43 @@ package engine.data.entities;
 import engine.data.attributes.Effect;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
+import engine.graphics.objects.movement.MoveableObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Entity {
+public class Instance {
 
 	private int id;
-	private String personalName = null;
 
 	List<Effect> effects;
+	List<Instance> subInstances;
 
-	public Entity(int id) {
+	public Instance(int id) {
 		effects = new ArrayList<>(4);
+		subInstances = new ArrayList<>(4);
 	}
+
+	// ###################################################################################
+	// ################################ Graphical ########################################
+	// ###################################################################################
+
+	// ###################################################################################
+	// ################################ Sub Instances ####################################
+	// ###################################################################################
+
+	public boolean contains(int subId) {
+		for (Instance instance : subInstances) {
+			if (instance.getId() == subId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// ###################################################################################
+	// ################################ Effects ##########################################
+	// ###################################################################################
 
 	public void addEffect(Effect effect) {
 		// maybe we have to merge two effects
@@ -26,6 +49,7 @@ public class Entity {
 				if (currentEffect.getId() == effect.getId()) {
 					exists = true;
 					currentEffect.merge(effect);
+					break;
 				}
 			}
 		}
@@ -53,5 +77,9 @@ public class Entity {
 		}
 
 		return value;
+	}
+
+	public int getId() {
+		return id;
 	}
 }
