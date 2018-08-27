@@ -1,14 +1,13 @@
 package engine.data.proto;
 
 import constants.TopologyConstants;
+import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
-import engine.data.attributes.Effect;
 import engine.data.structures.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.renderer.color.RGBA;
-import org.w3c.dom.Attr;
 
 /**
  * The container class holds values that apply to several instances of a certain type (defined by their id).
@@ -29,12 +28,13 @@ public class Container {
 
 	// game logic
 	private String name = "[NAME]";
-	private Effect commonEffect = null;
+	private BinaryTree<Attribute> attributes;
 	private BinaryTree<Script> scripts;
 
 	public Container(String textID, DataType type) {
 		this.textID = textID;
 		this.type = type;
+		attributes = new BinaryTree<>();
 		scripts = new BinaryTree<>();
 	}
 
@@ -72,24 +72,17 @@ public class Container {
 	}
 
 	public int getAttribute(int attributeID) {
-		return commonEffect != null? commonEffect.getValue(attributeID) : 0;
+		Attribute attribute = attributes.get(attributeID);
+		return attribute != null? attribute.getValue() : 0;
 	}
 
-	public Attribute[] getAttributes() {
-		return commonEffect != null? commonEffect.getAttributes() : null;
+	public IDInterface[] getAttributes() {
+		return attributes.toArray();
 	}
 
 	public void addAttribute(Attribute attribute) {
 		if (attribute != null) {
-			if (commonEffect == null) {
-				commonEffect = new Effect(-1, null);
-			}
-			commonEffect.add(attribute);
+			attributes.insert(attribute);
 		}
-	}
-
-	public void setCommonEffect(Effect effect) {
-		commonEffect = effect;
-		commonEffect.setEternal();
 	}
 }

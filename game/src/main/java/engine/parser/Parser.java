@@ -2,6 +2,7 @@ package engine.parser;
 
 import constants.ResourcePathConstants;
 import constants.ScriptConstants;
+import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
@@ -82,9 +83,10 @@ public class Parser {
 			Container container;
 			while ((container = Data.getContainer(i++)) != null) {
 				System.out.println("Container: " + container.getTextID() + ", " + container.getName() + ", " + container.getColor());
-				Attribute[] attributes = container.getAttributes();
+				IDInterface[] attributes = container.getAttributes();
 				if (attributes != null) {
-					for (Attribute attribute : attributes) {
+					for (IDInterface idInterface : attributes) {
+						Attribute attribute = (Attribute) idInterface;
 						System.out.println("-> Att: " + attribute.getId() + " (" + Data.getProtoAttribute(attribute.getId()).getTextID() + ") " + ", " + attribute.getValue());
 					}
 				}

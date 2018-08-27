@@ -1,9 +1,9 @@
 package engine.data.entities;
 
-import engine.data.attributes.Effect;
+import engine.data.attributes.Attribute;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
-import engine.graphics.objects.movement.MoveableObject;
+import engine.data.structures.trees.binary.BinaryTree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +12,11 @@ public class Instance {
 
 	protected int id;
 
-	private List<Effect> effects;
+	private BinaryTree<Attribute> attributes;
 	private List<Instance> subInstances;
 
 	public Instance(int id) {
-		effects = new ArrayList<>(4);
+		attributes = new BinaryTree<>();
 		subInstances = new ArrayList<>(4);
 	}
 
@@ -38,29 +38,6 @@ public class Instance {
 	}
 
 	// ###################################################################################
-	// ################################ Effects ##########################################
-	// ###################################################################################
-
-	public void addEffect(Effect effect) {
-		// maybe we have to merge two effects
-		boolean exists = false;
-		for (Effect currentEffect : effects) {
-			if (currentEffect != null) {
-				if (currentEffect.getId() == effect.getId()) {
-					exists = true;
-					currentEffect.merge(effect);
-					break;
-				}
-			}
-		}
-
-		// no merge was necessary -> add as usual
-		if (!exists) {
-			effects.add(effect);
-		}
-	}
-
-	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
@@ -72,9 +49,8 @@ public class Instance {
 		value += container != null? container.getAttribute(attributeID) : 0;
 
 		// personal data
-		for (Effect effect : effects) {
-			value += effect != null? effect.getValue(attributeID) : 0;
-		}
+		Attribute attribute = attributes.get(attributeID);
+		value += attribute != null? attribute.getValue() : 0;
 
 		return value;
 	}
