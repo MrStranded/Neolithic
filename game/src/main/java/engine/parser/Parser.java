@@ -2,6 +2,7 @@ package engine.parser;
 
 import constants.ResourcePathConstants;
 import constants.ScriptConstants;
+import engine.data.attributes.Attribute;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
 import engine.data.proto.ProtoAttribute;
@@ -48,7 +49,7 @@ public class Parser {
 		for (File file : definitionsFolder.listFiles()) {
 			if (file.isFile() && file.getName().endsWith(ScriptConstants.SCRIPT_FILE_SUFFIX)) {
 				// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Big Temporary Hack
-				if (file.getName().equals("smallestGame.neo")) { // <- this right here
+				if (file.getName().equals("smallGame.neo")) { // <- this right here
 					System.out.println("load file: " + file.getName());
 					loadFile(file);
 				}
@@ -81,6 +82,12 @@ public class Parser {
 			Container container;
 			while ((container = Data.getContainer(i++)) != null) {
 				System.out.println("Container: " + container.getTextID() + ", " + container.getName() + ", " + container.getColor());
+				Attribute[] attributes = container.getAttributes();
+				if (attributes != null) {
+					for (Attribute attribute : attributes) {
+						System.out.println("-> Att: " + attribute.getId() + " (" + Data.getProtoAttribute(attribute.getId()).getTextID() + ") " + ", " + attribute.getValue());
+					}
+				}
 			}
 
 		} catch (FileNotFoundException e) {

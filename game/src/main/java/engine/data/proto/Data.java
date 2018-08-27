@@ -55,6 +55,18 @@ public class Data {
 		return null;
 	}
 
+	public static int getProtoAttributeID(String textID) {
+		for (int i=0; i<attributes.length; i++) {
+			ProtoAttribute protoAttribute = attributes[i];
+			if (protoAttribute != null) {
+				if (protoAttribute.getTextID().equals(textID)) {
+					return i;
+				}
+			}
+		}
+		return -1;
+	}
+
 	/**
 	 * Creates a list with all the containers of a given DataType.
 	 * @param type

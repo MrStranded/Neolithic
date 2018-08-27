@@ -1,5 +1,6 @@
 package engine.parser.interpretation;
 
+import engine.data.attributes.Attribute;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
 import engine.data.proto.ProtoAttribute;
@@ -9,6 +10,7 @@ import engine.parser.Logger;
 import engine.parser.constants.TokenConstants;
 import engine.parser.constants.TokenType;
 import engine.parser.tokenization.Token;
+import engine.utils.converters.IntegerConverter;
 
 import java.util.Iterator;
 import java.util.List;
@@ -165,6 +167,22 @@ public class Interpreter {
 				protoTile.setColor(new RGBA(colorRed, colorGreen, colorBlue));
 
 				consume(TokenConstants.CURLY_BRACKETS_CLOSE);
+
+			} else if (TokenConstants.VALUES_ATTRIBUTES.isEqualTo(next)) { // list of attributes
+				consume(TokenConstants.CURLY_BRACKETS_OPEN);
+
+				String nextSub;
+				while (!TokenConstants.CURLY_BRACKETS_CLOSE.isEqualTo(nextSub = consume())) {
+					consume(TokenConstants.COMMA);
+					String value = consume();
+					consume(TokenConstants.SEMICOLON);
+
+					int id = Data.getProtoAttributeID(nextSub);
+					if (id >= 0) {
+						Attribute attribute = new Attribute(id, Integer.parseInt(value));
+						protoTile.addAttribute(attribute);
+					}
+				}
 
 			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.isEqualTo(next)) { // end of definition
 				return;

@@ -7,15 +7,14 @@ Attribute: attEdible { name = "Edible"; }
 ///////////////////////////////////////////////////////////////////////////// Tiles
 
 Tile: tDirt {
-	top {
+	name = "Dirt";
+
+	preferredHeight = 128;
+
+	color {
 		200;
 		150;
 		30;
-	}
-	side {
-		180;
-		140;
-		100;
 	}
 
 	Script: tick {
@@ -26,20 +25,21 @@ Tile: tDirt {
 }
 
 Tile: tGras {
-	top {
-		120;
-		200;
-		30;
-	}
-	side {
-		160;
-		160;
-		100;
+	name = "Gras";
+	preferredHeight = 180;
+
+	color {
+		120;200;50;
 	}
 
 	attributes {
 		attNutrition, 3;
 	}
+}
+
+Tile: tStone {
+	preferredHeight = 255;
+	name = "Stone"; color {150;150;120;}
 }
 
 ///////////////////////////////////////////////////////////////////////////// Creatures

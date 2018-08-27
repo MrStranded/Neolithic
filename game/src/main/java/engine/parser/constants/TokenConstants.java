@@ -12,10 +12,6 @@ public enum TokenConstants {
 	SCRIPT      (TokenType.KEYWORD, "Script"),
 	PROCESS     (TokenType.KEYWORD, "Process"),
 
-	// -------------------------------------------------- List Instantiaters
-	KNOWLEDGE   (TokenType.KEYWORD, "knowledge"),
-	ATTRIBUTES  (TokenType.KEYWORD, "attributes"),
-
 	// -------------------------------------------------- Scripts
 	ON          (TokenType.KEYWORD, "on"),
 
@@ -32,6 +28,10 @@ public enum TokenConstants {
 	VALUE_NAME              (TokenType.KEYWORD, "name"),
 	VALUE_COLOR             (TokenType.KEYWORD, "color"),
 	VALUE_PREFERREDHEIGHT   (TokenType.KEYWORD, "preferredHeight"),
+
+	// -------------------------------------------------- List Instantiaters
+	VALUES_KNOWLEDGE   (TokenType.KEYWORD, "knowledge"),
+	VALUES_ATTRIBUTES  (TokenType.KEYWORD, "attributes"),
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Seperators
 	// -------------------------------------------------- Brackets

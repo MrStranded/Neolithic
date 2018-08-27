@@ -1,16 +1,18 @@
 package engine.data.proto;
 
 import constants.TopologyConstants;
+import engine.data.attributes.Attribute;
 import engine.data.attributes.Effect;
 import engine.data.structures.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.renderer.color.RGBA;
+import org.w3c.dom.Attr;
 
 /**
  * The container class holds values that apply to several instances of a certain type (defined by their id).
- * For example: Items with the same id also share the name and the mesh, which are stored in a Container.
+ * For example: Items with the same id also share the (species) name and the mesh, which are stored in a Container.
  */
 public class Container {
 
@@ -71,6 +73,19 @@ public class Container {
 
 	public int getAttribute(int attributeID) {
 		return commonEffect != null? commonEffect.getValue(attributeID) : 0;
+	}
+
+	public Attribute[] getAttributes() {
+		return commonEffect != null? commonEffect.getAttributes() : null;
+	}
+
+	public void addAttribute(Attribute attribute) {
+		if (attribute != null) {
+			if (commonEffect == null) {
+				commonEffect = new Effect(-1, null);
+			}
+			commonEffect.add(attribute);
+		}
 	}
 
 	public void setCommonEffect(Effect effect) {

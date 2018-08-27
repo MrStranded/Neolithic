@@ -46,6 +46,10 @@ public class Effect implements IDInterface {
 		duration = null;
 	}
 
+	public Attribute[] getAttributes() {
+		return (Attribute[]) attributes.toArray();
+	}
+
 	@Override
 	public int getId() {
 		return id;
