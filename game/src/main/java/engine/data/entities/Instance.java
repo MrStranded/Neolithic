@@ -10,10 +10,10 @@ import java.util.List;
 
 public class Instance {
 
-	private int id;
+	protected int id;
 
-	List<Effect> effects;
-	List<Instance> subInstances;
+	private List<Effect> effects;
+	private List<Instance> subInstances;
 
 	public Instance(int id) {
 		effects = new ArrayList<>(4);
@@ -68,7 +68,7 @@ public class Instance {
 		int value = 0;
 
 		// general data
-		Container container = Data.get(id);
+		Container container = Data.getContainer(id);
 		value += container != null? container.getAttribute(attributeID) : 0;
 
 		// personal data
@@ -81,5 +81,8 @@ public class Instance {
 
 	public int getId() {
 		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 }

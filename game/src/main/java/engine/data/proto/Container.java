@@ -1,9 +1,12 @@
 package engine.data.proto;
 
+import constants.TopologyConstants;
 import engine.data.attributes.Effect;
 import engine.data.structures.Script;
 import engine.data.structures.trees.binary.BinaryTree;
+import engine.data.variables.DataType;
 import engine.graphics.objects.models.Mesh;
+import engine.graphics.renderer.color.RGBA;
 
 /**
  * The container class holds values that apply to several instances of a certain type (defined by their id).
@@ -13,17 +16,23 @@ public class Container {
 
 	// classification
 	private String textID;
+	private DataType type;
 
 	// graphical
 	private Mesh mesh = null;
+
+	// tile specific
+	private int preferredHeight = 0;
+	private RGBA color = TopologyConstants.TILE_DEFAULT_COLOR;
 
 	// game logic
 	private String name = "[NAME]";
 	private Effect commonEffect = null;
 	private BinaryTree<Script> scripts;
 
-	public Container(String textID) {
+	public Container(String textID, DataType type) {
 		this.textID = textID;
+		this.type = type;
 		scripts = new BinaryTree<>();
 	}
 
@@ -31,12 +40,37 @@ public class Container {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public int getAttribute(int attributeID) {
-		return commonEffect != null? commonEffect.getValue(attributeID) : 0;
-	}
-
 	public String getTextID() {
 		return textID;
+	}
+
+	public DataType getType() {
+		return type;
+	}
+
+	public RGBA getColor() {
+		return color;
+	}
+	public void setColor(RGBA color) {
+		this.color = color;
+	}
+
+	public int getPreferredHeight() {
+		return preferredHeight;
+	}
+	public void setPreferredHeight(int preferredHeight) {
+		this.preferredHeight = preferredHeight;
+	}
+
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAttribute(int attributeID) {
+		return commonEffect != null? commonEffect.getValue(attributeID) : 0;
 	}
 
 	public void setCommonEffect(Effect effect) {

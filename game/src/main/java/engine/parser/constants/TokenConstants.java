@@ -28,6 +28,11 @@ public enum TokenConstants {
 	// -------------------------------------------------- Commands
 	PRINT       (TokenType.KEYWORD, "print"),
 
+	// -------------------------------------------------- Engine Values
+	VALUE_NAME              (TokenType.KEYWORD, "name"),
+	VALUE_COLOR             (TokenType.KEYWORD, "color"),
+	VALUE_PREFERREDHEIGHT   (TokenType.KEYWORD, "preferredHeight"),
+
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Seperators
 	// -------------------------------------------------- Brackets
 	ROUND_BRACKETS_OPEN     (TokenType.SEPARATOR, "("),
@@ -107,8 +112,14 @@ public enum TokenConstants {
 		return (getType() == type) && (getValue().equals(value));
 	}
 
-	public boolean equals(Token t) {
-		return (getType() == t.getType()) && (getValue().equals(t.getValue()));
+	/**
+	 * I needed to change the name of the method, so the jvm knew which method to use.
+	 * (It used the default equals method for some reason)
+	 * @param tokenValue String value of asked token
+	 * @return true if the string values are equal
+	 */
+	public boolean isEqualTo(String tokenValue) {
+		return getValue().equals(tokenValue);
 	}
 
 	// ###################################################################################

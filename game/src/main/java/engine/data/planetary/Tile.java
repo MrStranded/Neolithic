@@ -1,17 +1,18 @@
 package engine.data.planetary;
 
 import constants.TopologyConstants;
+import engine.data.IDInterface;
 import engine.data.entities.Instance;
+import engine.data.proto.Container;
+import engine.data.proto.Data;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.renderer.color.RGBA;
 
-public class Tile extends Instance {
+public class Tile extends Instance implements IDInterface {
 
 	private int xPos,yPos;
 	private int height = 0;
 	private int waterHeight = TopologyConstants.PLANET_OZEAN_HEIGHT;
-
-	private RGBA color = TopologyConstants.TILE_DEFAULT_COLOR;
 
 	private Face face;
 	private FacePart tileMesh;
@@ -21,6 +22,11 @@ public class Tile extends Instance {
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.face = face;
+	}
+
+	@Override
+	public IDInterface merge(IDInterface other) {
+		return this;
 	}
 
 	// ###################################################################################
@@ -61,9 +67,13 @@ public class Tile extends Instance {
 	}
 
 	public RGBA getColor() {
-		return color;
+		Container protoTile = Data.getContainer(id);
+
+		if (protoTile != null) {
+			return protoTile.getColor();
+		}
+
+		return TopologyConstants.TILE_DEFAULT_COLOR;
 	}
-	public void setColor(RGBA color) {
-		this.color = color;
-	}
+
 }

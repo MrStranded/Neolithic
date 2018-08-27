@@ -2,6 +2,9 @@ package engine.parser;
 
 import constants.ResourcePathConstants;
 import constants.ScriptConstants;
+import engine.data.proto.Container;
+import engine.data.proto.Data;
+import engine.data.proto.ProtoAttribute;
 import engine.parser.interpretation.Interpreter;
 import engine.parser.tokenization.Token;
 import engine.parser.tokenization.Tokenizer;
@@ -47,19 +50,7 @@ public class Parser {
 				// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Big Temporary Hack
 				if (file.getName().equals("smallestGame.neo")) { // <- this right here
 					System.out.println("load file: " + file.getName());
-					try {
-						List<Token> tokens = Tokenizer.tokenize(new FileReader(file));
-
-						try {
-							Interpreter interpreter = new Interpreter(tokens);
-							interpreter.interpret();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}
+					loadFile(file);
 				}
 			}
 		}
@@ -69,7 +60,33 @@ public class Parser {
 	// ################################ Load Files #######################################
 	// ###################################################################################
 
+	private void loadFile(File file) {
+		try {
+			List<Token> tokens = Tokenizer.tokenize(new FileReader(file));
 
+			try {
+				Interpreter interpreter = new Interpreter(tokens);
+				interpreter.interpret();
+			} catch (Exception e) {
+				Logger.error("Parsing error in file: " + file.getName());
+				e.printStackTrace();
+			}
+
+			int i = 0;
+			ProtoAttribute protoAttribute;
+			while ((protoAttribute = Data.getProtoAttribute(i++)) != null) {
+				System.out.println("ProtoAttribute: " + protoAttribute.getTextID() + ", " + protoAttribute.getName());
+			}
+			i = 0;
+			Container container;
+			while ((container = Data.getContainer(i++)) != null) {
+				System.out.println("Container: " + container.getTextID() + ", " + container.getName() + ", " + container.getColor());
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 
 	// ###################################################################################
 	// ################################ Parse ############################################

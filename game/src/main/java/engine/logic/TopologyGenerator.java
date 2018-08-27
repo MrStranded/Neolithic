@@ -4,7 +4,12 @@ import constants.TopologyConstants;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
+import engine.data.proto.Container;
+import engine.data.proto.Data;
+import engine.data.variables.DataType;
 import engine.graphics.renderer.color.RGBA;
+
+import java.util.List;
 
 public class TopologyGenerator {
 
@@ -39,31 +44,40 @@ public class TopologyGenerator {
 			}
 		}
 
+		List<Container> tileList = Data.getContainersOfType(DataType.TILE);
 		for (Face face : planet.getFaces()) {
 			for (Tile tile : face.getTiles()) {
-				int height = tile.getHeight();
+				int bestFit = calculateBestTile(tile.getHeight(), tileList);
 
-				if (height > TopologyConstants.PLANET_OZEAN_HEIGHT) {
-					if (height > 200) {
-						double p = 1d - (255d - height) / 55d;
-
-						tile.setColor(new RGBA(
-								0.5d + p*0.5d,
-								1d,
-								0.25d + p*0.75d
-						));
-					} else {
-						double p = 1d - (200d - height) / (200 - TopologyConstants.PLANET_OZEAN_HEIGHT);
-
-						tile.setColor(new RGBA(
-								1d - p*0.5d,
-								0.75d + p*0.25d,
-								0.25d
-						));
-					}
+				if (bestFit >= 0) {
+					tile.setId(bestFit);
 				}
 			}
 		}
+	}
+
+	/**
+	 * Calculates the best tile type for a given environment.
+	 * @param height
+	 * @param tileList
+	 * @return
+	 */
+	private static int calculateBestTile(int height, List<Container> tileList) {
+		Container closest = null;
+		int closestDistance = 255;
+
+		for (Container protoTile : tileList) {
+			int distance = Math.abs(height - protoTile.getPreferredHeight()) + (int) (TopologyConstants.TILE_PREFERRED_TYPE_BLUR * (Math.random()*2d - 1d));
+			if (closest == null || distance < closestDistance) {
+				closest = protoTile;
+				closestDistance = distance;
+			}
+		}
+
+		if (closest != null) {
+			return Data.getContainerID(closest.getTextID());
+		}
+		return -1;
 	}
 
 	private static void liftTile(Tile tile, int height) {

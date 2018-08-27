@@ -34,9 +34,8 @@ public class Engine {
 	public static void loadData() {
 		Parser parser = new Parser();
 
+		Data.initialize();
 		parser.load();
-
-		//Data.initialize();
 	}
 
 	public static void createWorld() {
