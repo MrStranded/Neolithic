@@ -1,6 +1,5 @@
 package engine.parser.interpretation;
 
-import engine.data.attributes.Attribute;
 import engine.data.attributes.PreAttribute;
 import engine.data.proto.*;
 import engine.data.variables.DataType;
@@ -9,8 +8,8 @@ import engine.parser.Logger;
 import engine.parser.constants.TokenConstants;
 import engine.parser.constants.TokenType;
 import engine.parser.tokenization.Token;
-import engine.utils.converters.IntegerConverter;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,49 +25,32 @@ public class Interpreter {
 	// ################################ Token Consumption ################################
 	// ###################################################################################
 
-	private String consume(TokenConstants tokenConstant) throws Exception {
+	private Token consume(TokenConstants tokenConstant) throws Exception {
 		if (!tokenIterator.hasNext()) { // error reporting
 			throw new Exception("Reached unexpected end of file!");
 		}
 
 		Token next = tokenIterator.next();
-		if (tokenConstant.isEqualTo(next.getValue())) {
-			return next.getValue();
+		if (tokenConstant.equals(next)) {
+			return next;
 
 		} else { // error reporting
 			String errorMessage = "Wrong Token! Expected " + tokenConstant.getValue()
 					+ " but found " + next.getValue()
 					+ " on line " + next.getLine();
+
 			Logger.error(errorMessage);
-			/*StringBuilder successive = new StringBuilder();
-			int i = 0;
-			while (tokenIterator.hasNext() && i < 20) {
-				successive.append(tokenIterator.next().getValue());
-				successive.append(" ");
-				i++;
-			}
-			Logger.error("Right before: " + successive);*/
 			throw new Exception(errorMessage);
 
 		}
 	}
 
-	private String consume() throws Exception {
+	private Token consume() throws Exception {
 		if (!tokenIterator.hasNext()) { // error reporting
 			throw new Exception("Reached unexpected end of file!");
 		}
 
-		Token next = tokenIterator.next();
-		return next.getValue();
-	}
-
-	private Token consumeToken() throws Exception {
-		if (!tokenIterator.hasNext()) { // error reporting
-			throw new Exception("Reached unexpected end of file!");
-		}
-
-		Token next = tokenIterator.next();
-		return next;
+		return tokenIterator.next();
 	}
 
 	// ###################################################################################
@@ -140,44 +122,18 @@ public class Interpreter {
 	public void interpret() throws Exception {
 		// outer most level of a script
 		while (tokenIterator.hasNext()) {
-			String next = consume();
+			Token next = consume();
 
-			if (TokenConstants.ATTRIBUTE.isEqualTo(next)) {        // Attribute
+			if (TokenConstants.ATTRIBUTE.equals(next)) {        // Attribute
 				createAttribute();
-			} else if (TokenConstants.TILE.isEqualTo(next)) {      // Tile
+			} else if (TokenConstants.TILE.equals(next)) {      // Tile
 				createTile();
-			} else if (TokenConstants.CREATURE.isEqualTo(next)) {  // Creature
+			} else if (TokenConstants.CREATURE.equals(next)) {  // Creature
 				createCreature();
-			}
-		}
-	}
-
-	// ###################################################################################
-	// ################################ Attribute ########################################
-	// ###################################################################################
-
-	private void createAttribute() throws Exception {
-		// Attribute : attTextId { ... }
-		consume(TokenConstants.COLON);
-		String textId = consume();
-		consume(TokenConstants.CURLY_BRACKETS_OPEN);
-
-		ProtoAttribute protoAttribute = new ProtoAttribute(textId);
-		Data.addProtoAttribute(protoAttribute);
-
-		while (true) {
-			String next = consume();
-			if (TokenConstants.VALUE_NAME.isEqualTo(next)) { // name definition
-				consume(TokenConstants.ASSIGNMENT);
-
-				String name = consume();
-				protoAttribute.setName(name);
-
-				consume(TokenConstants.SEMICOLON);
-
-			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.isEqualTo(next)) { // end of definition
-				return;
-
+			} else if (TokenConstants.ENTITY.equals(next)) {    // Entity
+				createEntity();
+			} else if (TokenConstants.DRIVE.equals(next)) {     // Drive
+				createDrive();
 			}
 		}
 	}
@@ -195,31 +151,76 @@ public class Interpreter {
 		// attributes { attOne, 10; attTwo, 7; }
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
-		String nextSub;
-		while (!TokenConstants.CURLY_BRACKETS_CLOSE.isEqualTo(nextSub = consume())) {
+		Token nextToken;
+		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(nextToken = consume())) {
 			consume(TokenConstants.COMMA);
-			Token token = consumeToken();
+			Token token = consume();
 			consume(TokenConstants.SEMICOLON);
 
-			PreAttribute preAttribute = new PreAttribute(nextSub, getInt(token));
+			PreAttribute preAttribute = new PreAttribute(nextToken.getValue(), getInt(token));
 			container.addPreAttribute(preAttribute);
 		}
 	}
 
-	/**
-	 * A TokenConstants.VALUES_KNOWLEDGE has been encountered. We now add the textIDs of the processes to a preList of the container.
-	 * @param container to add the textIDs to
-	 * @throws Exception
-	 */
-	private void addKnowledge(CreatureContainer container) throws Exception {
-		// knowledge { proOne; proTwo; }
+	private void feedTextIDList(List<String> textIDs) throws Exception {
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
 		Token nextToken;
-		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(nextToken = consumeToken())) {
+		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(nextToken = consume())) {
 			consume(TokenConstants.SEMICOLON);
 
-			container.addPreKnownProcess(nextToken.getValue());
+			if (nextToken.getValue() != null && nextToken.getValue().length() > 0) {
+				textIDs.add(nextToken.getValue());
+			}
+		}
+	}
+
+	// ###################################################################################
+	// ################################ Value Helper Functions ###########################
+	// ###################################################################################
+
+	private void addName(Container container) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token name = consume();
+		container.setName(name.getValue());
+
+		consume(TokenConstants.SEMICOLON);
+	}
+
+	private void addName(ProtoAttribute protoAttribute) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token name = consume();
+		protoAttribute.setName(name.getValue());
+
+		consume(TokenConstants.SEMICOLON);
+	}
+
+	// ###################################################################################
+	// ################################ Attribute ########################################
+	// ###################################################################################
+
+	private void createAttribute() throws Exception {
+		// Attribute : attTextId { ... }
+		consume(TokenConstants.COLON);
+		Token textId = consume();
+		consume(TokenConstants.CURLY_BRACKETS_OPEN);
+
+		ProtoAttribute protoAttribute = new ProtoAttribute(textId.getValue());
+		Data.addProtoAttribute(protoAttribute);
+
+		while (true) {
+			Token next = consume();
+			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
+				addName(protoAttribute);
+
+			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
+				return;
+
+			} else { // unknown command
+				Logger.error("Unknown Attribute definition command '" + next.getValue() + "' on line " + next.getLine());
+			}
 		}
 	}
 
@@ -230,31 +231,26 @@ public class Interpreter {
 	private void createTile() throws Exception {
 		// Tile : tTextId { ... }
 		consume(TokenConstants.COLON);
-		String textId = consume();
+		Token textId = consume();
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
-		TileContainer protoTile = new TileContainer(textId);
+		TileContainer protoTile = new TileContainer(textId.getValue());
 		Data.addContainer(protoTile);
 
 		while (true) {
-			String next = consume();
-			if (TokenConstants.VALUE_NAME.isEqualTo(next)) { // name definition
+			Token next = consume();
+			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
+				addName(protoTile);
+
+			} else if (TokenConstants.VALUE_PREFERREDHEIGHT.equals(next)) { // preferred height definition
 				consume(TokenConstants.ASSIGNMENT);
 
-				String name = consume();
-				protoTile.setName(name);
-
-				consume(TokenConstants.SEMICOLON);
-
-			} else if (TokenConstants.VALUE_PREFERREDHEIGHT.isEqualTo(next)) { // preferred height definition
-				consume(TokenConstants.ASSIGNMENT);
-
-				Token height = consumeToken();
+				Token height = consume();
 				protoTile.setPreferredHeight(getInt(height));
 
-				Token nextSub = consumeToken();
+				Token nextSub = consume();
 				if (TokenConstants.COMMA.equals(nextSub)) {
-					Token blur = consumeToken();
+					Token blur = consume();
 					protoTile.setPreferredHeightBlur(getInt(blur));
 
 					consume(TokenConstants.SEMICOLON);
@@ -265,38 +261,38 @@ public class Interpreter {
 					Logger.error("Expected '" + TokenConstants.SEMICOLON.getValue() + "' but got '" + nextSub + "' on line " + nextSub.getLine());
 				}
 
-			} else if (TokenConstants.VALUE_PREFERREDHEIGHTBLUR.isEqualTo(next)) { // preferred height blur definition
+			} else if (TokenConstants.VALUE_PREFERREDHEIGHTBLUR.equals(next)) { // preferred height blur definition
 				consume(TokenConstants.ASSIGNMENT);
 
-				Token blur = consumeToken();
+				Token blur = consume();
 				protoTile.setPreferredHeightBlur(getInt(blur));
 
 				consume(TokenConstants.SEMICOLON);
 
-			} else if (TokenConstants.VALUE_COLOR.isEqualTo(next)) { // color definition
+			} else if (TokenConstants.VALUE_COLOR.equals(next)) { // color definition
 				consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
-				String seperator;
+				Token seperator;
 				Token redDeviation = null, greenDeviation = null, blueDeviation = null;
 
-				Token red = consumeToken();
+				Token red = consume();
 				seperator = consume();
-				if (TokenConstants.COMMA.isEqualTo(seperator)) {
-					redDeviation = consumeToken();
+				if (TokenConstants.COMMA.equals(seperator)) {
+					redDeviation = consume();
 					consume(TokenConstants.SEMICOLON);
 				}
 
-				Token green = consumeToken();
+				Token green = consume();
 				seperator = consume();
-				if (TokenConstants.COMMA.isEqualTo(seperator)) {
-					greenDeviation = consumeToken();
+				if (TokenConstants.COMMA.equals(seperator)) {
+					greenDeviation = consume();
 					consume(TokenConstants.SEMICOLON);
 				}
 
-				Token blue = consumeToken();
+				Token blue = consume();
 				seperator = consume();
-				if (TokenConstants.COMMA.isEqualTo(seperator)) {
-					blueDeviation = consumeToken();
+				if (TokenConstants.COMMA.equals(seperator)) {
+					blueDeviation = consume();
 					consume(TokenConstants.SEMICOLON);
 				}
 
@@ -313,12 +309,14 @@ public class Interpreter {
 
 				consume(TokenConstants.CURLY_BRACKETS_CLOSE);
 
-			} else if (TokenConstants.VALUES_ATTRIBUTES.isEqualTo(next)) { // list of attributes
+			} else if (TokenConstants.VALUES_ATTRIBUTES.equals(next)) { // list of attributes
 				addAttributes(protoTile);
 
-			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.isEqualTo(next)) { // end of definition
+			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
 				return;
 
+			} else { // unknown command
+				Logger.error("Unknown Tile definition command '" + next.getValue() + "' on line " + next.getLine());
 			}
 		}
 	}
@@ -330,31 +328,91 @@ public class Interpreter {
 	private void createCreature() throws Exception {
 		// Creature : cTextId { ... }
 		consume(TokenConstants.COLON);
-		String textId = consume();
+		Token textId = consume();
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
-		CreatureContainer protoCreature = new CreatureContainer(textId);
+		CreatureContainer protoCreature = new CreatureContainer(textId.getValue());
 		Data.addContainer(protoCreature);
 
 		while (true) {
-			String next = consume();
-			if (TokenConstants.VALUE_NAME.isEqualTo(next)) { // name definition
-				consume(TokenConstants.ASSIGNMENT);
+			Token next = consume();
+			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
+				addName(protoCreature);
 
-				String name = consume();
-				protoCreature.setName(name);
-
-				consume(TokenConstants.SEMICOLON);
-
-			} else if (TokenConstants.VALUES_ATTRIBUTES.isEqualTo(next)) { // list of attributes
+			} else if (TokenConstants.VALUES_ATTRIBUTES.equals(next)) { // list of attributes
 				addAttributes(protoCreature);
 
-			} else if (TokenConstants.VALUES_KNOWLEDGE.isEqualTo(next)) { // list of known processes
-				addKnowledge(protoCreature);
+			} else if (TokenConstants.VALUES_KNOWLEDGE.equals(next)) { // list of known processes
+				feedTextIDList(protoCreature.getPreKnownProcesses());
 
-			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.isEqualTo(next)) { // end of definition
+			} else if (TokenConstants.VALUES_DRIVES.equals(next)) { // list of drives
+				feedTextIDList(protoCreature.getPreDrives());
+
+			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
 				return;
 
+			} else { // unknown command
+				Logger.error("Unknown Creature definition command '" + next.getValue() + "' on line " + next.getLine());
+			}
+		}
+	}
+
+	// ###################################################################################
+	// ################################ Entity ###########################################
+	// ###################################################################################
+
+	private void createEntity() throws Exception {
+		// Entity : eTextId { ... }
+		consume(TokenConstants.COLON);
+		Token textId = consume();
+		consume(TokenConstants.CURLY_BRACKETS_OPEN);
+
+		Container protoEntity = new Container(textId.getValue(), DataType.ENTITY);
+		Data.addContainer(protoEntity);
+
+		while (true) {
+			Token next = consume();
+			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
+				addName(protoEntity);
+
+			} else if (TokenConstants.VALUES_ATTRIBUTES.equals(next)) { // list of attributes
+				addAttributes(protoEntity);
+
+			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
+				return;
+
+			} else { // unknown command
+				Logger.error("Unknown Entity definition command '" + next.getValue() + "' on line " + next.getLine());
+			}
+		}
+	}
+
+	// ###################################################################################
+	// ################################ Drive ############################################
+	// ###################################################################################
+
+	private void createDrive() throws Exception {
+		// Entity : eTextId { ... }
+		consume(TokenConstants.COLON);
+		Token textId = consume();
+		consume(TokenConstants.CURLY_BRACKETS_OPEN);
+
+		DriveContainer protoDrive = new DriveContainer(textId.getValue());
+		Data.addContainer(protoDrive);
+
+		while (true) {
+			Token next = consume();
+			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
+				addName(protoDrive);
+
+			} else if (TokenConstants.VALUES_SOLUTIONS.equals(next)) { // list of solutions
+				feedTextIDList(protoDrive.getPreSolutions());
+
+			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
+				return;
+
+			} else { // unknown command
+				Logger.error("Unknown Drive definition command '" + next.getValue() + "' on line " + next.getLine());
 			}
 		}
 	}

@@ -126,9 +126,12 @@ public class Data {
 		for (Container container : containers) {
 			if (container != null) {
 				container.finalizeAttributes();
+				container.finalizeScripts();
 
 				if (container.getType() == DataType.CREATURE) {
 					((CreatureContainer) container).finalizeBehaviour();
+				} else if (container.getType() == DataType.DRIVE) {
+					((DriveContainer) container).finalizeSolutions();
 				}
 			}
 		}

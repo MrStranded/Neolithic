@@ -4,10 +4,7 @@ import constants.ResourcePathConstants;
 import constants.ScriptConstants;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
-import engine.data.proto.Container;
-import engine.data.proto.CreatureContainer;
-import engine.data.proto.Data;
-import engine.data.proto.ProtoAttribute;
+import engine.data.proto.*;
 import engine.data.variables.DataType;
 import engine.parser.interpretation.Interpreter;
 import engine.parser.tokenization.Token;
@@ -102,6 +99,7 @@ public class Parser {
 	// ###################################################################################
 
 	private void debug() {
+		System.out.println("/////////////////////////////////////////////////////////////");
 		int i = 0;
 		ProtoAttribute protoAttribute;
 		while ((protoAttribute = Data.getProtoAttribute(i++)) != null) {
@@ -124,6 +122,13 @@ public class Parser {
 			if (container.getType() == DataType.CREATURE) {
 				for (String process : ((CreatureContainer) container).getPreKnownProcesses()) {
 					System.out.println("-> Pro: " + process);
+				}
+				for (String drive : ((CreatureContainer) container).getPreDrives()) {
+					System.out.println("-> Dri: " + drive);
+				}
+			} else if (container.getType() == DataType.DRIVE) {
+				for (String solution : ((DriveContainer) container).getPreSolutions()) {
+					System.out.println("-> Sol: " + solution);
 				}
 			}
 		}

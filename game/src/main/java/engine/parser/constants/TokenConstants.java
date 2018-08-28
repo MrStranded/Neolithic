@@ -12,6 +12,7 @@ public enum TokenConstants {
 	CREATURE    (TokenType.KEYWORD, "Creature"),
 	SCRIPT      (TokenType.KEYWORD, "Script"),
 	PROCESS     (TokenType.KEYWORD, "Process"),
+	DRIVE       (TokenType.KEYWORD, "Drive"),
 
 	// -------------------------------------------------- Scripts
 	ON          (TokenType.KEYWORD, "on"),
@@ -35,6 +36,7 @@ public enum TokenConstants {
 	VALUES_KNOWLEDGE   (TokenType.KEYWORD, "knowledge"),
 	VALUES_DRIVES      (TokenType.KEYWORD, "drives"),
 	VALUES_ATTRIBUTES  (TokenType.KEYWORD, "attributes"),
+	VALUES_SOLUTIONS   (TokenType.KEYWORD, "solutions"),
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Seperators
 	// -------------------------------------------------- Brackets
@@ -102,14 +104,26 @@ public enum TokenConstants {
 		token = new Token(type, value, 0);
 	}
 
+	/**
+	 * Checks whether the requested TokenConstant is exactly equal to the two given chars.
+	 * You have to pass the codepoints, which you may also retrieve with writing the char in single quotes. Eg. 'c'.
+	 * @param codePoint1 first char
+	 * @param codePoint2 second char
+	 * @return true if the tokenConstant equals the two given chars
+	 */
 	public boolean equals(int codePoint1, int codePoint2) {
 		String value = token.getValue();
-		if (value.length() >= 2) {
+		if (value.length() == 2) {
 			return (value.codePointAt(0) == codePoint1) && (value.codePointAt(1) == codePoint2);
 		}
 		return false;
 	}
 
+	/**
+	 * Checks whether this TokenConstant is exaclty equal to the given char.
+	 * @param c char to check against
+	 * @return true if they are equal
+	 */
 	public boolean equals(char c) {
 		String value = token.getValue();
 		if (value.length() == 1) {
@@ -118,22 +132,25 @@ public enum TokenConstants {
 		return false;
 	}
 
+	/**
+	 * This method checks for equality of type and value.
+	 * If you only need equality of value, use the method equals(Token) to do so.
+	 * @param type to check against
+	 * @param value to check against
+	 * @return true if both are equal to the requested TokenConstant
+	 */
 	public boolean equals(TokenType type, String value) {
 		return (getType() == type) && (getValue().equals(value));
 	}
 
+	/**
+	 * This method only checks for equality of String. The Type is not considered here.
+	 * Use the method equals(TokenType, String) for verbose equality if necessary.
+	 * @param t token whose value to check against
+	 * @return true if the values are equal
+	 */
 	public boolean equals(Token t) {
 		return (getValue().equals(t.getValue()));
-	}
-
-	/**
-	 * I needed to change the name of the method, so the jvm knew which method to use.
-	 * (It used the default equals method for some reason)
-	 * @param tokenValue String value of asked token
-	 * @return true if the string values are equal
-	 */
-	public boolean isEqualTo(String tokenValue) {
-		return getValue().equals(tokenValue);
 	}
 
 	// ###################################################################################

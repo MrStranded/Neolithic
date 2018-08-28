@@ -11,11 +11,13 @@ public class CreatureContainer extends Container {
 	//private BinaryTree<Process> knownProcesses;
 
 	private List<String> preKnownProcesses;
+	private List<String> preDrives;
 
 	public CreatureContainer(String textID) {
-		super(textID, DataType.ENTITY);
+		super(textID, DataType.CREATURE);
 
 		preKnownProcesses = new ArrayList<>(4);
+		preDrives = new ArrayList<>(2);
 	}
 
 	// ###################################################################################
@@ -36,11 +38,17 @@ public class CreatureContainer extends Container {
 		}
 	}
 
-	/**
-	 * For Debugging only! Remove soon!
-	 * @return
-	 */
+	public void addPreDrive(String textID) {
+		if (textID != null) {
+			preDrives.add(textID);
+		}
+	}
+
 	public List<String> getPreKnownProcesses() {
 		return preKnownProcesses;
+	}
+
+	public List<String> getPreDrives() {
+		return preDrives;
 	}
 }
