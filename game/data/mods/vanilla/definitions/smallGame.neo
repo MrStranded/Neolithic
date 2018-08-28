@@ -139,7 +139,7 @@ Entity: entFruit {
 
 ///////////////////////////////////////////////////////////////////////////// Plants
 
-Entity: entTree {
+Creature: creTree {
 	name = "Tree";
 
 	drives {

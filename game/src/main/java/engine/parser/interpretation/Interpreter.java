@@ -1,5 +1,6 @@
 package engine.parser.interpretation;
 
+import engine.data.ContainerIdentifier;
 import engine.data.attributes.PreAttribute;
 import engine.data.proto.*;
 import engine.data.variables.DataType;
@@ -164,7 +165,7 @@ public class Interpreter {
 		}
 	}
 
-	private void feedTextIDList(List<String> textIDs) throws Exception {
+	private void feedTextIDList(List<ContainerIdentifier> identifiers) throws Exception {
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
 		Token nextToken;
@@ -172,7 +173,7 @@ public class Interpreter {
 			consume(TokenConstants.SEMICOLON);
 
 			if (nextToken.getValue() != null && nextToken.getValue().length() > 0) {
-				textIDs.add(nextToken.getValue());
+				identifiers.add(new ContainerIdentifier(nextToken.getValue()));
 			}
 		}
 	}
@@ -180,6 +181,8 @@ public class Interpreter {
 	// ###################################################################################
 	// ################################ Value Helper Functions ###########################
 	// ###################################################################################
+
+	// ################################################################################### General
 
 	private void addName(Container container) throws Exception {
 		consume(TokenConstants.ASSIGNMENT);
@@ -197,6 +200,66 @@ public class Interpreter {
 		protoAttribute.setName(name.getValue());
 
 		consume(TokenConstants.SEMICOLON);
+	}
+
+	// ################################################################################### Tile
+
+	private void readPreferredHeight(TileContainer container) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token height = consume();
+		container.setPreferredHeight(getInt(height));
+
+		Token nextSub = consume();
+		if (TokenConstants.COMMA.equals(nextSub)) {
+			Token blur = consume();
+			container.setPreferredHeightBlur(getInt(blur));
+
+			consume(TokenConstants.SEMICOLON);
+
+		} else if (TokenConstants.SEMICOLON.equals(nextSub)) {
+			// exit definition
+		} else {
+			Logger.error("Expected '" + TokenConstants.SEMICOLON.getValue() + "' but got '" + nextSub + "' on line " + nextSub.getLine());
+		}
+	}
+
+	private void readPreferredHeightBlur(TileContainer container) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token blur = consume();
+		container.setPreferredHeightBlur(getInt(blur));
+
+		consume(TokenConstants.SEMICOLON);
+	}
+
+	private void readColor(TileContainer container) throws Exception {
+		consume(TokenConstants.CURLY_BRACKETS_OPEN);
+
+		Token seperator;
+		Token[][] values = new Token[3][2]; // x axis: r,g,b | y axis: color value, deviation
+
+		for (int i=0; i<3; i++) {
+			values[i][0] = consume();
+			seperator = consume();
+			if (TokenConstants.COMMA.equals(seperator)) {
+				values[i][1] = consume();
+				consume(TokenConstants.SEMICOLON);
+			}
+		}
+
+		container.setColor(new RGBA(
+				getDouble(values[0][0]) / 255d,
+				getDouble(values[1][0]) / 255d,
+				getDouble(values[2][0]) / 255d
+		));
+		container.setColorDeviation(new RGBA(
+				getDouble(values[0][1]) / 255d,
+				getDouble(values[1][1]) / 255d,
+				getDouble(values[2][1]) / 255d
+		));
+
+		consume(TokenConstants.CURLY_BRACKETS_CLOSE);
 	}
 
 	// ###################################################################################
@@ -235,6 +298,7 @@ public class Interpreter {
 		Token textId = consume();
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
+		// container creation
 		Container container;
 		switch (type) {
 			case ENTITY:
@@ -254,11 +318,11 @@ public class Interpreter {
 				break;
 			default:
 				Logger.error("Unknown entity constructor type '" + type + "' for '" + textId.getValue() + "' on line " + textId.getLine());
-				container = new Container(textId.getValue(), DataType.ENTITY);
-				break;
+				return;
 		}
 		Data.addContainer(container);
 
+		// container filling
 		while (true) {
 			Token next = consume();
 			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
@@ -266,107 +330,53 @@ public class Interpreter {
 
 			} else if (TokenConstants.VALUE_PREFERREDHEIGHT.equals(next)) { // preferred height definition
 				if (type == DataType.TILE) {
-					consume(TokenConstants.ASSIGNMENT);
-
-					Token height = consume();
-					((TileContainer) container).setPreferredHeight(getInt(height));
-
-					Token nextSub = consume();
-					if (TokenConstants.COMMA.equals(nextSub)) {
-						Token blur = consume();
-						((TileContainer) container).setPreferredHeightBlur(getInt(blur));
-
-						consume(TokenConstants.SEMICOLON);
-
-					} else if (TokenConstants.SEMICOLON.equals(nextSub)) {
-						// exit definition
-					} else {
-						Logger.error("Expected '" + TokenConstants.SEMICOLON.getValue() + "' but got '" + nextSub + "' on line " + nextSub.getLine());
-					}
-				}
+					readPreferredHeight((TileContainer) container);
+				} else { issueTypeError(next, type); }
 
 			} else if (TokenConstants.VALUE_PREFERREDHEIGHTBLUR.equals(next)) { // preferred height blur definition
 				if (type == DataType.TILE) {
-					consume(TokenConstants.ASSIGNMENT);
-
-					Token blur = consume();
-					((TileContainer) container).setPreferredHeightBlur(getInt(blur));
-
-					consume(TokenConstants.SEMICOLON);
-				}
+					readPreferredHeightBlur((TileContainer) container);
+				} else { issueTypeError(next, type); }
 
 			} else if (TokenConstants.VALUE_COLOR.equals(next)) { // color definition
 				if (type == DataType.TILE) {
-					consume(TokenConstants.CURLY_BRACKETS_OPEN);
-
-					Token seperator;
-					Token redDeviation = null, greenDeviation = null, blueDeviation = null;
-
-					Token red = consume();
-					seperator = consume();
-					if (TokenConstants.COMMA.equals(seperator)) {
-						redDeviation = consume();
-						consume(TokenConstants.SEMICOLON);
-					}
-
-					Token green = consume();
-					seperator = consume();
-					if (TokenConstants.COMMA.equals(seperator)) {
-						greenDeviation = consume();
-						consume(TokenConstants.SEMICOLON);
-					}
-
-					Token blue = consume();
-					seperator = consume();
-					if (TokenConstants.COMMA.equals(seperator)) {
-						blueDeviation = consume();
-						consume(TokenConstants.SEMICOLON);
-					}
-
-					double colorRed = getDouble(red) / 255d;
-					double colorGreen = getDouble(green) / 255d;
-					double colorBlue = getDouble(blue) / 255d;
-
-					double deviationRed = getDouble(redDeviation) / 255d;
-					double deviationGreen = getDouble(greenDeviation) / 255d;
-					double deviationBlue = getDouble(blueDeviation) / 255d;
-
-					((TileContainer) container).setColor(new RGBA(colorRed, colorGreen, colorBlue));
-					((TileContainer) container).setColorDeviation(new RGBA(deviationRed, deviationGreen, deviationBlue));
-
-					consume(TokenConstants.CURLY_BRACKETS_CLOSE);
-				}
+					readColor((TileContainer) container);
+				} else { issueTypeError(next, type); }
 
 			} else if (TokenConstants.VALUES_ATTRIBUTES.equals(next)) { // list of attributes
 				addAttributes(container);
 
 			} else if (TokenConstants.VALUES_KNOWLEDGE.equals(next)) { // list of known processes
 				if (type == DataType.CREATURE) {
-					feedTextIDList(((CreatureContainer) container).getPreKnownProcesses());
-				}
+					feedTextIDList(((CreatureContainer) container).getKnowledge());
+				} else { issueTypeError(next, type); }
 
 			} else if (TokenConstants.VALUES_DRIVES.equals(next)) { // list of drives
 				if (type == DataType.CREATURE) {
-					feedTextIDList(((CreatureContainer) container).getPreDrives());
-				}
+					feedTextIDList(((CreatureContainer) container).getDrives());
+				} else { issueTypeError(next, type); }
 
 			} else if (TokenConstants.VALUES_SOLUTIONS.equals(next)) { // list of solutions
 				if (type == DataType.DRIVE) {
-					feedTextIDList(((DriveContainer) container).getPreSolutions());
-				}
+					feedTextIDList(((DriveContainer) container).getSolutions());
+				} else { issueTypeError(next, type); }
 
 			} else if (TokenConstants.VALUES_ALTERNATIVES.equals(next)) { // list of alternatives
 				if (type == DataType.PROCESS) {
-					feedTextIDList(((ProcessContainer) container).getPreAlternatives());
-				}
+					feedTextIDList(((ProcessContainer) container).getAlternatives());
+				} else { issueTypeError(next, type); }
 
 			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
 				return;
 
 			} else { // unknown command
-				Logger.error("Unknown Tile definition command '" + next.getValue() + "' on line " + next.getLine());
+				Logger.error("Unknown Entity definition command '" + next.getValue() + "' on line " + next.getLine());
 			}
 		}
+	}
+
+	private void issueTypeError(Token command, DataType type) {
+		Logger.error("The command '" + command.getValue() + "' is not applicable to the type " + type + " (line " + command.getLine() + ")");
 	}
 
 }

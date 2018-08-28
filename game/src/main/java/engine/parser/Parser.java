@@ -2,6 +2,7 @@ package engine.parser;
 
 import constants.ResourcePathConstants;
 import constants.ScriptConstants;
+import engine.data.ContainerIdentifier;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.proto.*;
@@ -109,7 +110,7 @@ public class Parser {
 		i = 0;
 		Container container;
 		while ((container = Data.getContainer(i++)) != null) {
-			System.out.println("Container: " + container.getTextID() + ", " + container.getName());
+			System.out.println(container.getType() + ": " + container.getTextID() + ", " + container.getName());
 
 			IDInterface[] attributes = container.getAttributes();
 			if (attributes != null) {
@@ -120,18 +121,18 @@ public class Parser {
 			}
 
 			if (container.getType() == DataType.CREATURE) {
-				for (String process : ((CreatureContainer) container).getPreKnownProcesses()) {
+				for (ContainerIdentifier process : ((CreatureContainer) container).getKnowledge()) {
 					System.out.println("-> Pro: " + process);
 				}
-				for (String drive : ((CreatureContainer) container).getPreDrives()) {
+				for (ContainerIdentifier drive : ((CreatureContainer) container).getDrives()) {
 					System.out.println("-> Dri: " + drive);
 				}
 			} else if (container.getType() == DataType.DRIVE) {
-				for (String solution : ((DriveContainer) container).getPreSolutions()) {
+				for (ContainerIdentifier solution : ((DriveContainer) container).getSolutions()) {
 					System.out.println("-> Sol: " + solution);
 				}
 			} else if (container.getType() == DataType.PROCESS) {
-				for (String alternative : ((ProcessContainer) container).getPreAlternatives()) {
+				for (ContainerIdentifier alternative : ((ProcessContainer) container).getAlternatives()) {
 					System.out.println("-> Alt: " + alternative);
 				}
 			}
