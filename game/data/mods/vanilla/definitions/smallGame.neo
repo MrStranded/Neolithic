@@ -1,9 +1,3 @@
-///////////////////////////////////////////////////////////////////////////// Attributes
-Attribute: attLife { name = "Life"; }
-Attribute: attViewingDistance { name = "Viewing Distance"; }
-Attribute: attNutrition { name = "Nutrition"; }
-Attribute: attEdible { name = "Edible"; }
-
 ///////////////////////////////////////////////////////////////////////////// Tiles
 
 Tile: tDirt {
@@ -42,6 +36,12 @@ Tile: tStone {
 	preferredHeight = 240;preferredHeightBlur = 10;
 	name = "Stone"; color {150;150;120;}
 }
+
+///////////////////////////////////////////////////////////////////////////// Attributes
+Attribute: attLife { name = "Life"; }
+Attribute: attViewingDistance { name = "Viewing Distance"; }
+Attribute: attNutrition { name = "Nutrition"; }
+Attribute: attEdible { name = "Edible"; }
 
 ///////////////////////////////////////////////////////////////////////////// Creatures
 

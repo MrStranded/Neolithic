@@ -1,6 +1,7 @@
 package engine.parser.interpretation;
 
 import engine.data.attributes.Attribute;
+import engine.data.attributes.PreAttribute;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
 import engine.data.proto.ProtoAttribute;
@@ -197,11 +198,8 @@ public class Interpreter {
 			Token token = consumeToken();
 			consume(TokenConstants.SEMICOLON);
 
-			int id = Data.getProtoAttributeID(nextSub);
-			if (id >= 0) {
-				Attribute attribute = new Attribute(id, getInt(token));
-				container.addAttribute(attribute);
-			}
+			PreAttribute preAttribute = new PreAttribute(nextSub, getInt(token));
+			container.addPreAttribute(preAttribute);
 		}
 	}
 
@@ -238,7 +236,7 @@ public class Interpreter {
 				if (TokenConstants.COMMA.equals(nextSub)) {
 					Token blur = consumeToken();
 					protoTile.setPreferredHeightBlur(getInt(blur));
-					
+
 					consume(TokenConstants.SEMICOLON);
 
 				} else if (TokenConstants.SEMICOLON.equals(nextSub)) {

@@ -37,6 +37,10 @@ public class Parser {
 			System.out.println("load mod: " + mod);
 			loadMod(mod);
 		}
+
+		Data.finalizeIDs();
+
+		debug();
 	}
 
 	private void loadMod(String mod) {
@@ -74,24 +78,6 @@ public class Parser {
 				e.printStackTrace();
 			}
 
-			int i = 0;
-			ProtoAttribute protoAttribute;
-			while ((protoAttribute = Data.getProtoAttribute(i++)) != null) {
-				System.out.println("ProtoAttribute: " + protoAttribute.getTextID() + ", " + protoAttribute.getName());
-			}
-			i = 0;
-			Container container;
-			while ((container = Data.getContainer(i++)) != null) {
-				System.out.println("Container: " + container.getTextID() + ", " + container.getName());
-				IDInterface[] attributes = container.getAttributes();
-				if (attributes != null) {
-					for (IDInterface idInterface : attributes) {
-						Attribute attribute = (Attribute) idInterface;
-						System.out.println("-> Att: " + attribute.getId() + " (" + Data.getProtoAttribute(attribute.getId()).getTextID() + ") " + ", " + attribute.getValue());
-					}
-				}
-			}
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -108,5 +94,29 @@ public class Parser {
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
+
+	// ###################################################################################
+	// ################################ Debugging ########################################
+	// ###################################################################################
+
+	private void debug() {
+		int i = 0;
+		ProtoAttribute protoAttribute;
+		while ((protoAttribute = Data.getProtoAttribute(i++)) != null) {
+			System.out.println("ProtoAttribute: " + protoAttribute.getTextID() + ", " + protoAttribute.getName());
+		}
+		i = 0;
+		Container container;
+		while ((container = Data.getContainer(i++)) != null) {
+			System.out.println("Container: " + container.getTextID() + ", " + container.getName());
+			IDInterface[] attributes = container.getAttributes();
+			if (attributes != null) {
+				for (IDInterface idInterface : attributes) {
+					Attribute attribute = (Attribute) idInterface;
+					System.out.println("-> Att: " + attribute.getId() + " (" + Data.getProtoAttribute(attribute.getId()).getTextID() + ") " + ", " + attribute.getValue());
+				}
+			}
+		}
+	}
 
 }

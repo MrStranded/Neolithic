@@ -1,6 +1,7 @@
 package engine.data.attributes;
 
 import engine.data.IDInterface;
+import engine.data.proto.Data;
 
 public class Attribute implements IDInterface {
 

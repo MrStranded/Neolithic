@@ -3,11 +3,15 @@ package engine.data.proto;
 import constants.TopologyConstants;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
+import engine.data.attributes.PreAttribute;
 import engine.data.structures.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.renderer.color.RGBA;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The container class holds values that apply to several instances of a certain type (defined by their id).
@@ -27,11 +31,33 @@ public class Container {
 	private BinaryTree<Attribute> attributes;
 	private BinaryTree<Script> scripts;
 
+	// loading process
+	private List<PreAttribute> preAttributeList;
+
 	public Container(String textID, DataType type) {
 		this.textID = textID;
 		this.type = type;
 		attributes = new BinaryTree<>();
 		scripts = new BinaryTree<>();
+
+		preAttributeList = new ArrayList<>(8);
+	}
+
+	// ###################################################################################
+	// ################################ Preparing for Game ###############################
+	// ###################################################################################
+
+	public void finalizeAttributes() {
+		// convert
+		for (PreAttribute preAttribute : preAttributeList) {
+			int id = Data.getProtoAttributeID(preAttribute.getTextID());
+			if (id >= 0) {
+				attributes.insert(new Attribute(id, preAttribute.getValue()));
+			}
+		}
+		// free the memory
+		preAttributeList.clear();
+		preAttributeList = null;
 	}
 
 	// ###################################################################################
@@ -65,6 +91,12 @@ public class Container {
 	public void addAttribute(Attribute attribute) {
 		if (attribute != null) {
 			attributes.insert(attribute);
+		}
+	}
+
+	public void addPreAttribute(PreAttribute preAttribute) {
+		if (preAttribute != null) {
+			preAttributeList.add(preAttribute);
 		}
 	}
 }

@@ -34,7 +34,7 @@ public class Data {
 	/**
 	 * Could be more efficient with a hash map, but maybe there is no need to waste the memory if ids are only asked for at the start of the program.
 	 * @param textID
-	 * @return
+	 * @return id or -1 if not found
 	 */
 	public static int getContainerID(String textID) {
 		for (int i=0; i<containers.length; i++) {
@@ -55,6 +55,11 @@ public class Data {
 		return null;
 	}
 
+	/**
+	 * Returns the id of the requested textID. Returns -1 if not found.
+	 * @param textID to search for
+	 * @return id or -1 if not found
+	 */
 	public static int getProtoAttributeID(String textID) {
 		for (int i=0; i<attributes.length; i++) {
 			ProtoAttribute protoAttribute = attributes[i];
@@ -108,5 +113,17 @@ public class Data {
 		containers[id] = container;
 		containerID++;
 		return id;
+	}
+
+	// ###################################################################################
+	// ################################ Preparing for Game ###############################
+	// ###################################################################################
+
+	public static void finalizeIDs() {
+		for (Container container : containers) {
+			if (container != null) {
+				container.finalizeAttributes();
+			}
+		}
 	}
 }
