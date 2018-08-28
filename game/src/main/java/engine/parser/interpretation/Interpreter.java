@@ -86,6 +86,10 @@ public class Interpreter {
 	 * @return true if the value is legit
 	 */
 	private boolean isNumber(Token token, boolean isDouble) {
+		if (token == null) {
+			return false; // exit without error
+		}
+
 		if (token.getType() == TokenType.LITERAL) {
 			boolean isNumber = true;
 			boolean hadPoint = false;
@@ -256,18 +260,40 @@ public class Interpreter {
 			} else if (TokenConstants.VALUE_COLOR.isEqualTo(next)) { // color definition
 				consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
+				String seperator;
+				Token redDeviation = null, greenDeviation = null, blueDeviation = null;
+
 				Token red = consumeToken();
-				consume(TokenConstants.SEMICOLON);
+				seperator = consume();
+				if (TokenConstants.COMMA.isEqualTo(seperator)) {
+					redDeviation = consumeToken();
+					consume(TokenConstants.SEMICOLON);
+				}
+
 				Token green = consumeToken();
-				consume(TokenConstants.SEMICOLON);
+				seperator = consume();
+				if (TokenConstants.COMMA.isEqualTo(seperator)) {
+					greenDeviation = consumeToken();
+					consume(TokenConstants.SEMICOLON);
+				}
+
 				Token blue = consumeToken();
-				consume(TokenConstants.SEMICOLON);
+				seperator = consume();
+				if (TokenConstants.COMMA.isEqualTo(seperator)) {
+					blueDeviation = consumeToken();
+					consume(TokenConstants.SEMICOLON);
+				}
 
 				double colorRed = getDouble(red) / 255d;
 				double colorGreen = getDouble(green) / 255d;
 				double colorBlue = getDouble(blue) / 255d;
 
+				double deviationRed = getDouble(redDeviation) / 255d;
+				double deviationGreen = getDouble(greenDeviation) / 255d;
+				double deviationBlue = getDouble(blueDeviation) / 255d;
+
 				protoTile.setColor(new RGBA(colorRed, colorGreen, colorBlue));
+				protoTile.setColorDeviation(new RGBA(deviationRed, deviationGreen, deviationBlue));
 
 				consume(TokenConstants.CURLY_BRACKETS_CLOSE);
 

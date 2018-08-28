@@ -18,6 +18,8 @@ public class Tile extends Instance implements IDInterface {
 	private Face face;
 	private FacePart tileMesh;
 
+	private RGBA color = null;
+
 	public Tile(int id, int xPos, int yPos, Face face) {
 		super(id);
 		this.xPos = xPos;
@@ -28,6 +30,23 @@ public class Tile extends Instance implements IDInterface {
 	@Override
 	public IDInterface merge(IDInterface other) {
 		return this;
+	}
+
+	private void createRandomizedColor() {
+		TileContainer protoTile = (TileContainer) Data.getContainer(id);
+
+		if (protoTile != null) {
+			RGBA c = protoTile.getColor();
+			RGBA d = protoTile.getColorDeviation();
+
+			color = new RGBA(
+					c.getR() + d.getR()*(Math.random()*2d - 1d),
+					c.getG() + d.getG()*(Math.random()*2d - 1d),
+					c.getB() + d.getB()*(Math.random()*2d - 1d)
+			);
+		} else {
+			color = TopologyConstants.TILE_DEFAULT_COLOR;
+		}
 	}
 
 	// ###################################################################################
@@ -68,13 +87,10 @@ public class Tile extends Instance implements IDInterface {
 	}
 
 	public RGBA getColor() {
-		TileContainer protoTile = (TileContainer) Data.getContainer(id);
-
-		if (protoTile != null) {
-			return protoTile.getColor();
+		if (color == null) {
+			createRandomizedColor();
 		}
-
-		return TopologyConstants.TILE_DEFAULT_COLOR;
+		return color;
 	}
 
 }

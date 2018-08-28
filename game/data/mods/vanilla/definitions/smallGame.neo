@@ -6,9 +6,9 @@ Tile: tDirt {
 	preferredHeight = 128,5;
 
 	color {
-		200;
+		200,10;
 		150;
-		30;
+		30,10;
 	}
 
 	Script: tick {
@@ -24,7 +24,7 @@ Tile: tGras {
 	preferredHeightBlur = 20;
 
 	color {
-		120;200;50;
+		120,10;200,15;50;
 	}
 
 	attributes {
@@ -34,7 +34,7 @@ Tile: tGras {
 
 Tile: tStone {
 	preferredHeight = 240;preferredHeightBlur = 10;
-	name = "Stone"; color {150;150;120;}
+	name = "Stone"; color {150,10;150;120;}
 }
 
 ///////////////////////////////////////////////////////////////////////////// Attributes

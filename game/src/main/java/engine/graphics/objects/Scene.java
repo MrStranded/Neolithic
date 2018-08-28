@@ -57,7 +57,7 @@ public class Scene {
 		objects[3].setRotation(0,0,Math.PI/8);
 
 		// sun lights
-		pointLights[1] = new PointLight(0.25,0,0);
+		pointLights[1] = new PointLight(0.5,0.25,0.25);
 		pointLights[1].setAttenuation(Attenuation.CONSTANT());
 		pointLights[1].setPosition(0,0,sunDistance);
 
