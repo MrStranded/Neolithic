@@ -2,10 +2,7 @@ package engine.parser.interpretation;
 
 import engine.data.attributes.Attribute;
 import engine.data.attributes.PreAttribute;
-import engine.data.proto.Container;
-import engine.data.proto.Data;
-import engine.data.proto.ProtoAttribute;
-import engine.data.proto.TileContainer;
+import engine.data.proto.*;
 import engine.data.variables.DataType;
 import engine.graphics.renderer.color.RGBA;
 import engine.parser.Logger;
@@ -149,6 +146,8 @@ public class Interpreter {
 				createAttribute();
 			} else if (TokenConstants.TILE.isEqualTo(next)) {      // Tile
 				createTile();
+			} else if (TokenConstants.CREATURE.isEqualTo(next)) {  // Creature
+				createCreature();
 			}
 		}
 	}
@@ -184,7 +183,7 @@ public class Interpreter {
 	}
 
 	// ###################################################################################
-	// ################################ Attribute List ###################################
+	// ################################ Lists ############################################
 	// ###################################################################################
 
 	/**
@@ -204,6 +203,23 @@ public class Interpreter {
 
 			PreAttribute preAttribute = new PreAttribute(nextSub, getInt(token));
 			container.addPreAttribute(preAttribute);
+		}
+	}
+
+	/**
+	 * A TokenConstants.VALUES_KNOWLEDGE has been encountered. We now add the textIDs of the processes to a preList of the container.
+	 * @param container to add the textIDs to
+	 * @throws Exception
+	 */
+	private void addKnowledge(CreatureContainer container) throws Exception {
+		// knowledge { proOne; proTwo; }
+		consume(TokenConstants.CURLY_BRACKETS_OPEN);
+
+		Token nextToken;
+		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(nextToken = consumeToken())) {
+			consume(TokenConstants.SEMICOLON);
+
+			container.addPreKnownProcess(nextToken.getValue());
 		}
 	}
 
@@ -299,6 +315,42 @@ public class Interpreter {
 
 			} else if (TokenConstants.VALUES_ATTRIBUTES.isEqualTo(next)) { // list of attributes
 				addAttributes(protoTile);
+
+			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.isEqualTo(next)) { // end of definition
+				return;
+
+			}
+		}
+	}
+
+	// ###################################################################################
+	// ################################ Creature #########################################
+	// ###################################################################################
+
+	private void createCreature() throws Exception {
+		// Creature : cTextId { ... }
+		consume(TokenConstants.COLON);
+		String textId = consume();
+		consume(TokenConstants.CURLY_BRACKETS_OPEN);
+
+		CreatureContainer protoCreature = new CreatureContainer(textId);
+		Data.addContainer(protoCreature);
+
+		while (true) {
+			String next = consume();
+			if (TokenConstants.VALUE_NAME.isEqualTo(next)) { // name definition
+				consume(TokenConstants.ASSIGNMENT);
+
+				String name = consume();
+				protoCreature.setName(name);
+
+				consume(TokenConstants.SEMICOLON);
+
+			} else if (TokenConstants.VALUES_ATTRIBUTES.isEqualTo(next)) { // list of attributes
+				addAttributes(protoCreature);
+
+			} else if (TokenConstants.VALUES_KNOWLEDGE.isEqualTo(next)) { // list of known processes
+				addKnowledge(protoCreature);
 
 			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.isEqualTo(next)) { // end of definition
 				return;

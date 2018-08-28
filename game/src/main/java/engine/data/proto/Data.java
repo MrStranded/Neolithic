@@ -126,6 +126,10 @@ public class Data {
 		for (Container container : containers) {
 			if (container != null) {
 				container.finalizeAttributes();
+
+				if (container.getType() == DataType.CREATURE) {
+					((CreatureContainer) container).finalizeBehaviour();
+				}
 			}
 		}
 	}

@@ -8,7 +8,8 @@ public enum TokenConstants {
 	// -------------------------------------------------- Constructors
 	ATTRIBUTE   (TokenType.KEYWORD, "Attribute"),
 	TILE        (TokenType.KEYWORD, "Tile"),
-	ENTITY      (TokenType.KEYWORD, "Instance"),
+	ENTITY      (TokenType.KEYWORD, "Entity"),
+	CREATURE    (TokenType.KEYWORD, "Creature"),
 	SCRIPT      (TokenType.KEYWORD, "Script"),
 	PROCESS     (TokenType.KEYWORD, "Process"),
 
@@ -32,6 +33,7 @@ public enum TokenConstants {
 
 	// -------------------------------------------------- List Instantiaters
 	VALUES_KNOWLEDGE   (TokenType.KEYWORD, "knowledge"),
+	VALUES_DRIVES      (TokenType.KEYWORD, "drives"),
 	VALUES_ATTRIBUTES  (TokenType.KEYWORD, "attributes"),
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Seperators

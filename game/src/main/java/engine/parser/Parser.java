@@ -5,8 +5,10 @@ import constants.ScriptConstants;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.proto.Container;
+import engine.data.proto.CreatureContainer;
 import engine.data.proto.Data;
 import engine.data.proto.ProtoAttribute;
+import engine.data.variables.DataType;
 import engine.parser.interpretation.Interpreter;
 import engine.parser.tokenization.Token;
 import engine.parser.tokenization.Tokenizer;
@@ -105,15 +107,23 @@ public class Parser {
 		while ((protoAttribute = Data.getProtoAttribute(i++)) != null) {
 			System.out.println("ProtoAttribute: " + protoAttribute.getTextID() + ", " + protoAttribute.getName());
 		}
+
 		i = 0;
 		Container container;
 		while ((container = Data.getContainer(i++)) != null) {
 			System.out.println("Container: " + container.getTextID() + ", " + container.getName());
+
 			IDInterface[] attributes = container.getAttributes();
 			if (attributes != null) {
 				for (IDInterface idInterface : attributes) {
 					Attribute attribute = (Attribute) idInterface;
 					System.out.println("-> Att: " + attribute.getId() + " (" + Data.getProtoAttribute(attribute.getId()).getTextID() + ") " + ", " + attribute.getValue());
+				}
+			}
+
+			if (container.getType() == DataType.CREATURE) {
+				for (String process : ((CreatureContainer) container).getPreKnownProcesses()) {
+					System.out.println("-> Pro: " + process);
 				}
 			}
 		}

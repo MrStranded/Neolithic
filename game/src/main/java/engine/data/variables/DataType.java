@@ -7,6 +7,8 @@ public enum DataType {
 	ATTRIBUTE,
 	TILE,
 	ENTITY,
+	CREATURE,
+	FORMATION,
 	;
 
 }
