@@ -1,0 +1,2 @@
+hi777 " this   is // a string " etc .
+  /* this "string" is not added */ because it was in "comments"

@@ -10,13 +10,16 @@ import java.util.List;
 public class Data {
 
 	private static Container[] containers;
-	private static int containerID = 0;
+	private static int containerID;
 
 	private static ProtoAttribute[] attributes;
-	private static int attributeID = 0;
+	private static int attributeID;
 
 	public static void initialize() {
+		containerID = 0;
 		containers = new Container[GameConstants.MAX_CONTAINERS];
+
+		attributeID = 0;
 		attributes = new ProtoAttribute[GameConstants.MAX_ATTRIBUTES];
 	}
 
@@ -125,5 +128,14 @@ public class Data {
 				container.finalizeAttributes();
 			}
 		}
+	}
+
+	// ###################################################################################
+	// ################################ Clearing the Data ################################
+	// ###################################################################################
+
+	public static void clear() {
+		// just not referencing the old data anymore is enough. Thanks java garbage collector!
+		initialize();
 	}
 }

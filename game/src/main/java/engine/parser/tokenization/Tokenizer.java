@@ -86,7 +86,7 @@ public class Tokenizer {
 						int length = token.length();
 
 						if (!inString) {
-							if (TokenConstants.COMMENT.equals(previousChar, c)) { // line cooment
+							if (TokenConstants.COMMENT.equals(previousChar, c)) { // line comment
 								if (!inComment) {
 									inComment = true;
 									isBlockComment = false;
@@ -197,7 +197,7 @@ public class Tokenizer {
 			} else {
 				for (TokenConstants t : TokenConstants.values()) {
 					if (t.getValue().equals(token.toString())) {
-						result = t.getToken();
+						result = new Token(t.getType(), t.getValue(), textLine);
 						break;
 					}
 				}

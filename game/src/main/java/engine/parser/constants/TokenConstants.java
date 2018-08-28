@@ -80,7 +80,7 @@ public enum TokenConstants {
 	AND         (TokenType.OPERATOR, "&&"),
 	OR          (TokenType.OPERATOR, "||"),
 
-	// -------------------------------------------------- Logical
+	// -------------------------------------------------- Assignment
 	ASSIGNMENT  (TokenType.OPERATOR, "="),
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Comments
