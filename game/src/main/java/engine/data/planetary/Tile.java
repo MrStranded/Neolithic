@@ -5,6 +5,7 @@ import engine.data.IDInterface;
 import engine.data.entities.Instance;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
+import engine.data.proto.TileContainer;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.renderer.color.RGBA;
 
@@ -67,7 +68,7 @@ public class Tile extends Instance implements IDInterface {
 	}
 
 	public RGBA getColor() {
-		Container protoTile = Data.getContainer(id);
+		TileContainer protoTile = (TileContainer) Data.getContainer(id);
 
 		if (protoTile != null) {
 			return protoTile.getColor();

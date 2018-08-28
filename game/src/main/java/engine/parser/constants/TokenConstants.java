@@ -25,9 +25,10 @@ public enum TokenConstants {
 	PRINT       (TokenType.KEYWORD, "print"),
 
 	// -------------------------------------------------- Engine Values
-	VALUE_NAME              (TokenType.KEYWORD, "name"),
-	VALUE_COLOR             (TokenType.KEYWORD, "color"),
-	VALUE_PREFERREDHEIGHT   (TokenType.KEYWORD, "preferredHeight"),
+	VALUE_NAME                  (TokenType.KEYWORD, "name"),
+	VALUE_COLOR                 (TokenType.KEYWORD, "color"),
+	VALUE_PREFERREDHEIGHT       (TokenType.KEYWORD, "preferredHeight"),
+	VALUE_PREFERREDHEIGHTBLUR   (TokenType.KEYWORD, "preferredHeightBlur"),
 
 	// -------------------------------------------------- List Instantiaters
 	VALUES_KNOWLEDGE   (TokenType.KEYWORD, "knowledge"),
@@ -96,20 +97,31 @@ public enum TokenConstants {
 	private Token token;
 
 	TokenConstants(TokenType type, String value) {
-		token = new Token(type, value);
+		token = new Token(type, value, 0);
 	}
 
 	public boolean equals(int codePoint1, int codePoint2) {
 		String value = token.getValue();
 		if (value.length() >= 2) {
 			return (value.codePointAt(0) == codePoint1) && (value.codePointAt(1) == codePoint2);
-		} else {
-			return false;
 		}
+		return false;
+	}
+
+	public boolean equals(char c) {
+		String value = token.getValue();
+		if (value.length() == 1) {
+			return (value.charAt(0) == c);
+		}
+		return false;
 	}
 
 	public boolean equals(TokenType type, String value) {
 		return (getType() == type) && (getValue().equals(value));
+	}
+
+	public boolean equals(Token t) {
+		return (getValue().equals(t.getValue()));
 	}
 
 	/**

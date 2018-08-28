@@ -6,6 +6,7 @@ import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
+import engine.data.proto.TileContainer;
 import engine.data.variables.DataType;
 import engine.graphics.renderer.color.RGBA;
 
@@ -66,8 +67,9 @@ public class TopologyGenerator {
 		Container closest = null;
 		int closestDistance = 255;
 
-		for (Container protoTile : tileList) {
-			int distance = Math.abs(height - protoTile.getPreferredHeight()) + (int) (TopologyConstants.TILE_PREFERRED_TYPE_BLUR * (Math.random()*2d - 1d));
+		for (Container container : tileList) {
+			TileContainer protoTile = (TileContainer) container;
+			int distance = Math.abs(height - protoTile.getPreferredHeight()) + (int) ((double) protoTile.getPreferredHeightBlur() * (Math.random()*2d - 1d));
 			if (closest == null || distance < closestDistance) {
 				closest = protoTile;
 				closestDistance = distance;

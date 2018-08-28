@@ -4,6 +4,7 @@ import engine.data.attributes.Attribute;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
 import engine.data.proto.ProtoAttribute;
+import engine.data.proto.TileContainer;
 import engine.data.variables.DataType;
 import engine.graphics.renderer.color.RGBA;
 import engine.parser.Logger;
@@ -37,19 +38,19 @@ public class Interpreter {
 			return next.getValue();
 
 		} else { // error reporting
-			Logger.error("Wrong Token! Expected " + tokenConstant.getValue()
-					+ " (" + Character.codePointAt(tokenConstant.getValue().toCharArray(), 0) + ") "
+			String errorMessage = "Wrong Token! Expected " + tokenConstant.getValue()
 					+ " but found " + next.getValue()
-					+ " (" + Character.codePointAt(next.getValue().toCharArray(), 0) + ") ");
-			StringBuilder successive = new StringBuilder();
+					+ " on line " + next.getLine();
+			Logger.error(errorMessage);
+			/*StringBuilder successive = new StringBuilder();
 			int i = 0;
 			while (tokenIterator.hasNext() && i < 20) {
 				successive.append(tokenIterator.next().getValue());
 				successive.append(" ");
 				i++;
 			}
-			Logger.error("Right before: " + successive);
-			throw new Exception("Wrong Token! Expected " + tokenConstant.getValue() + " but found " + next.getValue());
+			Logger.error("Right before: " + successive);*/
+			throw new Exception(errorMessage);
 
 		}
 	}
@@ -70,6 +71,64 @@ public class Interpreter {
 
 		Token next = tokenIterator.next();
 		return next;
+	}
+
+	// ###################################################################################
+	// ################################ Data Type Assurance and Conversion ###############
+	// ###################################################################################
+
+	/**
+	 * Checks whether the given token is a double value (isDouble == true) or an integer value (isDouble == false).
+	 * If not, an error report is issued.
+	 * @param token to check
+	 * @param isDouble allow one decimal point or not
+	 * @return true if the value is legit
+	 */
+	private boolean isNumber(Token token, boolean isDouble) {
+		if (token.getType() == TokenType.LITERAL) {
+			boolean isNumber = true;
+			boolean hadPoint = false;
+			for (char c : token.getValue().toCharArray()) {
+				if (!Character.isDigit(c)) {
+					if (TokenConstants.POINT.equals(c) && !hadPoint && isDouble) {
+						hadPoint = true;
+					} else {
+						isNumber = false;
+						break;
+					}
+				}
+			}
+
+			if (isNumber) {
+				return true;
+			}
+		}
+		if (isDouble) {
+			Logger.error("Expected floating point number value but got '" + token.getValue() + "' on line " + token.getLine());
+		} else {
+			Logger.error("Expected integer number value but got '" + token.getValue() + "' on line " + token.getLine());
+		}
+		return false;
+	}
+
+	/**
+	 * Returns the token's value as an integer if possible.
+	 * Otherwise it issues an error log and returns 0.
+	 * @param token to convert
+	 * @return the token's value or zero
+	 */
+	private int getInt(Token token) {
+		return isNumber(token, false)? Integer.parseInt(token.getValue()) : 0;
+	}
+
+	/**
+	 * Returns the token's value as an double if possible.
+	 * Otherwise it issues an error log and returns 0.
+	 * @param token to convert
+	 * @return the token's value or zero
+	 */
+	private double getDouble(Token token) {
+		return isNumber(token, true)? Double.parseDouble(token.getValue()) : 0;
 	}
 
 	// ###################################################################################
@@ -120,6 +179,33 @@ public class Interpreter {
 	}
 
 	// ###################################################################################
+	// ################################ Attribute List ###################################
+	// ###################################################################################
+
+	/**
+	 * A TokenConstants.VALUES_ATTRIBUTES has been encountered. So let's add some Attributes to the container, shall we?
+	 * @param container to add the attributes to
+	 * @throws Exception
+	 */
+	private void addAttributes(Container container) throws Exception {
+		// attributes { attOne, 10; attTwo, 7; }
+		consume(TokenConstants.CURLY_BRACKETS_OPEN);
+
+		String nextSub;
+		while (!TokenConstants.CURLY_BRACKETS_CLOSE.isEqualTo(nextSub = consume())) {
+			consume(TokenConstants.COMMA);
+			Token token = consumeToken();
+			consume(TokenConstants.SEMICOLON);
+
+			int id = Data.getProtoAttributeID(nextSub);
+			if (id >= 0) {
+				Attribute attribute = new Attribute(id, getInt(token));
+				container.addAttribute(attribute);
+			}
+		}
+	}
+
+	// ###################################################################################
 	// ################################ Tile #############################################
 	// ###################################################################################
 
@@ -129,7 +215,7 @@ public class Interpreter {
 		String textId = consume();
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
-		Container protoTile = new Container(textId, DataType.TILE);
+		TileContainer protoTile = new TileContainer(textId);
 		Data.addContainer(protoTile);
 
 		while (true) {
@@ -143,12 +229,31 @@ public class Interpreter {
 				consume(TokenConstants.SEMICOLON);
 
 			} else if (TokenConstants.VALUE_PREFERREDHEIGHT.isEqualTo(next)) { // preferred height definition
-					consume(TokenConstants.ASSIGNMENT);
+				consume(TokenConstants.ASSIGNMENT);
 
-					String height = consume();
-					protoTile.setPreferredHeight(Integer.parseInt(height));
+				Token height = consumeToken();
+				protoTile.setPreferredHeight(getInt(height));
 
+				Token nextSub = consumeToken();
+				if (TokenConstants.COMMA.equals(nextSub)) {
+					Token blur = consumeToken();
+					protoTile.setPreferredHeightBlur(getInt(blur));
+					
 					consume(TokenConstants.SEMICOLON);
+
+				} else if (TokenConstants.SEMICOLON.equals(nextSub)) {
+					// exit definition
+				} else {
+					Logger.error("Expected '" + TokenConstants.SEMICOLON.getValue() + "' but got '" + nextSub + "' on line " + nextSub.getLine());
+				}
+
+			} else if (TokenConstants.VALUE_PREFERREDHEIGHTBLUR.isEqualTo(next)) { // preferred height blur definition
+				consume(TokenConstants.ASSIGNMENT);
+
+				Token blur = consumeToken();
+				protoTile.setPreferredHeightBlur(getInt(blur));
+
+				consume(TokenConstants.SEMICOLON);
 
 			} else if (TokenConstants.VALUE_COLOR.isEqualTo(next)) { // color definition
 				consume(TokenConstants.CURLY_BRACKETS_OPEN);
@@ -160,29 +265,16 @@ public class Interpreter {
 				Token blue = consumeToken();
 				consume(TokenConstants.SEMICOLON);
 
-				double colorRed = Double.parseDouble(red.getValue()) / 255d;
-				double colorGreen = Double.parseDouble(green.getValue()) / 255d;
-				double colorBlue = Double.parseDouble(blue.getValue()) / 255d;
+				double colorRed = getDouble(red) / 255d;
+				double colorGreen = getDouble(green) / 255d;
+				double colorBlue = getDouble(blue) / 255d;
 
 				protoTile.setColor(new RGBA(colorRed, colorGreen, colorBlue));
 
 				consume(TokenConstants.CURLY_BRACKETS_CLOSE);
 
 			} else if (TokenConstants.VALUES_ATTRIBUTES.isEqualTo(next)) { // list of attributes
-				consume(TokenConstants.CURLY_BRACKETS_OPEN);
-
-				String nextSub;
-				while (!TokenConstants.CURLY_BRACKETS_CLOSE.isEqualTo(nextSub = consume())) {
-					consume(TokenConstants.COMMA);
-					String value = consume();
-					consume(TokenConstants.SEMICOLON);
-
-					int id = Data.getProtoAttributeID(nextSub);
-					if (id >= 0) {
-						Attribute attribute = new Attribute(id, Integer.parseInt(value));
-						protoTile.addAttribute(attribute);
-					}
-				}
+				addAttributes(protoTile);
 
 			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.isEqualTo(next)) { // end of definition
 				return;

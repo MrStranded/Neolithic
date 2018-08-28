@@ -9,7 +9,7 @@ Attribute: attEdible { name = "Edible"; }
 Tile: tDirt {
 	name = "Dirt";
 
-	preferredHeight = 128;
+	preferredHeight = 128,5;
 
 	color {
 		200;
@@ -27,6 +27,7 @@ Tile: tDirt {
 Tile: tGras {
 	name = "Gras";
 	preferredHeight = 180;
+	preferredHeightBlur = 20;
 
 	color {
 		120;200;50;
@@ -38,7 +39,7 @@ Tile: tGras {
 }
 
 Tile: tStone {
-	preferredHeight = 255;
+	preferredHeight = 240;preferredHeightBlur = 10;
 	name = "Stone"; color {150;150;120;}
 }
 

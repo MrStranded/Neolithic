@@ -82,7 +82,7 @@ public class Parser {
 			i = 0;
 			Container container;
 			while ((container = Data.getContainer(i++)) != null) {
-				System.out.println("Container: " + container.getTextID() + ", " + container.getName() + ", " + container.getColor());
+				System.out.println("Container: " + container.getTextID() + ", " + container.getName());
 				IDInterface[] attributes = container.getAttributes();
 				if (attributes != null) {
 					for (IDInterface idInterface : attributes) {

@@ -22,10 +22,6 @@ public class Container {
 	// graphical
 	private Mesh mesh = null;
 
-	// tile specific
-	private int preferredHeight = 0;
-	private RGBA color = TopologyConstants.TILE_DEFAULT_COLOR;
-
 	// game logic
 	private String name = "[NAME]";
 	private BinaryTree<Attribute> attributes;
@@ -48,20 +44,6 @@ public class Container {
 
 	public DataType getType() {
 		return type;
-	}
-
-	public RGBA getColor() {
-		return color;
-	}
-	public void setColor(RGBA color) {
-		this.color = color;
-	}
-
-	public int getPreferredHeight() {
-		return preferredHeight;
-	}
-	public void setPreferredHeight(int preferredHeight) {
-		this.preferredHeight = preferredHeight;
 	}
 
 	public String getName() {

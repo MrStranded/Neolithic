@@ -12,12 +12,17 @@ import java.util.List;
 
 public class Tokenizer {
 
+	private static int textLine;
+
 	public static List<Token> tokenize(FileReader fileReader) {
 		CharacterClass currentClass = CharacterClass.UNDEFINED;
 
 		int c;
 		int previousChar = 0;
 		StringBuilder token = new StringBuilder();
+
+		textLine = 1;
+
 		boolean inString = false;
 		boolean inComment = false;
 		boolean isBlockComment = false;
@@ -71,6 +76,9 @@ public class Tokenizer {
 					case LINE_BREAK:
 						if (inComment && !isBlockComment) {
 							inComment = false;
+						}
+						if (c == 10) { // common denominator for windows / unix
+							textLine++;
 						}
 						break;
 
@@ -185,7 +193,7 @@ public class Tokenizer {
 			Token result = null;
 
 			if (characterClass == CharacterClass.QUOTATION_MARK || characterClass == CharacterClass.NUMBER || characterClass == CharacterClass.DECIMALNUMBER) {
-				result = new Token(TokenType.LITERAL, token.toString());
+				result = new Token(TokenType.LITERAL, token.toString(), textLine);
 			} else {
 				for (TokenConstants t : TokenConstants.values()) {
 					if (t.getValue().equals(token.toString())) {
@@ -194,7 +202,7 @@ public class Tokenizer {
 					}
 				}
 				if (result == null) {
-					result = new Token(TokenType.IDENTIFIER, token.toString());
+					result = new Token(TokenType.IDENTIFIER, token.toString(), textLine);
 				}
 			}
 
