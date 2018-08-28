@@ -127,13 +127,15 @@ public class Interpreter {
 			if (TokenConstants.ATTRIBUTE.equals(next)) {        // Attribute
 				createAttribute();
 			} else if (TokenConstants.TILE.equals(next)) {      // Tile
-				createTile();
+				createEntity(DataType.TILE);
 			} else if (TokenConstants.CREATURE.equals(next)) {  // Creature
-				createCreature();
+				createEntity(DataType.CREATURE);
 			} else if (TokenConstants.ENTITY.equals(next)) {    // Entity
-				createEntity();
+				createEntity(DataType.ENTITY);
 			} else if (TokenConstants.DRIVE.equals(next)) {     // Drive
-				createDrive();
+				createEntity(DataType.DRIVE);
+			} else if (TokenConstants.PROCESS.equals(next)) {     // Process
+				createEntity(DataType.PROCESS);
 			}
 		}
 	}
@@ -225,194 +227,144 @@ public class Interpreter {
 	}
 
 	// ###################################################################################
-	// ################################ Tile #############################################
+	// ################################ Entity ###########################################
 	// ###################################################################################
 
-	private void createTile() throws Exception {
-		// Tile : tTextId { ... }
+	private void createEntity(final DataType type) throws Exception {
 		consume(TokenConstants.COLON);
 		Token textId = consume();
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
-		TileContainer protoTile = new TileContainer(textId.getValue());
-		Data.addContainer(protoTile);
+		Container container;
+		switch (type) {
+			case ENTITY:
+				container = new Container(textId.getValue(), DataType.ENTITY);
+				break;
+			case TILE:
+				container = new TileContainer(textId.getValue());
+				break;
+			case CREATURE:
+				container = new CreatureContainer(textId.getValue());
+				break;
+			case DRIVE:
+				container = new DriveContainer(textId.getValue());
+				break;
+			case PROCESS:
+				container = new ProcessContainer(textId.getValue());
+				break;
+			default:
+				Logger.error("Unknown entity constructor type '" + type + "' for '" + textId.getValue() + "' on line " + textId.getLine());
+				container = new Container(textId.getValue(), DataType.ENTITY);
+				break;
+		}
+		Data.addContainer(container);
 
 		while (true) {
 			Token next = consume();
 			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
-				addName(protoTile);
+				addName(container);
 
 			} else if (TokenConstants.VALUE_PREFERREDHEIGHT.equals(next)) { // preferred height definition
-				consume(TokenConstants.ASSIGNMENT);
+				if (type == DataType.TILE) {
+					consume(TokenConstants.ASSIGNMENT);
 
-				Token height = consume();
-				protoTile.setPreferredHeight(getInt(height));
+					Token height = consume();
+					((TileContainer) container).setPreferredHeight(getInt(height));
 
-				Token nextSub = consume();
-				if (TokenConstants.COMMA.equals(nextSub)) {
-					Token blur = consume();
-					protoTile.setPreferredHeightBlur(getInt(blur));
+					Token nextSub = consume();
+					if (TokenConstants.COMMA.equals(nextSub)) {
+						Token blur = consume();
+						((TileContainer) container).setPreferredHeightBlur(getInt(blur));
 
-					consume(TokenConstants.SEMICOLON);
+						consume(TokenConstants.SEMICOLON);
 
-				} else if (TokenConstants.SEMICOLON.equals(nextSub)) {
-					// exit definition
-				} else {
-					Logger.error("Expected '" + TokenConstants.SEMICOLON.getValue() + "' but got '" + nextSub + "' on line " + nextSub.getLine());
+					} else if (TokenConstants.SEMICOLON.equals(nextSub)) {
+						// exit definition
+					} else {
+						Logger.error("Expected '" + TokenConstants.SEMICOLON.getValue() + "' but got '" + nextSub + "' on line " + nextSub.getLine());
+					}
 				}
 
 			} else if (TokenConstants.VALUE_PREFERREDHEIGHTBLUR.equals(next)) { // preferred height blur definition
-				consume(TokenConstants.ASSIGNMENT);
+				if (type == DataType.TILE) {
+					consume(TokenConstants.ASSIGNMENT);
 
-				Token blur = consume();
-				protoTile.setPreferredHeightBlur(getInt(blur));
+					Token blur = consume();
+					((TileContainer) container).setPreferredHeightBlur(getInt(blur));
 
-				consume(TokenConstants.SEMICOLON);
+					consume(TokenConstants.SEMICOLON);
+				}
 
 			} else if (TokenConstants.VALUE_COLOR.equals(next)) { // color definition
-				consume(TokenConstants.CURLY_BRACKETS_OPEN);
+				if (type == DataType.TILE) {
+					consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
-				Token seperator;
-				Token redDeviation = null, greenDeviation = null, blueDeviation = null;
+					Token seperator;
+					Token redDeviation = null, greenDeviation = null, blueDeviation = null;
 
-				Token red = consume();
-				seperator = consume();
-				if (TokenConstants.COMMA.equals(seperator)) {
-					redDeviation = consume();
-					consume(TokenConstants.SEMICOLON);
+					Token red = consume();
+					seperator = consume();
+					if (TokenConstants.COMMA.equals(seperator)) {
+						redDeviation = consume();
+						consume(TokenConstants.SEMICOLON);
+					}
+
+					Token green = consume();
+					seperator = consume();
+					if (TokenConstants.COMMA.equals(seperator)) {
+						greenDeviation = consume();
+						consume(TokenConstants.SEMICOLON);
+					}
+
+					Token blue = consume();
+					seperator = consume();
+					if (TokenConstants.COMMA.equals(seperator)) {
+						blueDeviation = consume();
+						consume(TokenConstants.SEMICOLON);
+					}
+
+					double colorRed = getDouble(red) / 255d;
+					double colorGreen = getDouble(green) / 255d;
+					double colorBlue = getDouble(blue) / 255d;
+
+					double deviationRed = getDouble(redDeviation) / 255d;
+					double deviationGreen = getDouble(greenDeviation) / 255d;
+					double deviationBlue = getDouble(blueDeviation) / 255d;
+
+					((TileContainer) container).setColor(new RGBA(colorRed, colorGreen, colorBlue));
+					((TileContainer) container).setColorDeviation(new RGBA(deviationRed, deviationGreen, deviationBlue));
+
+					consume(TokenConstants.CURLY_BRACKETS_CLOSE);
 				}
-
-				Token green = consume();
-				seperator = consume();
-				if (TokenConstants.COMMA.equals(seperator)) {
-					greenDeviation = consume();
-					consume(TokenConstants.SEMICOLON);
-				}
-
-				Token blue = consume();
-				seperator = consume();
-				if (TokenConstants.COMMA.equals(seperator)) {
-					blueDeviation = consume();
-					consume(TokenConstants.SEMICOLON);
-				}
-
-				double colorRed = getDouble(red) / 255d;
-				double colorGreen = getDouble(green) / 255d;
-				double colorBlue = getDouble(blue) / 255d;
-
-				double deviationRed = getDouble(redDeviation) / 255d;
-				double deviationGreen = getDouble(greenDeviation) / 255d;
-				double deviationBlue = getDouble(blueDeviation) / 255d;
-
-				protoTile.setColor(new RGBA(colorRed, colorGreen, colorBlue));
-				protoTile.setColorDeviation(new RGBA(deviationRed, deviationGreen, deviationBlue));
-
-				consume(TokenConstants.CURLY_BRACKETS_CLOSE);
 
 			} else if (TokenConstants.VALUES_ATTRIBUTES.equals(next)) { // list of attributes
-				addAttributes(protoTile);
+				addAttributes(container);
+
+			} else if (TokenConstants.VALUES_KNOWLEDGE.equals(next)) { // list of known processes
+				if (type == DataType.CREATURE) {
+					feedTextIDList(((CreatureContainer) container).getPreKnownProcesses());
+				}
+
+			} else if (TokenConstants.VALUES_DRIVES.equals(next)) { // list of drives
+				if (type == DataType.CREATURE) {
+					feedTextIDList(((CreatureContainer) container).getPreDrives());
+				}
+
+			} else if (TokenConstants.VALUES_SOLUTIONS.equals(next)) { // list of solutions
+				if (type == DataType.DRIVE) {
+					feedTextIDList(((DriveContainer) container).getPreSolutions());
+				}
+
+			} else if (TokenConstants.VALUES_ALTERNATIVES.equals(next)) { // list of alternatives
+				if (type == DataType.PROCESS) {
+					feedTextIDList(((ProcessContainer) container).getPreAlternatives());
+				}
 
 			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
 				return;
 
 			} else { // unknown command
 				Logger.error("Unknown Tile definition command '" + next.getValue() + "' on line " + next.getLine());
-			}
-		}
-	}
-
-	// ###################################################################################
-	// ################################ Creature #########################################
-	// ###################################################################################
-
-	private void createCreature() throws Exception {
-		// Creature : cTextId { ... }
-		consume(TokenConstants.COLON);
-		Token textId = consume();
-		consume(TokenConstants.CURLY_BRACKETS_OPEN);
-
-		CreatureContainer protoCreature = new CreatureContainer(textId.getValue());
-		Data.addContainer(protoCreature);
-
-		while (true) {
-			Token next = consume();
-			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
-				addName(protoCreature);
-
-			} else if (TokenConstants.VALUES_ATTRIBUTES.equals(next)) { // list of attributes
-				addAttributes(protoCreature);
-
-			} else if (TokenConstants.VALUES_KNOWLEDGE.equals(next)) { // list of known processes
-				feedTextIDList(protoCreature.getPreKnownProcesses());
-
-			} else if (TokenConstants.VALUES_DRIVES.equals(next)) { // list of drives
-				feedTextIDList(protoCreature.getPreDrives());
-
-			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
-				return;
-
-			} else { // unknown command
-				Logger.error("Unknown Creature definition command '" + next.getValue() + "' on line " + next.getLine());
-			}
-		}
-	}
-
-	// ###################################################################################
-	// ################################ Entity ###########################################
-	// ###################################################################################
-
-	private void createEntity() throws Exception {
-		// Entity : eTextId { ... }
-		consume(TokenConstants.COLON);
-		Token textId = consume();
-		consume(TokenConstants.CURLY_BRACKETS_OPEN);
-
-		Container protoEntity = new Container(textId.getValue(), DataType.ENTITY);
-		Data.addContainer(protoEntity);
-
-		while (true) {
-			Token next = consume();
-			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
-				addName(protoEntity);
-
-			} else if (TokenConstants.VALUES_ATTRIBUTES.equals(next)) { // list of attributes
-				addAttributes(protoEntity);
-
-			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
-				return;
-
-			} else { // unknown command
-				Logger.error("Unknown Entity definition command '" + next.getValue() + "' on line " + next.getLine());
-			}
-		}
-	}
-
-	// ###################################################################################
-	// ################################ Drive ############################################
-	// ###################################################################################
-
-	private void createDrive() throws Exception {
-		// Entity : eTextId { ... }
-		consume(TokenConstants.COLON);
-		Token textId = consume();
-		consume(TokenConstants.CURLY_BRACKETS_OPEN);
-
-		DriveContainer protoDrive = new DriveContainer(textId.getValue());
-		Data.addContainer(protoDrive);
-
-		while (true) {
-			Token next = consume();
-			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
-				addName(protoDrive);
-
-			} else if (TokenConstants.VALUES_SOLUTIONS.equals(next)) { // list of solutions
-				feedTextIDList(protoDrive.getPreSolutions());
-
-			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
-				return;
-
-			} else { // unknown command
-				Logger.error("Unknown Drive definition command '" + next.getValue() + "' on line " + next.getLine());
 			}
 		}
 	}

@@ -132,6 +132,8 @@ public class Data {
 					((CreatureContainer) container).finalizeBehaviour();
 				} else if (container.getType() == DataType.DRIVE) {
 					((DriveContainer) container).finalizeSolutions();
+				} else if (container.getType() == DataType.PROCESS) {
+					((ProcessContainer) container).finalizeAlternatives();
 				}
 			}
 		}

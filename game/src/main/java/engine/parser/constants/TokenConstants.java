@@ -33,10 +33,11 @@ public enum TokenConstants {
 	VALUE_PREFERREDHEIGHTBLUR   (TokenType.KEYWORD, "preferredHeightBlur"),
 
 	// -------------------------------------------------- List Instantiaters
-	VALUES_KNOWLEDGE   (TokenType.KEYWORD, "knowledge"),
-	VALUES_DRIVES      (TokenType.KEYWORD, "drives"),
-	VALUES_ATTRIBUTES  (TokenType.KEYWORD, "attributes"),
-	VALUES_SOLUTIONS   (TokenType.KEYWORD, "solutions"),
+	VALUES_KNOWLEDGE        (TokenType.KEYWORD, "knowledge"),
+	VALUES_DRIVES           (TokenType.KEYWORD, "drives"),
+	VALUES_ATTRIBUTES       (TokenType.KEYWORD, "attributes"),
+	VALUES_SOLUTIONS        (TokenType.KEYWORD, "solutions"),
+	VALUES_ALTERNATIVES     (TokenType.KEYWORD, "alternatives"),
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Seperators
 	// -------------------------------------------------- Brackets
