@@ -15,6 +15,7 @@ Tile: tDirt {
 		if (chance(0.01)) {
 			change(self,tGras);
 		}
+		print ("Dirty Test");
 	}
 }
 

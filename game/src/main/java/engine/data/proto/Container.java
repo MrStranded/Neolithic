@@ -103,4 +103,14 @@ public class Container {
 			preAttributeList.add(preAttribute);
 		}
 	}
+
+	public void addScript(Script script) {
+		if (script != null) {
+			scripts.insert(script);
+		}
+	}
+
+	public IDInterface[] getScripts() {
+		return scripts.toArray();
+	}
 }

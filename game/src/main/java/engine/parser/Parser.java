@@ -6,6 +6,7 @@ import engine.data.ContainerIdentifier;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.proto.*;
+import engine.data.structures.Script;
 import engine.data.variables.DataType;
 import engine.parser.interpretation.Interpreter;
 import engine.parser.tokenization.Token;
@@ -54,7 +55,7 @@ public class Parser {
 		for (File file : definitionsFolder.listFiles()) {
 			if (file.isFile() && file.getName().endsWith(ScriptConstants.SCRIPT_FILE_SUFFIX)) {
 				// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Big Temporary Hack
-				if (file.getName().equals("smallGame.neo")) { // <- this right here
+				if (file.getName().equals("scriptTest.neo")) { // <- this right here
 					System.out.println("load file: " + file.getName());
 					loadFile(file);
 				}
@@ -134,6 +135,14 @@ public class Parser {
 			} else if (container.getType() == DataType.PROCESS) {
 				for (ContainerIdentifier alternative : ((ProcessContainer) container).getAlternatives()) {
 					System.out.println("-> Alt: " + alternative);
+				}
+			}
+
+			IDInterface[] scripts = container.getScripts();
+			if (scripts != null) {
+				for (IDInterface idInterface : scripts) {
+					Script script = (Script) idInterface;
+					script.print();
 				}
 			}
 		}

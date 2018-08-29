@@ -3,30 +3,31 @@ package engine.parser.interpretation;
 import engine.data.ContainerIdentifier;
 import engine.data.attributes.PreAttribute;
 import engine.data.proto.*;
+import engine.data.structures.Script;
 import engine.data.variables.DataType;
 import engine.graphics.renderer.color.RGBA;
 import engine.parser.Logger;
 import engine.parser.constants.TokenConstants;
 import engine.parser.constants.TokenType;
+import engine.parser.scripts.ASTBuilder;
 import engine.parser.tokenization.Token;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class Interpreter {
 
-	private Iterator<Token> tokenIterator;
+	private PeekingIterator<Token> tokenIterator;
 
 	public Interpreter(List<Token> tokens) {
-		tokenIterator = tokens.iterator();
+		tokenIterator = new PeekingIterator<>(tokens);
 	}
 
 	// ###################################################################################
 	// ################################ Token Consumption ################################
 	// ###################################################################################
 
-	private Token consume(TokenConstants tokenConstant) throws Exception {
+	public Token consume(TokenConstants tokenConstant) throws Exception {
 		if (!tokenIterator.hasNext()) { // error reporting
 			throw new Exception("Reached unexpected end of file!");
 		}
@@ -46,12 +47,20 @@ public class Interpreter {
 		}
 	}
 
-	private Token consume() throws Exception {
+	public Token consume() throws Exception {
 		if (!tokenIterator.hasNext()) { // error reporting
 			throw new Exception("Reached unexpected end of file!");
 		}
 
 		return tokenIterator.next();
+	}
+
+	public Token peek() throws Exception {
+		if (!tokenIterator.hasNext()) { // error reporting
+			throw new Exception("Reached unexpected end of file!");
+		}
+
+		return tokenIterator.peek();
 	}
 
 	// ###################################################################################
@@ -102,7 +111,7 @@ public class Interpreter {
 	 * @param token to convert
 	 * @return the token's value or zero
 	 */
-	private int getInt(Token token) {
+	public int getInt(Token token) {
 		return isNumber(token, false)? Integer.parseInt(token.getValue()) : 0;
 	}
 
@@ -112,7 +121,7 @@ public class Interpreter {
 	 * @param token to convert
 	 * @return the token's value or zero
 	 */
-	private double getDouble(Token token) {
+	public double getDouble(Token token) {
 		return isNumber(token, true)? Double.parseDouble(token.getValue()) : 0;
 	}
 
@@ -135,7 +144,7 @@ public class Interpreter {
 				createEntity(DataType.ENTITY);
 			} else if (TokenConstants.DRIVE.equals(next)) {     // Drive
 				createEntity(DataType.DRIVE);
-			} else if (TokenConstants.PROCESS.equals(next)) {     // Process
+			} else if (TokenConstants.PROCESS.equals(next)) {   // Process
 				createEntity(DataType.PROCESS);
 			}
 		}
@@ -263,6 +272,27 @@ public class Interpreter {
 	}
 
 	// ###################################################################################
+	// ################################ Script ###########################################
+	// ###################################################################################
+
+	private void addScript(Container container) throws Exception {
+		consume(TokenConstants.COLON);
+		Token textId = consume();
+
+		if (textId.getValue() != null && textId.getValue().length() > 0) {
+			Script script = (new ASTBuilder(this)).buildScript(textId.getValue());
+			container.addScript(script);
+
+		} else {
+			String errorMessage = "Script has no textID (Script : textID { ...) on line " + textId.getLine();
+
+			Logger.error(errorMessage);
+			throw new Exception(errorMessage);
+
+		}
+	}
+
+	// ###################################################################################
 	// ################################ Attribute ########################################
 	// ###################################################################################
 
@@ -364,7 +394,12 @@ public class Interpreter {
 			} else if (TokenConstants.VALUES_ALTERNATIVES.equals(next)) { // list of alternatives
 				if (type == DataType.PROCESS) {
 					feedTextIDList(((ProcessContainer) container).getAlternatives());
-				} else { issueTypeError(next, type); }
+				} else {
+					issueTypeError(next, type);
+				}
+
+			} else if (TokenConstants.SCRIPT.equals(next)) { // Script
+				addScript(container);
 
 			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
 				return;

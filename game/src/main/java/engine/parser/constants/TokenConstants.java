@@ -24,7 +24,8 @@ public enum TokenConstants {
 	WHILE       (TokenType.KEYWORD, "while"),
 
 	// -------------------------------------------------- Commands
-	PRINT       (TokenType.KEYWORD, "print"),
+	COMMAND_PRINT   (TokenType.KEYWORD, "print"),
+	COMMAND_RANDOM  (TokenType.KEYWORD, "random"),
 
 	// -------------------------------------------------- Engine Values
 	VALUE_NAME                  (TokenType.KEYWORD, "name"),
@@ -168,5 +169,14 @@ public enum TokenConstants {
 
 	public String getValue() {
 		return token.getValue();
+	}
+
+	public static TokenConstants getCorrespondingKeyWord(Token t) {
+		for (TokenConstants constant : values()) {
+			if (constant.getType() == TokenType.KEYWORD && constant.equals(t)) {
+				return constant;
+			}
+		}
+		return null;
 	}
 }
