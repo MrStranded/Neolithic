@@ -218,7 +218,7 @@ public class Interpreter {
 			consume(TokenConstants.SEMICOLON);
 
 		} else if (TokenConstants.SEMICOLON.equals(nextSub)) {
-			// exit definition
+			return;
 		} else {
 			Logger.error("Expected '" + TokenConstants.SEMICOLON.getValue() + "' but got '" + nextSub + "' on line " + nextSub.getLine());
 		}
