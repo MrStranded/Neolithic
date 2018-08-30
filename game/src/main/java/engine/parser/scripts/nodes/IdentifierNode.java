@@ -18,7 +18,7 @@ public class IdentifierNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public void print() {
-		System.out.println("Identifier: " + identifier);
+	public void print(String indentation) {
+		System.out.println(indentation + "Identifier: " + identifier);
 	}
 }

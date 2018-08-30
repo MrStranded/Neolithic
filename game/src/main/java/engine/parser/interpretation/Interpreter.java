@@ -12,7 +12,6 @@ import engine.parser.constants.TokenType;
 import engine.parser.scripts.ASTBuilder;
 import engine.parser.tokenization.Token;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class Interpreter {
@@ -159,17 +158,17 @@ public class Interpreter {
 	 * @param container to add the attributes to
 	 * @throws Exception
 	 */
-	private void addAttributes(Container container) throws Exception {
+	private void feedAttributes(Container container) throws Exception {
 		// attributes { attOne, 10; attTwo, 7; }
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
-		Token nextToken;
-		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(nextToken = consume())) {
+		Token next;
+		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(next = consume())) {
 			consume(TokenConstants.COMMA);
 			Token token = consume();
 			consume(TokenConstants.SEMICOLON);
 
-			PreAttribute preAttribute = new PreAttribute(nextToken.getValue(), getInt(token));
+			PreAttribute preAttribute = new PreAttribute(next.getValue(), getInt(token));
 			container.addPreAttribute(preAttribute);
 		}
 	}
@@ -177,12 +176,12 @@ public class Interpreter {
 	private void feedTextIDList(List<ContainerIdentifier> identifiers) throws Exception {
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
-		Token nextToken;
-		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(nextToken = consume())) {
+		Token next;
+		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(next = consume())) {
 			consume(TokenConstants.SEMICOLON);
 
-			if (nextToken.getValue() != null && nextToken.getValue().length() > 0) {
-				identifiers.add(new ContainerIdentifier(nextToken.getValue()));
+			if (next.getValue() != null && next.getValue().length() > 0) {
+				identifiers.add(new ContainerIdentifier(next.getValue()));
 			}
 		}
 	}
@@ -374,7 +373,7 @@ public class Interpreter {
 				} else { issueTypeError(next, type); }
 
 			} else if (TokenConstants.VALUES_ATTRIBUTES.equals(next)) { // list of attributes
-				addAttributes(container);
+				feedAttributes(container);
 
 			} else if (TokenConstants.VALUES_KNOWLEDGE.equals(next)) { // list of known processes
 				if (type == DataType.CREATURE) {
@@ -410,8 +409,22 @@ public class Interpreter {
 		}
 	}
 
+	// ###################################################################################
+	// ################################ Debugging ########################################
+	// ###################################################################################
+
 	private void issueTypeError(Token command, DataType type) {
-		Logger.error("The command '" + command.getValue() + "' is not applicable to the type " + type + " (line " + command.getLine() + ")");
+		Logger.error("The definition command '" + command.getValue() + "' is not applicable to the type " + type + " (line " + command.getLine() + ")");
+	}
+
+	/**
+	 * This is for debugging only! Using this during a real parsing run will disrupt the process!
+	 * This method dumps the remainder of the iterator on the Console. The iterator is left empty!
+	 */
+	public void printRemainder() {
+		while (tokenIterator.hasNext()) {
+			System.out.println("--->   " + tokenIterator.next());
+		}
 	}
 
 }

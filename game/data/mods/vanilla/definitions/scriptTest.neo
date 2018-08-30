@@ -1,12 +1,12 @@
 Entity: eS {
-	Script: s1 {
+	/*Script: s1 {
 
 	}
 
 	Script: s2 {
 		print("Test");
-		print(print("Toist?","Or Moist?));
-	}
+		print(print("Toist?","Or Moist?"));
+	}*/
 
 	Script: s3 {
 		i = random(0,3);

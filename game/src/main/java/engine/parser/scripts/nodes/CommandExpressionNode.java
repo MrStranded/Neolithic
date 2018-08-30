@@ -26,10 +26,10 @@ public class CommandExpressionNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public void print() {
-		System.out.println("Command: " + command);
+	public void print(String indentation) {
+		System.out.println(indentation + "Command: " + command);
 		for (AbstractScriptNode node : subNodes) {
-			node.print();
+			node.print(indentation + " ");
 		}
 	}
 }

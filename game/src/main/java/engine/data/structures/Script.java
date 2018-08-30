@@ -25,7 +25,7 @@ public class Script implements IDInterface {
 			int i = 1;
 			for (char c : textId.toCharArray()) {
 				id += c * i;
-				i++;
+				i *= 256; // nr of ascii chars
 			}
 		}
 		return id;
@@ -37,7 +37,7 @@ public class Script implements IDInterface {
 	}
 
 	public void print() {
-		System.out.println("Script: " + textId + " (" + getId() + ") ---------------");
-		root.print();
+		System.out.println("Script: " + textId + " (" + getId() + ") ---------------------");
+		root.print("    ");
 	}
 }

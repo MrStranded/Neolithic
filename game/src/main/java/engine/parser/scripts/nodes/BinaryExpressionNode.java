@@ -22,9 +22,9 @@ public class BinaryExpressionNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public void print() {
-		System.out.println("Binary Expression " + operator);
-		subNodes[0].print();
-		subNodes[1].print();
+	public void print(String indentation) {
+		System.out.println(indentation + "Binary Expression " + operator);
+		subNodes[0].print(indentation + " ");
+		subNodes[1].print(indentation + " ");
 	}
 }

@@ -2,24 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb5f568f-e1c1-4ada-8646-68bc27407460" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/PeekingIterator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/AbstractScriptNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/smallGame.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/smallGame.neo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/proto/Container.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/proto/Container.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/scriptTest.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/scriptTest.neo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/structures/Script.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/structures/Script.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/constants/TokenConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/constants/TokenConstants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/Interpreter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/PeekingIterator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/PeekingIterator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/AbstractScriptNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/AbstractScriptNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/neolithic/.gradle/" />
@@ -72,8 +68,8 @@
       <file leaf-file-name="Parser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/Parser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="491">
-              <caret line="144" column="35" selection-start-line="144" selection-start-column="35" selection-end-line="144" selection-end-column="35" />
+            <state relative-caret-position="1166">
+              <caret line="144" column="33" selection-start-line="144" selection-start-column="33" selection-end-line="144" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -84,33 +80,8 @@
       <file leaf-file-name="Interpreter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/interpretation/Interpreter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="183">
-              <caret line="51" selection-start-line="51" selection-end-line="51" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#3306#3307#0" expanded="true" />
-                <element signature="e#3382#3383#0" expanded="true" />
-                <element signature="e#3425#3426#0" expanded="true" />
-                <element signature="e#3481#3482#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TokenConstants.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/constants/TokenConstants.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="27" column="50" selection-start-line="27" selection-start-column="50" selection-end-line="27" selection-end-column="50" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Container.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/proto/Container.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="464">
-              <caret line="113" column="33" selection-start-line="113" selection-start-column="33" selection-end-line="113" selection-end-column="33" />
+            <state relative-caret-position="363">
+              <caret line="54" column="46" selection-start-line="54" selection-start-column="46" selection-end-line="54" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -118,75 +89,58 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ASTBuilder.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Script.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/structures/Script.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="401">
+              <caret line="39" column="89" selection-start-line="39" selection-start-column="89" selection-end-line="39" selection-end-column="89" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ASTBuilder.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="795">
-              <caret line="86" column="44" selection-start-line="86" selection-start-column="44" selection-end-line="86" selection-end-column="44" />
+            <state relative-caret-position="371">
+              <caret line="67" column="37" selection-start-line="67" selection-start-column="37" selection-end-line="67" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#283#284#0" expanded="true" />
-                <element signature="e#319#320#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IdentifierNode.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" column="54" selection-start-line="21" selection-start-column="54" selection-end-line="21" selection-end-column="54" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#286#287#0" expanded="true" />
-                <element signature="e#296#297#0" expanded="true" />
-                <element signature="e#228#229#0" expanded="true" />
-                <element signature="e#246#247#0" expanded="true" />
-                <element signature="e#433#434#0" expanded="true" />
-                <element signature="e#460#461#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CommandExpressionNode.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="29" column="36" selection-start-line="29" selection-start-column="36" selection-end-line="29" selection-end-column="36" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#565#566#0" expanded="true" />
-                <element signature="e#583#584#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UnaryExpressionNode.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java">
+      <file leaf-file-name="PeekingIterator.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/interpretation/PeekingIterator.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="345">
-              <caret line="23" column="28" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
+              <caret line="26" column="40" lean-forward="true" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#235#236#0" expanded="true" />
-                <element signature="e#253#254#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BinaryExpressionNode.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java">
+      <file leaf-file-name="Tokenizer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Tokenizer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="33" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
+            <state relative-caret-position="311">
+              <caret line="172" column="68" selection-start-line="172" selection-start-column="68" selection-end-line="172" selection-end-column="68" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#464#465#0" expanded="true" />
-                <element signature="e#482#483#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IfStatementNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -195,8 +149,8 @@
       <file leaf-file-name="LiteralNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
+            <state relative-caret-position="315">
+              <caret line="21" column="41" selection-start-line="21" selection-start-column="41" selection-end-line="21" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#274#275#0" expanded="true" />
@@ -205,6 +159,30 @@
                 <element signature="e#311#312#0" expanded="true" />
                 <element signature="e#346#347#0" expanded="true" />
                 <element signature="e#373#374#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MultiStatementNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="435">
+              <caret line="29" column="39" selection-start-line="29" selection-start-column="39" selection-end-line="29" selection-end-column="39" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UnaryExpressionNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="23" column="42" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -223,7 +201,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>updateMatrix</find>
       <find>keyLimit</find>
       <find>halfAngle</find>
       <find>position</find>
@@ -253,6 +230,7 @@
       <find>float</find>
       <find>angle</find>
       <find>static</find>
+      <find>consume(TokenConstants.CURLY_BRACKETS_CLOSE)</find>
     </findStrings>
     <replaceStrings>
       <replace>verticesVboId</replace>
@@ -314,7 +292,6 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/data/attributes/Attribute.java" />
         <option value="$PROJECT_DIR$/src/test/resources/tokenizerTestNoComments" />
         <option value="$PROJECT_DIR$/src/test/resources/tokenizerTestComments" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Tokenizer.java" />
         <option value="$PROJECT_DIR$/src/test/resources/tokenizerTestStrings" />
         <option value="$PROJECT_DIR$/src/test/java/parser/TokenizerTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/parser/InterpreterTest.java" />
@@ -334,24 +311,25 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ScriptNodeInterface.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/Script.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/ASTBuilder.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/data/structures/Script.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/AbstractScriptNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/TokenIterator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/PeekingIterator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/Interpreter.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/proto/Container.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/Parser.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ExpressionNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/constants/TokenConstants.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/AbstractScriptNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/Parser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/data/structures/Script.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/Interpreter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Tokenizer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/PeekingIterator.java" />
       </list>
     </option>
   </component>
@@ -779,7 +757,7 @@
       <workItem from="1534677433060" duration="15416000" />
       <workItem from="1534860789658" duration="12232000" />
       <workItem from="1535361686593" duration="9998000" />
-      <workItem from="1535446076335" duration="32141000" />
+      <workItem from="1535446076335" duration="37399000" />
     </task>
     <servers />
   </component>
@@ -816,7 +794,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="491711000" />
+    <option name="totallyTimeSpent" value="496969000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -832,11 +810,11 @@
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32819384" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32819384" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28525642" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28525642" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32819384" />
       <window_info anchor="right" id="Gradle" order="4" weight="0.32959402" />
@@ -907,13 +885,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="975">
           <caret line="65" column="7" selection-start-line="65" selection-start-column="7" selection-end-line="65" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Token.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="25" column="20" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
         </state>
       </provider>
     </entry>
@@ -992,16 +963,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="326">
           <caret line="112" column="34" selection-start-line="112" selection-start-column="34" selection-end-line="112" selection-end-column="34" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Tokenizer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="86">
-          <caret line="88" column="93" selection-start-line="88" selection-start-column="93" selection-end-line="88" selection-end-column="93" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1200,13 +1161,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/structures/Script.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="40" column="21" selection-start-line="40" selection-start-column="21" selection-end-line="40" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -1214,56 +1168,6 @@
           <folding>
             <element signature="e#139#140#0" expanded="true" />
             <element signature="e#154#155#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/AbstractScriptNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="28" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="20" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="40" selection-start-line="22" selection-start-column="40" selection-end-line="22" selection-end-column="40" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#517#518#0" expanded="true" />
-            <element signature="e#544#545#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/interpretation/PeekingIterator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="29" column="13" lean-forward="true" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#405#406#0" expanded="true" />
-            <element signature="e#428#429#0" expanded="true" />
-            <element signature="e#189#190#0" expanded="true" />
-            <element signature="e#208#209#0" expanded="true" />
-            <element signature="e#244#245#0" expanded="true" />
-            <element signature="e#262#263#0" expanded="true" />
-            <element signature="e#599#600#0" expanded="true" />
-            <element signature="e#612#613#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1278,40 +1182,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/Parser.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/constants/TokenConstants.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="491">
-          <caret line="144" column="35" selection-start-line="144" selection-start-column="35" selection-end-line="144" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="405">
+          <caret line="27" column="50" selection-start-line="27" selection-start-column="50" selection-end-line="27" selection-end-column="50" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="28" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#235#236#0" expanded="true" />
-            <element signature="e#253#254#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/AbstractScriptNode.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
-          <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
+          <caret line="11" column="49" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#274#275#0" expanded="true" />
-            <element signature="e#302#303#0" expanded="true" />
-            <element signature="e#293#294#0" expanded="true" />
-            <element signature="e#311#312#0" expanded="true" />
-            <element signature="e#346#347#0" expanded="true" />
-            <element signature="e#373#374#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="27" column="42" selection-start-line="27" selection-start-column="42" selection-end-line="27" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#464#465#0" expanded="true" />
+            <element signature="e#482#483#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" column="39" selection-start-line="31" selection-start-column="39" selection-end-line="31" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#565#566#0" expanded="true" />
+            <element signature="e#583#584#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1319,7 +1226,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
-          <caret line="21" column="54" selection-start-line="21" selection-start-column="54" selection-end-line="21" selection-end-column="54" />
+          <caret line="21" column="41" selection-start-line="21" selection-start-column="41" selection-end-line="21" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#286#287#0" expanded="true" />
@@ -1332,59 +1239,112 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/constants/TokenConstants.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="50" selection-start-line="27" selection-start-column="50" selection-end-line="27" selection-end-column="50" />
+        <state relative-caret-position="315">
+          <caret line="21" column="41" selection-start-line="21" selection-start-column="41" selection-end-line="21" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#274#275#0" expanded="true" />
+            <element signature="e#302#303#0" expanded="true" />
+            <element signature="e#293#294#0" expanded="true" />
+            <element signature="e#311#312#0" expanded="true" />
+            <element signature="e#346#347#0" expanded="true" />
+            <element signature="e#373#374#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" column="39" selection-start-line="29" selection-start-column="39" selection-end-line="29" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="23" column="42" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/Parser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1166">
+          <caret line="144" column="33" selection-start-line="144" selection-start-column="33" selection-end-line="144" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/structures/Script.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="401">
+          <caret line="39" column="89" selection-start-line="39" selection-start-column="89" selection-end-line="39" selection-end-column="89" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Token.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="25" column="20" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/interpretation/Interpreter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="51" selection-start-line="51" selection-end-line="51" />
+        <state relative-caret-position="363">
+          <caret line="54" column="46" selection-start-line="54" selection-start-column="46" selection-end-line="54" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3306#3307#0" expanded="true" />
-            <element signature="e#3382#3383#0" expanded="true" />
-            <element signature="e#3425#3426#0" expanded="true" />
-            <element signature="e#3481#3482#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Tokenizer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="33" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
+        <state relative-caret-position="311">
+          <caret line="172" column="68" selection-start-line="172" selection-start-column="68" selection-end-line="172" selection-end-column="68" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#464#465#0" expanded="true" />
-            <element signature="e#482#483#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="29" column="36" selection-start-line="29" selection-start-column="36" selection-end-line="29" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#565#566#0" expanded="true" />
-            <element signature="e#583#584#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="795">
-          <caret line="86" column="44" selection-start-line="86" selection-start-column="44" selection-end-line="86" selection-end-column="44" />
+        <state relative-caret-position="371">
+          <caret line="67" column="37" selection-start-line="67" selection-start-column="37" selection-end-line="67" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#283#284#0" expanded="true" />
-            <element signature="e#319#320#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/interpretation/PeekingIterator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="26" column="40" lean-forward="true" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

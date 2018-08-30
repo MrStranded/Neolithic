@@ -24,10 +24,10 @@ public class MultiStatementNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public void print() {
-		System.out.println("MultiStatement");
+	public void print(String indentation) {
+		System.out.println(indentation + "MultiStatement");
 		for (AbstractScriptNode node : subNodes) {
-			node.print();
+			node.print(indentation + ">");
 		}
 	}
 }

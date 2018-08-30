@@ -24,7 +24,6 @@ public class ASTBuilder {
 	// ###################################################################################
 
 	public Script buildScript(String textID) throws Exception {
-		System.out.println("Started on script building " + textID);
 		MultiStatementNode root = readMultiStatement();
 		return new Script(textID, root);
 	}
@@ -108,7 +107,8 @@ public class ASTBuilder {
 			List<AbstractScriptNode> parameters = new ArrayList<>(1);
 
 			boolean firstParameter = true;
-			while (!TokenConstants.ROUND_BRACKETS_CLOSE.equals(interpreter.peek())) {
+			Token next;
+			while (!TokenConstants.ROUND_BRACKETS_CLOSE.equals(next = interpreter.peek())) {
 				if (!firstParameter) {
 					interpreter.consume(TokenConstants.COMMA);
 				}

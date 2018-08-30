@@ -18,7 +18,7 @@ public class LiteralNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public void print() {
-		System.out.println("Literal: " + literal);
+	public void print(String indentation) {
+		System.out.println(indentation + "Literal: " + literal);
 	}
 }

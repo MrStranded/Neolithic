@@ -19,8 +19,8 @@ public class UnaryExpressionNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public void print() {
-		System.out.println("Unary Expression " + operator);
-		subNodes[0].print();
+	public void print(String indentation) {
+		System.out.println(indentation + "Unary Expression " + operator);
+		subNodes[0].print(indentation + " ");
 	}
 }

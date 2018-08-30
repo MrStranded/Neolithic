@@ -19,7 +19,12 @@ public class IfStatementNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public void print() {
-		System.out.println("If Statement");
+	public void print(String indentation) {
+		System.out.println(indentation + "If Statement");
+		subNodes[0].print(indentation + "-");
+		subNodes[1].print(indentation + ".");
+		if (subNodes[2] != null) {
+			subNodes[2].print(indentation + ".");
+		}
 	}
 }

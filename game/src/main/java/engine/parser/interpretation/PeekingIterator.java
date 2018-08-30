@@ -24,7 +24,7 @@ public class PeekingIterator<T> implements Iterator {
 
 	@Override
 	public boolean hasNext() {
-		return (currentPosition < length-1);
+		return (currentPosition < length);
 	}
 
 	@Override

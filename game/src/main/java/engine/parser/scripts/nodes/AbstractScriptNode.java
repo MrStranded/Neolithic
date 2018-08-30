@@ -9,5 +9,5 @@ public abstract class AbstractScriptNode {
 
 	public abstract Variable execute(Instance instance);
 
-	public abstract void print();
+	public abstract void print(String indentation);
 }
