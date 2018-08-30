@@ -20,12 +20,12 @@ Entity: eS {
 	}
 
 	Script: s4 {
-		for (j = 0; j < 3; j=j+1) {
-			print(j);
+		for (j = 0; j < 3; j++) {
+			print(-j);
 		}
 
 		while(true) {
-			j = j -1;
+			j -= 1;
 		}
 	}
 }

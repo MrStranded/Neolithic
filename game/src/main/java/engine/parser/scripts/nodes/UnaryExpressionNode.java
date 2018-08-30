@@ -9,6 +9,7 @@ public class UnaryExpressionNode extends AbstractScriptNode {
 	private Token operator;
 
 	public UnaryExpressionNode(Token operator, AbstractScriptNode subNode) {
+		this.operator = operator;
 		subNodes = new AbstractScriptNode[1];
 		subNodes[0] = subNode;
 	}

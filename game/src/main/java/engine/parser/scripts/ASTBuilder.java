@@ -173,24 +173,42 @@ public class ASTBuilder {
 			Token next = interpreter.peek();
 			if (next.getType() == TokenType.OPERATOR) {
 				next = interpreter.consume();
-				AbstractScriptNode right = readExpression();
-				return new BinaryExpressionNode(next, expressionNode, right);
+				if (TokenConstants.SINGLE_INCREMENT.equals(next) || TokenConstants.SINGLE_DECREMENT.equals(next)) {
+					return new UnaryExpressionNode(next, expressionNode);
+
+				} else {
+					AbstractScriptNode right = readExpression();
+					return new BinaryExpressionNode(next, expressionNode, right);
+
+				}
 
 			} else {
 				return expressionNode;
 
 			}
 
+		} else if (expression.getType() == TokenType.OPERATOR) { // an operator in front of an expression -> unary node
+			AbstractScriptNode right = readExpression();
+			return new UnaryExpressionNode(expression, right);
+
 		} else if (expression.getType() == TokenType.LITERAL || expression.getType() == TokenType.IDENTIFIER) { // we have a literal or identifier
 			Token next = interpreter.peek();
+			AbstractScriptNode left;
+			if (expression.getType() == TokenType.LITERAL) {
+				left = new LiteralNode(expression);
+			} else {
+				left = new IdentifierNode(expression);
+			}
+
 			if (next.getType() == TokenType.OPERATOR) {
 				next = interpreter.consume();
-				AbstractScriptNode right = readExpression();
+				if (TokenConstants.SINGLE_INCREMENT.equals(next) || TokenConstants.SINGLE_DECREMENT.equals(next)) {
+					return new UnaryExpressionNode(next, left);
 
-				if (expression.getType() == TokenType.LITERAL) {
-					return new BinaryExpressionNode(next, new LiteralNode(expression), right);
 				} else {
-					return new BinaryExpressionNode(next, new IdentifierNode(expression), right);
+					AbstractScriptNode right = readExpression();
+					return new BinaryExpressionNode(next, left, right);
+
 				}
 
 			} else {

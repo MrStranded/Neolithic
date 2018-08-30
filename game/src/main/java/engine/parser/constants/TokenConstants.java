@@ -73,6 +73,18 @@ public enum TokenConstants {
 	MODULO      (TokenType.OPERATOR, "%"),
 	POWER       (TokenType.OPERATOR, "^"),
 
+	// -------------------------------------------------- Single Step
+	SINGLE_INCREMENT    (TokenType.OPERATOR, "++"),
+	SINGLE_DECREMENT    (TokenType.OPERATOR, "--"),
+
+	// -------------------------------------------------- Quick Math
+	QUICK_PLUS          (TokenType.OPERATOR, "+="),
+	QUICK_MINUS         (TokenType.OPERATOR, "-="),
+	QUICK_TIMES         (TokenType.OPERATOR, "*="),
+	QUICK_DIVIDE        (TokenType.OPERATOR, "/="),
+	QUICK_MODULO        (TokenType.OPERATOR, "%="),
+	QUICK_POWER         (TokenType.OPERATOR, "^="),
+
 	// -------------------------------------------------- Comparators
 	EQUAL           (TokenType.OPERATOR, "=="),
 	UNEQUAL         (TokenType.OPERATOR, "!="),
