@@ -43,6 +43,12 @@ public class ASTBuilder {
 				if (TokenConstants.IF.equals(next)) { // if statement
 					nodeList.add(readIfStatement());
 
+				} else if (TokenConstants.WHILE.equals(next)) { // while statement
+					nodeList.add(readWhileStatement());
+
+				} else if (TokenConstants.FOR.equals(next)) { // for statement
+					nodeList.add(readForStatement());
+
 				} else { // expression
 					nodeList.add(readExpression());
 					interpreter.consume(TokenConstants.SEMICOLON);
@@ -91,6 +97,46 @@ public class ASTBuilder {
 		}
 
 		return new IfStatementNode(expressionNode, body, elseBody);
+	}
+
+	// ###################################################################################
+	// ################################ While Statement ##################################
+	// ###################################################################################
+
+	private WhileStatementNode readWhileStatement() throws Exception {
+		interpreter.consume(TokenConstants.WHILE);
+		interpreter.consume(TokenConstants.ROUND_BRACKETS_OPEN);
+
+		AbstractScriptNode expressionNode = readExpression();
+
+		interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
+
+		MultiStatementNode body = readMultiStatement();
+
+		return new WhileStatementNode(expressionNode, body);
+	}
+
+	// ###################################################################################
+	// ################################ For Statement ####################################
+	// ###################################################################################
+
+	private ForStatementNode readForStatement() throws Exception {
+		interpreter.consume(TokenConstants.FOR);
+		interpreter.consume(TokenConstants.ROUND_BRACKETS_OPEN);
+
+		AbstractScriptNode initial = readExpression();
+		interpreter.consume(TokenConstants.SEMICOLON);
+
+		AbstractScriptNode condition = readExpression();
+		interpreter.consume(TokenConstants.SEMICOLON);
+
+		AbstractScriptNode step = readExpression();
+
+		interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
+
+		MultiStatementNode body = readMultiStatement();
+
+		return new ForStatementNode(initial, condition, step, body);
 	}
 
 	// ###################################################################################
