@@ -66,40 +66,40 @@ public enum TokenConstants {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Operators
 	// -------------------------------------------------- Math
-	PLUS        (TokenType.OPERATOR, "+"),
-	MINUS       (TokenType.OPERATOR, "-"),
-	TIMES       (TokenType.OPERATOR, "*"),
-	DIVIDE      (TokenType.OPERATOR, "/"),
-	MODULO      (TokenType.OPERATOR, "%"),
-	POWER       (TokenType.OPERATOR, "^"),
+	PLUS        (TokenType.OPERATOR, "+", 3),
+	MINUS       (TokenType.OPERATOR, "-", 3),
+	TIMES       (TokenType.OPERATOR, "*", 2),
+	DIVIDE      (TokenType.OPERATOR, "/", 2),
+	MODULO      (TokenType.OPERATOR, "%", 2),
+	POWER       (TokenType.OPERATOR, "^", 1),
 
 	// -------------------------------------------------- Single Step
 	SINGLE_INCREMENT    (TokenType.OPERATOR, "++"),
 	SINGLE_DECREMENT    (TokenType.OPERATOR, "--"),
 
 	// -------------------------------------------------- Quick Math
-	QUICK_PLUS          (TokenType.OPERATOR, "+="),
-	QUICK_MINUS         (TokenType.OPERATOR, "-="),
-	QUICK_TIMES         (TokenType.OPERATOR, "*="),
-	QUICK_DIVIDE        (TokenType.OPERATOR, "/="),
-	QUICK_MODULO        (TokenType.OPERATOR, "%="),
-	QUICK_POWER         (TokenType.OPERATOR, "^="),
+	QUICK_PLUS          (TokenType.OPERATOR, "+=", 8),
+	QUICK_MINUS         (TokenType.OPERATOR, "-=", 8),
+	QUICK_TIMES         (TokenType.OPERATOR, "*=", 8),
+	QUICK_DIVIDE        (TokenType.OPERATOR, "/=", 8),
+	QUICK_MODULO        (TokenType.OPERATOR, "%=", 8),
+	QUICK_POWER         (TokenType.OPERATOR, "^=", 8),
 
 	// -------------------------------------------------- Comparators
-	EQUAL           (TokenType.OPERATOR, "=="),
-	UNEQUAL         (TokenType.OPERATOR, "!="),
-	GREATER         (TokenType.OPERATOR, ">"),
-	LESSER          (TokenType.OPERATOR, "<"),
-	GREATER_EQUAL   (TokenType.OPERATOR, ">="),
-	LESSER_EQUAL    (TokenType.OPERATOR, "<="),
+	EQUAL           (TokenType.OPERATOR, "==", 5),
+	UNEQUAL         (TokenType.OPERATOR, "!=", 5),
+	GREATER         (TokenType.OPERATOR, ">", 4),
+	LESSER          (TokenType.OPERATOR, "<", 4),
+	GREATER_EQUAL   (TokenType.OPERATOR, ">=", 4),
+	LESSER_EQUAL    (TokenType.OPERATOR, "<=", 4),
 
 	// -------------------------------------------------- Logical
 	NOT         (TokenType.OPERATOR, "!"),
-	AND         (TokenType.OPERATOR, "&&"),
-	OR          (TokenType.OPERATOR, "||"),
+	AND         (TokenType.OPERATOR, "&&", 6),
+	OR          (TokenType.OPERATOR, "||", 7),
 
 	// -------------------------------------------------- Assignment
-	ASSIGNMENT  (TokenType.OPERATOR, "="),
+	ASSIGNMENT  (TokenType.OPERATOR, "=", 8),
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Comments
 	COMMENT         (TokenType.COMMENT, "//"),
@@ -113,9 +113,15 @@ public enum TokenConstants {
 	// ###################################################################################
 
 	private Token token;
+	private int precedence = 0;
 
 	TokenConstants(TokenType type, String value) {
 		token = new Token(type, value, 0);
+	}
+
+	TokenConstants(TokenType type, String value, int precedence) {
+		token = new Token(type, value, 0);
+		this.precedence = precedence;
 	}
 
 	/**
@@ -183,9 +189,32 @@ public enum TokenConstants {
 		return token.getValue();
 	}
 
+	public int getPrecedence() {
+		return precedence;
+	}
+
+	/**
+	 * Searches the token constants for a token with type KEYWORD and the same value as the given token and returns it.
+	 * @param t token to check for
+	 * @return token constant with type KEYWORD, if found
+	 */
 	public static TokenConstants getCorrespondingKeyWord(Token t) {
 		for (TokenConstants constant : values()) {
 			if (constant.getType() == TokenType.KEYWORD && constant.equals(t)) {
+				return constant;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Searches the token constants for a token with the same value as the given token and returns it.
+	 * @param t token to check for
+	 * @return token constant with same value, if found
+	 */
+	public static TokenConstants getCorrespondingConstant(Token t) {
+		for (TokenConstants constant : values()) {
+			if (constant.equals(t)) {
 				return constant;
 			}
 		}

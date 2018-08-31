@@ -1,5 +1,6 @@
 package engine.parser.tokenization;
 
+import engine.parser.constants.TokenConstants;
 import engine.parser.constants.TokenType;
 
 public class Token {
@@ -12,6 +13,14 @@ public class Token {
 		this.type = type;
 		this.value = value;
 		this.line = line;
+	}
+
+	public int getPrecedence() {
+		TokenConstants tokenConstant = TokenConstants.getCorrespondingConstant(this);
+		if (tokenConstant == null) {
+			return 0;
+		}
+		return tokenConstant.getPrecedence();
 	}
 
 	public String getValue() {

@@ -166,24 +166,20 @@ public class ASTBuilder {
 			return new CommandExpressionNode(command.getToken(), parameters);
 
 		} else if (TokenConstants.ROUND_BRACKETS_OPEN.equals(expression)) { // an expression in brackets
-			AbstractScriptNode expressionNode = readExpression();
+			AbstractScriptNode left = readExpression();
+
+			if (left.getClass() == BinaryExpressionNode.class) { // binary expression in brackets
+				((BinaryExpressionNode) left).setBracketed(true);
+			}
 
 			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
 
 			Token next = interpreter.peek();
 			if (next.getType() == TokenType.OPERATOR) {
-				next = interpreter.consume();
-				if (TokenConstants.SINGLE_INCREMENT.equals(next) || TokenConstants.SINGLE_DECREMENT.equals(next)) {
-					return new UnaryExpressionNode(next, expressionNode);
-
-				} else {
-					AbstractScriptNode right = readExpression();
-					return new BinaryExpressionNode(next, expressionNode, right);
-
-				}
+				return readArithmeticExpression(left);
 
 			} else {
-				return expressionNode;
+				return left;
 
 			}
 
@@ -201,15 +197,7 @@ public class ASTBuilder {
 			}
 
 			if (next.getType() == TokenType.OPERATOR) {
-				next = interpreter.consume();
-				if (TokenConstants.SINGLE_INCREMENT.equals(next) || TokenConstants.SINGLE_DECREMENT.equals(next)) {
-					return new UnaryExpressionNode(next, left);
-
-				} else {
-					AbstractScriptNode right = readExpression();
-					return new BinaryExpressionNode(next, left, right);
-
-				}
+				return readArithmeticExpression(left);
 
 			} else {
 				if (expression.getType() == TokenType.LITERAL) {
@@ -225,6 +213,39 @@ public class ASTBuilder {
 
 		}
 		return null;
+	}
+
+	// ###################################################################################
+	// ################################ Arithmetic Expression ############################
+	// ###################################################################################
+
+	private AbstractScriptNode readArithmeticExpression(AbstractScriptNode left) throws Exception {
+		Token operator = interpreter.consume();
+
+		if (TokenConstants.SINGLE_INCREMENT.equals(operator) || TokenConstants.SINGLE_DECREMENT.equals(operator)) {
+			return new UnaryExpressionNode(operator, left);
+
+		} else {
+			AbstractScriptNode right = readExpression();
+			// precedence correction
+			if (right.getClass() == BinaryExpressionNode.class) { // possibly rehang tree structure
+				BinaryExpressionNode rightNode = ((BinaryExpressionNode) right);
+
+				if (!rightNode.isBracketed()) { // only correct when right node is not bracketed
+					// current operator binds more strongly than the one from the right expression -> rehang
+					if (operator.getPrecedence() < rightNode.getOperator().getPrecedence()) {
+						AbstractScriptNode sub = rightNode.getLeft();
+						BinaryExpressionNode newLeft = new BinaryExpressionNode(operator, left, sub);
+						rightNode.setLeft(newLeft);
+						return rightNode;
+
+					}
+				}
+			}
+
+			return new BinaryExpressionNode(operator, left, right);
+
+		}
 	}
 
 }
