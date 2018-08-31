@@ -2,11 +2,15 @@ package engine.data.entities;
 
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
+import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
 import engine.data.structures.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.Variable;
+import engine.graphics.objects.GraphicalObject;
+import engine.logic.GeographicCoordinates;
+import engine.math.numericalObjects.Vector3;
 import engine.utils.converters.StringConverter;
 
 import java.util.ArrayList;
@@ -19,6 +23,9 @@ public class Instance {
 	private BinaryTree<Attribute> attributes;
 	private BinaryTree<Variable> variables;
 	private List<Instance> subInstances;
+
+	private Tile position = null;
+	private GraphicalObject graphicalObject = null;
 
 	public Instance(int id) {
 		attributes = new BinaryTree<>();
@@ -44,6 +51,41 @@ public class Instance {
 	// ################################ Graphical ########################################
 	// ###################################################################################
 
+	public void render() {
+		if (graphicalObject != null && position != null) {
+			graphicalObject.render();
+		}
+		for (Instance subInstance : subInstances) {
+			System.out.println("rendering " + subInstance.getId());
+			subInstance.render();
+		}
+	}
+
+	public void setGraphicalObject(GraphicalObject graphicalObject) {
+		this.graphicalObject = graphicalObject;
+		graphicalObject.setScale(0.5d,0.5d,0.5d);
+	}
+
+	public void setPosition(Tile tile) {
+		if (position != null) {
+			position.removeSubInstance(this);
+		}
+		tile.addSubInstance(this);
+		position = tile;
+		actualizeObjectPosition();
+	}
+
+	private void actualizeObjectPosition() {
+		if (position != null && graphicalObject != null) {
+			double pitch = GeographicCoordinates.getLatitude(position);
+			double yaw = GeographicCoordinates.getLongitude(position);
+			Vector3 pos = position.getTileMesh().getMid();
+			System.out.println("pos: " + pos);
+			graphicalObject.setPosition(pos);
+			//graphicalObject.setRotation(pitch, yaw, 0);
+		}
+	}
+
 	// ###################################################################################
 	// ################################ Sub Instances ####################################
 	// ###################################################################################
@@ -55,6 +97,13 @@ public class Instance {
 			}
 		}
 		return false;
+	}
+
+	public void addSubInstance(Instance instance) {
+		subInstances.add(instance);
+	}
+	public void removeSubInstance(Instance instance) {
+		subInstances.remove(instance);
 	}
 
 	// ###################################################################################

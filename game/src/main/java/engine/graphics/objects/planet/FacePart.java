@@ -65,6 +65,10 @@ public class FacePart {
 			}
 
 		}
+		// render all objects on the current tile
+		if (tile != null) {
+			tile.render();
+		}
 	}
 	
 	public void render(ShaderProgram shaderProgram, Matrix4 viewWorldMatrix, int depth, boolean putDataIntoShader, boolean drawWater) {
@@ -132,6 +136,10 @@ public class FacePart {
 	}
 	public Vector3 getCorner3() {
 		return corner3;
+	}
+
+	public Vector3 getMid() {
+		return corner1.plus(corner2).plus(corner3).times(1d/3d);
 	}
 
 	public double getHeight() {

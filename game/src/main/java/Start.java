@@ -1,4 +1,8 @@
 import engine.Engine;
+import engine.data.entities.Instance;
+import engine.data.proto.Data;
+import engine.graphics.objects.GraphicalObject;
+import load.OBJLoader;
 
 /**
  * Use this class to start the game.

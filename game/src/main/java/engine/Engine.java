@@ -1,14 +1,17 @@
 package engine;
 
+import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
 import engine.data.proto.Data;
 import engine.graphics.gui.BaseGUI;
 import engine.graphics.gui.GUIInterface;
+import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.Scene;
 import engine.graphics.gui.window.Window;
 import engine.graphics.renderer.Renderer;
 import engine.logic.TopologyGenerator;
 import engine.parser.Parser;
+import load.OBJLoader;
 
 /**
  * The engine binds the whole thing together.
@@ -55,6 +58,14 @@ public class Engine {
 		time = System.currentTimeMillis();
 		gaia.updatePlanetMesh();
 		System.out.println("Updating LOD Mesh took: "+(System.currentTimeMillis()-time)+" ms");
+
+		Instance i01 = new Instance(Data.getContainerID("eS"));
+		try {
+			i01.setGraphicalObject(new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		i01.setPosition(gaia.getFace(0,1).getTile(7,5));
 	}
 
 	/**

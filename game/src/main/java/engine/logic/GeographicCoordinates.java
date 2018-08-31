@@ -55,17 +55,46 @@ public interface GeographicCoordinates {
 		return closest.getTile();
 	}
 
+	/**
+	 * Returns the longitude of the given tile in degrees.
+	 * The longitude corresponds to the rotation around the y axis or the yaw.
+	 * @param tile
+	 * @return
+	 */
+	static double getLongitudeDegrees(Tile tile) {
+		return Math.toDegrees(getLongitude(tile));
+	}
+
+	/**
+	 * Returns the latitude of the given tile in degrees.
+	 * The latitude corresponds to the rotation around the x axis or the pitch.
+	 * @param tile
+	 * @return
+	 */
+	static double getLatitudeDegrees(Tile tile) {
+		return Math.toDegrees(getLatitude(tile));
+	}
+	/**
+	 * Returns the longitude of the given tile in radian.
+	 * The longitude corresponds to the rotation around the y axis or the yaw.
+	 * @param tile
+	 * @return
+	 */
 	static double getLongitude(Tile tile) {
 		FacePart facePart = tile.getTileMesh();
 
 		double x = facePart.getNormal().getX();
 		double z = facePart.getNormal().getZ();
 
-		double yaw = Math.atan2(z, x);
-
-		return Math.toDegrees(yaw);
+		return Math.atan2(z, x);
 	}
 
+	/**
+	 * Returns the latitude of the given tile in radian.
+	 * The latitude corresponds to the rotation around the x axis or the pitch.
+	 * @param tile
+	 * @return
+	 */
 	static double getLatitude(Tile tile) {
 		FacePart facePart = tile.getTileMesh();
 
@@ -73,9 +102,7 @@ public interface GeographicCoordinates {
 		double y = facePart.getNormal().getY();
 		double z = facePart.getNormal().getZ();
 
-		double pitch = -Math.atan2(y, Math.sqrt(x*x + z*z));
-
-		return Math.toDegrees(pitch);
+		return -Math.atan2(y, Math.sqrt(x*x + z*z));
 	}
 
 }
