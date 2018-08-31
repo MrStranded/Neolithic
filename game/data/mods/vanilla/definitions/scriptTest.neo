@@ -8,7 +8,7 @@ Entity: eS {
 		print(print("Toist?","Or Moist?"));
 	}
 
-	Script: s3 {
+	Script: s3(){
 		i = random(0,3);
 		if (i == 2) {
 			print("i isch zwei");
@@ -19,7 +19,7 @@ Entity: eS {
 		print("Capische? " + i);
 	}
 
-	Script: s4 {
+	Script: s4 (one, two, three) {
 		for (j = 0; j < 3; j++) {
 			print(-j);
 		}

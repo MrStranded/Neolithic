@@ -9,6 +9,7 @@ import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.renderer.color.RGBA;
+import engine.utils.converters.StringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +109,12 @@ public class Container {
 		if (script != null) {
 			scripts.insert(script);
 		}
+	}
+	public Script getScript(String textID) {
+		if (scripts != null) {
+			return scripts.get(StringConverter.toID(textID));
+		}
+		return null;
 	}
 
 	public IDInterface[] getScripts() {

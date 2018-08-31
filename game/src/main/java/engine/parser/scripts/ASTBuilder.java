@@ -24,8 +24,25 @@ public class ASTBuilder {
 	// ###################################################################################
 
 	public Script buildScript(String textID) throws Exception {
+		Token next = interpreter.peek();
+		List<String> parameters = new ArrayList<>(0);
+
+		if (TokenConstants.ROUND_BRACKETS_OPEN.equals(next)) { // we're gonna read in some parameters
+			interpreter.consume(TokenConstants.ROUND_BRACKETS_OPEN);
+			boolean firstParameter = true;
+
+			while (!TokenConstants.ROUND_BRACKETS_CLOSE.equals(next = interpreter.peek())) {
+				if (!firstParameter) {
+					interpreter.consume(TokenConstants.COMMA);
+				}
+				parameters.add(interpreter.consume().getValue());
+				firstParameter = false;
+			}
+			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
+		}
+
 		MultiStatementNode root = readMultiStatement();
-		return new Script(textID, root);
+		return new Script(textID, root, parameters);
 	}
 
 	// ###################################################################################

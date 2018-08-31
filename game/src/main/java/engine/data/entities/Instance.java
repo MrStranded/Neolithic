@@ -3,7 +3,10 @@ package engine.data.entities;
 import engine.data.attributes.Attribute;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
+import engine.data.structures.Script;
 import engine.data.structures.trees.binary.BinaryTree;
+import engine.data.variables.Variable;
+import engine.utils.converters.StringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +16,27 @@ public class Instance {
 	protected int id;
 
 	private BinaryTree<Attribute> attributes;
+	private BinaryTree<Variable> variables;
 	private List<Instance> subInstances;
 
 	public Instance(int id) {
 		attributes = new BinaryTree<>();
-		subInstances = new ArrayList<>(4);
+		variables = new BinaryTree<>();
+		subInstances = new ArrayList<>(0);
+	}
+
+	// ###################################################################################
+	// ################################ Game Logic #######################################
+	// ###################################################################################
+
+	public void runScript(String textID, Variable[] parameters) {
+		Container container = Data.getContainer(id);
+		if (container != null) {
+			Script script = container.getScript(textID);
+			if (script != null) {
+				script.run(this, parameters);
+			}
+		}
 	}
 
 	// ###################################################################################
@@ -53,6 +72,16 @@ public class Instance {
 		value += attribute != null? attribute.getValue() : 0;
 
 		return value;
+	}
+
+	public Variable getVariable(String name) {
+		return variables.get(StringConverter.toID(name));
+	}
+	public void addVariable(Variable variable) {
+		variables.insert(variable);
+	}
+	public void removeVariable(String name) {
+		variables.remove(StringConverter.toID(name));
 	}
 
 	public int getId() {
