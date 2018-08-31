@@ -1,5 +1,6 @@
 package engine.data.entities;
 
+import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
@@ -89,5 +90,16 @@ public class Instance {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	// ###################################################################################
+	// ################################ Debugging ########################################
+	// ###################################################################################
+
+	public void printVariables() {
+		IDInterface[] vars = variables.toArray();
+		for (IDInterface idInterface : vars) {
+			System.out.println((Variable) idInterface);
+		}
 	}
 }

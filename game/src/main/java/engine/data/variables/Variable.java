@@ -81,6 +81,10 @@ public class Variable implements IDInterface {
 		value = v;
 	}
 
+	// ###################################################################################
+	// ################################ Getters and Setters (IDInterface) ################
+	// ###################################################################################
+
 	@Override
 	public int getId() {
 		return id;
@@ -89,5 +93,21 @@ public class Variable implements IDInterface {
 	@Override
 	public IDInterface merge(IDInterface other) {
 		return this;
+	}
+
+	// ###################################################################################
+	// ################################ Debugging ########################################
+	// ###################################################################################
+
+	public String toString() {
+		String pre = name + " [" + type + "] ";
+		switch (type) {
+			case NUMBER:
+				return pre+ (Double) value;
+			case STRING:
+				return pre + (String) value;
+			default:
+				return "[UNKNOWN VARIABLE TYPE]";
+		}
 	}
 }

@@ -40,8 +40,6 @@ public class Parser {
 		}
 
 		Data.finalizeIDs();
-
-		debug();
 	}
 
 	private void loadMod(String mod) {
@@ -100,7 +98,7 @@ public class Parser {
 	// ################################ Debugging ########################################
 	// ###################################################################################
 
-	private void debug() {
+	public void debug() {
 		System.out.println("/////////////////////////////////////////////////////////////");
 		int i = 0;
 		ProtoAttribute protoAttribute;
