@@ -20,6 +20,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import static java.lang.System.exit;
 
 /**
@@ -27,6 +30,8 @@ import static java.lang.System.exit;
  */
 
 public class Renderer {
+
+	public static Renderer self;
 
 	private Window window;
 
@@ -48,9 +53,14 @@ public class Renderer {
 
 	private double angle = 0;
 
+	private List<GraphicalObject> renderList;
+
 	public Renderer(Window window) {
 		this.window = window;
+		renderList = new LinkedList<>();
+
 		window.setRenderer(this);
+		self = this;
 	}
 
 	// ###################################################################################
@@ -358,19 +368,11 @@ public class Renderer {
 
 		for (GraphicalObject object : scene.getObjects()) {
 			if (object != null) {
-				shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(object.getWorldMatrix()));
-				shaderProgram.setUniform("affectedByLight", object.isAffectedByLight() ? 1 : 0);
-				shaderProgram.setUniform("dynamic", object.isStatic() ? 0 : 1);
-				shaderProgram.setUniform("color", object.getMesh().getColor());
-				shaderProgram.setUniform("material", object.getMesh().getMaterial());
-
-				if (shadowMap != null) {
-					shaderProgram.setUniform("modelLightViewMatrix", shadowMap.getViewMatrix().times(object.getWorldMatrix()));
-				}
-
-				object.render();
+				renderObject(object, viewMatrix, shadowMap);
 			}
 		}
+
+		renderList.clear();
 
 		if (planetObject != null) {
 			shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(planetObject.getWorldMatrix()));
@@ -385,7 +387,31 @@ public class Renderer {
 			planetObject.render(shaderProgram, camera.getPlanetaryLODMatrix(), true, true);
 		}
 
+		for (GraphicalObject object : renderList) {
+			if (object != null) {
+				renderObject(object, viewMatrix, shadowMap);
+			}
+		}
+
 		shaderProgram.unbind();
+	}
+
+	private void renderObject(GraphicalObject object, Matrix4 viewMatrix, ShadowMap shadowMap) {
+		shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(object.getWorldMatrix()));
+		shaderProgram.setUniform("affectedByLight", object.isAffectedByLight() ? 1 : 0);
+		shaderProgram.setUniform("dynamic", object.isStatic() ? 0 : 1);
+		shaderProgram.setUniform("color", object.getMesh().getColor());
+		shaderProgram.setUniform("material", object.getMesh().getMaterial());
+
+		if (shadowMap != null) {
+			shaderProgram.setUniform("modelLightViewMatrix", shadowMap.getViewMatrix().times(object.getWorldMatrix()));
+		}
+
+		object.render();
+	}
+
+	public void addToRenderList(GraphicalObject object) {
+		renderList.add(object);
 	}
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GUI

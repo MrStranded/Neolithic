@@ -9,6 +9,8 @@ import engine.data.structures.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.Variable;
 import engine.graphics.objects.GraphicalObject;
+import engine.graphics.renderer.Renderer;
+import engine.graphics.renderer.color.RGBA;
 import engine.logic.GeographicCoordinates;
 import engine.math.numericalObjects.Vector3;
 import engine.utils.converters.StringConverter;
@@ -53,17 +55,16 @@ public class Instance {
 
 	public void render() {
 		if (graphicalObject != null && position != null) {
-			graphicalObject.render();
+			Renderer.self.addToRenderList(graphicalObject);
 		}
 		for (Instance subInstance : subInstances) {
-			System.out.println("rendering " + subInstance.getId());
 			subInstance.render();
 		}
 	}
 
 	public void setGraphicalObject(GraphicalObject graphicalObject) {
 		this.graphicalObject = graphicalObject;
-		graphicalObject.setScale(0.5d,0.5d,0.5d);
+		graphicalObject.setScale(0.1d,0.1d,0.1d);
 	}
 
 	public void setPosition(Tile tile) {
@@ -80,9 +81,9 @@ public class Instance {
 			double pitch = GeographicCoordinates.getLatitude(position);
 			double yaw = GeographicCoordinates.getLongitude(position);
 			Vector3 pos = position.getTileMesh().getMid();
-			System.out.println("pos: " + pos);
 			graphicalObject.setPosition(pos);
-			//graphicalObject.setRotation(pitch, yaw, 0);
+			graphicalObject.setRotation(pitch, yaw, 0);
+			graphicalObject.getMesh().setColor(new RGBA(0,1,1));
 		}
 	}
 

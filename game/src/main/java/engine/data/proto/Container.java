@@ -26,6 +26,7 @@ public class Container {
 
 	// graphical
 	private Mesh mesh = null;
+	private String meshPath = null;
 
 	// game logic
 	private String name = "[NAME]";

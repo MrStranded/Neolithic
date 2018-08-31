@@ -1,4 +1,7 @@
 Entity: eS {
+
+	mesh = "monkey.obj";
+
 	Script: s1 {
 
 	}
