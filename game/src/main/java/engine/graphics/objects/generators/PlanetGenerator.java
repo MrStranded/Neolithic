@@ -65,7 +65,7 @@ public class PlanetGenerator {
 	// ###################################################################################
 
 	private Mesh createTile(FacePart facePart, Tile tile, boolean smallest, boolean water) {
-		double height = 0;
+		double height;
 		if (water) {
 			height = facePart.getWaterHeight();
 		} else {
@@ -79,10 +79,15 @@ public class PlanetGenerator {
 		upper[1] = facePart.getCorner2().times(f);
 		upper[2] = facePart.getCorner3().times(f);
 
-		Vector3 normal = facePart.getCorner1().plus(facePart.getCorner2()).plus(facePart.getCorner3()).normalize();
-		Vector3 mid = facePart.getCorner1().plus(facePart.getCorner2()).plus(facePart.getCorner3()).times(1d/3d);
+		Vector3 positionMid = upper[0].plus(upper[1]).plus(upper[2]).times(1d/3d);
+		if (water) {
+			facePart.setWaterMid(positionMid);
+		} else {
+			facePart.setMid(positionMid);
+		}
 
-		//double normalFactor = 1d / GraphicalConstants.PLANET_CONSTRUCTION_SIDE_NORMAL_QUOTIENT;
+		Vector3 mid = facePart.getCorner1().plus(facePart.getCorner2()).plus(facePart.getCorner3()).times(1d/3d);
+		Vector3 normal = mid.normalize();
 
 		Vector3[] midToSide = new Vector3[3];
 		midToSide[0] = facePart.getCorner1().plus(facePart.getCorner2()).minus(mid).normalize();

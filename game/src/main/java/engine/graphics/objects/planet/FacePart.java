@@ -17,6 +17,8 @@ public class FacePart {
 	private Mesh waterMesh;
 	private Vector3 normal;
 
+	private Vector3 mid, waterMid;
+
 	private FacePart[] quarterFaces;
 
 	private double height = 0;
@@ -34,7 +36,8 @@ public class FacePart {
 		this.corner2 = corner2;
 		this.corner3 = corner3;
 
-		normal = corner1.plus(corner2).plus(corner3).normalize();
+		mid = corner1.plus(corner2).plus(corner3).times(1d/3d);
+		normal = mid.normalize();
 	}
 
 	// ###################################################################################
@@ -65,8 +68,8 @@ public class FacePart {
 			}
 
 		}
-		// render all objects on the current tile
-		if (tile != null) {
+		// render all objects on the current tile, but only if we're in the real draw situation (not shadow map drawing)
+		if (tile != null && putDataIntoShader) {
 			tile.render();
 		}
 	}
@@ -106,7 +109,7 @@ public class FacePart {
 			detailLevel = depth-1;
 		}
 
-		if ((detailLevel >= this.depth) && (quarterFaces != null)) {
+		if (detailLevel >= this.depth) {
 			for (FacePart facePart : quarterFaces) {
 				if (facePart != null) {
 					facePart.render(shaderProgram, viewWorldMatrix, depth, putDataIntoShader, drawWater);
@@ -139,7 +142,34 @@ public class FacePart {
 	}
 
 	public Vector3 getMid() {
-		return corner1.plus(corner2).plus(corner3).times(1d/3d);
+		return mid;
+	}
+	/**
+	 * This value is set in PlanetGenerator.createTile()
+	 * @param mid
+	 */
+	public void setMid(Vector3 mid) {
+		this.mid = mid;
+	}
+
+	/**
+	 * Returns the middle position of the water on the tile if it exists.
+	 * If not water exists on the tile, the mid of the land position is returned.
+	 * @return mid of water if existant, otherwise mid of water
+	 */
+	public Vector3 getWaterMid() {
+		if (waterMid == null) {
+			return mid;
+		} else {
+			return waterMid;
+		}
+	}
+	/**
+	 * This value is set in PlanetGenerator.createTile()
+	 * @param waterMid
+	 */
+	public void setWaterMid(Vector3 waterMid) {
+		this.waterMid = waterMid;
 	}
 
 	public double getHeight() {

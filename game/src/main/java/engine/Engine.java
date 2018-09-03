@@ -59,13 +59,15 @@ public class Engine {
 		gaia.updatePlanetMesh();
 		System.out.println("Updating LOD Mesh took: "+(System.currentTimeMillis()-time)+" ms");
 
-		Instance i01 = new Instance(Data.getContainerID("eS"));
-		try {
-			i01.setGraphicalObject(new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj")));
-		} catch (Exception e) {
-			e.printStackTrace();
+		for (int i=0; i<10; i++) {
+			Instance i01 = new Instance(Data.getContainerID("eS"));
+			try {
+				i01.setGraphicalObject(new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj")));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			i01.setPosition(gaia.getFace((int) (5d*Math.random()), (int) (4d*Math.random())).getTile((int) (32d*Math.random()), (int) (32d*Math.random())));
 		}
-		i01.setPosition(gaia.getFace(0,1).getTile(7,5));
 	}
 
 	/**

@@ -64,7 +64,7 @@ public class Instance {
 
 	public void setGraphicalObject(GraphicalObject graphicalObject) {
 		this.graphicalObject = graphicalObject;
-		graphicalObject.setScale(0.1d,0.1d,0.1d);
+		graphicalObject.setScale(0.05d,0.05d,0.05d);
 	}
 
 	public void setPosition(Tile tile) {
@@ -80,9 +80,14 @@ public class Instance {
 		if (position != null && graphicalObject != null) {
 			double pitch = GeographicCoordinates.getLatitude(position);
 			double yaw = GeographicCoordinates.getLongitude(position);
-			Vector3 pos = position.getTileMesh().getMid();
+			Vector3 pos;
+			if (position.getHeight() > position.getWaterHeight()) {
+				pos = position.getTileMesh().getMid();
+			} else {
+				pos = position.getTileMesh().getWaterMid();
+			}
 			graphicalObject.setPosition(pos);
-			graphicalObject.setRotation(pitch, yaw, 0);
+			graphicalObject.setRotation(pitch, -yaw + Math.PI/2d, 0);
 			graphicalObject.getMesh().setColor(new RGBA(0,1,1));
 		}
 	}

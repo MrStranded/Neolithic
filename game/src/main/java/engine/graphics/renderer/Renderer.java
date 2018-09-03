@@ -366,6 +366,7 @@ public class Renderer {
 
 		Matrix4 viewMatrix = camera.getViewMatrix();
 
+		// space scenery
 		for (GraphicalObject object : scene.getObjects()) {
 			if (object != null) {
 				renderObject(object, viewMatrix, shadowMap);
@@ -374,6 +375,7 @@ public class Renderer {
 
 		renderList.clear();
 
+		// planet
 		if (planetObject != null) {
 			shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(planetObject.getWorldMatrix()));
 			shaderProgram.setUniform("affectedByLight", 1);
@@ -387,6 +389,7 @@ public class Renderer {
 			planetObject.render(shaderProgram, camera.getPlanetaryLODMatrix(), true, true);
 		}
 
+		// planetary objects
 		for (GraphicalObject object : renderList) {
 			if (object != null) {
 				renderObject(object, viewMatrix, shadowMap);
