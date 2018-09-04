@@ -130,6 +130,12 @@ public class Mesh {
 	// ################################ Render ###########################################
 	// ###################################################################################
 
+	/**
+	 * Use this method to render single meshes that are not part of a MeshHub.
+	 * In a situation where you want to render multiple objects with the same mesh use the methods:
+	 * prepareRender(), pureRender() and postRender().
+	 * @param useDepthTest whether to use depth test or not
+	 */
 	public void render(boolean useDepthTest) {
 		// Activate first texture unit
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -153,6 +159,44 @@ public class Mesh {
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 		}
 
+		// Restore state
+		GL20.glDisableVertexAttribArray(0);
+		GL20.glDisableVertexAttribArray(1);
+		GL20.glDisableVertexAttribArray(2);
+		GL30.glBindVertexArray(0);
+	}
+
+	/**
+	 * Preparation method to draw multiple objects with the same mesh.
+	 * Used in MeshHub.render().
+	 */
+	public void prepareRender() {
+		// Activate first texture unit
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		// Bind the texture
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.hasTexture() ? material.getTexture().getTextureId() : 0);
+
+		// Bind to the VAO
+		GL30.glBindVertexArray(vertexArrayObjectId);
+		GL20.glEnableVertexAttribArray(0);
+		GL20.glEnableVertexAttribArray(1);
+		GL20.glEnableVertexAttribArray(2);
+	}
+
+	/**
+	 * Method to draw multiple objects with the same mesh.
+	 * Used in MeshHub.render().
+	 */
+	public void pureRender() {
+		// Draw the mesh
+		GL11.glDrawElements(GL11.GL_TRIANGLES, vertexCount, GL11.GL_UNSIGNED_INT, 0);
+	}
+
+	/**
+	 * Clean up method after rendering multiple objects with the same mesh.
+	 * Used in MeshHub.render().
+	 */
+	public void postRender() {
 		// Restore state
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);

@@ -32,6 +32,7 @@ public enum TokenConstants {
 	VALUE_COLOR                 (TokenType.KEYWORD, "color"),
 	VALUE_PREFERREDHEIGHT       (TokenType.KEYWORD, "preferredHeight"),
 	VALUE_PREFERREDHEIGHTBLUR   (TokenType.KEYWORD, "preferredHeightBlur"),
+	VALUE_MESH                  (TokenType.KEYWORD, "mesh"),
 
 	// -------------------------------------------------- List Instantiaters
 	VALUES_KNOWLEDGE        (TokenType.KEYWORD, "knowledge"),

@@ -3,10 +3,12 @@ package engine.graphics.renderer;
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
 import engine.data.planetary.Planet;
+import engine.data.proto.Data;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.*;
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.light.*;
+import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
@@ -20,6 +22,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,8 +33,6 @@ import static java.lang.System.exit;
  */
 
 public class Renderer {
-
-	public static Renderer self;
 
 	private Window window;
 
@@ -53,14 +54,9 @@ public class Renderer {
 
 	private double angle = 0;
 
-	private List<GraphicalObject> renderList;
-
 	public Renderer(Window window) {
 		this.window = window;
-		renderList = new LinkedList<>();
-
 		window.setRenderer(this);
-		self = this;
 	}
 
 	// ###################################################################################
@@ -365,6 +361,7 @@ public class Renderer {
 		}
 
 		Matrix4 viewMatrix = camera.getViewMatrix();
+		Collection<MeshHub> meshHubs = Data.getMeshHubs();
 
 		// space scenery
 		for (GraphicalObject object : scene.getObjects()) {
@@ -373,7 +370,10 @@ public class Renderer {
 			}
 		}
 
-		renderList.clear();
+		// clear meshHub lists
+		for (MeshHub meshHub : meshHubs) {
+			meshHub.clear();
+		}
 
 		// planet
 		if (planetObject != null) {
@@ -390,10 +390,8 @@ public class Renderer {
 		}
 
 		// planetary objects
-		for (GraphicalObject object : renderList) {
-			if (object != null) {
-				renderObject(object, viewMatrix, shadowMap);
-			}
+		for (MeshHub meshHub : meshHubs) {
+			meshHub.render(shaderProgram, viewMatrix, shadowMap);
 		}
 
 		shaderProgram.unbind();
@@ -411,10 +409,6 @@ public class Renderer {
 		}
 
 		object.render();
-	}
-
-	public void addToRenderList(GraphicalObject object) {
-		renderList.add(object);
 	}
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GUI

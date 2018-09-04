@@ -1,14 +1,12 @@
 package engine.data.proto;
 
-import constants.TopologyConstants;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.attributes.PreAttribute;
 import engine.data.structures.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
-import engine.graphics.objects.models.Mesh;
-import engine.graphics.renderer.color.RGBA;
+import engine.graphics.objects.MeshHub;
 import engine.utils.converters.StringConverter;
 
 import java.util.ArrayList;
@@ -25,8 +23,7 @@ public class Container {
 	private DataType type;
 
 	// graphical
-	private Mesh mesh = null;
-	private String meshPath = null;
+	private MeshHub meshHub = null;
 
 	// game logic
 	private String name = "[NAME]";
@@ -116,6 +113,13 @@ public class Container {
 			return scripts.get(StringConverter.toID(textID));
 		}
 		return null;
+	}
+
+	public MeshHub getMeshHub() {
+		return meshHub;
+	}
+	public void setMeshHub(MeshHub meshHub) {
+		this.meshHub = meshHub;
 	}
 
 	public IDInterface[] getScripts() {

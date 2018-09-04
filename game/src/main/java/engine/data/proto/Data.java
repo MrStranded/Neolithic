@@ -3,8 +3,11 @@ package engine.data.proto;
 import constants.GameConstants;
 import engine.data.attributes.Attribute;
 import engine.data.variables.DataType;
+import engine.graphics.objects.MeshHub;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class Data {
@@ -15,12 +18,16 @@ public class Data {
 	private static ProtoAttribute[] attributes;
 	private static int attributeID;
 
+	private static HashMap<String, MeshHub> meshHubs;
+
 	public static void initialize() {
 		containerID = 0;
 		containers = new Container[GameConstants.MAX_CONTAINERS];
 
 		attributeID = 0;
 		attributes = new ProtoAttribute[GameConstants.MAX_ATTRIBUTES];
+
+		meshHubs = new HashMap<>(GameConstants.MAX_CONTAINERS);
 	}
 
 	// ###################################################################################
@@ -94,6 +101,23 @@ public class Data {
 		return containerList;
 	}
 
+	/**
+	 * Returns the MeshHub with the specified path or null if none is found.
+	 * @param path of the mesh
+	 * @return MeshHub if existant or null otherwise
+	 */
+	public static MeshHub getMeshHub(String path) {
+		return meshHubs.get(path);
+	}
+
+	/**
+	 * Returns a Collection of all the MeshHubs to iterate over.
+	 * @return Collection of all stored MeshHubs
+	 */
+	public static Collection<MeshHub> getMeshHubs() {
+		return meshHubs.values();
+	}
+
 	// ###################################################################################
 	// ################################ Feeding ##########################################
 	// ###################################################################################
@@ -118,6 +142,22 @@ public class Data {
 		return id;
 	}
 
+	/**
+	 * Creates and stores a MeshHub with the specified path.
+	 * If such a MeshHub already exists, nothing is done.
+	 * The Method returns the (possibly freshly created) MeshHub.
+	 * @param path of the mesh
+	 * @return MeshHub with specified path
+	 */
+	public static MeshHub addMeshHub(String path) {
+		MeshHub meshHub = getMeshHub(path);
+		if (meshHub == null) {
+			meshHub = new MeshHub(path);
+			meshHubs.put(path, meshHub);
+		}
+		return meshHub;
+	}
+
 	// ###################################################################################
 	// ################################ Preparing for Game ###############################
 	// ###################################################################################
@@ -131,6 +171,16 @@ public class Data {
 		}
 	}
 
+	/**
+	 * Loads the missing data that has been specified by the parser.
+	 * This includes meshes.
+	 */
+	public static void load() {
+		for (MeshHub meshHub : meshHubs.values()) {
+			meshHub.loadMesh();
+		}
+	}
+
 	// ###################################################################################
 	// ################################ Clearing the Data ################################
 	// ###################################################################################
@@ -138,5 +188,10 @@ public class Data {
 	public static void clear() {
 		// just not referencing the old data anymore is enough. Thanks java garbage collector!
 		initialize();
+
+		// we have to clean up the meshHubs though
+		for (MeshHub meshHub : meshHubs.values()) {
+			meshHub.cleanUp();
+		}
 	}
 }

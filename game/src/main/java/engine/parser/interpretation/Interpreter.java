@@ -1,10 +1,12 @@
 package engine.parser.interpretation;
 
+import constants.ResourcePathConstants;
 import engine.data.ContainerIdentifier;
 import engine.data.attributes.PreAttribute;
 import engine.data.proto.*;
 import engine.data.structures.Script;
 import engine.data.variables.DataType;
+import engine.graphics.objects.MeshHub;
 import engine.graphics.renderer.color.RGBA;
 import engine.parser.Logger;
 import engine.parser.constants.TokenConstants;
@@ -12,14 +14,17 @@ import engine.parser.constants.TokenType;
 import engine.parser.scripts.ASTBuilder;
 import engine.parser.tokenization.Token;
 
+import java.util.Collection;
 import java.util.List;
 
 public class Interpreter {
 
 	private PeekingIterator<Token> tokenIterator;
+	private String currentMod;
 
-	public Interpreter(List<Token> tokens) {
+	public Interpreter(List<Token> tokens, String currentMod) {
 		tokenIterator = new PeekingIterator<>(tokens);
+		this.currentMod = currentMod;
 	}
 
 	// ###################################################################################
@@ -210,6 +215,17 @@ public class Interpreter {
 		consume(TokenConstants.SEMICOLON);
 	}
 
+	private void readMeshPath(Container container) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token pathToken = consume();
+		String path = ResourcePathConstants.MOD_FOLDER + currentMod + "/" + ResourcePathConstants.MESH_FOLDER + pathToken.getValue();
+		MeshHub meshHub = Data.addMeshHub(path);
+		container.setMeshHub(meshHub);
+
+		consume(TokenConstants.SEMICOLON);
+	}
+
 	// ################################################################################### Tile
 
 	private void readPreferredHeight(TileContainer container) throws Exception {
@@ -354,9 +370,11 @@ public class Interpreter {
 		// container filling
 		while (true) {
 			Token next = consume();
+			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% name
 			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
 				addName(container);
 
+			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% type specific values
 			} else if (TokenConstants.VALUE_PREFERREDHEIGHT.equals(next)) { // preferred height definition
 				if (type == DataType.TILE) {
 					readPreferredHeight((TileContainer) container);
@@ -370,8 +388,14 @@ public class Interpreter {
 			} else if (TokenConstants.VALUE_COLOR.equals(next)) { // color definition
 				if (type == DataType.TILE) {
 					readColor((TileContainer) container);
-				} else { issueTypeError(next, type); }
+				} else {
+					issueTypeError(next, type);
+				}
 
+			} else if (TokenConstants.VALUE_MESH.equals(next)) { // mesh path definition
+				readMeshPath(container);
+
+			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% value lists
 			} else if (TokenConstants.VALUES_ATTRIBUTES.equals(next)) { // list of attributes
 				feedAttributes(container);
 
@@ -397,6 +421,7 @@ public class Interpreter {
 					issueTypeError(next, type);
 				}
 
+			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% general data
 			} else if (TokenConstants.SCRIPT.equals(next)) { // Script
 				addScript(container);
 

@@ -55,7 +55,12 @@ public class Instance {
 
 	public void render() {
 		if (graphicalObject != null && position != null) {
-			Renderer.self.addToRenderList(graphicalObject);
+			System.out.println("render");
+			Container container = Data.getContainer(id);
+			if (container != null && container.getMeshHub() != null) {
+				System.out.println("register");
+				container.getMeshHub().registerObject(graphicalObject);
+			}
 		}
 		for (Instance subInstance : subInstances) {
 			subInstance.render();

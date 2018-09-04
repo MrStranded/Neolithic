@@ -39,6 +39,8 @@ public class Engine {
 
 		Data.initialize();
 		parser.load();
+
+		Data.load();
 	}
 
 	public static void createWorld() {
@@ -61,11 +63,6 @@ public class Engine {
 
 		for (int i=0; i<10; i++) {
 			Instance i01 = new Instance(Data.getContainerID("eS"));
-			try {
-				i01.setGraphicalObject(new GraphicalObject(OBJLoader.loadMesh("data/mods/vanilla/assets/meshes/monkey.obj")));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 			i01.setPosition(gaia.getFace((int) (5d*Math.random()), (int) (4d*Math.random())).getTile((int) (32d*Math.random()), (int) (32d*Math.random())));
 		}
 	}
@@ -87,6 +84,8 @@ public class Engine {
 		if (renderer != null) { renderer.cleanUp(); }
 		if (scene != null) { scene.cleanUp(); }
 		if (hud != null) { hud.cleanUp(); }
+
+		Data.clear();
 
 		if (window != null) { window.destroy(); }
 	}

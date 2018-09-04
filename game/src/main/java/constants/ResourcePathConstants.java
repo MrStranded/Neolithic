@@ -24,4 +24,6 @@ public class ResourcePathConstants {
 
 	public static final String DEFINITIONS_FOLDER       = "definitions/";
 	public static final String ASSETS_FOLDER            = "assets/";
+	public static final String MESH_FOLDER              = ASSETS_FOLDER + "meshes/";
+	public static final String TEXTURE_FOLDER           = ASSETS_FOLDER + "textures/";
 }

@@ -55,7 +55,7 @@ public class Parser {
 				// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Big Temporary Hack
 				if (file.getName().equals("scriptTest.neo")) { // <- this right here
 					System.out.println("load file: " + file.getName());
-					loadFile(file);
+					loadFile(file, mod);
 				}
 			}
 		}
@@ -65,12 +65,12 @@ public class Parser {
 	// ################################ Load Files #######################################
 	// ###################################################################################
 
-	private void loadFile(File file) {
+	private void loadFile(File file, String currentMod) {
 		try {
 			List<Token> tokens = Tokenizer.tokenize(new FileReader(file));
 
 			try {
-				Interpreter interpreter = new Interpreter(tokens);
+				Interpreter interpreter = new Interpreter(tokens, currentMod);
 				interpreter.interpret();
 			} catch (Exception e) {
 				Logger.error("Parsing error in file: " + file.getName());
