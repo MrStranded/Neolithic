@@ -6,6 +6,7 @@ import engine.data.proto.Data;
 import engine.graphics.gui.BaseGUI;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.GraphicalObject;
+import engine.graphics.objects.MeshHub;
 import engine.graphics.objects.Scene;
 import engine.graphics.gui.window.Window;
 import engine.graphics.renderer.Renderer;
@@ -62,7 +63,14 @@ public class Engine {
 		System.out.println("Updating LOD Mesh took: "+(System.currentTimeMillis()-time)+" ms");
 
 		for (int i=0; i<10; i++) {
-			Instance i01 = new Instance(Data.getContainerID("eS"));
+			Instance i01;
+			if (Math.random() < 0.5d) {
+				i01 = new Instance(Data.getContainerID("eS"));
+			} else if (Math.random() < 0.5d) {
+				i01 = new Instance(Data.getContainerID("eT"));
+			} else {
+				i01 = new Instance(Data.getContainerID("eU"));
+			}
 			i01.setPosition(gaia.getFace((int) (5d*Math.random()), (int) (4d*Math.random())).getTile((int) (32d*Math.random()), (int) (32d*Math.random())));
 		}
 	}

@@ -388,12 +388,12 @@ public class Interpreter {
 			} else if (TokenConstants.VALUE_COLOR.equals(next)) { // color definition
 				if (type == DataType.TILE) {
 					readColor((TileContainer) container);
-				} else {
-					issueTypeError(next, type);
-				}
+				} else { issueTypeError(next, type); }
 
 			} else if (TokenConstants.VALUE_MESH.equals(next)) { // mesh path definition
-				readMeshPath(container);
+				if (type != DataType.TILE) {
+					readMeshPath(container);
+				} else { issueTypeError(next, type); }
 
 			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% value lists
 			} else if (TokenConstants.VALUES_ATTRIBUTES.equals(next)) { // list of attributes

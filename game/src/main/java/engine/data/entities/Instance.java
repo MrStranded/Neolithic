@@ -9,7 +9,7 @@ import engine.data.structures.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.Variable;
 import engine.graphics.objects.GraphicalObject;
-import engine.graphics.renderer.Renderer;
+import engine.graphics.objects.movement.MoveableObject;
 import engine.graphics.renderer.color.RGBA;
 import engine.logic.GeographicCoordinates;
 import engine.math.numericalObjects.Vector3;
@@ -27,9 +27,12 @@ public class Instance {
 	private List<Instance> subInstances;
 
 	private Tile position = null;
-	private GraphicalObject graphicalObject = null;
+	private MoveableObject moveableObject = null;
 
 	public Instance(int id) {
+		this.id = id;
+
+		moveableObject = new MoveableObject();
 		attributes = new BinaryTree<>();
 		variables = new BinaryTree<>();
 		subInstances = new ArrayList<>(0);
@@ -54,22 +57,15 @@ public class Instance {
 	// ###################################################################################
 
 	public void render() {
-		if (graphicalObject != null && position != null) {
-			System.out.println("render");
+		if (position != null) {
 			Container container = Data.getContainer(id);
 			if (container != null && container.getMeshHub() != null) {
-				System.out.println("register");
-				container.getMeshHub().registerObject(graphicalObject);
+				container.getMeshHub().registerObject(moveableObject);
 			}
 		}
 		for (Instance subInstance : subInstances) {
 			subInstance.render();
 		}
-	}
-
-	public void setGraphicalObject(GraphicalObject graphicalObject) {
-		this.graphicalObject = graphicalObject;
-		graphicalObject.setScale(0.05d,0.05d,0.05d);
 	}
 
 	public void setPosition(Tile tile) {
@@ -82,7 +78,7 @@ public class Instance {
 	}
 
 	private void actualizeObjectPosition() {
-		if (position != null && graphicalObject != null) {
+		if (position != null && moveableObject != null) {
 			double pitch = GeographicCoordinates.getLatitude(position);
 			double yaw = GeographicCoordinates.getLongitude(position);
 			Vector3 pos;
@@ -91,9 +87,10 @@ public class Instance {
 			} else {
 				pos = position.getTileMesh().getWaterMid();
 			}
-			graphicalObject.setPosition(pos);
-			graphicalObject.setRotation(pitch, -yaw + Math.PI/2d, 0);
-			graphicalObject.getMesh().setColor(new RGBA(0,1,1));
+			moveableObject.setScale(0.05d,0.05d,0.05d);
+			moveableObject.setPosition(pos);
+			moveableObject.setRotation(pitch + Math.PI/2d, -yaw + Math.PI/2d, 0);
+			moveableObject.setPreRotation(0,Math.random() * Math.PI*2d,0);
 		}
 	}
 

@@ -7,11 +7,13 @@ import engine.math.Transformations;
 
 public class MoveableObject {
 
+	protected Vector3 preRotation = null;
 	protected Vector3 position = new Vector3(0,0,0);
 	protected Vector3 scale = new Vector3(1,1,1);
 	protected Vector3 rotation = new Vector3(0,0,0);
 
 	private Matrix4 matrix;
+	private boolean changed = true;
 
 	// TAU constant
 	private static final double TAU = Math.PI*2d;
@@ -32,6 +34,7 @@ public class MoveableObject {
 	public void translate(double x, double y, double z) {
 		Vector3 v = new Vector3(x,y,z);
 		position.plusInplace(v);
+		changed = true;
 	}
 
 	/**
@@ -42,16 +45,18 @@ public class MoveableObject {
 	 */
 	public void move(double x, double y, double z) {
 		Vector3[] internalAxes = Transformations.getInternalAxes(rotation);
-
 		position.plusInplace(internalAxes[0].times(x)).plusInplace(internalAxes[0].times(y)).plusInplace(internalAxes[0].times(z));
+		changed = true;
 	}
 
 	public void setPosition(double x, double y, double z) {
 		position = new Vector3(x,y,z);
+		changed = true;
 	}
 
 	public void setPosition(Vector3 position) {
 		this.position = position;
+		changed = true;
 	}
 
 	// ###################################################################################
@@ -61,10 +66,12 @@ public class MoveableObject {
 	public void scale(double x, double y, double z) {
 		Vector3 v = new Vector3(x,y,z);
 		scale.timesElementwiseInplace(v);
+		changed = true;
 	}
 
 	public void setScale(double x, double y, double z) {
 		scale = new Vector3(x,y,z);
+		changed = true;
 	}
 
 	// ###################################################################################
@@ -80,6 +87,7 @@ public class MoveableObject {
 		rotation.plusInplace(v);
 		position = rotationMatrix.times(new Vector4(position)).extractVector3();
 		checkAngle();
+		changed = true;
 	}
 
 	/**
@@ -90,6 +98,7 @@ public class MoveableObject {
 		rotation.plusInplace(new Vector3(a,0,0));
 		position = rotationMatrix.times(new Vector4(position)).extractVector3();
 		checkAngle();
+		changed = true;
 	}
 	/**
 	 * Rotates Object by given degree around origin of world coordinates around the y axis.
@@ -99,6 +108,7 @@ public class MoveableObject {
 		rotation.plusInplace(new Vector3(0,a,0));
 		position = rotationMatrix.times(new Vector4(position)).extractVector3();
 		checkAngle();
+		changed = true;
 	}
 	/**
 	 * Rotates Object by given degree around origin of world coordinates around the z axis.
@@ -108,6 +118,7 @@ public class MoveableObject {
 		rotation.plusInplace(new Vector3(0,0,a));
 		position = rotationMatrix.times(new Vector4(position)).extractVector3();
 		checkAngle();
+		changed = true;
 	}
 
 	// ###################################################################################
@@ -121,6 +132,7 @@ public class MoveableObject {
 		Vector3 v = new Vector3(x,y,z);
 		rotation.plusInplace(v);
 		checkAngle();
+		changed = true;
 	}
 
 	/**
@@ -129,6 +141,7 @@ public class MoveableObject {
 	public void rotateX(double a) {
 		rotation.plusInplace(new Vector3(a,0,0));
 		checkAngle();
+		changed = true;
 	}
 	/**
 	 * Rotates Object by given degree around center of own mesh around y axis.
@@ -136,6 +149,7 @@ public class MoveableObject {
 	public void rotateY(double a) {
 		rotation.plusInplace(new Vector3(0,a,0));
 		checkAngle();
+		changed = true;
 	}
 	/**
 	 * Rotates Object by given degree around center of own mesh around z axis.
@@ -143,6 +157,32 @@ public class MoveableObject {
 	public void rotateZ(double a) {
 		rotation.plusInplace(new Vector3(0,0,a));
 		checkAngle();
+		changed = true;
+	}
+
+	// ###################################################################################
+	// ################################ PreRotation Around Own Axes ######################
+	// ###################################################################################
+
+	/**
+	 * PreRotation can be used to simulate the rotation of an object around one of its internal axes.
+	 * Works if you use only one of the dimensions, breaks when using more.
+	 * @param x rotation around internal x axis
+	 * @param y rotation around internal y axis
+	 * @param z rotation around internal z axis
+	 */
+	public void setPreRotation(double x, double y, double z) {
+		preRotation = new Vector3(x,y,z);
+		changed = true;
+	}
+
+	/**
+	 * Use this method to remove the PreRotation around the objects internal axes.
+	 * Deleting the PreRotation gives a small performance boost.
+	 */
+	public void deletePreRotation() {
+		preRotation = null;
+		changed = true;
 	}
 
 	// ###################################################################################
@@ -154,6 +194,7 @@ public class MoveableObject {
 	 */
 	public void setRotation(double x, double y, double z) {
 		rotation = new Vector3(x,y,z);
+		changed = true;
 	}
 
 	// ###################################################################################
@@ -186,8 +227,19 @@ public class MoveableObject {
 	// ###################################################################################
 
 	public Matrix4 getWorldMatrix() {
-		return  Transformations.translate(position).times(
-				Transformations.rotate(rotation).times(
-				Transformations.scale(scale)));
+		if (changed) {
+			if (preRotation == null) {
+				matrix =    Transformations.translate(position).times(
+							Transformations.rotate(rotation).times(
+							Transformations.scale(scale)));
+			} else {
+				matrix =    Transformations.translate(position).times(
+							Transformations.rotate(rotation).times(
+							Transformations.scale(scale).times(
+							Transformations.rotate(preRotation))));
+			}
+			changed = false;
+		}
+		return matrix;
 	}
 }

@@ -2,6 +2,7 @@ package engine.graphics.objects;
 
 import engine.graphics.objects.light.ShadowMap;
 import engine.graphics.objects.models.Mesh;
+import engine.graphics.objects.movement.MoveableObject;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
 import engine.parser.Logger;
@@ -18,7 +19,7 @@ public class MeshHub {
 
 	private String meshPath;
 	private Mesh mesh;
-	private List<GraphicalObject> objects;
+	private List<MoveableObject> objects;
 
 	public MeshHub(String meshPath) {
 		this.meshPath = meshPath;
@@ -34,7 +35,7 @@ public class MeshHub {
 		}
 	}
 
-	public void registerObject(GraphicalObject object) {
+	public void registerObject(MoveableObject object) {
 		objects.add(object);
 	}
 
@@ -48,13 +49,13 @@ public class MeshHub {
 	public void render(ShaderProgram shaderProgram, Matrix4 viewMatrix, ShadowMap shadowMap) {
 		shaderProgram.setUniform("color", mesh.getColor());
 		shaderProgram.setUniform("material", mesh.getMaterial());
+		shaderProgram.setUniform("affectedByLight", 1);
+		shaderProgram.setUniform("dynamic", 1);
 
 		mesh.prepareRender();
 
-		for (GraphicalObject object : objects) {
+		for (MoveableObject object : objects) {
 			shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(object.getWorldMatrix()));
-			shaderProgram.setUniform("affectedByLight", object.isAffectedByLight() ? 1 : 0);
-			shaderProgram.setUniform("dynamic", object.isStatic() ? 0 : 1);
 
 			if (shadowMap != null) {
 				shaderProgram.setUniform("modelLightViewMatrix", shadowMap.getViewMatrix().times(object.getWorldMatrix()));
@@ -71,6 +72,10 @@ public class MeshHub {
 	 */
 	public void cleanUp() {
 		mesh.cleanUp();
+	}
+
+	public String getMeshPath() {
+		return meshPath;
 	}
 
 }
