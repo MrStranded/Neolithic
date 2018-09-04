@@ -20,6 +20,10 @@ public class Data {
 
 	private static HashMap<String, MeshHub> meshHubs;
 
+	// ###################################################################################
+	// ################################ Initialization ###################################
+	// ###################################################################################
+
 	public static void initialize() {
 		containerID = 0;
 		containers = new Container[GameConstants.MAX_CONTAINERS];
@@ -176,8 +180,10 @@ public class Data {
 	 * This includes meshes.
 	 */
 	public static void load() {
-		for (MeshHub meshHub : meshHubs.values()) {
-			meshHub.loadMesh();
+		if (meshHubs != null) {
+			for (MeshHub meshHub : meshHubs.values()) {
+				meshHub.loadMesh();
+			}
 		}
 	}
 
@@ -186,12 +192,12 @@ public class Data {
 	// ###################################################################################
 
 	public static void clear() {
-		// just not referencing the old data anymore is enough. Thanks java garbage collector!
-		initialize();
-
 		// we have to clean up the meshHubs though
 		for (MeshHub meshHub : meshHubs.values()) {
 			meshHub.cleanUp();
 		}
+
+		// just not referencing the old data anymore is enough. Thanks java garbage collector!
+		initialize();
 	}
 }

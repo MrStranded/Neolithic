@@ -162,15 +162,16 @@ public class ASTBuilder {
 	private AbstractScriptNode readExpression() throws Exception {
 		Token expression = interpreter.consume();
 		TokenConstants command = TokenConstants.getCorrespondingConstantOfType(expression, TokenType.COMMAND);
+		AbstractScriptNode left = null;
 
 		if (command != null) { // we have a command!
 			interpreter.consume(TokenConstants.ROUND_BRACKETS_OPEN);
 
 			List<AbstractScriptNode> parameters = new ArrayList<>(1);
 
-			System.out.println("-------------------------------------------------" + command);
 			boolean firstParameter = true;
 			while (!TokenConstants.ROUND_BRACKETS_CLOSE.equals(interpreter.peek())) {
+				System.out.println(interpreter.peek());
 				if (!firstParameter) {
 					interpreter.consume(TokenConstants.COMMA);
 				}
@@ -179,21 +180,13 @@ public class ASTBuilder {
 			}
 			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
 
-			return new CommandExpressionNode(command.getToken(), parameters);
+			left = new CommandExpressionNode(command.getToken(), parameters);
 
 		} else if (TokenConstants.SELF.equals(expression)) { // a self expression
-			AbstractScriptNode left = new SelfNode();
-			System.out.println("created self");
-
-			Token next = interpreter.peek();
-			if (next.getType() == TokenType.OPERATOR) {
-				return readArithmeticExpression(left);
-			} else {
-				return left;
-			}
+			left = new SelfNode();
 
 		} else if (TokenConstants.ROUND_BRACKETS_OPEN.equals(expression)) { // an expression in brackets
-			AbstractScriptNode left = readExpression();
+			left = readExpression();
 
 			if (left.getClass() == BinaryExpressionNode.class) { // binary expression in brackets
 				((BinaryExpressionNode) left).setBracketed(true);
@@ -201,42 +194,36 @@ public class ASTBuilder {
 
 			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
 
-			Token next = interpreter.peek();
-			if (next.getType() == TokenType.OPERATOR) {
-				return readArithmeticExpression(left);
-			} else {
-				return left;
-			}
-
 		} else if (expression.getType() == TokenType.OPERATOR) { // an operator in front of an expression -> unary node
 			AbstractScriptNode right = readExpression();
-			return new UnaryExpressionNode(expression, right);
+			left = new UnaryExpressionNode(expression, right);
 
-		} else if (expression.getType() == TokenType.LITERAL || expression.getType() == TokenType.IDENTIFIER) { // we have a literal or identifier
-			Token next = interpreter.peek();
-			AbstractScriptNode left;
-			if (expression.getType() == TokenType.LITERAL) {
-				left = new LiteralNode(expression);
-			} else {
-				left = new IdentifierNode(expression);
-			}
+		} else if (expression.getType() == TokenType.LITERAL) { // we have a literal
+			left = new LiteralNode(expression);
 
-			if (next.getType() == TokenType.OPERATOR) {
-				return readArithmeticExpression(left);
+		} else if (expression.getType() == TokenType.IDENTIFIER) { // we have an identifier
+			left = new IdentifierNode(expression);
 
-			} else {
-				if (expression.getType() == TokenType.LITERAL) {
-					return new LiteralNode(expression);
-				} else {
-					return new IdentifierNode(expression);
-				}
-
+			if (TokenConstants.ROUND_BRACKETS_OPEN.equals(interpreter.peek())) { // a script call upon an object
+			
 			}
 
 		} else {
 			Logger.error("Unknown script command '" + expression.getValue() + "' on line " + expression.getLine());
 
 		}
+
+		// Arithmetic recursion
+		if (left != null) {
+			Token next = interpreter.peek();
+			if (next.getType() == TokenType.OPERATOR) {
+				return readArithmeticExpression(left);
+			} else {
+				return left;
+			}
+		}
+
+		Logger.error("Unable to parse '" + expression.getValue() + "' on line " + expression.getLine());
 		return null;
 	}
 
@@ -269,7 +256,6 @@ public class ASTBuilder {
 			}
 
 			return new BinaryExpressionNode(operator, left, right);
-
 		}
 	}
 

@@ -87,7 +87,7 @@ Process: proStroll {
 	//Script: educt {}
 	Script: product {
 		i = random(3);
-		moveTo(self, getNeighbour(getTile(self), i));
+		moveTo(self, getNeighbor(getTile(self), i));
 	}
 	
 	//alternatives {}

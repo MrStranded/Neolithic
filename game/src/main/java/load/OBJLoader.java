@@ -98,7 +98,6 @@ public class OBJLoader {
 			}
 		}
 
-
 		// ---------------------- creating mesh
 		return new Mesh(
 				VectorConverter.Vector3ArrayToFloatArray(verticesArray),
