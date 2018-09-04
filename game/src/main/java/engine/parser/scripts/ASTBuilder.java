@@ -66,11 +66,15 @@ public class ASTBuilder {
 				} else if (TokenConstants.FOR.equals(next)) { // for statement
 					nodeList.add(readForStatement());
 
-				} else { // expression
+				} else { // expression (induced by eg. 'self')
 					nodeList.add(readExpression());
 					interpreter.consume(TokenConstants.SEMICOLON);
 
 				}
+
+			} else if (next.getType() == TokenType.COMMAND) { // a command -> expression
+				nodeList.add(readExpression());
+				interpreter.consume(TokenConstants.SEMICOLON);
 
 			} else if (next.getType() == TokenType.IDENTIFIER) { // also expression
 				nodeList.add(readExpression());
@@ -103,14 +107,9 @@ public class ASTBuilder {
 		MultiStatementNode elseBody = null;
 
 		Token next = interpreter.peek();
-
 		if (TokenConstants.ELSE.equals(next)) {
 			interpreter.consume();
 			elseBody = readMultiStatement();
-
-		} else {
-			Logger.error("If statement has to continue with 'else' or end. Found unexpected '" + next.getValue() + "' on line " + next.getLine());
-
 		}
 
 		return new IfStatementNode(expressionNode, body, elseBody);
@@ -162,16 +161,16 @@ public class ASTBuilder {
 
 	private AbstractScriptNode readExpression() throws Exception {
 		Token expression = interpreter.consume();
-		TokenConstants command = TokenConstants.getCorrespondingKeyWord(expression);
+		TokenConstants command = TokenConstants.getCorrespondingConstantOfType(expression, TokenType.COMMAND);
 
 		if (command != null) { // we have a command!
 			interpreter.consume(TokenConstants.ROUND_BRACKETS_OPEN);
 
 			List<AbstractScriptNode> parameters = new ArrayList<>(1);
 
+			System.out.println("-------------------------------------------------" + command);
 			boolean firstParameter = true;
-			Token next;
-			while (!TokenConstants.ROUND_BRACKETS_CLOSE.equals(next = interpreter.peek())) {
+			while (!TokenConstants.ROUND_BRACKETS_CLOSE.equals(interpreter.peek())) {
 				if (!firstParameter) {
 					interpreter.consume(TokenConstants.COMMA);
 				}
@@ -181,6 +180,17 @@ public class ASTBuilder {
 			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
 
 			return new CommandExpressionNode(command.getToken(), parameters);
+
+		} else if (TokenConstants.SELF.equals(expression)) { // a self expression
+			AbstractScriptNode left = new SelfNode();
+			System.out.println("created self");
+
+			Token next = interpreter.peek();
+			if (next.getType() == TokenType.OPERATOR) {
+				return readArithmeticExpression(left);
+			} else {
+				return left;
+			}
 
 		} else if (TokenConstants.ROUND_BRACKETS_OPEN.equals(expression)) { // an expression in brackets
 			AbstractScriptNode left = readExpression();
@@ -194,10 +204,8 @@ public class ASTBuilder {
 			Token next = interpreter.peek();
 			if (next.getType() == TokenType.OPERATOR) {
 				return readArithmeticExpression(left);
-
 			} else {
 				return left;
-
 			}
 
 		} else if (expression.getType() == TokenType.OPERATOR) { // an operator in front of an expression -> unary node

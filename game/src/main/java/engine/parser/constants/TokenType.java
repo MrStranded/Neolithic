@@ -4,6 +4,7 @@ public enum TokenType {
 
 	IDENTIFIER,
 	KEYWORD,
+	COMMAND,
 	SEPARATOR,
 	OPERATOR,
 	LITERAL,

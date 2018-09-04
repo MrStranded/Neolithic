@@ -53,7 +53,7 @@ public class Parser {
 		for (File file : definitionsFolder.listFiles()) {
 			if (file.isFile() && file.getName().endsWith(ScriptConstants.SCRIPT_FILE_SUFFIX)) {
 				// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Big Temporary Hack
-				if (file.getName().equals("scriptTest.neo")) { // <- this right here
+				if (file.getName().equals("smallGame.neo")) { // <- this right here
 					System.out.println("load file: " + file.getName());
 					loadFile(file, mod);
 				}

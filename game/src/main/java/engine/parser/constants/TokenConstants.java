@@ -15,17 +15,13 @@ public enum TokenConstants {
 	DRIVE       (TokenType.KEYWORD, "Drive"),
 
 	// -------------------------------------------------- Scripts
-	ON          (TokenType.KEYWORD, "on"),
+	SELF        (TokenType.KEYWORD, "self"),
 
 	// -------------------------------------------------- Structure
 	IF          (TokenType.KEYWORD, "if"),
 	ELSE        (TokenType.KEYWORD, "else"),
 	FOR         (TokenType.KEYWORD, "for"),
 	WHILE       (TokenType.KEYWORD, "while"),
-
-	// -------------------------------------------------- Commands
-	COMMAND_PRINT   (TokenType.KEYWORD, "print"),
-	COMMAND_RANDOM  (TokenType.KEYWORD, "random"),
 
 	// -------------------------------------------------- Engine Values
 	VALUE_NAME                  (TokenType.KEYWORD, "name"),
@@ -40,6 +36,35 @@ public enum TokenConstants {
 	VALUES_ATTRIBUTES       (TokenType.KEYWORD, "attributes"),
 	VALUES_SOLUTIONS        (TokenType.KEYWORD, "solutions"),
 	VALUES_ALTERNATIVES     (TokenType.KEYWORD, "alternatives"),
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands
+	// -------------------------------------------------- Math
+	CHANCE          (TokenType.COMMAND, "chance"),
+	RANDOM          (TokenType.COMMAND, "random"),
+
+	// -------------------------------------------------- Entity Manipulation
+	CHANGE          (TokenType.COMMAND, "change"),
+	CREATE          (TokenType.COMMAND, "create"),
+	DESTROY         (TokenType.COMMAND, "destroy"),
+
+	// -------------------------------------------------- Retrieval
+	GET_ATTRIBUTE_IN_RANGE  (TokenType.COMMAND, "getAttInRange"),
+	GET_ITEM_ATTRIBUTE      (TokenType.COMMAND, "getItemAtt"),
+	GET_LIGHT_LEVEL         (TokenType.COMMAND, "getLightLevel"),
+	GET_NEIGHBOUR           (TokenType.COMMAND, "getNeighbor"), // difference between british english in code and american english in scripts
+	GET_TILE                (TokenType.COMMAND, "getTile"),
+	HAS_ATTRIBUTE_IN_RANGE  (TokenType.COMMAND, "hasAttInRange"),
+	HAS_ITEM_ATTRIBUTE      (TokenType.COMMAND, "hasItemAtt"),
+
+	// -------------------------------------------------- Actions
+	MOVE_TO         (TokenType.COMMAND, "moveTo"),
+	PICK_UP         (TokenType.COMMAND, "pickUp"),
+
+	// -------------------------------------------------- GUI
+	PRINT           (TokenType.COMMAND, "print"),
+
+	// -------------------------------------------------- Conditions
+	REQUIRE         (TokenType.COMMAND, "require"),
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Seperators
 	// -------------------------------------------------- Brackets
@@ -101,6 +126,9 @@ public enum TokenConstants {
 
 	// -------------------------------------------------- Assignment
 	ASSIGNMENT  (TokenType.OPERATOR, "=", 8),
+
+	// -------------------------------------------------- Object Attributes
+	OBJECT_OPERATOR (TokenType.OPERATOR, "->", 0),
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Comments
 	COMMENT         (TokenType.COMMENT, "//"),
@@ -195,13 +223,14 @@ public enum TokenConstants {
 	}
 
 	/**
-	 * Searches the token constants for a token with type KEYWORD and the same value as the given token and returns it.
+	 * Searches the token constants for a token with the specified type and the same value as the given token and returns it.
 	 * @param t token to check for
-	 * @return token constant with type KEYWORD, if found
+	 * @param type type to check for
+	 * @return token constant with specified type, if found
 	 */
-	public static TokenConstants getCorrespondingKeyWord(Token t) {
+	public static TokenConstants getCorrespondingConstantOfType(Token t, TokenType type) {
 		for (TokenConstants constant : values()) {
-			if (constant.getType() == TokenType.KEYWORD && constant.equals(t)) {
+			if (constant.getType() == type && constant.equals(t)) {
 				return constant;
 			}
 		}

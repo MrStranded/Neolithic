@@ -18,7 +18,7 @@ import java.util.List;
 public class MeshHub {
 
 	private String meshPath;
-	private Mesh mesh;
+	private Mesh mesh = null;
 	private List<MoveableObject> objects;
 
 	public MeshHub(String meshPath) {
@@ -71,7 +71,9 @@ public class MeshHub {
 	 * This method cleans up the mesh data that is held by the meshHub.
 	 */
 	public void cleanUp() {
-		mesh.cleanUp();
+		if (mesh != null) {
+			mesh.cleanUp();
+		}
 	}
 
 	public String getMeshPath() {

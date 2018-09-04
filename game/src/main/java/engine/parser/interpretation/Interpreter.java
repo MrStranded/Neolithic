@@ -297,6 +297,7 @@ public class Interpreter {
 		if (textId.getValue() != null && textId.getValue().length() > 0) {
 			Script script = (new ASTBuilder(this)).buildScript(textId.getValue());
 			container.addScript(script);
+			script.print();
 
 		} else {
 			String errorMessage = "Script has no textID (Script : textID { ...) on line " + textId.getLine();
@@ -391,7 +392,7 @@ public class Interpreter {
 				} else { issueTypeError(next, type); }
 
 			} else if (TokenConstants.VALUE_MESH.equals(next)) { // mesh path definition
-				if (type != DataType.TILE) {
+				if (type == DataType.ENTITY || type == DataType.CREATURE) {
 					readMeshPath(container);
 				} else { issueTypeError(next, type); }
 

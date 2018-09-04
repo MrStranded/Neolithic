@@ -19,6 +19,7 @@ Entity: eS {
 		} else {
 			print(i);
 		}
+		if (true) {}
 		print("Capische? " + i);
 	}
 
@@ -35,6 +36,7 @@ Entity: eS {
 }
 
 Entity: eT {mesh="cylinder.obj";}
+Entity: eU {mesh="monkey.obj";}
 
 Tile: tLol {
 	color {200,20;150,10;30,5;}

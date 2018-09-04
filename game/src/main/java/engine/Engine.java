@@ -65,11 +65,9 @@ public class Engine {
 		for (int i=0; i<10; i++) {
 			Instance i01;
 			if (Math.random() < 0.5d) {
-				i01 = new Instance(Data.getContainerID("eS"));
-			} else if (Math.random() < 0.5d) {
-				i01 = new Instance(Data.getContainerID("eT"));
+				i01 = new Instance(Data.getContainerID("cDuck"));
 			} else {
-				i01 = new Instance(Data.getContainerID("eU"));
+				i01 = new Instance(Data.getContainerID("cTree"));
 			}
 			i01.setPosition(gaia.getFace((int) (5d*Math.random()), (int) (4d*Math.random())).getTile((int) (32d*Math.random()), (int) (32d*Math.random())));
 		}
