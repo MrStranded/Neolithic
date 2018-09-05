@@ -1,7 +1,7 @@
 package engine.parser.scripts;
 
 import engine.data.structures.Script;
-import engine.parser.Logger;
+import engine.parser.utils.Logger;
 import engine.parser.constants.TokenConstants;
 import engine.parser.constants.TokenType;
 import engine.parser.interpretation.Interpreter;
@@ -174,7 +174,7 @@ public class ASTBuilder {
 		} else if (TokenConstants.ROUND_BRACKETS_OPEN.equals(expression)) { // an expression in brackets
 			left = readExpression();
 
-			if (left.getClass() == BinaryExpressionNode.class) { // binary expression in brackets
+			if (left != null && left.getClass() == BinaryExpressionNode.class) { // binary expression in brackets
 				((BinaryExpressionNode) left).setBracketed(true);
 			}
 
@@ -225,7 +225,6 @@ public class ASTBuilder {
 
 		boolean firstParameter = true;
 		while (!TokenConstants.ROUND_BRACKETS_CLOSE.equals(interpreter.peek())) {
-			System.out.println(interpreter.peek());
 			if (!firstParameter) {
 				interpreter.consume(TokenConstants.COMMA);
 			}

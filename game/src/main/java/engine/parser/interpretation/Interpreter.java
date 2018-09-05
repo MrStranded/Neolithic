@@ -8,13 +8,13 @@ import engine.data.structures.Script;
 import engine.data.variables.DataType;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.renderer.color.RGBA;
-import engine.parser.Logger;
+import engine.parser.utils.Logger;
 import engine.parser.constants.TokenConstants;
 import engine.parser.constants.TokenType;
 import engine.parser.scripts.ASTBuilder;
 import engine.parser.tokenization.Token;
+import engine.parser.utils.TokenNumerifier;
 
-import java.util.Collection;
 import java.util.List;
 
 public class Interpreter {
@@ -68,68 +68,6 @@ public class Interpreter {
 	}
 
 	// ###################################################################################
-	// ################################ Data Type Assurance and Conversion ###############
-	// ###################################################################################
-
-	/**
-	 * Checks whether the given token is a double value (isDouble == true) or an integer value (isDouble == false).
-	 * If not, an error report is issued.
-	 * @param token to check
-	 * @param isDouble allow one decimal point or not
-	 * @return true if the value is legit
-	 */
-	public boolean isNumber(Token token, boolean isDouble) {
-		if (token == null) {
-			return false; // exit without error
-		}
-
-		if (token.getType() == TokenType.LITERAL) {
-			boolean isNumber = true;
-			boolean hadPoint = false;
-			for (char c : token.getValue().toCharArray()) {
-				if (!Character.isDigit(c)) {
-					if (TokenConstants.POINT.equals(c) && !hadPoint && isDouble) {
-						hadPoint = true;
-					} else {
-						isNumber = false;
-						break;
-					}
-				}
-			}
-
-			if (isNumber) {
-				return true;
-			}
-		}
-		if (isDouble) {
-			Logger.error("Expected floating point number value but got '" + token.getValue() + "' on line " + token.getLine());
-		} else {
-			Logger.error("Expected integer number value but got '" + token.getValue() + "' on line " + token.getLine());
-		}
-		return false;
-	}
-
-	/**
-	 * Returns the token's value as an integer if possible.
-	 * Otherwise it issues an error log and returns 0.
-	 * @param token to convert
-	 * @return the token's value or zero
-	 */
-	public int getInt(Token token) {
-		return isNumber(token, false)? Integer.parseInt(token.getValue()) : 0;
-	}
-
-	/**
-	 * Returns the token's value as an double if possible.
-	 * Otherwise it issues an error log and returns 0.
-	 * @param token to convert
-	 * @return the token's value or zero
-	 */
-	public double getDouble(Token token) {
-		return isNumber(token, true)? Double.parseDouble(token.getValue()) : 0;
-	}
-
-	// ###################################################################################
 	// ################################ Top Level  #######################################
 	// ###################################################################################
 
@@ -150,6 +88,10 @@ public class Interpreter {
 				createEntity(DataType.DRIVE);
 			} else if (TokenConstants.PROCESS.equals(next)) {   // Process
 				createEntity(DataType.PROCESS);
+			} else if (TokenConstants.FORMATION.equals(next)) { // Formation
+				createEntity(DataType.FORMATION);
+			} else if (TokenConstants.WORLDGEN.equals(next)) {  // WorldGen
+				createEntity(DataType.WORLDGEN);
 			}
 		}
 	}
@@ -173,7 +115,7 @@ public class Interpreter {
 			Token token = consume();
 			consume(TokenConstants.SEMICOLON);
 
-			PreAttribute preAttribute = new PreAttribute(next.getValue(), getInt(token));
+			PreAttribute preAttribute = new PreAttribute(next.getValue(), TokenNumerifier.getInt(token));
 			container.addPreAttribute(preAttribute);
 		}
 	}
@@ -232,12 +174,12 @@ public class Interpreter {
 		consume(TokenConstants.ASSIGNMENT);
 
 		Token height = consume();
-		container.setPreferredHeight(getInt(height));
+		container.setPreferredHeight(TokenNumerifier.getInt(height));
 
 		Token nextSub = consume();
 		if (TokenConstants.COMMA.equals(nextSub)) {
 			Token blur = consume();
-			container.setPreferredHeightBlur(getInt(blur));
+			container.setPreferredHeightBlur(TokenNumerifier.getInt(blur));
 
 			consume(TokenConstants.SEMICOLON);
 
@@ -252,7 +194,7 @@ public class Interpreter {
 		consume(TokenConstants.ASSIGNMENT);
 
 		Token blur = consume();
-		container.setPreferredHeightBlur(getInt(blur));
+		container.setPreferredHeightBlur(TokenNumerifier.getInt(blur));
 
 		consume(TokenConstants.SEMICOLON);
 	}
@@ -273,14 +215,14 @@ public class Interpreter {
 		}
 
 		container.setColor(new RGBA(
-				getDouble(values[0][0]) / 255d,
-				getDouble(values[1][0]) / 255d,
-				getDouble(values[2][0]) / 255d
+				TokenNumerifier.getDouble(values[0][0]) / 255d,
+				TokenNumerifier.getDouble(values[1][0]) / 255d,
+				TokenNumerifier.getDouble(values[2][0]) / 255d
 		));
 		container.setColorDeviation(new RGBA(
-				getDouble(values[0][1]) / 255d,
-				getDouble(values[1][1]) / 255d,
-				getDouble(values[2][1]) / 255d
+				TokenNumerifier.getDouble(values[0][1]) / 255d,
+				TokenNumerifier.getDouble(values[1][1]) / 255d,
+				TokenNumerifier.getDouble(values[2][1]) / 255d
 		));
 
 		consume(TokenConstants.CURLY_BRACKETS_CLOSE);
@@ -372,6 +314,12 @@ public class Interpreter {
 					break;
 				case PROCESS:
 					container = new ProcessContainer(textID.getValue());
+					break;
+				case FORMATION:
+					container = new Container(textID.getValue(), DataType.FORMATION);
+					break;
+				case WORLDGEN:
+					container = new Container(textID.getValue(), DataType.WORLDGEN);
 					break;
 				default:
 					Logger.error("Unknown entity constructor type '" + type + "' for '" + textID.getValue() + "' on line " + textID.getLine());

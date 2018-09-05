@@ -14,6 +14,7 @@ public enum TokenConstants {
 	PROCESS     (TokenType.KEYWORD, "Process"),
 	DRIVE       (TokenType.KEYWORD, "Drive"),
 	FORMATION   (TokenType.KEYWORD, "Formation"),
+	WORLDGEN    (TokenType.KEYWORD, "WorldGen"),
 
 	// -------------------------------------------------- Scripts
 	SELF        (TokenType.KEYWORD, "self"),
@@ -48,6 +49,11 @@ public enum TokenConstants {
 	CREATE          (TokenType.COMMAND, "create"),
 	DESTROY         (TokenType.COMMAND, "destroy"),
 
+	// -------------------------------------------------- Planet Manipulation
+	CREATE_FORMATION    (TokenType.COMMAND, "createFormation"),
+	SET_HEIGHT          (TokenType.COMMAND, "setHeight"),
+	SET_WATER_LEVEL     (TokenType.COMMAND, "setWaterLevel"),
+
 	// -------------------------------------------------- Retrieval
 	GET_ATTRIBUTE_IN_RANGE  (TokenType.COMMAND, "getAttInRange"),
 	GET_ITEM_ATTRIBUTE      (TokenType.COMMAND, "getItemAtt"),
@@ -56,6 +62,7 @@ public enum TokenConstants {
 	GET_TILE                (TokenType.COMMAND, "getTile"),
 	HAS_ATTRIBUTE_IN_RANGE  (TokenType.COMMAND, "hasAttInRange"),
 	HAS_ITEM_ATTRIBUTE      (TokenType.COMMAND, "hasItemAtt"),
+	RANDOM_TILE             (TokenType.COMMAND, "randomTile"),
 
 	// -------------------------------------------------- Actions
 	MOVE_TO         (TokenType.COMMAND, "moveTo"),

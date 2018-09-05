@@ -1,37 +1,35 @@
 WorldGen: genContinental {
-	name: "Continental";
-	waterLevel: 50;
+	name = "Continental";
 
-	Script: start {
-		disableWorldMeshUpdates();
-
-		setWaterLevel(waterLevel);
+	Script: generate {
+		setWaterLevel(100);
 
 		t = randomTile();
-		createFormation(formMountain, t);
-
-		enableWorldMeshUpdates();
+		createFormation("formMountain", t);
 	}
 }
 
 Formation: formMountain {
-	Script: place(Tile: tile) {
-		height = random(100,255);
-		lift(tile, height);
+	Script: place(tile) {
+		height = random(150,256);
+		self->lift(tile, height);
 	}
 
 	Script: lift(tile, height) {
 		if (height > 0) {
 			setHeight(tile, height);
 
-			deviation = random(0,10);
-			lift(getNeighbour(tile, 0), height-deviation);
+			deviation = random(1,10);
+			lift(getNeighbor(tile, 0), height-deviation);
 
-			deviation = random(0,10);
-			lift(getNeighbour(tile, 1), height-deviation);
+			deviation = random(1,10);
+			lift(getNeighbor(tile, 1), height-deviation);
 
-			deviation = random(0,10);
-			lift(getNeighbour(tile, 2), height-deviation);
+			deviation = random(1,10);
+			lift(getNeighbor(tile, 2), height-deviation);
 		}
 	}
+}
+
+Tile: tTest {
 }

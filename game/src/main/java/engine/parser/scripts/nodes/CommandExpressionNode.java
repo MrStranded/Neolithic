@@ -2,6 +2,7 @@ package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
 import engine.data.variables.Variable;
+import engine.parser.scripts.execution.CommandExecuter;
 import engine.parser.tokenization.Token;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class CommandExpressionNode extends AbstractScriptNode {
 
 	@Override
 	public Variable execute(Instance instance) {
-		return null;
+		return CommandExecuter.executeCommand(instance, this);
 	}
 
 	@Override
@@ -31,5 +32,13 @@ public class CommandExpressionNode extends AbstractScriptNode {
 		for (AbstractScriptNode node : subNodes) {
 			node.print(indentation + " ");
 		}
+	}
+
+	// ###################################################################################
+	// ################################ Getters and Setters ##############################
+	// ###################################################################################
+
+	public Token getCommand() {
+		return command;
 	}
 }

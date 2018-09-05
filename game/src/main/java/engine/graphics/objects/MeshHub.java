@@ -5,11 +5,10 @@ import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.movement.MoveableObject;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
-import engine.parser.Logger;
+import engine.parser.utils.Logger;
 import load.OBJLoader;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**

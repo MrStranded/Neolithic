@@ -1,8 +1,14 @@
 package engine;
 
+import constants.ScriptConstants;
 import engine.data.entities.Instance;
+import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
+import engine.data.planetary.Tile;
+import engine.data.proto.Container;
 import engine.data.proto.Data;
+import engine.data.structures.Script;
+import engine.data.variables.DataType;
 import engine.graphics.gui.BaseGUI;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.GraphicalObject;
@@ -13,6 +19,8 @@ import engine.graphics.renderer.Renderer;
 import engine.logic.TopologyGenerator;
 import engine.parser.Parser;
 import load.OBJLoader;
+
+import java.util.List;
 
 /**
  * The engine binds the whole thing together.
@@ -49,10 +57,25 @@ public class Engine {
 		hud = new BaseGUI();
 
 		gaia = new Planet(32);
+		Data.setPlanet(gaia);
+
+		List<Container> tileList = Data.getContainersOfType(DataType.TILE);
+		for (Face face : gaia.getFaces()) {
+			for (Tile tile : face.getTiles()) {
+				tile.setId(TopologyGenerator.calculateBestTile(0,tileList));
+			}
+		}
 
 		long time = System.currentTimeMillis();
 		gaia.generatePlanetMesh();
 		System.out.println("Generating LOD Mesh took: "+(System.currentTimeMillis()-time)+" ms");
+
+		time = System.currentTimeMillis();
+		Instance worldGen = new Instance(Data.getContainerID("genContinental"));
+		worldGen.runScript(ScriptConstants.EVENT_GENERATE_WORLD, null);
+		System.out.println("Executing WorldGen Script took: "+(System.currentTimeMillis()-time)+" ms");
+
+		/*
 
 		time = System.currentTimeMillis();
 		TopologyGenerator.formTopology(gaia);
@@ -60,9 +83,9 @@ public class Engine {
 
 		time = System.currentTimeMillis();
 		gaia.updatePlanetMesh();
-		System.out.println("Updating LOD Mesh took: "+(System.currentTimeMillis()-time)+" ms");
+		System.out.println("Updating LOD Mesh took: "+(System.currentTimeMillis()-time)+" ms");*/
 
-		for (int i=0; i<10; i++) {
+		/*for (int i=0; i<10; i++) {
 			Instance i01;
 			if (Math.random() < 0.5d) {
 				i01 = new Instance(Data.getContainerID("cDuck"));
@@ -70,7 +93,7 @@ public class Engine {
 				i01 = new Instance(Data.getContainerID("cTree"));
 			}
 			i01.setPosition(gaia.getFace((int) (5d*Math.random()), (int) (4d*Math.random())).getTile((int) (32d*Math.random()), (int) (32d*Math.random())));
-		}
+		}*/
 	}
 
 	/**

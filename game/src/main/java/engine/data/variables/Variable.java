@@ -1,38 +1,74 @@
 package engine.data.variables;
 
 import engine.data.IDInterface;
+import engine.data.attributes.Attribute;
+import engine.data.entities.Instance;
+import engine.data.planetary.Tile;
 import engine.utils.converters.StringConverter;
 
 public class Variable implements IDInterface {
 
 	private int id;
-	private String name;
+	private String name = null;
 
 	private DataType type = DataType.NUMBER;
 	private Object value = 0d;
 
-	public Variable(String name) {
-		this.name = name;
-		id = StringConverter.toID(name);
-	}
+	public Variable() {}
 
 	public Variable(String name, Variable other) {
-		this.name = name;
-		this.type = other.type;
-		this.value = other.copyValue();
-		id = StringConverter.toID(name);
+		setName(name);
+		copyValue(other);
 	}
 
-	public Object copyValue() {
-		switch (type) {
-			case NUMBER:
-				return new Double((Double) value);
-			case STRING:
-				return new String((String) value);
-			default:
-				return value;
-		}
+	/**
+	 * Use this static method to create a new, empty variable with the specified name.
+	 * The reason this is done so unintuitively is because the constructor Variable(String) is already used to define a new variable with the given string as a value.
+	 * @param name of the variable
+	 * @return the variable
+	 */
+	public static Variable withName(String name) {
+		Variable variable = new Variable();
+		variable.setName(name);
+		return variable;
 	}
+
+	// ###################################################################################
+	// ################################ Specific Constructors ############################
+	// ###################################################################################
+
+	public Variable(double value) {
+		this.type = DataType.NUMBER;
+		this.value = value;
+	}
+
+	public Variable(String value) {
+		this.type = DataType.STRING;
+		this.value = value;
+	}
+
+	public Variable(Tile value) {
+		this.type = DataType.TILE;
+		this.value = value;
+	}
+
+	public Variable(Instance value) {
+		this.type = DataType.INSTANCE;
+		this.value = value;
+	}
+
+	// ###################################################################################
+	// ################################ Value Copying ####################################
+	// ###################################################################################
+
+	public void copyValue(Variable other) {
+		type = other.type;
+		value = other.value;
+	}
+
+	// ###################################################################################
+	// ################################ Emptiness Check ##################################
+	// ###################################################################################
 
 	public boolean isNull() {
 		switch (type) {
@@ -51,10 +87,20 @@ public class Variable implements IDInterface {
 		}
 	}
 
+	public boolean hasName() {
+		return (name != null);
+	}
+
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
+	private void setName(String name) {
+		this.name = name;
+		id = StringConverter.toID(name);
+	}
+
+	// ----------------------------------------------- double
 	public double getDouble() {
 		if (type == DataType.NUMBER) {
 			return (Double) value;
@@ -66,6 +112,19 @@ public class Variable implements IDInterface {
 		value = v;
 	}
 
+	// ----------------------------------------------- int
+	public int getInt() {
+		if (type == DataType.NUMBER) {
+			return (Integer) value;
+		}
+		return 0;
+	}
+	public void setInt(int v) {
+		type = DataType.NUMBER;
+		value = v;
+	}
+
+	// ----------------------------------------------- string
 	public String getString() {
 		switch (type) {
 			case NUMBER:
@@ -78,6 +137,34 @@ public class Variable implements IDInterface {
 	}
 	public void setString(String v) {
 		type = DataType.STRING;
+		value = v;
+	}
+
+	// ----------------------------------------------- tile
+	public Tile getTile() {
+		if (type == DataType.TILE) {
+			return (Tile) value;
+		} else if (type == DataType.INSTANCE) {
+			return ((Instance) value).getPosition();
+		}
+		return null;
+	}
+	public void setTile(Tile v) {
+		type = DataType.TILE;
+		value = v;
+	}
+
+	// ----------------------------------------------- instance
+	public Instance getInstance() {
+		if (type == DataType.INSTANCE) {
+			return (Instance) value;
+		} else if (type == DataType.TILE) {
+			return ((Instance) value);
+		}
+		return null;
+	}
+	public void setInstance(Instance v) {
+		type = DataType.INSTANCE;
 		value = v;
 	}
 
@@ -106,6 +193,8 @@ public class Variable implements IDInterface {
 				return pre+ (Double) value;
 			case STRING:
 				return pre + (String) value;
+			case TILE:
+				return pre + (Tile) value;
 			default:
 				return "[UNKNOWN VARIABLE TYPE]";
 		}

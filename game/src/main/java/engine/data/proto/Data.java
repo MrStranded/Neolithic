@@ -2,6 +2,7 @@ package engine.data.proto;
 
 import constants.GameConstants;
 import engine.data.attributes.Attribute;
+import engine.data.planetary.Planet;
 import engine.data.variables.DataType;
 import engine.graphics.objects.MeshHub;
 
@@ -11,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Data {
+
+	private static Planet planet;
 
 	private static Container[] containers;
 	private static int containerID;
@@ -43,6 +46,10 @@ public class Data {
 			return containers[id];
 		}
 		return null;
+	}
+
+	public static Container getContainer(String textID) {
+		return getContainer(getContainerID(textID));
 	}
 
 	/**
@@ -199,5 +206,16 @@ public class Data {
 
 		// just not referencing the old data anymore is enough. Thanks java garbage collector!
 		initialize();
+	}
+
+	// ###################################################################################
+	// ################################ Getters and Setters ##############################
+	// ###################################################################################
+
+	public static Planet getPlanet() {
+		return planet;
+	}
+	public static void setPlanet(Planet planet) {
+		Data.planet = planet;
 	}
 }

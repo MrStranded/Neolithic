@@ -29,13 +29,15 @@ public class Script implements IDInterface {
 	}
 
 	public void run(Instance self, Variable[] parameters) {
-		int i=0;
-		for (Variable parameter : parameters) {
-			if (parameter != null && i < parameterNames.length) {
-				Variable variable = new Variable(parameterNames[i], parameter);
-				self.addVariable(variable);
+		if (parameters != null) {
+			int i = 0;
+			for (Variable parameter : parameters) {
+				if (parameter != null && i < parameterNames.length) {
+					Variable variable = new Variable(parameterNames[i], parameter);
+					self.addVariable(variable);
+				}
+				i++;
 			}
-			i++;
 		}
 		System.out.println("Running script " + textId);
 		root.execute(self);

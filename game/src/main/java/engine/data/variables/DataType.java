@@ -11,11 +11,13 @@ public enum DataType {
 
 	// game objects
 	TILE,
+	INSTANCE,
 	ENTITY,
 	CREATURE,
 
 	// planet creation
 	FORMATION,
+	WORLDGEN,
 
 	// behaviour
 	DRIVE,

@@ -3,6 +3,7 @@ package engine.parser.scripts.nodes;
 import engine.data.entities.Instance;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.Variable;
+import engine.parser.scripts.execution.OperationExecuter;
 import engine.parser.tokenization.Token;
 
 public class BinaryExpressionNode extends AbstractScriptNode {
@@ -19,7 +20,7 @@ public class BinaryExpressionNode extends AbstractScriptNode {
 
 	@Override
 	public Variable execute(Instance instance) {
-		return null;
+		return OperationExecuter.executeOperation(instance, this);
 	}
 
 	@Override

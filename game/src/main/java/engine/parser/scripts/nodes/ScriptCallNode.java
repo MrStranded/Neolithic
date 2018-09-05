@@ -2,6 +2,7 @@ package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
 import engine.data.variables.Variable;
+import engine.parser.scripts.execution.ParameterCalculator;
 import engine.parser.tokenization.Token;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 public class ScriptCallNode extends AbstractScriptNode {
 
 	private Token identifier;
+	private Variable target = null;
 
 	public ScriptCallNode(Token identifier, List<AbstractScriptNode> parameters) {
 		this.identifier = identifier;
@@ -22,7 +24,17 @@ public class ScriptCallNode extends AbstractScriptNode {
 
 	@Override
 	public Variable execute(Instance instance) {
-		return null;
+		Instance targetInstance = null;
+		if (target != null) {
+			targetInstance = target.getInstance();
+		}
+		
+		if (targetInstance != null) { // run script on different target
+			targetInstance.runScript(identifier.getValue(), ParameterCalculator.calculateParameters(instance, this));
+		} else { // run script on self
+			instance.runScript(identifier.getValue(), ParameterCalculator.calculateParameters(instance, this));
+		}
+		return new Variable();
 	}
 
 	@Override
@@ -31,5 +43,9 @@ public class ScriptCallNode extends AbstractScriptNode {
 		for (AbstractScriptNode node : subNodes) {
 			node.print(indentation + " ");
 		}
+	}
+
+	public void setTarget(Variable target) {
+		this.target = target;
 	}
 }

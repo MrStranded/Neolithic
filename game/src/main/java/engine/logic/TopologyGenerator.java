@@ -63,7 +63,7 @@ public class TopologyGenerator {
 	 * @param tileList
 	 * @return
 	 */
-	private static int calculateBestTile(int height, List<Container> tileList) {
+	public static int calculateBestTile(int height, List<Container> tileList) {
 		Container closest = null;
 		int closestDistance = 255;
 

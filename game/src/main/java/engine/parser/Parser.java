@@ -11,6 +11,7 @@ import engine.data.variables.DataType;
 import engine.parser.interpretation.Interpreter;
 import engine.parser.tokenization.Token;
 import engine.parser.tokenization.Tokenizer;
+import engine.parser.utils.Logger;
 import load.ModOrderLoader;
 
 import java.io.File;
@@ -53,7 +54,7 @@ public class Parser {
 		for (File file : definitionsFolder.listFiles()) {
 			if (file.isFile() && file.getName().endsWith(ScriptConstants.SCRIPT_FILE_SUFFIX)) {
 				// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Big Temporary Hack
-				if (file.getName().equals("smallestGame.neo")) { // <- this right here
+				if (file.getName().equals("worldGen01.neo")) { // <- this right here
 					System.out.println("load file: " + file.getName());
 					loadFile(file, mod);
 				}

@@ -1,7 +1,7 @@
 package load;
 
 import constants.ResourcePathConstants;
-import engine.parser.Logger;
+import engine.parser.utils.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
