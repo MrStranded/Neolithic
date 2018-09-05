@@ -115,13 +115,13 @@ public class Variable implements IDInterface {
 	// ----------------------------------------------- int
 	public int getInt() {
 		if (type == DataType.NUMBER) {
-			return (Integer) value;
+			return ((Double) value).intValue();
 		}
 		return 0;
 	}
 	public void setInt(int v) {
 		type = DataType.NUMBER;
-		value = v;
+		value = (double) v;
 	}
 
 	// ----------------------------------------------- string

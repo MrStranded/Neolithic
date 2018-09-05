@@ -36,11 +36,18 @@ public class OperationExecuter {
 
 			return binaryNode.getRight().execute(self);
 
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& -
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& -
 		} else if (TokenConstants.MINUS.equals(operator)) {
 			Variable right = binaryNode.getRight().execute(self);
 
 			return new Variable(left.getDouble() - right.getDouble());
+
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& >
+		} else if (TokenConstants.GREATER.equals(operator)) {
+			Variable right = binaryNode.getRight().execute(self);
+
+			return new Variable(left.getDouble() > right.getDouble() ? 1 : 0);
 
 		}
 

@@ -28,7 +28,7 @@ public class ScriptCallNode extends AbstractScriptNode {
 		if (target != null) {
 			targetInstance = target.getInstance();
 		}
-		
+
 		if (targetInstance != null) { // run script on different target
 			targetInstance.runScript(identifier.getValue(), ParameterCalculator.calculateParameters(instance, this));
 		} else { // run script on self
