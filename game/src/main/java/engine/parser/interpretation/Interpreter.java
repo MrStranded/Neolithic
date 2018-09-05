@@ -78,7 +78,7 @@ public class Interpreter {
 	 * @param isDouble allow one decimal point or not
 	 * @return true if the value is legit
 	 */
-	private boolean isNumber(Token token, boolean isDouble) {
+	public boolean isNumber(Token token, boolean isDouble) {
 		if (token == null) {
 			return false; // exit without error
 		}
@@ -297,14 +297,11 @@ public class Interpreter {
 		if (textId.getValue() != null && textId.getValue().length() > 0) {
 			Script script = (new ASTBuilder(this)).buildScript(textId.getValue());
 			container.addScript(script);
-			script.print();
-
 		} else {
 			String errorMessage = "Script has no textID (Script : textID { ...) on line " + textId.getLine();
 
 			Logger.error(errorMessage);
 			throw new Exception(errorMessage);
-
 		}
 	}
 
@@ -341,32 +338,47 @@ public class Interpreter {
 
 	private void createEntity(final DataType type) throws Exception {
 		consume(TokenConstants.COLON);
-		Token textId = consume();
+		Token textID = consume();
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
-		// container creation
 		Container container;
-		switch (type) {
-			case ENTITY:
-				container = new Container(textId.getValue(), DataType.ENTITY);
-				break;
-			case TILE:
-				container = new TileContainer(textId.getValue());
-				break;
-			case CREATURE:
-				container = new CreatureContainer(textId.getValue());
-				break;
-			case DRIVE:
-				container = new DriveContainer(textId.getValue());
-				break;
-			case PROCESS:
-				container = new ProcessContainer(textId.getValue());
-				break;
-			default:
-				Logger.error("Unknown entity constructor type '" + type + "' for '" + textId.getValue() + "' on line " + textId.getLine());
-				return;
+
+		// does such a container already exist?
+		container = Data.getContainer(Data.getContainerID(textID.getValue()));
+		if (container != null) {
+			if (container.getType() != type) {
+				String errorMessage = "Line " + textID.getLine()
+						+ ": An object with textID '" + textID.getValue()
+						+ "' already exists, but has type " + container.getType()
+						+ " instead of " + type + ".";
+
+				Logger.error(errorMessage);
+				throw new Exception(errorMessage);
+			}
+		} else {
+			// container creation
+			switch (type) {
+				case ENTITY:
+					container = new Container(textID.getValue(), DataType.ENTITY);
+					break;
+				case TILE:
+					container = new TileContainer(textID.getValue());
+					break;
+				case CREATURE:
+					container = new CreatureContainer(textID.getValue());
+					break;
+				case DRIVE:
+					container = new DriveContainer(textID.getValue());
+					break;
+				case PROCESS:
+					container = new ProcessContainer(textID.getValue());
+					break;
+				default:
+					Logger.error("Unknown entity constructor type '" + type + "' for '" + textID.getValue() + "' on line " + textID.getLine());
+					return;
+			}
+			Data.addContainer(container);
 		}
-		Data.addContainer(container);
 
 		// container filling
 		while (true) {

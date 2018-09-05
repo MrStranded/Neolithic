@@ -165,21 +165,7 @@ public class ASTBuilder {
 		AbstractScriptNode left = null;
 
 		if (command != null) { // we have a command!
-			interpreter.consume(TokenConstants.ROUND_BRACKETS_OPEN);
-
-			List<AbstractScriptNode> parameters = new ArrayList<>(1);
-
-			boolean firstParameter = true;
-			while (!TokenConstants.ROUND_BRACKETS_CLOSE.equals(interpreter.peek())) {
-				System.out.println(interpreter.peek());
-				if (!firstParameter) {
-					interpreter.consume(TokenConstants.COMMA);
-				}
-				parameters.add(readExpression());
-				firstParameter = false;
-			}
-			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
-
+			List<AbstractScriptNode> parameters = readParameters();
 			left = new CommandExpressionNode(command.getToken(), parameters);
 
 		} else if (TokenConstants.SELF.equals(expression)) { // a self expression
@@ -205,7 +191,8 @@ public class ASTBuilder {
 			left = new IdentifierNode(expression);
 
 			if (TokenConstants.ROUND_BRACKETS_OPEN.equals(interpreter.peek())) { // a script call upon an object
-			
+				List<AbstractScriptNode> parameters = readParameters();
+				left = new ScriptCallNode(expression, parameters);
 			}
 
 		} else {
@@ -225,6 +212,29 @@ public class ASTBuilder {
 
 		Logger.error("Unable to parse '" + expression.getValue() + "' on line " + expression.getLine());
 		return null;
+	}
+
+	// ###################################################################################
+	// ################################ Parameters #######################################
+	// ###################################################################################
+
+	private List<AbstractScriptNode> readParameters() throws Exception {
+		interpreter.consume(TokenConstants.ROUND_BRACKETS_OPEN);
+
+		List<AbstractScriptNode> parameters = new ArrayList<>(1);
+
+		boolean firstParameter = true;
+		while (!TokenConstants.ROUND_BRACKETS_CLOSE.equals(interpreter.peek())) {
+			System.out.println(interpreter.peek());
+			if (!firstParameter) {
+				interpreter.consume(TokenConstants.COMMA);
+			}
+			parameters.add(readExpression());
+			firstParameter = false;
+		}
+		interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
+
+		return parameters;
 	}
 
 	// ###################################################################################

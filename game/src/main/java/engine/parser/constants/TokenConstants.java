@@ -13,6 +13,7 @@ public enum TokenConstants {
 	SCRIPT      (TokenType.KEYWORD, "Script"),
 	PROCESS     (TokenType.KEYWORD, "Process"),
 	DRIVE       (TokenType.KEYWORD, "Drive"),
+	FORMATION   (TokenType.KEYWORD, "Formation"),
 
 	// -------------------------------------------------- Scripts
 	SELF        (TokenType.KEYWORD, "self"),

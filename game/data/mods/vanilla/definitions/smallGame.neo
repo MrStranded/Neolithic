@@ -169,7 +169,7 @@ Process: proPhotoSynthesis {
 	}
 	Script: product {
 		getTile(self)->attHumidity -= 5;
-		self.attNutrition += 5;
+		self->attNutrition += 5;
 	}
 
 	alternatives {} // there is no way for a plant to create light (currently?)

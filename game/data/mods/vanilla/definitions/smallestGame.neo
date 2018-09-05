@@ -28,3 +28,9 @@ Tile: tStone {
 	preferredHeight = 255;
 	name = "Stone"; color {150;150;120;}
 }
+
+Entity: eTest { name = "Yolo"; }
+Creature: eTest { name "Haha. U thot!"; }
+Entity: eTest {
+	Script: troll { print("cräzi");}
+}
