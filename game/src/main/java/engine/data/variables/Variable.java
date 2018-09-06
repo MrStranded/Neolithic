@@ -4,6 +4,7 @@ import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
 import engine.data.planetary.Tile;
+import engine.data.proto.Data;
 import engine.utils.converters.StringConverter;
 
 public class Variable implements IDInterface {
@@ -98,6 +99,10 @@ public class Variable implements IDInterface {
 	private void setName(String name) {
 		this.name = name;
 		id = StringConverter.toID(name);
+	}
+
+	public DataType getType() {
+		return type;
 	}
 
 	// ----------------------------------------------- double

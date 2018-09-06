@@ -1,6 +1,7 @@
 package engine.parser.scripts.execution;
 
 import engine.data.entities.Instance;
+import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.nodes.BinaryExpressionNode;
@@ -8,11 +9,9 @@ import engine.parser.scripts.nodes.IdentifierNode;
 import engine.parser.scripts.nodes.ScriptCallNode;
 import engine.parser.tokenization.Token;
 
-public class OperationExecuter {
+public class BinaryOperationExecuter {
 
 	public static Variable executeOperation(Instance self, BinaryExpressionNode binaryNode) {
-		System.out.println("execute binary operation " + binaryNode.getOperator());
-
 		Token operator = binaryNode.getOperator();
 		Variable left = binaryNode.getLeft().execute(self);
 
@@ -28,7 +27,6 @@ public class OperationExecuter {
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ->
 		} else if (TokenConstants.OBJECT_OPERATOR.equals(operator)) {
-			System.out.println("putting " + left + " into " + binaryNode.getRight());
 			if (binaryNode.getRight().getClass() == ScriptCallNode.class) { // script call
 				((ScriptCallNode) binaryNode.getRight()).setTarget(left);
 			} else if (binaryNode.getRight().getClass() == IdentifierNode.class) { // variable
@@ -36,6 +34,16 @@ public class OperationExecuter {
 			}
 
 			return binaryNode.getRight().execute(self);
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& +
+		} else if (TokenConstants.PLUS.equals(operator)) {
+			Variable right = binaryNode.getRight().execute(self);
+
+			if (left.getType() == DataType.NUMBER && right.getType() == DataType.NUMBER) { // normal addition
+				return new Variable(left.getDouble() + right.getDouble());
+			} else { // string concatenation
+				return new Variable(left.getString() + right.getString());
+			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& -
 		} else if (TokenConstants.MINUS.equals(operator)) {

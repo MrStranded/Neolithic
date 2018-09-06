@@ -2,6 +2,7 @@ package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
 import engine.data.variables.Variable;
+import engine.parser.scripts.execution.UnaryOperationExecuter;
 import engine.parser.tokenization.Token;
 
 public class UnaryExpressionNode extends AbstractScriptNode {
@@ -16,7 +17,7 @@ public class UnaryExpressionNode extends AbstractScriptNode {
 
 	@Override
 	public Variable execute(Instance instance) {
-		return null;
+		return UnaryOperationExecuter.executeOperation(instance, this);
 	}
 
 	@Override
@@ -24,4 +25,17 @@ public class UnaryExpressionNode extends AbstractScriptNode {
 		System.out.println(indentation + "Unary Expression " + operator);
 		subNodes[0].print(indentation + " ");
 	}
+
+	// ###################################################################################
+	// ################################ Getters and Setters ##############################
+	// ###################################################################################
+
+	public Token getOperator() {
+		return operator;
+	}
+
+	public AbstractScriptNode getSubNode() {
+		return subNodes[0];
+	}
+
 }

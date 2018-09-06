@@ -1,6 +1,7 @@
 package engine.parser.scripts.execution;
 
 import constants.ScriptConstants;
+import constants.TopologyConstants;
 import engine.data.entities.Instance;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
@@ -21,7 +22,7 @@ import java.util.List;
 public class CommandExecuter {
 
 	public static Variable executeCommand(Instance self, CommandExpressionNode commandNode) {
-		System.out.println("execute command: " + commandNode.getCommand());
+		//System.out.println("execute command: " + commandNode.getCommand());
 
 		Token command = commandNode.getCommand();
 		Variable[] parameters = ParameterCalculator.calculateParameters(self, commandNode);
@@ -37,7 +38,10 @@ public class CommandExecuter {
 					Instance formationInstance = new Instance(formationID);
 					Variable[] newParameters = new Variable[1];
 					newParameters[0] = parameters[1];
+					
 					formationInstance.runScript(ScriptConstants.EVENT_PLACE_FORMATION, newParameters);
+
+					return new Variable(formationInstance);
 				} else {
 					if (formationID == -1) {
 						Logger.error("Cannot create Formation: Formation '" + formationTextID + "' does not exist. Line " + command.getLine());
@@ -57,7 +61,6 @@ public class CommandExecuter {
 					return new Variable(0);
 				}
 
-				System.out.println("h: " + tile.getHeight());
 				return new Variable(tile.getHeight());
 			}
 
@@ -76,6 +79,14 @@ public class CommandExecuter {
 				}
 
 				return new Variable(Neighbour.getNeighbour(tile, position));
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& print (String text)
+		} else if (TokenConstants.PRINT.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				String text = parameters[0].getString();
+				Logger.log("PRINT: " + text);
+				return new Variable(text);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& random ([double bottom,] double top)
@@ -112,7 +123,11 @@ public class CommandExecuter {
 				int height = parameters[1].getInt();
 
 				if (tile != null) {
+					if (height < 0) { height = 0; }
+					if (height > TopologyConstants.PLANET_MAXIMUM_HEIGHT) { height = (int) TopologyConstants.PLANET_MAXIMUM_HEIGHT; }
 					tile.setHeight(height);
+
+					return new Variable(height);
 				}
 			}
 
@@ -127,6 +142,8 @@ public class CommandExecuter {
 							tile.setWaterHeight(level);
 						}
 					}
+
+					return new Variable(level);
 				}
 			}
 		}

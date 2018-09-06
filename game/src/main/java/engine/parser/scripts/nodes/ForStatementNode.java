@@ -15,8 +15,14 @@ public class ForStatementNode extends AbstractScriptNode {
 
 	@Override
 	public Variable execute(Instance instance) {
-
-		return null;
+		Variable body;
+		subNodes[0].execute(instance); // initial
+		body = new Variable();
+		while (!subNodes[1].execute(instance).isNull()) { // condition
+			body = subNodes[3].execute(instance); // body
+			subNodes[2].execute(instance); // step
+		}
+		return body;
 	}
 
 	@Override

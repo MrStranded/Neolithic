@@ -17,10 +17,11 @@ public class MultiStatementNode extends AbstractScriptNode {
 
 	@Override
 	public Variable execute(Instance instance) {
+		Variable lastStatement = new Variable();
 		for (AbstractScriptNode node : subNodes) {
-			node.execute(instance);
+			lastStatement = node.execute(instance);
 		}
-		return null;
+		return lastStatement;
 	}
 
 	@Override
