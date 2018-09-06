@@ -38,5 +38,8 @@ public class UnaryExpressionNode extends AbstractScriptNode {
 	public AbstractScriptNode getSubNode() {
 		return subNodes[0];
 	}
+	public void setSubNode(AbstractScriptNode subNode) {
+		subNodes[0] = subNode;
+	}
 
 }

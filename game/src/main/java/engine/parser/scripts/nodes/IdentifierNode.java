@@ -10,7 +10,7 @@ import engine.parser.tokenization.Token;
 public class IdentifierNode extends AbstractScriptNode {
 
 	private Token identifier;
-	private Variable target;
+	private Variable target = null;
 
 	public IdentifierNode(Token identifier) {
 		this.identifier = identifier;
@@ -23,15 +23,19 @@ public class IdentifierNode extends AbstractScriptNode {
 
 		if (targetInstance != null) { // return variable from an instance
 			variable = targetInstance.getVariable(identifier.getValue());
+			if (variable == null) {
+				variable = Variable.withName(identifier.getValue());
+				targetInstance.addVariable(variable);
+			}
 		} else { // retrieve variable from current script scope
 			variable = script.getVariable(identifier.getValue());
+			if (variable == null) {
+				variable = Variable.withName(identifier.getValue());
+				script.addVariable(variable);
+			}
 		}
 
-		if (variable != null) {
-			return variable;
-		} else {
-			return Variable.withName(identifier.getValue());
-		}
+		return variable;
 	}
 
 	public Instance getTargetInstance() {

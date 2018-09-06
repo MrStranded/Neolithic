@@ -54,8 +54,14 @@ public class Script implements IDInterface {
 		if (false) {
 			System.out.println("---------------------------- S");
 			System.out.println("Running script " + textId);
-			System.out.println("Variables:");
+			System.out.println("Instance Variables:");
 			self.printVariables();
+			System.out.println("Script Variables:");
+			if (!variableStack.empty()) {
+				for (IDInterface variable : variableStack.peek().toArray()) {
+					System.out.println(((Variable) variable));
+				}
+			}
 			System.out.println("---------------------------- E");
 		}
 
@@ -76,6 +82,7 @@ public class Script implements IDInterface {
 	}
 	public void addVariable(Variable variable) {
 		if (!variableStack.empty()) {
+			System.out.println("added variable " + variable + " to script " + textId);
 			variableStack.peek().insert(variable);
 		}
 	}

@@ -14,19 +14,19 @@ WorldGen: genContinental {
 
 Formation: formMountain {
 	Script: place(tile) {
-		height = random(150,256);
-		self->lift(tile, height);
+		height = random(50,250);
 		self->counter = 1;
+		self->lift(tile, height);
 	}
 
 	Script: lift(tile, height) {
 		if (height > getHeight(tile)) {
 			setHeight(tile, height);
-print("c: "+self->counter++);
 
-			deviation = random(1,20);
+			print("c: "+self->counter++);
 
 			for (i=0; i<3; i++) {
+				deviation = random(7,20);
 				lift(getNeighbor(tile, i), height - deviation);
 			}
 		}

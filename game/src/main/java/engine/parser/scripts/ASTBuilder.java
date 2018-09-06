@@ -259,8 +259,17 @@ public class ASTBuilder {
 						BinaryExpressionNode newLeft = new BinaryExpressionNode(operator, left, sub);
 						rightNode.setLeft(newLeft);
 						return rightNode;
-
 					}
+				}
+			} else if (right.getClass() == UnaryExpressionNode.class) { // possibly need to rehang
+				UnaryExpressionNode rightNode = ((UnaryExpressionNode) right);
+
+				// current operator binds more strongly than the one from the right expression -> rehang
+				if (operator.getPrecedence() < rightNode.getOperator().getPrecedence()) {
+					AbstractScriptNode sub = rightNode.getSubNode();
+					BinaryExpressionNode newSub = new BinaryExpressionNode(operator, left, sub);
+					rightNode.setSubNode(newSub);
+					return rightNode;
 				}
 			}
 

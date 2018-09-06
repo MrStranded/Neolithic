@@ -21,18 +21,6 @@ public class BinaryOperationExecuter {
 			Variable right = binaryNode.getRight().execute(self, script);
 
 			left.copyValue(right);
-			if (left.hasName()) { // only if variable has a name!
-				if (binaryNode.getLeft().getClass() == IdentifierNode.class) {
-					Instance targetInstance = ((IdentifierNode) binaryNode.getLeft()).getTargetInstance();
-					if (targetInstance != null) {
-						targetInstance.addVariable(left);
-					} else {
-						script.addVariable(left);
-					}
-				} else {
-					script.addVariable(left);
-				}
-			}
 			return left;
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ->
@@ -42,7 +30,6 @@ public class BinaryOperationExecuter {
 			} else if (binaryNode.getRight().getClass() == IdentifierNode.class) { // variable
 				((IdentifierNode) binaryNode.getRight()).setTarget(left);
 			}
-
 			return binaryNode.getRight().execute(self, script);
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& +
@@ -72,6 +59,24 @@ public class BinaryOperationExecuter {
 			Variable right = binaryNode.getRight().execute(self, script);
 
 			return new Variable(left.getDouble() < right.getDouble() ? 1 : 0);
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& <=
+		} else if (TokenConstants.LESSER_EQUAL.equals(operator)) {
+			Variable right = binaryNode.getRight().execute(self, script);
+
+			return new Variable(left.getDouble() <= right.getDouble() ? 1 : 0);
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& >
+		} else if (TokenConstants.GREATER.equals(operator)) {
+			Variable right = binaryNode.getRight().execute(self, script);
+
+			return new Variable(left.getDouble() > right.getDouble() ? 1 : 0);
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& >=
+		} else if (TokenConstants.GREATER_EQUAL.equals(operator)) {
+			Variable right = binaryNode.getRight().execute(self, script);
+
+			return new Variable(left.getDouble() >= right.getDouble() ? 1 : 0);
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& &&
 		} else if (TokenConstants.AND.equals(operator)) {

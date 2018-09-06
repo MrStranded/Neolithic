@@ -315,7 +315,8 @@ public class Renderer {
 		depthShaderProgram.unbind();
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 
-		hud.getHUDObjects()[0].getMesh().getMaterial().setTexture(shadowMap.getDepthMap());
+		// shadow map into hud object 0
+		//hud.getHUDObjects()[0].getMesh().getMaterial().setTexture(shadowMap.getDepthMap());
 	}
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Scene

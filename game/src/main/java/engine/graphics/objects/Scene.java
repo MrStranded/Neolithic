@@ -67,17 +67,18 @@ public class Scene {
 		ambientLight = new AmbientLight(0.5,0.5,0.5);
 		//ambientLight = new AmbientLight(0.75,0.75,0.75);
 
-		try {
-			shadowMap = new ShadowMap();
-			shadowMap.setDistance(1.125d);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		// camera
 		camera = new Camera();
 		camera.setRadius(2);
 
-		shadowMap.setCamera(camera);
+		// shadow map
+		try {
+			shadowMap = new ShadowMap();
+			shadowMap.setDistance(1.125d);
+			shadowMap.setCamera(camera);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// ###################################################################################

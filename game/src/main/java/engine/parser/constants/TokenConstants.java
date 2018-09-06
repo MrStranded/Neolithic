@@ -101,40 +101,40 @@ public enum TokenConstants {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Operators
 	// -------------------------------------------------- Math
-	PLUS        (TokenType.OPERATOR, "+", 3),
-	MINUS       (TokenType.OPERATOR, "-", 3),
-	TIMES       (TokenType.OPERATOR, "*", 2),
-	DIVIDE      (TokenType.OPERATOR, "/", 2),
-	MODULO      (TokenType.OPERATOR, "%", 2),
-	POWER       (TokenType.OPERATOR, "^", 1),
+	PLUS        (TokenType.OPERATOR, "+", 4),
+	MINUS       (TokenType.OPERATOR, "-", 4),
+	TIMES       (TokenType.OPERATOR, "*", 3),
+	DIVIDE      (TokenType.OPERATOR, "/", 3),
+	MODULO      (TokenType.OPERATOR, "%", 3),
+	POWER       (TokenType.OPERATOR, "^", 2),
 
 	// -------------------------------------------------- Single Step
-	SINGLE_INCREMENT    (TokenType.OPERATOR, "++"),
-	SINGLE_DECREMENT    (TokenType.OPERATOR, "--"),
+	SINGLE_INCREMENT    (TokenType.OPERATOR, "++",1),
+	SINGLE_DECREMENT    (TokenType.OPERATOR, "--",1),
 
 	// -------------------------------------------------- Quick Math
-	QUICK_PLUS          (TokenType.OPERATOR, "+=", 8),
-	QUICK_MINUS         (TokenType.OPERATOR, "-=", 8),
-	QUICK_TIMES         (TokenType.OPERATOR, "*=", 8),
-	QUICK_DIVIDE        (TokenType.OPERATOR, "/=", 8),
-	QUICK_MODULO        (TokenType.OPERATOR, "%=", 8),
-	QUICK_POWER         (TokenType.OPERATOR, "^=", 8),
+	QUICK_PLUS          (TokenType.OPERATOR, "+=", 9),
+	QUICK_MINUS         (TokenType.OPERATOR, "-=", 9),
+	QUICK_TIMES         (TokenType.OPERATOR, "*=", 9),
+	QUICK_DIVIDE        (TokenType.OPERATOR, "/=", 9),
+	QUICK_MODULO        (TokenType.OPERATOR, "%=", 9),
+	QUICK_POWER         (TokenType.OPERATOR, "^=", 9),
 
 	// -------------------------------------------------- Comparators
-	EQUAL           (TokenType.OPERATOR, "==", 5),
-	UNEQUAL         (TokenType.OPERATOR, "!=", 5),
-	GREATER         (TokenType.OPERATOR, ">", 4),
-	LESSER          (TokenType.OPERATOR, "<", 4),
-	GREATER_EQUAL   (TokenType.OPERATOR, ">=", 4),
-	LESSER_EQUAL    (TokenType.OPERATOR, "<=", 4),
+	EQUAL           (TokenType.OPERATOR, "==", 6),
+	UNEQUAL         (TokenType.OPERATOR, "!=", 6),
+	GREATER         (TokenType.OPERATOR, ">", 5),
+	LESSER          (TokenType.OPERATOR, "<", 5),
+	GREATER_EQUAL   (TokenType.OPERATOR, ">=", 5),
+	LESSER_EQUAL    (TokenType.OPERATOR, "<=", 5),
 
 	// -------------------------------------------------- Logical
-	NOT         (TokenType.OPERATOR, "!"),
-	AND         (TokenType.OPERATOR, "&&", 6),
-	OR          (TokenType.OPERATOR, "||", 7),
+	NOT         (TokenType.OPERATOR, "!",1),
+	AND         (TokenType.OPERATOR, "&&", 7),
+	OR          (TokenType.OPERATOR, "||", 8),
 
 	// -------------------------------------------------- Assignment
-	ASSIGNMENT  (TokenType.OPERATOR, "=", 8),
+	ASSIGNMENT  (TokenType.OPERATOR, "=", 9),
 
 	// -------------------------------------------------- Object Attributes
 	OBJECT_OPERATOR (TokenType.OPERATOR, "->", 0),

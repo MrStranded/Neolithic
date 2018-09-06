@@ -156,7 +156,7 @@ public class Instance {
 	// ###################################################################################
 
 	public String toString() {
-		return "Instance (id = " + id + ")";
+		return "Instance (id = " + Data.getContainer(id).getTextID() + ")";
 	}
 
 	public void printVariables() {

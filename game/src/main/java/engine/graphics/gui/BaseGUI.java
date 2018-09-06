@@ -31,7 +31,7 @@ public class BaseGUI implements GUIInterface {
 		objects[1].setPosition(0,0,-0.25d);
 		objects[1].setRelativeScreenPositionX(RelativeScreenPosition.CENTER);
 
-		objects[0] = new GUIObject(MeshGenerator.createQuad());
+		/*objects[0] = new GUIObject(MeshGenerator.createQuad());
 		objects[0].getMesh().getMaterial().setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png"));
 		objects[0].setSize(200,200);
 		//objects[0].setLocation(0,100);
@@ -39,7 +39,7 @@ public class BaseGUI implements GUIInterface {
 		//objects[0].getMesh().setColor(0.5f, 0.5f, 0.5f, 0.5f);
 		//objects[0].setLocation(200, 400);
 		//objects[0].setRelativeScreenPosition(RelativeScreenPosition.RIGHT, RelativeScreenPosition.BOTTOM);
-		objects[0].setRelativeScreenPosition(RelativeScreenPosition.LEFT, RelativeScreenPosition.TOP);
+		objects[0].setRelativeScreenPosition(RelativeScreenPosition.LEFT, RelativeScreenPosition.TOP);*/
 	}
 
 	// ###################################################################################
