@@ -1,6 +1,7 @@
 package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
+import engine.data.structures.Script;
 import engine.data.variables.Variable;
 
 import java.util.List;
@@ -16,10 +17,10 @@ public class MultiStatementNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance) {
+	public Variable execute(Instance instance, Script script) {
 		Variable lastStatement = new Variable();
 		for (AbstractScriptNode node : subNodes) {
-			lastStatement = node.execute(instance);
+			lastStatement = node.execute(instance, script);
 		}
 		return lastStatement;
 	}

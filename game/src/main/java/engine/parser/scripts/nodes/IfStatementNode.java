@@ -1,6 +1,7 @@
 package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
+import engine.data.structures.Script;
 import engine.data.variables.Variable;
 
 public class IfStatementNode extends AbstractScriptNode {
@@ -13,14 +14,14 @@ public class IfStatementNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance) {
-		Variable condition = subNodes[0].execute(instance);
+	public Variable execute(Instance instance, Script script) {
+		Variable condition = subNodes[0].execute(instance, script);
 
 		if (!condition.isNull()) {
-			return subNodes[1].execute(instance);
+			return subNodes[1].execute(instance, script);
 		} else {
 			if (subNodes[2] != null) {
-				return subNodes[2].execute(instance);
+				return subNodes[2].execute(instance, script);
 			}
 		}
 

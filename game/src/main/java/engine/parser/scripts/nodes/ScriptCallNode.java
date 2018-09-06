@@ -1,6 +1,7 @@
 package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
+import engine.data.structures.Script;
 import engine.data.variables.Variable;
 import engine.parser.scripts.execution.ParameterCalculator;
 import engine.parser.tokenization.Token;
@@ -23,16 +24,16 @@ public class ScriptCallNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance) {
+	public Variable execute(Instance instance, Script script) {
 		Instance targetInstance = null;
 		if (target != null) {
 			targetInstance = target.getInstance();
 		}
 
 		if (targetInstance != null) { // run script on different target
-			targetInstance.runScript(identifier.getValue(), ParameterCalculator.calculateParameters(instance, this));
+			targetInstance.runScript(identifier.getValue(), ParameterCalculator.calculateParameters(instance, script, this));
 		} else { // run script on self
-			instance.runScript(identifier.getValue(), ParameterCalculator.calculateParameters(instance, this));
+			instance.runScript(identifier.getValue(), ParameterCalculator.calculateParameters(instance, script, this));
 		}
 		return new Variable();
 	}

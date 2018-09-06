@@ -1,6 +1,7 @@
 package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
+import engine.data.structures.Script;
 import engine.data.variables.Variable;
 
 public class ForStatementNode extends AbstractScriptNode {
@@ -14,13 +15,13 @@ public class ForStatementNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance) {
+	public Variable execute(Instance instance, Script script) {
 		Variable body;
-		subNodes[0].execute(instance); // initial
+		subNodes[0].execute(instance, script); // initial
 		body = new Variable();
-		while (!subNodes[1].execute(instance).isNull()) { // condition
-			body = subNodes[3].execute(instance); // body
-			subNodes[2].execute(instance); // step
+		while (!subNodes[1].execute(instance, script).isNull()) { // condition
+			body = subNodes[3].execute(instance, script); // body
+			subNodes[2].execute(instance, script); // step
 		}
 		return body;
 	}

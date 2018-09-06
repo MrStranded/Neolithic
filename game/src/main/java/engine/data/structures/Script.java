@@ -2,11 +2,13 @@ package engine.data.structures;
 
 import engine.data.IDInterface;
 import engine.data.entities.Instance;
+import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.Variable;
 import engine.parser.scripts.nodes.AbstractScriptNode;
 import engine.utils.converters.StringConverter;
 
 import java.util.List;
+import java.util.Stack;
 
 public class Script implements IDInterface {
 
@@ -14,6 +16,7 @@ public class Script implements IDInterface {
 	private int id = -1;
 	private AbstractScriptNode root;
 	private String[] parameterNames;
+	private Stack<BinaryTree<Variable>> variableStack;
 
 	public Script(String textId, AbstractScriptNode root, List<String> parameterNameList) {
 		this.textId = textId;
@@ -26,19 +29,28 @@ public class Script implements IDInterface {
 		for (String parameterName : parameterNameList) {
 			parameterNames[i++] = parameterName;
 		}
+
+		variableStack = new Stack<>();
 	}
 
 	public void run(Instance self, Variable[] parameters) {
+		// create new variable tree
+		BinaryTree<Variable> variables = new BinaryTree<>();
+		variableStack.push(variables);
+
+		// fill parameters in
 		if (parameters != null) {
 			int i = 0;
 			for (Variable parameter : parameters) {
 				if (parameter != null && i < parameterNames.length) {
 					Variable variable = new Variable(parameterNames[i], parameter);
-					self.addVariable(variable);
+					variables.insert(variable);
 				}
 				i++;
 			}
 		}
+
+		// debugging
 		if (false) {
 			System.out.println("---------------------------- S");
 			System.out.println("Running script " + textId);
@@ -46,7 +58,26 @@ public class Script implements IDInterface {
 			self.printVariables();
 			System.out.println("---------------------------- E");
 		}
-		root.execute(self);
+
+		// execute
+		root.execute(self, this);
+
+		// pop variable stack
+		variableStack.pop();
+	}
+
+	public Variable getVariable(String name) {
+		if (!variableStack.empty()) {
+			BinaryTree<Variable> variables = variableStack.peek();
+			return variables.get(StringConverter.toID(name));
+		} else {
+			return new Variable();
+		}
+	}
+	public void addVariable(Variable variable) {
+		if (!variableStack.empty()) {
+			variableStack.peek().insert(variable);
+		}
 	}
 
 	@Override
@@ -56,7 +87,7 @@ public class Script implements IDInterface {
 
 	@Override
 	public IDInterface merge(IDInterface other) {
-		return this;
+		return other; // overwrite older scripts with newer ones
 	}
 
 	public void print() {

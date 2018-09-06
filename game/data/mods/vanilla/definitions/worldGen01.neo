@@ -23,7 +23,7 @@ Formation: formMountain {
 			print("height= "+height);
 			setHeight(tile, height);
 
-			deviation = random(1,2);
+			deviation = random(1,20);
 			print("deviation= "+deviation);
 
 			for (i=0; i<3; i++) {

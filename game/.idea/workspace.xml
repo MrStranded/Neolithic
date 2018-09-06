@@ -2,18 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb5f568f-e1c1-4ada-8646-68bc27407460" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/UnaryOperationExecuter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/structures/Script.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/structures/Script.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/OperationExecuter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/ParameterCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/ParameterCalculator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/UnaryOperationExecuter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/UnaryOperationExecuter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/AbstractScriptNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/AbstractScriptNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ForStatementNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ForStatementNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ScriptCallNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ScriptCallNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/SelfNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/SelfNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/WhileStatementNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/WhileStatementNode.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/neolithic/.gradle/" />
@@ -63,29 +70,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Variable.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java">
+      <file leaf-file-name="CommandExpressionNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="104" column="20" selection-start-line="104" selection-start-column="20" selection-end-line="104" selection-end-column="20" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2330#2331#0" expanded="true" />
-                <element signature="e#2352#2353#0" expanded="true" />
-                <element signature="e#3149#3150#0" expanded="true" />
-                <element signature="e#3165#3166#0" expanded="true" />
-                <element signature="e#3224#3225#0" expanded="true" />
-                <element signature="e#3242#3243#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BinaryOperationExecuter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="371">
-              <caret line="43" column="44" selection-start-line="43" selection-start-column="44" selection-end-line="43" selection-end-column="44" />
+            <state relative-caret-position="375">
+              <caret line="26" column="63" selection-start-line="26" selection-start-column="63" selection-end-line="26" selection-end-column="63" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -93,80 +82,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UnaryOperationExecuter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/UnaryOperationExecuter.java">
+      <file leaf-file-name="IdentifierNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="71">
-              <caret line="13" column="91" selection-start-line="13" selection-start-column="91" selection-end-line="13" selection-end-column="91" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BinaryExpressionNode.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="506">
-              <caret line="58" column="5" lean-forward="true" selection-start-line="58" selection-start-column="5" selection-end-line="58" selection-end-column="5" />
+            <state relative-caret-position="101">
+              <caret line="21" column="54" selection-start-line="21" selection-start-column="54" selection-end-line="21" selection-end-column="54" />
               <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UnaryExpressionNode.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="19" column="69" selection-start-line="19" selection-start-column="69" selection-end-line="19" selection-end-column="69" />
-              <folding>
-                <element signature="e#472#473#0" expanded="true" />
-                <element signature="e#490#491#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ForStatementNode.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ForStatementNode.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Script.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/structures/Script.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="47" column="9" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="9" />
-              <folding>
-                <element signature="e#1400#1401#0" expanded="true" />
-                <element signature="e#1416#1417#0" expanded="true" />
-                <element signature="e#1475#1476#0" expanded="true" />
-                <element signature="e#1493#1494#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MultiStatementNode.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="23" column="28" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CommandExecuter.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="236">
-              <caret line="40" column="20" selection-start-line="40" selection-start-column="20" selection-end-line="40" selection-end-column="20" />
-              <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#1084#1085#0" expanded="true" />
+                <element signature="e#1152#1153#0" expanded="true" />
+                <element signature="e#1195#1196#0" expanded="true" />
+                <element signature="e#1222#1223#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -175,8 +100,78 @@
       <file leaf-file-name="IfStatementNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java">
           <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="16" column="51" selection-start-line="16" selection-start-column="51" selection-end-line="16" selection-end-column="51" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LiteralNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java">
+          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="225">
-              <caret line="16" column="59" selection-start-line="16" selection-start-column="59" selection-end-line="16" selection-end-column="59" />
+              <caret line="17" column="49" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MultiStatementNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="19" column="52" selection-start-line="19" selection-start-column="52" selection-end-line="19" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ScriptCallNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ScriptCallNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="303">
+              <caret line="35" column="111" selection-start-line="35" selection-start-column="111" selection-end-line="35" selection-end-column="111" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SelfNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/SelfNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="12" column="60" selection-start-line="12" selection-start-column="60" selection-end-line="12" selection-end-column="60" />
+              <folding>
+                <element signature="e#287#288#0" expanded="true" />
+                <element signature="e#323#324#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UnaryExpressionNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="20" column="72" selection-start-line="20" selection-start-column="72" selection-end-line="20" selection-end-column="72" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WhileStatementNode.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/WhileStatementNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="15" column="60" selection-start-line="15" selection-start-column="60" selection-end-line="15" selection-end-column="60" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ForStatementNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ForStatementNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -272,7 +267,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/constants/PrecedenceConstants.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Token.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/utils/converters/StringConverter.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/logic/GeographicCoordinates.java" />
@@ -294,35 +288,36 @@
         <option value="$PROJECT_DIR$/src/main/java/tests/parser/ParserTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/Parser.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/AbstractScriptNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/Interpreter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/proto/Data.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/logic/TopologyGenerator.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/utils/TokenNumerifier.java" />
         <option value="$PROJECT_DIR$/src/main/java/constants/ScriptConstants.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/ParameterCalculator.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/variables/DataType.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/logic/Neighbour.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ScriptCallNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/SelfNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/entities/Instance.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/constants/TokenConstants.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/planetary/Tile.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/Engine.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/OperationExecuter.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/UnaryOperationExecuter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/AbstractScriptNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/structures/Script.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ForStatementNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/UnaryOperationExecuter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/ParameterCalculator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ForStatementNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ScriptCallNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/SelfNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/WhileStatementNode.java" />
       </list>
     </option>
   </component>
@@ -799,7 +794,7 @@
       <workItem from="1535361686593" duration="9998000" />
       <workItem from="1535446076335" duration="54811000" />
       <workItem from="1535966485398" duration="23960000" />
-      <workItem from="1536139079412" duration="22362000" />
+      <workItem from="1536139079412" duration="25955000" />
     </task>
     <servers />
   </component>
@@ -836,7 +831,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="560703000" />
+    <option name="totallyTimeSpent" value="564296000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -888,13 +883,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/Scene.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="63" column="50" selection-start-line="63" selection-start-column="50" selection-end-line="63" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/objects/generators/PlanetGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -1085,16 +1073,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/AbstractScriptNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="15" column="5" lean-forward="true" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3138">
@@ -1113,32 +1091,6 @@
             <element signature="imports" expanded="true" />
             <element signature="e#1563#1564#0" expanded="true" />
             <element signature="e#1590#1591#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="62" selection-start-line="25" selection-start-column="62" selection-end-line="25" selection-end-column="62" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#640#641#0" expanded="true" />
-            <element signature="e#668#669#0" expanded="true" />
-            <element signature="e#1095#1096#0" expanded="true" />
-            <element signature="e#1116#1117#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="20" column="62" selection-start-line="20" selection-start-column="62" selection-end-line="20" selection-end-column="62" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#516#517#0" expanded="true" />
-            <element signature="e#578#579#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1179,16 +1131,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/ParameterCalculator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="59" lean-forward="true" selection-start-line="9" selection-start-column="59" selection-end-line="9" selection-end-column="59" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/interpretation/Interpreter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -1206,41 +1148,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="22" column="29" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
-          <folding>
-            <element signature="e#1027#1028#0" expanded="true" />
-            <element signature="e#1095#1096#0" expanded="true" />
-            <element signature="e#1138#1139#0" expanded="true" />
-            <element signature="e#1165#1166#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/logic/Neighbour.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
           <caret line="76" column="43" selection-start-line="76" selection-start-column="43" selection-end-line="76" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ScriptCallNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="30" selection-start-line="30" selection-end-line="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/SelfNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="12" column="36" selection-start-line="12" selection-start-column="36" selection-end-line="12" selection-end-column="36" />
-          <folding>
-            <element signature="e#287#288#0" expanded="true" />
-            <element signature="e#305#306#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1299,28 +1210,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/AbstractScriptNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="19" column="69" selection-start-line="19" selection-start-column="69" selection-end-line="19" selection-end-column="69" />
-          <folding>
-            <element signature="e#472#473#0" expanded="true" />
-            <element signature="e#490#491#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="16" column="59" selection-start-line="16" selection-start-column="59" selection-end-line="16" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="58" column="5" lean-forward="true" selection-start-line="58" selection-start-column="5" selection-end-line="58" selection-end-column="5" />
+        <state relative-caret-position="150">
+          <caret line="10" column="69" selection-start-line="10" selection-start-column="69" selection-end-line="10" selection-end-column="69" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1329,35 +1222,68 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/structures/Script.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="47" column="9" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="9" />
+        <state relative-caret-position="420">
+          <caret line="78" column="48" selection-start-line="78" selection-start-column="48" selection-end-line="78" selection-end-column="48" />
           <folding>
-            <element signature="e#1400#1401#0" expanded="true" />
-            <element signature="e#1416#1417#0" expanded="true" />
+            <element signature="e#1609#1610#0" expanded="true" />
+            <element signature="e#1625#1626#0" expanded="true" />
             <element signature="e#1475#1476#0" expanded="true" />
             <element signature="e#1493#1494#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="23" column="28" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
+        <state relative-caret-position="341">
+          <caret line="29" column="48" selection-start-line="29" selection-start-column="48" selection-end-line="29" selection-end-column="48" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/UnaryOperationExecuter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="71">
-          <caret line="13" column="91" selection-start-line="13" selection-start-column="91" selection-end-line="13" selection-end-column="91" />
+        <state relative-caret-position="101">
+          <caret line="16" column="71" selection-start-line="16" selection-start-column="71" selection-end-line="16" selection-end-column="71" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BinaryExpressionNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="43" column="44" selection-start-line="43" selection-start-column="44" selection-end-line="43" selection-end-column="44" />
+        <state relative-caret-position="191">
+          <caret line="22" column="72" selection-start-line="22" selection-start-column="72" selection-end-line="22" selection-end-column="72" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1215">
+          <caret line="28" column="84" selection-start-line="28" selection-start-column="84" selection-end-line="28" selection-end-column="84" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/ParameterCalculator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="64" selection-start-line="18" selection-start-column="64" selection-end-line="18" selection-end-column="64" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="26" column="63" selection-start-line="26" selection-start-column="63" selection-end-line="26" selection-end-column="63" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1367,17 +1293,76 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ForStatementNode.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
-          <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+          <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="40" column="20" selection-start-line="40" selection-start-column="20" selection-end-line="40" selection-end-column="20" />
+        <state relative-caret-position="101">
+          <caret line="21" column="54" selection-start-line="21" selection-start-column="54" selection-end-line="21" selection-end-column="54" />
+          <folding>
+            <element signature="e#1084#1085#0" expanded="true" />
+            <element signature="e#1152#1153#0" expanded="true" />
+            <element signature="e#1195#1196#0" expanded="true" />
+            <element signature="e#1222#1223#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IfStatementNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="16" column="51" selection-start-line="16" selection-start-column="51" selection-end-line="16" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/LiteralNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="17" column="49" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MultiStatementNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="19" column="52" selection-start-line="19" selection-start-column="52" selection-end-line="19" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ScriptCallNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="303">
+          <caret line="35" column="111" selection-start-line="35" selection-start-column="111" selection-end-line="35" selection-end-column="111" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/SelfNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="12" column="60" selection-start-line="12" selection-start-column="60" selection-end-line="12" selection-end-column="60" />
+          <folding>
+            <element signature="e#287#288#0" expanded="true" />
+            <element signature="e#323#324#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/UnaryExpressionNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="20" column="72" selection-start-line="20" selection-start-column="72" selection-end-line="20" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/WhileStatementNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="15" column="60" selection-start-line="15" selection-start-column="60" selection-end-line="15" selection-end-column="60" />
         </state>
       </provider>
     </entry>

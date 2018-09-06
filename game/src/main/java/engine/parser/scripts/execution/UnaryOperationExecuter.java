@@ -1,6 +1,7 @@
 package engine.parser.scripts.execution;
 
 import engine.data.entities.Instance;
+import engine.data.structures.Script;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.parser.constants.TokenConstants;
@@ -11,9 +12,9 @@ import engine.parser.tokenization.Token;
 
 public class UnaryOperationExecuter {
 
-	public static Variable executeOperation(Instance self, UnaryExpressionNode unaryNode) {
+	public static Variable executeOperation(Instance self, Script script, UnaryExpressionNode unaryNode) {
 		Token operator = unaryNode.getOperator();
-		Variable variable = unaryNode.getSubNode().execute(self);
+		Variable variable = unaryNode.getSubNode().execute(self, script);
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ++
 		if (TokenConstants.SINGLE_INCREMENT.equals(operator)) {

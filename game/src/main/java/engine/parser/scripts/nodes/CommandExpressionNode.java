@@ -1,6 +1,7 @@
 package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
+import engine.data.structures.Script;
 import engine.data.variables.Variable;
 import engine.parser.scripts.execution.CommandExecuter;
 import engine.parser.tokenization.Token;
@@ -22,8 +23,8 @@ public class CommandExpressionNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance) {
-		return CommandExecuter.executeCommand(instance, this);
+	public Variable execute(Instance instance, Script script) {
+		return CommandExecuter.executeCommand(instance, script, this);
 	}
 
 	@Override

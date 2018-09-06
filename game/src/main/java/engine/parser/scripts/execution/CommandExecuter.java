@@ -8,6 +8,7 @@ import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
+import engine.data.structures.Script;
 import engine.data.variables.Variable;
 import engine.logic.Neighbour;
 import engine.parser.utils.Logger;
@@ -21,11 +22,11 @@ import java.util.List;
 
 public class CommandExecuter {
 
-	public static Variable executeCommand(Instance self, CommandExpressionNode commandNode) {
+	public static Variable executeCommand(Instance self, Script script, CommandExpressionNode commandNode) {
 		//System.out.println("execute command: " + commandNode.getCommand());
 
 		Token command = commandNode.getCommand();
-		Variable[] parameters = ParameterCalculator.calculateParameters(self, commandNode);
+		Variable[] parameters = ParameterCalculator.calculateParameters(self, script, commandNode);
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& createFormation (String formationTextID, Tile tile)
 		if (TokenConstants.CREATE_FORMATION.equals(command)) {
@@ -38,7 +39,7 @@ public class CommandExecuter {
 					Instance formationInstance = new Instance(formationID);
 					Variable[] newParameters = new Variable[1];
 					newParameters[0] = parameters[1];
-					
+
 					formationInstance.runScript(ScriptConstants.EVENT_PLACE_FORMATION, newParameters);
 
 					return new Variable(formationInstance);

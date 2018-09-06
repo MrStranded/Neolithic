@@ -1,6 +1,7 @@
 package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
+import engine.data.structures.Script;
 import engine.data.variables.Variable;
 import engine.parser.tokenization.Token;
 import engine.parser.utils.TokenNumerifier;
@@ -14,7 +15,7 @@ public class LiteralNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance) {
+	public Variable execute(Instance instance, Script script) {
 		if (TokenNumerifier.isNumber(literal, true)) {
 			return new Variable(TokenNumerifier.getDouble(literal)); // double
 		} else {

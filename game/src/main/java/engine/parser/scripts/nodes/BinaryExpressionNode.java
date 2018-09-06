@@ -1,6 +1,7 @@
 package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
+import engine.data.structures.Script;
 import engine.data.variables.Variable;
 import engine.parser.scripts.execution.BinaryOperationExecuter;
 import engine.parser.tokenization.Token;
@@ -18,8 +19,8 @@ public class BinaryExpressionNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance) {
-		return BinaryOperationExecuter.executeOperation(instance, this);
+	public Variable execute(Instance instance, Script script) {
+		return BinaryOperationExecuter.executeOperation(instance, script, this);
 	}
 
 	@Override

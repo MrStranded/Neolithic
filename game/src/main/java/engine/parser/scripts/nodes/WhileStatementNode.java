@@ -1,6 +1,7 @@
 package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
+import engine.data.structures.Script;
 import engine.data.variables.Variable;
 
 public class WhileStatementNode extends AbstractScriptNode {
@@ -12,7 +13,7 @@ public class WhileStatementNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance) {
+	public Variable execute(Instance instance, Script script) {
 
 		return null;
 	}

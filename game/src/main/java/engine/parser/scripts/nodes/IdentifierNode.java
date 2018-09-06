@@ -3,6 +3,7 @@ package engine.parser.scripts.nodes;
 import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
 import engine.data.proto.Data;
+import engine.data.structures.Script;
 import engine.data.variables.Variable;
 import engine.parser.tokenization.Token;
 
@@ -16,17 +17,14 @@ public class IdentifierNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance) {
-		Variable variable = null;
-		Instance targetInstance = null;
-		if (target != null) {
-			targetInstance = target.getInstance();
-		}
+	public Variable execute(Instance instance, Script script) {
+		Variable variable;
+		Instance targetInstance = getTargetInstance();
 
-		if (targetInstance != null) { // get value from other instance
+		if (targetInstance != null) { // return variable from an instance
 			variable = targetInstance.getVariable(identifier.getValue());
-		} else if (instance != null) { // get value from self
-			variable = instance.getVariable(identifier.getValue());
+		} else { // retrieve variable from current script scope
+			variable = script.getVariable(identifier.getValue());
 		}
 
 		if (variable != null) {
@@ -34,6 +32,13 @@ public class IdentifierNode extends AbstractScriptNode {
 		} else {
 			return Variable.withName(identifier.getValue());
 		}
+	}
+
+	public Instance getTargetInstance() {
+		if (target != null) {
+			return target.getInstance();
+		}
+		return null;
 	}
 
 	@Override

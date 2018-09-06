@@ -1,6 +1,7 @@
 package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
+import engine.data.structures.Script;
 import engine.data.variables.Variable;
 import engine.parser.scripts.execution.UnaryOperationExecuter;
 import engine.parser.tokenization.Token;
@@ -16,8 +17,8 @@ public class UnaryExpressionNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance) {
-		return UnaryOperationExecuter.executeOperation(instance, this);
+	public Variable execute(Instance instance, Script script) {
+		return UnaryOperationExecuter.executeOperation(instance, script, this);
 	}
 
 	@Override

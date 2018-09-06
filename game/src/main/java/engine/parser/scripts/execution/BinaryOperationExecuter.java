@@ -1,6 +1,7 @@
 package engine.parser.scripts.execution;
 
 import engine.data.entities.Instance;
+import engine.data.structures.Script;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.parser.constants.TokenConstants;
@@ -11,17 +12,26 @@ import engine.parser.tokenization.Token;
 
 public class BinaryOperationExecuter {
 
-	public static Variable executeOperation(Instance self, BinaryExpressionNode binaryNode) {
+	public static Variable executeOperation(Instance self, Script script, BinaryExpressionNode binaryNode) {
 		Token operator = binaryNode.getOperator();
-		Variable left = binaryNode.getLeft().execute(self);
+		Variable left = binaryNode.getLeft().execute(self, script);
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& =
 		if (TokenConstants.ASSIGNMENT.equals(operator)) {
-			Variable right = binaryNode.getRight().execute(self);
+			Variable right = binaryNode.getRight().execute(self, script);
 
 			left.copyValue(right);
-			if (self != null && left.hasName()) {
-				self.addVariable(left);
+			if (left.hasName()) { // only if variable has a name!
+				if (binaryNode.getLeft().getClass() == IdentifierNode.class) {
+					Instance targetInstance = ((IdentifierNode) binaryNode.getLeft()).getTargetInstance();
+					if (targetInstance != null) {
+						targetInstance.addVariable(left);
+					} else {
+						script.addVariable(left);
+					}
+				} else {
+					script.addVariable(left);
+				}
 			}
 			return left;
 
@@ -33,11 +43,11 @@ public class BinaryOperationExecuter {
 				((IdentifierNode) binaryNode.getRight()).setTarget(left);
 			}
 
-			return binaryNode.getRight().execute(self);
+			return binaryNode.getRight().execute(self, script);
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& +
 		} else if (TokenConstants.PLUS.equals(operator)) {
-			Variable right = binaryNode.getRight().execute(self);
+			Variable right = binaryNode.getRight().execute(self, script);
 
 			if (left.getType() == DataType.NUMBER && right.getType() == DataType.NUMBER) { // normal addition
 				return new Variable(left.getDouble() + right.getDouble());
@@ -47,19 +57,19 @@ public class BinaryOperationExecuter {
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& -
 		} else if (TokenConstants.MINUS.equals(operator)) {
-			Variable right = binaryNode.getRight().execute(self);
+			Variable right = binaryNode.getRight().execute(self, script);
 
 			return new Variable(left.getDouble() - right.getDouble());
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& >
 		} else if (TokenConstants.GREATER.equals(operator)) {
-			Variable right = binaryNode.getRight().execute(self);
+			Variable right = binaryNode.getRight().execute(self, script);
 
 			return new Variable(left.getDouble() > right.getDouble() ? 1 : 0);
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& <
 		} else if (TokenConstants.LESSER.equals(operator)) {
-			Variable right = binaryNode.getRight().execute(self);
+			Variable right = binaryNode.getRight().execute(self, script);
 
 			return new Variable(left.getDouble() < right.getDouble() ? 1 : 0);
 
@@ -69,7 +79,7 @@ public class BinaryOperationExecuter {
 				return new Variable(0);
 			}
 
-			Variable right = binaryNode.getRight().execute(self);
+			Variable right = binaryNode.getRight().execute(self, script);
 
 			return new Variable(right.isNull() ? 0 : 1);
 
