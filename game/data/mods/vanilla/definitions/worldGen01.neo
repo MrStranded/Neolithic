@@ -4,18 +4,21 @@ WorldGen: genContinental {
 	Script: generate {
 		setWaterLevel(100);
 
-		for (i=0; i<100; i++) {
-			print("i= "+i);
+		for (i=0; i<20; i++) {
 			t = randomTile();
-			createFormation("formMountain", t);
+
+			if (chance(0.5)) {
+				createFormation("formPlateau", t);
+			} else {
+				createFormation("formMountain", t);
+			}
 		}
 	}
 }
 
 Formation: formMountain {
 	Script: place(tile) {
-		height = random(50,250);
-		self->counter = 1;
+		height = random(150,250);
 		self->lift(tile, height);
 	}
 
@@ -23,11 +26,37 @@ Formation: formMountain {
 		if (height > getHeight(tile)) {
 			setHeight(tile, height);
 
-			print("c: "+self->counter++);
+			for (i=0; i<3; i++) {
+				deviation = random(12,32);
+				lift(getNeighbor(tile, i), height - deviation);
+			}
+		}
+	}
+}
+
+Formation: formPlateau {
+	Script: place(tile) {
+		height = random(200,250);
+		direction = random(0,3);
+		self->lift(tile, height, direction);
+	}
+
+	Script: lift(tile, height, direction) {
+		if (height > getHeight(tile)) {
+			setHeight(tile, height);
+
+			newDirection = 0;
+			while (direction == newDirection) {
+				newDirection = random(0,3);
+			}
 
 			for (i=0; i<3; i++) {
-				deviation = random(7,20);
-				lift(getNeighbor(tile, i), height - deviation);
+				if (i == newDirection && chance(0.9)) {
+					lift(getNeighbor(tile, i), height - 1, i);
+				} else {
+					deviation = random(12,32);
+					lift(getNeighbor(tile, i), height - deviation, i);
+				}
 			}
 		}
 	}

@@ -82,7 +82,6 @@ public class Script implements IDInterface {
 	}
 	public void addVariable(Variable variable) {
 		if (!variableStack.empty()) {
-			System.out.println("added variable " + variable + " to script " + textId);
 			variableStack.peek().insert(variable);
 		}
 	}

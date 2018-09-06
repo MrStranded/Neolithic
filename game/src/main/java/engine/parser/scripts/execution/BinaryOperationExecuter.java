@@ -48,6 +48,12 @@ public class BinaryOperationExecuter {
 
 			return new Variable(left.getDouble() - right.getDouble());
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ==
+		} else if (TokenConstants.EQUAL.equals(operator)) {
+			Variable right = binaryNode.getRight().execute(self, script);
+
+			return new Variable(left.equals(right) ? 1 : 0);
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& >
 		} else if (TokenConstants.GREATER.equals(operator)) {
 			Variable right = binaryNode.getRight().execute(self, script);
@@ -80,13 +86,19 @@ public class BinaryOperationExecuter {
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& &&
 		} else if (TokenConstants.AND.equals(operator)) {
-			if (left.isNull()) {
-				return new Variable(0);
-			}
+			if (left.isNull()) { return new Variable(0); }
 
 			Variable right = binaryNode.getRight().execute(self, script);
 
 			return new Variable(right.isNull() ? 0 : 1);
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ||
+		} else if (TokenConstants.OR.equals(operator)) {
+			if (!left.isNull()) { return new Variable(1); }
+
+			Variable right = binaryNode.getRight().execute(self, script);
+
+			return new Variable(!right.isNull() ? 1 : 0);
 
 		}
 

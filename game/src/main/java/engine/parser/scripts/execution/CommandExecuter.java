@@ -28,8 +28,16 @@ public class CommandExecuter {
 		Token command = commandNode.getCommand();
 		Variable[] parameters = ParameterCalculator.calculateParameters(self, script, commandNode);
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& createFormation (String formationTextID, Tile tile)
-		if (TokenConstants.CREATE_FORMATION.equals(command)) {
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance createFormation (String formationTextID, Tile tile)
+		if (TokenConstants.CHANCE.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				double chance = parameters[0].getDouble();
+
+				return new Variable(Math.random() < chance ? 1 : 0);
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance createFormation (String formationTextID, Tile tile)
+		} else if (TokenConstants.CREATE_FORMATION.equals(command)) {
 			if (requireParameters(commandNode, 2)) {
 				String formationTextID = parameters[0].getString();
 				int formationID = Data.getContainerID(formationTextID);
@@ -53,7 +61,7 @@ public class CommandExecuter {
 				}
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& getHeight (Tile tile)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getHeight (Tile tile)
 		} else if (TokenConstants.GET_HEIGHT.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
 				Tile tile = parameters[0].getTile();
@@ -65,7 +73,7 @@ public class CommandExecuter {
 				return new Variable(tile.getHeight());
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& getNeighbor (Tile tile, int position)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile getNeighbor (Tile tile, int position)
 		} else if (TokenConstants.GET_NEIGHBOUR.equals(command)) {
 			if (requireParameters(commandNode, 2)) {
 				Tile tile = parameters[0].getTile();
@@ -82,7 +90,7 @@ public class CommandExecuter {
 				return new Variable(Neighbour.getNeighbour(tile, position));
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& print (String text)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string print (String text)
 		} else if (TokenConstants.PRINT.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
 				String text = parameters[0].getString();
@@ -90,22 +98,22 @@ public class CommandExecuter {
 				return new Variable(text);
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& random ([double bottom,] double top)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int random ([int bottom,] int top)
 		} else if (TokenConstants.RANDOM.equals(command)) {
 			if (parameters.length >= 2) {
 				double bottom = parameters[0].getDouble();
 				double top = parameters[1].getDouble();
 
-				double value = bottom + Math.random() * (top - bottom);
+				int value = (int) (bottom + Math.random() * (top - bottom));
 				return new Variable(value);
 			} else if (requireParameters(commandNode, 1)) {
 				double top = parameters[0].getDouble();
 
-				double value = Math.random() * top;
+				int value = (int) (Math.random() * top);
 				return new Variable(value);
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& randomTile ()
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile randomTile ()
 		} else if (TokenConstants.RANDOM_TILE.equals(command)) {
 			Planet planet = Data.getPlanet();
 			if (planet != null) {
@@ -117,7 +125,7 @@ public class CommandExecuter {
 				return new Variable(tile);
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& setHeight (int height)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int setHeight (int height)
 		} else if (TokenConstants.SET_HEIGHT.equals(command)) {
 			if (requireParameters(commandNode, 2)) {
 				Tile tile = parameters[0].getTile();
@@ -132,7 +140,7 @@ public class CommandExecuter {
 				}
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& setWaterLevel (int level)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int setWaterLevel (int level)
 		} else if (TokenConstants.SET_WATER_LEVEL.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
 				Planet planet = Data.getPlanet();

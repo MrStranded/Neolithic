@@ -93,6 +93,21 @@ public class Variable implements IDInterface {
 	}
 
 	// ###################################################################################
+	// ################################ Equality Check ###################################
+	// ###################################################################################
+
+	public boolean equals(Variable other) {
+		switch (type) {
+			case NUMBER:
+				return ((double) value) == other.getDouble();
+			case STRING:
+				return ((String) value).equals(other.getString());
+			default:
+				return ((type == other.type) && (value == other.value));
+		}
+	}
+
+	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 

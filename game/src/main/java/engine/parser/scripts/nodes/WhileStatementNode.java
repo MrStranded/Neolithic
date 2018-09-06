@@ -14,8 +14,11 @@ public class WhileStatementNode extends AbstractScriptNode {
 
 	@Override
 	public Variable execute(Instance instance, Script script) {
-
-		return null;
+		Variable body = new Variable();
+		while (!subNodes[0].execute(instance, script).isNull()) { // condition
+			body = subNodes[1].execute(instance, script); // body
+		}
+		return body;
 	}
 
 	@Override
