@@ -275,23 +275,26 @@ public class PlanetGenerator {
 		if (facePart.getQuarterFaces() != null) {
 			double maxHeight = 0d;
 			double sumHeight = 0d;
+			double maxWaterHeight = 0d;
+			double sumWaterHeight = 0d;
 			RGBA sumColor = new RGBA(0,0,0,1);
 
 			for (FacePart subFace : facePart.getQuarterFaces()) {
 				if (subFace != null) {
 					updateFace(subFace);
 
-					if (subFace.getHeight() > maxHeight) {
-						maxHeight = subFace.getHeight();
-					}
+					if (subFace.getHeight() > maxHeight) { maxHeight = subFace.getHeight(); }
+					if (subFace.getWaterHeight() > maxWaterHeight) { maxWaterHeight = subFace.getWaterHeight(); }
+
 					sumHeight += subFace.getHeight();
+					sumWaterHeight += subFace.getWaterHeight();
 
 					sumColor = sumColor.plus(subFace.getColor());
 				}
 			}
 
 			facePart.setHeight(maxHeight/4d + sumHeight*3d/16d);
-			facePart.setWaterHeight(TopologyConstants.PLANET_OZEAN_HEIGHT);
+			facePart.setWaterHeight(maxWaterHeight/4d + sumWaterHeight*3d/16d);
 			facePart.setColor(sumColor.times(0.25d));
 
 		} else {
@@ -314,8 +317,8 @@ public class PlanetGenerator {
 				waterHeight = tile.getWaterHeight();
 			}
 		} else {
-			if (facePart.getHeight() < TopologyConstants.PLANET_OZEAN_HEIGHT) {
-				waterHeight = TopologyConstants.PLANET_OZEAN_HEIGHT;
+			if (facePart.getHeight() < facePart.getWaterHeight()) {
+				waterHeight = facePart.getWaterHeight();
 			}
 		}
 

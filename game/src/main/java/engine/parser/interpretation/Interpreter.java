@@ -211,6 +211,11 @@ public class Interpreter {
 			if (TokenConstants.COMMA.equals(seperator)) {
 				values[i][1] = consume();
 				consume(TokenConstants.SEMICOLON);
+			} else if (!TokenConstants.SEMICOLON.equals(seperator)) {
+				String errorMessage = "Color values have to be followed by a '" + TokenConstants.SEMICOLON.getValue()
+						+ "' or by a comma and a deviation value, which in turn have to be followed by a semicolon. Line: " + seperator.getLine();
+				Logger.error(errorMessage);
+				throw new Exception(errorMessage);
 			}
 		}
 

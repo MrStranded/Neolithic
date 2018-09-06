@@ -46,6 +46,10 @@ public class TokenNumerifier {
 	 * @return true if the value is legit
 	 */
 	public static boolean requireNumber(Token token, boolean isDouble) {
+		if (token == null) {
+			return false;
+		}
+
 		boolean number = isNumber(token, isDouble);
 
 		if (!number) {

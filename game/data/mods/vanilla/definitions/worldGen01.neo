@@ -16,15 +16,15 @@ Formation: formMountain {
 	Script: place(tile) {
 		height = random(150,256);
 		self->lift(tile, height);
+		self->counter = 1;
 	}
 
 	Script: lift(tile, height) {
 		if (height > getHeight(tile)) {
-			print("height= "+height);
 			setHeight(tile, height);
+print("c: "+self->counter++);
 
 			deviation = random(1,20);
-			print("deviation= "+deviation);
 
 			for (i=0; i<3; i++) {
 				lift(getNeighbor(tile, i), height - deviation);
@@ -33,5 +33,4 @@ Formation: formMountain {
 	}
 }
 
-Tile: tTest {
-}
+Tile: tTest { color {200,10;150,5;30;} }
