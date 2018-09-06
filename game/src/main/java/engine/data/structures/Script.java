@@ -39,7 +39,11 @@ public class Script implements IDInterface {
 				i++;
 			}
 		}
+		System.out.println("---------------------------- S");
 		System.out.println("Running script " + textId);
+		System.out.println("Variables:");
+		self.printVariables();
+		System.out.println("---------------------------- E");
 		root.execute(self);
 	}
 

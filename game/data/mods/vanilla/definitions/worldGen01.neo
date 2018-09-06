@@ -16,7 +16,7 @@ Formation: formMountain {
 	}
 
 	Script: lift(tile, height) {
-		if (height > 0) {
+		if (height > getHeight(tile)) {
 			setHeight(tile, height);
 
 			deviation = random(1,10);

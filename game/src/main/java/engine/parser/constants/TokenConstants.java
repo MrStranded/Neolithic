@@ -56,6 +56,7 @@ public enum TokenConstants {
 
 	// -------------------------------------------------- Retrieval
 	GET_ATTRIBUTE_IN_RANGE  (TokenType.COMMAND, "getAttInRange"),
+	GET_HEIGHT              (TokenType.COMMAND, "getHeight"),
 	GET_ITEM_ATTRIBUTE      (TokenType.COMMAND, "getItemAtt"),
 	GET_LIGHT_LEVEL         (TokenType.COMMAND, "getLightLevel"),
 	GET_NEIGHBOUR           (TokenType.COMMAND, "getNeighbor"), // difference between british english in code and american english in scripts

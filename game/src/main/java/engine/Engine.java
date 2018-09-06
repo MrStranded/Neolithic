@@ -73,6 +73,7 @@ public class Engine {
 		time = System.currentTimeMillis();
 		Instance worldGen = new Instance(Data.getContainerID("genContinental"));
 		worldGen.runScript(ScriptConstants.EVENT_GENERATE_WORLD, null);
+		gaia.updatePlanetMesh();
 		System.out.println("Executing WorldGen Script took: "+(System.currentTimeMillis()-time)+" ms");
 
 		/*

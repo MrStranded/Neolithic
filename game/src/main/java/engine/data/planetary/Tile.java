@@ -93,4 +93,8 @@ public class Tile extends Instance implements IDInterface {
 		return color;
 	}
 
+	public String toString() {
+		return "Tile (face = " + face.getX() + ", " + face.getY() + ", tile = " + getX() + ", " + getY() + ")";
+	}
+
 }

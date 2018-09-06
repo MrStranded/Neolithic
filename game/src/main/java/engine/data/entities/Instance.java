@@ -155,6 +155,10 @@ public class Instance {
 	// ################################ Debugging ########################################
 	// ###################################################################################
 
+	public String toString() {
+		return "Instance (id = " + id + ")";
+	}
+
 	public void printVariables() {
 		IDInterface[] vars = variables.toArray();
 		for (IDInterface idInterface : vars) {

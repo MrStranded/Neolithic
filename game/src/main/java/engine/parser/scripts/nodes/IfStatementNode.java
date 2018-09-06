@@ -15,8 +15,7 @@ public class IfStatementNode extends AbstractScriptNode {
 	@Override
 	public Variable execute(Instance instance) {
 		Variable condition = subNodes[0].execute(instance);
-		System.out.println(condition);
-		System.out.println(condition.isNull());
+		System.out.println(condition); // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& COMMENT!!!!!!!!!!!
 
 		if (!condition.isNull()) {
 			return subNodes[1].execute(instance);

@@ -3,6 +3,7 @@ package engine.logic;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
+import engine.parser.utils.Logger;
 
 public class Neighbour {
 
@@ -66,6 +67,14 @@ public class Neighbour {
 		}
 
 		return neighbours;
+	}
+
+	public static Tile getNeighbour(Tile tile, int position) {
+		if (position < 0 || position > 2) {
+			Logger.error("Invoked Neighbour.getNeighbour() with position value which is outside of [0,2]! Returned null!");
+			return null;
+		}
+		return getNeighbours(tile)[position];
 	}
 
 	private static boolean isOutside(int size, int edge, int reflectedX, int reflectedY) {

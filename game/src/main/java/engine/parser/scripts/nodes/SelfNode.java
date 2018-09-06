@@ -10,7 +10,7 @@ public class SelfNode extends AbstractScriptNode {
 
 	@Override
 	public Variable execute(Instance instance) {
-		return null;
+		return new Variable(instance);
 	}
 
 	@Override

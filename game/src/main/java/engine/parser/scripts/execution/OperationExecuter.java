@@ -28,6 +28,7 @@ public class OperationExecuter {
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ->
 		} else if (TokenConstants.OBJECT_OPERATOR.equals(operator)) {
+			System.out.println("putting " + left + " into " + binaryNode.getRight());
 			if (binaryNode.getRight().getClass() == ScriptCallNode.class) { // script call
 				((ScriptCallNode) binaryNode.getRight()).setTarget(left);
 			} else if (binaryNode.getRight().getClass() == IdentifierNode.class) { // variable
@@ -42,12 +43,27 @@ public class OperationExecuter {
 
 			return new Variable(left.getDouble() - right.getDouble());
 
-
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& >
 		} else if (TokenConstants.GREATER.equals(operator)) {
 			Variable right = binaryNode.getRight().execute(self);
 
 			return new Variable(left.getDouble() > right.getDouble() ? 1 : 0);
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& <
+		} else if (TokenConstants.LESSER.equals(operator)) {
+			Variable right = binaryNode.getRight().execute(self);
+
+			return new Variable(left.getDouble() < right.getDouble() ? 1 : 0);
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& &&
+		} else if (TokenConstants.AND.equals(operator)) {
+			if (left.isNull()) {
+				return new Variable(0);
+			}
+
+			Variable right = binaryNode.getRight().execute(self);
+
+			return new Variable(right.isNull() ? 0 : 1);
 
 		}
 

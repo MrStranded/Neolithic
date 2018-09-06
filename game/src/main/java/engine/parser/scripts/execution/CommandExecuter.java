@@ -8,6 +8,7 @@ import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.Data;
 import engine.data.variables.Variable;
+import engine.logic.Neighbour;
 import engine.parser.utils.Logger;
 import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.nodes.AbstractScriptNode;
@@ -47,6 +48,36 @@ public class CommandExecuter {
 				}
 			}
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& getHeight (Tile tile)
+		} else if (TokenConstants.GET_HEIGHT.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				Tile tile = parameters[0].getTile();
+
+				if (tile == null) {
+					return new Variable(0);
+				}
+
+				System.out.println("h: " + tile.getHeight());
+				return new Variable(tile.getHeight());
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& getNeighbor (Tile tile, int position)
+		} else if (TokenConstants.GET_NEIGHBOUR.equals(command)) {
+			if (requireParameters(commandNode, 2)) {
+				Tile tile = parameters[0].getTile();
+				int position = parameters[1].getInt();
+
+				if (tile == null) {
+					Logger.error("Tile value for command '" + TokenConstants.GET_NEIGHBOUR.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+				if (position < 0 || position > 2) {
+					position = position % 3;
+				}
+
+				return new Variable(Neighbour.getNeighbour(tile, position));
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& random ([double bottom,] double top)
 		} else if (TokenConstants.RANDOM.equals(command)) {
 			if (parameters.length >= 2) {
@@ -82,9 +113,6 @@ public class CommandExecuter {
 
 				if (tile != null) {
 					tile.setHeight(height);
-					if (Data.getPlanet() != null) {
-						Data.getPlanet().updatePlanetMesh();
-					}
 				}
 			}
 
@@ -99,7 +127,6 @@ public class CommandExecuter {
 							tile.setWaterHeight(level);
 						}
 					}
-					planet.updatePlanetMesh();
 				}
 			}
 		}

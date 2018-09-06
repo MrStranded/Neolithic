@@ -131,6 +131,8 @@ public class Variable implements IDInterface {
 				return String.valueOf(value);
 			case STRING:
 				return (String) value;
+			case INSTANCE:
+				return ((Instance) value).toString();
 			default:
 				return "[CANNOT CAST TO STRING]";
 		}
@@ -179,7 +181,7 @@ public class Variable implements IDInterface {
 
 	@Override
 	public IDInterface merge(IDInterface other) {
-		return this;
+		return other; // replace old value with new one
 	}
 
 	// ###################################################################################
@@ -187,7 +189,7 @@ public class Variable implements IDInterface {
 	// ###################################################################################
 
 	public String toString() {
-		String pre = name + " [" + type + "] ";
+		String pre = (name != null? name : "NONAME") + " [" + type + "] ";
 		switch (type) {
 			case NUMBER:
 				return pre+ (Double) value;
@@ -195,6 +197,8 @@ public class Variable implements IDInterface {
 				return pre + (String) value;
 			case TILE:
 				return pre + (Tile) value;
+			case INSTANCE:
+				return pre + (Instance) value;
 			default:
 				return "[UNKNOWN VARIABLE TYPE]";
 		}
