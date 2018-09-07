@@ -4,7 +4,6 @@ import engine.data.entities.Instance;
 import engine.data.structures.Script;
 import engine.data.variables.Variable;
 import engine.parser.scripts.nodes.AbstractScriptNode;
-import engine.parser.scripts.nodes.CommandExpressionNode;
 
 public class ParameterCalculator {
 

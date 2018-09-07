@@ -8,7 +8,6 @@ import engine.data.proto.Container;
 import engine.data.proto.Data;
 import engine.data.proto.TileContainer;
 import engine.data.variables.DataType;
-import engine.graphics.renderer.color.RGBA;
 
 import java.util.List;
 

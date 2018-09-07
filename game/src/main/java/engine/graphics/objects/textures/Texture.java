@@ -2,9 +2,7 @@ package engine.graphics.objects.textures;
 
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL30;
 
 import java.io.IOException;
 import java.io.InputStream;

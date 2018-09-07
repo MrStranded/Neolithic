@@ -1,8 +1,6 @@
 package engine.graphics.objects.models;
 
-import engine.graphics.objects.textures.Texture;
 import engine.graphics.renderer.color.RGBA;
-import engine.graphics.renderer.shaders.ShaderProgram;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.MemoryUtil;
 
@@ -230,20 +228,20 @@ public class Mesh {
 
 		// find out the dimenstions of the mesh
 		int dimension = 0;
-		for (int i=0; i<vertices.length; i++) {
+		for (float vertex : vertices) {
 			if (dimension == 0) { // X dimension
-				if (vertices[i] < leftMost) {
-					leftMost = vertices[i];
+				if (vertex < leftMost) {
+					leftMost = vertex;
 				}
-				if (vertices[i] > rightMost) {
-					rightMost = vertices[i];
+				if (vertex > rightMost) {
+					rightMost = vertex;
 				}
 			} else if (dimension == 1) { // Y dimension
-				if (vertices[i] < bottomMost) {
-					bottomMost = vertices[i];
+				if (vertex < bottomMost) {
+					bottomMost = vertex;
 				}
-				if (vertices[i] > topMost) {
-					topMost = vertices[i];
+				if (vertex > topMost) {
+					topMost = vertex;
 				}
 			}
 

@@ -2,9 +2,7 @@ package engine.graphics.gui;
 
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.gui.TextObject;
-import engine.graphics.objects.generators.MeshGenerator;
 import engine.graphics.objects.textures.FontTexture;
-import load.TextureLoader;
 
 import java.awt.*;
 

@@ -8,7 +8,6 @@ import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.*;
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.light.*;
-import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
@@ -23,8 +22,6 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
 import static java.lang.System.exit;
 

@@ -7,7 +7,6 @@ import engine.parser.constants.TokenType;
 import engine.parser.interpretation.Interpreter;
 import engine.parser.scripts.nodes.*;
 import engine.parser.tokenization.Token;
-import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.List;

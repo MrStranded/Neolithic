@@ -1,7 +1,6 @@
 package engine.data.proto;
 
 import engine.data.ContainerIdentifier;
-import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 
 import java.util.ArrayList;

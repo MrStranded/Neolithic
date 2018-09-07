@@ -1,7 +1,6 @@
 package engine.graphics.objects.movement;
 
 import constants.GraphicalConstants;
-import engine.graphics.objects.GraphicalObject;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
 import engine.math.Transformations;

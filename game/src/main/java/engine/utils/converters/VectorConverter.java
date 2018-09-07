@@ -2,7 +2,6 @@ package engine.utils.converters;
 
 import engine.math.numericalObjects.Vector2;
 import engine.math.numericalObjects.Vector3;
-import org.lwjgl.system.CallbackI;
 
 import java.util.List;
 

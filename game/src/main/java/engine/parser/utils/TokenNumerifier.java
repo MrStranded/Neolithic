@@ -31,9 +31,7 @@ public class TokenNumerifier {
 				}
 			}
 
-			if (isNumber) {
-				return true;
-			}
+			return isNumber;
 		}
 		return false;
 	}

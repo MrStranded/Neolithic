@@ -1,10 +1,6 @@
 package tests.parser;
 
 import engine.Engine;
-import engine.data.entities.Instance;
-import engine.data.proto.Data;
-import engine.data.variables.Variable;
-import engine.parser.interpretation.Interpreter;
 
 public class ParserTest {
 

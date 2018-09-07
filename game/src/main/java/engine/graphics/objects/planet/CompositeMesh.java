@@ -80,9 +80,7 @@ public class CompositeMesh {
 		int newSize = subMeshes.length + GraphicalConstants.COMPOSITE_MESH_SIZE_CHANGE;
 		CompositeMesh[] newSubMeshes = new CompositeMesh[newSize];
 
-		for (int i=0; i<subMeshes.length; i++) {
-			newSubMeshes[i] = subMeshes[i];
-		}
+		System.arraycopy(subMeshes, 0, newSubMeshes, 0, subMeshes.length);
 
 		subMeshes = newSubMeshes;
 	}

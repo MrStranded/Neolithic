@@ -1,9 +1,6 @@
 package engine.graphics.objects;
 
-import constants.GraphicalConstants;
-import engine.graphics.objects.textures.Texture;
 import engine.graphics.objects.movement.MoveableObject;
-import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Vector3;
 import engine.graphics.objects.models.Mesh;
 

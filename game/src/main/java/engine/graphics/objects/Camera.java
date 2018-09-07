@@ -1,7 +1,6 @@
 package engine.graphics.objects;
 
 import engine.graphics.objects.movement.MoveableCamera;
-import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
 
 public class Camera extends MoveableCamera {

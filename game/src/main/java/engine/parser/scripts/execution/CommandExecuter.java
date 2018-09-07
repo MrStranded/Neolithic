@@ -6,7 +6,6 @@ import engine.data.entities.Instance;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
-import engine.data.proto.Container;
 import engine.data.proto.Data;
 import engine.data.structures.Script;
 import engine.data.variables.Variable;
@@ -14,12 +13,8 @@ import engine.logic.Neighbour;
 import engine.logic.TopologyGenerator;
 import engine.parser.utils.Logger;
 import engine.parser.constants.TokenConstants;
-import engine.parser.scripts.nodes.AbstractScriptNode;
 import engine.parser.scripts.nodes.CommandExpressionNode;
 import engine.parser.tokenization.Token;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CommandExecuter {
 

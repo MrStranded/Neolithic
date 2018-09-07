@@ -1,10 +1,8 @@
 package engine.data.variables;
 
 import engine.data.IDInterface;
-import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
 import engine.data.planetary.Tile;
-import engine.data.proto.Data;
 import engine.utils.converters.StringConverter;
 
 public class Variable implements IDInterface {
@@ -74,15 +72,9 @@ public class Variable implements IDInterface {
 	public boolean isNull() {
 		switch (type) {
 			case NUMBER:
-				if (value == null || (Double) value == 0d) {
-					return true;
-				}
-				return false;
+				return (value == null || (Double) value == 0d);
 			case STRING:
-				if (value == null || ((String) value).length() == 0) {
-					return true;
-				}
-				return false;
+				return (value == null || ((String) value).length() == 0);
 			default:
 				return (value == null);
 		}

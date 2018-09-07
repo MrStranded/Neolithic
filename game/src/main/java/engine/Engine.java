@@ -2,25 +2,14 @@ package engine;
 
 import constants.ScriptConstants;
 import engine.data.entities.Instance;
-import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
-import engine.data.planetary.Tile;
-import engine.data.proto.Container;
 import engine.data.proto.Data;
-import engine.data.structures.Script;
-import engine.data.variables.DataType;
 import engine.graphics.gui.BaseGUI;
 import engine.graphics.gui.GUIInterface;
-import engine.graphics.objects.GraphicalObject;
-import engine.graphics.objects.MeshHub;
 import engine.graphics.objects.Scene;
 import engine.graphics.gui.window.Window;
 import engine.graphics.renderer.Renderer;
-import engine.logic.TopologyGenerator;
 import engine.parser.Parser;
-import load.OBJLoader;
-
-import java.util.List;
 
 /**
  * The engine binds the whole thing together.

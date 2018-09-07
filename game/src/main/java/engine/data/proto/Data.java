@@ -1,7 +1,6 @@
 package engine.data.proto;
 
 import constants.GameConstants;
-import engine.data.attributes.Attribute;
 import engine.data.planetary.Planet;
 import engine.data.variables.DataType;
 import engine.graphics.objects.MeshHub;

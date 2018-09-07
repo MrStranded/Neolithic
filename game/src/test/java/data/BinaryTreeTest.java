@@ -5,8 +5,7 @@ import engine.data.attributes.Attribute;
 import engine.data.structures.trees.binary.BinaryTree;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BinaryTreeTest {
 
@@ -19,12 +18,12 @@ public class BinaryTreeTest {
 		tree.insert(new Attribute(-100));
 		tree.insert(new Attribute(7));
 
-		assertTrue(tree.get(0) != null);
-		assertTrue(tree.get(1) != null);
-		assertTrue(tree.get(7) != null);
-		assertTrue(tree.get(-100) != null);
+		assertNotNull(tree.get(0));
+		assertNotNull(tree.get(1));
+		assertNotNull(tree.get(7));
+		assertNotNull(tree.get(-100));
 
-		assertTrue(tree.get(3) == null);
+		assertNull(tree.get(3));
 
 		Attribute[] attributes = new Attribute[5];
 		attributes[0] = new Attribute(8);
@@ -33,9 +32,9 @@ public class BinaryTreeTest {
 
 		tree.insert(attributes);
 
-		assertTrue(tree.get(8) != null);
-		assertTrue(tree.get(14) != null);
-		assertTrue(tree.get(-1) != null);
+		assertNotNull(tree.get(8));
+		assertNotNull(tree.get(14));
+		assertNotNull(tree.get(-1));
 	}
 
 	@Test
@@ -47,7 +46,7 @@ public class BinaryTreeTest {
 		tree.insert(new Attribute(-3));
 		tree.insert(new Attribute(2));
 
-		assertTrue(tree.get(2) != null);
+		assertNotNull(tree.get(2));
 		assertEquals(3, tree.size());
 	}
 
@@ -67,7 +66,7 @@ public class BinaryTreeTest {
 
 		t1.insert(t2);
 
-		assertTrue(t1.get(3) != null);
+		assertNotNull(t1.get(3));
 		assertEquals(5, t1.size());
 	}
 
@@ -83,7 +82,7 @@ public class BinaryTreeTest {
 
 		assertEquals(a1, tree.get(123));
 		assertEquals(a2, tree.get(-123));
-		assertEquals(null, tree.get(0));
+		assertNull(tree.get(0));
 	}
 
 	@Test

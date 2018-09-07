@@ -10,7 +10,6 @@ import engine.graphics.objects.MeshHub;
 import engine.graphics.renderer.color.RGBA;
 import engine.parser.utils.Logger;
 import engine.parser.constants.TokenConstants;
-import engine.parser.constants.TokenType;
 import engine.parser.scripts.ASTBuilder;
 import engine.parser.tokenization.Token;
 import engine.parser.utils.TokenNumerifier;
