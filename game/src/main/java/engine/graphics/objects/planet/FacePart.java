@@ -55,7 +55,6 @@ public class FacePart {
 				}
 				waterMesh.render(true);
 			}
-
 		} else {
 			if (waterMesh == null) {
 				if (putDataIntoShader) {
@@ -66,7 +65,6 @@ public class FacePart {
 				}
 				mesh.render(true);
 			}
-
 		}
 		// render all objects on the current tile, but only if we're in the real draw situation (not shadow map drawing)
 		if (tile != null && putDataIntoShader) {

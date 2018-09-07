@@ -11,6 +11,7 @@ import engine.data.proto.Data;
 import engine.data.structures.Script;
 import engine.data.variables.Variable;
 import engine.logic.Neighbour;
+import engine.logic.TopologyGenerator;
 import engine.parser.utils.Logger;
 import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.nodes.AbstractScriptNode;
@@ -59,6 +60,12 @@ public class CommandExecuter {
 						Logger.error("Cannot create Formation: Not a valid tile value.");
 					}
 				}
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int fitTiles ()
+		} else if (TokenConstants.FIT_TILES.equals(command)) {
+			if (Data.getPlanet() != null) {
+				TopologyGenerator.fitTiles(Data.getPlanet());
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getHeight (Tile tile)

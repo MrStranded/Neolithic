@@ -7,6 +7,7 @@ import engine.parser.constants.TokenType;
 import engine.parser.interpretation.Interpreter;
 import engine.parser.scripts.nodes.*;
 import engine.parser.tokenization.Token;
+import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,12 +105,22 @@ public class ASTBuilder {
 		interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
 
 		MultiStatementNode body = readMultiStatement();
-		MultiStatementNode elseBody = null;
+		AbstractScriptNode elseBody = null;
 
 		Token next = interpreter.peek();
 		if (TokenConstants.ELSE.equals(next)) {
 			interpreter.consume();
-			elseBody = readMultiStatement();
+			Token nextNext = interpreter.peek();
+			if (TokenConstants.IF.equals(nextNext)) {
+				elseBody = readIfStatement();
+			} else if (TokenConstants.CURLY_BRACKETS_OPEN.equals(nextNext)) {
+				elseBody = readMultiStatement();
+			} else {
+				String errorMessage = "After 'else' on line " + next.getLine() + " has to come either another 'if' statement or the body of the else statement. "
+						+ "'" + nextNext.getValue() + "' is not allowed here.";
+				Logger.error(errorMessage);
+				throw new Exception(errorMessage);
+			}
 		}
 
 		return new IfStatementNode(expressionNode, body, elseBody);

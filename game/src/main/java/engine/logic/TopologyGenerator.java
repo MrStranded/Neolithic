@@ -45,6 +45,14 @@ public class TopologyGenerator {
 			}
 		}
 
+		fitTiles(planet);
+	}
+
+	/**
+	 * Iterates over each tile and assigns best fitting tile type to it.
+	 * @param planet to fit tiles on
+	 */
+	public static void fitTiles(Planet planet) {
 		List<Container> tileList = Data.getContainersOfType(DataType.TILE);
 		for (Face face : planet.getFaces()) {
 			for (Tile tile : face.getTiles()) {
@@ -63,7 +71,7 @@ public class TopologyGenerator {
 	 * @param tileList
 	 * @return
 	 */
-	public static int calculateBestTile(int height, List<Container> tileList) {
+	private static int calculateBestTile(int height, List<Container> tileList) {
 		Container closest = null;
 		int closestDistance = 255;
 

@@ -58,13 +58,7 @@ public class Engine {
 
 		gaia = new Planet(32);
 		Data.setPlanet(gaia);
-
-		List<Container> tileList = Data.getContainersOfType(DataType.TILE);
-		for (Face face : gaia.getFaces()) {
-			for (Tile tile : face.getTiles()) {
-				tile.setId(TopologyGenerator.calculateBestTile(0,tileList));
-			}
-		}
+		//TopologyGenerator.fitTiles(gaia);
 
 		long time = System.currentTimeMillis();
 		gaia.generatePlanetMesh();

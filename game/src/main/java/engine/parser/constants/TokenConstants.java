@@ -51,6 +51,7 @@ public enum TokenConstants {
 
 	// -------------------------------------------------- Planet Manipulation
 	CREATE_FORMATION    (TokenType.COMMAND, "createFormation"),
+	FIT_TILES           (TokenType.COMMAND, "fitTiles"),
 	SET_HEIGHT          (TokenType.COMMAND, "setHeight"),
 	SET_WATER_LEVEL     (TokenType.COMMAND, "setWaterLevel"),
 
