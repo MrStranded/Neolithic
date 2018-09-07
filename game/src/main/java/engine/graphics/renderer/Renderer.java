@@ -3,7 +3,7 @@ package engine.graphics.renderer;
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
 import engine.data.planetary.Planet;
-import engine.data.proto.Data;
+import engine.data.Data;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.*;
 import engine.graphics.objects.gui.GUIObject;

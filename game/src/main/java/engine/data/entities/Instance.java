@@ -4,7 +4,7 @@ import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
-import engine.data.proto.Data;
+import engine.data.Data;
 import engine.data.structures.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.Variable;

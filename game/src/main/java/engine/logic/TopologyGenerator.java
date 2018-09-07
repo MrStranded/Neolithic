@@ -5,7 +5,7 @@ import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
-import engine.data.proto.Data;
+import engine.data.Data;
 import engine.data.proto.TileContainer;
 import engine.data.variables.DataType;
 

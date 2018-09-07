@@ -1,14 +1,14 @@
-package engine.data.proto;
+package engine.data;
 
 import constants.GameConstants;
+import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
+import engine.data.proto.Container;
+import engine.data.proto.ProtoAttribute;
 import engine.data.variables.DataType;
 import engine.graphics.objects.MeshHub;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Data {
 
@@ -22,6 +22,8 @@ public class Data {
 
 	private static HashMap<String, MeshHub> meshHubs;
 
+	private static Queue<Instance> creatureQueue;
+
 	// ###################################################################################
 	// ################################ Initialization ###################################
 	// ###################################################################################
@@ -34,6 +36,8 @@ public class Data {
 		attributes = new ProtoAttribute[GameConstants.MAX_ATTRIBUTES];
 
 		meshHubs = new HashMap<>(GameConstants.MAX_CONTAINERS);
+
+		creatureQueue = new LinkedList<>();
 	}
 
 	// ###################################################################################
@@ -216,5 +220,9 @@ public class Data {
 	}
 	public static void setPlanet(Planet planet) {
 		Data.planet = planet;
+	}
+
+	public static Queue<Instance> getCreatureQueue() {
+		return creatureQueue;
 	}
 }

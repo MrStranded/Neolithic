@@ -1,7 +1,6 @@
 package engine.data;
 
 import engine.data.proto.Container;
-import engine.data.proto.Data;
 
 public class ContainerIdentifier {
 

@@ -3,7 +3,7 @@ package engine.parser.scripts.nodes;
 import engine.data.entities.Instance;
 import engine.data.planetary.Face;
 import engine.data.planetary.Tile;
-import engine.data.proto.Data;
+import engine.data.Data;
 import engine.data.structures.Script;
 import engine.data.variables.Variable;
 import engine.parser.constants.TokenConstants;

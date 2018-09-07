@@ -1,6 +1,6 @@
 package parser;
 
-import engine.data.proto.Data;
+import engine.data.Data;
 import engine.parser.constants.TokenType;
 import engine.parser.interpretation.Interpreter;
 import engine.parser.tokenization.Token;

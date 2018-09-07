@@ -10,6 +10,11 @@ Tile: tDirt {
 		150;
 		30,10;
 	}
+	sideColor {
+		120,10;
+		110,10;
+		90;
+	}
 
 	Script: tick {
 		if (chance(0.01)) {
@@ -25,7 +30,14 @@ Tile: tGras {
 	preferredHeightBlur = 20;
 
 	topColor {
-		120,10;200,15;50;
+		120,10;
+		200,15;
+		50;
+	}
+	sideColor {
+		100,10;
+		90,10;
+		80;
 	}
 
 	attributes {
@@ -67,9 +79,10 @@ Creature: cDuck {
 	}
 
 	Script: tick {
-		if (chance(0.1)) {
-			self->attNutrition -= 1;
-		}
+		//if (chance(0.1)) {
+			//self->attNutrition -= 1;
+		//}
+		moveTo(self, getNeighbor(getTile(self), random(3));
 	}
 }
 
@@ -134,7 +147,7 @@ Entity: entFruit {
 	}
 
 	Script: consume(actor) {
-		actor->attNutrition += self->attNutrition;
+		//actor->attNutrition += self->attNutrition;
 		destroy(self);
 	}
 }
@@ -168,8 +181,8 @@ Process: proPhotoSynthesis {
 		require(getTile(self)->attHumidity >= 20);
 	}
 	Script: product {
-		getTile(self)->attHumidity -= 5;
-		self->attNutrition += 5;
+		//getTile(self)->attHumidity -= 5;
+		//self->attNutrition += 5;
 	}
 
 	alternatives {} // there is no way for a plant to create light (currently?)

@@ -3,7 +3,7 @@ package engine.data.planetary;
 import constants.TopologyConstants;
 import engine.data.IDInterface;
 import engine.data.entities.Instance;
-import engine.data.proto.Data;
+import engine.data.Data;
 import engine.data.proto.TileContainer;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.renderer.color.RGBA;

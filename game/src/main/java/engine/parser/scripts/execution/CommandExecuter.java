@@ -6,8 +6,9 @@ import engine.data.entities.Instance;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
-import engine.data.proto.Data;
+import engine.data.Data;
 import engine.data.structures.Script;
+import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.logic.Neighbour;
 import engine.logic.TopologyGenerator;
@@ -33,26 +34,29 @@ public class CommandExecuter {
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance createFormation (String formationTextID, Tile tile)
-		} else if (TokenConstants.CREATE_FORMATION.equals(command)) {
+		} else if (TokenConstants.CREATE.equals(command)) {
 			if (requireParameters(commandNode, 2)) {
-				String formationTextID = parameters[0].getString();
-				int formationID = Data.getContainerID(formationTextID);
+				String testID = parameters[0].getString();
+				int id = Data.getContainerID(testID);
 				Tile tile = parameters[1].getTile();
 
-				if (formationID >= 0 && tile != null) {
-					Instance formationInstance = new Instance(formationID);
+				if (id >= 0 && tile != null) {
+					Instance instance = new Instance(id);
 					Variable[] newParameters = new Variable[1];
 					newParameters[0] = parameters[1];
 
-					formationInstance.runScript(ScriptConstants.EVENT_PLACE_FORMATION, newParameters);
+					instance.runScript(ScriptConstants.EVENT_PLACE, newParameters);
+					if (Data.getContainer(id).getType() == DataType.CREATURE) {
+						// add to tick queue
+					}
 
-					return new Variable(formationInstance);
+					return new Variable(instance);
 				} else {
-					if (formationID == -1) {
-						Logger.error("Cannot create Formation: Formation '" + formationTextID + "' does not exist. Line " + command.getLine());
+					if (id == -1) {
+						Logger.error("Cannot create Instance: Template for '" + testID + "' does not exist. Line " + command.getLine());
 					}
 					if (tile == null) {
-						Logger.error("Cannot create Formation: Not a valid tile value.");
+						Logger.error("Cannot create Instance: Not a valid tile value.");
 					}
 				}
 			}
@@ -90,6 +94,12 @@ public class CommandExecuter {
 				}
 
 				return new Variable(Neighbour.getNeighbour(tile, position));
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile moveTo (Instance instance, Tile tile)
+		} else if (TokenConstants.MOVE_TO.equals(command)) {
+			if (requireParameters(commandNode, 2)) {
+				// implemt plz
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string print (String text)

@@ -7,10 +7,11 @@ WorldGen: genContinental {
 		for (t : eachTile) {
 			if (chance(0.01)) { // 1% chance
 				if (chance(0.5)) {
-					createFormation("formPlateau", t);
+					create("formPlateau", t);
 				} else {
-					createFormation("formHill", t);
+					create("formHill", t);
 				}
+				create("cDuck",t);
 			}
 		}
 
@@ -59,14 +60,4 @@ Formation: formPlateau {
 			}
 		}
 	}
-}
-
-Tile: tDirt {
-	preferredHeight = 100, 10;
-	topColor {200,10;150,5;30;}
-}
-Tile: tGras {
-	preferredHeight = 130, 10;
-	topColor {80,10;150,10;50;}
-	sideColor {100,5;100,5;100,5;}
 }

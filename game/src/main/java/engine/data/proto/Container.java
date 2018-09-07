@@ -1,5 +1,6 @@
 package engine.data.proto;
 
+import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.attributes.PreAttribute;

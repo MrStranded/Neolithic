@@ -3,7 +3,7 @@ package engine;
 import constants.ScriptConstants;
 import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
-import engine.data.proto.Data;
+import engine.data.Data;
 import engine.graphics.gui.BaseGUI;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.Scene;

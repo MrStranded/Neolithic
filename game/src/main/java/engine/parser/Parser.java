@@ -3,6 +3,7 @@ package engine.parser;
 import constants.ResourcePathConstants;
 import constants.ScriptConstants;
 import engine.data.ContainerIdentifier;
+import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.proto.*;
@@ -53,11 +54,8 @@ public class Parser {
 
 		for (File file : definitionsFolder.listFiles()) {
 			if (file.isFile() && file.getName().endsWith(ScriptConstants.SCRIPT_FILE_SUFFIX)) {
-				// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Big Temporary Hack
-				if (file.getName().equals("worldGen01.neo")) { // <- this right here
-					System.out.println("load file: " + file.getName());
-					loadFile(file, mod);
-				}
+				System.out.println("load file: " + file.getName());
+				loadFile(file, mod);
 			}
 		}
 	}
