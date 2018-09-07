@@ -48,7 +48,7 @@ public class FacePart {
 		if (drawWater) {
 			if (waterMesh != null) {
 				if (putDataIntoShader) {
-					shaderProgram.setUniform("color", waterMesh.getColor());
+					//shaderProgram.setUniform("color", waterMesh.getColor());
 					if (waterMesh.getMaterial() != null) {
 						shaderProgram.setUniform("material", waterMesh.getMaterial());
 					}
@@ -58,7 +58,7 @@ public class FacePart {
 		} else {
 			if (waterMesh == null) {
 				if (putDataIntoShader) {
-					shaderProgram.setUniform("color", mesh.getColor());
+					//shaderProgram.setUniform("color", mesh.getColor());
 					if (mesh.getMaterial() != null) {
 						shaderProgram.setUniform("material", mesh.getMaterial());
 					}

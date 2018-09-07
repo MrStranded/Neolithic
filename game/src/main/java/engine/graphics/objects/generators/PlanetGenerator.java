@@ -10,6 +10,7 @@ import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.color.RGBA;
 import engine.logic.Neighbour;
 import engine.math.numericalObjects.Vector3;
+import engine.utils.converters.ColorConverter;
 import engine.utils.converters.IntegerConverter;
 import engine.utils.converters.VectorConverter;
 
@@ -65,6 +66,7 @@ public class PlanetGenerator {
 	// ###################################################################################
 
 	private Mesh createTile(FacePart facePart, Tile tile, boolean smallest, boolean water) {
+		// ------------------------------------- vector value setup
 		double height;
 		if (water) {
 			height = facePart.getWaterHeight();
@@ -94,6 +96,19 @@ public class PlanetGenerator {
 		midToSide[1] = facePart.getCorner2().plus(facePart.getCorner3()).minus(mid).normalize();
 		midToSide[2] = facePart.getCorner3().plus(facePart.getCorner1()).minus(mid).normalize();
 
+		// ------------------------------------- color value setup
+		RGBA topColor, bottomColor;
+		if (water) {
+			topColor = TopologyConstants.WATER_DEFAULT_COLOR;
+		} else {
+			if (facePart.getColor() != null) {
+				topColor = facePart.getColor();
+			} else {
+				topColor = TopologyConstants.TILE_DEFAULT_COLOR;
+			}
+		}
+		bottomColor = topColor.times(0.5d);
+
 		// ------------------------------------- vertices set up (top triangle)
 		List<Vector3> vectorList = new ArrayList<>(15);
 		vectorList.add(upper[0]);
@@ -111,6 +126,12 @@ public class PlanetGenerator {
 		normalList.add(normal);
 		normalList.add(normal);
 		normalList.add(normal);
+
+		// ------------------------------------- colors set up (top triangle)
+		List<RGBA> colorList = new ArrayList<>(15);
+		colorList.add(topColor);
+		colorList.add(topColor);
+		colorList.add(topColor);
 
 		// ------------------------------------- neighbour retrieval and side mesh build up
 		Tile[] neighbours = null;
@@ -155,6 +176,11 @@ public class PlanetGenerator {
 				normalList.add(midToSide[i]);
 				normalList.add(midToSide[i]);
 
+				colorList.add(bottomColor);
+				colorList.add(bottomColor);
+				colorList.add(bottomColor);
+				colorList.add(bottomColor);
+
 				// side mesh indices
 				indicesList.add(index);
 				indicesList.add(index + 1);
@@ -176,23 +202,24 @@ public class PlanetGenerator {
 		// ------------------------------------- normals
 		float[] normals = VectorConverter.Vector3ListToFloatArray(normalList);
 
+		// ------------------------------------- normals
+		float[] colors = ColorConverter.RGBAListToFloatArray(colorList);
+
 		// ------------------------------------- texture coordinates
 		float[] textureCoordniates = new float[vertices.length]; // no texture support for planets so far
 
 		Mesh mesh;
 		if (water) { // create water mesh
-			mesh = new Mesh(vertices, indices, normals, textureCoordniates);
-			mesh.setColor(TopologyConstants.WATER_DEFAULT_COLOR);
+			mesh = new Mesh(vertices, indices, normals, textureCoordniates, colors);
+			//mesh.setColor(TopologyConstants.WATER_DEFAULT_COLOR);
 			mesh.setMaterial(waterMaterial);
-
 		} else { // create land mesh
-			mesh = new Mesh(vertices, indices, normals, textureCoordniates);
-			if (facePart.getColor() != null) {
+			mesh = new Mesh(vertices, indices, normals, textureCoordniates, colors);
+			/*if (facePart.getColor() != null) {
 				mesh.setColor(facePart.getColor());
 			} else {
 				mesh.setColor(TopologyConstants.TILE_DEFAULT_COLOR);
-			}
-
+			}*/
 		}
 
 		return mesh;

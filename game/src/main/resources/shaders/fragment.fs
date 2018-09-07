@@ -51,6 +51,7 @@ struct Material {
 in vec3 outPosition;
 in vec3 outNormal;
 in vec2 outTextureCoordinates;
+in vec4 outColor;
 
 in vec4 lightPosition;
 
@@ -59,7 +60,7 @@ out vec4 fragmentColor;
 // ----------- uniforms
 
 uniform sampler2D textureSampler;
-uniform vec4 color;
+//uniform vec4 color;
 uniform int affectedByLight;
 
 uniform sampler2D shadowSampler;
@@ -227,8 +228,8 @@ void main() {
             }
         }
 
-        fragmentColor = color * (ambientC * ambientLight + pointLightColor + spotLightColor + shadowFactor * directionalLightColor);
+        fragmentColor = outColor * (ambientC * ambientLight + pointLightColor + spotLightColor + shadowFactor * directionalLightColor);
     } else {
-        fragmentColor = color * ambientC;
+        fragmentColor = outColor * ambientC;
     }
 }

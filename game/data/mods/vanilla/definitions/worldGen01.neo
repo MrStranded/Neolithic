@@ -67,5 +67,5 @@ Tile: tDirt {
 }
 Tile: tGras {
 	preferredHeight = 130, 10;
-	color {80,10;200,5;50;}
+	color {80,10;150,10;50;}
 }

@@ -14,9 +14,10 @@ public class Mesh {
 	private final int indicesVboId; // Indices Vertex Buffer Object Id
 	private final int normalsVboId; // Colors Vertex Buffer Object Id
 	private final int textureVboId; // Texture Coordinates Vertex Buffer Object Id
+	private final int colorVboId; // Color Vertex Buffer Object Id
 
 	private Material material; // the Material, containing also the texture
-	private RGBA color; // color of the mesh
+	//private RGBA color; // color of the mesh
 
 	private final int vertexCount;
 
@@ -24,15 +25,17 @@ public class Mesh {
 	private int[] indices;
 	private float[] normals;
 	private float[] textureCoordinates;
+	private float[] colors;
 
-	public Mesh(float[] vertices, int[] indices, float[] normals, float[] textureCoordinates) {
+	public Mesh(float[] vertices, int[] indices, float[] normals, float[] textureCoordinates, float[] colors) {
 		this.vertices = vertices;
 		this.indices = indices;
 		this.normals = normals;
 		this.textureCoordinates = textureCoordinates;
+		this.colors = colors;
 
 		material = new Material();
-		color = new RGBA(1,1,1,1);
+		//color = new RGBA(1,1,1,1);
 
 		// set up static data
 
@@ -53,6 +56,9 @@ public class Mesh {
 		// ------------------ texture part
 		textureVboId = GL15.glGenBuffers();
 
+		// ------------------ color part
+		colorVboId = GL15.glGenBuffers();
+
 		// register mesh data
 		registerData();
 	}
@@ -62,6 +68,7 @@ public class Mesh {
 		IntBuffer indicesBuffer = null;
 		FloatBuffer normalsBuffer = null;
 		FloatBuffer textureBuffer = null;
+		FloatBuffer colorsBuffer = null;
 
 		try {
 			// ------------------ whole object
@@ -101,6 +108,15 @@ public class Mesh {
 
 			GL20.glVertexAttribPointer(2, 2, GL11.GL_FLOAT, false, 0, 0);
 
+			// ------------------ color part
+			colorsBuffer = MemoryUtil.memAllocFloat(colors.length);
+			colorsBuffer.put(colors).flip();
+
+			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, colorVboId);
+			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colorsBuffer, GL15.GL_STATIC_DRAW);
+
+			GL20.glVertexAttribPointer(3, 4, GL11.GL_FLOAT, false, 0, 0);
+
 			// ------------------ unbind
 			// Unbind the VBO
 			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
@@ -120,6 +136,9 @@ public class Mesh {
 			}
 			if (textureBuffer != null) {
 				MemoryUtil.memFree(textureBuffer);
+			}
+			if (colorsBuffer != null) {
+				MemoryUtil.memFree(colorsBuffer);
 			}
 		}
 	}
@@ -145,6 +164,7 @@ public class Mesh {
 		GL20.glEnableVertexAttribArray(0);
 		GL20.glEnableVertexAttribArray(1);
 		GL20.glEnableVertexAttribArray(2);
+		GL20.glEnableVertexAttribArray(3);
 
 		if (!useDepthTest) {
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -161,6 +181,7 @@ public class Mesh {
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);
 		GL20.glDisableVertexAttribArray(2);
+		GL20.glDisableVertexAttribArray(3);
 		GL30.glBindVertexArray(0);
 	}
 
@@ -179,6 +200,7 @@ public class Mesh {
 		GL20.glEnableVertexAttribArray(0);
 		GL20.glEnableVertexAttribArray(1);
 		GL20.glEnableVertexAttribArray(2);
+		GL20.glEnableVertexAttribArray(3);
 	}
 
 	/**
@@ -199,6 +221,7 @@ public class Mesh {
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);
 		GL20.glDisableVertexAttribArray(2);
+		GL20.glDisableVertexAttribArray(3);
 		GL30.glBindVertexArray(0);
 	}
 
@@ -294,16 +317,19 @@ public class Mesh {
 	// ###################################################################################
 
 	public void setColor(RGBA color) {
-		this.color = color;
+		setColor((float) color.getR(), (float) color.getG(), (float) color.getB(), (float) color.getA());
 	}
 	public void setColor(float r, float g, float b) {
-		color = new RGBA(r,g,b);
+		setColor(r, g, b, 1);
 	}
 	public void setColor(float r, float g, float b, float a) {
-		color = new RGBA(r,g,b,a);
-	}
-	public RGBA getColor() {
-		return color;
+		for (int i=0; i<colors.length/4; i++) {
+			colors[i*4 + 0] = r;
+			colors[i*4 + 1] = g;
+			colors[i*4 + 2] = b;
+			colors[i*4 + 3] = a;
+		}
+		registerData();
 	}
 
 	public Material getMaterial() {

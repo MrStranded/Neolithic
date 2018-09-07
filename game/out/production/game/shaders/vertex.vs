@@ -3,10 +3,12 @@
 in vec3 inPosition;
 in vec3 inNormal;
 in vec2 inTextureCoordinates;
+in vec4 inColor;
 
 out vec3 outPosition;
 out vec3 outNormal;
 out vec2 outTextureCoordinates;
+out vec4 outColor;
 
 out vec4 lightPosition;
 
@@ -23,6 +25,7 @@ void main() {
 
     outNormal = normalize(modelViewMatrix * vec4(inNormal, 0.0)).xyz;
     outTextureCoordinates = inTextureCoordinates;
+    outColor = inColor;
 
     lightPosition = lightProjectionMatrix * modelLightViewMatrix * vec4(inPosition, 1.0);
 }

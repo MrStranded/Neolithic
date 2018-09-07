@@ -98,12 +98,19 @@ public class OBJLoader {
 			}
 		}
 
+		// ---------------------- creating color (white)
+		float[] colors = new float[verticesArray.length * 4];
+		for (int i=0; i<colors.length; i++) {
+			colors[i] = 1f;
+		}
+
 		// ---------------------- creating mesh
 		return new Mesh(
 				VectorConverter.Vector3ArrayToFloatArray(verticesArray),
 				IntegerConverter.IntegerListToIntArray(indicesList),
 				VectorConverter.Vector3ArrayToFloatArray(normalsArray),
-				VectorConverter.Vector2ArrayToFloatArray(texturesArray)
+				VectorConverter.Vector2ArrayToFloatArray(texturesArray),
+				colors
 		);
 	}
 }

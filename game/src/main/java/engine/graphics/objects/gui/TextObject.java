@@ -28,6 +28,7 @@ public class TextObject extends GUIObject {
 		List<Float> positions = new ArrayList<>();
 		List<Float> textureCoordinates = new ArrayList<>();
 		List<Integer> indices = new ArrayList<>();
+		List<Float> colors = new ArrayList<>();
 		float[] normals = new float[0];
 
 		// please do not confuse with charInfo.xPos
@@ -51,6 +52,7 @@ public class TextObject extends GUIObject {
 			positions.add(0f);
 			textureCoordinates.add(charXPos / fontWidth);
 			textureCoordinates.add(0f);
+			for (int c=0; c<4; c++) { colors.add(1f); }
 
 			// bottom left vertex
 			positions.add(xPos);
@@ -58,6 +60,7 @@ public class TextObject extends GUIObject {
 			positions.add(0f);
 			textureCoordinates.add(charXPos / fontWidth);
 			textureCoordinates.add(1f);
+			for (int c=0; c<4; c++) { colors.add(1f); }
 
 			// top right vertex
 			positions.add(xPos + charWidth);
@@ -65,6 +68,7 @@ public class TextObject extends GUIObject {
 			positions.add(0f);
 			textureCoordinates.add((charXPos + charWidth) / fontWidth);
 			textureCoordinates.add(0f);
+			for (int c=0; c<4; c++) { colors.add(1f); }
 
 			// bottom right vertex
 			positions.add(xPos + charWidth);
@@ -72,6 +76,7 @@ public class TextObject extends GUIObject {
 			positions.add(0f);
 			textureCoordinates.add((charXPos + charWidth) / fontWidth);
 			textureCoordinates.add(1f);
+			for (int c=0; c<4; c++) { colors.add(1f); }
 
 			// indices
 			indices.add(i*4 + 0);
@@ -88,7 +93,8 @@ public class TextObject extends GUIObject {
 				FloatConverter.FloatListToFloatArray(positions),
 				IntegerConverter.IntegerListToIntArray(indices),
 				normals,
-				FloatConverter.FloatListToFloatArray(textureCoordinates)
+				FloatConverter.FloatListToFloatArray(textureCoordinates),
+				FloatConverter.FloatListToFloatArray(colors)
 		);
 		mesh.normalize();
 		mesh.getMaterial().setTexture(fontTexture.getTexture());
