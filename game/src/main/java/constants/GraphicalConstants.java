@@ -35,5 +35,4 @@ public class GraphicalConstants {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Planet Construction %%%%%%%%%%%%%%%%%%%%%%%%
 	public static final double PLANET_CONSTRUCTION_SIDE_NORMAL_QUOTIENT = 16d; // inverse amount of top normal that is added to side normals
-	public static final float WATER_ALPHA = 1f;
 }

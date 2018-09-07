@@ -8,7 +8,7 @@ Tile: tDirt {
 
 	preferredHeight = 128;
 
-	color {
+	topColor {
 		200,20;
 		150,20;
 		30,5;
@@ -19,14 +19,14 @@ Tile: tGras {
 	name = "Gras";
 	preferredHeight = 190;
 
-	color {
+	topColor {
 		120;200;50;
 	}
 }
 
 Tile: tStone {
 	preferredHeight = 255;
-	name = "Stone"; color {150;150;120;}
+	name = "Stone"; topColor {150;150;120;}
 }
 
 Entity: eTest { name = "Yolo"; }

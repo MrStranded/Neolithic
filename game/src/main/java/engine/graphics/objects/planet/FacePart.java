@@ -25,7 +25,8 @@ public class FacePart {
 	private double waterHeight = TopologyConstants.PLANET_OZEAN_HEIGHT;
 
 	private Tile tile;
-	private RGBA color = TopologyConstants.TILE_DEFAULT_COLOR;
+	private RGBA topColor = TopologyConstants.TILE_DEFAULT_COLOR;
+	private RGBA sideColor = topColor.times(TopologyConstants.TILE_SIDE_COLOR_FACTOR);
 
 	private Vector3 corner1, corner2, corner3;
 
@@ -48,7 +49,6 @@ public class FacePart {
 		if (drawWater) {
 			if (waterMesh != null) {
 				if (putDataIntoShader) {
-					//shaderProgram.setUniform("color", waterMesh.getColor());
 					if (waterMesh.getMaterial() != null) {
 						shaderProgram.setUniform("material", waterMesh.getMaterial());
 					}
@@ -58,7 +58,6 @@ public class FacePart {
 		} else {
 			if (waterMesh == null) {
 				if (putDataIntoShader) {
-					//shaderProgram.setUniform("color", mesh.getColor());
 					if (mesh.getMaterial() != null) {
 						shaderProgram.setUniform("material", mesh.getMaterial());
 					}
@@ -184,11 +183,18 @@ public class FacePart {
 		this.waterHeight = waterHeight;
 	}
 
-	public RGBA getColor() {
-		return color;
+	public RGBA getTopColor() {
+		return topColor;
 	}
-	public void setColor(RGBA color) {
-		this.color = color;
+	public void setTopColor(RGBA topColor) {
+		this.topColor = topColor;
+	}
+
+	public RGBA getSideColor() {
+		return sideColor;
+	}
+	public void setSideColor(RGBA sideColor) {
+		this.sideColor = sideColor;
 	}
 
 	public Mesh getWaterMesh() {

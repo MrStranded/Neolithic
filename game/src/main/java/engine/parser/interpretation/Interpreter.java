@@ -198,7 +198,7 @@ public class Interpreter {
 		consume(TokenConstants.SEMICOLON);
 	}
 
-	private void readColor(TileContainer container) throws Exception {
+	private void readColor(TileContainer container, boolean side) throws Exception {
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
 		Token seperator;
@@ -218,16 +218,29 @@ public class Interpreter {
 			}
 		}
 
-		container.setColor(new RGBA(
-				TokenNumerifier.getDouble(values[0][0]) / 255d,
-				TokenNumerifier.getDouble(values[1][0]) / 255d,
-				TokenNumerifier.getDouble(values[2][0]) / 255d
-		));
-		container.setColorDeviation(new RGBA(
-				TokenNumerifier.getDouble(values[0][1]) / 255d,
-				TokenNumerifier.getDouble(values[1][1]) / 255d,
-				TokenNumerifier.getDouble(values[2][1]) / 255d
-		));
+		if (!side) {
+			container.setTopColor(new RGBA(
+					TokenNumerifier.getDouble(values[0][0]) / 255d,
+					TokenNumerifier.getDouble(values[1][0]) / 255d,
+					TokenNumerifier.getDouble(values[2][0]) / 255d
+			));
+			container.setTopColorDeviation(new RGBA(
+					TokenNumerifier.getDouble(values[0][1]) / 255d,
+					TokenNumerifier.getDouble(values[1][1]) / 255d,
+					TokenNumerifier.getDouble(values[2][1]) / 255d
+			));
+		} else {
+			container.setSideColor(new RGBA(
+					TokenNumerifier.getDouble(values[0][0]) / 255d,
+					TokenNumerifier.getDouble(values[1][0]) / 255d,
+					TokenNumerifier.getDouble(values[2][0]) / 255d
+			));
+			container.setSideColorDeviation(new RGBA(
+					TokenNumerifier.getDouble(values[0][1]) / 255d,
+					TokenNumerifier.getDouble(values[1][1]) / 255d,
+					TokenNumerifier.getDouble(values[2][1]) / 255d
+			));
+		}
 
 		consume(TokenConstants.CURLY_BRACKETS_CLOSE);
 	}
@@ -350,9 +363,14 @@ public class Interpreter {
 					readPreferredHeightBlur((TileContainer) container);
 				} else { issueTypeError(next, type); }
 
-			} else if (TokenConstants.VALUE_COLOR.equals(next)) { // color definition
+			} else if (TokenConstants.VALUE_TOP_COLOR.equals(next)) { // top color definition
 				if (type == DataType.TILE) {
-					readColor((TileContainer) container);
+					readColor((TileContainer) container, false);
+				} else { issueTypeError(next, type); }
+
+			} else if (TokenConstants.VALUE_SIDE_COLOR.equals(next)) { // side color definition
+				if (type == DataType.TILE) {
+					readColor((TileContainer) container, true);
 				} else { issueTypeError(next, type); }
 
 			} else if (TokenConstants.VALUE_MESH.equals(next)) { // mesh path definition

@@ -97,17 +97,22 @@ public class PlanetGenerator {
 		midToSide[2] = facePart.getCorner3().plus(facePart.getCorner1()).minus(mid).normalize();
 
 		// ------------------------------------- color value setup
-		RGBA topColor, bottomColor;
+		RGBA topColor, sideColor = null;
 		if (water) {
 			topColor = TopologyConstants.WATER_DEFAULT_COLOR;
 		} else {
-			if (facePart.getColor() != null) {
-				topColor = facePart.getColor();
+			if (facePart.getTopColor() != null) {
+				topColor = facePart.getTopColor();
 			} else {
 				topColor = TopologyConstants.TILE_DEFAULT_COLOR;
 			}
+			if (facePart.getSideColor() != null) {
+				sideColor = facePart.getSideColor();
+			}
 		}
-		bottomColor = topColor.times(0.5d);
+		if (sideColor == null) {
+			sideColor = topColor.times(TopologyConstants.TILE_SIDE_COLOR_FACTOR);
+		}
 
 		// ------------------------------------- vertices set up (top triangle)
 		List<Vector3> vectorList = new ArrayList<>(15);
@@ -176,10 +181,10 @@ public class PlanetGenerator {
 				normalList.add(midToSide[i]);
 				normalList.add(midToSide[i]);
 
-				colorList.add(bottomColor);
-				colorList.add(bottomColor);
-				colorList.add(bottomColor);
-				colorList.add(bottomColor);
+				colorList.add(sideColor);
+				colorList.add(sideColor);
+				colorList.add(sideColor);
+				colorList.add(sideColor);
 
 				// side mesh indices
 				indicesList.add(index);
@@ -211,15 +216,9 @@ public class PlanetGenerator {
 		Mesh mesh;
 		if (water) { // create water mesh
 			mesh = new Mesh(vertices, indices, normals, textureCoordniates, colors);
-			//mesh.setColor(TopologyConstants.WATER_DEFAULT_COLOR);
 			mesh.setMaterial(waterMaterial);
 		} else { // create land mesh
 			mesh = new Mesh(vertices, indices, normals, textureCoordniates, colors);
-			/*if (facePart.getColor() != null) {
-				mesh.setColor(facePart.getColor());
-			} else {
-				mesh.setColor(TopologyConstants.TILE_DEFAULT_COLOR);
-			}*/
 		}
 
 		return mesh;
@@ -304,7 +303,8 @@ public class PlanetGenerator {
 			double sumHeight = 0d;
 			double maxWaterHeight = 0d;
 			double sumWaterHeight = 0d;
-			RGBA sumColor = new RGBA(0,0,0,1);
+			RGBA sumTopColor = new RGBA(0,0,0,1);
+			RGBA sumSideColor = new RGBA(0,0,0,1);
 
 			for (FacePart subFace : facePart.getQuarterFaces()) {
 				if (subFace != null) {
@@ -316,22 +316,23 @@ public class PlanetGenerator {
 					sumHeight += subFace.getHeight();
 					sumWaterHeight += subFace.getWaterHeight();
 
-					sumColor = sumColor.plus(subFace.getColor());
+					sumTopColor = sumTopColor.plus(subFace.getTopColor());
+					sumSideColor = sumSideColor.plus(subFace.getSideColor());
 				}
 			}
 
 			facePart.setHeight(maxHeight/4d + sumHeight*3d/16d);
 			facePart.setWaterHeight(maxWaterHeight/4d + sumWaterHeight*3d/16d);
-			facePart.setColor(sumColor.times(0.25d));
-
+			facePart.setTopColor(sumTopColor.times(0.25d));
+			facePart.setSideColor(sumSideColor.times(0.25d));
 		} else {
 			tile = facePart.getTile();
 			smallest = true;
 
 			facePart.setHeight(tile.getHeight());
 			facePart.setWaterHeight(tile.getWaterHeight());
-			facePart.setColor(tile.getColor());
-
+			facePart.setTopColor(tile.getTopColor());
+			facePart.setSideColor(tile.getSideColor());
 		}
 
 		Mesh faceMesh = createTile(facePart, tile, smallest, false);

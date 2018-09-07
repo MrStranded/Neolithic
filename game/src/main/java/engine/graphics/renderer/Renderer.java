@@ -399,7 +399,7 @@ public class Renderer {
 		shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(object.getWorldMatrix()));
 		shaderProgram.setUniform("affectedByLight", object.isAffectedByLight() ? 1 : 0);
 		shaderProgram.setUniform("dynamic", object.isStatic() ? 0 : 1);
-		//shaderProgram.setUniform("color", object.getMesh().getColor());
+		//shaderProgram.setUniform("color", object.getMesh().getTopColor());
 		shaderProgram.setUniform("material", object.getMesh().getMaterial());
 
 		if (shadowMap != null) {
@@ -424,7 +424,7 @@ public class Renderer {
 				}
 
 				hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
-				//hudShaderProgram.setUniform("color", object.getMesh().getColor());
+				//hudShaderProgram.setUniform("color", object.getMesh().getTopColor());
 				object.render();
 			}
 		}

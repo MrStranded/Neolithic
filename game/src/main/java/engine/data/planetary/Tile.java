@@ -17,7 +17,8 @@ public class Tile extends Instance implements IDInterface {
 	private Face face;
 	private FacePart tileMesh;
 
-	private RGBA color = null;
+	private RGBA topColor = null;
+	private RGBA sideColor = null;
 
 	public Tile(int id, int xPos, int yPos, Face face) {
 		super(id);
@@ -35,16 +36,26 @@ public class Tile extends Instance implements IDInterface {
 		TileContainer protoTile = (TileContainer) Data.getContainer(id);
 
 		if (protoTile != null) {
-			RGBA c = protoTile.getColor();
-			RGBA d = protoTile.getColorDeviation();
+			RGBA protoTopColor = protoTile.getTopColor();
+			RGBA protoTopColorDeviation = protoTile.getTopColorDeviation();
 
-			color = new RGBA(
-					c.getR() + d.getR()*(Math.random()*2d - 1d),
-					c.getG() + d.getG()*(Math.random()*2d - 1d),
-					c.getB() + d.getB()*(Math.random()*2d - 1d)
+			topColor = new RGBA(
+					protoTopColor.getR() + protoTopColorDeviation.getR()*(Math.random()*2d - 1d),
+					protoTopColor.getG() + protoTopColorDeviation.getG()*(Math.random()*2d - 1d),
+					protoTopColor.getB() + protoTopColorDeviation.getB()*(Math.random()*2d - 1d)
+			);
+
+			RGBA protoSideColor = protoTile.getSideColor();
+			RGBA protoSideColorDeviation = protoTile.getSideColorDeviation();
+
+			sideColor = new RGBA(
+					protoSideColor.getR() + protoSideColorDeviation.getR()*(Math.random()*2d - 1d),
+					protoSideColor.getG() + protoSideColorDeviation.getG()*(Math.random()*2d - 1d),
+					protoSideColor.getB() + protoSideColorDeviation.getB()*(Math.random()*2d - 1d)
 			);
 		} else {
-			color = TopologyConstants.TILE_DEFAULT_COLOR;
+			topColor = TopologyConstants.TILE_DEFAULT_COLOR;
+			sideColor = topColor.times(TopologyConstants.TILE_SIDE_COLOR_FACTOR);
 		}
 	}
 
@@ -85,11 +96,18 @@ public class Tile extends Instance implements IDInterface {
 		this.waterHeight = waterHeight;
 	}
 
-	public RGBA getColor() {
-		if (color == null) {
+	public RGBA getTopColor() {
+		if (topColor == null) {
 			createRandomizedColor();
 		}
-		return color;
+		return topColor;
+	}
+
+	public RGBA getSideColor() {
+		if (sideColor == null) {
+			createRandomizedColor();
+		}
+		return sideColor;
 	}
 
 	public String toString() {

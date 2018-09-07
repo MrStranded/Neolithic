@@ -5,7 +5,7 @@ Tile: tDirt {
 
 	preferredHeight = 128,5;
 
-	color {
+	topColor {
 		200,10;
 		150;
 		30,10;
@@ -24,7 +24,7 @@ Tile: tGras {
 	preferredHeight = 180;
 	preferredHeightBlur = 20;
 
-	color {
+	topColor {
 		120,10;200,15;50;
 	}
 
@@ -35,7 +35,7 @@ Tile: tGras {
 
 Tile: tStone {
 	preferredHeight = 240;preferredHeightBlur = 10;
-	name = "Stone"; color {150,10;150;120;}
+	name = "Stone"; topColor {150,10;150;120;}
 }
 
 ///////////////////////////////////////////////////////////////////////////// Attributes

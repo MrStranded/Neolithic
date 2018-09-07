@@ -76,7 +76,7 @@ public class ASTBuilder {
 				nodeList.add(readExpression());
 				interpreter.consume(TokenConstants.SEMICOLON);
 
-			} else if (next.getType() == TokenType.IDENTIFIER) { // also expression
+			} else if (next.getType() == TokenType.IDENTIFIER || next.getType() == TokenType.OPERATOR) { // also expression
 				nodeList.add(readExpression());
 				interpreter.consume(TokenConstants.SEMICOLON);
 

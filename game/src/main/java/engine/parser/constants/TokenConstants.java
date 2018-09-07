@@ -27,7 +27,8 @@ public enum TokenConstants {
 
 	// -------------------------------------------------- Engine Values
 	VALUE_NAME                  (TokenType.KEYWORD, "name"),
-	VALUE_COLOR                 (TokenType.KEYWORD, "color"),
+	VALUE_TOP_COLOR             (TokenType.KEYWORD, "topColor"),
+	VALUE_SIDE_COLOR            (TokenType.KEYWORD, "sideColor"),
 	VALUE_PREFERREDHEIGHT       (TokenType.KEYWORD, "preferredHeight"),
 	VALUE_PREFERREDHEIGHTBLUR   (TokenType.KEYWORD, "preferredHeightBlur"),
 	VALUE_MESH                  (TokenType.KEYWORD, "mesh"),
