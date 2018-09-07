@@ -4,13 +4,13 @@ WorldGen: genContinental {
 	Script: generate {
 		setWaterLevel(100);
 
-		for (i=0; i<100; i++) {
-			t = randomTile();
-
-			if (chance(0.5)) {
-				createFormation("formPlateau", t);
-			} else {
-				createFormation("formHill", t);
+		for (t : eachTile) {
+			if (chance(0.01)) { // 1% chance
+				if (chance(0.5)) {
+					createFormation("formPlateau", t);
+				} else {
+					createFormation("formHill", t);
+				}
 			}
 		}
 

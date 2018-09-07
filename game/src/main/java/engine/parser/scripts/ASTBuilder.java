@@ -150,19 +150,32 @@ public class ASTBuilder {
 		interpreter.consume(TokenConstants.FOR);
 		interpreter.consume(TokenConstants.ROUND_BRACKETS_OPEN);
 
-		AbstractScriptNode initial = readExpression();
-		interpreter.consume(TokenConstants.SEMICOLON);
+		AbstractScriptNode initial, condition, step;
 
-		AbstractScriptNode condition = readExpression();
-		interpreter.consume(TokenConstants.SEMICOLON);
+		initial = readExpression();
+		Token next = interpreter.peek();
+		if (TokenConstants.SEMICOLON.equals(next)) { // normal for loop
+			interpreter.consume(TokenConstants.SEMICOLON);
+			condition = readExpression();
+			interpreter.consume(TokenConstants.SEMICOLON);
+			step = readExpression();
+			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
+			MultiStatementNode body = readMultiStatement();
 
-		AbstractScriptNode step = readExpression();
+			return new ForStatementNode(initial, condition, step, body);
+		} else if (TokenConstants.COLON.equals(next)) { // special iterator (tiles, entities ...)
+			interpreter.consume(TokenConstants.COLON);
+			Token iterator = interpreter.consume();
+			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
+			MultiStatementNode body = readMultiStatement();
 
-		interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
-
-		MultiStatementNode body = readMultiStatement();
-
-		return new ForStatementNode(initial, condition, step, body);
+			return new ForStatementNode(initial, iterator, body);
+		} else {
+			String errorMessage = "Unexpected '" + next.getValue() + "' on line " + next.getLine()
+					+ ". For statements have to be of the format 'for (initial; condition; step) {...}' OR 'for (initial : iterator) {...}'!";
+			Logger.error(errorMessage);
+			throw new Exception(errorMessage);
+		}
 	}
 
 	// ###################################################################################

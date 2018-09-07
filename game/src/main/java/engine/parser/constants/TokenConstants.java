@@ -19,6 +19,11 @@ public enum TokenConstants {
 	// -------------------------------------------------- Scripts
 	SELF        (TokenType.KEYWORD, "self"),
 
+	// -------------------------------------------------- Iterators
+	ITERATOR_TILE       (TokenType.KEYWORD, "eachTile"),
+	ITERATOR_ENTITY     (TokenType.KEYWORD, "eachEntity"),
+	ITERATOR_CREATURE   (TokenType.KEYWORD, "eachCreature"),
+
 	// -------------------------------------------------- Structure
 	IF          (TokenType.KEYWORD, "if"),
 	ELSE        (TokenType.KEYWORD, "else"),
