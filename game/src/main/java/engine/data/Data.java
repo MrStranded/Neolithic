@@ -116,6 +116,18 @@ public class Data {
 	}
 
 	/**
+	 * Returns the next creature from the creature queue and removes it from there.
+	 * If there is no next create, null is returned.
+	 * @return next creature in queue
+	 */
+	public static Instance getNextCreature() {
+		if (creatureQueue.isEmpty()) {
+			return null;
+		}
+		return creatureQueue.poll();
+	}
+
+	/**
 	 * Returns the MeshHub with the specified path or null if none is found.
 	 * @param path of the mesh
 	 * @return MeshHub if existant or null otherwise
@@ -172,6 +184,16 @@ public class Data {
 		return meshHub;
 	}
 
+	/**
+	 * Adds the given creature to the end of the creature queue. Does nothing if the given creature is null.
+	 * @param instance to add to queue
+	 */
+	public static void addCreatureToQueue(Instance instance) {
+		if (instance != null) {
+			creatureQueue.add(instance);
+		}
+	}
+
 	// ###################################################################################
 	// ################################ Preparing for Game ###############################
 	// ###################################################################################
@@ -222,7 +244,4 @@ public class Data {
 		Data.planet = planet;
 	}
 
-	public static Queue<Instance> getCreatureQueue() {
-		return creatureQueue;
-	}
 }

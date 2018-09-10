@@ -15,6 +15,12 @@ WorldGen: genContinental {
 			}
 		}
 
+		for (t : eachTile) {
+			if (getHeight(t) > 100 && chance(0.01)) {
+				create("cTree", t);
+			}
+		}
+
 		fitTiles();
 	}
 }

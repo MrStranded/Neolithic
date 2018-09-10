@@ -46,7 +46,6 @@ public class MeshHub {
 	}
 
 	public void render(ShaderProgram shaderProgram, Matrix4 viewMatrix, ShadowMap shadowMap) {
-		//shaderProgram.setUniform("color", mesh.getTopColor());
 		shaderProgram.setUniform("material", mesh.getMaterial());
 		shaderProgram.setUniform("affectedByLight", 1);
 		shaderProgram.setUniform("dynamic", 1);

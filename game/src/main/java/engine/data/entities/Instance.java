@@ -85,7 +85,10 @@ public class Instance {
 			} else {
 				pos = position.getTileMesh().getWaterMid();
 			}
-			moveableObject.setScale(0.05d,0.05d,0.05d);
+			if (Data.getPlanet() != null) {
+				double scaleFactor = 1d / (double) Data.getPlanet().getSize();
+				moveableObject.setScale(scaleFactor, scaleFactor, scaleFactor);
+			}
 			moveableObject.setPosition(pos);
 			moveableObject.setRotation(pitch + Math.PI/2d, -yaw + Math.PI/2d, 0);
 			moveableObject.setPreRotation(0,Math.random() * Math.PI*2d,0);

@@ -82,7 +82,7 @@ Creature: cDuck {
 		//if (chance(0.1)) {
 			//self->attNutrition -= 1;
 		//}
-		moveTo(self, getNeighbor(getTile(self), random(3));
+		moveTo(self, getNeighbor(getTile(self), random(3)));
 	}
 }
 
@@ -156,7 +156,7 @@ Entity: entFruit {
 
 Creature: cTree {
 	name = "Tree";
-	mesh = "cylinder.obj";
+	mesh = "tree01.obj";
 
 	drives {
 		driPlantReproduction;
@@ -165,6 +165,10 @@ Creature: cTree {
 	knowledge {
 		proPhotoSynthesis;
 		proCreateFruit;
+	}
+
+	Script: tick {
+		print("tick: "+self->ticks++);
 	}
 }
 

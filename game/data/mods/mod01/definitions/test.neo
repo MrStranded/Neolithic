@@ -1,18 +1,18 @@
-Attribute attLife {
-	name: "Life";
+Attribute: attLife {
+	name = "Life";
 }
 
-Attribute attSpeed {
-	name: "Speed";
-	mutationChance: 0.5;
+Attribute: attSpeed {
+	name = "Speed";
+	//mutationChance = 0.5;
 }
 
-Attribute attWeight {
-	name: "Weight";
+Attribute: attWeight {
+	name = "Weight";
 }
 
-Entity entHuman {
-	name: "Human";
+Creature: cHuman {
+	name = "Human";
 
 	knowledge {
 		proEat;
@@ -20,27 +20,23 @@ Entity entHuman {
 	}
 
 	attributes {
-		attLife, 7*20 - 80/2;
-		attSpeed, random(1,2);
+		attLife, 100;
+		attSpeed, 1;
 		attWeight, 70;
 	}
 
-	on start {
-		sHumanBirthEvent;
+	Script: start {
+		print ("a human has been born " + getName(human));
+		if (getAttribute(human,attLife) > 1) {
+			print ("and " + getName(human) + " is fast");
+		} else {
+			print ("but he/she is very slow");
+		}
 	}
 }
 
-Script sHumanBirthEvent(human) {
-	print ("a human has been born " + human.name);
-	if (human.attLife > 1) {
-		print ("and " + human.name + " is fast");
-	} else {
-		print ("but he/she is very slow");
-	}
-}
-
-Entity entRock {
-	name: "Rock";
+Entity: entRock {
+	name = "Rock";
 
 	attributes { attWeight, 10; }
 }

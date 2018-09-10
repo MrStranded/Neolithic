@@ -19,16 +19,12 @@ public class LogicThread extends Thread {
 	@Override
 	public void run() {
 		while (!window.isClosed()) {
-			Queue<Instance> creatureQueue = Data.getCreatureQueue();
+			Instance creature = Data.getNextCreature();
 
-			if (creatureQueue != null) {
-				Instance creature = creatureQueue.poll();
+			if (creature != null) {
+				creature.runScript(ScriptConstants.EVENT_TICK, null);
 
-				if (creature != null) {
-					creature.runScript(ScriptConstants.EVENT_TICK, null);
-
-					creatureQueue.add(creature);
-				}
+				Data.addCreatureToQueue(creature);
 			}
 		}
 	}

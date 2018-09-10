@@ -33,27 +33,28 @@ public class CommandExecuter {
 				return new Variable(Math.random() < chance ? 1 : 0);
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance createFormation (String formationTextID, Tile tile)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance create (String textID, Tile tile)
 		} else if (TokenConstants.CREATE.equals(command)) {
 			if (requireParameters(commandNode, 2)) {
-				String testID = parameters[0].getString();
-				int id = Data.getContainerID(testID);
+				String textID = parameters[0].getString();
+				int id = Data.getContainerID(textID);
 				Tile tile = parameters[1].getTile();
 
 				if (id >= 0 && tile != null) {
 					Instance instance = new Instance(id);
+					instance.setPosition(tile);
 					Variable[] newParameters = new Variable[1];
 					newParameters[0] = parameters[1];
 
 					instance.runScript(ScriptConstants.EVENT_PLACE, newParameters);
 					if (Data.getContainer(id).getType() == DataType.CREATURE) {
-						// add to tick queue
+						Data.addCreatureToQueue(instance);
 					}
 
 					return new Variable(instance);
 				} else {
 					if (id == -1) {
-						Logger.error("Cannot create Instance: Template for '" + testID + "' does not exist. Line " + command.getLine());
+						Logger.error("Cannot create Instance: Template for '" + textID + "' does not exist. Line " + command.getLine());
 					}
 					if (tile == null) {
 						Logger.error("Cannot create Instance: Not a valid tile value.");
@@ -99,7 +100,20 @@ public class CommandExecuter {
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile moveTo (Instance instance, Tile tile)
 		} else if (TokenConstants.MOVE_TO.equals(command)) {
 			if (requireParameters(commandNode, 2)) {
-				// implemt plz
+				Instance instance = parameters[0].getInstance();
+				Tile tile = parameters[1].getTile();
+
+				if (tile == null) {
+					Logger.error("Tile value for command '" + TokenConstants.MOVE_TO.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+				if (instance == null) {
+					Logger.error("Instance value for command '" + TokenConstants.MOVE_TO.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+
+				instance.setPosition(tile);
+				return new Variable(tile);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string print (String text)
