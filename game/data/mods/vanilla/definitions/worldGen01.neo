@@ -11,13 +11,16 @@ WorldGen: genContinental {
 				} else {
 					create("formHill", t);
 				}
-				create("cDuck",t);
 			}
 		}
 
 		for (t : eachTile) {
-			if (getHeight(t) > 100 && chance(0.01)) {
-				create("cTree", t);
+			if (getHeight(t) > 100) {
+				if (chance(0.025)) {
+					create("cTree", t);
+				} else if (chance(0.01)) {
+					create("cDuck", t);
+				}
 			}
 		}
 

@@ -97,6 +97,19 @@ public class CommandExecuter {
 				return new Variable(Neighbour.getNeighbour(tile, position));
 			}
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile getTile (Instance instance)
+		} else if (TokenConstants.GET_TILE.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				Instance instance = parameters[0].getInstance();
+
+				if (instance == null) {
+					Logger.error("Instance value for command '" + TokenConstants.GET_TILE.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+
+				return new Variable(instance.getPosition());
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile moveTo (Instance instance, Tile tile)
 		} else if (TokenConstants.MOVE_TO.equals(command)) {
 			if (requireParameters(commandNode, 2)) {

@@ -82,7 +82,10 @@ Creature: cDuck {
 		//if (chance(0.1)) {
 			//self->attNutrition -= 1;
 		//}
-		moveTo(self, getNeighbor(getTile(self), random(3)));
+		otherTile = getNeighbor(getTile(self), random(3));
+		if (getHeight(otherTile) >= getHeight(getTile(self))) {
+			moveTo(self, otherTile);
+		}
 	}
 }
 

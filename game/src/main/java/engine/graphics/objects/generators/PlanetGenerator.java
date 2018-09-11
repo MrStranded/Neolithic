@@ -81,7 +81,7 @@ public class PlanetGenerator {
 		upper[1] = facePart.getCorner2().times(f);
 		upper[2] = facePart.getCorner3().times(f);
 
-		Vector3 positionMid = upper[0].plus(upper[1]).plus(upper[2]).times(1d/3d);
+		Vector3 positionMid = (upper[0].plus(upper[1]).plus(upper[2])).times(1d/3d);
 		if (water) {
 			facePart.setWaterMid(positionMid);
 		} else {

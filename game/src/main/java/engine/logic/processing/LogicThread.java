@@ -11,6 +11,8 @@ import java.util.Queue;
 public class LogicThread extends Thread {
 
 	private Window window;
+	private long t;
+	private long timePerCreature = 1;
 
 	public LogicThread(Window window) {
 		this.window = window;
@@ -18,13 +20,26 @@ public class LogicThread extends Thread {
 
 	@Override
 	public void run() {
+		t = System.currentTimeMillis();
 		while (!window.isClosed()) {
-			Instance creature = Data.getNextCreature();
+			long currentTime = System.currentTimeMillis();
 
-			if (creature != null) {
-				creature.runScript(ScriptConstants.EVENT_TICK, null);
+			if (currentTime - t >= timePerCreature) {
+				Instance creature = Data.getNextCreature();
 
-				Data.addCreatureToQueue(creature);
+				if (creature != null) {
+					creature.runScript(ScriptConstants.EVENT_TICK, null);
+
+					Data.addCreatureToQueue(creature);
+				}
+
+				t = System.currentTimeMillis();
+			} else {
+				try {
+					sleep(timePerCreature - (currentTime - t));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

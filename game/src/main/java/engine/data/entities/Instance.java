@@ -75,7 +75,7 @@ public class Instance {
 		actualizeObjectPosition();
 	}
 
-	private void actualizeObjectPosition() {
+	public void actualizeObjectPosition() {
 		if (position != null && moveableObject != null) {
 			double pitch = GeographicCoordinates.getLatitude(position);
 			double yaw = GeographicCoordinates.getLongitude(position);

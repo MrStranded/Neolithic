@@ -271,6 +271,7 @@ public class ASTBuilder {
 
 		} else {
 			AbstractScriptNode right = readExpression();
+
 			// precedence correction
 			if (right.getClass() == BinaryExpressionNode.class) { // possibly rehang tree structure
 				BinaryExpressionNode rightNode = ((BinaryExpressionNode) right);

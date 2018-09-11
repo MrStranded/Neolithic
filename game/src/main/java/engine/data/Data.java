@@ -219,6 +219,15 @@ public class Data {
 		}
 	}
 
+	/**
+	 * This method actualizes the positions of all the instances on the planet with the (possibly) new facePart.getMid()s.
+	 */
+	public static void updateCreaturePositions() {
+		for (Instance instance : creatureQueue) {
+			instance.actualizeObjectPosition();
+		}
+	}
+
 	// ###################################################################################
 	// ################################ Clearing the Data ################################
 	// ###################################################################################

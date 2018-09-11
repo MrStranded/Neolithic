@@ -11,7 +11,6 @@ public class Transformations {
 	// ###################################################################################
 
 	public static Vector3[] getInternalAxes(Vector3 rotation) {
-
 		Vector3[] out = new Vector3[3];
 
 		Matrix4 rotationMatrix = Transformations.rotate(rotation);
@@ -23,17 +22,14 @@ public class Transformations {
 	}
 
 	public static Vector3 getInternalXAxis(Vector3 rotation) {
-
 		Matrix4 rotationMatrix = Transformations.rotate(rotation);
 		return rotationMatrix.times(new Vector4(1d,0,0,0)).extractVector3();
 	}
 	public static Vector3 getInternalYAxis(Vector3 rotation) {
-
 		Matrix4 rotationMatrix = Transformations.rotate(rotation);
 		return rotationMatrix.times(new Vector4(0,1d,0,0)).extractVector3();
 	}
 	public static Vector3 getInternalZAxis(Vector3 rotation) {
-
 		Matrix4 rotationMatrix = Transformations.rotate(rotation);
 		return rotationMatrix.times(new Vector4(0,0,1d,0)).extractVector3();
 	}
@@ -43,7 +39,6 @@ public class Transformations {
 	// ###################################################################################
 
 	public static Matrix4 translate(Vector3 v) {
-
 		return new Matrix4(
 				1d, 0, 0, v.getX(),
 				0, 1d, 0, v.getY(),
@@ -57,7 +52,6 @@ public class Transformations {
 	// ###################################################################################
 
 	public static Matrix4 scale(Vector3 v) {
-
 		return new Matrix4(
 				v.getX(), 0, 0, 0,
 				0, v.getY(), 0, 0,
@@ -71,12 +65,10 @@ public class Transformations {
 	// ###################################################################################
 
 	public static Matrix4 rotate(Vector3 v) {
-
 		return rotateZ(v.getZ()).times(rotateY(v.getY()).times(rotateX(v.getX())));
 	}
 
 	public static Matrix4 rotateX(double a) {
-
 		double c = Math.cos(a);
 		double s = Math.sin(a);
 
@@ -89,7 +81,6 @@ public class Transformations {
 	}
 
 	public static Matrix4 rotateY(double a) {
-
 		double c = Math.cos(a);
 		double s = Math.sin(a);
 
@@ -102,7 +93,6 @@ public class Transformations {
 	}
 
 	public static Matrix4 rotateZ(double a) {
-
 		double c = Math.cos(a);
 		double s = Math.sin(a);
 
@@ -122,7 +112,6 @@ public class Transformations {
 	 * @return rotation matrix
 	 */
 	public static Matrix4 rotateAroundVector(Vector3 axis, double a) {
-
 		double c = Math.cos(a);
 		double s = Math.sin(a);
 		// the 'R' in the variable name means 'reverse' or 'reciprocal'

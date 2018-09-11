@@ -9,6 +9,7 @@ import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.Scene;
 import engine.graphics.gui.window.Window;
 import engine.graphics.renderer.Renderer;
+import engine.logic.processing.LogicThread;
 import engine.parser.Parser;
 
 /**
@@ -57,27 +58,11 @@ public class Engine {
 		Instance worldGen = new Instance(Data.getContainerID("genContinental"));
 		worldGen.runScript(ScriptConstants.EVENT_GENERATE_WORLD, null);
 		gaia.updatePlanetMesh();
+		Data.updateCreaturePositions();
 		System.out.println("Executing WorldGen Script took: "+(System.currentTimeMillis()-time)+" ms");
 
-		/*
-
-		time = System.currentTimeMillis();
-		TopologyGenerator.formTopology(gaia);
-		System.out.println("Forming Topology took: "+(System.currentTimeMillis()-time)+" ms");
-
-		time = System.currentTimeMillis();
-		gaia.updatePlanetMesh();
-		System.out.println("Updating LOD Mesh took: "+(System.currentTimeMillis()-time)+" ms");*/
-
-		/*for (int i=0; i<10; i++) {
-			Instance i01;
-			if (Math.random() < 0.5d) {
-				i01 = new Instance(Data.getContainerID("cDuck"));
-			} else {
-				i01 = new Instance(Data.getContainerID("cTree"));
-			}
-			i01.setPosition(gaia.getFace((int) (5d*Math.random()), (int) (4d*Math.random())).getTile((int) (32d*Math.random()), (int) (32d*Math.random())));
-		}*/
+		LogicThread logicThread = new LogicThread(window);
+		logicThread.start();
 	}
 
 	/**

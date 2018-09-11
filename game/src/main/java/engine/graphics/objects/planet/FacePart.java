@@ -37,8 +37,7 @@ public class FacePart {
 		this.corner2 = corner2;
 		this.corner3 = corner3;
 
-		mid = corner1.plus(corner2).plus(corner3).times(1d/3d);
-		normal = mid.normalize();
+		normal = (corner1.plus(corner2).plus(corner3)).normalize();
 	}
 
 	// ###################################################################################
@@ -157,9 +156,8 @@ public class FacePart {
 	public Vector3 getWaterMid() {
 		if (waterMid == null) {
 			return mid;
-		} else {
-			return waterMid;
 		}
+		return waterMid;
 	}
 	/**
 	 * This value is set in PlanetGenerator.createTile()
