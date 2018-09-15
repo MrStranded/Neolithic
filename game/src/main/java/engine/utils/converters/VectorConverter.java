@@ -20,6 +20,18 @@ public class VectorConverter {
 		return floats;
 	}
 
+	public static float[] Vector2ListToFloatArray(List<Vector2> vectors) {
+		float[] floats = new float[vectors.size()*2];
+
+		int i=0;
+		for (Vector2 vector: vectors) {
+			floats[i++] = (float) vector.getX();
+			floats[i++] = (float) vector.getY();
+		}
+
+		return floats;
+	}
+
 	public static float[] Vector3ArrayToFloatArray(Vector3[] vectors) {
 		float[] floats = new float[vectors.length*3];
 

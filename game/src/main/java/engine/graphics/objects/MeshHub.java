@@ -8,6 +8,7 @@ import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
 import engine.parser.utils.Logger;
 import load.OBJLoader;
+import load.PLYLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,13 @@ public class MeshHub {
 
 	public void loadMesh() {
 		try {
-			mesh = OBJLoader.loadMesh(meshPath);
+			if (meshPath.endsWith(".obj")) {
+				mesh = OBJLoader.loadMesh(meshPath);
+			} else if (meshPath.endsWith(".ply")) {
+				mesh = PLYLoader.loadMesh(meshPath);
+			} else {
+				Logger.error("Mesh format of file '" + meshPath + "' is not supported! Use .obj or .ply files.");
+			}
 		} catch (Exception e) {
 			Logger.error("Could not load mesh: '" + meshPath + "'");
 			e.printStackTrace();

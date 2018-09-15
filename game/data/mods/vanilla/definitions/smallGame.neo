@@ -159,7 +159,7 @@ Entity: entFruit {
 
 Creature: cTree {
 	name = "Tree";
-	mesh = "tree01.obj";
+	mesh = "tree01.ply";
 
 	drives {
 		driPlantReproduction;
