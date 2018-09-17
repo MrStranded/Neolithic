@@ -62,6 +62,7 @@ public enum TokenConstants {
 	SET_WATER_LEVEL     (TokenType.COMMAND, "setWaterLevel"),
 
 	// -------------------------------------------------- Retrieval
+	GET_ATTRIBUTE           (TokenType.COMMAND, "getAttribute"),
 	GET_ATTRIBUTE_IN_RANGE  (TokenType.COMMAND, "getAttInRange"),
 	GET_HEIGHT              (TokenType.COMMAND, "getHeight"),
 	GET_ITEM_ATTRIBUTE      (TokenType.COMMAND, "getItemAtt"),

@@ -58,8 +58,8 @@ Attribute: attEdible { name = "Edible"; }
 
 ///////////////////////////////////////////////////////////////////////////// Creatures
 
-Creature: cDuck {
-	name = "Duck";
+Creature: cMonkey {
+	name = "Monkey";
 	mesh = "monkey.obj";
 
 	knowledge {
@@ -78,20 +78,18 @@ Creature: cDuck {
 		attNutrition, 5;
 	}
 
+	Script: place {
+		self->id = random(1000);
+	}
+
 	Script: tick {
-		//if (chance(0.1)) {
-			//self->attNutrition -= 1;
-		//}
-		otherTile = getNeighbor(getTile(self), random(3));
-		if (getHeight(otherTile) >= getHeight(getTile(self))) {
-			moveTo(self, otherTile);
-		}
+		print("monkey tick " + self->id);
 	}
 }
 
 Drive: driHunger {
 	Script: trigger {
-		require(self->attNutrition < 5);
+		require(getAttribute("attNutrition") <= 5);
 	}
 
 	solutions {
@@ -101,9 +99,10 @@ Drive: driHunger {
 
 Process: proStroll {
 	//Script: educt {}
+
 	Script: product {
-		i = random(3);
-		moveTo(self, getNeighbor(getTile(self), i));
+		while (getHeight(tile = getNeighbor(getTile(self), random(3))) < 100) {}
+		moveTo(self,tile);
 	}
 	
 	//alternatives {}
@@ -113,10 +112,10 @@ Process: proStroll {
 
 Process: proEat {
 	Script: educt {
-		require(hasItemAtt(self, attEdible) > 0);
+		require(getItemAtt(self, "attEdible"));
 	}
 	Script: product {
-		item = getItemAtt(self, attEdible);
+		item = getItemAtt(self, "attEdible");
 		item->consume(self);
 	}
 
@@ -127,15 +126,15 @@ Process: proEat {
 
 Process: proGatherFood {
 	Script: educt {
-		require(hasAttInRange(self, attEdible, self->attViewingDistance));
+		require(getAttInRange(creature, "attEdible", getAttribute(creature, "attViewingDistance")));
 	}
-	Script: product {
-		pickUp(self, getAttInRange(self, attEdible, self->attViewingDistance));
+	Script: product(creature) {
+		pickUp(creature, getAttInRange(creature, "attEdible", getAttribute(creature,"attViewingDistance")));
 	}
 
-	Script: discovery {
-		require(getSpeed(self) > 0);
-		require(self->attViewingDistance > 0);
+	Script: discovery(creature) {
+		require(getAttribute(creature, "attSpeed") > 0);
+		require(getAttribute(creature, "attViewingDistance") > 0);
 	}
 }
 

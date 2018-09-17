@@ -28,7 +28,7 @@ public class LogicThread extends Thread {
 				Instance creature = Data.getNextCreature();
 
 				if (creature != null) {
-					creature.runScript(ScriptConstants.EVENT_TICK, null);
+					creature.tick();
 
 					Data.addCreatureToQueue(creature);
 				}

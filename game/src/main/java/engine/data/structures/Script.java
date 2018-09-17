@@ -33,7 +33,7 @@ public class Script implements IDInterface {
 		variableStack = new Stack<>();
 	}
 
-	public void run(Instance self, Variable[] parameters) {
+	public Variable run(Instance self, Variable[] parameters) {
 		// create new variable tree
 		BinaryTree<Variable> variables = new BinaryTree<>();
 		variableStack.push(variables);
@@ -66,10 +66,12 @@ public class Script implements IDInterface {
 		}
 
 		// execute
-		root.execute(self, this);
+		Variable result = root.execute(self, this);
 
 		// pop variable stack
 		variableStack.pop();
+
+		return result;
 	}
 
 	public Variable getVariable(String name) {

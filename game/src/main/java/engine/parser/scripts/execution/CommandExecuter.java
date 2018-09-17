@@ -68,6 +68,35 @@ public class CommandExecuter {
 				TopologyGenerator.fitTiles(Data.getPlanet());
 			}
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getAttribute ([Instance instance,] String attribute)
+		} else if (TokenConstants.GET_ATTRIBUTE.equals(command)) {
+			if (parameters.length >= 2) {
+				Instance instance = parameters[0].getInstance();
+
+				String attributeTextID = parameters[1].getString();
+				int attributeID = Data.getProtoAttributeID(attributeTextID);
+
+				if (instance != null && attributeID >= 0) {
+					return new Variable(instance.getAttribute(attributeID));
+				} else {
+					if (instance == null) {
+						Logger.error("Instance value for command '" + TokenConstants.GET_ATTRIBUTE.getValue() + "' is invalid!");
+					}
+					if (attributeID == -1) {
+						Logger.error("Attribute '" + attributeTextID + "' does not exist!");
+					}
+				}
+			} else if (requireParameters(commandNode, 1)) {
+				String attributeTextID = parameters[0].getString();
+				int attributeID = Data.getProtoAttributeID(attributeTextID);
+
+				if (attributeID >= 0) {
+					return new Variable(self.getAttribute(attributeID));
+				} else {
+					Logger.error("Attribute '" + attributeTextID + "' does not exist!");
+				}
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getHeight (Tile tile)
 		} else if (TokenConstants.GET_HEIGHT.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
@@ -162,6 +191,12 @@ public class CommandExecuter {
 
 				Tile tile = planet.getFace(f).getTile(x,y);
 				return new Variable(tile);
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int require (variable)
+		} else if (TokenConstants.REQUIRE.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				return new Variable(parameters[0].isNull() ? 0 : 1);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int setHeight (int height)

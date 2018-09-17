@@ -65,7 +65,7 @@ public class FacePart {
 			}
 		}
 		// render all objects on the current tile, but only if we're in the real draw situation (not shadow map drawing)
-		if (tile != null && putDataIntoShader) {
+		if (quarterFaces == null && tile != null && putDataIntoShader) {
 			tile.render();
 		}
 	}

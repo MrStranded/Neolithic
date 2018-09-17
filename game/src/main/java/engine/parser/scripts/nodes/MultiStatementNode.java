@@ -18,11 +18,11 @@ public class MultiStatementNode extends AbstractScriptNode {
 
 	@Override
 	public Variable execute(Instance instance, Script script) {
-		Variable lastStatement = new Variable();
+		boolean allTrue = true;
 		for (AbstractScriptNode node : subNodes) {
-			lastStatement = node.execute(instance, script);
+			allTrue = !node.execute(instance, script).isNull() && allTrue; // allTrue is only true if all subNodes return Variables that are not null
 		}
-		return lastStatement;
+		return new Variable(allTrue ? 1 : 0);
 	}
 
 	@Override

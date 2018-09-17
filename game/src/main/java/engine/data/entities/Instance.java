@@ -1,12 +1,17 @@
 package engine.data.entities;
 
+import constants.ScriptConstants;
+import engine.data.ContainerIdentifier;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.Data;
+import engine.data.proto.CreatureContainer;
+import engine.data.proto.DriveContainer;
 import engine.data.structures.Script;
 import engine.data.structures.trees.binary.BinaryTree;
+import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.graphics.objects.movement.MoveableObject;
 import engine.logic.GeographicCoordinates;
@@ -40,14 +45,51 @@ public class Instance {
 	// ################################ Game Logic #######################################
 	// ###################################################################################
 
-	public void runScript(String textID, Variable[] parameters) {
+	public Variable runScript(String textID, Variable[] parameters) {
 		Container container = Data.getContainer(id);
 		if (container != null) {
 			Script script = container.getScript(textID);
 			if (script != null) {
-				script.run(this, parameters);
+				return script.run(this, parameters);
 			}
 		}
+		return new Variable();
+	}
+
+	public Variable runExternalScript(Container scriptContainer, String textID, Variable[] parameters) {
+		if (scriptContainer != null) {
+			Script script = scriptContainer.getScript(textID);
+			if (script != null) {
+				return script.run(this, parameters);
+			}
+		}
+		return new Variable();
+	}
+
+	// ###################################################################################
+	// ################################ Tick #############################################
+	// ###################################################################################
+
+	public void tick() {
+		// ----------- calculate drives
+		System.out.println("calc drives");
+		Container container = Data.getContainer(id);
+		if (container != null && container.getType() == DataType.CREATURE) {
+			List<ContainerIdentifier> drives = ((CreatureContainer) container).getDrives();
+			if (drives != null && !drives.isEmpty()) {
+				for (ContainerIdentifier drive : drives) {
+					Container driveContainer = drive.retrieve();
+					if (driveContainer != null) {
+						if (!runExternalScript(driveContainer, ScriptConstants.EVENT_TRIGGER, null).isNull()) {
+							System.out.println("!!!!!!!!!!!!!!!!! " + id + " has been triggered! " + drive.toString());
+						}
+					}
+				}
+			}
+		}
+
+		// ----------- calculate tick script
+		runScript(ScriptConstants.EVENT_TICK, null);
 	}
 
 	// ###################################################################################
