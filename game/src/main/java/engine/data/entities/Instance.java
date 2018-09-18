@@ -82,6 +82,17 @@ public class Instance {
 					if (driveContainer != null) {
 						if (!runExternalScript(driveContainer, ScriptConstants.EVENT_TRIGGER, null).isNull()) {
 							System.out.println("!!!!!!!!!!!!!!!!! " + id + " has been triggered! " + drive.toString());
+							for (ContainerIdentifier solution : ((DriveContainer) driveContainer).getSolutions()) {
+								Container solutionContainer = solution.retrieve();
+								if (solutionContainer != null) {
+									if(!runExternalScript(solutionContainer, ScriptConstants.EVENT_EDUCT, null).isNull()) {
+										System.out.println("!!!!!!!!!!!!!!!!! " + id + " has a doable solution: " + solution.toString());
+										runExternalScript(solutionContainer, ScriptConstants.EVENT_PRODUCT, null);
+									} else {
+										System.out.println("!!!!!!!!!!!!!!!!! " + id + " cannot do solution: " + solution.toString());
+									}
+								}
+							}
 						}
 					}
 				}
@@ -175,6 +186,27 @@ public class Instance {
 		return value;
 	}
 
+	/**
+	 * Sets the personal attribute of the instance exactly to the given value.
+	 * @param attributeID
+	 * @param value
+	 */
+	public void setAttribute(int attributeID, int value) {
+		if (attributeID >= 0) {
+			Attribute attribute = attributes.get(attributeID);
+			if (attribute == null) {
+				attributes.insert(new Attribute(attributeID, value));
+			} else {
+				attribute.setValue(value);
+			}
+		}
+	}
+	public void addAttribute(int attributeID, int value) {
+		if (attributeID >= 0) {
+			attributes.insert(new Attribute(attributeID, value));
+		}
+	}
+
 	public Variable getVariable(String name) {
 		return variables.get(StringConverter.toID(name));
 	}
@@ -193,6 +225,10 @@ public class Instance {
 	}
 
 	public Tile getPosition() { return position; }
+
+	public List<Instance> getSubInstances() {
+		return subInstances;
+	}
 
 	// ###################################################################################
 	// ################################ Debugging ########################################

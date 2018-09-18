@@ -396,14 +396,9 @@ public class Interpreter {
 			} else if (TokenConstants.VALUES_SOLUTIONS.equals(next)) { // list of solutions
 				if (type == DataType.DRIVE) {
 					feedTextIDList(((DriveContainer) container).getSolutions());
+				} else if (type == DataType.PROCESS) {
+					feedTextIDList(((ProcessContainer) container).getSolutions());
 				} else { issueTypeError(next, type); }
-
-			} else if (TokenConstants.VALUES_ALTERNATIVES.equals(next)) { // list of alternatives
-				if (type == DataType.PROCESS) {
-					feedTextIDList(((ProcessContainer) container).getAlternatives());
-				} else {
-					issueTypeError(next, type);
-				}
 
 			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% general data
 			} else if (TokenConstants.SCRIPT.equals(next)) { // Script

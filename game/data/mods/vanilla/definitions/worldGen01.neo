@@ -19,7 +19,9 @@ WorldGen: genContinental {
 				if (chance(0.05)) {
 					create("cTree", t);
 				} else if (chance(0.01)) {
-					create("cMonkey", t);
+					monkey = create("cMonkey", t);
+					food = create("entFruit", t);
+					pickUp(monkey, food);
 				}
 			}
 		}

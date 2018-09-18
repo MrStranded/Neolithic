@@ -130,8 +130,8 @@ public class Parser {
 					System.out.println("-> Sol: " + solution);
 				}
 			} else if (container.getType() == DataType.PROCESS) {
-				for (ContainerIdentifier alternative : ((ProcessContainer) container).getAlternatives()) {
-					System.out.println("-> Alt: " + alternative);
+				for (ContainerIdentifier alternative : ((ProcessContainer) container).getSolutions()) {
+					System.out.println("-> Sol: " + alternative);
 				}
 			}
 

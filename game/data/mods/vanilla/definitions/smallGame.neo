@@ -105,7 +105,7 @@ Process: proStroll {
 		moveTo(self,tile);
 	}
 	
-	//alternatives {}
+	//solutions {}
 	
 	//Script: discovery {}
 }
@@ -119,7 +119,7 @@ Process: proEat {
 		item->consume(self);
 	}
 
-	alternatives {
+	solutions {
 		proGatherFood;
 	}
 }
@@ -149,7 +149,7 @@ Entity: entFruit {
 	}
 
 	Script: consume(actor) {
-		//actor->attNutrition += self->attNutrition;
+		addPersonalAtt(actor, "attNutrition", getAttribute("attNutrition"));
 		destroy(self);
 	}
 }
@@ -191,7 +191,7 @@ Process: proPhotoSynthesis {
 		//self->attNutrition += 5;
 	}
 
-	alternatives {} // there is no way for a plant to create light (currently?)
+	solutions {} // there is no way for a plant to create light (currently?)
 
 	Script: discovery(actor) { // there is no way for an entity to learn photosynthesisis
 	}

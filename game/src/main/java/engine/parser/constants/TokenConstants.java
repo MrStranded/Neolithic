@@ -43,7 +43,6 @@ public enum TokenConstants {
 	VALUES_DRIVES           (TokenType.KEYWORD, "drives"),
 	VALUES_ATTRIBUTES       (TokenType.KEYWORD, "attributes"),
 	VALUES_SOLUTIONS        (TokenType.KEYWORD, "solutions"),
-	VALUES_ALTERNATIVES     (TokenType.KEYWORD, "alternatives"),
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands
 	// -------------------------------------------------- Math
@@ -51,9 +50,11 @@ public enum TokenConstants {
 	RANDOM          (TokenType.COMMAND, "random"),
 
 	// -------------------------------------------------- Entity Manipulation
-	CHANGE          (TokenType.COMMAND, "change"),
-	CREATE          (TokenType.COMMAND, "create"),
-	DESTROY         (TokenType.COMMAND, "destroy"),
+	CHANGE                  (TokenType.COMMAND, "change"),
+	CREATE                  (TokenType.COMMAND, "create"),
+	DESTROY                 (TokenType.COMMAND, "destroy"),
+	ADD_PERSONAL_ATTRIBUTE  (TokenType.COMMAND, "addPersonalAtt"),
+	ADD_SPECIES_ATTRIBUTE   (TokenType.COMMAND, "addSpeciesAtt"),
 
 	// -------------------------------------------------- Planet Manipulation
 	CREATE_FORMATION    (TokenType.COMMAND, "createFormation"),
@@ -69,8 +70,6 @@ public enum TokenConstants {
 	GET_LIGHT_LEVEL         (TokenType.COMMAND, "getLightLevel"),
 	GET_NEIGHBOUR           (TokenType.COMMAND, "getNeighbor"), // difference between british english in code and american english in scripts
 	GET_TILE                (TokenType.COMMAND, "getTile"),
-	HAS_ATTRIBUTE_IN_RANGE  (TokenType.COMMAND, "hasAttInRange"),
-	HAS_ITEM_ATTRIBUTE      (TokenType.COMMAND, "hasItemAtt"),
 	RANDOM_TILE             (TokenType.COMMAND, "randomTile"),
 
 	// -------------------------------------------------- Actions

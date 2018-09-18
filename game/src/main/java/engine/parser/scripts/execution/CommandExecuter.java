@@ -25,8 +25,29 @@ public class CommandExecuter {
 		Token command = commandNode.getCommand();
 		Variable[] parameters = ParameterCalculator.calculateParameters(self, script, commandNode);
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int addPersonalAtt (Instance target, String attributeTextID, int amount)
+		if (TokenConstants.ADD_PERSONAL_ATTRIBUTE.equals(command)) {
+			if (requireParameters(commandNode, 3)) {
+				Instance target = parameters[0].getInstance();
+				String attributeTextID = parameters[1].getString();
+				int amount = parameters[2].getInt();
+
+				if (target == null) {
+					Logger.error("Target instance value for command '" + TokenConstants.ADD_PERSONAL_ATTRIBUTE.getValue() + "' is invalid!");
+					return new Variable();
+				}
+
+				int attributeID = Data.getProtoAttributeID(attributeTextID);
+				if (attributeID == -1) {
+					Logger.error("Attribute '" + attributeTextID + "' does not exist!");
+					return new Variable();
+				}
+
+				target.addAttribute(attributeID, amount);
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance createFormation (String formationTextID, Tile tile)
-		if (TokenConstants.CHANCE.equals(command)) {
+		} else if (TokenConstants.CHANCE.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
 				double chance = parameters[0].getDouble();
 
@@ -103,10 +124,36 @@ public class CommandExecuter {
 				Tile tile = parameters[0].getTile();
 
 				if (tile == null) {
-					return new Variable(0);
+					return new Variable();
 				}
 
 				return new Variable(tile.getHeight());
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance getItemAtt (Instance holder, String attributeTextID)
+		} else if (TokenConstants.GET_ITEM_ATTRIBUTE.equals(command)) {
+			if (requireParameters(commandNode, 2)) {
+				Instance holder = parameters[0].getInstance();
+				String attributeTextID = parameters[1].getString();
+				int attributeID = Data.getProtoAttributeID(attributeTextID);
+
+				if (holder == null) {
+					Logger.error("Holder instance value for command '" + TokenConstants.GET_ITEM_ATTRIBUTE.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+				if (attributeID == -1) {
+					Logger.error("Attribute '" + attributeTextID + "' does not exist!");
+					return new Variable();
+				}
+
+				for (Instance item : holder.getSubInstances()) {
+					if (item != null) {
+						if (item.getAttribute(attributeID) > 0) {
+							return new Variable(item);
+						}
+					}
+				}
+				return new Variable();
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile getNeighbor (Tile tile, int position)
@@ -156,6 +203,26 @@ public class CommandExecuter {
 
 				instance.setPosition(tile);
 				return new Variable(tile);
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance pickUp (Instance holder, Instance item)
+		} else if (TokenConstants.PICK_UP.equals(command)) {
+			if (requireParameters(commandNode, 2)) {
+				Instance holder = parameters[0].getInstance();
+				Instance item = parameters[1].getInstance();
+
+				if (holder == null) {
+					Logger.error("Holder instance value for command '" + TokenConstants.PICK_UP.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+				if (item == null) {
+					Logger.error("Item instance value for command '" + TokenConstants.PICK_UP.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+
+				item.setPosition(holder.getPosition());
+				holder.addSubInstance(item);
+				return new Variable(item);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string print (String text)
