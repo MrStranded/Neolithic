@@ -80,7 +80,6 @@ public class Instance {
 				Container container = process.retrieve();
 				if (container != null) {
 					if (!run(container, ScriptConstants.EVENT_CONDITION, null).isNull()) { // condition is fulfilled
-						System.out.println("!!!!!!!!!!!!!!!!! " + id + " has been triggered! " + process.toString());
 
 						if (container.getType() == DataType.PROCESS) { // execute process
 							run(container, ScriptConstants.EVENT_PROCESS, null);

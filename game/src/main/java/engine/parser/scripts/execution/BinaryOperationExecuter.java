@@ -33,6 +33,14 @@ public class BinaryOperationExecuter {
 			}
 			return binaryNode.getRight().execute(self, script);
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& .
+		} else if (TokenConstants.POINT.equals(operator)) {
+			IdentifierNode subNode = (IdentifierNode) binaryNode.getRight();
+			subNode.setTarget(left);
+			subNode.markAsAttributeIdentifier();
+
+			return binaryNode.getRight().execute(self, script);
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& +
 		} else if (TokenConstants.PLUS.equals(operator)) {
 			Variable right = binaryNode.getRight().execute(self, script);

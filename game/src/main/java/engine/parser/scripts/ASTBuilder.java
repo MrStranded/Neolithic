@@ -205,7 +205,8 @@ public class ASTBuilder {
 
 		} else if (expression.getType() == TokenType.OPERATOR) { // an operator in front of an expression -> unary node
 			AbstractScriptNode right = readExpression();
-			left = new UnaryExpressionNode(expression, right);
+			AbstractScriptNode self = new SelfNode();
+			left = precedenceCorrection(expression, self, right);
 
 		} else if (expression.getType() == TokenType.LITERAL) { // we have a literal
 			left = new LiteralNode(expression);
@@ -271,34 +272,40 @@ public class ASTBuilder {
 
 		} else {
 			AbstractScriptNode right = readExpression();
+			return precedenceCorrection(operator, left, right);
+		}
+	}
 
-			// precedence correction
-			if (right.getClass() == BinaryExpressionNode.class) { // possibly rehang tree structure
-				BinaryExpressionNode rightNode = ((BinaryExpressionNode) right);
+	// ###################################################################################
+	// ################################ Precedence Correction ############################
+	// ###################################################################################
 
-				if (!rightNode.isBracketed()) { // only correct when right node is not bracketed
-					// current operator binds more strongly than the one from the right expression -> rehang
-					if (operator.getPrecedence() < rightNode.getOperator().getPrecedence()) {
-						AbstractScriptNode sub = rightNode.getLeft();
-						BinaryExpressionNode newLeft = new BinaryExpressionNode(operator, left, sub);
-						rightNode.setLeft(newLeft);
-						return rightNode;
-					}
-				}
-			} else if (right.getClass() == UnaryExpressionNode.class) { // possibly need to rehang
-				UnaryExpressionNode rightNode = ((UnaryExpressionNode) right);
+	private AbstractScriptNode precedenceCorrection(Token operator, AbstractScriptNode left, AbstractScriptNode right) throws Exception {
+		if (right.getClass() == BinaryExpressionNode.class) { // possibly rehang tree structure
+			BinaryExpressionNode rightNode = ((BinaryExpressionNode) right);
 
+			if (!rightNode.isBracketed()) { // only correct when right node is not bracketed
 				// current operator binds more strongly than the one from the right expression -> rehang
 				if (operator.getPrecedence() < rightNode.getOperator().getPrecedence()) {
-					AbstractScriptNode sub = rightNode.getSubNode();
-					BinaryExpressionNode newSub = new BinaryExpressionNode(operator, left, sub);
-					rightNode.setSubNode(newSub);
+					AbstractScriptNode sub = rightNode.getLeft();
+					BinaryExpressionNode newLeft = new BinaryExpressionNode(operator, left, sub);
+					rightNode.setLeft(newLeft);
 					return rightNode;
 				}
 			}
+		} else if (right.getClass() == UnaryExpressionNode.class) { // possibly need to rehang
+			UnaryExpressionNode rightNode = ((UnaryExpressionNode) right);
 
-			return new BinaryExpressionNode(operator, left, right);
+			// current operator binds more strongly than the one from the right expression -> rehang
+			if (operator.getPrecedence() < rightNode.getOperator().getPrecedence()) {
+				AbstractScriptNode sub = rightNode.getSubNode();
+				BinaryExpressionNode newSub = new BinaryExpressionNode(operator, left, sub);
+				rightNode.setSubNode(newSub);
+				return rightNode;
+			}
 		}
+
+		return new BinaryExpressionNode(operator, left, right);
 	}
 
 }

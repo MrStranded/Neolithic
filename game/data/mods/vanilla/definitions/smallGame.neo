@@ -55,6 +55,8 @@ Attribute: attLife { name = "Life"; }
 Attribute: attViewingDistance { name = "Viewing Distance"; }
 Attribute: attNutrition { name = "Nutrition"; }
 Attribute: attEdible { name = "Edible"; }
+Attribute: attLightLevel { name = "Light Level"; }
+Attribute: attHumidity { name = "Humidity"; }
 
 ///////////////////////////////////////////////////////////////////////////// Creatures
 
@@ -90,7 +92,7 @@ Creature: cMonkey {
 
 Drive: driHunger {
 	Script: condition {
-		require(getAttribute("attNutrition") <= 5);
+		require(.attNutrition <= 5);
 	}
 
 	solutions {
@@ -127,15 +129,15 @@ Process: proEat {
 
 Process: proGatherFood {
 	Script: condition {
-		require(getAttInRange(creature, "attEdible", getAttribute(creature, "attViewingDistance")));
+		require(getAttInRange(creature, "attEdible", creature.attViewingDistance));
 	}
 	Script: process(creature) {
-		pickUp(creature, getAttInRange(creature, "attEdible", getAttribute(creature,"attViewingDistance")));
+		pickUp(creature, getAttInRange(creature, "attEdible", creature.attViewingDistance));
 	}
 
 	Script: discovery(creature) {
-		require(getAttribute(creature, "attSpeed") > 0);
-		require(getAttribute(creature, "attViewingDistance") > 0);
+		require(creature.attSpeed > 0);
+		require(creature.attViewingDistance > 0);
 	}
 }
 
@@ -151,7 +153,7 @@ Entity: entFruit {
 
 	Script: consume(actor) {
 		print("consume Apple");
-		addPersonalAtt(actor, "attNutrition", getAttribute("attNutrition"));
+		addPersonalAtt(actor, "attNutrition", .attNutrition);
 		destroy(self);
 	}
 }
@@ -185,8 +187,8 @@ Drive: driPlantReproduction {
 
 Process: proPhotoSynthesis {
 	Script: condition {
-		require(getLightLevel(self) + getAttribute("attLightLevel") >= 50);
-		require(getAttribute(getTile(self), "attHumidity") >= 20);
+		require(getLightLevel(self) + .attLightLevel >= 50);
+		require(getTile(self).attHumidity >= 20);
 	}
 	Script: process {
 		//getTile(self)->attHumidity -= 5;
@@ -196,6 +198,7 @@ Process: proPhotoSynthesis {
 	solutions {} // there is no way for a plant to create light (currently?)
 
 	Script: discovery(actor) { // there is no way for an entity to learn photosynthesisis
+		require(0);
 	}
 }
 
@@ -203,7 +206,7 @@ Process: proCreateFruit {
 	Script: condition {
 		require(chance(0.1));
 		require(!getAttInRange(self, "attEdible", 0));
-		require(getAttribute("attNutrition") >= 10);
+		require(.attNutrition >= 10);
 	}
 	Script: process {
 		fruit = create(entFruit, getTile(self));

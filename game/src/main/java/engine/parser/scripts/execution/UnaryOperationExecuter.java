@@ -9,6 +9,7 @@ import engine.parser.scripts.nodes.IdentifierNode;
 import engine.parser.scripts.nodes.ScriptCallNode;
 import engine.parser.scripts.nodes.UnaryExpressionNode;
 import engine.parser.tokenization.Token;
+import engine.parser.utils.Logger;
 
 public class UnaryOperationExecuter {
 
@@ -40,6 +41,19 @@ public class UnaryOperationExecuter {
 			} else if (unaryNode.getSubNode().getClass() == IdentifierNode.class) { // variable
 				((IdentifierNode) unaryNode.getSubNode()).setTarget(new Variable(self));
 			}
+
+			return unaryNode.getSubNode().execute(self, script);
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& .
+		} else if (TokenConstants.POINT.equals(operator)) {
+			if (unaryNode.getSubNode().getClass() != IdentifierNode.class) {
+				Logger.error("WTF Exception (" + operator.getLine() + ") it's an: " + unaryNode.getSubNode().getClass().toGenericString());
+			}
+
+			IdentifierNode subNode = (IdentifierNode) unaryNode.getSubNode();
+			subNode.setTarget(new Variable(self));
+			subNode.markAsAttributeIdentifier();
+
 			return unaryNode.getSubNode().execute(self, script);
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& !

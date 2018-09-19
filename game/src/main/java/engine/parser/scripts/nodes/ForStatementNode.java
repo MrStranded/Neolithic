@@ -60,9 +60,8 @@ public class ForStatementNode extends AbstractScriptNode {
 	@Override
 	public void print(String indentation) {
 		System.out.println(indentation + "For Statement");
-		subNodes[0].print(indentation + "-");
-		subNodes[1].print(indentation + "-");
-		subNodes[2].print(indentation + "-");
-		subNodes[3].print(indentation + ".");
+		for (int i=0; i<subNodes.length; i++) {
+			subNodes[i].print(indentation + "-");
+		}
 	}
 }

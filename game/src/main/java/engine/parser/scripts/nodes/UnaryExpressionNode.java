@@ -23,7 +23,7 @@ public class UnaryExpressionNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "Unary Expression " + operator);
+		System.out.println(indentation + "Unary Expression " + operator + " (" + operator.getPrecedence() + ")");
 		subNodes[0].print(indentation + " ");
 	}
 
