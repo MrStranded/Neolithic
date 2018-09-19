@@ -1,6 +1,6 @@
 package engine.parser.scripts;
 
-import engine.data.structures.Script;
+import engine.data.Script;
 import engine.parser.utils.Logger;
 import engine.parser.constants.TokenConstants;
 import engine.parser.constants.TokenType;

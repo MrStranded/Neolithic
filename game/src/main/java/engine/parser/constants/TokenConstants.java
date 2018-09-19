@@ -93,7 +93,6 @@ public enum TokenConstants {
 
 	// -------------------------------------------------- Punctuation Marks
 	COMMA       (TokenType.SEPARATOR, ","),
-	POINT       (TokenType.SEPARATOR, "."),
 	SEMICOLON   (TokenType.SEPARATOR, ";"),
 	COLON       (TokenType.SEPARATOR, ":"),
 
@@ -143,8 +142,9 @@ public enum TokenConstants {
 	// -------------------------------------------------- Assignment
 	ASSIGNMENT  (TokenType.OPERATOR, "=", 9),
 
-	// -------------------------------------------------- Object Attributes
+	// -------------------------------------------------- Special Operators
 	OBJECT_OPERATOR (TokenType.OPERATOR, "->", 0),
+	POINT           (TokenType.OPERATOR, ".", 0),
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Comments
 	COMMENT         (TokenType.COMMENT, "//"),

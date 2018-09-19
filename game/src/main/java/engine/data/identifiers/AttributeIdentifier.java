@@ -1,13 +1,16 @@
-package engine.data;
+package engine.data.identifiers;
 
+import engine.data.Data;
+import engine.data.attributes.Attribute;
+import engine.data.entities.Instance;
 import engine.data.proto.Container;
 
-public class ContainerIdentifier {
+public class AttributeIdentifier {
 
 	private String textID;
 	private int id = -1;
 
-	public ContainerIdentifier(String textID) {
+	public AttributeIdentifier(String textID) {
 		this.textID = textID;
 	}
 
@@ -16,15 +19,18 @@ public class ContainerIdentifier {
 	 * The first time this is called, the textID is being replaced by a numerical id and the textID is discarded.
 	 * @return the container specified by this identifier or null if no such container exists
 	 */
-	public Container retrieve() {
+	public int retrieve(Instance instance) {
+		if (instance == null) {
+			return 0;
+		}
 		if (id < 0) {
-			int containerID = Data.getContainerID(textID);
-			if (containerID >= 0) {
-				id = containerID;
+			int attributeID = Data.getProtoAttributeID(textID);
+			if (attributeID >= 0) {
+				id = attributeID;
 				textID = null; // free the space up. thanks java garbage collector! <3
 			}
 		}
-		return Data.getContainer(id);
+		return instance.getAttribute(id);
 	}
 
 	public String toString() {

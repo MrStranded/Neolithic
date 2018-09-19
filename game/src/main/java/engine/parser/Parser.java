@@ -2,12 +2,12 @@ package engine.parser;
 
 import constants.ResourcePathConstants;
 import constants.ScriptConstants;
-import engine.data.ContainerIdentifier;
+import engine.data.identifiers.ContainerIdentifier;
 import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.proto.*;
-import engine.data.structures.Script;
+import engine.data.Script;
 import engine.data.variables.DataType;
 import engine.parser.interpretation.Interpreter;
 import engine.parser.tokenization.Token;

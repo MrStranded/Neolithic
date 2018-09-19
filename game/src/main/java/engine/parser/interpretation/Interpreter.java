@@ -1,11 +1,11 @@
 package engine.parser.interpretation;
 
 import constants.ResourcePathConstants;
-import engine.data.ContainerIdentifier;
+import engine.data.identifiers.ContainerIdentifier;
 import engine.data.Data;
 import engine.data.attributes.PreAttribute;
 import engine.data.proto.*;
-import engine.data.structures.Script;
+import engine.data.Script;
 import engine.data.variables.DataType;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.renderer.color.RGBA;

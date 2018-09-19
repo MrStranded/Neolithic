@@ -1,7 +1,7 @@
 package engine.parser.scripts.execution;
 
 import engine.data.entities.Instance;
-import engine.data.structures.Script;
+import engine.data.Script;
 import engine.data.variables.Variable;
 import engine.parser.scripts.nodes.AbstractScriptNode;
 

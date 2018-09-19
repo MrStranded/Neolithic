@@ -1,6 +1,6 @@
 package engine.data.proto;
 
-import engine.data.ContainerIdentifier;
+import engine.data.identifiers.ContainerIdentifier;
 import engine.data.variables.DataType;
 
 import java.util.ArrayList;

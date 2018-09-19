@@ -4,7 +4,7 @@ import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.attributes.PreAttribute;
-import engine.data.structures.Script;
+import engine.data.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.graphics.objects.MeshHub;

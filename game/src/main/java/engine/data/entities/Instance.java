@@ -1,7 +1,7 @@
 package engine.data.entities;
 
 import constants.ScriptConstants;
-import engine.data.ContainerIdentifier;
+import engine.data.identifiers.ContainerIdentifier;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.planetary.Tile;
@@ -9,7 +9,8 @@ import engine.data.proto.Container;
 import engine.data.Data;
 import engine.data.proto.CreatureContainer;
 import engine.data.proto.DriveContainer;
-import engine.data.structures.Script;
+import engine.data.proto.ProcessContainer;
+import engine.data.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
@@ -28,6 +29,9 @@ public class Instance {
 	private BinaryTree<Attribute> attributes;
 	private BinaryTree<Variable> variables;
 	private List<Instance> subInstances;
+	private Instance superInstance = null;
+
+	private boolean slatedForRemoval = false;
 
 	private Tile position = null;
 	private MoveableObject moveableObject = null;
@@ -45,25 +49,55 @@ public class Instance {
 	// ################################ Game Logic #######################################
 	// ###################################################################################
 
-	public Variable runScript(String textID, Variable[] parameters) {
+	public Variable run(String textID, Variable[] parameters) {
 		Container container = Data.getContainer(id);
 		if (container != null) {
 			Script script = container.getScript(textID);
-			if (script != null) {
-				return script.run(this, parameters);
-			}
+			return runScript(script, parameters);
 		}
 		return new Variable();
 	}
 
-	public Variable runExternalScript(Container scriptContainer, String textID, Variable[] parameters) {
+	public Variable run(Container scriptContainer, String textID, Variable[] parameters) {
 		if (scriptContainer != null) {
 			Script script = scriptContainer.getScript(textID);
-			if (script != null) {
-				return script.run(this, parameters);
-			}
+			return runScript(script, parameters);
 		}
 		return new Variable();
+	}
+
+	private Variable runScript(Script script, Variable[] parameters) {
+		if (script != null) {
+			return script.run(this, parameters);
+		} else {
+			return new Variable(1);
+		}
+	}
+
+	private void searchProcesses(List<ContainerIdentifier> processes) {
+		if (processes != null && !processes.isEmpty()) {
+			for (ContainerIdentifier process : processes) {
+				Container container = process.retrieve();
+				if (container != null) {
+					if (!run(container, ScriptConstants.EVENT_CONDITION, null).isNull()) { // condition is fulfilled
+						System.out.println("!!!!!!!!!!!!!!!!! " + id + " has been triggered! " + process.toString());
+
+						if (container.getType() == DataType.PROCESS) { // execute process
+							run(container, ScriptConstants.EVENT_PROCESS, null);
+						} else if (container.getType() == DataType.DRIVE) { // look through solutions of triggered drive
+							searchProcesses(((DriveContainer) container).getSolutions());
+						}
+
+					} else { // condition not fulfilled -> if process, look through alternatives
+
+						if (container.getType() == DataType.PROCESS) {
+							searchProcesses(((ProcessContainer) container).getSolutions());
+						}
+
+					}
+				}
+			}
+		}
 	}
 
 	// ###################################################################################
@@ -72,35 +106,13 @@ public class Instance {
 
 	public void tick() {
 		// ----------- calculate drives
-		System.out.println("calc drives");
 		Container container = Data.getContainer(id);
 		if (container != null && container.getType() == DataType.CREATURE) {
-			List<ContainerIdentifier> drives = ((CreatureContainer) container).getDrives();
-			if (drives != null && !drives.isEmpty()) {
-				for (ContainerIdentifier drive : drives) {
-					Container driveContainer = drive.retrieve();
-					if (driveContainer != null) {
-						if (!runExternalScript(driveContainer, ScriptConstants.EVENT_TRIGGER, null).isNull()) {
-							System.out.println("!!!!!!!!!!!!!!!!! " + id + " has been triggered! " + drive.toString());
-							for (ContainerIdentifier solution : ((DriveContainer) driveContainer).getSolutions()) {
-								Container solutionContainer = solution.retrieve();
-								if (solutionContainer != null) {
-									if(!runExternalScript(solutionContainer, ScriptConstants.EVENT_EDUCT, null).isNull()) {
-										System.out.println("!!!!!!!!!!!!!!!!! " + id + " has a doable solution: " + solution.toString());
-										runExternalScript(solutionContainer, ScriptConstants.EVENT_PRODUCT, null);
-									} else {
-										System.out.println("!!!!!!!!!!!!!!!!! " + id + " cannot do solution: " + solution.toString());
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+			searchProcesses(((CreatureContainer) container).getDrives());
 		}
 
 		// ----------- calculate tick script
-		runScript(ScriptConstants.EVENT_TICK, null);
+		run(ScriptConstants.EVENT_TICK, null);
 	}
 
 	// ###################################################################################
@@ -148,6 +160,13 @@ public class Instance {
 		}
 	}
 
+	public void destroy() {
+		slatedForRemoval = true;
+		if (superInstance != null) {
+			superInstance.removeSubInstance(this);
+		}
+	}
+
 	// ###################################################################################
 	// ################################ Sub Instances ####################################
 	// ###################################################################################
@@ -162,10 +181,16 @@ public class Instance {
 	}
 
 	public void addSubInstance(Instance instance) {
-		subInstances.add(instance);
+		if (instance != null) {
+			instance.setSuperInstance(this);
+			subInstances.add(instance);
+		}
 	}
 	public void removeSubInstance(Instance instance) {
-		subInstances.remove(instance);
+		if (instance != null) {
+			instance.setSuperInstance(null);
+			subInstances.remove(instance);
+		}
 	}
 
 	// ###################################################################################
@@ -228,6 +253,20 @@ public class Instance {
 
 	public List<Instance> getSubInstances() {
 		return subInstances;
+	}
+
+	public Instance getSuperInstance() {
+		return superInstance;
+	}
+	public void setSuperInstance(Instance superInstance) {
+		this.superInstance = superInstance;
+	}
+
+	public boolean isSlatedForRemoval() {
+		return slatedForRemoval;
+	}
+	public void setSlatedForRemoval(boolean slatedForRemoval) {
+		this.slatedForRemoval = slatedForRemoval;
 	}
 
 	// ###################################################################################

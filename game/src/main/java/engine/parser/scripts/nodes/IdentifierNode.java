@@ -1,7 +1,7 @@
 package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
-import engine.data.structures.Script;
+import engine.data.Script;
 import engine.data.variables.Variable;
 import engine.parser.tokenization.Token;
 
@@ -9,6 +9,7 @@ public class IdentifierNode extends AbstractScriptNode {
 
 	private Token identifier;
 	private Variable target = null;
+	
 
 	public IdentifierNode(Token identifier) {
 		this.identifier = identifier;

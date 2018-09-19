@@ -7,7 +7,7 @@ import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.Data;
-import engine.data.structures.Script;
+import engine.data.Script;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.logic.Neighbour;
@@ -67,7 +67,7 @@ public class CommandExecuter {
 					Variable[] newParameters = new Variable[1];
 					newParameters[0] = parameters[1];
 
-					instance.runScript(ScriptConstants.EVENT_PLACE, newParameters);
+					instance.run(ScriptConstants.EVENT_PLACE, newParameters);
 					if (Data.getContainer(id).getType() == DataType.CREATURE) {
 						Data.addCreatureToQueue(instance);
 					}
@@ -81,6 +81,19 @@ public class CommandExecuter {
 						Logger.error("Cannot create Instance: Not a valid tile value.");
 					}
 				}
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int destroy (Instance instance)
+		} else if (TokenConstants.DESTROY.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				Instance instance = parameters[0].getInstance();
+
+				if (instance == null) {
+					Logger.error("Instance value for command '" + TokenConstants.DESTROY.getValue() + "' is invalid!");
+					return new Variable();
+				}
+
+				instance.destroy();
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int fitTiles ()

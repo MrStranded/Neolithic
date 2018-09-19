@@ -84,11 +84,12 @@ Creature: cMonkey {
 
 	Script: tick {
 		print("monkey tick " + self->id);
+		print("monkey nutrition " + self.attNutrition);
 	}
 }
 
 Drive: driHunger {
-	Script: trigger {
+	Script: condition {
 		require(getAttribute("attNutrition") <= 5);
 	}
 
@@ -98,9 +99,9 @@ Drive: driHunger {
 }
 
 Process: proStroll {
-	//Script: educt {}
+	//Script: condition {}
 
-	Script: product {
+	Script: process {
 		while (getHeight(tile = getNeighbor(getTile(self), random(3))) < 100) {}
 		moveTo(self,tile);
 	}
@@ -111,10 +112,10 @@ Process: proStroll {
 }
 
 Process: proEat {
-	Script: educt {
+	Script: condition {
 		require(getItemAtt(self, "attEdible"));
 	}
-	Script: product {
+	Script: process {
 		item = getItemAtt(self, "attEdible");
 		item->consume(self);
 	}
@@ -125,10 +126,10 @@ Process: proEat {
 }
 
 Process: proGatherFood {
-	Script: educt {
+	Script: condition {
 		require(getAttInRange(creature, "attEdible", getAttribute(creature, "attViewingDistance")));
 	}
-	Script: product(creature) {
+	Script: process(creature) {
 		pickUp(creature, getAttInRange(creature, "attEdible", getAttribute(creature,"attViewingDistance")));
 	}
 
@@ -149,6 +150,7 @@ Entity: entFruit {
 	}
 
 	Script: consume(actor) {
+		print("consume Apple");
 		addPersonalAtt(actor, "attNutrition", getAttribute("attNutrition"));
 		destroy(self);
 	}
@@ -170,7 +172,7 @@ Creature: cTree {
 	}
 
 	Script: tick {
-		print("tick: "+self->ticks++);
+		//print("tick: "+self->ticks++);
 	}
 }
 
@@ -182,11 +184,11 @@ Drive: driPlantReproduction {
 }
 
 Process: proPhotoSynthesis {
-	Script: educt {
-		require(getLightLevel(self) + self->attLightLevel >= 50);
-		require(getTile(self)->attHumidity >= 20);
+	Script: condition {
+		require(getLightLevel(self) + getAttribute("attLightLevel") >= 50);
+		require(getAttribute(getTile(self), "attHumidity") >= 20);
 	}
-	Script: product {
+	Script: process {
 		//getTile(self)->attHumidity -= 5;
 		//self->attNutrition += 5;
 	}
@@ -198,12 +200,13 @@ Process: proPhotoSynthesis {
 }
 
 Process: proCreateFruit {
-	Script: educt {
+	Script: condition {
 		require(chance(0.1));
-		require(hasAttInRange(self, attEdible, 0) == 0);
-		require(self->attNutrition >= 10);
+		require(!getAttInRange(self, "attEdible", 0));
+		require(getAttribute("attNutrition") >= 10);
 	}
-	Script: product {
-		create(entFruit, getTile(self));
+	Script: process {
+		fruit = create(entFruit, getTile(self));
+		pickUp(self, fruit);
 	}
 }
