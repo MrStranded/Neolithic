@@ -16,12 +16,17 @@ WorldGen: genContinental {
 
 		for (t : eachTile) {
 			if (getHeight(t) > 100) {
-				if (chance(0.05)) {
-					create("cTree", t);
-				} else if (chance(0.01)) {
+				if (chance(0.01)) {
 					monkey = create("cMonkey", t);
-					food = create("entFruit", t);
-					pickUp(monkey, food);
+				}
+				if (chance(0.05)) {
+					fruit = create("entFruit", t);
+					print("created fruit");
+				}
+			}
+			if (getHeight(t) > 150) {
+				if (chance(0.2)){
+					create("cTree",t);
 				}
 			}
 		}
