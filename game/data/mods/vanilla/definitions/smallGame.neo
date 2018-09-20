@@ -42,6 +42,7 @@ Tile: tGras {
 
 	attributes {
 		attNutrition, 3;
+		attHumidity, 50;
 	}
 }
 
@@ -145,6 +146,7 @@ Process: proGatherFood {
 
 Entity: entFruit {
 	name = "Apple";
+	mesh = "cylinder.ply";
 
 	attributes {
 		attNutrition, 10;
