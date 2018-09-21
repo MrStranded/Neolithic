@@ -58,7 +58,7 @@ public class Engine {
 		Instance worldGen = new Instance(Data.getContainerID("genContinental"));
 		worldGen.run(ScriptConstants.EVENT_GENERATE_WORLD, null);
 		gaia.updatePlanetMesh();
-		Data.updateCreaturePositions();
+		Data.updateInstancePositions();
 		System.out.println("Executing WorldGen Script took: "+(System.currentTimeMillis()-time)+" ms");
 
 		LogicThread logicThread = new LogicThread(window);

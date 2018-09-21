@@ -1,13 +1,10 @@
 package engine.logic.processing;
 
 import constants.GameConstants;
-import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.entities.Instance;
+import engine.data.variables.DataType;
 import engine.graphics.gui.window.Window;
-import engine.parser.scripts.nodes.ScriptCallNode;
-
-import java.util.Queue;
 
 public class LogicThread extends Thread {
 
@@ -24,15 +21,20 @@ public class LogicThread extends Thread {
 			long currentTime = System.currentTimeMillis();
 
 			if (currentTime - t >= GameConstants.TICK_TIME_PER_CREATURE) {
-				Instance creature = Data.getNextCreature();
+				Instance instance = Data.getNextInstance();
+				boolean isCreature = Data.getContainer(instance.getId()).getType() == DataType.CREATURE;
 
-				if (creature != null && !creature.isSlatedForRemoval()) {
-					creature.tick();
+				if (instance != null && !instance.isSlatedForRemoval()) {
+					if (isCreature) {
+						instance.tick();
+					}
 
-					Data.addCreatureToQueue(creature);
+					Data.addInstanceToQueue(instance);
 				}
 
-				t = System.currentTimeMillis();
+				if (isCreature) {
+					t = System.currentTimeMillis();
+				}
 			} else {
 				try {
 					sleep(GameConstants.TICK_TIME_PER_CREATURE - (currentTime - t));

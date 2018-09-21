@@ -68,9 +68,9 @@ public class CommandExecuter {
 					newParameters[0] = parameters[1];
 
 					instance.run(ScriptConstants.EVENT_PLACE, newParameters);
-					if (Data.getContainer(id).getType() == DataType.CREATURE) {
-						Data.addCreatureToQueue(instance);
-					}
+					//if (Data.getContainer(id).getType() == DataType.CREATURE) {
+						Data.addInstanceToQueue(instance);
+					//}
 
 					return new Variable(instance);
 				} else {

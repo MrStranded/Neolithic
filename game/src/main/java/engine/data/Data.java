@@ -22,7 +22,7 @@ public class Data {
 
 	private static HashMap<String, MeshHub> meshHubs;
 
-	private static Queue<Instance> creatureQueue;
+	private static Queue<Instance> instanceQueue;
 
 	// ###################################################################################
 	// ################################ Initialization ###################################
@@ -37,7 +37,7 @@ public class Data {
 
 		meshHubs = new HashMap<>(GameConstants.MAX_CONTAINERS);
 
-		creatureQueue = new LinkedList<>();
+		instanceQueue = new LinkedList<>();
 	}
 
 	// ###################################################################################
@@ -120,11 +120,11 @@ public class Data {
 	 * If there is no next create, null is returned.
 	 * @return next creature in queue
 	 */
-	public static Instance getNextCreature() {
-		if (creatureQueue.isEmpty()) {
+	public static Instance getNextInstance() {
+		if (instanceQueue.isEmpty()) {
 			return null;
 		}
-		return creatureQueue.poll();
+		return instanceQueue.poll();
 	}
 
 	/**
@@ -188,9 +188,9 @@ public class Data {
 	 * Adds the given creature to the end of the creature queue. Does nothing if the given creature is null.
 	 * @param instance to add to queue
 	 */
-	public static void addCreatureToQueue(Instance instance) {
+	public static void addInstanceToQueue(Instance instance) {
 		if (instance != null) {
-			creatureQueue.add(instance);
+			instanceQueue.add(instance);
 		}
 	}
 
@@ -222,8 +222,8 @@ public class Data {
 	/**
 	 * This method actualizes the positions of all the instances on the planet with the (possibly) new facePart.getMid()s.
 	 */
-	public static void updateCreaturePositions() {
-		for (Instance instance : creatureQueue) {
+	public static void updateInstancePositions() {
+		for (Instance instance : instanceQueue) {
 			instance.actualizeObjectPosition();
 		}
 	}
