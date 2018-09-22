@@ -215,7 +215,7 @@ public class CommandExecuter {
 				return new Variable(instance.getPosition());
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile moveTo (Instance instance, Tile tile)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string moveTo (Instance instance, Tile tile)
 		} else if (TokenConstants.MOVE_TO.equals(command)) {
 			if (requireParameters(commandNode, 2)) {
 				Instance instance = parameters[0].getInstance();
@@ -231,7 +231,7 @@ public class CommandExecuter {
 				}
 
 				instance.setPosition(tile);
-				return new Variable(tile);
+				return new Variable("Semira <3");
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance pickUp (Instance holder, Instance item)

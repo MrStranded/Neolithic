@@ -41,6 +41,8 @@ WorldGen: genContinental {
 			print("s = " + s);
 		}
 
+		print(moveTo(create("cMonkey",randomTile()), randomTile()));
+
 		fitTiles();
 	}
 }
