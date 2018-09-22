@@ -21,7 +21,7 @@ WorldGen: genContinental {
 				}
 				if (chance(0.05)) {
 					fruit = create("entFruit", t);
-					print("created fruit");
+					//print("created fruit");
 				}
 			}
 			if (getHeight(t) > 150) {
@@ -30,6 +30,12 @@ WorldGen: genContinental {
 				}
 			}
 		}
+
+		test = ["hallo", randomTile(), 7.0];
+		print(test);
+
+		test2 = [["haha", "lol"], 1, test];
+		print("test2 = " + test2);
 
 		fitTiles();
 	}

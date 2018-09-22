@@ -1,6 +1,7 @@
 package engine.parser.scripts;
 
 import engine.data.Script;
+import engine.data.variables.Variable;
 import engine.parser.utils.Logger;
 import engine.parser.constants.TokenConstants;
 import engine.parser.constants.TokenType;
@@ -202,6 +203,21 @@ public class ASTBuilder {
 			}
 
 			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
+
+		} else if (TokenConstants.SQUARE_BRACKETS_OPEN.equals(expression)) { // a list expression
+			List<AbstractScriptNode> nodeList = new ArrayList<>();
+
+			boolean first = true;
+			while (!TokenConstants.SQUARE_BRACKETS_CLOSE.equals(interpreter.peek())) {
+				if (!first) {
+					interpreter.consume(TokenConstants.COMMA);
+				}
+				nodeList.add(readExpression());
+				first = false;
+			}
+			left = new ListExpressionNode(nodeList);
+
+			interpreter.consume(TokenConstants.SQUARE_BRACKETS_CLOSE);
 
 		} else if (expression.getType() == TokenType.OPERATOR) { // an operator in front of an expression -> unary node
 			AbstractScriptNode right = readExpression();

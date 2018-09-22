@@ -12,7 +12,7 @@ public class StringConverter {
 		int id = 0;
 		for (char c : text.toCharArray()) {
 			id += c * i;
-			i *= 256; // nr of ascii chars
+			i *= 255; // approximately nr of ascii chars (not exact on purpose: to prevent overflow from doing nothing)
 		}
 		return id;
 	}

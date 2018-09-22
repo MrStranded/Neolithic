@@ -188,8 +188,22 @@ public class Variable implements IDInterface {
 				return ((Instance) value).toString();
 			case ATTRIBUTE:
 				return String.valueOf(((Attribute) value).getValue());
+			case LIST:
+				StringBuilder values = new StringBuilder("[");
+				boolean first = true;
+				for (Variable variable : (List<Variable>) value) {
+					if (variable != this) {
+						if (!first) {
+							values.append(", ");
+						}
+						values.append(variable.getString());
+						first = false;
+					}
+				}
+				values.append("]");
+				return values.toString();
 			default:
-				return "[CANNOT CAST TO STRING]";
+				return "CANNOT CAST TO STRING";
 		}
 	}
 	public void setString(String v) {
@@ -248,6 +262,7 @@ public class Variable implements IDInterface {
 
 	@Override
 	public IDInterface merge(IDInterface other) {
+		System.out.println("Variable insertion collision! " + getId() + " | " + other.getId());
 		return other; // replace old value with new one
 	}
 
@@ -256,7 +271,7 @@ public class Variable implements IDInterface {
 	// ###################################################################################
 
 	public String toString() {
-		String pre = (name != null? name : "NONAME") + " [" + type + "] ";
+		String pre = (name != null? name : "NONAME") + " (" + type + "): ";
 		switch (type) {
 			case NUMBER:
 				return pre+ (Double) value;
@@ -270,19 +285,23 @@ public class Variable implements IDInterface {
 				return pre + (Attribute) value;
 			case LIST:
 				if (value != null) {
-					StringBuilder values = new StringBuilder();
+					StringBuilder values = new StringBuilder("[");
 					boolean first = true;
 					for (Variable variable : (List<Variable>) value) {
-						if (!first) {
-							values.append(", ");
+						if (variable != this) {
+							if (!first) {
+								values.append(", ");
+							}
+							values.append(variable.toString());
+							first = false;
 						}
-						values.append(variable.toString());
-						first = false;
 					}
+					values.append("]");
+					return pre + values;
 				}
 				return pre + "EMPTY";
 			default:
-				return "[UNKNOWN VARIABLE TYPE]";
+				return "UNKNOWN VARIABLE TYPE";
 		}
 	}
 }
