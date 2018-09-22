@@ -1,9 +1,13 @@
 package engine.data.variables;
 
+import engine.data.Data;
 import engine.data.IDInterface;
+import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
 import engine.data.planetary.Tile;
 import engine.utils.converters.StringConverter;
+
+import java.util.List;
 
 public class Variable implements IDInterface {
 
@@ -56,6 +60,16 @@ public class Variable implements IDInterface {
 		this.value = value;
 	}
 
+	public Variable(Attribute value) {
+		this.type = DataType.ATTRIBUTE;
+		this.value = value;
+	}
+
+	public Variable(List<Variable> value) {
+		this.type = DataType.LIST;
+		this.value = value;
+	}
+
 	// ###################################################################################
 	// ################################ Value Copying ####################################
 	// ###################################################################################
@@ -75,6 +89,8 @@ public class Variable implements IDInterface {
 				return (value == null || (Double) value == 0d);
 			case STRING:
 				return (value == null || ((String) value).length() == 0);
+			case LIST:
+				return (value == null || ((List<Variable>) value).isEmpty());
 			default:
 				return (value == null);
 		}
@@ -94,6 +110,27 @@ public class Variable implements IDInterface {
 				return ((double) value) == other.getDouble();
 			case STRING:
 				return ((String) value).equals(other.getString());
+			case ATTRIBUTE:
+				return getDouble() == other.getDouble();
+			case LIST:
+				if (other.getType() == DataType.LIST) {
+					if (value != null && other.value != null) {
+						List<Variable> list1 = (List<Variable>) value;
+						List<Variable> list2 = (List<Variable>) other.value;
+						if (list1.size() == list2.size()) {
+							for (int i=0; i<list1.size(); i++) {
+								if (!list1.get(i).equals(list2.get(i))) {
+									return false;
+								}
+								return true;
+							}
+						}
+						return false;
+					} else {
+						return (value == null && other.value == null);
+					}
+				}
+				return false;
 			default:
 				return ((type == other.type) && (value == other.value));
 		}
@@ -116,6 +153,8 @@ public class Variable implements IDInterface {
 	public double getDouble() {
 		if (type == DataType.NUMBER) {
 			return (Double) value;
+		} else if (type == DataType.ATTRIBUTE) {
+			return ((Attribute) value).getValue();
 		}
 		return 0d;
 	}
@@ -128,6 +167,8 @@ public class Variable implements IDInterface {
 	public int getInt() {
 		if (type == DataType.NUMBER) {
 			return ((Double) value).intValue();
+		} else if (type == DataType.ATTRIBUTE) {
+			return ((Attribute) value).getValue();
 		}
 		return 0;
 	}
@@ -145,6 +186,8 @@ public class Variable implements IDInterface {
 				return (String) value;
 			case INSTANCE:
 				return ((Instance) value).toString();
+			case ATTRIBUTE:
+				return String.valueOf(((Attribute) value).getValue());
 			default:
 				return "[CANNOT CAST TO STRING]";
 		}
@@ -182,6 +225,18 @@ public class Variable implements IDInterface {
 		value = v;
 	}
 
+	// ----------------------------------------------- list
+	public List<Variable> getList() {
+		if (type == DataType.LIST) {
+			return (List<Variable>) value;
+		}
+		return null;
+	}
+	public void setList(List<Variable> v) {
+		type = DataType.LIST;
+		value = v;
+	}
+
 	// ###################################################################################
 	// ################################ Getters and Setters (IDInterface) ################
 	// ###################################################################################
@@ -211,6 +266,21 @@ public class Variable implements IDInterface {
 				return pre + (Tile) value;
 			case INSTANCE:
 				return pre + (Instance) value;
+			case ATTRIBUTE:
+				return pre + (Attribute) value;
+			case LIST:
+				if (value != null) {
+					StringBuilder values = new StringBuilder();
+					boolean first = true;
+					for (Variable variable : (List<Variable>) value) {
+						if (!first) {
+							values.append(", ");
+						}
+						values.append(variable.toString());
+						first = false;
+					}
+				}
+				return pre + "EMPTY";
 			default:
 				return "[UNKNOWN VARIABLE TYPE]";
 		}

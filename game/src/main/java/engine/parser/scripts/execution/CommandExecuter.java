@@ -17,6 +17,9 @@ import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.nodes.CommandExpressionNode;
 import engine.parser.tokenization.Token;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CommandExecuter {
 
 	public static Variable executeCommand(Instance self, Script script, CommandExpressionNode commandNode) {
@@ -94,6 +97,19 @@ public class CommandExecuter {
 				}
 
 				instance.destroy();
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list eachTile ()
+		} else if (TokenConstants.EACH_TILE.equals(command)) {
+			Planet planet = Data.getPlanet();
+			if (planet != null) {
+				List<Variable> tileList = new ArrayList<>(planet.getSize() * planet.getSize() * 20);
+				for (Face face : planet.getFaces()) {
+					for (Tile tile : face.getTiles()) {
+						tileList.add(new Variable(tile));
+					}
+				}
+				return new Variable(tileList);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int fitTiles ()

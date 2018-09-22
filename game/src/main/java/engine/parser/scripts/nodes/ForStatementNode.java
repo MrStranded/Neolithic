@@ -5,14 +5,15 @@ import engine.data.planetary.Face;
 import engine.data.planetary.Tile;
 import engine.data.Data;
 import engine.data.Script;
+import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.parser.constants.TokenConstants;
 import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
 
-public class ForStatementNode extends AbstractScriptNode {
+import java.util.List;
 
-	private Token iterator = null;
+public class ForStatementNode extends AbstractScriptNode {
 
 	public ForStatementNode(AbstractScriptNode initial, AbstractScriptNode condition, AbstractScriptNode step, AbstractScriptNode body) {
 		subNodes = new AbstractScriptNode[4];
@@ -22,36 +23,36 @@ public class ForStatementNode extends AbstractScriptNode {
 		subNodes[3] = body;
 	}
 
-	public ForStatementNode(AbstractScriptNode initial, Token iterator, AbstractScriptNode body) {
-		subNodes = new AbstractScriptNode[2];
+	public ForStatementNode(AbstractScriptNode initial, AbstractScriptNode iterator, AbstractScriptNode body) {
+		subNodes = new AbstractScriptNode[3];
 		subNodes[0] = initial;
-		subNodes[1] = body;
-		this.iterator = iterator;
+		subNodes[1] = iterator;
+		subNodes[2] = body;
 	}
 
 	@Override
 	public Variable execute(Instance instance, Script script) {
 		Variable body = new Variable();
-		if (iterator == null) { // normal for loop
+		if (subNodes.length == 4) { // normal for loop
 			subNodes[0].execute(instance, script); // initial
 			while (!subNodes[1].execute(instance, script).isNull()) { // condition
 				body = subNodes[3].execute(instance, script); // body
 				subNodes[2].execute(instance, script); // step
 			}
 
-		} else {
-			if (TokenConstants.ITERATOR_TILE.equals(iterator)) { // tile iterator
-				Variable iterationVariable = subNodes[0].execute(instance, script); // initial
-				if (Data.getPlanet() != null) {
-					for (Face face : Data.getPlanet().getFaces()) {
-						for (Tile tile : face.getTiles()) {
-							iterationVariable.setTile(tile);
-							body = subNodes[1].execute(instance, script); // body
-						}
+		} else { // for loop with list iterator
+			Variable iterationVariable = subNodes[0].execute(instance, script); // initial
+			Variable listVariable = subNodes[1].execute(instance, script); // iterator
+			if (listVariable.getType() == DataType.LIST) {
+				List<Variable> variableList = listVariable.getList();
+				if (variableList != null) {
+					for (Variable variable : variableList) {
+						iterationVariable.copyValue(variable);
+						body = subNodes[2].execute(instance, script); // body
 					}
 				}
 			} else {
-				Logger.error("Illegal keyword '" + iterator.getValue() + "' as for-loop iterator!");
+				Logger.error("Iterator variable has to be of type LIST! Encountered type '" + listVariable.getType() + "'!");
 			}
 		}
 		return body;

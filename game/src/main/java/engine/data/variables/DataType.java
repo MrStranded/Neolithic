@@ -23,6 +23,9 @@ public enum DataType {
 	DRIVE,
 	PROCESS,
 
+	// composite types
+	LIST,
+
 	// silly little small tailing semicolon - look how cute it is
 	;
 	// UwU

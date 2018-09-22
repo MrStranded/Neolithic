@@ -165,7 +165,7 @@ public class ASTBuilder {
 			return new ForStatementNode(initial, condition, step, body);
 		} else if (TokenConstants.COLON.equals(next)) { // special iterator (tiles, entities ...)
 			interpreter.consume(TokenConstants.COLON);
-			Token iterator = interpreter.consume();
+			AbstractScriptNode iterator = readExpression();
 			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
 			MultiStatementNode body = readMultiStatement();
 
