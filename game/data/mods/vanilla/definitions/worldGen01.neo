@@ -37,6 +37,10 @@ WorldGen: genContinental {
 		test2 = [["haha", "lol"], 1, test];
 		print("test2 = " + test2);
 
+		for (s : test + test2) {
+			print("s = " + s);
+		}
+
 		fitTiles();
 	}
 }

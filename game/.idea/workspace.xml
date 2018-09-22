@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb5f568f-e1c1-4ada-8646-68bc27407460" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ListExpressionNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/utils/converters/StringConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/utils/converters/StringConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/neolithic/.gradle/" />
@@ -81,8 +77,8 @@
       <file leaf-file-name="worldGen01.neo" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="37" column="32" selection-start-line="37" selection-start-column="32" selection-end-line="37" selection-end-column="32" />
+            <state relative-caret-position="510">
+              <caret line="40" column="30" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -112,19 +108,19 @@
       <file leaf-file-name="Variable.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-858">
-              <caret line="204" column="34" selection-start-line="204" selection-start-column="34" selection-end-line="204" selection-end-column="34" />
+            <state relative-caret-position="162">
+              <caret line="191" column="16" selection-start-line="191" selection-start-column="16" selection-end-line="191" selection-end-column="16" />
               <folding>
                 <element signature="e#4186#4187#0" expanded="true" />
                 <element signature="e#4204#4205#0" expanded="true" />
+                <element signature="e#7078#7079#0" expanded="true" />
                 <element signature="e#7094#7095#0" expanded="true" />
-                <element signature="e#7110#7111#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StringConverter.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="StringConverter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/utils/converters/StringConverter.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="210">
@@ -133,11 +129,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BinaryOperationExecuter.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BinaryOperationExecuter.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="23" column="34" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
+            <state relative-caret-position="342">
+              <caret line="72" column="43" selection-start-line="72" selection-start-column="43" selection-end-line="72" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -301,10 +297,10 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ForStatementNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/ListExpressionNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/utils/converters/StringConverter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" />
         <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/utils/converters/StringConverter.java" />
       </list>
     </option>
   </component>
@@ -919,7 +915,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="643307000" />
+    <option name="totallyTimeSpent" value="643882000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -942,10 +938,10 @@
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.2610132" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2610132" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2777778" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2777778" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32819384" />
       <window_info anchor="right" id="Gradle" order="4" weight="0.32959402" />
       <window_info anchor="right" id="Theme Preview" order="3" />
@@ -1318,20 +1314,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="37" column="32" selection-start-line="37" selection-start-column="32" selection-end-line="37" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="23" column="34" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/utils/TokenNumerifier.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -1339,23 +1321,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-858">
-          <caret line="204" column="34" selection-start-line="204" selection-start-column="34" selection-end-line="204" selection-end-column="34" />
-          <folding>
-            <element signature="e#4186#4187#0" expanded="true" />
-            <element signature="e#4204#4205#0" expanded="true" />
-            <element signature="e#7094#7095#0" expanded="true" />
-            <element signature="e#7110#7111#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/utils/converters/StringConverter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="14" column="119" lean-forward="true" selection-start-line="14" selection-start-column="119" selection-end-line="14" selection-end-column="119" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="191" column="16" selection-start-line="191" selection-start-column="16" selection-end-line="191" selection-end-column="16" />
+          <folding>
+            <element signature="e#4186#4187#0" expanded="true" />
+            <element signature="e#4204#4205#0" expanded="true" />
+            <element signature="e#7078#7079#0" expanded="true" />
+            <element signature="e#7094#7095#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="40" column="30" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="72" column="43" selection-start-line="72" selection-start-column="43" selection-end-line="72" selection-end-column="43" />
         </state>
       </provider>
     </entry>

@@ -1,5 +1,6 @@
 package engine.parser.scripts.execution;
 
+import engine.data.Data;
 import engine.data.entities.Instance;
 import engine.data.Script;
 import engine.data.variables.DataType;
@@ -10,6 +11,9 @@ import engine.parser.scripts.nodes.IdentifierNode;
 import engine.parser.scripts.nodes.ScriptCallNode;
 import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BinaryOperationExecuter {
 
@@ -47,6 +51,21 @@ public class BinaryOperationExecuter {
 
 			if (left.getType() == DataType.NUMBER && right.getType() == DataType.NUMBER) { // normal addition
 				return new Variable(left.getDouble() + right.getDouble());
+			} else if (left.getType() == DataType.LIST) { // list concatenation
+				if (right.getType() == DataType.LIST) { // merge two lists
+					List<Variable> leftList = left.getList();
+					List<Variable> rightList = right.getList();
+					List<Variable> resultList = new ArrayList<>(leftList.size() + rightList.size());
+					resultList.addAll(leftList);
+					resultList.addAll(rightList);
+					return new Variable(resultList);
+				} else { // add element to list
+					List<Variable> leftList = left.getList();
+					List<Variable> resultList = new ArrayList<>(leftList.size() + 1);
+					resultList.addAll(leftList);
+					resultList.add(right);
+					return new Variable(resultList);
+				}
 			} else { // string concatenation
 				return new Variable(left.getString() + right.getString());
 			}
