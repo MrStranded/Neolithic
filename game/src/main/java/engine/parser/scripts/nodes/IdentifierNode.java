@@ -1,8 +1,11 @@
 package engine.parser.scripts.nodes;
 
-import engine.data.entities.Instance;
+import engine.data.Data;
 import engine.data.Script;
+import engine.data.entities.Instance;
 import engine.data.identifiers.AttributeIdentifier;
+import engine.data.identifiers.ContainerIdentifier;
+import engine.data.proto.Container;
 import engine.data.variables.Variable;
 import engine.parser.tokenization.Token;
 
@@ -20,6 +23,7 @@ public class IdentifierNode extends AbstractScriptNode {
 	public Variable execute(Instance instance, Script script) {
 		Variable variable;
 		Instance targetInstance = getTargetInstance();
+		Container targetContainer = getTargetContainer();
 
 		if (attributeIdentifier == null) { // ----- retrieve variable
 			if (targetInstance != null) { // return variable from an instance
@@ -28,16 +32,23 @@ public class IdentifierNode extends AbstractScriptNode {
 					variable = Variable.withName(identifier.getValue());
 					targetInstance.addVariable(variable);
 				}
-			} else { // retrieve variable from current script scope
+			} else { // retrieve variable from current script scope OR retrieve container from "global" scope
 				variable = script.getVariable(identifier.getValue());
 				if (variable == null) {
-					variable = Variable.withName(identifier.getValue());
-					script.addVariable(variable);
+					int containerID = Data.getContainerID(identifier.getValue());
+					if (containerID >= 0) { // fill container into variable
+						return new Variable(Data.getContainer(containerID));
+					} else { // create new variable in scope
+						variable = Variable.withName(identifier.getValue());
+						script.addVariable(variable);
+					}
 				}
 			}
 		} else { // ------------------------------- retrive attribute
 			if (targetInstance != null) { // return attribute from target instance
 				variable = new Variable(attributeIdentifier.retrieve(targetInstance));
+			} else if (targetContainer != null) {
+				variable = new Variable(attributeIdentifier.retrieve(targetContainer));
 			} else { // return variable from self
 				variable = new Variable(attributeIdentifier.retrieve(instance));
 			}
@@ -53,6 +64,12 @@ public class IdentifierNode extends AbstractScriptNode {
 	public Instance getTargetInstance() {
 		if (target != null) {
 			return target.getInstance();
+		}
+		return null;
+	}
+	public Container getTargetContainer() {
+		if (target != null) {
+			return target.getContainer();
 		}
 		return null;
 	}

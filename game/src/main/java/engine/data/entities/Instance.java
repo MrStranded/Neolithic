@@ -196,18 +196,34 @@ public class Instance {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public int getAttribute(int attributeID) {
+	public Attribute getAttribute(int attributeID) {
+		Attribute attribute = attributes.get(attributeID);
+		if (attribute == null) {
+			attribute = new Attribute(attributeID, 0);
+			attributes.insert(attribute);
+		}
+		return attribute;
+	}
+
+	public int getAttributeValue(int attributeID) {
 		int value = 0;
 
 		// general data
-		Container container = Data.getContainer(id);
-		value += container != null? container.getAttribute(attributeID) : 0;
-
+		value += getSpeciesAttributeValue(attributeID);
 		// personal data
-		Attribute attribute = attributes.get(attributeID);
-		value += attribute != null? attribute.getValue() : 0;
+		value += getPersonalAttributeValue(attributeID);
 
 		return value;
+	}
+
+	public int getPersonalAttributeValue(int attributeID) {
+		Attribute attribute = attributes.get(attributeID);
+		return attribute != null? attribute.getValue() : 0;
+	}
+
+	public int getSpeciesAttributeValue(int attributeID) {
+		Container container = Data.getContainer(id);
+		return container != null? container.getAttributeValue(attributeID) : 0;
 	}
 
 	/**

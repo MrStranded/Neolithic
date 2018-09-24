@@ -2,20 +2,20 @@ package engine.parser.scripts.execution;
 
 import constants.ScriptConstants;
 import constants.TopologyConstants;
+import engine.data.Data;
+import engine.data.Script;
 import engine.data.entities.Instance;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
-import engine.data.Data;
-import engine.data.Script;
-import engine.data.variables.DataType;
+import engine.data.proto.Container;
 import engine.data.variables.Variable;
 import engine.logic.Neighbour;
 import engine.logic.TopologyGenerator;
-import engine.parser.utils.Logger;
 import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.nodes.CommandExpressionNode;
 import engine.parser.tokenization.Token;
+import engine.parser.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ public class CommandExecuter {
 				target.addAttribute(attributeID, amount);
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance createFormation (String formationTextID, Tile tile)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double chance (double probability)
 		} else if (TokenConstants.CHANCE.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
 				double chance = parameters[0].getDouble();
@@ -57,14 +57,14 @@ public class CommandExecuter {
 				return new Variable(Math.random() < chance ? 1 : 0);
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance create (String textID, Tile tile)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance create (Container container, Tile tile)
 		} else if (TokenConstants.CREATE.equals(command)) {
 			if (requireParameters(commandNode, 2)) {
-				String textID = parameters[0].getString();
-				int id = Data.getContainerID(textID);
+				Container container = parameters[0].getContainer();
 				Tile tile = parameters[1].getTile();
 
-				if (id >= 0 && tile != null) {
+				if (container != null && tile != null) {
+					int id = Data.getContainerID(container.getTextID());
 					Instance instance = new Instance(id);
 					instance.setPosition(tile);
 					Variable[] newParameters = new Variable[1];
@@ -77,8 +77,8 @@ public class CommandExecuter {
 
 					return new Variable(instance);
 				} else {
-					if (id == -1) {
-						Logger.error("Cannot create Instance: Template for '" + textID + "' does not exist. Line " + command.getLine());
+					if (container == null) {
+						Logger.error("Cannot create Instance: Template for '" + parameters[0] + "' does not exist. Line " + command.getLine());
 					}
 					if (tile == null) {
 						Logger.error("Cannot create Instance: Not a valid tile value.");
@@ -118,7 +118,7 @@ public class CommandExecuter {
 				TopologyGenerator.fitTiles(Data.getPlanet());
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getAttribute ([Instance instance,] String attribute)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getAttributeValue ([Instance instance,] String attribute)
 		} else if (TokenConstants.GET_ATTRIBUTE.equals(command)) {
 			if (parameters.length >= 2) {
 				Instance instance = parameters[0].getInstance();
@@ -177,7 +177,7 @@ public class CommandExecuter {
 
 				for (Instance item : holder.getSubInstances()) {
 					if (item != null) {
-						if (item.getAttribute(attributeID) > 0) {
+						if (item.getAttributeValue(attributeID) > 0) {
 							return new Variable(item);
 						}
 					}

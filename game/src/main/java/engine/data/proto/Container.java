@@ -83,7 +83,11 @@ public class Container {
 		this.name = name;
 	}
 
-	public int getAttribute(int attributeID) {
+	public Attribute getAttribute(int attributeID) {
+		return attributes.get(attributeID);
+	}
+
+	public int getAttributeValue(int attributeID) {
 		Attribute attribute = attributes.get(attributeID);
 		return attribute != null? attribute.getValue() : 0;
 	}

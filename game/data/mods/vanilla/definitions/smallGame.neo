@@ -87,7 +87,9 @@ Creature: cMonkey {
 
 	Script: tick {
 		print("monkey tick " + self->id);
-		print("monkey nutrition " + self.attNutrition);
+		(.attNutrition += random(3)) ^= 2;
+		print("species nutrition " + cMonkey.attNutrition);
+		print("monkey nutrition " + (cMonkey.attNutrition + self.attNutrition));
 	}
 }
 

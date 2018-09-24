@@ -15,14 +15,32 @@ public class AttributeIdentifier {
 	}
 
 	/**
-	 * Retrieves the corresponding Container from the game data.
+	 * Retrieves the corresponding Attribute from the given instance.
 	 * The first time this is called, the textID is being replaced by a numerical id and the textID is discarded.
-	 * @return the container specified by this identifier or null if no such container exists
+	 * @return the attribute, stored in the instance, specified by this identifier or null if no such container exists
 	 */
-	public int retrieve(Instance instance) {
+	public Attribute retrieve(Instance instance) {
 		if (instance == null) {
-			return 0;
+			return null;
 		}
+		checkID();
+		return instance.getAttribute(id);
+	}
+
+	/**
+	 * Retrieves the corresponding Attribute from the given instance.
+	 * The first time this is called, the textID is being replaced by a numerical id and the textID is discarded.
+	 * @return the attribute, stored in the instance, specified by this identifier or null if no such container exists
+	 */
+	public Attribute retrieve(Container container) {
+		if (container == null) {
+			return null;
+		}
+		checkID();
+		return container.getAttribute(id);
+	}
+
+	private void checkID() {
 		if (id < 0) {
 			int attributeID = Data.getProtoAttributeID(textID);
 			if (attributeID >= 0) {
@@ -30,7 +48,6 @@ public class AttributeIdentifier {
 				textID = null; // free the space up. thanks java garbage collector! <3
 			}
 		}
-		return instance.getAttribute(id);
 	}
 
 	public String toString() {

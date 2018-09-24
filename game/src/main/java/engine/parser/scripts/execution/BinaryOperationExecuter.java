@@ -1,6 +1,7 @@
 package engine.parser.scripts.execution;
 
 import engine.data.Data;
+import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
 import engine.data.Script;
 import engine.data.variables.DataType;
@@ -39,9 +40,15 @@ public class BinaryOperationExecuter {
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& .
 		} else if (TokenConstants.POINT.equals(operator)) {
-			IdentifierNode subNode = (IdentifierNode) binaryNode.getRight();
-			subNode.setTarget(left);
-			subNode.markAsAttributeIdentifier();
+			if (binaryNode.getRight().getClass() == IdentifierNode.class) {
+				IdentifierNode subNode = (IdentifierNode) binaryNode.getRight();
+				subNode.setTarget(left);
+				subNode.markAsAttributeIdentifier();
+			} else {
+				Logger.error("Wrong argument type after point operator: '" + binaryNode.getRight().getClass() + "' on line " + operator.getLine());
+				Logger.error("Argument:");
+				binaryNode.getRight().print("   ");
+			}
 
 			return binaryNode.getRight().execute(self, script);
 
@@ -49,7 +56,7 @@ public class BinaryOperationExecuter {
 		} else if (TokenConstants.PLUS.equals(operator)) {
 			Variable right = binaryNode.getRight().execute(self, script);
 
-			if (left.getType() == DataType.NUMBER && right.getType() == DataType.NUMBER) { // normal addition
+			if (left.getType() == DataType.NUMBER || left.getType() == DataType.ATTRIBUTE) { // normal addition
 				return new Variable(left.getDouble() + right.getDouble());
 			} else if (left.getType() == DataType.LIST) { // list concatenation
 				if (right.getType() == DataType.LIST) { // merge two lists
@@ -97,6 +104,11 @@ public class BinaryOperationExecuter {
 		} else if (TokenConstants.MODULO.equals(operator)) {
 			Variable right = binaryNode.getRight().execute(self, script);
 
+			if (right.isNull()) {
+				Logger.error("Cannot calculate modulo with zero! Line: " + operator.getLine());
+				return new Variable();
+			}
+
 			return new Variable(left.getDouble() % right.getDouble());
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ^
@@ -109,13 +121,80 @@ public class BinaryOperationExecuter {
 		} else if (TokenConstants.QUICK_PLUS.equals(operator)) {
 			Variable right = binaryNode.getRight().execute(self, script);
 
-			if (left.getType() == DataType.NUMBER && right.getType() == DataType.NUMBER) { // normal addition
+			if (left.getType() == DataType.NUMBER) { // normal addition
 				left.setDouble(left.getDouble() + right.getDouble());
 				return left;
+			} else if (left.getType() == DataType.ATTRIBUTE) { // attribute addition
+				return left.quickSetAttributeValue(left.getDouble() + right.getDouble());
 			} else { // string concatenation
 				left.setString(left.getString() + right.getString());
 				return left;
 			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& -=
+		} else if (TokenConstants.QUICK_MINUS.equals(operator)) {
+			Variable right = binaryNode.getRight().execute(self, script);
+
+			if (left.getType() == DataType.ATTRIBUTE) { // attribute subtraction
+				return left.quickSetAttributeValue(left.getDouble() - right.getDouble());
+			}
+
+			left.setDouble(left.getDouble() - right.getDouble());
+			return left;
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& *=
+		} else if (TokenConstants.QUICK_TIMES.equals(operator)) {
+			Variable right = binaryNode.getRight().execute(self, script);
+
+			if (left.getType() == DataType.ATTRIBUTE) { // attribute multiplication
+				return left.quickSetAttributeValue(left.getDouble() * right.getDouble());
+			}
+
+			left.setDouble(left.getDouble() * right.getDouble());
+			return left;
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& /=
+		} else if (TokenConstants.QUICK_DIVIDE.equals(operator)) {
+			Variable right = binaryNode.getRight().execute(self, script);
+
+			if (right.isNull()) {
+				Logger.error("Cannot divide by zero! Line: " + operator.getLine());
+				return new Variable();
+			}
+
+			if (left.getType() == DataType.ATTRIBUTE) { // attribute division
+				return left.quickSetAttributeValue(left.getDouble() / right.getDouble());
+			}
+
+			left.setDouble(left.getDouble() / right.getDouble());
+			return left;
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& %=
+		} else if (TokenConstants.QUICK_MODULO.equals(operator)) {
+			Variable right = binaryNode.getRight().execute(self, script);
+
+			if (right.isNull()) {
+				Logger.error("Cannot calculate modulo with zero! Line: " + operator.getLine());
+				return new Variable();
+			}
+
+			if (left.getType() == DataType.ATTRIBUTE) { // attribute modulo
+				return left.quickSetAttributeValue(left.getDouble() % right.getDouble());
+			}
+
+			left.setDouble(left.getDouble() % right.getDouble());
+			return left;
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ^=
+		} else if (TokenConstants.QUICK_POWER.equals(operator)) {
+			Variable right = binaryNode.getRight().execute(self, script);
+
+			if (left.getType() == DataType.ATTRIBUTE) { // attribute power
+				return left.quickSetAttributeValue(Math.pow(left.getDouble(), right.getDouble()));
+			}
+
+			left.setDouble(Math.pow(left.getDouble(), right.getDouble()));
+			return left;
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ==
 		} else if (TokenConstants.EQUAL.equals(operator)) {

@@ -14,7 +14,7 @@ public class Classifier {
 		}
 
 		switch (c) {
-			case '>': case '<': case '=': case '!': case '&': case '|': case '+': case '-': case '*': case '/':
+			case '>': case '<': case '=': case '!': case '&': case '|': case '+': case '-': case '*': case '/': case '^':
 				return CharacterClass.OPERATOR;
 
 			case ';': case ':': case ',': case '(': case ')': case '{': case '}': case '[': case ']':

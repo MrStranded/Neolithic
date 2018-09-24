@@ -15,6 +15,9 @@ public enum DataType {
 	ENTITY,
 	CREATURE,
 
+	// containers
+	CONTAINER,
+
 	// planet creation
 	FORMATION,
 	WORLDGEN,

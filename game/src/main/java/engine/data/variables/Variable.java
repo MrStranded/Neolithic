@@ -5,6 +5,7 @@ import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
 import engine.data.planetary.Tile;
+import engine.data.proto.Container;
 import engine.utils.converters.StringConverter;
 
 import java.util.List;
@@ -57,6 +58,11 @@ public class Variable implements IDInterface {
 
 	public Variable(Instance value) {
 		this.type = DataType.INSTANCE;
+		this.value = value;
+	}
+
+	public Variable(Container value) {
+		this.type = DataType.CONTAINER;
 		this.value = value;
 	}
 
@@ -137,6 +143,18 @@ public class Variable implements IDInterface {
 	}
 
 	// ###################################################################################
+	// ################################ Quick Math #######################################
+	// ###################################################################################
+
+	public Variable quickSetAttributeValue(double value) {
+		Attribute attribute = getAttribute();
+		if (attribute != null) {
+			attribute.setValue((int) value);
+		}
+		return this;
+	}
+
+	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
@@ -154,7 +172,9 @@ public class Variable implements IDInterface {
 		if (type == DataType.NUMBER) {
 			return (Double) value;
 		} else if (type == DataType.ATTRIBUTE) {
-			return ((Attribute) value).getValue();
+			if ((Attribute) value != null) {
+				return ((Attribute) value).getValue();
+			}
 		}
 		return 0d;
 	}
@@ -186,8 +206,14 @@ public class Variable implements IDInterface {
 				return (String) value;
 			case INSTANCE:
 				return ((Instance) value).toString();
+			case CONTAINER:
+				return ((Container) value).getName();
 			case ATTRIBUTE:
-				return String.valueOf(((Attribute) value).getValue());
+				if ((Attribute) value != null) {
+					return String.valueOf(((Attribute) value).getValue());
+				} else {
+					return "(NULL ATTRIBUTE)";
+				}
 			case LIST:
 				StringBuilder values = new StringBuilder("[");
 				boolean first = true;
@@ -203,11 +229,23 @@ public class Variable implements IDInterface {
 				values.append("]");
 				return values.toString();
 			default:
-				return "CANNOT CAST TO STRING";
+				return "(CANNOT CAST TO STRING: " + toString() + ")";
 		}
 	}
 	public void setString(String v) {
 		type = DataType.STRING;
+		value = v;
+	}
+
+	// ----------------------------------------------- attribute
+	public Attribute getAttribute() {
+		if (type == DataType.ATTRIBUTE) {
+			return (Attribute) value;
+		}
+		return null;
+	}
+	public void setAttribute(Attribute v) {
+		type = DataType.ATTRIBUTE;
 		value = v;
 	}
 
@@ -239,6 +277,18 @@ public class Variable implements IDInterface {
 		value = v;
 	}
 
+	// ----------------------------------------------- container
+	public Container getContainer() {
+		if (type == DataType.CONTAINER) {
+			return (Container) value;
+		}
+		return null;
+	}
+	public void setContainer(Container v) {
+		type = DataType.CONTAINER;
+		value = v;
+	}
+
 	// ----------------------------------------------- list
 	public List<Variable> getList() {
 		if (type == DataType.LIST) {
@@ -262,7 +312,7 @@ public class Variable implements IDInterface {
 
 	@Override
 	public IDInterface merge(IDInterface other) {
-		System.out.println("Variable insertion collision! " + getId() + " | " + other.getId());
+		System.out.println("Variable insertion collision! " + getId() + " from " + toString() + " | " + other.getId() + " from " + other.toString() + "");
 		return other; // replace old value with new one
 	}
 
@@ -281,6 +331,8 @@ public class Variable implements IDInterface {
 				return pre + (Tile) value;
 			case INSTANCE:
 				return pre + (Instance) value;
+			case CONTAINER:
+				return pre + (Container) value;
 			case ATTRIBUTE:
 				return pre + (Attribute) value;
 			case LIST:
