@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb5f568f-e1c1-4ada-8646-68bc27407460" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/smallGame.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/smallGame.neo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/entities/Instance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/entities/Instance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/identifiers/AttributeIdentifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/identifiers/AttributeIdentifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/proto/Container.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/proto/Container.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/variables/DataType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/variables/DataType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/constants/TokenConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/constants/TokenConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Classifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Classifier.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/neolithic/.gradle/" />
@@ -69,7 +57,7 @@
         <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/smallGame.neo">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="156">
-              <caret line="89" column="9" selection-start-line="89" selection-start-column="9" selection-end-line="89" selection-end-column="9" />
+              <caret line="89" column="31" selection-start-line="89" selection-start-column="31" selection-end-line="89" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -134,8 +122,8 @@
       <file leaf-file-name="BinaryOperationExecuter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="49" column="48" selection-start-line="49" selection-start-column="48" selection-end-line="49" selection-end-column="48" />
+            <state relative-caret-position="180">
+              <caret line="29" column="70" selection-start-line="29" selection-start-column="70" selection-end-line="29" selection-end-column="70" />
             </state>
           </provider>
         </entry>
@@ -299,9 +287,9 @@
         <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Classifier.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java" />
         <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/smallGame.neo" />
       </list>
     </option>
@@ -927,7 +915,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="661392000" />
+    <option name="totallyTimeSpent" value="661625000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -1333,13 +1321,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="49" column="48" selection-start-line="49" selection-start-column="48" selection-end-line="49" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Tokenizer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
@@ -1364,10 +1345,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="29" column="70" selection-start-line="29" selection-start-column="70" selection-end-line="29" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/smallGame.neo">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="156">
-          <caret line="89" column="9" selection-start-line="89" selection-start-column="9" selection-end-line="89" selection-end-column="9" />
+          <caret line="89" column="31" selection-start-line="89" selection-start-column="31" selection-end-line="89" selection-end-column="31" />
         </state>
       </provider>
     </entry>

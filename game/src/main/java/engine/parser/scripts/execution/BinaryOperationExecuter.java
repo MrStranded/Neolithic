@@ -26,6 +26,10 @@ public class BinaryOperationExecuter {
 		if (TokenConstants.ASSIGNMENT.equals(operator)) {
 			Variable right = binaryNode.getRight().execute(self, script);
 
+			if (left.getType() == DataType.ATTRIBUTE) { // attribute assignment
+				return left.quickSetAttributeValue(right.getDouble());
+			}
+
 			left.copyValue(right);
 			return left;
 
