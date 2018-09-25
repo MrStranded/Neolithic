@@ -56,6 +56,19 @@ public class UnaryOperationExecuter {
 
 			return unaryNode.getSubNode().execute(self, script);
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ..
+		} else if (TokenConstants.DOUBLE_POINT.equals(operator)) {
+			if (unaryNode.getSubNode().getClass() != IdentifierNode.class) {
+				Logger.error("WTF Exception (" + operator.getLine() + ") it's an: " + unaryNode.getSubNode().getClass().toGenericString());
+			}
+
+			IdentifierNode subNode = (IdentifierNode) unaryNode.getSubNode();
+			subNode.setTarget(new Variable(self));
+			subNode.markAsAttributeIdentifier();
+			subNode.setRetrieveCompleteAttributeValue(true);
+
+			return unaryNode.getSubNode().execute(self, script);
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& !
 		} else if (TokenConstants.NOT.equals(operator)) {
 			Variable variable = unaryNode.getSubNode().execute(self, script);

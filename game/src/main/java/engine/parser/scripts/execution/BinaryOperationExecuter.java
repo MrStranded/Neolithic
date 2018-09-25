@@ -75,7 +75,8 @@ public class BinaryOperationExecuter {
 		} else if (TokenConstants.PLUS.equals(operator)) {
 			Variable right = binaryNode.getRight().execute(self, script);
 
-			if (left.getType() == DataType.NUMBER || left.getType() == DataType.ATTRIBUTE) { // normal addition
+			if ((left.getType() == DataType.NUMBER || left.getType() == DataType.ATTRIBUTE)
+			&& (right.getType() == DataType.NUMBER || right.getType() == DataType.ATTRIBUTE)) { // normal addition
 				return new Variable(left.getDouble() + right.getDouble());
 			} else if (left.getType() == DataType.LIST) { // list concatenation
 				if (right.getType() == DataType.LIST) { // merge two lists

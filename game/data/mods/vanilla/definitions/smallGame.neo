@@ -83,13 +83,13 @@ Creature: cMonkey {
 
 	Script: place {
 		self->id = random(1000);
+		print(->id + " searching for food!");
+		print(getAttInRange("attEdible", self, 2));
 	}
 
 	Script: tick {
 		print("monkey tick " + self->id);
-		cMonkey.attNutrition = (.attNutrition += random(3)) ^= 2;
-		print("species nutrition " + cMonkey.attNutrition);
-		print("monkey nutrition " + (cMonkey.attNutrition + self.attNutrition));
+		print("monkey nutrition " + ..attNutrition);
 	}
 }
 
@@ -132,15 +132,15 @@ Process: proEat {
 
 Process: proGatherFood {
 	Script: condition {
-		require(getAttInRange("attEdible", getTile(creature), creature..attViewingDistance));
+		require(getAttInRange("attEdible", getTile(self), ..attViewingDistance));
 	}
 	Script: process(creature) {
-		pickUp(creature, getAttInRange("attEdible", creature, creature..attViewingDistance));
+		pickUp(self, getAttInRange("attEdible", self, ..attViewingDistance));
 	}
 
 	Script: discovery(creature) {
-		require(creature.attSpeed > 0);
-		require(creature.attViewingDistance > 0);
+		require(..attSpeed > 0);
+		require(..attViewingDistance > 0);
 	}
 }
 
