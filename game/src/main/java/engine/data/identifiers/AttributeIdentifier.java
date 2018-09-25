@@ -40,6 +40,20 @@ public class AttributeIdentifier {
 		return container.getAttribute(id);
 	}
 
+	/**
+	 * Retrieves the complete value of the corresponding attribute.
+	 * This means the added value of the personal, as well as the species attribute of the specified type.
+	 * @param instance to search in
+	 * @return personal + species attribute value
+	 */
+	public int retrieveAll(Instance instance) {
+		if (instance == null) {
+			return 0;
+		}
+		checkID();
+		return instance.getAttributeValue(id);
+	}
+
 	private void checkID() {
 		if (id < 0) {
 			int attributeID = Data.getProtoAttributeID(textID);

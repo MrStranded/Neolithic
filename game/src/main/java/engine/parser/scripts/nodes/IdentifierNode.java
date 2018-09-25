@@ -14,6 +14,7 @@ public class IdentifierNode extends AbstractScriptNode {
 	private Token identifier;
 	private Variable target = null;
 	private AttributeIdentifier attributeIdentifier = null;
+	private boolean retrieveCompleteAttributeValue = false;
 
 	public IdentifierNode(Token identifier) {
 		this.identifier = identifier;
@@ -46,11 +47,19 @@ public class IdentifierNode extends AbstractScriptNode {
 			}
 		} else { // ------------------------------- retrive attribute
 			if (targetInstance != null) { // return attribute from target instance
-				variable = new Variable(attributeIdentifier.retrieve(targetInstance));
+				if (retrieveCompleteAttributeValue) {
+					variable = new Variable(attributeIdentifier.retrieveAll(targetInstance));
+				} else {
+					variable = new Variable(attributeIdentifier.retrieve(targetInstance));
+				}
 			} else if (targetContainer != null) {
 				variable = new Variable(attributeIdentifier.retrieve(targetContainer));
 			} else { // return variable from self
-				variable = new Variable(attributeIdentifier.retrieve(instance));
+				if (retrieveCompleteAttributeValue) {
+					variable = new Variable(attributeIdentifier.retrieveAll(targetInstance));
+				} else {
+					variable = new Variable(attributeIdentifier.retrieve(instance));
+				}
 			}
 		}
 
@@ -59,6 +68,10 @@ public class IdentifierNode extends AbstractScriptNode {
 
 	public void markAsAttributeIdentifier() {
 		attributeIdentifier = new AttributeIdentifier(identifier.getValue());
+	}
+
+	public void setRetrieveCompleteAttributeValue(boolean retrieveCompleteAttributeValue) {
+		this.retrieveCompleteAttributeValue = retrieveCompleteAttributeValue;
 	}
 
 	public Instance getTargetInstance() {

@@ -10,8 +10,9 @@ import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.variables.Variable;
-import engine.logic.Neighbour;
+import engine.logic.tiles.Neighbour;
 import engine.logic.TopologyGenerator;
+import engine.logic.tiles.TileArea;
 import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.nodes.CommandExpressionNode;
 import engine.parser.tokenization.Token;
@@ -147,6 +148,38 @@ public class CommandExecuter {
 				}
 			}
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance getAttInRange (String attributeTextID, Tile center, int radius)
+		} else if (TokenConstants.GET_ATTRIBUTE_IN_RANGE.equals(command)) {
+			if (requireParameters(commandNode, 3)) {
+				String attributeTextID = parameters[0].getString();
+				Tile center = parameters[1].getTile();
+				int radius = parameters[2].getInt();
+
+				int attributeID = Data.getProtoAttributeID(attributeTextID);
+
+				if (center == null) {
+					Logger.error("Tile value for command '" + TokenConstants.GET_ATTRIBUTE_IN_RANGE.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+
+				if (attributeID == -1) {
+					Logger.error("Attribute '" + attributeTextID + "' does not exist!");
+					return new Variable();
+				}
+
+				TileArea tileArea = new TileArea(center, radius);
+				for (Tile tile : tileArea.getTileList()) {
+					for (Instance instance : tile.getSubInstances()) {
+						if (instance != null) {
+							if (instance.getAttributeValue(attributeID) > 0) {
+								return new Variable(instance);
+							}
+						}
+					}
+				}
+				return new Variable();
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getHeight (Tile tile)
 		} else if (TokenConstants.GET_HEIGHT.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
@@ -213,6 +246,21 @@ public class CommandExecuter {
 				}
 
 				return new Variable(instance.getPosition());
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list<tile> getTilesInRange (Tile tile, int radius)
+		} else if (TokenConstants.GET_TILES_IN_RANGE.equals(command)) {
+			if (requireParameters(commandNode, 2)) {
+				Tile center = parameters[0].getTile();
+				int radius = parameters[1].getInt();
+
+				if (center == null) {
+					Logger.error("Tile value for command '" + TokenConstants.GET_TILES_IN_RANGE.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+
+				TileArea tileArea = new TileArea(center, radius);
+				return new Variable(tileArea.getTilesAsVariableList());
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string moveTo (Instance instance, Tile tile)

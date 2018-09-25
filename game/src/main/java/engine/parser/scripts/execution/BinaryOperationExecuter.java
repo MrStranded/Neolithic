@@ -56,6 +56,21 @@ public class BinaryOperationExecuter {
 
 			return binaryNode.getRight().execute(self, script);
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ..
+		} else if (TokenConstants.DOUBLE_POINT.equals(operator)) {
+			if (binaryNode.getRight().getClass() == IdentifierNode.class) {
+				IdentifierNode subNode = (IdentifierNode) binaryNode.getRight();
+				subNode.setTarget(left);
+				subNode.markAsAttributeIdentifier();
+				subNode.setRetrieveCompleteAttributeValue(true);
+			} else {
+				Logger.error("Wrong argument type after double point operator: '" + binaryNode.getRight().getClass() + "' on line " + operator.getLine());
+				Logger.error("Argument:");
+				binaryNode.getRight().print("   ");
+			}
+
+			return binaryNode.getRight().execute(self, script);
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& +
 		} else if (TokenConstants.PLUS.equals(operator)) {
 			Variable right = binaryNode.getRight().execute(self, script);

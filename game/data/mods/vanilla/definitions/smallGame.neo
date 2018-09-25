@@ -132,10 +132,10 @@ Process: proEat {
 
 Process: proGatherFood {
 	Script: condition {
-		require(getAttInRange(creature, "attEdible", creature.attViewingDistance));
+		require(getAttInRange("attEdible", getTile(creature), creature..attViewingDistance));
 	}
 	Script: process(creature) {
-		pickUp(creature, getAttInRange(creature, "attEdible", creature.attViewingDistance));
+		pickUp(creature, getAttInRange("attEdible", creature, creature..attViewingDistance));
 	}
 
 	Script: discovery(creature) {

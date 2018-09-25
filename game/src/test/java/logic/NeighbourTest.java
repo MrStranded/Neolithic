@@ -2,7 +2,7 @@ package logic;
 
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
-import engine.logic.Neighbour;
+import engine.logic.tiles.Neighbour;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

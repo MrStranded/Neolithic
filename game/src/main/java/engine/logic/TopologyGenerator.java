@@ -8,6 +8,7 @@ import engine.data.proto.Container;
 import engine.data.Data;
 import engine.data.proto.TileContainer;
 import engine.data.variables.DataType;
+import engine.logic.tiles.Neighbour;
 
 import java.util.List;
 

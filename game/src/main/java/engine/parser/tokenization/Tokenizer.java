@@ -142,7 +142,9 @@ public class Tokenizer {
 					case POINT:
 						if (!inComment) {
 							if (!inString) {
-								if (currentClass != CharacterClass.NUMBER) { // the point behaves like an operator
+								if (currentClass == CharacterClass.POINT) { // double point possibly
+									currentClass = CharacterClass.OPERATOR;
+								} else if (currentClass != CharacterClass.NUMBER) { // the point behaves like an operator
 									addToken(tokens, currentClass, token);
 									currentClass = CharacterClass.OPERATOR;
 								} else { // the point designates the decimal point of a number

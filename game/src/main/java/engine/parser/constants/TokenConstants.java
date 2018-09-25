@@ -58,13 +58,14 @@ public enum TokenConstants {
 	SET_WATER_LEVEL     (TokenType.COMMAND, "setWaterLevel"),
 
 	// -------------------------------------------------- Retrieval
-	GET_ATTRIBUTE           (TokenType.COMMAND, "getAttributeValue"),
+	GET_ATTRIBUTE           (TokenType.COMMAND, "getAtt"),
 	GET_ATTRIBUTE_IN_RANGE  (TokenType.COMMAND, "getAttInRange"),
 	GET_HEIGHT              (TokenType.COMMAND, "getHeight"),
 	GET_ITEM_ATTRIBUTE      (TokenType.COMMAND, "getItemAtt"),
 	GET_LIGHT_LEVEL         (TokenType.COMMAND, "getLightLevel"),
 	GET_NEIGHBOUR           (TokenType.COMMAND, "getNeighbor"), // difference between british english in code and american english in scripts
 	GET_TILE                (TokenType.COMMAND, "getTile"),
+	GET_TILES_IN_RANGE      (TokenType.COMMAND, "getTilesInRange"),
 	RANDOM_TILE             (TokenType.COMMAND, "randomTile"),
 
 	// -------------------------------------------------- Actions
@@ -145,6 +146,7 @@ public enum TokenConstants {
 	// -------------------------------------------------- Special Operators
 	OBJECT_OPERATOR (TokenType.OPERATOR, "->", 0),
 	POINT           (TokenType.OPERATOR, ".", 0),
+	DOUBLE_POINT    (TokenType.OPERATOR, "..",0),
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Comments
 	COMMENT         (TokenType.COMMENT, "//"),

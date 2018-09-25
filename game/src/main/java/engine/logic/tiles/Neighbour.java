@@ -1,4 +1,4 @@
-package engine.logic;
+package engine.logic.tiles;
 
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
