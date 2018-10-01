@@ -3,6 +3,7 @@ package engine.parser.scripts.nodes;
 import engine.data.entities.Instance;
 import engine.data.Script;
 import engine.data.variables.Variable;
+import engine.parser.constants.TokenConstants;
 
 import java.util.List;
 
@@ -20,7 +21,14 @@ public class MultiStatementNode extends AbstractScriptNode {
 	public Variable execute(Instance instance, Script script) {
 		boolean allTrue = true;
 		for (AbstractScriptNode node : subNodes) {
-			allTrue = !node.execute(instance, script).isNull() && allTrue; // allTrue is only true if all subNodes return Variables that are not null
+			Variable variable = node.execute(instance, script);
+			if (node.getClass() == CommandExpressionNode.class) {
+				if (TokenConstants.REQUIRE.equals(((CommandExpressionNode) node).getCommand())) {
+					allTrue = !variable.isNull() && allTrue; // allTrue is only true if all require command subNodes return Variables that are not null
+				} else if (TokenConstants.RETURN.equals(((CommandExpressionNode) node).getCommand())) {
+					return variable;
+				}
+			}
 		}
 		return new Variable(allTrue ? 1 : 0);
 	}

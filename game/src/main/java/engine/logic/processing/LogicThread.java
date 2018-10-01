@@ -3,7 +3,6 @@ package engine.logic.processing;
 import constants.GameConstants;
 import engine.data.Data;
 import engine.data.entities.Instance;
-import engine.data.variables.DataType;
 import engine.graphics.gui.window.Window;
 
 public class LogicThread extends Thread {
@@ -21,26 +20,21 @@ public class LogicThread extends Thread {
 		while (!window.isClosed()) {
 			long currentTime = System.currentTimeMillis();
 
-			if (currentTime - t >= GameConstants.TICK_TIME_PER_CREATURE) {
+			if (currentTime - t >= GameConstants.TICK_TIME_PER_INSTANCE) {
 				Instance instance = Data.getNextInstance();
-				if (instance != null) {
-					boolean isCreature = Data.getContainer(instance.getId()).getType() == DataType.CREATURE;
 
+				if (instance != null) {
 					if (!instance.isSlatedForRemoval()) {
-						if (isCreature) {
-							instance.tick();
-						}
+						instance.tick();
 
 						Data.addInstanceToQueue(instance);
 					}
 
-					if (isCreature) {
-						t = System.currentTimeMillis();
-					}
+					t = System.currentTimeMillis();
 				}
 			} else {
 				try {
-					sleep(GameConstants.TICK_TIME_PER_CREATURE - (currentTime - t));
+					sleep(GameConstants.TICK_TIME_PER_INSTANCE - (currentTime - t));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

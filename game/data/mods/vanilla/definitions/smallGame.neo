@@ -83,13 +83,11 @@ Creature: cMonkey {
 
 	Script: place {
 		self->id = random(1000);
-		print(getAttInRange("attEdible", self, 2));
-
 		.attNutrition += random(5,10);
 	}
 
 	Script: tick {
-		if (chance(1)) {
+		if (chance(0.5)) {
 			.attNutrition--;
 		}
 
@@ -177,7 +175,7 @@ Entity: entFruit {
 	mesh = "cylinder.ply";
 
 	attributes {
-		attNutrition, 10;
+		attNutrition, 5;
 		attEdible, 1;
 	}
 
@@ -203,9 +201,7 @@ Creature: cTree {
 		proCreateFruit;
 	}
 
-	Script: tick {
-		//print("tick: "+self->ticks++);
-	}
+	attributes{attLightLevel,50;}
 }
 
 Drive: driPlantReproduction {
@@ -217,12 +213,12 @@ Drive: driPlantReproduction {
 
 Process: proPhotoSynthesis {
 	Script: condition {
-		require(getLightLevel(self) + .attLightLevel >= 50);
-		require(getTile(self).attHumidity >= 20);
+		require(getLightLevel(self) + ..attLightLevel >= 50);
+		//require(getTile(self).attHumidity >= 20);
 	}
 	Script: process {
 		//getTile(self)->attHumidity -= 5;
-		//self->attNutrition += 5;
+		.attNutrition += 5;
 	}
 
 	solutions {} // there is no way for a plant to create light (currently?)
@@ -234,12 +230,14 @@ Process: proPhotoSynthesis {
 
 Process: proCreateFruit {
 	Script: condition {
+		print("tree wants to grow fruit");
 		require(chance(0.1));
-		require(!getAttInRange(self, "attEdible", 0));
-		require(.attNutrition >= 10);
+		require(!getAttInRange("attEdible", self, 0));
+		require(..attNutrition >= 5);
 	}
 	Script: process {
+		print("tree creates fruit");
 		fruit = create(entFruit, getTile(self));
-		pickUp(self, fruit);
+		//pickUp(self, fruit);
 	}
 }

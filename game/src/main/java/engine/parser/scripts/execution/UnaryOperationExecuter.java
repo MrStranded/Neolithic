@@ -78,7 +78,6 @@ public class UnaryOperationExecuter {
 			Variable variable = unaryNode.getSubNode().execute(self, script);
 
 			return new Variable(variable.isNull() ? 1 : 0);
-
 		}
 
 		return new Variable();

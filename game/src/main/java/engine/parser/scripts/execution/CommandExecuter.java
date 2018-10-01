@@ -47,9 +47,7 @@ public class CommandExecuter {
 					return new Variable();
 				}
 
-				System.out.println("... pre " + target + ": " + target.getPersonalAttributeValue(attributeID));
 				target.addAttribute(attributeID, amount);
-				System.out.println(",, post " + target + ": " + target.getPersonalAttributeValue(attributeID));
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double chance (double probability)
@@ -69,14 +67,12 @@ public class CommandExecuter {
 				if (container != null && tile != null) {
 					int id = Data.getContainerID(container.getTextID());
 					Instance instance = new Instance(id);
-					instance.setPosition(tile);
+					instance.placeInto(tile);
 					Variable[] newParameters = new Variable[1];
 					newParameters[0] = parameters[1];
 
 					instance.run(ScriptConstants.EVENT_PLACE, newParameters);
-					//if (Data.getContainer(id).getType() == DataType.CREATURE) {
-						Data.addInstanceToQueue(instance);
-					//}
+					Data.addInstanceToQueue(instance);
 
 					return new Variable(instance);
 				} else {
@@ -280,7 +276,7 @@ public class CommandExecuter {
 					return new Variable();
 				}
 
-				instance.setPosition(tile);
+				instance.placeInto(tile);
 				return new Variable("Semira <3");
 			}
 
@@ -299,8 +295,9 @@ public class CommandExecuter {
 					return new Variable();
 				}
 
-				item.setPosition(holder.getPosition());
-				holder.addSubInstance(item);
+				//item.placeInto(holder.getPosition());
+				//holder.addSubInstance(item);
+				item.placeInto(holder);
 				return new Variable(item);
 			}
 
@@ -337,6 +334,12 @@ public class CommandExecuter {
 
 				Tile tile = planet.getFace(f).getTile(x,y);
 				return new Variable(tile);
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& variable return (variable)
+		} else if (TokenConstants.RETURN.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				return parameters[0];
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int require (variable)

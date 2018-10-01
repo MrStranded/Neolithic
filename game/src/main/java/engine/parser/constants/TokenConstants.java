@@ -75,8 +75,9 @@ public enum TokenConstants {
 	// -------------------------------------------------- GUI
 	PRINT           (TokenType.COMMAND, "print"),
 
-	// -------------------------------------------------- Conditions
+	// -------------------------------------------------- Return Commands
 	REQUIRE         (TokenType.COMMAND, "require"),
+	RETURN          (TokenType.COMMAND, "return"),
 
 	// -------------------------------------------------- Iterators
 	EACH_TILE       (TokenType.COMMAND, "eachTile"),

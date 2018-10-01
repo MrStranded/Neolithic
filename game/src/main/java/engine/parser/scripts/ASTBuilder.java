@@ -222,7 +222,7 @@ public class ASTBuilder {
 		} else if (expression.getType() == TokenType.OPERATOR) { // an operator in front of an expression -> unary node
 			AbstractScriptNode right = readExpression();
 			AbstractScriptNode self = new SelfNode();
-			left = precedenceCorrection(expression, self, right);
+			left = precedenceCorrection(expression, self, right, true);
 
 		} else if (expression.getType() == TokenType.LITERAL) { // we have a literal
 			left = new LiteralNode(expression);
@@ -288,7 +288,7 @@ public class ASTBuilder {
 
 		} else {
 			AbstractScriptNode right = readExpression();
-			return precedenceCorrection(operator, left, right);
+			return precedenceCorrection(operator, left, right, false);
 		}
 	}
 
@@ -296,13 +296,20 @@ public class ASTBuilder {
 	// ################################ Precedence Correction ############################
 	// ###################################################################################
 
-	private AbstractScriptNode precedenceCorrection(Token operator, AbstractScriptNode left, AbstractScriptNode right) throws Exception {
+	private AbstractScriptNode precedenceCorrection(Token operator, AbstractScriptNode left, AbstractScriptNode right, boolean unary) throws Exception {
 		if (right.getClass() == BinaryExpressionNode.class) { // possibly rehang tree structure
 			BinaryExpressionNode rightNode = ((BinaryExpressionNode) right);
 
 			if (!rightNode.isBracketed()) { // only correct when right node is not bracketed
 				// current operator binds more strongly than the one from the right expression -> rehang
 				if (operator.getPrecedence() < rightNode.getOperator().getPrecedence()) {
+					if (unary) {
+						AbstractScriptNode sub = rightNode.getLeft();
+						UnaryExpressionNode newLeft = new UnaryExpressionNode(operator, sub);
+						rightNode.setLeft(newLeft);
+						return rightNode;
+					}
+
 					AbstractScriptNode sub = rightNode.getLeft();
 					BinaryExpressionNode newLeft = new BinaryExpressionNode(operator, left, sub);
 					rightNode.setLeft(newLeft);
@@ -314,11 +321,22 @@ public class ASTBuilder {
 
 			// current operator binds more strongly than the one from the right expression -> rehang
 			if (operator.getPrecedence() < rightNode.getOperator().getPrecedence()) {
+				if (unary) {
+					AbstractScriptNode sub = rightNode.getSubNode();
+					UnaryExpressionNode newSub = new UnaryExpressionNode(operator, sub);
+					rightNode.setSubNode(newSub);
+					return rightNode;
+				}
+
 				AbstractScriptNode sub = rightNode.getSubNode();
 				BinaryExpressionNode newSub = new BinaryExpressionNode(operator, left, sub);
 				rightNode.setSubNode(newSub);
 				return rightNode;
 			}
+		}
+
+		if (unary) {
+			return new UnaryExpressionNode(operator, right);
 		}
 
 		return new BinaryExpressionNode(operator, left, right);

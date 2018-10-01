@@ -129,13 +129,37 @@ public class Instance {
 		}
 	}
 
-	public void setPosition(Instance instance) {
-		if (superInstance != null) {
-			superInstance.removeSubInstance(this);
+	/**
+	 * Sets the current instance as a subinstance of the given instance.
+	 * @param instance where we want to put the current instance
+	 */
+	public void placeInto(Instance instance) {
+		if (instance != null) {
+			if (superInstance != null) {
+				superInstance.removeSubInstance(this);
+			}
+			instance.addSubInstance(this);
+			superInstance = instance;
+			actualizeObjectPosition();
 		}
-		instance.addSubInstance(this);
-		superInstance = instance;
-		actualizeObjectPosition();
+	}
+
+	/**
+	 * Sets the current instance at the tile position of the given instance.
+	 * @param instance at whose tile position we want to put the current instance
+	 */
+	public void placeAt(Instance instance) {
+		if (instance != null) {
+			if (superInstance != null) {
+				superInstance.removeSubInstance(this);
+			}
+			Tile position = instance.getPosition();
+			if (position != null) {
+				position.addSubInstance(this);
+				superInstance = position;
+			}
+			actualizeObjectPosition();
+		}
 	}
 
 	public void actualizeObjectPosition() {
@@ -170,6 +194,7 @@ public class Instance {
 		if (superInstance != null) {
 			superInstance.removeSubInstance(this);
 		}
+		superInstance = null;
 	}
 
 	// ###################################################################################
