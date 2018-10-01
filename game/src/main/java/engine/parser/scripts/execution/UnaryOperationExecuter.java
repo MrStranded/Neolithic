@@ -22,6 +22,8 @@ public class UnaryOperationExecuter {
 
 			if (variable.getType() == DataType.NUMBER) {
 				variable.setDouble(variable.getDouble() + 1);
+			} else if (variable.getType() == DataType.ATTRIBUTE) { // attribute addition
+				return variable.quickSetAttributeValue(variable.getDouble() + 1);
 			}
 			return variable;
 
@@ -31,6 +33,8 @@ public class UnaryOperationExecuter {
 
 			if (variable.getType() == DataType.NUMBER) {
 				variable.setDouble(variable.getDouble() - 1);
+			} else if (variable.getType() == DataType.ATTRIBUTE) { // attribute subtraction
+				return variable.quickSetAttributeValue(variable.getDouble() - 1);
 			}
 			return variable;
 

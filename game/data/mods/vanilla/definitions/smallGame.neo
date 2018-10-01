@@ -67,29 +67,39 @@ Creature: cMonkey {
 
 	knowledge {
 		proStroll;
-		proEatBread;
+		proEat;
 	}
 
 	drives {
 		driHunger;
+		driMove;
 	}
 
 	attributes {
 		attLife, 10;
 		attSpeed, 1;
 		attViewingDistance, 10;
-		attNutrition, 5;
 	}
 
 	Script: place {
 		self->id = random(1000);
-		print(->id + " searching for food!");
 		print(getAttInRange("attEdible", self, 2));
+
+		.attNutrition += random(5,10);
 	}
 
 	Script: tick {
+		if (chance(1)) {
+			.attNutrition--;
+		}
+
 		print("monkey tick " + self->id);
 		print("monkey nutrition " + ..attNutrition);
+
+		if (..attNutrition < 0) {
+			print(->id + " dies!");
+			destroy(self);
+		}
 	}
 }
 
@@ -104,8 +114,16 @@ Drive: driHunger {
 	}
 }
 
+Drive: driMove {
+	solutions {
+		proStroll;
+	}
+}
+
 Process: proStroll {
-	//Script: condition {}
+	Script: condition {
+		require(..attNutrition > 0);
+	}
 
 	Script: process {
 		while (getHeight(tile = getNeighbor(getTile(self), random(3))) < 100) {}
@@ -136,9 +154,14 @@ Process: proEat {
 Process: proGatherFood {
 	Script: condition {
 		require(getAttInRange("attEdible", getTile(self), ..attViewingDistance));
+		print(->id + " is considering to gather food");
 	}
 	Script: process(creature) {
+		print(->id + " tries to collect food");
 		pickUp(self, getAttInRange("attEdible", self, ..attViewingDistance));
+		if (getItemAtt(self, "attEdible")) {
+			print(->id + " has a food item in the inventory");
+		}
 	}
 
 	Script: discovery(creature) {
@@ -159,8 +182,8 @@ Entity: entFruit {
 	}
 
 	Script: consume(actor) {
-		print("consume Apple");
-		addPersonalAtt(actor, "attNutrition", .attNutrition);
+		print("----------------------------------------------- " + actor->id + " consumes Apple (" + ..attNutrition + ")");
+		addPersonalAtt(actor, "attNutrition", ..attNutrition);
 		destroy(self);
 	}
 }

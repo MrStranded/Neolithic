@@ -33,7 +33,6 @@ public class Instance {
 
 	private boolean slatedForRemoval = false;
 
-	private Tile position = null;
 	private MoveableObject moveableObject = null;
 
 	public Instance(int id) {
@@ -119,43 +118,50 @@ public class Instance {
 	// ###################################################################################
 
 	public void render() {
-		if (position != null) {
-			Container container = Data.getContainer(id);
-			if (container != null && container.getMeshHub() != null) {
-				container.getMeshHub().registerObject(moveableObject);
-			}
+		// render self
+		Container container = Data.getContainer(id);
+		if (container != null && container.getMeshHub() != null) {
+			container.getMeshHub().registerObject(moveableObject);
 		}
+		// render subs
 		for (Instance subInstance : subInstances) {
 			subInstance.render();
 		}
 	}
 
-	public void setPosition(Tile tile) {
-		if (position != null) {
-			position.removeSubInstance(this);
+	public void setPosition(Instance instance) {
+		if (superInstance != null) {
+			superInstance.removeSubInstance(this);
 		}
-		tile.addSubInstance(this);
-		position = tile;
+		instance.addSubInstance(this);
+		superInstance = instance;
 		actualizeObjectPosition();
 	}
 
 	public void actualizeObjectPosition() {
-		if (position != null && moveableObject != null) {
-			double pitch = GeographicCoordinates.getLatitude(position);
-			double yaw = GeographicCoordinates.getLongitude(position);
-			Vector3 pos;
-			if (position.getHeight() > position.getWaterHeight()) {
-				pos = position.getTileMesh().getMid();
-			} else {
-				pos = position.getTileMesh().getWaterMid();
+		if (superInstance != null && moveableObject != null) {
+			Tile position = superInstance.getPosition();
+			if (position != null) {
+				// get rotation angles
+				double pitch = GeographicCoordinates.getLatitude(position);
+				double yaw = GeographicCoordinates.getLongitude(position);
+				Vector3 pos;
+				// set position
+				if (position.getHeight() > position.getWaterHeight()) {
+					pos = position.getTileMesh().getMid();
+				} else {
+					pos = position.getTileMesh().getWaterMid();
+				}
+				// set correct scale
+				if (Data.getPlanet() != null) {
+					double scaleFactor = 1d / (double) Data.getPlanet().getSize();
+					moveableObject.setScale(scaleFactor, scaleFactor, scaleFactor);
+				}
+				// assign values to moveable object
+				moveableObject.setPosition(pos);
+				moveableObject.setRotation(pitch + Math.PI / 2d, -yaw + Math.PI / 2d, 0);
+				moveableObject.setPreRotation(0, Math.random() * Math.PI * 2d, 0);
 			}
-			if (Data.getPlanet() != null) {
-				double scaleFactor = 1d / (double) Data.getPlanet().getSize();
-				moveableObject.setScale(scaleFactor, scaleFactor, scaleFactor);
-			}
-			moveableObject.setPosition(pos);
-			moveableObject.setRotation(pitch + Math.PI/2d, -yaw + Math.PI/2d, 0);
-			moveableObject.setPreRotation(0,Math.random() * Math.PI*2d,0);
 		}
 	}
 
@@ -264,7 +270,13 @@ public class Instance {
 		this.id = id;
 	}
 
-	public Tile getPosition() { return position; }
+	public Tile getPosition() {
+		if (superInstance != null) {
+			return superInstance.getPosition();
+		} else {
+			return null;
+		}
+	}
 
 	public List<Instance> getSubInstances() {
 		return subInstances;

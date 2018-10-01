@@ -5,8 +5,8 @@ WorldGen: genContinental {
 		setWaterLevel(100);
 
 		for (t : eachTile()) {
-			if (chance(0.01)) { // 1% chance
-				if (chance(0.5)) {
+			if (chance(0.0025)) { // 1/4% chance
+				if (chance(0.75)) {
 					create(formPlateau, t);
 				} else {
 					create(formHill, t);
@@ -19,9 +19,8 @@ WorldGen: genContinental {
 				if (chance(0.01)) {
 					monkey = create(cMonkey, t);
 				}
-				if (chance(0.05)) {
+				if (chance(0.01)) {
 					fruit = create(entFruit, t);
-					//print("created fruit");
 				}
 			}
 			if (getHeight(t) > 150) {
@@ -37,7 +36,7 @@ WorldGen: genContinental {
 
 Formation: formHill {
 	Script: place(tile) {
-		height = random(110,150);
+		height = random(150,200);
 		self->lift(tile, height);
 	}
 
@@ -55,14 +54,15 @@ Formation: formHill {
 
 Formation: formPlateau {
 	Script: place(tile) {
-		height = random(120,200);
-		distance = random(2,12);
+		height = random(110,230);
+		if (height >= 170) { height = random(110,230);}
+		distance = random(12,20);
 		self->lift(tile, height, distance);
 	}
 
 	Script: lift(tile, height, distance) {
 		if (chance(0.1)) {
-			->lift(tile, height + random(5,15), distance);
+			->lift(tile, height + random(5,15), distance / 2);
 		} else if (height > getHeight(tile)) {
 			setHeight(tile, height);
 
@@ -70,7 +70,7 @@ Formation: formPlateau {
 				if (distance - random(0,7) >= 0) {
 					deviation = random(-1,3);
 				} else {
-					deviation = random(20,42);
+					deviation = random(30,50);
 				}
 				lift(getNeighbor(tile, i), height - deviation, distance - 1);
 			}

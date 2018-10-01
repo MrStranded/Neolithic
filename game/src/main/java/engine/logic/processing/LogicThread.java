@@ -12,6 +12,7 @@ public class LogicThread extends Thread {
 
 	public LogicThread(Window window) {
 		this.window = window;
+		setDaemon(true);
 	}
 
 	@Override
@@ -22,18 +23,20 @@ public class LogicThread extends Thread {
 
 			if (currentTime - t >= GameConstants.TICK_TIME_PER_CREATURE) {
 				Instance instance = Data.getNextInstance();
-				boolean isCreature = Data.getContainer(instance.getId()).getType() == DataType.CREATURE;
+				if (instance != null) {
+					boolean isCreature = Data.getContainer(instance.getId()).getType() == DataType.CREATURE;
 
-				if (instance != null && !instance.isSlatedForRemoval()) {
-					if (isCreature) {
-						instance.tick();
+					if (!instance.isSlatedForRemoval()) {
+						if (isCreature) {
+							instance.tick();
+						}
+
+						Data.addInstanceToQueue(instance);
 					}
 
-					Data.addInstanceToQueue(instance);
-				}
-
-				if (isCreature) {
-					t = System.currentTimeMillis();
+					if (isCreature) {
+						t = System.currentTimeMillis();
+					}
 				}
 			} else {
 				try {

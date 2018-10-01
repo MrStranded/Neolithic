@@ -47,7 +47,9 @@ public class CommandExecuter {
 					return new Variable();
 				}
 
+				System.out.println("... pre " + target + ": " + target.getPersonalAttributeValue(attributeID));
 				target.addAttribute(attributeID, amount);
+				System.out.println(",, post " + target + ": " + target.getPersonalAttributeValue(attributeID));
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double chance (double probability)

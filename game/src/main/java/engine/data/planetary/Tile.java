@@ -63,6 +63,11 @@ public class Tile extends Instance implements IDInterface {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
+	@Override
+	public Tile getPosition() {
+		return this;
+	}
+
 	public Face getFace() {
 		return face;
 	}
