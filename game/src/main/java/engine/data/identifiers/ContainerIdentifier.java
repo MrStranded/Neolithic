@@ -28,6 +28,13 @@ public class ContainerIdentifier {
 		return Data.getContainer(id);
 	}
 
+	public boolean identifies(Container container) {
+		if (textID != null) {
+			return textID.equals(container.getTextID());
+		}
+		return Data.getContainer(id) == container;
+	}
+
 	public String toString() {
 		if (textID != null) {
 			return textID;

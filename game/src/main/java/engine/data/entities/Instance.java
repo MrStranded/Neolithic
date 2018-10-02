@@ -77,7 +77,7 @@ public class Instance {
 		if (processes != null && !processes.isEmpty()) {
 			for (ContainerIdentifier process : processes) {
 				Container container = process.retrieve();
-				if (container != null) {
+				if (container != null && knowsProcess(container)) {
 					if (!run(container, ScriptConstants.EVENT_CONDITION, null).isNull()) { // condition is fulfilled
 
 						if (container.getType() == DataType.PROCESS) { // execute process
@@ -85,6 +85,7 @@ public class Instance {
 						} else if (container.getType() == DataType.DRIVE) { // look through solutions of triggered drive
 							searchProcesses(((DriveContainer) container).getSolutions());
 						}
+						break; // only one drive / one process for resolving is executed
 
 					} else { // condition not fulfilled -> if process, look through alternatives
 
@@ -96,6 +97,30 @@ public class Instance {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns true if the given entity knows the requested process.
+	 * Returns true if the given container is a drive.
+	 * @param container
+	 * @return
+	 */
+	private boolean knowsProcess(Container container) {
+		// drives require no knowledge of the processes
+		if (container.getType() == DataType.DRIVE) {
+			return true;
+		}
+
+		// check the knowledge base of the creature to see whether it knows the process
+		Container selfContainer = Data.getContainer(id);
+		if (selfContainer.getType() == DataType.CREATURE) {
+			for (ContainerIdentifier knowledge : ((CreatureContainer) selfContainer).getKnowledge()) {
+				if (knowledge.identifies(container)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	// ###################################################################################
@@ -226,6 +251,17 @@ public class Instance {
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
+
+	public Instance getSubInstanceWithAttribute(int attributeID) {
+		for (Instance instance : subInstances) {
+			if (instance != null) {
+				if (instance.getAttributeValue(attributeID) > 0) {
+					return instance;
+				}
+			}
+		}
+		return null;
+	}
 
 	public Attribute getAttribute(int attributeID) {
 		Attribute attribute = attributes.get(attributeID);

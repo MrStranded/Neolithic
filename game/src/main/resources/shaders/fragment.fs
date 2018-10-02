@@ -124,15 +124,18 @@ float calculateShadow(vec4 position) {
         */
 
         // ---------------------------------------------- sampling the minimum value from a few points in proximity
-        float minDistance = projectionCoordinates.z;
-        int sampleDistance = 4;
+        //float minDistance = projectionCoordinates.z;
+        float sumDistance = 0.0;
+        int sampleDistance = 2;
         for (int x=-sampleDistance; x<=sampleDistance; x+=sampleDistance) {
             for (int y=-sampleDistance; y<=sampleDistance; y+=sampleDistance) {
                 float distance = texture(shadowSampler, projectionCoordinates.xy + vec2(x,y)*increment).r;
-                minDistance = min(minDistance, distance);
+                //minDistance = min(minDistance, distance);
+                sumDistance += distance;
             }
         }
-        if (projectionCoordinates.z > minDistance + shadowEpsilon) {
+        //if (projectionCoordinates.z > minDistance + shadowEpsilon) {
+        if (projectionCoordinates.z > sumDistance/9.0 + shadowEpsilon) {
             shadowFactor = 1.0 - shadowStrength;
         }
     }

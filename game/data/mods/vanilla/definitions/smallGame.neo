@@ -68,6 +68,8 @@ Creature: cMonkey {
 	knowledge {
 		proStroll;
 		proEat;
+		proGatherFood;
+		proPickUpFood;
 	}
 
 	drives {
@@ -78,7 +80,7 @@ Creature: cMonkey {
 	attributes {
 		attLife, 10;
 		attSpeed, 1;
-		attViewingDistance, 10;
+		attViewingDistance, 5;
 	}
 
 	Script: place {
@@ -91,8 +93,8 @@ Creature: cMonkey {
 			.attNutrition--;
 		}
 
-		print("monkey tick " + self->id);
-		print("monkey nutrition " + ..attNutrition);
+		//print("monkey tick " + self->id);
+		//print("monkey nutrition " + ..attNutrition);
 
 		if (..attNutrition < 0) {
 			print(->id + " dies!");
@@ -101,14 +103,14 @@ Creature: cMonkey {
 	}
 }
 
-Drive: driHunger {
-	Script: condition {
-		require(..attNutrition <= 5);
-		if (..attNutrition <= 5) {print(self->id + " is hungry"); }
-	}
-
-	solutions {
+Entity: tFruitEater {
+	knowledge {
 		proEat;
+		proGatherFood;
+		proPickUpFood;
+	}
+	drives {
+		driHunger;
 	}
 }
 
@@ -133,36 +135,57 @@ Process: proStroll {
 	//Script: discovery {}
 }
 
+Drive: driHunger {
+	Script: condition {
+		require(..attNutrition <= 5);
+		if (..attNutrition <= 5) {print(self->id + " is hungry"); }
+	}
+
+	solutions {
+		proEat;
+	}
+}
+
 Process: proEat {
 	Script: condition {
+		print(->id + " trying to eat");
 		require(getItemAtt(self, "attEdible"));
-		print(->id + " is considering to eat");
 	}
 	Script: process {
-		print(->id + " tries to eat");
 		item = getItemAtt(self, "attEdible");
 		item->consume(self);
 	}
 
 	solutions {
+		proPickUpFood;
 		proGatherFood;
+	}
+}
+
+Process: proPickUpFood {
+	Script: condition {
+		print(->id + " trying to pick up fruit");
+		require(getAttInRange("attEdible",self,0));
+	}
+	Script: process() {
+		print(->id + " picking up fruit");
+		pickUp(self, getAttInRange("attEdible",self,0));
+	}
+	solutions {
 	}
 }
 
 Process: proGatherFood {
 	Script: condition {
+		print(->id + " trying to go to fruit");
 		require(getAttInRange("attEdible", getTile(self), ..attViewingDistance));
-		print(->id + " is considering to gather food");
 	}
-	Script: process(creature) {
-		print(->id + " tries to collect food");
-		pickUp(self, getAttInRange("attEdible", self, ..attViewingDistance));
-		if (getItemAtt(self, "attEdible")) {
-			print(->id + " has a food item in the inventory");
-		}
+	Script: process() {
+		print(->id + " moving to fruit");
+		food = getAttInRange("attEdible", self, ..attViewingDistance);
+		moveTo(self, food);
 	}
-
-	Script: discovery(creature) {
+	Script: discovery() {
 		require(..attSpeed > 0);
 		require(..attViewingDistance > 0);
 	}
@@ -179,9 +202,16 @@ Entity: entFruit {
 		attEdible, 1;
 	}
 
+	Script: tick() {
+		if (chance(0.02)) {
+			destroy(self);
+		}
+	}
+
 	Script: consume(actor) {
-		print("----------------------------------------------- " + actor->id + " consumes Apple (" + ..attNutrition + ")");
-		addPersonalAtt(actor, "attNutrition", ..attNutrition);
+		//print("----------------------------------------------- " + actor->id + " consumes Apple (" + ..attNutrition + ")");
+		//addPersonalAtt(actor, "attNutrition", ..attNutrition);
+		actor.attNutrition += ..attNutrition;
 		destroy(self);
 	}
 }
@@ -206,8 +236,8 @@ Creature: cTree {
 
 Drive: driPlantReproduction {
 	solutions {
-		proPhotoSynthesis;
 		proCreateFruit;
+		proPhotoSynthesis;
 	}
 }
 
@@ -230,14 +260,15 @@ Process: proPhotoSynthesis {
 
 Process: proCreateFruit {
 	Script: condition {
-		print("tree wants to grow fruit");
 		require(chance(0.1));
-		require(!getAttInRange("attEdible", self, 0));
+		require(!getAttInRange("attEdible", self, 1));
 		require(..attNutrition >= 5);
 	}
+
 	Script: process {
 		print("tree creates fruit");
 		fruit = create(entFruit, getTile(self));
+		.attNutrition -= 5;
 		//pickUp(self, fruit);
 	}
 }

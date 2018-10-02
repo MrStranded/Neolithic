@@ -167,12 +167,10 @@ public class CommandExecuter {
 
 				TileArea tileArea = new TileArea(center, radius);
 				for (Tile tile : tileArea.getTileList()) {
-					for (Instance instance : tile.getSubInstances()) {
-						if (instance != null) {
-							if (instance.getAttributeValue(attributeID) > 0) {
-								return new Variable(instance);
-							}
-						}
+					Instance instance = tile.getSubInstanceWithAttribute(attributeID);
+
+					if (instance != null) {
+						return new Variable(instance);
 					}
 				}
 				return new Variable();
