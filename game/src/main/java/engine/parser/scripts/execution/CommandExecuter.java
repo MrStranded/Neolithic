@@ -231,6 +231,23 @@ public class CommandExecuter {
 				return new Variable(Neighbour.getNeighbour(tile, position));
 			}
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list<tile> getNeighbors (Tile tile)
+		} else if (TokenConstants.GET_NEIGHBOURS.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				Tile tile = parameters[0].getTile();
+
+				if (tile == null) {
+					Logger.error("Tile value for command '" + TokenConstants.GET_NEIGHBOURS.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+
+				List<Variable> tileList = new ArrayList<>(3);
+				for (Tile neighbour : Neighbour.getNeighbours(tile)) {
+					tileList.add(new Variable(neighbour));
+				}
+				return new Variable(tileList);
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile getTile (Instance instance)
 		} else if (TokenConstants.GET_TILE.equals(command)) {
 			if (requireParameters(commandNode, 1)) {

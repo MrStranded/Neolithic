@@ -44,9 +44,9 @@ Formation: formHill {
 		if (height > getHeight(tile)) {
 			setHeight(tile, height);
 
-			for (i=0; i<3; i++) {
+			for (n : getNeighbors(tile)) {
 				deviation = random(1,12);
-				lift(getNeighbor(tile, i), height - deviation);
+				lift(n, height - deviation);
 			}
 		}
 	}

@@ -103,7 +103,7 @@ Creature: cMonkey {
 	}
 }
 
-Entity: tFruitEater {
+Creature: tFruitEater {
 	knowledge {
 		proEat;
 		proGatherFood;

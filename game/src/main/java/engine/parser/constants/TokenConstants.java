@@ -64,6 +64,7 @@ public enum TokenConstants {
 	GET_ITEM_ATTRIBUTE      (TokenType.COMMAND, "getItemAtt"),
 	GET_LIGHT_LEVEL         (TokenType.COMMAND, "getLightLevel"),
 	GET_NEIGHBOUR           (TokenType.COMMAND, "getNeighbor"), // difference between british english in code and american english in scripts
+	GET_NEIGHBOURS          (TokenType.COMMAND, "getNeighbors"),
 	GET_TILE                (TokenType.COMMAND, "getTile"),
 	GET_TILES_IN_RANGE      (TokenType.COMMAND, "getTilesInRange"),
 	RANDOM_TILE             (TokenType.COMMAND, "randomTile"),
