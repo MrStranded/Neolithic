@@ -9,3 +9,9 @@ game/\.idea/
 game/game\.iml
 
 game/old/
+
+\.idea/
+
+game/out/
+
+*.log
