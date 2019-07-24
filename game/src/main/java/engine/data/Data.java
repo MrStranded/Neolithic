@@ -234,8 +234,10 @@ public class Data {
 
 	public static void clear() {
 		// we have to clean up the meshHubs though
-		for (MeshHub meshHub : meshHubs.values()) {
-			meshHub.cleanUp();
+		if (meshHubs != null) {
+			for (MeshHub meshHub : meshHubs.values()) {
+				meshHub.cleanUp();
+			}
 		}
 
 		// just not referencing the old data anymore is enough. Thanks java garbage collector!

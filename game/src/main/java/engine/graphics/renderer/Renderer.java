@@ -61,8 +61,6 @@ public class Renderer {
 	// ###################################################################################
 
 	public void initialize() {
-		window.initialize();
-
 		initializeShaders();
 		initializeHUDShaders();
 		initializeDepthShaders();

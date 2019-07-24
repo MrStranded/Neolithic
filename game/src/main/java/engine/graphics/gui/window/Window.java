@@ -102,15 +102,12 @@ public class Window {
 					(vidmode.width() - pWidth.get(0)) / 2,
 					(vidmode.height() - pHeight.get(0)) / 2
 			);
+		} catch (Exception e) {
+			e.printStackTrace();
 		} // the stack frame is popped automatically
 
 		// Make the OpenGL context current
 		GLFW.glfwMakeContextCurrent(window);
-		// Enable v-sync
-		GLFW.glfwSwapInterval(1);
-
-		// Make the window visible
-		GLFW.glfwShowWindow(window);
 
 		// This line is critical for LWJGL's interoperation with GLFW's
 		// OpenGL context, or any context that is managed externally.
@@ -118,6 +115,13 @@ public class Window {
 		// creates the GLCapabilities instance and makes the OpenGL
 		// bindings available for use.
 		GL.createCapabilities();
+
+		// Enable v-sync
+		GLFW.glfwSwapInterval(1);
+
+		// Make the window visible
+		GLFW.glfwShowWindow(window);
+
 	}
 
 	private void setSettings() {

@@ -28,6 +28,7 @@ public class Engine {
 
 	public static void initialize() {
 		window = new Window(800,600,"Neolithic");
+		window.initialize();
 
 		renderer = new Renderer(window);
 		renderer.initialize();
