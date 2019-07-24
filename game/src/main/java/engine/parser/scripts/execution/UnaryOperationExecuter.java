@@ -73,6 +73,12 @@ public class UnaryOperationExecuter {
 
 			return unaryNode.getSubNode().execute(self, script);
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& -
+		} else if (TokenConstants.MINUS.equals(operator)) {
+			Variable variable = unaryNode.getSubNode().execute(self, script);
+
+			return new Variable(-variable.getDouble());
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& !
 		} else if (TokenConstants.NOT.equals(operator)) {
 			Variable variable = unaryNode.getSubNode().execute(self, script);
