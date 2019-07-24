@@ -1,4 +1,4 @@
-package engine.logic;
+package engine.logic.topology;
 
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;

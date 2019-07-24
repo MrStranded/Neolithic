@@ -8,7 +8,7 @@ import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.color.RGBA;
-import engine.logic.tiles.Neighbour;
+import engine.logic.topology.Neighbour;
 import engine.math.numericalObjects.Vector3;
 import engine.utils.converters.ColorConverter;
 import engine.utils.converters.IntegerConverter;

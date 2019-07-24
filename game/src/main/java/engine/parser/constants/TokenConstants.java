@@ -71,6 +71,7 @@ public enum TokenConstants {
 
 	// -------------------------------------------------- Actions
 	MOVE_TO         (TokenType.COMMAND, "moveTo"),
+	MOVE_TOWARDS    (TokenType.COMMAND, "moveTowards"),
 	PICK_UP         (TokenType.COMMAND, "pickUp"),
 
 	// -------------------------------------------------- GUI

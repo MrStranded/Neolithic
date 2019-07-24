@@ -79,8 +79,9 @@ Creature: cMonkey {
 
 	attributes {
 		attLife, 10;
-		attSpeed, 1;
+		attSpeed, 2;
 		attViewingDistance, 5;
+		attStepHeight, 7;
 	}
 
 	Script: place {
@@ -97,20 +98,9 @@ Creature: cMonkey {
 		//print("monkey nutrition " + ..attNutrition);
 
 		if (..attNutrition < 0) {
-			print(->id + " dies!");
-			destroy(self);
+			print(->id + " dies! (no he doesn't!)");
+			//destroy(self);
 		}
-	}
-}
-
-Creature: tFruitEater {
-	knowledge {
-		proEat;
-		proGatherFood;
-		proPickUpFood;
-	}
-	drives {
-		driHunger;
 	}
 }
 
@@ -183,7 +173,7 @@ Process: proGatherFood {
 	Script: process() {
 		print(->id + " moving to fruit");
 		food = getAttInRange("attEdible", self, ..attViewingDistance);
-		moveTo(self, food);
+		moveTowards(self, food);
 	}
 	Script: discovery() {
 		require(..attSpeed > 0);

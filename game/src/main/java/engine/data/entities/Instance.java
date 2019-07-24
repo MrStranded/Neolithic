@@ -15,7 +15,7 @@ import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.graphics.objects.movement.MoveableObject;
-import engine.logic.GeographicCoordinates;
+import engine.logic.topology.GeographicCoordinates;
 import engine.math.numericalObjects.Vector3;
 import engine.utils.converters.StringConverter;
 

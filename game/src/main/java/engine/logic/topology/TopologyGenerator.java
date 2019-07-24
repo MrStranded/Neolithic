@@ -1,4 +1,4 @@
-package engine.logic;
+package engine.logic.topology;
 
 import constants.TopologyConstants;
 import engine.data.planetary.Face;
@@ -8,7 +8,7 @@ import engine.data.proto.Container;
 import engine.data.Data;
 import engine.data.proto.TileContainer;
 import engine.data.variables.DataType;
-import engine.logic.tiles.Neighbour;
+import engine.logic.topology.Neighbour;
 
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class TopologyGenerator {
 
 	/**
 	 * Iterates over each tile and assigns best fitting tile type to it.
-	 * @param planet to fit tiles on
+	 * @param planet to fit topology on
 	 */
 	public static void fitTiles(Planet planet) {
 		List<Container> tileList = Data.getContainersOfType(DataType.TILE);

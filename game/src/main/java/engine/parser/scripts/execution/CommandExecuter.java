@@ -10,9 +10,10 @@ import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.variables.Variable;
-import engine.logic.tiles.Neighbour;
-import engine.logic.TopologyGenerator;
-import engine.logic.tiles.TileArea;
+import engine.logic.topology.Neighbour;
+import engine.logic.topology.Pathfinding;
+import engine.logic.topology.TopologyGenerator;
+import engine.logic.topology.TileArea;
 import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.nodes.CommandExpressionNode;
 import engine.parser.tokenization.Token;
@@ -37,7 +38,7 @@ public class CommandExecuter {
 				int amount = parameters[2].getInt();
 
 				if (target == null) {
-					Logger.error("Target instance value for command '" + TokenConstants.ADD_PERSONAL_ATTRIBUTE.getValue() + "' is invalid!");
+					Logger.error("Target instance value for command '" + command.getValue() + "' is invalid!");
 					return new Variable();
 				}
 
@@ -91,7 +92,7 @@ public class CommandExecuter {
 				Instance instance = parameters[0].getInstance();
 
 				if (instance == null) {
-					Logger.error("Instance value for command '" + TokenConstants.DESTROY.getValue() + "' is invalid!");
+					Logger.error("Instance value for command '" + command.getValue() + "' is invalid!");
 					return new Variable();
 				}
 
@@ -129,7 +130,7 @@ public class CommandExecuter {
 					return new Variable(instance.getAttribute(attributeID));
 				} else {
 					if (instance == null) {
-						Logger.error("Instance value for command '" + TokenConstants.GET_ATTRIBUTE.getValue() + "' is invalid!");
+						Logger.error("Instance value for command '" + command.getValue() + "' is invalid!");
 					}
 					if (attributeID == -1) {
 						Logger.error("Attribute '" + attributeTextID + "' does not exist!");
@@ -156,7 +157,7 @@ public class CommandExecuter {
 				int attributeID = Data.getProtoAttributeID(attributeTextID);
 
 				if (center == null) {
-					Logger.error("Tile value for command '" + TokenConstants.GET_ATTRIBUTE_IN_RANGE.getValue() + "' is invalid on line " + command.getLine());
+					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
 					return new Variable();
 				}
 
@@ -196,7 +197,7 @@ public class CommandExecuter {
 				int attributeID = Data.getProtoAttributeID(attributeTextID);
 
 				if (holder == null) {
-					Logger.error("Holder instance value for command '" + TokenConstants.GET_ITEM_ATTRIBUTE.getValue() + "' is invalid on line " + command.getLine());
+					Logger.error("Holder instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
 					return new Variable();
 				}
 				if (attributeID == -1) {
@@ -221,7 +222,7 @@ public class CommandExecuter {
 				int position = parameters[1].getInt();
 
 				if (tile == null) {
-					Logger.error("Tile value for command '" + TokenConstants.GET_NEIGHBOUR.getValue() + "' is invalid on line " + command.getLine());
+					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
 					return new Variable();
 				}
 				if (position < 0 || position > 2) {
@@ -237,7 +238,7 @@ public class CommandExecuter {
 				Tile tile = parameters[0].getTile();
 
 				if (tile == null) {
-					Logger.error("Tile value for command '" + TokenConstants.GET_NEIGHBOURS.getValue() + "' is invalid on line " + command.getLine());
+					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
 					return new Variable();
 				}
 
@@ -254,7 +255,7 @@ public class CommandExecuter {
 				Instance instance = parameters[0].getInstance();
 
 				if (instance == null) {
-					Logger.error("Instance value for command '" + TokenConstants.GET_TILE.getValue() + "' is invalid on line " + command.getLine());
+					Logger.error("Instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
 					return new Variable();
 				}
 
@@ -268,7 +269,7 @@ public class CommandExecuter {
 				int radius = parameters[1].getInt();
 
 				if (center == null) {
-					Logger.error("Tile value for command '" + TokenConstants.GET_TILES_IN_RANGE.getValue() + "' is invalid on line " + command.getLine());
+					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
 					return new Variable();
 				}
 
@@ -283,16 +284,40 @@ public class CommandExecuter {
 				Tile tile = parameters[1].getTile();
 
 				if (tile == null) {
-					Logger.error("Tile value for command '" + TokenConstants.MOVE_TO.getValue() + "' is invalid on line " + command.getLine());
+					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
 					return new Variable();
 				}
 				if (instance == null) {
-					Logger.error("Instance value for command '" + TokenConstants.MOVE_TO.getValue() + "' is invalid on line " + command.getLine());
+					Logger.error("Instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
 					return new Variable();
 				}
 
 				instance.placeInto(tile);
 				return new Variable("Semira <3");
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string moveTo (Instance instance, Tile tile)
+		} else if (TokenConstants.MOVE_TOWARDS.equals(command)) {
+			if (requireParameters(commandNode, 3)) {
+				Instance instance = parameters[0].getInstance();
+				Tile tile = parameters[1].getTile();
+				int steps = parameters[2].getInt();
+
+				if (tile == null) {
+					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+				if (instance == null) {
+					Logger.error("Instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+
+				Tile newPosition = Pathfinding.moveTowardsTile(instance, tile, steps);
+
+				if (newPosition != instance.getPosition()) {
+					instance.placeInto(newPosition);
+				}
+				return new Variable();
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance pickUp (Instance holder, Instance item)
@@ -302,11 +327,11 @@ public class CommandExecuter {
 				Instance item = parameters[1].getInstance();
 
 				if (holder == null) {
-					Logger.error("Holder instance value for command '" + TokenConstants.PICK_UP.getValue() + "' is invalid on line " + command.getLine());
+					Logger.error("Holder instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
 					return new Variable();
 				}
 				if (item == null) {
-					Logger.error("Item instance value for command '" + TokenConstants.PICK_UP.getValue() + "' is invalid on line " + command.getLine());
+					Logger.error("Item instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
 					return new Variable();
 				}
 
