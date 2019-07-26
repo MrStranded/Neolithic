@@ -204,6 +204,8 @@ public class Variable implements IDInterface {
 				return String.valueOf(value);
 			case STRING:
 				return (String) value;
+			case TILE:
+				return ((Tile) value).toString();
 			case INSTANCE:
 				return ((Instance) value).toString();
 			case CONTAINER:

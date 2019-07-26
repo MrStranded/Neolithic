@@ -94,11 +94,7 @@ Creature: cMonkey {
 			.attNutrition--;
 		}
 
-		//print("monkey tick " + self->id);
-		//print("monkey nutrition " + ..attNutrition);
-
 		if (..attNutrition < 0) {
-			print(->id + " dies!");
 			destroy(self);
 		}
 	}
@@ -133,7 +129,6 @@ Process: proStroll {
 Drive: driHunger {
 	Script: condition {
 		require(..attNutrition <= 10);
-		if (..attNutrition <= 10) {print(self->id + " is hungry"); }
 	}
 
 	solutions {
@@ -143,7 +138,6 @@ Drive: driHunger {
 
 Process: proEat {
 	Script: condition {
-		print(->id + " trying to eat");
 		require(getItemAtt(self, "attEdible"));
 	}
 	Script: process {
@@ -159,11 +153,9 @@ Process: proEat {
 
 Process: proPickUpFood {
 	Script: condition {
-		print(->id + " trying to pick up fruit");
 		require(getAttInRange("attEdible",self,0));
 	}
 	Script: process() {
-		print(->id + " picking up fruit");
 		pickUp(self, getAttInRange("attEdible",self,0));
 	}
 	solutions {
@@ -172,16 +164,11 @@ Process: proPickUpFood {
 
 Process: proGatherFood {
 	Script: condition {
-		print(->id + " trying to go to fruit");
-		->foodTile = getAttInRange("attEdible",self,..attViewingDistance);
-		print("=====\\ " + ->foodTile);
-		require(->foodTile);
+		->food = getAttInRange("attEdible",self,..attViewingDistance);
+		require(->food);
 	}
 	Script: process() {
-		print(->id + " moving to fruit");
-		//food = getAttInRange("attEdible", self, ..attViewingDistance);
-		print("=====/ " + ->foodTile);
-		moveTowards(self, ->foodTile, ..attSpeed);
+		moveTowards(self, ->food, ..attSpeed);
 	}
 	Script: discovery() {
 		require(..attSpeed > 0);
@@ -207,7 +194,6 @@ Entity: entFruit {
 	}
 
 	Script: consume(actor) {
-		//print("----------------------------------------------- " + actor->id + " consumes Apple (" + ..attNutrition + ")");
 		//addPersonalAtt(actor, "attNutrition", ..attNutrition);
 		actor.attNutrition += ..attNutrition;
 		destroy(self);
@@ -268,7 +254,6 @@ Process: proCreateFruit {
 	}
 
 	Script: process {
-		print("tree creates fruit");
 		fruit = create(entFruit, getTile(self));
 		.attNutrition -= 30;
 		//pickUp(self, fruit);

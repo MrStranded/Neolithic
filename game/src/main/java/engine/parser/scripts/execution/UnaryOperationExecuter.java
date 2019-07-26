@@ -61,7 +61,7 @@ public class UnaryOperationExecuter {
 			return unaryNode.getSubNode().execute(self, script);
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ..
-		} else if (TokenConstants.DOUBLE_POINT.equals(operator)) {
+		} else if (TokenConstants.DOUBLE_POINT.equals(operator)) { // retrieving personal AND proto attributes
 			if (unaryNode.getSubNode().getClass() != IdentifierNode.class) {
 				Logger.error("WTF Exception (" + operator.getLine() + ") it's an: " + unaryNode.getSubNode().getClass().toGenericString());
 			}
