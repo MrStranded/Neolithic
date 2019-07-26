@@ -79,8 +79,8 @@ Creature: cMonkey {
 
 	attributes {
 		attLife, 10;
-		attSpeed, 2;
-		attViewingDistance, 5;
+		attSpeed, 3;
+		attViewingDistance, 7;
 		attStepHeight, 7;
 	}
 
@@ -90,7 +90,7 @@ Creature: cMonkey {
 	}
 
 	Script: tick {
-		if (chance(0.5)) {
+		if (chance(0.125)) {
 			.attNutrition--;
 		}
 
@@ -98,26 +98,31 @@ Creature: cMonkey {
 		//print("monkey nutrition " + ..attNutrition);
 
 		if (..attNutrition < 0) {
-			print(->id + " dies! (no he doesn't!)");
-			//destroy(self);
+			print(->id + " dies!");
+			destroy(self);
 		}
 	}
 }
 
 Drive: driMove {
+	Script: condition {
+		require(..attNutrition > 0);
+		->lastmove++;
+		if (->lastmove > 3) { ->lastmove = 0; }
+		//require(->lastmove == 0);
+	}
+
 	solutions {
 		proStroll;
 	}
 }
 
 Process: proStroll {
-	Script: condition {
-		require(..attNutrition > 0);
-	}
-
 	Script: process {
-		while (getHeight(tile = getNeighbor(getTile(self), random(3))) < 100) {}
-		moveTo(self,tile);
+		if (getHeight(tile = getNeighbor(getTile(self), random(3))) >= 100) {
+		    print("---------------------------- " + self + " going to " + tile);
+		    moveTo(self,tile);
+		}
 	}
 	
 	//solutions {}
@@ -127,8 +132,8 @@ Process: proStroll {
 
 Drive: driHunger {
 	Script: condition {
-		require(..attNutrition <= 5);
-		if (..attNutrition <= 5) {print(self->id + " is hungry"); }
+		require(..attNutrition <= 10);
+		if (..attNutrition <= 10) {print(self->id + " is hungry"); }
 	}
 
 	solutions {
@@ -168,12 +173,15 @@ Process: proPickUpFood {
 Process: proGatherFood {
 	Script: condition {
 		print(->id + " trying to go to fruit");
-		require(getAttInRange("attEdible", getTile(self), ..attViewingDistance));
+		->foodTile = getAttInRange("attEdible",self,..attViewingDistance);
+		print("=====\\ " + ->foodTile);
+		require(->foodTile);
 	}
 	Script: process() {
 		print(->id + " moving to fruit");
-		food = getAttInRange("attEdible", self, ..attViewingDistance);
-		moveTowards(self, food);
+		//food = getAttInRange("attEdible", self, ..attViewingDistance);
+		print("=====/ " + ->foodTile);
+		moveTowards(self, ->foodTile, ..attSpeed);
 	}
 	Script: discovery() {
 		require(..attSpeed > 0);
@@ -185,7 +193,7 @@ Process: proGatherFood {
 
 Entity: entFruit {
 	name = "Apple";
-	mesh = "cylinder.ply";
+	mesh = "apple02.ply";
 
 	attributes {
 		attNutrition, 5;
@@ -221,6 +229,10 @@ Creature: cTree {
 		proCreateFruit;
 	}
 
+	Script: place {
+		.attNutrition += random(30);
+	}
+
 	attributes{attLightLevel,50;}
 }
 
@@ -238,7 +250,7 @@ Process: proPhotoSynthesis {
 	}
 	Script: process {
 		//getTile(self)->attHumidity -= 5;
-		.attNutrition += 5;
+		.attNutrition += 1;
 	}
 
 	solutions {} // there is no way for a plant to create light (currently?)
@@ -252,13 +264,13 @@ Process: proCreateFruit {
 	Script: condition {
 		require(chance(0.1));
 		require(!getAttInRange("attEdible", self, 1));
-		require(..attNutrition >= 5);
+		require(..attNutrition >= 30);
 	}
 
 	Script: process {
 		print("tree creates fruit");
 		fruit = create(entFruit, getTile(self));
-		.attNutrition -= 5;
+		.attNutrition -= 30;
 		//pickUp(self, fruit);
 	}
 }

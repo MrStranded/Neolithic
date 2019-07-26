@@ -296,7 +296,7 @@ public class CommandExecuter {
 				return new Variable("Semira <3");
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string moveTo (Instance instance, Tile tile)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile moveTowards (Instance instance, Tile tile, int steps)
 		} else if (TokenConstants.MOVE_TOWARDS.equals(command)) {
 			if (requireParameters(commandNode, 3)) {
 				Instance instance = parameters[0].getInstance();

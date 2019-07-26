@@ -1,18 +1,18 @@
 package engine.parser.interpretation;
 
 import constants.ResourcePathConstants;
-import engine.data.identifiers.ContainerIdentifier;
 import engine.data.Data;
-import engine.data.attributes.PreAttribute;
-import engine.data.proto.*;
 import engine.data.Script;
+import engine.data.attributes.PreAttribute;
+import engine.data.identifiers.ContainerIdentifier;
+import engine.data.proto.*;
 import engine.data.variables.DataType;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.renderer.color.RGBA;
-import engine.parser.utils.Logger;
 import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.ASTBuilder;
 import engine.parser.tokenization.Token;
+import engine.parser.utils.Logger;
 import engine.parser.utils.TokenNumerifier;
 
 import java.util.List;

@@ -19,9 +19,6 @@ WorldGen: genContinental {
 				if (chance(0.01)) {
 					monkey = create(cMonkey, t);
 				}
-				if (chance(0.01)) {
-					fruit = create(entFruit, t);
-				}
 			}
 			if (getHeight(t) > 150) {
 				if (chance(0.2)){
