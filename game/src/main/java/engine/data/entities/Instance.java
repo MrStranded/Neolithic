@@ -152,9 +152,11 @@ public class Instance {
 			container.getMeshHub().registerObject(moveableObject);
 		}
 		// render subs
-		for (Instance subInstance : subInstances) {
-			subInstance.render();
-		}
+        synchronized (subInstances) {
+            for (Instance subInstance : subInstances) {
+                subInstance.render();
+            }
+        }
 	}
 
 	/**
@@ -247,7 +249,9 @@ public class Instance {
 	public void removeSubInstance(Instance instance) {
 		if (instance != null) {
 			instance.setSuperInstance(null);
-			subInstances.remove(instance);
+			synchronized (subInstances) {
+                subInstances.remove(instance);
+            }
 		}
 	}
 

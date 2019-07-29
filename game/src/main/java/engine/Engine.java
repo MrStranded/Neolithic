@@ -62,6 +62,8 @@ public class Engine {
 		Data.updateInstancePositions();
 		System.out.println("Executing WorldGen Script took: "+(System.currentTimeMillis()-time)+" ms");
 
+		Data.shuffleInstanceQueue();
+
 		LogicThread logicThread = new LogicThread(window);
 		logicThread.start();
 	}

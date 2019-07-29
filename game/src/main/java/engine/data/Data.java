@@ -227,6 +227,16 @@ public class Data {
 		}
 	}
 
+    /**
+     * This method shuffles the positions of the instances in the instance queue.
+     */
+    public static void shuffleInstanceQueue() {
+        List<Instance> list = (List<Instance>) instanceQueue;
+        Collections.shuffle(list);
+        instanceQueue = new LinkedList<>();
+        instanceQueue.addAll(list);
+    }
+
 	// ###################################################################################
 	// ################################ Clearing the Data ################################
 	// ###################################################################################

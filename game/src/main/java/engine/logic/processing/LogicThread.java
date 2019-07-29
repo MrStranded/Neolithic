@@ -21,20 +21,22 @@ public class LogicThread extends Thread {
 			long currentTime = System.currentTimeMillis();
 
 			if (currentTime - t >= GameConstants.TICK_TIME_PER_INSTANCE) {
-				Instance instance = Data.getNextInstance();
+				for (int i = 0; i < GameConstants.INSTANCES_PER_TICK; i++) {
+					Instance instance = Data.getNextInstance();
 
-				if (instance != null) {
-					if (!instance.isSlatedForRemoval()) {
-						instance.tick();
+					if (instance != null) {
+						if (!instance.isSlatedForRemoval()) {
+							instance.tick();
 
-						Data.addInstanceToQueue(instance);
+							Data.addInstanceToQueue(instance);
+						}
+
+						t = System.currentTimeMillis();
 					}
-
-					t = System.currentTimeMillis();
 				}
 			} else {
 				try {
-					sleep(GameConstants.TICK_TIME_PER_INSTANCE - (currentTime - t));
+					sleep((GameConstants.TICK_TIME_PER_INSTANCE - (currentTime - t)));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -74,11 +74,13 @@ Creature: cMonkey {
 		proPickUpFood;
 		proMate;
 		proSearchMate;
+		proSleep;
 	}
 
 	drives {
 		driHunger;
 		driMate;
+		driSleep;
 		driMove;
 	}
 
@@ -87,9 +89,9 @@ Creature: cMonkey {
 		attNutrition, 50;
 		attSpeed, 3;
 		attViewingDistance, 7;
-		attStepHeight, 7, 12;
-		attLibido, 0, 100;
-		attRestlessness, 0, 100;
+		attStepHeight, 7;
+		attLibido, 0;
+		attRestlessness, 0;
 	}
 
 	Script: place {
@@ -106,6 +108,8 @@ Creature: cMonkey {
 
 		if (..attNutrition < 0) {
 			.attLife--;
+		} else if (..attNutrition > 50) {
+		    .attLife++;
 		}
 		if (..attLife < 0) {
 		    destroy(self);
@@ -113,9 +117,26 @@ Creature: cMonkey {
 	}
 }
 
+Drive: driSleep {
+	Script: condition {
+		require(..attRestlessness <= 30);
+	}
+
+	solutions {
+		proSleep;
+	}
+}
+
+Process: proSleep {
+	Script: process {
+		.attRestlessness += 10;
+		.attLife += 10;
+	}
+}
+
 Drive: driMove {
 	Script: condition {
-		require(..attRestlessness > 50);
+		require(..attRestlessness > 30);
 	}
 
 	solutions {
@@ -211,8 +232,6 @@ Process: proPickUpFood {
 	Script: process() {
 		pickUp(self, ->food);
 	}
-	solutions {
-	}
 }
 
 Process: proGatherFood {
@@ -227,6 +246,10 @@ Process: proGatherFood {
 		require(..attSpeed > 0);
 		require(..attViewingDistance > 0);
 	}
+
+	solutions {
+	    proStroll;
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////// Items
@@ -236,7 +259,7 @@ Entity: entFruit {
 	mesh = "apple02.ply";
 
 	attributes {
-		attNutrition, 5;
+		attNutrition, 50;
 		attEdible, 1;
 	}
 
@@ -304,12 +327,12 @@ Process: proCreateFruit {
 	Script: condition {
 		require(chance(0.1));
 		require(!getAttInRange("attEdible", self, 1));
-		require(..attNutrition >= 30);
+		require(..attNutrition >= 100);
 	}
 
 	Script: process {
 		fruit = create(entFruit, getTile(self));
-		.attNutrition -= 30;
+		.attNutrition -= 100;
 		//pickUp(self, fruit);
 	}
 }
