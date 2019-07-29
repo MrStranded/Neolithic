@@ -177,6 +177,35 @@ public class CommandExecuter {
 				return new Variable();
 			}
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance getCreatureInRange (Container type, Tile center, int radius)
+		} else if (TokenConstants.GET_CREATURE_IN_RANGE.equals(command)) {
+			if (requireParameters(commandNode, 3)) {
+				Container type = parameters[0].getContainer();
+				int containerID = -1;
+				Tile center = parameters[1].getTile();
+				int radius = parameters[2].getInt();
+
+				if (center == null) {
+					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+
+				if ((type == null) || ((containerID = Data.getContainerID(type.getTextID())) < 0)) {
+					Logger.error("Type of value '" + parameters[0].toString() + "' does not exist!");
+					return new Variable();
+				}
+
+				TileArea tileArea = new TileArea(center, radius);
+				for (Tile tile : tileArea.getTileList()) {
+					Instance instance = tile.getThisOrSubInstanceWithID(containerID);
+
+					if (instance != null) {
+						return new Variable(instance);
+					}
+				}
+				return new Variable();
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getHeight (Tile tile)
 		} else if (TokenConstants.GET_HEIGHT.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
@@ -276,6 +305,19 @@ public class CommandExecuter {
 				TileArea tileArea = new TileArea(center, radius);
 				return new Variable(tileArea.getTilesAsVariableList());
 			}
+
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Container getType (Instance instance)
+        } else if (TokenConstants.GET_TYPE.equals(command)) {
+            if (requireParameters(commandNode,1)) {
+                Instance instance = parameters[0].getInstance();
+
+                if (instance == null) {
+                    Logger.error("Instance for command '" + command.getValue() + "' does not exist on line " + command.getLine());
+                    return new Variable();
+                }
+
+                return new Variable(Data.getContainer(instance.getId()));
+            }
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string moveTo (Instance instance, Tile tile)
 		} else if (TokenConstants.MOVE_TO.equals(command)) {

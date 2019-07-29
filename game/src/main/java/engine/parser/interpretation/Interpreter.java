@@ -112,11 +112,22 @@ public class Interpreter {
 		Token next;
 		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(next = consume())) {
 			consume(TokenConstants.COMMA);
-			Token token = consume();
-			consume(TokenConstants.SEMICOLON);
+			Token first = consume();
 
-			PreAttribute preAttribute = new PreAttribute(next.getValue(), TokenNumerifier.getInt(token));
-			container.addPreAttribute(preAttribute);
+			Token second = peek();
+			if (TokenConstants.SEMICOLON.equals(second)) {
+				consume(TokenConstants.SEMICOLON);
+
+				PreAttribute preAttribute = new PreAttribute(next.getValue(), TokenNumerifier.getInt(first));
+				container.addPreAttribute(preAttribute);
+			} else {
+				consume(TokenConstants.COMMA);
+				second = consume();
+				consume(TokenConstants.SEMICOLON);
+
+				PreAttribute preAttribute = new PreAttribute(next.getValue(), (int) ((TokenNumerifier.getInt(first)+TokenNumerifier.getInt(second))/2.0) );
+				container.addPreAttribute(preAttribute);
+			}
 		}
 	}
 

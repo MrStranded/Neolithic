@@ -62,9 +62,8 @@ public class Data {
 	 */
 	public static int getContainerID(String textID) {
 		for (int i=0; i<containers.length; i++) {
-			Container container = containers[i];
-			if (container != null) {
-				if (container.getTextID().equals(textID)) {
+			if (containers[i] != null) {
+				if (containers[i].getTextID().equals(textID)) {
 					return i;
 				}
 			}

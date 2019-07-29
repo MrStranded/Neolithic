@@ -17,6 +17,7 @@ import engine.data.variables.Variable;
 import engine.graphics.objects.movement.MoveableObject;
 import engine.logic.topology.GeographicCoordinates;
 import engine.math.numericalObjects.Vector3;
+import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
 import java.util.ArrayList;
@@ -121,6 +122,7 @@ public class Instance {
 				}
 			}
 		}
+        Logger.log(Data.getContainer(id).getType() + " does not know " + container.getTextID());
 		return false;
 	}
 
@@ -263,6 +265,19 @@ public class Instance {
 		}
 		return null;
 	}
+
+    public Instance getThisOrSubInstanceWithID(int containerID) {
+	    if (id == containerID) { return this; }
+
+        for (Instance instance : subInstances) {
+            if (instance != null) {
+                if (instance.getId() == containerID) {
+                    return instance;
+                }
+            }
+        }
+        return null;
+    }
 
 	public Attribute getAttribute(int attributeID) {
 		Attribute attribute = attributes.get(attributeID);

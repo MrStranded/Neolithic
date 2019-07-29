@@ -29,13 +29,13 @@ public class IdentifierNode extends AbstractScriptNode {
 		if (attributeIdentifier == null) { // ----- retrieve variable
 			if (targetInstance != null) { // return variable from an instance
 				variable = targetInstance.getVariable(identifier.getValue());
-				if (variable == null) {
+				if (variable == null) { // variable does not yet exist in instance -> create it
 					variable = Variable.withName(identifier.getValue());
 					targetInstance.addVariable(variable);
 				}
 			} else { // retrieve variable from current script scope OR retrieve container from "global" scope
 				variable = script.getVariable(identifier.getValue());
-				if (variable == null) {
+				if (variable == null) { // script scope does not contain variable -> search through containers
 					int containerID = Data.getContainerID(identifier.getValue());
 					if (containerID >= 0) { // fill container into variable
 						return new Variable(Data.getContainer(containerID));

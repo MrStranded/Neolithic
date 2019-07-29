@@ -58,6 +58,8 @@ Attribute: attNutrition { name = "Nutrition"; }
 Attribute: attEdible { name = "Edible"; }
 Attribute: attLightLevel { name = "Light Level"; }
 Attribute: attHumidity { name = "Humidity"; }
+Attribute: attLibido { name = "Libido"; }
+Attribute: attRestlessness { name = "Restlessness"; }
 
 ///////////////////////////////////////////////////////////////////////////// Creatures
 
@@ -70,42 +72,50 @@ Creature: cMonkey {
 		proEat;
 		proGatherFood;
 		proPickUpFood;
+		proMate;
+		proSearchMate;
 	}
 
 	drives {
 		driHunger;
+		driMate;
 		driMove;
 	}
 
 	attributes {
-		attLife, 10;
+		attLife, 100;
+		attNutrition, 50;
 		attSpeed, 3;
 		attViewingDistance, 7;
-		attStepHeight, 7;
+		attStepHeight, 7, 12;
+		attLibido, 0, 100;
+		attRestlessness, 0, 100;
 	}
 
 	Script: place {
 		self->id = random(1000);
-		self->lastmove = random(3);
-		.attNutrition += random(5,10);
 	}
 
 	Script: tick {
-		if (chance(0.125)) {
-			.attNutrition--;
+	    if (chance(0.5)) {
+		    .attNutrition--;
 		}
 
+		.attRestlessness++;
+		.attLibido++;
+
 		if (..attNutrition < 0) {
-			destroy(self);
+			.attLife--;
 		}
+		if (..attLife < 0) {
+		    destroy(self);
+        }
 	}
 }
 
 Drive: driMove {
 	Script: condition {
-		->lastmove++;
-		if (->lastmove > 3) { ->lastmove = 0; }
-		require(->lastmove == 0);
+		require(..attRestlessness > 50);
 	}
 
 	solutions {
@@ -116,14 +126,56 @@ Drive: driMove {
 Process: proStroll {
 	Script: process {
 		if (getHeight(tile = getNeighbor(getTile(self), random(3))) >= 100) {
-		    print("---------------------------- " + ->lastmove + "   from " + getTile(self) + " going to " + tile);
-		    moveTo(self,tile);
+		    moveTo(self, tile);
+		    .attRestlessness -= 5;
 		}
 	}
 	
 	//solutions {}
 	
 	//Script: discovery {}
+}
+
+Drive: driMate {
+    Script: condition {
+        require(self.attNutrition >= 10);
+        require(self.attLibido >= 10);
+    }
+
+    solutions {
+        proMate;
+    }
+}
+
+Process: proMate {
+    Script: condition {
+        print(->id + " wants to mate");
+        ->mate = getCreatureInRange(getType(self), getTile(self), 1);
+        require(->mate);
+    }
+    Script: process {
+        print(->id + " mated!");
+        self.attNutrition -= 5;
+        self.attLibido -= 50;
+        self.attRestlessness -= 100;
+        create(getType(self), getTile(self));
+    }
+
+    solutions {
+        proSearchMate;
+    }
+}
+
+Process: proSearchMate {
+    Script: condition {
+        print(->id + " is looking for mate");
+        ->mate = getCreatureInRange(getType(self), getTile(self), self..attViewingDistance);
+        require(->mate);
+    }
+    Script: process {
+        print(->id + " is going towards mate");
+        moveTowards(self, ->mate, self..attSpeed);
+    }
 }
 
 Drive: driHunger {
@@ -197,6 +249,7 @@ Entity: entFruit {
 	Script: consume(actor) {
 		//addPersonalAtt(actor, "attNutrition", ..attNutrition);
 		actor.attNutrition += ..attNutrition;
+		actor.attRestlessness -= 2;
 		destroy(self);
 	}
 }
