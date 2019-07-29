@@ -23,6 +23,7 @@ import engine.utils.converters.StringConverter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Instance {
 
@@ -152,8 +153,9 @@ public class Instance {
 			container.getMeshHub().registerObject(moveableObject);
 		}
 		// render subs
-        synchronized (subInstances) {
-            for (Instance subInstance : subInstances) {
+        CopyOnWriteArraySet<Instance> subs = new CopyOnWriteArraySet<>(subInstances);
+        for (Instance subInstance : subs) {
+            if (subInstance != null) {
                 subInstance.render();
             }
         }
@@ -249,9 +251,7 @@ public class Instance {
 	public void removeSubInstance(Instance instance) {
 		if (instance != null) {
 			instance.setSuperInstance(null);
-			synchronized (subInstances) {
-                subInstances.remove(instance);
-            }
+            subInstances.remove(instance);
 		}
 	}
 
