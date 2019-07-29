@@ -86,6 +86,7 @@ Creature: cMonkey {
 
 	Script: place {
 		self->id = random(1000);
+		self->lastmove = random(3);
 		.attNutrition += random(5,10);
 	}
 
@@ -102,10 +103,9 @@ Creature: cMonkey {
 
 Drive: driMove {
 	Script: condition {
-		require(..attNutrition > 0);
 		->lastmove++;
 		if (->lastmove > 3) { ->lastmove = 0; }
-		//require(->lastmove == 0);
+		require(->lastmove == 0);
 	}
 
 	solutions {
@@ -116,7 +116,7 @@ Drive: driMove {
 Process: proStroll {
 	Script: process {
 		if (getHeight(tile = getNeighbor(getTile(self), random(3))) >= 100) {
-		    print("---------------------------- " + self + " going to " + tile);
+		    print("---------------------------- " + ->lastmove + "   from " + getTile(self) + " going to " + tile);
 		    moveTo(self,tile);
 		}
 	}
@@ -153,10 +153,11 @@ Process: proEat {
 
 Process: proPickUpFood {
 	Script: condition {
-		require(getAttInRange("attEdible",self,0));
+	    ->food = getAttInRange("attEdible",self,0);
+		require(->food);
 	}
 	Script: process() {
-		pickUp(self, getAttInRange("attEdible",self,0));
+		pickUp(self, ->food);
 	}
 	solutions {
 	}

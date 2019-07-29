@@ -195,6 +195,12 @@ public class ASTBuilder {
 		} else if (TokenConstants.SELF.equals(expression)) { // a self expression
 			left = new SelfNode();
 
+		} else if (TokenConstants.TRUE.equals(expression)) { // true = 1.0
+			left = new LiteralNode(new Token(TokenType.LITERAL, "1", expression.getLine()));
+
+		} else if (TokenConstants.FALSE.equals(expression)) { // false = 0.0
+			left = new LiteralNode(new Token(TokenType.LITERAL, "0", expression.getLine()));
+
 		} else if (TokenConstants.ROUND_BRACKETS_OPEN.equals(expression)) { // an expression in brackets
 			left = readExpression();
 

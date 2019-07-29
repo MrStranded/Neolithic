@@ -20,6 +20,7 @@ import engine.math.numericalObjects.Vector3;
 import engine.utils.converters.StringConverter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Instance {
@@ -69,7 +70,7 @@ public class Instance {
 		if (script != null) {
 			return script.run(this, parameters);
 		} else {
-			return new Variable(1);
+			return new Variable(1); // script does not exist -> interpreted as true / condition fulfilled
 		}
 	}
 

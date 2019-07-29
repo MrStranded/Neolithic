@@ -19,6 +19,10 @@ public enum TokenConstants {
 	// -------------------------------------------------- Scripts
 	SELF        (TokenType.KEYWORD, "self"),
 
+	// -------------------------------------------------- Values
+	TRUE        (TokenType.KEYWORD, "true"),
+	FALSE       (TokenType.KEYWORD, "false"),
+
 	// -------------------------------------------------- Structure
 	IF          (TokenType.KEYWORD, "if"),
 	ELSE        (TokenType.KEYWORD, "else"),
@@ -33,7 +37,7 @@ public enum TokenConstants {
 	VALUE_PREFERREDHEIGHTBLUR   (TokenType.KEYWORD, "preferredHeightBlur"),
 	VALUE_MESH                  (TokenType.KEYWORD, "mesh"),
 
-	// -------------------------------------------------- List Instantiaters
+	// -------------------------------------------------- List Instantiators
 	VALUES_KNOWLEDGE        (TokenType.KEYWORD, "knowledge"),
 	VALUES_DRIVES           (TokenType.KEYWORD, "drives"),
 	VALUES_ATTRIBUTES       (TokenType.KEYWORD, "attributes"),
