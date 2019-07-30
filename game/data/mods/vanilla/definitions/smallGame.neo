@@ -60,6 +60,7 @@ Attribute: attLightLevel { name = "Light Level"; }
 Attribute: attHumidity { name = "Humidity"; }
 Attribute: attLibido { name = "Libido"; }
 Attribute: attRestlessness { name = "Restlessness"; }
+Attribute: attStepHeight { name = "Step height"; }
 
 ///////////////////////////////////////////////////////////////////////////// Creatures
 
@@ -86,12 +87,12 @@ Creature: cMonkey {
 
 	attributes {
 		attLife, 100;
-		attNutrition, 50;
+		attNutrition, 20;
 		attSpeed, 3;
 		attViewingDistance, 7;
-		attStepHeight, 7;
-		attLibido, 0;
-		attRestlessness, 0;
+		attStepHeight, 24;
+		attLibido, 50;
+		attRestlessness, 05;
 	}
 
 	Script: place {
@@ -114,6 +115,12 @@ Creature: cMonkey {
 		if (..attLife < 0) {
 		    destroy(self);
         }
+	}
+
+	Script: reachable (from, to) {
+        h1 = getHeight(from);
+        h2 = getHeight(to);
+        return ((h2 >= 100) && (abs(h1-h2) <= ..attStepHeight));
 	}
 }
 
@@ -146,8 +153,9 @@ Drive: driMove {
 
 Process: proStroll {
 	Script: process {
-		if (getHeight(tile = getNeighbor(getTile(self), random(3))) >= 100) {
-		    moveTo(self, tile);
+		tile = getNeighbor(getTile(self), random(3));
+		if (self->reachable(getTile(self), tile)) {
+		    setAt(self, tile);
 		    .attRestlessness -= 5;
 		}
 	}
@@ -195,13 +203,13 @@ Process: proSearchMate {
     }
     Script: process {
         print(->id + " is going towards mate");
-        moveTowards(self, ->mate, self..attSpeed);
+        moveTo(self, ->mate, self..attSpeed);
     }
 }
 
 Drive: driHunger {
 	Script: condition {
-		require(..attNutrition <= 10);
+		require(..attNutrition <= 20);
 	}
 
 	solutions {
@@ -240,7 +248,7 @@ Process: proGatherFood {
 		require(->food);
 	}
 	Script: process() {
-		moveTowards(self, ->food, ..attSpeed);
+		moveTo(self, ->food, ..attSpeed);
 	}
 	Script: discovery() {
 		require(..attSpeed > 0);
@@ -293,7 +301,7 @@ Creature: cTree {
 	}
 
 	Script: place {
-		.attNutrition += random(30);
+		.attNutrition += random(200);
 	}
 
 	attributes{attLightLevel,50;}
@@ -327,12 +335,12 @@ Process: proCreateFruit {
 	Script: condition {
 		require(chance(0.1));
 		require(!getAttInRange("attEdible", self, 1));
-		require(..attNutrition >= 100);
+		require(..attNutrition >= 200);
 	}
 
 	Script: process {
 		fruit = create(entFruit, getTile(self));
-		.attNutrition -= 100;
+		.attNutrition -= 200;
 		//pickUp(self, fruit);
 	}
 }

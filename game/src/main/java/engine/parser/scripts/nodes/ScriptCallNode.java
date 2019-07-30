@@ -26,16 +26,18 @@ public class ScriptCallNode extends AbstractScriptNode {
 	@Override
 	public Variable execute(Instance instance, Script script) {
 		Instance targetInstance = null;
+		Variable result = new Variable();
+
 		if (target != null) {
 			targetInstance = target.getInstance();
 		}
 
 		if (targetInstance != null) { // run script on different target
-			targetInstance.run(identifier.getValue(), ParameterCalculator.calculateParameters(instance, script, this));
+			result = targetInstance.run(identifier.getValue(), ParameterCalculator.calculateParameters(instance, script, this));
 		} else { // run script on self
-			instance.run(identifier.getValue(), ParameterCalculator.calculateParameters(instance, script, this));
+			result = instance.run(identifier.getValue(), ParameterCalculator.calculateParameters(instance, script, this));
 		}
-		return new Variable();
+		return result;
 	}
 
 	@Override

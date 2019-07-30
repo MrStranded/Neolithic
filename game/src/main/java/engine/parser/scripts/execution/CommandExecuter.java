@@ -30,8 +30,15 @@ public class CommandExecuter {
 		Token command = commandNode.getCommand();
 		Variable[] parameters = ParameterCalculator.calculateParameters(self, script, commandNode);
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int addPersonalAtt (Instance target, String attributeTextID, int amount)
-		if (TokenConstants.ADD_PERSONAL_ATTRIBUTE.equals(command)) {
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double abs (double value)
+		if (TokenConstants.ABSOLUTE.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				double value = parameters[0].getDouble();
+				return new Variable(Math.abs(value));
+			}
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int addPersonalAtt (Instance target, String attributeTextID, int amount)
+		} else if (TokenConstants.ADD_PERSONAL_ATTRIBUTE.equals(command)) {
 			if (requireParameters(commandNode, 3)) {
 				Instance target = parameters[0].getInstance();
 				String attributeTextID = parameters[1].getString();
@@ -319,27 +326,8 @@ public class CommandExecuter {
                 return new Variable(Data.getContainer(instance.getId()));
             }
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string moveTo (Instance instance, Tile tile)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile moveTo (Instance instance, Tile tile, int steps)
 		} else if (TokenConstants.MOVE_TO.equals(command)) {
-			if (requireParameters(commandNode, 2)) {
-				Instance instance = parameters[0].getInstance();
-				Tile tile = parameters[1].getTile();
-
-				if (tile == null) {
-					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
-				if (instance == null) {
-					Logger.error("Instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
-
-				instance.placeInto(tile);
-				return new Variable("Semira <3");
-			}
-
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile moveTowards (Instance instance, Tile tile, int steps)
-		} else if (TokenConstants.MOVE_TOWARDS.equals(command)) {
 			if (requireParameters(commandNode, 3)) {
 				Instance instance = parameters[0].getInstance();
 				Tile tile = parameters[1].getTile();
@@ -444,6 +432,25 @@ public class CommandExecuter {
 					return new Variable(height);
 				}
 			}
+
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string setAt (Instance instance, Tile tile)
+        } else if (TokenConstants.SET_AT.equals(command)) {
+            if (requireParameters(commandNode, 2)) {
+                Instance instance = parameters[0].getInstance();
+                Tile tile = parameters[1].getTile();
+
+                if (tile == null) {
+                    Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+                    return new Variable();
+                }
+                if (instance == null) {
+                    Logger.error("Instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+                    return new Variable();
+                }
+
+                instance.placeInto(tile);
+                return new Variable("Semira <3");
+            }
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int setWaterLevel (int level)
 		} else if (TokenConstants.SET_WATER_LEVEL.equals(command)) {

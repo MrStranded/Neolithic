@@ -1,5 +1,7 @@
 package engine.logic.topology;
 
+import constants.TopologyConstants;
+import engine.data.Data;
 import engine.data.entities.Instance;
 import engine.data.planetary.Tile;
 import engine.math.numericalObjects.Vector3;
@@ -11,24 +13,21 @@ public class Pathfinding {
         if (from == null || to == null) { return from; }
 
         Tile currentPosition = from;
-        double currentDistance = getHeuristic(from, to) * 2.0; // times two to improve attractiveness of neighbours
+        double currentDistance = getHeuristic(from, to) * TopologyConstants.CURRENT_POSITION_HEURISTIC_MULTIPLIER; // times a factor to improve attractiveness of neighbours
 
         if (steps > 0) {
-            //System.out.println("doing steps: " + instance + " from " + from + " to " + to + ": " + currentDistance);
             for (int step = 0; step < steps; step++) {
-
                 for (Tile neighbour : Neighbour.getNeighbours(currentPosition)) {
-                    // is neighbour accessible ? -> still has to be implemented!
-                    double newDistance = getHeuristic(neighbour, to);
-                    //System.out.println(currentPosition + " to " + neighbour + ": " + newDistance);
+                    if (instance.canGo(currentPosition, neighbour)) {
+                        double newDistance = getHeuristic(neighbour, to);
+                        //System.out.println(currentPosition + " to " + neighbour + ": " + newDistance);
 
-                    if (newDistance < currentDistance) {
-                        currentDistance = newDistance;
-                        currentPosition = neighbour;
+                        if (newDistance < currentDistance) {
+                            currentDistance = newDistance;
+                            currentPosition = neighbour;
+                        }
                     }
                 }
-
-                //System.out.println("next tile: " + currentPosition);
             }
         }
 
@@ -38,7 +37,7 @@ public class Pathfinding {
     public static double getHeuristic(Tile from, Tile to) {
         if (from == null || to == null) { return 0; }
 
-        return getSquaredDistance(from, to) + 0*(to.getHeight() - from.getHeight());
+        return getSquaredDistance(from, to) * Data.getPlanet().getSize() * TopologyConstants.HEURISTIC_MULTIPLIER; // this brings the distance to a range of 0.25 to 25
     }
 
     public static double getSquaredDistance(Tile from, Tile to) {

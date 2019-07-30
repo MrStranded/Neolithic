@@ -21,7 +21,6 @@ import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -125,6 +124,10 @@ public class Instance {
 		}
         Logger.log(Data.getContainer(id).getType() + " does not know " + container.getTextID());
 		return false;
+	}
+
+	public boolean canGo(Tile from, Tile to) {
+	    return !run(ScriptConstants.EVENT_CANGO, new Variable[] {new Variable(from), new Variable(to)}).isNull();
 	}
 
 	// ###################################################################################
@@ -391,4 +394,11 @@ public class Instance {
 			System.out.println((Variable) idInterface);
 		}
 	}
+
+	public void printAttributes() {
+        IDInterface[] atts = attributes.toArray();
+        for (IDInterface idInterface : atts) {
+            System.out.println((Attribute) idInterface);
+        }
+    }
 }

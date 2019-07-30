@@ -8,6 +8,7 @@ import engine.data.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.graphics.objects.MeshHub;
+import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
 import java.util.ArrayList;
@@ -53,6 +54,8 @@ public class Container {
 			int id = Data.getProtoAttributeID(preAttribute.getTextID());
 			if (id >= 0) {
 				attributes.insert(new Attribute(id, preAttribute.getValue()));
+			} else {
+                Logger.error("Attribute with textID '" + preAttribute.getTextID() + "' is never declared!");
 			}
 		}
 		// free the memory

@@ -47,6 +47,7 @@ public enum TokenConstants {
 	// -------------------------------------------------- Math
 	CHANCE          (TokenType.COMMAND, "chance"),
 	RANDOM          (TokenType.COMMAND, "random"),
+	ABSOLUTE        (TokenType.COMMAND, "abs"),
 
 	// -------------------------------------------------- Entity Manipulation
 	CHANGE                  (TokenType.COMMAND, "change"),
@@ -76,8 +77,8 @@ public enum TokenConstants {
 	RANDOM_TILE             (TokenType.COMMAND, "randomTile"),
 
 	// -------------------------------------------------- Actions
+	SET_AT          (TokenType.COMMAND, "setAt"),
 	MOVE_TO         (TokenType.COMMAND, "moveTo"),
-	MOVE_TOWARDS    (TokenType.COMMAND, "moveTowards"),
 	PICK_UP         (TokenType.COMMAND, "pickUp"),
 
 	// -------------------------------------------------- GUI

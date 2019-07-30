@@ -1,5 +1,6 @@
 package engine.data.attributes;
 
+import engine.data.Data;
 import engine.data.IDInterface;
 
 public class Attribute implements IDInterface {
@@ -36,5 +37,10 @@ public class Attribute implements IDInterface {
 	}
 	public void setValue(int value) {
 		this.value = value;
+	}
+
+	@Override
+	public String toString() {
+		return "Attribute (id = " + Data.getProtoAttribute(id).getTextID() + ": " + value + ")";
 	}
 }

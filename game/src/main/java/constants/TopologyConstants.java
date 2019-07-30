@@ -14,4 +14,8 @@ public class TopologyConstants {
 	public static final RGBA TILE_DEFAULT_COLOR = new RGBA(1d, 0.75d, 0.5d, 1d); // default color of new topology
 	public static final RGBA WATER_DEFAULT_COLOR = new RGBA(0.25d, 0.5d, 0.75d, WATER_ALPHA); // default color of water
 	public static final double TILE_SIDE_COLOR_FACTOR = 0.75d; // if no side color is available, the top color is multiplied with this factor to create a side color
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Pathfinding %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public static final double CURRENT_POSITION_HEURISTIC_MULTIPLIER = 1.5;
+	public static final double HEURISTIC_MULTIPLIER = 1000000;
 }

@@ -52,7 +52,7 @@ public class IdentifierNode extends AbstractScriptNode {
 				} else {
 					variable = new Variable(attributeIdentifier.retrieve(targetInstance));
 				}
-			} else if (targetContainer != null) {
+			} else if (targetContainer != null) { // return attribute from target container
 				variable = new Variable(attributeIdentifier.retrieve(targetContainer));
 			} else { // return variable from self
 				if (retrieveCompleteAttributeValue) {
