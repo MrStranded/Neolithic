@@ -358,6 +358,19 @@ public class CommandExecuter {
                 return new Variable(Data.getContainer(instance.getId()));
             }
 
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int length (List list)
+        } else if (TokenConstants.LENGTH.equals(command)) {
+            if (requireParameters(commandNode,1)) {
+                List<Variable> list = parameters[0].getList();
+
+                if (list == null) {
+                    Logger.error("Value for command '" + command.getValue() + "' is not a list on line " + command.getLine());
+                    return new Variable();
+                }
+
+                return new Variable(list.size());
+            }
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile moveTo (Instance instance, Tile tile, int steps)
 		} else if (TokenConstants.MOVE_TO.equals(command)) {
 			if (requireParameters(commandNode, 3)) {

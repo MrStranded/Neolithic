@@ -269,6 +269,36 @@ public class BinaryOperationExecuter {
 
 			return new Variable(!right.isNull() ? 1 : 0);
 
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& >>
+        } else if (TokenConstants.SHIFT_RIGHT.equals(operator)) {
+            Variable right = binaryNode.getRight().execute(self, script);
+
+            return new Variable(left.getInt() >> right.getInt());
+
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& <<
+        } else if (TokenConstants.SHIFT_LEFT.equals(operator)) {
+            Variable right = binaryNode.getRight().execute(self, script);
+
+            return new Variable(left.getInt() << right.getInt());
+
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& &
+        } else if (TokenConstants.BITWISE_AND.equals(operator)) {
+            Variable right = binaryNode.getRight().execute(self, script);
+
+            return new Variable(left.getInt() & right.getInt());
+
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& |
+        } else if (TokenConstants.BITWISE_OR.equals(operator)) {
+            Variable right = binaryNode.getRight().execute(self, script);
+
+            return new Variable(left.getInt() | right.getInt());
+
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ^^
+        } else if (TokenConstants.BITWISE_XOR.equals(operator)) {
+            Variable right = binaryNode.getRight().execute(self, script);
+
+            return new Variable(left.getInt() ^ right.getInt());
+
 		}
 
 		return new Variable();

@@ -90,6 +90,9 @@ public enum TokenConstants {
 	REQUIRE         (TokenType.COMMAND, "require"),
 	RETURN          (TokenType.COMMAND, "return"),
 
+    // -------------------------------------------------- Lists
+    LENGTH          (TokenType.COMMAND, "length"),
+
 	// -------------------------------------------------- Iterators
 	EACH_TILE       (TokenType.COMMAND, "eachTile"),
 	EACH_ENTITY     (TokenType.COMMAND, "eachEntity"),
