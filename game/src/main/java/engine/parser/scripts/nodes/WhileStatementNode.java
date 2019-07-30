@@ -3,6 +3,8 @@ package engine.parser.scripts.nodes;
 import engine.data.entities.Instance;
 import engine.data.Script;
 import engine.data.variables.Variable;
+import engine.parser.scripts.exceptions.BreakException;
+import engine.parser.scripts.exceptions.ScriptInterruptedException;
 
 public class WhileStatementNode extends AbstractScriptNode {
 
@@ -13,10 +15,14 @@ public class WhileStatementNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance, Script script) {
+	public Variable execute(Instance instance, Script script) throws ScriptInterruptedException {
 		Variable body = new Variable();
 		while (!subNodes[0].execute(instance, script).isNull()) { // condition
-			body = subNodes[1].execute(instance, script); // body
+			try {
+				body = subNodes[1].execute(instance, script); // body
+			} catch (BreakException breakException) {
+				break;
+			}
 		}
 		return body;
 	}

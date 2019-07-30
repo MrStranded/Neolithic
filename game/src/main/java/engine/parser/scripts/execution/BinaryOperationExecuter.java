@@ -7,6 +7,7 @@ import engine.data.Script;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.parser.constants.TokenConstants;
+import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.nodes.BinaryExpressionNode;
 import engine.parser.scripts.nodes.IdentifierNode;
 import engine.parser.scripts.nodes.ScriptCallNode;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class BinaryOperationExecuter {
 
-	public static Variable executeOperation(Instance self, Script script, BinaryExpressionNode binaryNode) {
+	public static Variable executeOperation(Instance self, Script script, BinaryExpressionNode binaryNode) throws ScriptInterruptedException {
 		Token operator = binaryNode.getOperator();
 		Variable left = binaryNode.getLeft().execute(self, script);
 

@@ -28,6 +28,7 @@ public enum TokenConstants {
 	ELSE        (TokenType.KEYWORD, "else"),
 	FOR         (TokenType.KEYWORD, "for"),
 	WHILE       (TokenType.KEYWORD, "while"),
+    BREAK       (TokenType.KEYWORD, "break"),
 
 	// -------------------------------------------------- Engine Values
 	VALUE_NAME                  (TokenType.KEYWORD, "name"),
@@ -66,6 +67,7 @@ public enum TokenConstants {
 	GET_ATTRIBUTE           (TokenType.COMMAND, "getAtt"),
 	GET_ATTRIBUTE_IN_RANGE  (TokenType.COMMAND, "getAttInRange"),
 	GET_CREATURE_IN_RANGE	(TokenType.COMMAND, "getCreatureInRange"),
+    GET_CREATURES_IN_RANGE	(TokenType.COMMAND, "getCreaturesInRange"),
 	GET_HEIGHT              (TokenType.COMMAND, "getHeight"),
 	GET_ITEM_ATTRIBUTE      (TokenType.COMMAND, "getItemAtt"),
 	GET_LIGHT_LEVEL         (TokenType.COMMAND, "getLightLevel"),
@@ -149,6 +151,13 @@ public enum TokenConstants {
 	NOT         (TokenType.OPERATOR, "!",1),
 	AND         (TokenType.OPERATOR, "&&", 7),
 	OR          (TokenType.OPERATOR, "||", 8),
+
+    // -------------------------------------------------- Bitwise
+    SHIFT_LEFT      (TokenType.OPERATOR, "<<",2),
+    SHIFT_RIGHT     (TokenType.OPERATOR, ">>",2),
+    BITWISE_AND     (TokenType.OPERATOR, "&",2),
+    BITWISE_OR      (TokenType.OPERATOR, "|",2),
+    BITWISE_XOR     (TokenType.OPERATOR, "^^",2),
 
 	// -------------------------------------------------- Assignment
 	ASSIGNMENT  (TokenType.OPERATOR, "=", 9),

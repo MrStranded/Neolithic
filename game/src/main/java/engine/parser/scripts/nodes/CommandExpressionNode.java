@@ -3,6 +3,7 @@ package engine.parser.scripts.nodes;
 import engine.data.entities.Instance;
 import engine.data.Script;
 import engine.data.variables.Variable;
+import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.execution.CommandExecuter;
 import engine.parser.tokenization.Token;
 
@@ -23,7 +24,7 @@ public class CommandExpressionNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance, Script script) {
+	public Variable execute(Instance instance, Script script) throws ScriptInterruptedException {
 		return CommandExecuter.executeCommand(instance, script, this);
 	}
 

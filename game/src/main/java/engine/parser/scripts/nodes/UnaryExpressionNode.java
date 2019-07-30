@@ -3,6 +3,7 @@ package engine.parser.scripts.nodes;
 import engine.data.entities.Instance;
 import engine.data.Script;
 import engine.data.variables.Variable;
+import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.execution.UnaryOperationExecuter;
 import engine.parser.tokenization.Token;
 
@@ -17,7 +18,7 @@ public class UnaryExpressionNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance, Script script) {
+	public Variable execute(Instance instance, Script script) throws ScriptInterruptedException {
 		return UnaryOperationExecuter.executeOperation(instance, script, this);
 	}
 

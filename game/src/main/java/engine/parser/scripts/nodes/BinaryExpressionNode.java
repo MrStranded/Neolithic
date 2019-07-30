@@ -3,6 +3,7 @@ package engine.parser.scripts.nodes;
 import engine.data.entities.Instance;
 import engine.data.Script;
 import engine.data.variables.Variable;
+import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.execution.BinaryOperationExecuter;
 import engine.parser.tokenization.Token;
 
@@ -19,7 +20,7 @@ public class BinaryExpressionNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance, Script script) {
+	public Variable execute(Instance instance, Script script) throws ScriptInterruptedException {
 		return BinaryOperationExecuter.executeOperation(instance, script, this);
 	}
 

@@ -4,6 +4,8 @@ import engine.data.entities.Instance;
 import engine.data.Script;
 import engine.data.variables.Variable;
 import engine.parser.constants.TokenConstants;
+import engine.parser.scripts.exceptions.ReturnException;
+import engine.parser.scripts.exceptions.ScriptInterruptedException;
 
 import java.util.List;
 
@@ -18,18 +20,22 @@ public class MultiStatementNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance, Script script) {
+	public Variable execute(Instance instance, Script script) throws ScriptInterruptedException {
 		boolean allTrue = true;
-		for (AbstractScriptNode node : subNodes) {
-			Variable variable = node.execute(instance, script);
-			if (node.getClass() == CommandExpressionNode.class) {
-				if (TokenConstants.REQUIRE.equals(((CommandExpressionNode) node).getCommand())) {
-					allTrue = !variable.isNull() && allTrue; // allTrue is only true if all require command subNodes return Variables that are not null
-				} else if (TokenConstants.RETURN.equals(((CommandExpressionNode) node).getCommand())) {
-					return variable;
-				}
-			}
-		}
+
+		try {
+            for (AbstractScriptNode node : subNodes) {
+                Variable variable = node.execute(instance, script);
+                if (node.getClass() == CommandExpressionNode.class) {
+                    if (TokenConstants.REQUIRE.equals(((CommandExpressionNode) node).getCommand())) {
+                        allTrue = !variable.isNull() && allTrue; // allTrue is only true if all require command subNodes return Variables that are not null
+                    }
+                }
+            }
+        } catch (ReturnException returnException) {
+		    return returnException.getReturnValue();
+        }
+
 		return new Variable(allTrue ? 1 : 0);
 	}
 

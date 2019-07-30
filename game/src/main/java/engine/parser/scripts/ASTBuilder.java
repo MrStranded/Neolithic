@@ -67,6 +67,9 @@ public class ASTBuilder {
 				} else if (TokenConstants.FOR.equals(next)) { // for statement
 					nodeList.add(readForStatement());
 
+				} else if (TokenConstants.BREAK.equals(next)) { // break statement
+					nodeList.add(readBreakStatement());
+
 				} else { // expression (induced by eg. 'self')
 					nodeList.add(readExpression());
 					interpreter.consume(TokenConstants.SEMICOLON);
@@ -177,6 +180,17 @@ public class ASTBuilder {
 			Logger.error(errorMessage);
 			throw new Exception(errorMessage);
 		}
+	}
+
+	// ###################################################################################
+	// ################################ Break Statement ##################################
+	// ###################################################################################
+
+	private BreakStatementNode readBreakStatement() throws Exception {
+		interpreter.consume(TokenConstants.BREAK);
+		interpreter.consume(TokenConstants.SEMICOLON);
+
+		return new BreakStatementNode();
 	}
 
 	// ###################################################################################

@@ -3,6 +3,7 @@ package engine.parser.scripts.nodes;
 import engine.data.Script;
 import engine.data.entities.Instance;
 import engine.data.variables.Variable;
+import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.tokenization.Token;
 import engine.parser.utils.TokenNumerifier;
 import org.lwjgl.system.CallbackI;
@@ -20,7 +21,7 @@ public class ListExpressionNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance, Script script) {
+	public Variable execute(Instance instance, Script script) throws ScriptInterruptedException {
 		List<Variable> variableList = new ArrayList<>(subNodes.length);
 		for (int i=0; i<subNodes.length; i++) {
 			variableList.add(subNodes[i].execute(instance, script));

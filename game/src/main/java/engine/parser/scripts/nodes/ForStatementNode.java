@@ -8,6 +8,8 @@ import engine.data.Script;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.parser.constants.TokenConstants;
+import engine.parser.scripts.exceptions.BreakException;
+import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
 
@@ -31,8 +33,9 @@ public class ForStatementNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance, Script script) {
+	public Variable execute(Instance instance, Script script) throws ScriptInterruptedException {
 		Variable body = new Variable();
+
 		if (subNodes.length == 4) { // normal for loop
 			subNodes[0].execute(instance, script); // initial
 			while (!subNodes[1].execute(instance, script).isNull()) { // condition
@@ -42,19 +45,29 @@ public class ForStatementNode extends AbstractScriptNode {
 
 		} else { // for loop with list iterator
 			Variable iterationVariable = subNodes[0].execute(instance, script); // initial
-			Variable listVariable = subNodes[1].execute(instance, script); // iterator
+			Variable listVariable = null; // iterator
+			try {
+				listVariable = subNodes[1].execute(instance, script);
+			} catch (ScriptInterruptedException e) {
+				e.printStackTrace();
+			}
 			if (listVariable.getType() == DataType.LIST) {
 				List<Variable> variableList = listVariable.getList();
 				if (variableList != null) {
 					for (Variable variable : variableList) {
 						iterationVariable.copyValue(variable);
-						body = subNodes[2].execute(instance, script); // body
+						try {
+							body = subNodes[2].execute(instance, script); // body
+						} catch (BreakException breakException) {
+							break;
+						}
 					}
 				}
 			} else {
 				Logger.error("Iterator variable has to be of type LIST! Encountered type '" + listVariable.getType() + "'!");
 			}
 		}
+
 		return body;
 	}
 

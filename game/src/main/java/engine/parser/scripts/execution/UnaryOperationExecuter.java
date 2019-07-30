@@ -5,6 +5,7 @@ import engine.data.Script;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.parser.constants.TokenConstants;
+import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.nodes.IdentifierNode;
 import engine.parser.scripts.nodes.ScriptCallNode;
 import engine.parser.scripts.nodes.UnaryExpressionNode;
@@ -13,7 +14,7 @@ import engine.parser.utils.Logger;
 
 public class UnaryOperationExecuter {
 
-	public static Variable executeOperation(Instance self, Script script, UnaryExpressionNode unaryNode) {
+	public static Variable executeOperation(Instance self, Script script, UnaryExpressionNode unaryNode) throws ScriptInterruptedException {
 		Token operator = unaryNode.getOperator();
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ++

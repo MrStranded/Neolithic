@@ -3,6 +3,7 @@ package engine.parser.scripts.nodes;
 import engine.data.entities.Instance;
 import engine.data.Script;
 import engine.data.variables.Variable;
+import engine.parser.scripts.exceptions.ScriptInterruptedException;
 
 public class IfStatementNode extends AbstractScriptNode {
 
@@ -14,7 +15,7 @@ public class IfStatementNode extends AbstractScriptNode {
 	}
 
 	@Override
-	public Variable execute(Instance instance, Script script) {
+	public Variable execute(Instance instance, Script script) throws ScriptInterruptedException {
 		Variable condition = subNodes[0].execute(instance, script);
 
 		if (!condition.isNull()) {

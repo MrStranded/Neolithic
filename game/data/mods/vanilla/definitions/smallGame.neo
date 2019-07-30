@@ -167,8 +167,8 @@ Process: proStroll {
 
 Drive: driMate {
     Script: condition {
-        require(self.attNutrition >= 10);
-        require(self.attLibido >= 10);
+        require(self.attNutrition >= 20);
+        require(self.attLibido >= 50);
     }
 
     solutions {
@@ -179,7 +179,6 @@ Drive: driMate {
 Process: proMate {
     Script: condition {
         print(->id + " wants to mate");
-        ->mate = getCreatureInRange(getType(self), getTile(self), 1);
         require(->mate);
     }
     Script: process {
@@ -198,7 +197,15 @@ Process: proMate {
 Process: proSearchMate {
     Script: condition {
         print(->id + " is looking for mate");
-        ->mate = getCreatureInRange(getType(self), getTile(self), self..attViewingDistance);
+        creatures = getCreaturesInRange(getType(self), getTile(self), ..attViewingDistance);
+        ->mate = 0;
+        for (creature : creatures) {
+            if (creature != self) {
+                ->mate = creature;
+                break;
+            }
+        }
+        if (->mate) { print("found mate"); } else { print("no mate found anywhere"); }
         require(->mate);
     }
     Script: process {

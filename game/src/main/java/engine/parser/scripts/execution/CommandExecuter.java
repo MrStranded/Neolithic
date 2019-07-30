@@ -15,6 +15,8 @@ import engine.logic.topology.Pathfinding;
 import engine.logic.topology.TopologyGenerator;
 import engine.logic.topology.TileArea;
 import engine.parser.constants.TokenConstants;
+import engine.parser.scripts.exceptions.ReturnException;
+import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.nodes.CommandExpressionNode;
 import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
@@ -24,7 +26,7 @@ import java.util.List;
 
 public class CommandExecuter {
 
-	public static Variable executeCommand(Instance self, Script script, CommandExpressionNode commandNode) {
+	public static Variable executeCommand(Instance self, Script script, CommandExpressionNode commandNode) throws ScriptInterruptedException {
 		//System.out.println("execute command: " + commandNode.getCommand());
 
 		Token command = commandNode.getCommand();
@@ -212,6 +214,36 @@ public class CommandExecuter {
 				}
 				return new Variable();
 			}
+
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance[] getCreaturesInRange (Container type, Tile center, int radius)
+        } else if (TokenConstants.GET_CREATURES_IN_RANGE.equals(command)) {
+            if (requireParameters(commandNode, 3)) {
+                Container type = parameters[0].getContainer();
+                int containerID = -1;
+                Tile center = parameters[1].getTile();
+                int radius = parameters[2].getInt();
+
+                if (center == null) {
+                    Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+                    return new Variable();
+                }
+
+                if ((type == null) || ((containerID = Data.getContainerID(type.getTextID())) < 0)) {
+                    Logger.error("Type of value '" + parameters[0].toString() + "' does not exist!");
+                    return new Variable();
+                }
+
+                List<Variable> creatures = new ArrayList<>();
+                TileArea tileArea = new TileArea(center, radius);
+                for (Tile tile : tileArea.getTileList()) {
+                    Instance instance = tile.getThisOrSubInstanceWithID(containerID);
+
+                    if (instance != null) {
+                        creatures.add(new Variable(instance));
+                    }
+                }
+                return new Variable(creatures);
+            }
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getHeight (Tile tile)
 		} else if (TokenConstants.GET_HEIGHT.equals(command)) {
@@ -409,7 +441,7 @@ public class CommandExecuter {
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& variable return (variable)
 		} else if (TokenConstants.RETURN.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
-				return parameters[0];
+				throw new ReturnException(parameters[0]);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int require (variable)
