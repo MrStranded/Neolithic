@@ -6,32 +6,54 @@ import engine.data.entities.Instance;
 import engine.data.planetary.Tile;
 import engine.math.numericalObjects.Vector3;
 
+import java.util.HashSet;
+import java.util.PriorityQueue;
+
 public class Pathfinding {
+
+    private static class TileHeuristic implements Comparable<TileHeuristic> {
+        public Tile tile;
+        public double h, g;
+
+        TileHeuristic(Tile tile, double h, double g) {
+            this.tile = tile;
+            this.h = h;
+            this.g = g;
+        }
+
+        @Override
+        public int compareTo(TileHeuristic o) {
+            return (int) ((h+g) - (o.h+o.g));
+        }
+    }
 
     public static Tile moveTowardsTile(Instance instance, Tile to, int steps) {
         Tile from = instance.getPosition();
         if (from == null || to == null) { return from; }
 
-        Tile currentPosition = from;
-        double currentDistance = getHeuristic(from, to) * TopologyConstants.CURRENT_POSITION_HEURISTIC_MULTIPLIER; // times a factor to improve attractiveness of neighbours
+        PriorityQueue<TileHeuristic> openList = new PriorityQueue<>();
+        HashSet<Tile> closedList = new HashSet<>();
 
-        if (steps > 0) {
-            for (int step = 0; step < steps; step++) {
-                for (Tile neighbour : Neighbour.getNeighbours(currentPosition)) {
-                    if (instance.canGo(currentPosition, neighbour)) {
-                        double newDistance = getHeuristic(neighbour, to);
-                        //System.out.println(currentPosition + " to " + neighbour + ": " + newDistance);
+        openList.add(new TileHeuristic(from, getHeuristic(from, to), 0));
+        Tile finalTile = from;
 
-                        if (newDistance < currentDistance) {
-                            currentDistance = newDistance;
-                            currentPosition = neighbour;
-                        }
-                    }
+        while (true) {
+            TileHeuristic currentTile = openList.poll();
+            closedList.add(currentTile.tile);
+
+            if (currentTile.tile == to || currentTile.g >= steps) {
+                finalTile = currentTile.tile;
+                break;
+            }
+
+            for (Tile neighbour : Neighbour.getNeighbours(currentTile.tile)) {
+                if (!closedList.contains(neighbour)) {
+                    openList.add(new TileHeuristic(neighbour, getHeuristic(neighbour, to), currentTile.g + 1));
                 }
             }
         }
 
-        return currentPosition;
+        return finalTile;
     }
 
     public static double getHeuristic(Tile from, Tile to) {

@@ -16,6 +16,6 @@ public class TopologyConstants {
 	public static final double TILE_SIDE_COLOR_FACTOR = 0.75d; // if no side color is available, the top color is multiplied with this factor to create a side color
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Pathfinding %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	public static final double CURRENT_POSITION_HEURISTIC_MULTIPLIER = 1.5;
+	public static final double CURRENT_POSITION_HEURISTIC_MULTIPLIER = 1.125;
 	public static final double HEURISTIC_MULTIPLIER = 1000000;
 }
