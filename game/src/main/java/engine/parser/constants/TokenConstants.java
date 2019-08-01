@@ -56,6 +56,8 @@ public enum TokenConstants {
 	DESTROY                 (TokenType.COMMAND, "destroy"),
 	ADD_PERSONAL_ATTRIBUTE  (TokenType.COMMAND, "addPersonalAtt"),
 	ADD_SPECIES_ATTRIBUTE   (TokenType.COMMAND, "addSpeciesAtt"),
+	ADD_OCCUPATION			(TokenType.COMMAND, "addOccupation"),
+	MIX_ATTRIBUTES          (TokenType.COMMAND, "mixAttributes"),
 
 	// -------------------------------------------------- Planet Manipulation
 	CREATE_FORMATION    (TokenType.COMMAND, "createFormation"),
@@ -166,7 +168,7 @@ public enum TokenConstants {
 	ASSIGNMENT  (TokenType.OPERATOR, "=", 9),
 
 	// -------------------------------------------------- Special Operators
-	OBJECT_OPERATOR (TokenType.OPERATOR, "->", 0),
+	OBJECT_OPERATOR (TokenType.OPERATOR, "->", -1),
 	POINT           (TokenType.OPERATOR, ".", 0),
 	DOUBLE_POINT    (TokenType.OPERATOR, "..",0),
 

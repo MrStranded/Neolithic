@@ -1,6 +1,7 @@
 package engine.data.entities;
 
 import constants.ScriptConstants;
+import engine.data.behaviour.Occupation;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
@@ -21,7 +22,9 @@ import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Instance {
@@ -32,6 +35,8 @@ public class Instance {
 	private BinaryTree<Variable> variables;
 	private List<Instance> subInstances;
 	private Instance superInstance = null;
+
+	private Queue<Occupation> occupations;
 
 	private boolean slatedForRemoval = false;
 
@@ -44,6 +49,7 @@ public class Instance {
 		attributes = new BinaryTree<>();
 		variables = new BinaryTree<>();
 		subInstances = new ArrayList<>(0);
+		occupations = new LinkedList<>();
 	}
 
 	// ###################################################################################
@@ -130,19 +136,34 @@ public class Instance {
 	    return !run(ScriptConstants.EVENT_CANGO, new Variable[] {new Variable(from), new Variable(to)}).isNull();
 	}
 
+	public void addOccupation(int duration, String callBackScript) {
+	    occupations.add(new Occupation(duration, callBackScript));
+    }
+
 	// ###################################################################################
 	// ################################ Tick #############################################
 	// ###################################################################################
 
 	public void tick() {
-		// ----------- calculate drives
-		Container container = Data.getContainer(id);
-		if (container != null && container.getType() == DataType.CREATURE) {
-			searchProcesses(((CreatureContainer) container).getDrives());
-		}
+	    if (occupations.isEmpty()) {
+            // ----------- calculate drives
+            Container container = Data.getContainer(id);
+            if (container != null && container.getType() == DataType.CREATURE) {
+                searchProcesses(((CreatureContainer) container).getDrives());
+            }
 
-		// ----------- calculate tick script
-		run(ScriptConstants.EVENT_TICK, null);
+            // ----------- calculate tick script
+            run(ScriptConstants.EVENT_TICK, null);
+        } else {
+            // ----------- calculate occupations
+	        Occupation currentOccupation = occupations.peek();
+	        currentOccupation.tick();
+
+	        if (currentOccupation.isFinished()) {
+	            currentOccupation.callBack(this);
+	            occupations.poll();
+            }
+        }
 	}
 
 	// ###################################################################################

@@ -1,6 +1,7 @@
 package engine.data;
 
 import constants.GameConstants;
+import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
 import engine.data.proto.Container;
@@ -84,7 +85,7 @@ public class Data {
 	 * @return id or -1 if not found
 	 */
 	public static int getProtoAttributeID(String textID) {
-		for (int i=0; i<attributes.length; i++) {
+		for (int i = 0; i < attributes.length; i++) {
 			ProtoAttribute protoAttribute = attributes[i];
 			if (protoAttribute != null) {
 				if (protoAttribute.getTextID().equals(textID)) {
@@ -93,6 +94,22 @@ public class Data {
 			}
 		}
 		return -1;
+	}
+
+    /**
+     * Returns a list of all attribute ids that are registered in the game.
+     * @return list of protoattribute ids
+     */
+	public static List<Integer> getAllAttributeIDs() {
+		List<Integer> attributeIDList = new ArrayList<>(8);
+
+		for (int i = 0; i < attributes.length; i++) {
+			if (attributes[i] != null) {
+				attributeIDList.add(i);
+			}
+		}
+
+		return attributeIDList;
 	}
 
 	/**

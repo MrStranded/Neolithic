@@ -11,6 +11,10 @@ import java.util.PriorityQueue;
 
 public class Pathfinding {
 
+    /**
+     * This private class is used to remember the tiles with their heuristic and g values.
+     * g denotes how many steps have already been taken to reach this tile
+     */
     private static class TileHeuristic implements Comparable<TileHeuristic> {
         public Tile tile;
         public double h, g;
@@ -27,6 +31,14 @@ public class Pathfinding {
         }
     }
 
+    /**
+     * Tries to move towards the specified tile for the given number of steps.
+     * This method implements an A* algorithm.
+     * @param instance to move
+     * @param to goal tile
+     * @param steps number of allowed steps
+     * @return tile closest to goal tile with given steps
+     */
     public static Tile moveTowardsTile(Instance instance, Tile to, int steps) {
         Tile from = instance.getPosition();
         if (from == null || to == null) { return from; }
@@ -39,6 +51,7 @@ public class Pathfinding {
 
         while (true) {
             TileHeuristic currentTile = openList.poll();
+            if (currentTile == null) { break; } // nowhere to go
             closedList.add(currentTile.tile);
 
             if (currentTile.tile == to || currentTile.g >= steps) {
@@ -48,7 +61,9 @@ public class Pathfinding {
 
             for (Tile neighbour : Neighbour.getNeighbours(currentTile.tile)) {
                 if (!closedList.contains(neighbour)) {
-                    openList.add(new TileHeuristic(neighbour, getHeuristic(neighbour, to), currentTile.g + 1));
+                    if (instance.canGo(currentTile.tile, neighbour)) {
+                        openList.add(new TileHeuristic(neighbour, getHeuristic(neighbour, to), currentTile.g + 1));
+                    }
                 }
             }
         }

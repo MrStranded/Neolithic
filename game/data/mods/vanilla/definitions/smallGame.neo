@@ -61,6 +61,10 @@ Attribute: attHumidity { name = "Humidity"; }
 Attribute: attLibido { name = "Libido"; }
 Attribute: attRestlessness { name = "Restlessness"; }
 Attribute: attStepHeight { name = "Step height"; }
+Attribute: attSleeping { name = "Sleeping"; }
+Attribute: attAge { name = "Age"; }
+Attribute: attMutationChance { name = "Mutation chance"; }
+Attribute: attMutationExtent { name = "Extent of mutation"; }
 
 ///////////////////////////////////////////////////////////////////////////// Creatures
 
@@ -97,21 +101,26 @@ Creature: cMonkey {
 
 	Script: place {
 		self->id = random(1000);
+		.attMutationChance = random(100);
+		.attMutationExtent = random(1,10);
 	}
 
 	Script: tick {
-	    if (chance(0.5)) {
-		    .attNutrition--;
+	    if (.attSleeping == 0) {
+            if (chance(0.5)) {
+                .attNutrition--;
+            }
+
+            .attRestlessness++;
+            .attLibido++;
+
+            if (..attNutrition < 0) {
+                .attLife--;
+            } else if (..attNutrition > 50) {
+                .attLife++;
+            }
 		}
 
-		.attRestlessness++;
-		.attLibido++;
-
-		if (..attNutrition < 0) {
-			.attLife--;
-		} else if (..attNutrition > 50) {
-		    .attLife++;
-		}
 		if (..attLife < 0) {
 		    destroy(self);
         }
@@ -121,6 +130,13 @@ Creature: cMonkey {
         h1 = getHeight(from);
         h2 = getHeight(to);
         return ((h2 >= 100) && (abs(h1-h2) <= ..attStepHeight));
+	}
+
+	Script: awake() {
+	    print(->id + " woke up");
+	    .attSleeping = 0;
+		.attRestlessness += 10;
+		.attLife += 10;
 	}
 }
 
@@ -136,8 +152,8 @@ Drive: driSleep {
 
 Process: proSleep {
 	Script: process {
-		.attRestlessness += 10;
-		.attLife += 10;
+	    print(->id + " goes to sleep");
+	    addOccupation(self, 20, "awake");
 	}
 }
 
@@ -178,15 +194,14 @@ Drive: driMate {
 
 Process: proMate {
     Script: condition {
-        print(->id + " wants to mate");
         require(->mate);
     }
     Script: process {
-        print(->id + " mated!");
         self.attNutrition -= 5;
         self.attLibido -= 50;
         self.attRestlessness -= 100;
-        create(getType(self), getTile(self));
+        child = create(getType(self), getTile(self));
+        mixAttributes(child, self, ->mate, (.attMutationChance + ->mate.attMutationChance)/2, (.attMutationExtent + ->mate.attMutationExtent)/2);
     }
 
     solutions {
@@ -196,7 +211,6 @@ Process: proMate {
 
 Process: proSearchMate {
     Script: condition {
-        print(->id + " is looking for mate");
         creatures = getCreaturesInRange(getType(self), getTile(self), ..attViewingDistance);
         ->mate = 0;
         for (creature : creatures) {
@@ -205,11 +219,9 @@ Process: proSearchMate {
                 break;
             }
         }
-        if (->mate) { print("found mate"); } else { print("no mate found anywhere"); }
         require(->mate);
     }
     Script: process {
-        print(->id + " is going towards mate");
         moveTo(self, ->mate, self..attSpeed);
     }
 }
@@ -279,7 +291,8 @@ Entity: entFruit {
 	}
 
 	Script: tick() {
-		if (chance(0.02)) {
+	    .attAge++;
+		if (.attAge > 420) {
 			destroy(self);
 		}
 	}
@@ -308,7 +321,7 @@ Creature: cTree {
 	}
 
 	Script: place {
-		.attNutrition += random(200);
+		.attNutrition += random(1000);
 	}
 
 	attributes{attLightLevel,50;}
@@ -342,12 +355,12 @@ Process: proCreateFruit {
 	Script: condition {
 		require(chance(0.1));
 		require(!getAttInRange("attEdible", self, 1));
-		require(..attNutrition >= 200);
+		require(..attNutrition >= 500);
 	}
 
 	Script: process {
 		fruit = create(entFruit, getTile(self));
-		.attNutrition -= 200;
+		.attNutrition -= 500;
 		//pickUp(self, fruit);
 	}
 }

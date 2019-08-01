@@ -4,6 +4,7 @@ import constants.ScriptConstants;
 import constants.TopologyConstants;
 import engine.data.Data;
 import engine.data.Script;
+import engine.data.behaviour.Occupation;
 import engine.data.entities.Instance;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
@@ -39,7 +40,7 @@ public class CommandExecuter {
 				return new Variable(Math.abs(value));
 			}
 
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int addPersonalAtt (Instance target, String attributeTextID, int amount)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int addPersonalAtt (Instance target, String attributeTextID, int amount)
 		} else if (TokenConstants.ADD_PERSONAL_ATTRIBUTE.equals(command)) {
 			if (requireParameters(commandNode, 3)) {
 				Instance target = parameters[0].getInstance();
@@ -59,6 +60,32 @@ public class CommandExecuter {
 
 				target.addAttribute(attributeID, amount);
 			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void addOccupation (Instance instance, int duration[, String callBackScript])
+		} else if (TokenConstants.ADD_OCCUPATION.equals(command)) {
+			if (parameters.length >= 3) {
+				Instance target = parameters[0].getInstance();
+				int duration = parameters[1].getInt();
+				String callBackScript = parameters[2].getString();
+
+				if (target == null) {
+					Logger.error("Target instance value for command '" + command.getValue() + "' is invalid!");
+					return new Variable();
+				}
+
+				target.addOccupation(duration, callBackScript);
+
+			} else if (requireParameters(commandNode, 2)) {
+                Instance target = parameters[0].getInstance();
+                int duration = parameters[1].getInt();
+
+                if (target == null) {
+                    Logger.error("Target instance value for command '" + command.getValue() + "' is invalid!");
+                    return new Variable();
+                }
+
+                target.addOccupation(duration, null);
+            }
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double chance (double probability)
 		} else if (TokenConstants.CHANCE.equals(command)) {
@@ -370,6 +397,40 @@ public class CommandExecuter {
 
                 return new Variable(list.size());
             }
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void mixAttributes (Instance t, Instance p1, Instance p2, double chance, double extent)
+		} else if (TokenConstants.MIX_ATTRIBUTES.equals(command)) {
+			if (requireParameters(commandNode, 5)) {
+				Instance target = parameters[0].getInstance();
+				Instance parent1 = parameters[1].getInstance();
+				Instance parent2 = parameters[2].getInstance();
+				double chance = parameters[3].getDouble();
+				double extent = parameters[4].getDouble();
+
+                if (target == null) {
+                    Logger.error("Target instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+                    return new Variable();
+                }
+                if (parent1 == null) {
+                    Logger.error("Parent1 instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+                    return new Variable();
+                }
+                if (parent2 == null) {
+                    Logger.error("Parent2 instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+                    return new Variable();
+                }
+
+                List<Integer> attributes = Data.getAllAttributeIDs();
+                for (Integer id : attributes) {
+                    int value = (parent1.getPersonalAttributeValue(id) + parent2.getPersonalAttributeValue(id)) / 2;
+
+                    if (Math.random() <= chance/100d) {
+                        value += -extent + Math.random()*extent;
+                    }
+
+                    target.setAttribute(id, value);
+                }
+			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile moveTo (Instance instance, Tile tile, int steps)
 		} else if (TokenConstants.MOVE_TO.equals(command)) {
