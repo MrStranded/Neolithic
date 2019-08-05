@@ -17,6 +17,6 @@ public class BreakStatementNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "Self");
+		System.out.println(indentation + "Break");
 	}
 }

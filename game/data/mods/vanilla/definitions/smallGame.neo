@@ -1,3 +1,23 @@
+///////////////////////////////////////////////////////////////////////////// Global
+
+Script: tick {
+    // one minute
+    ->minute++;
+
+    if (->minute >= 60) {
+        ->minute = 0;
+        ->hour++;
+        print("Day: " + ->day + " | Hour: " + ->hour);
+    }
+
+    if (->hour >= 24) {
+        ->hour = 0;
+        ->day++;
+    }
+
+    changeSunAngle(0.25); // 0.25 * 60 * 24 = 360
+}
+
 ///////////////////////////////////////////////////////////////////////////// Tiles
 
 Tile: tDirt {
@@ -133,7 +153,6 @@ Creature: cMonkey {
 	}
 
 	Script: awake() {
-	    print(->id + " woke up");
 	    .attSleeping = 0;
 		.attRestlessness += 10;
 		.attLife += 10;
@@ -143,6 +162,7 @@ Creature: cMonkey {
 Drive: driSleep {
 	Script: condition {
 		require(..attRestlessness <= 30);
+		require(getLightLevel(self) <= 50);
 	}
 
 	solutions {
@@ -152,7 +172,6 @@ Drive: driSleep {
 
 Process: proSleep {
 	Script: process {
-	    print(->id + " goes to sleep");
 	    addOccupation(self, 20, "awake");
 	}
 }
@@ -201,7 +220,7 @@ Process: proMate {
         self.attLibido -= 50;
         self.attRestlessness -= 100;
         child = create(getType(self), getTile(self));
-        mixAttributes(child, self, ->mate, (.attMutationChance + ->mate.attMutationChance)/2, (.attMutationExtent + ->mate.attMutationExtent)/2);
+        //mixAttributes(child, self, ->mate, (.attMutationChance + ->mate.attMutationChance)/2, (.attMutationExtent + ->mate.attMutationExtent)/2);
     }
 
     solutions {

@@ -35,4 +35,7 @@ public class GraphicalConstants {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Planet Construction %%%%%%%%%%%%%%%%%%%%%%%%
 	public static final double PLANET_CONSTRUCTION_SIDE_NORMAL_QUOTIENT = 16d; // inverse amount of top normal that is added to side normals
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Sun Properties %%%%%%%%%%%%%%%%%%%%%%%%
+	public static final double SUN_DISTANCE = 1000d;
 }

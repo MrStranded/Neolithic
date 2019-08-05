@@ -1,19 +1,25 @@
 package engine.data;
 
 import constants.GameConstants;
-import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
 import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
 import engine.data.variables.DataType;
+import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.MeshHub;
+import engine.graphics.objects.planet.Sun;
 
 import java.util.*;
 
 public class Data {
 
 	private static Planet planet;
+	private static Sun sun;
+	private static GraphicalObject moon;
+
+	private static Container mainContainer;
+	private static Instance mainInstance;
 
 	private static Container[] containers;
 	private static int containerID;
@@ -39,6 +45,12 @@ public class Data {
 		meshHubs = new HashMap<>(GameConstants.MAX_CONTAINERS);
 
 		instanceQueue = new LinkedList<>();
+
+		// the mainContainer container contains global scripts
+		mainContainer = new Container("mainContainer", DataType.CONTAINER);
+		int mainID = addContainer(mainContainer);
+		mainInstance = new Instance(mainID);
+		instanceQueue.add(mainInstance);
 	}
 
 	// ###################################################################################
@@ -274,11 +286,30 @@ public class Data {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public static Planet getPlanet() {
+
+    public static Container getMainContainer() {
+        return mainContainer;
+    }
+    public static Instance getMainInstance() { return mainInstance; }
+
+    public static Planet getPlanet() {
 		return planet;
 	}
 	public static void setPlanet(Planet planet) {
 		Data.planet = planet;
 	}
 
+    public static Sun getSun() {
+        return sun;
+    }
+    public static void setSun(Sun sun) {
+        Data.sun = sun;
+    }
+
+    public static GraphicalObject getMoon() {
+        return moon;
+    }
+    public static void setMoon(GraphicalObject moon) {
+        Data.moon = moon;
+    }
 }

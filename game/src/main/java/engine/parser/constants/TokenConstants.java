@@ -18,6 +18,7 @@ public enum TokenConstants {
 
 	// -------------------------------------------------- Scripts
 	SELF        (TokenType.KEYWORD, "self"),
+    MAIN        (TokenType.KEYWORD, "main"),
 
 	// -------------------------------------------------- Values
 	TRUE        (TokenType.KEYWORD, "true"),
@@ -60,10 +61,12 @@ public enum TokenConstants {
 	MIX_ATTRIBUTES          (TokenType.COMMAND, "mixAttributes"),
 
 	// -------------------------------------------------- Planet Manipulation
+    CHANGE_SUN_ANGLE    (TokenType.COMMAND, "changeSunAngle"),
 	CREATE_FORMATION    (TokenType.COMMAND, "createFormation"),
 	FIT_TILES           (TokenType.COMMAND, "fitTiles"),
 	SET_HEIGHT          (TokenType.COMMAND, "setHeight"),
 	SET_WATER_LEVEL     (TokenType.COMMAND, "setWaterLevel"),
+    SET_SUN_ANGLE       (TokenType.COMMAND, "setSunAngle"),
 
 	// -------------------------------------------------- Retrieval
 	GET_ATTRIBUTE           (TokenType.COMMAND, "getAtt"),

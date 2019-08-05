@@ -1,7 +1,10 @@
 package engine.graphics.objects;
 
+import constants.GraphicalConstants;
+import engine.data.Data;
 import engine.graphics.objects.generators.MeshGenerator;
 import engine.graphics.objects.light.*;
+import engine.graphics.objects.planet.Sun;
 import engine.graphics.objects.textures.Texture;
 import engine.math.numericalObjects.Vector3;
 import load.TextureLoader;
@@ -32,7 +35,7 @@ public class Scene {
 		objects = new GraphicalObject[4];
 		pointLights = new PointLight[3];
 		spotLights = new SpotLight[8];
-		double sunDistance = 1000;
+		double sunDistance = GraphicalConstants.SUN_DISTANCE;
 
 		// background
 		objects[0] = new GraphicalObject(MeshGenerator.createCube(true));
@@ -55,6 +58,7 @@ public class Scene {
 		objects[3].scale(0.5, 0.5, 0.5);
 		objects[3].setPosition(0,0,50);
 		objects[3].setRotation(0,0,Math.PI/8);
+		Data.setMoon(objects[3]);
 
 		// sun lights
 		pointLights[1] = new PointLight(0.5,0.25,0.25);
@@ -79,6 +83,8 @@ public class Scene {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+        Data.setSun(new Sun(objects[2], directionalLight, pointLights[1], shadowMap));
 	}
 
 	// ###################################################################################

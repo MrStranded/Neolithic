@@ -26,6 +26,9 @@ public enum DataType {
 	DRIVE,
 	PROCESS,
 
+	// scripts
+	SCRIPT,
+
 	// composite types
 	LIST,
 

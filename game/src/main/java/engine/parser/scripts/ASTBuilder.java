@@ -209,6 +209,9 @@ public class ASTBuilder {
 		} else if (TokenConstants.SELF.equals(expression)) { // a self expression
 			left = new SelfNode();
 
+		} else if (TokenConstants.MAIN.equals(expression)) { // a main expression
+			left = new SelfNode();
+
 		} else if (TokenConstants.TRUE.equals(expression)) { // true = 1.0
 			left = new LiteralNode(new Token(TokenType.LITERAL, "1", expression.getLine()));
 

@@ -1,5 +1,6 @@
 package engine.parser.scripts.execution;
 
+import constants.GraphicalConstants;
 import constants.ScriptConstants;
 import constants.TopologyConstants;
 import engine.data.Data;
@@ -11,10 +12,13 @@ import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.variables.Variable;
+import engine.graphics.objects.GraphicalObject;
+import engine.graphics.renderer.Renderer;
 import engine.logic.topology.Neighbour;
 import engine.logic.topology.Pathfinding;
 import engine.logic.topology.TopologyGenerator;
 import engine.logic.topology.TileArea;
+import engine.math.numericalObjects.Vector3;
 import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.exceptions.ReturnException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
@@ -94,6 +98,14 @@ public class CommandExecuter {
 
 				return new Variable(Math.random() < chance ? 1 : 0);
 			}
+
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void changeSunAngle (double angle)
+        } else if (TokenConstants.CHANGE_SUN_ANGLE.equals(command)) {
+            if (requireParameters(commandNode, 1)) {
+                double angle = parameters[0].getDouble();
+
+                Data.getSun().changeAngle(angle);
+            }
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance create (Container container, Tile tile)
 		} else if (TokenConstants.CREATE.equals(command)) {
@@ -308,6 +320,24 @@ public class CommandExecuter {
 					}
 				}
 				return new Variable();
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double getLightLevel (Tile tile)
+		} else if (TokenConstants.GET_LIGHT_LEVEL.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				Tile tile = parameters[0].getTile();
+
+				if (tile == null) {
+					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+
+				Vector3 sunPosition = Data.getSun().getGraphicalObject().getPosition().normalize();
+				Vector3 tilePosition = tile.getTileMesh().getNormal();
+
+				double dotProduct = sunPosition.dot(tilePosition); // ranges from -1 to 1
+
+				return new Variable(50d * (dotProduct + 1d)); // ranges from 0 to 100
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile getNeighbor (Tile tile, int position)
@@ -539,7 +569,7 @@ public class CommandExecuter {
 				}
 			}
 
-        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string setAt (Instance instance, Tile tile)
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Tile setAt (Instance instance, Tile tile)
         } else if (TokenConstants.SET_AT.equals(command)) {
             if (requireParameters(commandNode, 2)) {
                 Instance instance = parameters[0].getInstance();
@@ -555,6 +585,16 @@ public class CommandExecuter {
                 }
 
                 instance.placeInto(tile);
+                return new Variable(tile);
+            }
+
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string setSunAngle (double angle)
+        } else if (TokenConstants.SET_SUN_ANGLE.equals(command)) {
+            if (requireParameters(commandNode, 1)) {
+                double angle = parameters[0].getDouble();
+
+                Data.getSun().setAngle(angle);
+
                 return new Variable("Semira <3");
             }
 

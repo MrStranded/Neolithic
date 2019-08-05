@@ -197,23 +197,23 @@ public class Renderer {
 	// ###################################################################################
 
 	private void processInput(Scene scene) {
-		double angleStep = 0.0025d;
+		/*double angleStep = 0.0025d;
 		angle += angleStep;
 		if (angle > Math.PI*2d) {
 			angle -= Math.PI*2d;
-		}
+		}*/
 
-		GraphicalObject[] objects = scene.getObjects();
+		//GraphicalObject[] objects = scene.getObjects();
 		Camera camera = scene.getCamera();
 
-		objects[2].rotateYAroundOrigin(-angleStep);
-		objects[3].rotateYAroundOrigin(angleStep*2d);
+		//objects[2].rotateYAroundOrigin(-angleStep); // sun
+		//Data.getMoon().rotateYAroundOrigin(angleStep*2d); // moon
 		//camera.rotateYaw(-angleStep);
-		scene.getDirectionalLight().rotateY(-angleStep);
-		scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
+		//scene.getDirectionalLight().rotateY(-angleStep);
+		//scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
 
-		scene.getShadowMap().setLightAngle(-angle);
-		scene.getShadowMap().cameraChangedPosition();
+		//scene.getShadowMap().setLightAngle(-angle);
+		//scene.getShadowMap().cameraChangedPosition();
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
 			camera.rotateYaw(-0.01d);

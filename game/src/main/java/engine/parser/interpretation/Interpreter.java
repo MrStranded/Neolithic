@@ -91,7 +91,9 @@ public class Interpreter {
 			} else if (TokenConstants.FORMATION.equals(next)) { // Formation
 				createEntity(DataType.FORMATION);
 			} else if (TokenConstants.WORLDGEN.equals(next)) {  // WorldGen
-				createEntity(DataType.WORLDGEN);
+                createEntity(DataType.WORLDGEN);
+            } else if (TokenConstants.SCRIPT.equals(next)) { // Script
+			    addScript(Data.getMainContainer());
 			}
 		}
 	}
