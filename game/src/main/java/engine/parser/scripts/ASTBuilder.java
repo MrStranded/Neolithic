@@ -210,7 +210,7 @@ public class ASTBuilder {
 			left = new SelfNode();
 
 		} else if (TokenConstants.MAIN.equals(expression)) { // a main expression
-			left = new SelfNode();
+			left = new MainNode();
 
 		} else if (TokenConstants.TRUE.equals(expression)) { // true = 1.0
 			left = new LiteralNode(new Token(TokenType.LITERAL, "1", expression.getLine()));

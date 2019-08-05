@@ -18,6 +18,14 @@ Script: tick {
     changeSunAngle(0.25); // 0.25 * 60 * 24 = 360
 }
 
+Script: setTime (hour, minute) {
+    ->hour = hour;
+    ->minute = minute;
+
+    angle = 360 * (minute + hour*60) / (24*60);
+    setSunAngle(angle);
+}
+
 ///////////////////////////////////////////////////////////////////////////// Tiles
 
 Tile: tDirt {
