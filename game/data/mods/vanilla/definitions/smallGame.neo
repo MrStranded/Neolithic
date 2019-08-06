@@ -169,7 +169,7 @@ Effect: effAchingFeet {
 
 Creature: cMonkey {
 	name = "Monkey";
-	mesh = "monkey.obj";
+	mesh = "monkey01.ply";
 
 	knowledge {
 		proEat; proGatherFood; proPickUpFood;
