@@ -14,20 +14,20 @@ WorldGen: genContinental {
 			}
 		}
 
+		fitTiles();
+
 		for (t : eachTile()) {
 			if (getHeight(t) > 100) {
 				if (chance(0.01)) {
 					monkey = create(cMonkey, t);
 				}
 			}
-			if (getHeight(t) > 150) {
-				if (chance(0.2)){
+			if (getType(t) == tGras) {
+				if (chance(0.3)){
 					create(cTree,t);
 				}
 			}
 		}
-
-		fitTiles();
 	}
 }
 

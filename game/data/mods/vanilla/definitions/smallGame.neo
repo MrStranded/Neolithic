@@ -31,7 +31,7 @@ Script: setTime (hour, minute) {
 Tile: tDirt {
 	name = "Dirt";
 
-	preferredHeight = 128,5;
+	preferredHeight = 170,20;
 
 	topColor {
 		200,10;
@@ -47,7 +47,7 @@ Tile: tDirt {
 	Script: tick {
 	    /*.attAge++;
 		if (.attAge > 3) {
-			change(self,tGras);
+			change(self,tGras); // no wörki-wörki yet
 		}*/
 	}
 }
@@ -71,6 +71,23 @@ Tile: tGras {
 	attributes {
 		attNutrition, 3;
 		attHumidity, 50;
+	}
+}
+
+Tile: tSand {
+	name = "Sand";
+
+	preferredHeight = 128,5;
+
+	topColor {
+		200,10;
+		150;
+		30,10;
+	}
+	sideColor {
+		120,10;
+		110,10;
+		90;
 	}
 }
 
