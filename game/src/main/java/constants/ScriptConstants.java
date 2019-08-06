@@ -9,6 +9,7 @@ public class ScriptConstants {
 	public static final String EVENT_TICK               = "tick";
 	public static final String EVENT_CONDITION          = "condition";
 	public static final String EVENT_PROCESS            = "process";
-	public static final String EVENT_CANGO              = "reachable";
+	public static final String EVENT_CAN_GO 			= "reachable";
+	public static final String EVENT_REMOVE_CONDITION	= "removeCondition";
 
 }

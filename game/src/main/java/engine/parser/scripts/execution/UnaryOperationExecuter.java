@@ -49,19 +49,20 @@ public class UnaryOperationExecuter {
 
 			return unaryNode.getSubNode().execute(self, script);
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& .
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& . // retrieve complete attribute values (with effects)
 		} else if (TokenConstants.POINT.equals(operator)) {
 			if (unaryNode.getSubNode().getClass() != IdentifierNode.class) {
-				Logger.error("WTF Exception (" + operator.getLine() + ") it's an: " + unaryNode.getSubNode().getClass().toGenericString());
+				Logger.error("WTF Exception (line " + operator.getLine() + ") it's an: " + unaryNode.getSubNode().getClass().toGenericString());
 			}
 
 			IdentifierNode subNode = (IdentifierNode) unaryNode.getSubNode();
 			subNode.setTarget(new Variable(self));
 			subNode.markAsAttributeIdentifier();
+			subNode.setRetrieveCompleteAttributeValue(true);
 
 			return unaryNode.getSubNode().execute(self, script);
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ..
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& .. // retrieve personal attribute values (without effects)
 		} else if (TokenConstants.DOUBLE_POINT.equals(operator)) { // retrieving personal AND proto attributes
 			if (unaryNode.getSubNode().getClass() != IdentifierNode.class) {
 				Logger.error("WTF Exception (" + operator.getLine() + ") it's an: " + unaryNode.getSubNode().getClass().toGenericString());
@@ -70,7 +71,6 @@ public class UnaryOperationExecuter {
 			IdentifierNode subNode = (IdentifierNode) unaryNode.getSubNode();
 			subNode.setTarget(new Variable(self));
 			subNode.markAsAttributeIdentifier();
-			subNode.setRetrieveCompleteAttributeValue(true);
 
 			return unaryNode.getSubNode().execute(self, script);
 

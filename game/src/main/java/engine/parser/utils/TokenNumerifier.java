@@ -20,15 +20,19 @@ public class TokenNumerifier {
 		if (token.getType() == TokenType.LITERAL) {
 			boolean isNumber = true;
 			boolean hadPoint = false;
+			boolean firstChar = true;
 			for (char c : token.getValue().toCharArray()) {
 				if (!Character.isDigit(c)) {
 					if (TokenConstants.POINT.equals(c) && !hadPoint && isDouble) {
 						hadPoint = true;
+					} else if (TokenConstants.MINUS.equals(c) && firstChar) {
+						// nothing happens, we're happy, first char may be a minus
 					} else {
 						isNumber = false;
 						break;
 					}
 				}
+				firstChar = false;
 			}
 
 			return isNumber;

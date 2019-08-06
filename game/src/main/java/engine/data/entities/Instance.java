@@ -2,7 +2,6 @@ package engine.data.entities;
 
 import constants.ScriptConstants;
 import engine.data.behaviour.Occupation;
-import engine.data.effects.Effect;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
@@ -23,11 +22,13 @@ import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Instance {
 
 	protected int id;
+	private String name = null;
 
 	private BinaryTree<Attribute> attributes;
 	private List<Effect> effects;
@@ -152,7 +153,7 @@ public class Instance {
 	}
 
 	public boolean canGo(Tile from, Tile to) {
-	    return !run(ScriptConstants.EVENT_CANGO, new Variable[] {new Variable(from), new Variable(to)}).isNull();
+	    return !run(ScriptConstants.EVENT_CAN_GO, new Variable[] {new Variable(from), new Variable(to)}).isNull();
 	}
 
 	public void addOccupation(int duration, String callBackScript) {
@@ -191,12 +192,12 @@ public class Instance {
 
 	private void tickEffects() {
 	    for (Effect effect : effects) {
-	        effect.tick();
+	        effect.tick(this);
         }
     }
 
     private void cleanEffects() {
-        effects.removeIf(Effect::shouldBeRemoved);
+        effects.removeIf(effect -> effect.shouldBeRemoved(this));
     }
 
 	// ###################################################################################
@@ -334,7 +335,20 @@ public class Instance {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public Instance getSubInstanceWithAttribute(int attributeID) {
+
+    public String getName() {
+        return name != null ? name : Data.getContainer(id).getName();
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Instance> getEffects() {
+        return new CopyOnWriteArrayList<>(effects);
+    }
+
+    public Instance getSubInstanceWithAttribute(int attributeID) {
 		for (Instance instance : subInstances) {
 			if (instance != null) {
 				if (instance.getAttributeValue(attributeID) > 0) {
@@ -370,12 +384,10 @@ public class Instance {
 	public int getAttributeValue(int attributeID) {
 		int value = 0;
 
-		// general data
-		//value += getSpeciesAttributeValue(attributeID);
 		// personal data
 		value += getPersonalAttributeValue(attributeID);
 		// effects
-        for (Effect effect : effects) {
+        for (Instance effect : effects) {
             value += effect.getAttributeValue(attributeID);
         }
 
@@ -385,11 +397,6 @@ public class Instance {
 	public int getPersonalAttributeValue(int attributeID) {
 		Attribute attribute = attributes.get(attributeID);
 		return attribute != null? attribute.getValue() : 0;
-	}
-
-	public int getSpeciesAttributeValue(int attributeID) {
-		Container container = Data.getContainer(id);
-		return container != null? container.getAttributeValue(attributeID) : 0;
 	}
 
 	/**
@@ -461,7 +468,7 @@ public class Instance {
 	// ###################################################################################
 
 	public String toString() {
-		return "Instance (id = " + Data.getContainer(id).getTextID() + ")";
+		return "Instance (id = " + Data.getContainer(id).getTextID() + (name != null ? " Name: " + name : "") + ")";
 	}
 
 	public void printVariables() {

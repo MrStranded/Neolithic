@@ -15,6 +15,7 @@ import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
 import engine.parser.utils.TokenNumerifier;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import java.util.List;
 
 public class Interpreter {
@@ -51,6 +52,19 @@ public class Interpreter {
 		}
 	}
 
+	/*public Token consumeNumber() throws Exception {
+		if (!tokenIterator.hasNext()) { // error reporting
+			throw new Exception("Reached unexpected end of file!");
+		}
+
+		if (TokenConstants.MINUS.equals(peek())) {
+			consume();
+			return consume().flipValue();
+		} else {
+			return consume();
+		}
+	}*/
+
 	public Token consume() throws Exception {
 		if (!tokenIterator.hasNext()) { // error reporting
 			throw new Exception("Reached unexpected end of file!");
@@ -82,6 +96,8 @@ public class Interpreter {
 				createEntity(DataType.TILE);
 			} else if (TokenConstants.CREATURE.equals(next)) {  // Creature
 				createEntity(DataType.CREATURE);
+			} else if (TokenConstants.EFFECT.equals(next)) {    // Effect
+				createEntity(DataType.EFFECT);
 			} else if (TokenConstants.ENTITY.equals(next)) {    // Entity
 				createEntity(DataType.ENTITY);
 			} else if (TokenConstants.DRIVE.equals(next)) {     // Drive
@@ -114,7 +130,7 @@ public class Interpreter {
 		Token next;
 		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(next = consume())) {
 			consume(TokenConstants.COMMA);
-			Token value = consume();
+			Token value = consume();//consumeNumber();
             consume(TokenConstants.SEMICOLON);
 
             PreAttribute preAttribute = new PreAttribute(next.getValue(), TokenNumerifier.getInt(value));
@@ -322,6 +338,9 @@ public class Interpreter {
 			switch (type) {
 				case ENTITY:
 					container = new Container(textID.getValue(), DataType.ENTITY);
+					break;
+				case EFFECT:
+					container = new Container(textID.getValue(), DataType.EFFECT);
 					break;
 				case TILE:
 					container = new TileContainer(textID.getValue());

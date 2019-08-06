@@ -31,21 +31,21 @@ Script: setTime (hour, minute) {
 Tile: tDirt {
 	name = "Dirt";
 
-	preferredHeight = 170,20;
+	preferredHeight = 150,30;
 
 	topColor {
-		200,10;
-		150;
-		30,10;
+		150,10;
+		100;
+		20,10;
 	}
 	sideColor {
-		120,10;
-		110,10;
-		90;
+		90,10;
+		70,10;
+		60;
 	}
 
 	Script: tick {
-	    /*.attAge++;
+	    /*..attAge++;
 		if (.attAge > 3) {
 			change(self,tGras); // no wörki-wörki yet
 		}*/
@@ -97,19 +97,47 @@ Tile: tStone {
 }
 
 ///////////////////////////////////////////////////////////////////////////// Attributes
-Attribute: attLife { name = "Life"; }
-Attribute: attViewingDistance { name = "Viewing Distance"; }
+
+// life
+Attribute: attHealth { name = "Health"; }
 Attribute: attNutrition { name = "Nutrition"; }
-Attribute: attEdible { name = "Edible"; }
-Attribute: attLightLevel { name = "Light Level"; }
-Attribute: attHumidity { name = "Humidity"; }
-Attribute: attLibido { name = "Libido"; }
-Attribute: attRestlessness { name = "Restlessness"; }
-Attribute: attStepHeight { name = "Step height"; }
 Attribute: attSleeping { name = "Sleeping"; }
 Attribute: attAge { name = "Age"; }
-Attribute: attMutationChance { name = "Mutation chance"; }
-Attribute: attMutationExtent { name = "Extent of mutation"; }
+Attribute: attFatigue { name = "Fatigue"; }
+Attribute: attEdible { name = "Edible"; }
+
+// movement
+Attribute: attViewingDistance { name = "Viewing Distance"; }
+Attribute: attStepHeight { name = "Step height"; }
+Attribute: attSpeed { name = "Speed"; }
+
+// environmental
+Attribute: attHumidity { name = "Humidity"; }
+
+///////////////////////////////////////////////////////////////////////////// Creatures
+
+Effect: effHunger {
+    name = "Hunger";
+
+    attributes {
+        attHealth, "-1";
+        attSpeed, "-1";
+    }
+
+    Script: tick (carrier) {
+        if (carrier.attNutrition > 0) {
+            if (.attHealth < 0) {
+                ..attHealth++;
+            }
+        } else {
+            ..attHealth--;
+        }
+    }
+
+    Script: removeCondition {
+        require(.attHealth >= 0);
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////// Creatures
 
@@ -118,13 +146,10 @@ Creature: cMonkey {
 	mesh = "monkey.obj";
 
 	knowledge {
-		proStroll;
-		proEat;
-		proGatherFood;
-		proPickUpFood;
-		proMate;
-		proSearchMate;
+		proEat; proGatherFood; proPickUpFood;
+		proMate; proSearchMate;
 		proSleep;
+		proStroll;
 	}
 
 	drives {
@@ -135,38 +160,46 @@ Creature: cMonkey {
 	}
 
 	attributes {
-		attLife, 100;
-		attNutrition, 20;
+		attHealth, 100;
+
 		attSpeed, 3;
 		attViewingDistance, 7;
 		attStepHeight, 24;
-		attLibido, 50;
-		attRestlessness, 05;
 	}
 
 	Script: place {
 		self->id = random(1000);
-		.attMutationChance = random(100);
-		.attMutationExtent = random(1,10);
+		if (main->monkey == 0) {
+		    main->monkey = self->id;
+        }
 	}
 
 	Script: tick {
-	    if (.attSleeping == 0) {
-            if (chance(0.5)) {
-                .attNutrition--;
+	    if (.attSleeping <= 0) { // creature is awake
+            if (.attNutrition <= 0) { // and malnourished
+                if (!getEffects(self,effHunger) && chance(0.1)) {
+                    addEffect(self, effHunger);
+                }
             }
 
-            .attRestlessness++;
-            .attLibido++;
-
-            if (..attNutrition < 0) {
-                .attLife--;
-            } else if (..attNutrition > 50) {
-                .attLife++;
+            if (chance(0.5)) {
+                ..attFatigue++;
             }
 		}
 
-		if (..attLife < 0) {
+		if (self->id == main->monkey) {
+		    print(self->id + " his stats: -------------------------------------");
+		    print("health: " + .attHealth);
+		    print("nutrition: " + .attNutrition);
+		    print("fatigue: " + .attFatigue);
+		    print(getEffects(self));
+		}
+
+		if (.attHealth < 0) {
+		    if (self->id == main->monkey) {
+		        main->monkey = 0;
+		    }
+
 		    destroy(self);
         }
 	}
@@ -178,15 +211,13 @@ Creature: cMonkey {
 	}
 
 	Script: awake() {
-	    .attSleeping = 0;
-		.attRestlessness += 10;
-		.attLife += 10;
+	    ..attFatigue = 0;
 	}
 }
 
 Drive: driSleep {
 	Script: condition {
-		require(..attRestlessness <= 30);
+		require(.attFatigue > 300);
 		require(getLightLevel(self) <= 50);
 	}
 
@@ -197,13 +228,14 @@ Drive: driSleep {
 
 Process: proSleep {
 	Script: process {
-	    addOccupation(self, 20, "awake");
+	    addOccupation(self, 600, "awake");
+	    .attSleeping = 1;
 	}
 }
 
 Drive: driMove {
 	Script: condition {
-		require(..attRestlessness > 30);
+		require(.attFatigue < 300);
 	}
 
 	solutions {
@@ -211,12 +243,33 @@ Drive: driMove {
 	}
 }
 
+Effect: effAchingFeet {
+    name = "Aching feet";
+
+    attributes {
+        attFatigue, 10;
+        attHealth, "-5";
+    }
+
+    Script: tick {
+        if ((.attFatigue) > 0 && chance(0.1)) {
+            ..attFatigue--;
+        }
+    }
+
+    Script: removeCondition {
+        require (.attFatigue <= 0);
+    }
+}
+
 Process: proStroll {
 	Script: process {
 		tile = getNeighbor(getTile(self), random(3));
 		if (self->reachable(getTile(self), tile)) {
 		    setAt(self, tile);
-		    .attRestlessness -= 5;
+		    if (chance(0.01)) {
+		        addEffect(self, effAchingFeet);
+		    }
 		}
 	}
 	
@@ -227,8 +280,8 @@ Process: proStroll {
 
 Drive: driMate {
     Script: condition {
-        require(self.attNutrition >= 20);
-        require(self.attLibido >= 50);
+        require(self.attNutrition >= 69);
+        require(self.attFatigue < 420);
     }
 
     solutions {
@@ -241,9 +294,11 @@ Process: proMate {
         require(->mate);
     }
     Script: process {
-        self.attNutrition -= 5;
-        self.attLibido -= 50;
-        self.attRestlessness -= 100;
+        addEffect(self, "Postcoital exhaustion", 200, [
+            "attNutrition", -20,
+            "attFatigue", 100
+        ]);
+
         child = create(getType(self), getTile(self));
         //mixAttributes(child, self, ->mate, (.attMutationChance + ->mate.attMutationChance)/2, (.attMutationExtent + ->mate.attMutationExtent)/2);
     }
@@ -255,8 +310,8 @@ Process: proMate {
 
 Process: proSearchMate {
     Script: condition {
-        creatures = getCreaturesInRange(getType(self), getTile(self), ..attViewingDistance);
-        ->mate = 0;
+        creatures = getCreaturesInRange(getType(self), getTile(self), .attViewingDistance);
+        ->mate = false;
         for (creature : creatures) {
             if (creature != self) {
                 ->mate = creature;
@@ -266,13 +321,13 @@ Process: proSearchMate {
         require(->mate);
     }
     Script: process {
-        moveTo(self, ->mate, self..attSpeed);
+        moveTo(self, ->mate, self.attSpeed);
     }
 }
 
 Drive: driHunger {
 	Script: condition {
-		require(..attNutrition <= 20);
+		require(.attNutrition <= 50);
 	}
 
 	solutions {
@@ -307,15 +362,15 @@ Process: proPickUpFood {
 
 Process: proGatherFood {
 	Script: condition {
-		->food = getAttInRange("attEdible",self,..attViewingDistance);
+		->food = getAttInRange("attEdible",self,.attViewingDistance);
 		require(->food);
 	}
 	Script: process() {
-		moveTo(self, ->food, ..attSpeed);
+		moveTo(self, ->food, .attSpeed);
 	}
 	Script: discovery() {
-		require(..attSpeed > 0);
-		require(..attViewingDistance > 0);
+		require(.attSpeed > 0);
+		require(.attViewingDistance > 0);
 	}
 
 	solutions {
@@ -330,19 +385,19 @@ Entity: entFruit {
 	mesh = "apple02.ply";
 
 	attributes {
-		attNutrition, 50;
+		attNutrition, 100;
 		attEdible, 1;
 	}
 
 	Script: tick() {
-	    .attAge++;
-		if (.attAge > 420) {
+	    ..attAge++;
+		if (.attAge > 1440) {
 			destroy(self);
 		}
 	}
 
 	Script: consume(actor) {
-		addEffect(actor, "Tasty apple", 30, [.attNutrition, "attRestlessness", -2]);
+		addEffect(actor, "Tasty apple", 120, [..attNutrition, "attFatigue", -10]);
 
 		destroy(self);
 	}
@@ -364,10 +419,10 @@ Creature: cTree {
 	}
 
 	Script: place {
-		.attNutrition += random(1000);
+		..attNutrition += random(100);
 	}
 
-	attributes{attLightLevel,50;}
+	attributes{}
 }
 
 Drive: driPlantReproduction {
@@ -379,12 +434,10 @@ Drive: driPlantReproduction {
 
 Process: proPhotoSynthesis {
 	Script: condition {
-		require(getLightLevel(self) + ..attLightLevel >= 50);
-		//require(getTile(self).attHumidity >= 20);
+		require(getLightLevel(self) >= 50);
 	}
 	Script: process {
-		//getTile(self)->attHumidity -= 5;
-		.attNutrition += 1;
+		..attNutrition += 1;
 	}
 
 	solutions {} // there is no way for a plant to create light (currently?)
@@ -396,14 +449,13 @@ Process: proPhotoSynthesis {
 
 Process: proCreateFruit {
 	Script: condition {
-		require(chance(0.1));
 		require(!getAttInRange("attEdible", self, 1));
-		require(..attNutrition >= 500);
+		require(.attNutrition >= 100);
 	}
 
 	Script: process {
 		fruit = create(entFruit, getTile(self));
-		.attNutrition -= 500;
+		..attNutrition -= 100;
 		//pickUp(self, fruit);
 	}
 }

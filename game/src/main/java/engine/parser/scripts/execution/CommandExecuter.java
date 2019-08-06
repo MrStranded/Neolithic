@@ -1,23 +1,17 @@
 package engine.parser.scripts.execution;
 
-import constants.GraphicalConstants;
 import constants.ScriptConstants;
 import constants.TopologyConstants;
 import engine.data.Data;
 import engine.data.Script;
-import engine.data.attributes.Attribute;
-import engine.data.behaviour.Occupation;
-import engine.data.effects.Effect;
+import engine.data.entities.Effect;
 import engine.data.entities.Instance;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
-import engine.data.proto.TileContainer;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
-import engine.graphics.objects.GraphicalObject;
-import engine.graphics.renderer.Renderer;
 import engine.logic.topology.Neighbour;
 import engine.logic.topology.Pathfinding;
 import engine.logic.topology.TopologyGenerator;
@@ -48,9 +42,9 @@ public class CommandExecuter {
 				return new Variable(Math.abs(value));
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void addEffect (Instance target, String name, int duration, [attributeName, value, ...])
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& effect addEffect (Instance target, Container effectContainer)
 		} else if (TokenConstants.ADD_EFFECT.equals(command)) {
-			if (requireParameters(commandNode, 3)) {
+			if (parameters.length >= 4) {
 				Instance target = parameters[0].getInstance();
 				String name = parameters[1].getString();
 				int duration = parameters[2].getInt();
@@ -61,14 +55,16 @@ public class CommandExecuter {
 					return new Variable();
 				}
 
-				Effect effect = new Effect(name, duration);
+				Effect effect = new Effect(-1);
+				effect.setName(name);
+				effect.setRemainingTicks(duration);
 
 				boolean getID = true;
 				String attributeTextID = null;
 				for (Variable variable : attributes) {
 					if (getID) {
 						if (variable.getType() == DataType.ATTRIBUTE) {
-							effect.addAttrubte(variable.getAttribute());
+							effect.setAttribute(variable.getAttribute().getId(), variable.getAttribute().getValue());
 						} else {
 							attributeTextID = variable.getString();
 							getID = false;
@@ -76,7 +72,7 @@ public class CommandExecuter {
 					} else {
 						int id = Data.getProtoAttributeID(attributeTextID);
 						if (id >= 0) {
-							effect.addAttrubte(new Attribute(id, variable.getInt()));
+							effect.setAttribute(id, variable.getInt());
 						} else {
 							Logger.error("Attribute with textID '" + attributeTextID + "' does not exist!");
 						}
@@ -85,6 +81,25 @@ public class CommandExecuter {
 				}
 
 				target.addEffect(effect);
+			} else if (requireParameters(commandNode, 2)) {
+				Instance target = parameters[0].getInstance();
+				Container container = parameters[1].getContainer();
+
+				if (target == null) {
+					Logger.error("Target instance value for command '" + command.getValue() + "' is invalid!");
+					return new Variable();
+				}
+
+				if (container == null) {
+					Logger.error("Cannot create effect: Template for '" + parameters[1].getString() + "' does not exist. Line " + command.getLine());
+				}
+
+				int id = Data.getContainerID(container.getTextID());
+				Effect effect = new Effect(id);
+
+				target.addEffect(effect);
+
+				return new Variable(effect);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int addPersonalAtt (Instance target, String attributeTextID, int amount)
@@ -202,7 +217,7 @@ public class CommandExecuter {
 					return new Variable(instance);
 				} else {
 					if (container == null) {
-						Logger.error("Cannot create Instance: Template for '" + parameters[0] + "' does not exist. Line " + command.getLine());
+						Logger.error("Cannot create Instance: Template for '" + parameters[0].getString() + "' does not exist. Line " + command.getLine());
 					}
 					if (tile == null) {
 						Logger.error("Cannot create Instance: Not a valid tile value.");
@@ -315,7 +330,7 @@ public class CommandExecuter {
 				}
 
 				if ((type == null) || ((containerID = Data.getContainerID(type.getTextID())) < 0)) {
-					Logger.error("Type of value '" + parameters[0].toString() + "' does not exist!");
+					Logger.error("Type of value '" + parameters[0].getString() + "' does not exist!");
 					return new Variable();
 				}
 
@@ -344,7 +359,7 @@ public class CommandExecuter {
                 }
 
                 if ((type == null) || ((containerID = Data.getContainerID(type.getTextID())) < 0)) {
-                    Logger.error("Type of value '" + parameters[0].toString() + "' does not exist!");
+                    Logger.error("Type of value '" + parameters[0].getString() + "' does not exist!");
                     return new Variable();
                 }
 
@@ -359,6 +374,26 @@ public class CommandExecuter {
                 }
                 return new Variable(creatures);
             }
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& List<Instance> getEffects (Instance target, Container effectContainer)
+		} else if (TokenConstants.GET_EFFECTS.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				Instance target = parameters[0].getInstance();
+				int containerID = parameters.length >= 2 ? parameters[1].getContainerId() : -1;
+
+				if (target == null) {
+					Logger.error("Target value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+
+				List<Variable> effects = new ArrayList<>();
+				for (Instance effect : target.getEffects()) {
+					if ((containerID == -1) || (containerID == effect.getId())) {
+						effects.add(new Variable(effect));
+					}
+				}
+				return new Variable(effects);
+			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getHeight (Tile tile)
 		} else if (TokenConstants.GET_HEIGHT.equals(command)) {

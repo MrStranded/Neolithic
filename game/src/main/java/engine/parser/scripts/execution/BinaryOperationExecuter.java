@@ -43,12 +43,13 @@ public class BinaryOperationExecuter {
 			}
 			return binaryNode.getRight().execute(self, script);
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& .
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& . // complete (with effects)
 		} else if (TokenConstants.POINT.equals(operator)) {
 			if (binaryNode.getRight().getClass() == IdentifierNode.class) {
 				IdentifierNode subNode = (IdentifierNode) binaryNode.getRight();
 				subNode.setTarget(left);
 				subNode.markAsAttributeIdentifier();
+				subNode.setRetrieveCompleteAttributeValue(true);
 			} else {
 				Logger.error("Wrong argument type after point operator: '" + binaryNode.getRight().getClass() + "' on line " + operator.getLine());
 				Logger.error("Argument:");
@@ -57,13 +58,12 @@ public class BinaryOperationExecuter {
 
 			return binaryNode.getRight().execute(self, script);
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ..
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& .. // personal (without effects)
 		} else if (TokenConstants.DOUBLE_POINT.equals(operator)) {
 			if (binaryNode.getRight().getClass() == IdentifierNode.class) {
 				IdentifierNode subNode = (IdentifierNode) binaryNode.getRight();
 				subNode.setTarget(left);
 				subNode.markAsAttributeIdentifier();
-				subNode.setRetrieveCompleteAttributeValue(true);
 			} else {
 				Logger.error("Wrong argument type after double point operator: '" + binaryNode.getRight().getClass() + "' on line " + operator.getLine());
 				Logger.error("Argument:");

@@ -197,6 +197,19 @@ public class Variable implements IDInterface {
 		value = (double) v;
 	}
 
+	public int getContainerId() {
+		if (type == DataType.CONTAINER) {
+			return Data.getContainerID(((Container) value).getTextID());
+		} else if (type == DataType.STRING) {
+			return Data.getContainerID((String) value);
+		} else if (type == DataType.NUMBER){
+			return (int) value;
+		} else if (type == DataType.INSTANCE) {
+			return ((Instance) value).getId();
+		}
+		return -1;
+	}
+
 	// ----------------------------------------------- string
 	public String getString() {
 		switch (type) {
@@ -204,10 +217,6 @@ public class Variable implements IDInterface {
 				return String.valueOf(value);
 			case STRING:
 				return (String) value;
-			case TILE:
-				return ((Tile) value).toString();
-			case INSTANCE:
-				return ((Instance) value).toString();
 			case CONTAINER:
 				return ((Container) value).getName();
 			case ATTRIBUTE:
@@ -231,7 +240,8 @@ public class Variable implements IDInterface {
 				values.append("]");
 				return values.toString();
 			default:
-				return "(CANNOT CAST TO STRING: " + toString() + ")";
+				return toString();
+				//return "(CANNOT CAST TO STRING: " + toString() + ")";
 		}
 	}
 	public void setString(String v) {
@@ -323,7 +333,7 @@ public class Variable implements IDInterface {
 	// ###################################################################################
 
 	public String toString() {
-		String pre = (name != null? name : "NONAME") + " (" + type + "): ";
+		String pre = (name != null? name : "") + " (" + type + "): ";
 		switch (type) {
 			case NUMBER:
 				return pre+ (Double) value;
@@ -346,7 +356,7 @@ public class Variable implements IDInterface {
 							if (!first) {
 								values.append(", ");
 							}
-							values.append(variable.toString());
+							values.append(variable.getString());
 							first = false;
 						}
 					}

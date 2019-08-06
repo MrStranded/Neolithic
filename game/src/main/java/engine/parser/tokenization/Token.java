@@ -23,6 +23,11 @@ public class Token {
 		return tokenConstant.getPrecedence();
 	}
 
+	public Token flipValue() {
+		value = "-" + value;
+		return this;
+	}
+
 	public String getValue() {
 		return value;
 	}
