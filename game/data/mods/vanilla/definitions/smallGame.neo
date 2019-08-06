@@ -114,7 +114,7 @@ Attribute: attSpeed { name = "Speed"; }
 // environmental
 Attribute: attHumidity { name = "Humidity"; }
 
-///////////////////////////////////////////////////////////////////////////// Creatures
+///////////////////////////////////////////////////////////////////////////// Effects
 
 Effect: effHunger {
     name = "Hunger";
@@ -136,6 +136,32 @@ Effect: effHunger {
 
     Script: removeCondition {
         require(.attHealth >= 0);
+    }
+}
+
+Effect: effDigest {
+    name = "Digest";
+
+    Script: tick() { ..attNutrition--; }
+    Script: removeCondition() { require(.attNutrition <= 0); }
+}
+
+Effect: effAchingFeet {
+    name = "Aching feet";
+
+    attributes {
+        attFatigue, 10;
+        attHealth, "-5";
+    }
+
+    Script: tick {
+        if ((.attFatigue) > 0 && chance(0.1)) {
+            ..attFatigue--;
+        }
+    }
+
+    Script: removeCondition {
+        require (.attFatigue <= 0);
     }
 }
 
@@ -217,7 +243,7 @@ Creature: cMonkey {
 
 Drive: driSleep {
 	Script: condition {
-		require(.attFatigue > 300);
+		require(.attFatigue > 250);
 		require(getLightLevel(self) <= 50);
 	}
 
@@ -228,8 +254,8 @@ Drive: driSleep {
 
 Process: proSleep {
 	Script: process {
-	    addOccupation(self, 600, "awake");
-	    .attSleeping = 1;
+	    addOccupation(self, 700, "awake");
+	    ..attSleeping = 1;
 	}
 }
 
@@ -241,25 +267,6 @@ Drive: driMove {
 	solutions {
 		proStroll;
 	}
-}
-
-Effect: effAchingFeet {
-    name = "Aching feet";
-
-    attributes {
-        attFatigue, 10;
-        attHealth, "-5";
-    }
-
-    Script: tick {
-        if ((.attFatigue) > 0 && chance(0.1)) {
-            ..attFatigue--;
-        }
-    }
-
-    Script: removeCondition {
-        require (.attFatigue <= 0);
-    }
 }
 
 Process: proStroll {
@@ -294,9 +301,9 @@ Process: proMate {
         require(->mate);
     }
     Script: process {
-        addEffect(self, "Postcoital exhaustion", 200, [
+        addEffect(self, "Postcoital exhaustion", 30, [
             "attNutrition", -20,
-            "attFatigue", 100
+            "attFatigue", 200
         ]);
 
         child = create(getType(self), getTile(self));
@@ -385,7 +392,7 @@ Entity: entFruit {
 	mesh = "apple02.ply";
 
 	attributes {
-		attNutrition, 100;
+		attNutrition, 120;
 		attEdible, 1;
 	}
 
@@ -397,7 +404,7 @@ Entity: entFruit {
 	}
 
 	Script: consume(actor) {
-		addEffect(actor, "Tasty apple", 120, [..attNutrition, "attFatigue", -10]);
+        (addEffect(actor, effDigest))..attNutrition = .attNutrition;
 
 		destroy(self);
 	}
