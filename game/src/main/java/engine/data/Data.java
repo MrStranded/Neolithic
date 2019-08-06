@@ -2,7 +2,9 @@ package engine.data;
 
 import constants.GameConstants;
 import engine.data.entities.Instance;
+import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
+import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
 import engine.data.variables.DataType;
@@ -265,6 +267,16 @@ public class Data {
         instanceQueue = new LinkedList<>();
         instanceQueue.addAll(list);
     }
+
+    public static void addPlanetTilesToQueue() {
+    	if (planet != null) {
+    		for (Face face : planet.getFaces()) {
+    			for (Tile tile : face.getTiles()) {
+    				instanceQueue.add(tile);
+				}
+			}
+		}
+	}
 
 	// ###################################################################################
 	// ################################ Clearing the Data ################################

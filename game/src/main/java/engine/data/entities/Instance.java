@@ -2,6 +2,7 @@ package engine.data.entities;
 
 import constants.ScriptConstants;
 import engine.data.behaviour.Occupation;
+import engine.data.effects.Effect;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
@@ -21,10 +22,7 @@ import engine.math.numericalObjects.Vector3;
 import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Instance {
@@ -32,7 +30,9 @@ public class Instance {
 	protected int id;
 
 	private BinaryTree<Attribute> attributes;
+	private List<Effect> effects;
 	private BinaryTree<Variable> variables;
+
 	private List<Instance> subInstances;
 	private Instance superInstance = null;
 
@@ -45,12 +45,31 @@ public class Instance {
 	public Instance(int id) {
 		this.id = id;
 
-		moveableObject = new MoveableObject();
 		attributes = new BinaryTree<>();
+		effects = new LinkedList<>();
 		variables = new BinaryTree<>();
+
 		subInstances = new ArrayList<>(0);
 		occupations = new LinkedList<>();
+
+        moveableObject = new MoveableObject();
+
+        inheritAttributes();
 	}
+
+    // ###################################################################################
+    // ################################ Creation #########################################
+    // ###################################################################################
+
+    private void inheritAttributes() {
+	    Container container = Data.getContainer(id);
+
+	    if (container != null) {
+	        for (IDInterface attributeID : container.getAttributes()) {
+	            addAttribute(attributeID.getId(), container.getAttributeValue(attributeID.getId()));
+            }
+        }
+    }
 
 	// ###################################################################################
 	// ################################ Game Logic #######################################
@@ -145,6 +164,8 @@ public class Instance {
 	// ###################################################################################
 
 	public void tick() {
+	    tickEffects();
+
 	    if (occupations.isEmpty()) {
             // ----------- calculate drives
             Container container = Data.getContainer(id);
@@ -164,7 +185,19 @@ public class Instance {
 	            occupations.poll();
             }
         }
+
+        cleanEffects();
 	}
+
+	private void tickEffects() {
+	    for (Effect effect : effects) {
+	        effect.tick();
+        }
+    }
+
+    private void cleanEffects() {
+        effects.removeIf(Effect::shouldBeRemoved);
+    }
 
 	// ###################################################################################
 	// ################################ Graphical ########################################
@@ -245,6 +278,16 @@ public class Instance {
 		}
 	}
 
+	public void replaceBy(Instance other) {
+	    if (superInstance != null) { superInstance.addSubInstance(other); }
+
+	    for (Instance subInstance : subInstances) {
+	        other.addSubInstance(subInstance);
+        }
+
+        destroy();
+    }
+
 	public void destroy() {
 		slatedForRemoval = true;
 		if (superInstance != null) {
@@ -278,6 +321,14 @@ public class Instance {
             subInstances.remove(instance);
 		}
 	}
+
+    // ###################################################################################
+    // ################################ Effects ##########################################
+    // ###################################################################################
+
+    public void addEffect(Effect effect) {
+	    effects.add(effect);
+    }
 
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
@@ -320,9 +371,13 @@ public class Instance {
 		int value = 0;
 
 		// general data
-		value += getSpeciesAttributeValue(attributeID);
+		//value += getSpeciesAttributeValue(attributeID);
 		// personal data
 		value += getPersonalAttributeValue(attributeID);
+		// effects
+        for (Effect effect : effects) {
+            value += effect.getAttributeValue(attributeID);
+        }
 
 		return value;
 	}

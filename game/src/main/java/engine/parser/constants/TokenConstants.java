@@ -43,7 +43,7 @@ public enum TokenConstants {
 	VALUES_KNOWLEDGE        (TokenType.KEYWORD, "knowledge"),
 	VALUES_DRIVES           (TokenType.KEYWORD, "drives"),
 	VALUES_ATTRIBUTES       (TokenType.KEYWORD, "attributes"),
-	VALUES_SOLUTIONS        (TokenType.KEYWORD, "solutions"),
+    VALUES_SOLUTIONS        (TokenType.KEYWORD, "solutions"),
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands
 	// -------------------------------------------------- Math
@@ -55,6 +55,7 @@ public enum TokenConstants {
 	CHANGE                  (TokenType.COMMAND, "change"),
 	CREATE                  (TokenType.COMMAND, "create"),
 	DESTROY                 (TokenType.COMMAND, "destroy"),
+	ADD_EFFECT				(TokenType.COMMAND, "addEffect"),
 	ADD_PERSONAL_ATTRIBUTE  (TokenType.COMMAND, "addPersonalAtt"),
 	ADD_SPECIES_ATTRIBUTE   (TokenType.COMMAND, "addSpeciesAtt"),
 	ADD_OCCUPATION			(TokenType.COMMAND, "addOccupation"),

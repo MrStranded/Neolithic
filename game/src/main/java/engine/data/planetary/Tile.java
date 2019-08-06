@@ -27,6 +27,17 @@ public class Tile extends Instance implements IDInterface {
 		this.face = face;
 	}
 
+	public Tile(int id, Tile old) {
+		super(id);
+		this.xPos = old.getX();
+		this.yPos = old.getY();
+		this.height = old.getHeight();
+		this.waterHeight = old.getWaterHeight();
+
+		this.face = old.getFace();
+		this.tileMesh = old.getTileMesh();
+	}
+
 	@Override
 	public IDInterface merge(IDInterface other) {
 		return this;

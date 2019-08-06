@@ -5,12 +5,16 @@ import constants.ScriptConstants;
 import constants.TopologyConstants;
 import engine.data.Data;
 import engine.data.Script;
+import engine.data.attributes.Attribute;
 import engine.data.behaviour.Occupation;
+import engine.data.effects.Effect;
 import engine.data.entities.Instance;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
+import engine.data.proto.TileContainer;
+import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.graphics.objects.GraphicalObject;
 import engine.graphics.renderer.Renderer;
@@ -42,6 +46,45 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 1)) {
 				double value = parameters[0].getDouble();
 				return new Variable(Math.abs(value));
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void addEffect (Instance target, String name, int duration, [attributeName, value, ...])
+		} else if (TokenConstants.ADD_EFFECT.equals(command)) {
+			if (requireParameters(commandNode, 3)) {
+				Instance target = parameters[0].getInstance();
+				String name = parameters[1].getString();
+				int duration = parameters[2].getInt();
+				List<Variable> attributes = parameters[3].getList();
+
+				if (target == null) {
+					Logger.error("Target instance value for command '" + command.getValue() + "' is invalid!");
+					return new Variable();
+				}
+
+				Effect effect = new Effect(name, duration);
+
+				boolean getID = true;
+				String attributeTextID = null;
+				for (Variable variable : attributes) {
+					if (getID) {
+						if (variable.getType() == DataType.ATTRIBUTE) {
+							effect.addAttrubte(variable.getAttribute());
+						} else {
+							attributeTextID = variable.getString();
+							getID = false;
+						}
+					} else {
+						int id = Data.getProtoAttributeID(attributeTextID);
+						if (id >= 0) {
+							effect.addAttrubte(new Attribute(id, variable.getInt()));
+						} else {
+							Logger.error("Attribute with textID '" + attributeTextID + "' does not exist!");
+						}
+						getID = true;
+					}
+				}
+
+				target.addEffect(effect);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int addPersonalAtt (Instance target, String attributeTextID, int amount)
@@ -97,6 +140,39 @@ public class CommandExecuter {
 				double chance = parameters[0].getDouble();
 
 				return new Variable(Math.random() < chance ? 1 : 0);
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Instance change (Instance target, Container / String container)
+		} else if (TokenConstants.CHANGE.equals(command)) {
+			if (requireParameters(commandNode, 2)) {
+				Logger.error("The command '" + TokenConstants.CHANGE.getValue() + "' is not supported yet!");
+
+				Instance oldInstance = parameters[0].getInstance();
+				String textID = parameters[1].getType() == DataType.CONTAINER ? parameters[1].getContainer().getTextID() : parameters[1].getString();
+
+				if (oldInstance == null) {
+					Logger.error("Instance value for command '" + command.getValue() + "' is invalid!");
+					return new Variable();
+				}
+
+				int id = Data.getContainerID(textID);
+				if (id < 0) {
+					Logger.error("Container with textID '" + textID + "' does not exist!");
+					return new Variable();
+				}
+
+				if (Data.getContainer(id).getType() == DataType.TILE) {
+					Tile oldTile = oldInstance.getPosition();
+					Tile newTile = new Tile(id, oldTile);
+					oldTile.replaceBy(newTile);
+
+					return new Variable(newTile);
+				} else {
+					Instance newInstance = new Instance(id);
+					oldInstance.replaceBy(newInstance);
+
+					return new Variable(newInstance);
+				}
 			}
 
         // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void changeSunAngle (double angle)

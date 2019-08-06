@@ -45,10 +45,10 @@ Tile: tDirt {
 	}
 
 	Script: tick {
-		if (chance(0.01)) {
+	    /*.attAge++;
+		if (.attAge > 3) {
 			change(self,tGras);
-		}
-		print ("Dirty Test");
+		}*/
 	}
 }
 
@@ -325,9 +325,8 @@ Entity: entFruit {
 	}
 
 	Script: consume(actor) {
-		//addPersonalAtt(actor, "attNutrition", ..attNutrition);
-		actor.attNutrition += ..attNutrition;
-		actor.attRestlessness -= 2;
+		addEffect(actor, "Tasty apple", 30, [.attNutrition, "attRestlessness", -2]);
+
 		destroy(self);
 	}
 }

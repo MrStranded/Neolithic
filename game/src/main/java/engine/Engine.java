@@ -49,6 +49,7 @@ public class Engine {
 
 		gaia = new Planet(32);
 		Data.setPlanet(gaia);
+		Data.addPlanetTilesToQueue();
 		//TopologyGenerator.fitTiles(gaia);
 
 		long time = System.currentTimeMillis();
