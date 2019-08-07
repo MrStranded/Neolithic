@@ -341,7 +341,7 @@ public class Instance {
 
 
     public String getName() {
-        return name != null ? name : Data.getContainer(id).getName();
+        return name != null ? name : Data.getContainer(id) != null ? Data.getContainer(id).getName() : "Noname";
     }
 
     public void setName(String name) {
@@ -391,9 +391,13 @@ public class Instance {
 		// personal data
 		value += getPersonalAttributeValue(attributeID);
 		// effects
-        for (Instance effect : effects) {
-            value += effect.getAttributeValue(attributeID);
-        }
+		try {
+			for (Instance effect : new CopyOnWriteArrayList<>(effects)) {
+				value += effect.getAttributeValue(attributeID);
+			}
+		} catch (Exception e) {
+			Logger.error("Concurrent modification during 'Instance.getAttributeValue()' (effect list is currently being modified)");
+		}
 
 		return value;
 	}

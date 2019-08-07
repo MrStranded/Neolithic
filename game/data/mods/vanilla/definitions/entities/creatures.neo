@@ -56,7 +56,7 @@ Creature: cMonkey {
             }
 		}
 
-		if (self->id == main->monkey) {
+		if (self->id == main->monkey && false) {
 		    print(self->id + " his stats: -------------------------------------");
 		    print("light sense:      " + .attLightSensitivity);
 		    print("hunger sense:     " + .attHungerSensitivity);
@@ -77,6 +77,8 @@ Creature: cMonkey {
 
 		    destroy(self);
         }
+
+        ..attAge++;
 	}
 
 	Script: reachable (from, to) {

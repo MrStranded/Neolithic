@@ -24,6 +24,7 @@ public class Engine {
 	private static Window window;
 	private static Scene scene;
 	private static GUIInterface hud;
+	private static LogicThread logicThread;
 
 	private static Planet gaia;
 
@@ -33,6 +34,8 @@ public class Engine {
 
 		renderer = new Renderer(window);
 		renderer.initialize();
+
+		logicThread = new LogicThread(window);
 	}
 
 	public static void loadData() {
@@ -65,20 +68,19 @@ public class Engine {
 		System.out.println("Executing WorldGen Script took: "+(System.currentTimeMillis()-time)+" ms");
 
 		Data.shuffleInstanceQueue();
-
-		LogicThread logicThread = new LogicThread(window);
-		logicThread.start();
 	}
 
 	/**
 	 * Starting the drawing loop and cleaning up the window after exiting the program.
 	 */
 	public static void start() {
+		logicThread.start();
 		renderLoop();
 	}
 
 	private static void renderLoop() {
 		while (renderer.displayExists()) {
+			hud.tick(window.getWidth(), window.getHeight());
 			renderer.render(scene, hud, gaia);
 		}
 	}

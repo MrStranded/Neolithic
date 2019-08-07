@@ -242,6 +242,10 @@ public class Renderer {
 		if (keyboard.isPressed(GLFW.GLFW_KEY_F)) { // go farther away
 			camera.changeRadius(camera.getRadius()/100d);
 		}
+
+		if (keyboard.isClicked(GLFW.GLFW_KEY_G)) {
+			Data.getMainInstance().run("repopulate", null);
+		}
 	}
 
 	// ###################################################################################

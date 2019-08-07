@@ -25,3 +25,13 @@ Script: setTime (hour, minute) {
     angle = 360 * (minute + hour*60) / (24*60);
     setSunAngle(angle);
 }
+
+Script: repopulate() {
+    for (t : eachTile()) {
+        if (getHeight(t) > 100) {
+            if (chance(0.01)) {
+                monkey = create(cMonkey, t);
+            }
+        }
+    }
+}

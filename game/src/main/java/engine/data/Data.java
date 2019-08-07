@@ -8,13 +8,19 @@ import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
 import engine.data.variables.DataType;
+import engine.graphics.gui.BaseGUI;
+import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.objects.planet.Sun;
+import engine.parser.utils.Logger;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Data {
+
+	private static GUIInterface hud;
 
 	private static Planet planet;
 	private static Sun sun;
@@ -124,6 +130,27 @@ public class Data {
 		}
 
 		return attributeIDList;
+	}
+
+	/**
+	 * Returns all instances from the queue with the given container ID.
+	 * @param id of container
+	 * @return list of instances of given type
+	 */
+	public static List<Instance> getAllInstancesWithID(int id) {
+		List<Instance> list = new ArrayList<>();
+
+		try {
+			for (Instance instance : instanceQueue) {
+				if (instance.getId() == id) {
+					list.add(instance);
+				}
+			}
+		} catch (Exception e) {
+			Logger.error("Concurrent modification during 'Data.getAllInstancesWithID()'");
+		}
+
+		return list;
 	}
 
 	/**
@@ -298,7 +325,6 @@ public class Data {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-
     public static Container getMainContainer() {
         return mainContainer;
     }
@@ -324,4 +350,11 @@ public class Data {
     public static void setMoon(GraphicalObject moon) {
         Data.moon = moon;
     }
+
+	public static GUIInterface getHud() {
+		return hud;
+	}
+	public static void setHud(GUIInterface hud) {
+		Data.hud = hud;
+	}
 }
