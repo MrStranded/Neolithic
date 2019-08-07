@@ -10,7 +10,7 @@ import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.Scene;
 import engine.graphics.gui.window.Window;
 import engine.graphics.renderer.Renderer;
-import engine.logic.processing.LogicThread;
+import engine.threads.LogicThread;
 import engine.parser.Parser;
 
 /**
@@ -24,6 +24,7 @@ public class Engine {
 	private static Window window;
 	private static Scene scene;
 	private static GUIInterface hud;
+
 	private static LogicThread logicThread;
 
 	private static Planet gaia;
@@ -75,13 +76,16 @@ public class Engine {
 	 */
 	public static void start() {
 		logicThread.start();
-		renderLoop();
-	}
 
-	private static void renderLoop() {
+		long t = System.currentTimeMillis();
+
 		while (renderer.displayExists()) {
+			while (System.currentTimeMillis() - t < GameConstants.MILLISECONDS_PER_FRAME) {}
+			
 			hud.tick(window.getWidth(), window.getHeight());
 			renderer.render(scene, hud, gaia);
+
+			t = System.currentTimeMillis();
 		}
 	}
 

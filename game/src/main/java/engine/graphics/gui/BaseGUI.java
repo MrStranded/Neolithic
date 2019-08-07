@@ -51,7 +51,7 @@ public class BaseGUI implements GUIInterface {
 	// ###################################################################################
 
 	public void tick(int windowWidth, int windowHeight) {
-		int slot = 1;
+		int slot = 2;
 		double width = windowWidth;
 		double height = windowHeight;
 
@@ -61,16 +61,31 @@ public class BaseGUI implements GUIInterface {
 		double headcount = monkeys.size();
 		if (nrOfAtts == 0 || headcount == 0) { return; }
 
+		int sleepingID = Data.getProtoAttributeID("attSleeping");
+
 		for (Integer id : attributes) {
 			double sum = 0;
 			for (Instance monkey : monkeys) {
 				sum += monkey.getAttributeValue(id);
 			}
 
+			if (id == sleepingID) {
+				GUIObject sleepers = new TextObject("Sleeping: " + ((int) sum), fontTexture);
+				sleepers.setSize(width/4, 30);
+				sleepers.setLocation(width/2, 0);
+				sleepers.recalculateScale(windowWidth, windowHeight);
+				objects[0] = sleepers;
+				GUIObject sleepers2 = new TextObject(" of: " + ((int) headcount), fontTexture);
+				sleepers2.setSize(width/4, 30);
+				sleepers2.setLocation(width*3/4, 0);
+				sleepers2.recalculateScale(windowWidth, windowHeight);
+				objects[1] = sleepers2;
+			}
+
 			double yPos = ((double) (slot) / (nrOfAtts+1d)) * height;
 			GUIObject out = new TextObject(Data.getProtoAttribute(id).getName() + ":   " + ((double) ((int) (sum/headcount*100d)) / 100d), fontTexture);
 
-			out.setSize(width/2d,height/(nrOfAtts+1d));
+			out.setSize(width/3d,height/(nrOfAtts+1d));
 			out.setLocation(0, yPos);
 			out.recalculateScale(windowWidth,windowHeight);
 

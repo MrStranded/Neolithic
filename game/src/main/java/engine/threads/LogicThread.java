@@ -1,4 +1,4 @@
-package engine.logic.processing;
+package engine.threads;
 
 import constants.GameConstants;
 import engine.data.Data;
@@ -20,7 +20,7 @@ public class LogicThread extends Thread {
 		while (!window.isClosed()) {
 			long currentTime = System.currentTimeMillis();
 
-			if (currentTime - t >= GameConstants.TICK_TIME_PER_INSTANCE) {
+			if (currentTime - t >= GameConstants.TIME_BETWEEN_TICK_LOADS) {
 				for (int i = 0; i < GameConstants.INSTANCES_PER_TICK; i++) {
 					Instance instance = Data.getNextInstance();
 
@@ -36,7 +36,7 @@ public class LogicThread extends Thread {
 				}
 			} else {
 				try {
-					sleep((GameConstants.TICK_TIME_PER_INSTANCE - (currentTime - t)));
+					sleep((GameConstants.TIME_BETWEEN_TICK_LOADS - (currentTime - t)));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
