@@ -62,6 +62,7 @@ public enum TokenConstants {
 	CHANGE                  (TokenType.COMMAND, "change"),
 	CREATE                  (TokenType.COMMAND, "create"),
 	DESTROY                 (TokenType.COMMAND, "destroy"),
+	DELETE_EFFECTS			(TokenType.COMMAND, "deleteEffects"),
 	ADD_EFFECT				(TokenType.COMMAND, "addEffect"),
 	ADD_PERSONAL_ATTRIBUTE  (TokenType.COMMAND, "addPersonalAtt"),
 	ADD_SPECIES_ATTRIBUTE   (TokenType.COMMAND, "addSpeciesAtt"),

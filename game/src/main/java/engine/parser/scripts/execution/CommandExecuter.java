@@ -226,6 +226,20 @@ public class CommandExecuter {
 				}
 			}
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void deleteEffects (Instance target, Container effectContainer)
+		} else if (TokenConstants.DELETE_EFFECTS.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				Instance target = parameters[0].getInstance();
+				int containerID = parameters.length >= 2 ? parameters[1].getContainerId() : -1;
+
+				if (target == null) {
+					Logger.error("Target value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+
+				target.deleteEffects(containerID);
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int destroy (Instance instance)
 		} else if (TokenConstants.DESTROY.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
@@ -563,6 +577,7 @@ public class CommandExecuter {
                 List<Integer> attributes = Data.getAllAttributeIDs();
                 for (Integer id : attributes) {
 					ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
+
                 	if (protoAttribute.isInherited()) {
                 		double v1 = parent1.getPersonalAttributeValue(id);
                 		double v2 = parent2.getPersonalAttributeValue(id);
@@ -570,9 +585,9 @@ public class CommandExecuter {
                 			double p = Math.random();
 							int value = (int) (v1*p + v2*(1-p));
 
-							if (Math.random() <= protoAttribute.getMutationChance() / 100d) {
-								// * 3d because (int) rounds the result down. Math.random() is always < 1
-								value += (int) (-protoAttribute.getMutationExtent() + Math.random() * 3d * protoAttribute.getMutationExtent());
+							if (Math.random() < protoAttribute.getMutationChance() / 100d) {
+								// +1 because (int) rounds the result down. Math.random() is always < 1
+								value += (int) (-protoAttribute.getMutationExtent() + Math.random() * (protoAttribute.getMutationExtent()+1d));
 							}
 
 							target.setAttribute(id, value);

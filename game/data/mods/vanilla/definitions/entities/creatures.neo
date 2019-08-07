@@ -23,7 +23,11 @@ Creature: cMonkey {
 		attHealth, 100;
 
         attLightSensitivity, 60;
-        attHungerSensitivity, 60;
+        attHungerSensitivity, 100;
+        attFatigueSensitivity, 200;
+
+        attCuriosity, 250;
+        attSleepTime, 700;
 
 		attSpeed, 3;
 		attViewingDistance, 7;
@@ -38,11 +42,13 @@ Creature: cMonkey {
 	}
 
 	Script: tick {
-	    if (.attSleeping <= 0) { // creature is awake
+	    if (!(.attSleeping)) { // creature is awake
             if (.attNutrition <= 0) { // and malnourished
-                if (!getEffects(self,effHunger) && chance(0.1)) {
+                if (!getEffects(self,effHunger)) {
                     addEffect(self, effHunger);
                 }
+            } else {
+                 ..attNutrition--;
             }
 
             if (chance(0.5)) {
@@ -54,9 +60,13 @@ Creature: cMonkey {
 		    print(self->id + " his stats: -------------------------------------");
 		    print("light sense:      " + .attLightSensitivity);
 		    print("hunger sense:     " + .attHungerSensitivity);
+		    print("fatigue sense:    " + .attFatigueSensitivity);
+		    print("curiosity:        " + .attCuriosity);
+		    print("sleep time:       " + .attSleepTime);
 		    print("speed:            " + .attSpeed);
 		    print("viewing distance: " + .attViewingDistance);
 		    print("step height:      " + .attStepHeight);
+		    print("sleeping: " + .attSleeping + "   health: " + .attHealth + "   nutrition: " + .attNutrition + "   fatigue: " + .attFatigue);
 		    print(getEffects(self));
 		}
 
@@ -72,7 +82,7 @@ Creature: cMonkey {
 	Script: reachable (from, to) {
         h1 = getHeight(from);
         h2 = getHeight(to);
-        return ((h2 >= 100) && (abs(h1-h2) <= ..attStepHeight));
+        return ((h2 >= 100) && (abs(h1-h2) <= .attStepHeight));
 	}
 
 	Script: awake() {

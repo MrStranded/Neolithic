@@ -24,8 +24,8 @@ Effect: effAchingFeet {
 
 Drive: driMove {
 	Script: condition {
-		require(.attFatigue < 300);
-		require(.attNutrition > 0);
+		require(.attFatigue < .attCuriosity);
+		require(.attNutrition > 30);
 	}
 
 	solutions {
@@ -43,6 +43,7 @@ Process: proStroll {
 		    if (chance(0.01)) {
 		        addEffect(self, effAchingFeet);
 		    }
+		    self..attNutrition--;
 		}
 	}
 

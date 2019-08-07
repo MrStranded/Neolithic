@@ -331,6 +331,10 @@ public class Instance {
 	    effects.add(effect);
     }
 
+    public void deleteEffects(int containerID) {
+		effects.removeIf(effect -> ((containerID == -1) || (effect.getId() == containerID)));
+	}
+
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################

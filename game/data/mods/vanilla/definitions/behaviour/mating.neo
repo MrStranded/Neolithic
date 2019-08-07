@@ -24,6 +24,7 @@ Process: proMate {
         addEffect(self, "Postcoital exhaustion", 60, [
             "attFatigue", 300
         ]);
+        ..attNutrition -= 69;
 
         child = create(getType(self), getTile(self));
         mixAttributes(child, self, ->mate);

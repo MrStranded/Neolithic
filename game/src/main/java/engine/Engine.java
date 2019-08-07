@@ -1,5 +1,6 @@
 package engine;
 
+import constants.GameConstants;
 import constants.ScriptConstants;
 import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
@@ -47,7 +48,7 @@ public class Engine {
 		scene = new Scene();
 		hud = new BaseGUI();
 
-		gaia = new Planet(32);
+		gaia = new Planet(GameConstants.DEFAULT_PLANET_SIZE);
 		Data.setPlanet(gaia);
 		//Data.addPlanetTilesToQueue();
 		//TopologyGenerator.fitTiles(gaia);

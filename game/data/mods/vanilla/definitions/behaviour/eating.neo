@@ -16,6 +16,7 @@ Effect: effHunger {
             }
         } else {
             ..attHealth--;
+            ..attFatigue++;
         }
     }
 
@@ -27,7 +28,7 @@ Effect: effHunger {
 Effect: effDigest {
     name = "Digest";
 
-    Script: tick() { ..attNutrition--; }
+    Script: tick(carrier) { ..attNutrition--; carrier..attNutrition++; }
     Script: removeCondition() { require(.attNutrition <= 0); }
 }
 

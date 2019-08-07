@@ -8,16 +8,23 @@ Attribute: attLightSensitivity {
 Attribute: attHungerSensitivity {
     name = "Hunger sensitivity";
     inherited;
-    mutation = 50, 3;
+    mutation = 50, 5;
 }
+Attribute: attFatigueSensitivity {
+    name = "Fatigue sensitivity";
+    inherited;
+    mutation = 30, 50;
+}
+
+// movement
 Attribute: attViewingDistance {
     name = "Viewing distance";
     inherited;
-    mutation = 5, 1;
+    mutation = 10, 1;
 }
 Attribute: attStepHeight {
     name = "Step height";
-    mutation=15,3;
+    mutation = 25 , 10;
     inherited;
 }
 Attribute: attSpeed {
@@ -30,7 +37,12 @@ Attribute: attSpeed {
 Attribute: attCuriosity {
     name = "Curiosity";
     inherited;
-    mutation = 10, 5;
+    mutation = 50, 30;
+}
+Attribute: attSleepTime {
+    name = "Sleeping time";
+    inherited;
+    mutation = 30, 50;
 }
 
 // life

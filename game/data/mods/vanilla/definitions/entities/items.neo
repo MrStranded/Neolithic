@@ -6,7 +6,7 @@ Entity: entFruit {
 	mesh = "apple02.ply";
 
 	attributes {
-		attNutrition, 30;
+		attNutrition, 50;
 		attEdible, 1;
 	}
 

@@ -5,7 +5,7 @@
 
 Drive: driSleep {
 	Script: condition {
-		require((.attFatigue > 250) || (.attNutrition < 0));
+		require((.attFatigue > .attFatigueSensitivity) || (.attNutrition < 0));
 		require(getLightLevel(self) <= .attLightSensitivity);
 	}
 
@@ -18,7 +18,8 @@ Drive: driSleep {
 
 Process: proSleep {
 	Script: process {
-	    addOccupation(self, 700, "awake");
+        deleteEffects(self,effHunger);
+	    addOccupation(self, .attSleepTime, "awake");
 	    ..attSleeping = 1;
 	}
 }
