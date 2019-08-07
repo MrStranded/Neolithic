@@ -1,0 +1,70 @@
+
+///////////////////////////////////////////////////////////////////////////// Tiles
+
+Tile: tDirt {
+	name = "Dirt";
+
+	preferredHeight = 120,20;
+
+	topColor {
+		150,10;
+		100;
+		20,10;
+	}
+	sideColor {
+		90,10;
+		70,10;
+		60;
+	}
+
+	Script: tick {
+	    /*..attAge++;
+		if (.attAge > 3) {
+			change(self,tGras); // no wörki-wörki yet
+		}*/
+	}
+}
+
+Tile: tGras {
+	name = "Gras";
+	preferredHeight = 150;
+	preferredHeightBlur = 50;
+
+	topColor {
+		120,10;
+		200,15;
+		50;
+	}
+	sideColor {
+		100,10;
+		90,10;
+		80;
+	}
+
+	attributes {
+		attNutrition, 3;
+		attHumidity, 50;
+	}
+}
+
+Tile: tSand {
+	name = "Sand";
+
+	preferredHeight = 100,5;
+
+	topColor {
+		200,10;
+		150;
+		30,10;
+	}
+	sideColor {
+		120,10;
+		110,10;
+		90;
+	}
+}
+
+Tile: tStone {
+	preferredHeight = 255;preferredHeightBlur = 10;
+	name = "Stone"; topColor {150,10;150;120;}
+}

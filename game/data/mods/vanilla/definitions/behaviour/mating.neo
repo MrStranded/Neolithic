@@ -1,0 +1,52 @@
+
+///////////////////////////////////////////////////////////////////////////// Effects
+
+///////////////////////////////////////////////////////////////////////////// Drives
+
+Drive: driMate {
+    Script: condition {
+        require(self.attNutrition >= 69);
+        require(self.attFatigue < 420);
+    }
+
+    solutions {
+        proMate;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////// Processes
+
+Process: proMate {
+    Script: condition {
+        require(->mate);
+    }
+    Script: process {
+        addEffect(self, "Postcoital exhaustion", 60, [
+            "attFatigue", 300
+        ]);
+
+        child = create(getType(self), getTile(self));
+        mixAttributes(child, self, ->mate);
+    }
+
+    solutions {
+        proSearchMate;
+    }
+}
+
+Process: proSearchMate {
+    Script: condition {
+        creatures = getCreaturesInRange(getType(self), getTile(self), .attViewingDistance);
+        ->mate = false;
+        for (creature : creatures) {
+            if (creature != self) {
+                ->mate = creature;
+                break;
+            }
+        }
+        require(->mate);
+    }
+    Script: process {
+        moveTo(self, ->mate, self.attSpeed);
+    }
+}

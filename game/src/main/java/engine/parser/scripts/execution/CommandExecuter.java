@@ -10,6 +10,7 @@ import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
+import engine.data.proto.ProtoAttribute;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.logic.topology.Neighbour;
@@ -539,14 +540,12 @@ public class CommandExecuter {
                 return new Variable(list.size());
             }
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void mixAttributes (Instance t, Instance p1, Instance p2, double chance, double extent)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void mixAttributes (Instance t, Instance p1, Instance p2)
 		} else if (TokenConstants.MIX_ATTRIBUTES.equals(command)) {
-			if (requireParameters(commandNode, 5)) {
+			if (requireParameters(commandNode, 3)) {
 				Instance target = parameters[0].getInstance();
 				Instance parent1 = parameters[1].getInstance();
 				Instance parent2 = parameters[2].getInstance();
-				double chance = parameters[3].getDouble();
-				double extent = parameters[4].getDouble();
 
                 if (target == null) {
                     Logger.error("Target instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
@@ -563,13 +562,22 @@ public class CommandExecuter {
 
                 List<Integer> attributes = Data.getAllAttributeIDs();
                 for (Integer id : attributes) {
-                    int value = (parent1.getPersonalAttributeValue(id) + parent2.getPersonalAttributeValue(id)) / 2;
+					ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
+                	if (protoAttribute.isInherited()) {
+                		double v1 = parent1.getPersonalAttributeValue(id);
+                		double v2 = parent2.getPersonalAttributeValue(id);
+                		if (v1 != 0 && v2 != 0) {
+                			double p = Math.random();
+							int value = (int) (v1*p + v2*(1-p));
 
-                    if (Math.random() <= chance/100d) {
-                        value += -extent + Math.random()*extent;
-                    }
+							if (Math.random() <= protoAttribute.getMutationChance() / 100d) {
+								// * 3d because (int) rounds the result down. Math.random() is always < 1
+								value += (int) (-protoAttribute.getMutationExtent() + Math.random() * 3d * protoAttribute.getMutationExtent());
+							}
 
-                    target.setAttribute(id, value);
+							target.setAttribute(id, value);
+						}
+					}
                 }
 			}
 

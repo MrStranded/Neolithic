@@ -1,0 +1,81 @@
+
+///////////////////////////////////////////////////////////////////////////// Monkey
+
+Creature: cMonkey {
+	name = "Monkey";
+	mesh = "monkey01.ply";
+
+	knowledge {
+		proEat; proGatherFood; proPickUpFood;
+		proMate; proSearchMate;
+		proSleep;
+		proStroll;
+	}
+
+	drives {
+		driHunger;
+		driMate;
+		driSleep;
+		driMove;
+	}
+
+	attributes {
+		attHealth, 100;
+
+        attLightSensitivity, 60;
+        attHungerSensitivity, 60;
+
+		attSpeed, 3;
+		attViewingDistance, 7;
+		attStepHeight, 24;
+	}
+
+	Script: place {
+		self->id = random(1000);
+		if (main->monkey == 0) {
+		    main->monkey = self->id;
+        }
+	}
+
+	Script: tick {
+	    if (.attSleeping <= 0) { // creature is awake
+            if (.attNutrition <= 0) { // and malnourished
+                if (!getEffects(self,effHunger) && chance(0.1)) {
+                    addEffect(self, effHunger);
+                }
+            }
+
+            if (chance(0.5)) {
+                ..attFatigue++;
+            }
+		}
+
+		if (self->id == main->monkey) {
+		    print(self->id + " his stats: -------------------------------------");
+		    print("light sense:      " + .attLightSensitivity);
+		    print("hunger sense:     " + .attHungerSensitivity);
+		    print("speed:            " + .attSpeed);
+		    print("viewing distance: " + .attViewingDistance);
+		    print("step height:      " + .attStepHeight);
+		    print(getEffects(self));
+		}
+
+		if (.attHealth < 0) {
+		    if (self->id == main->monkey) {
+		        main->monkey = 0;
+		    }
+
+		    destroy(self);
+        }
+	}
+
+	Script: reachable (from, to) {
+        h1 = getHeight(from);
+        h2 = getHeight(to);
+        return ((h2 >= 100) && (abs(h1-h2) <= ..attStepHeight));
+	}
+
+	Script: awake() {
+	    ..attFatigue = 0;
+	}
+}

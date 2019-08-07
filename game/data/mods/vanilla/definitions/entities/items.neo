@@ -1,0 +1,25 @@
+
+///////////////////////////////////////////////////////////////////////////// Fruit
+
+Entity: entFruit {
+	name = "Apple";
+	mesh = "apple02.ply";
+
+	attributes {
+		attNutrition, 30;
+		attEdible, 1;
+	}
+
+	Script: tick() {
+	    ..attAge++;
+		if (.attAge > 1440) {
+			destroy(self);
+		}
+	}
+
+	Script: consume(actor) {
+        (addEffect(actor, effDigest))..attNutrition = .attNutrition;
+
+		destroy(self);
+	}
+}

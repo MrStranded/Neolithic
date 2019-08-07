@@ -1,0 +1,24 @@
+
+///////////////////////////////////////////////////////////////////////////// Effects
+
+///////////////////////////////////////////////////////////////////////////// Drives
+
+Drive: driSleep {
+	Script: condition {
+		require((.attFatigue > 250) || (.attNutrition < 0));
+		require(getLightLevel(self) <= .attLightSensitivity);
+	}
+
+	solutions {
+		proSleep;
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////// Processes
+
+Process: proSleep {
+	Script: process {
+	    addOccupation(self, 700, "awake");
+	    ..attSleeping = 1;
+	}
+}

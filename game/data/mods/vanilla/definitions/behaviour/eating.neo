@@ -1,0 +1,89 @@
+
+///////////////////////////////////////////////////////////////////////////// Effects
+
+Effect: effHunger {
+    name = "Hunger";
+
+    attributes {
+        attHealth, "-1";
+        attSpeed, "-1";
+    }
+
+    Script: tick (carrier) {
+        if (carrier.attNutrition > 0) {
+            if (.attHealth < 0) {
+                ..attHealth++;
+            }
+        } else {
+            ..attHealth--;
+        }
+    }
+
+    Script: removeCondition {
+        require(.attHealth >= 0);
+    }
+}
+
+Effect: effDigest {
+    name = "Digest";
+
+    Script: tick() { ..attNutrition--; }
+    Script: removeCondition() { require(.attNutrition <= 0); }
+}
+
+///////////////////////////////////////////////////////////////////////////// Drives
+
+Drive: driHunger {
+	Script: condition {
+		require(.attNutrition <= .attHungerSensitivity);
+	}
+
+	solutions {
+		proEat;
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////// Processes
+
+Process: proEat {
+	Script: condition {
+		require(getItemAtt(self, "attEdible"));
+	}
+	Script: process {
+		item = getItemAtt(self, "attEdible");
+		item->consume(self);
+	}
+
+	solutions {
+		proPickUpFood;
+		proGatherFood;
+	}
+}
+
+Process: proPickUpFood {
+	Script: condition {
+	    ->food = getAttInRange("attEdible",self,0);
+		require(->food);
+	}
+	Script: process() {
+		pickUp(self, ->food);
+	}
+}
+
+Process: proGatherFood {
+	Script: condition {
+		->food = getAttInRange("attEdible",self,.attViewingDistance);
+		require(->food);
+	}
+	Script: process() {
+		moveTo(self, ->food, .attSpeed);
+	}
+	Script: discovery() {
+		require(.attSpeed > 0);
+		require(.attViewingDistance > 0);
+	}
+
+	solutions {
+	    proStroll;
+	}
+}

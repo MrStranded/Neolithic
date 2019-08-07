@@ -1,0 +1,27 @@
+///////////////////////////////////////////////////////////////////////////// Global
+
+Script: tick {
+    // one minute
+    ->minute++;
+
+    if (->minute >= 60) {
+        ->minute = 0;
+        ->hour++;
+        print("Day: " + ->day + " | Hour: " + ->hour);
+    }
+
+    if (->hour >= 24) {
+        ->hour = 0;
+        ->day++;
+    }
+
+    changeSunAngle(0.25); // 0.25 * 60 * 24 = 360
+}
+
+Script: setTime (hour, minute) {
+    ->hour = hour;
+    ->minute = minute;
+
+    angle = 360 * (minute + hour*60) / (24*60);
+    setSunAngle(angle);
+}

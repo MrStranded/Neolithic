@@ -34,11 +34,17 @@ public enum TokenConstants {
 
 	// -------------------------------------------------- Engine Values
 	VALUE_NAME                  (TokenType.KEYWORD, "name"),
+	VALUE_MESH                  (TokenType.KEYWORD, "mesh"),
+	// -------------------------------------------------- Tiles
 	VALUE_TOP_COLOR             (TokenType.KEYWORD, "topColor"),
 	VALUE_SIDE_COLOR            (TokenType.KEYWORD, "sideColor"),
-	VALUE_PREFERREDHEIGHT       (TokenType.KEYWORD, "preferredHeight"),
-	VALUE_PREFERREDHEIGHTBLUR   (TokenType.KEYWORD, "preferredHeightBlur"),
-	VALUE_MESH                  (TokenType.KEYWORD, "mesh"),
+	VALUE_PREFERRED_HEIGHT		(TokenType.KEYWORD, "preferredHeight"),
+	VALUE_PREFERRED_HEIGHT_BLUR	(TokenType.KEYWORD, "preferredHeightBlur"),
+	// -------------------------------------------------- Attributes
+	VALUE_INHERITED             (TokenType.KEYWORD, "inherited"),
+	VALUE_MUTATION_CHANCE       (TokenType.KEYWORD, "mutationChance"),
+	VALUE_MUTATION_EXTEND       (TokenType.KEYWORD, "mutationExtent"),
+	VALUE_MUTATION              (TokenType.KEYWORD, "mutation"),
 
 	// -------------------------------------------------- List Instantiators
 	VALUES_KNOWLEDGE        (TokenType.KEYWORD, "knowledge"),

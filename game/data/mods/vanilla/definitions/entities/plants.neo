@@ -1,0 +1,61 @@
+
+///////////////////////////////////////////////////////////////////////////// Tree
+
+Creature: cTree {
+	name = "Tree";
+	mesh = "tree01.ply";
+
+	drives {
+		driPlantReproduction;
+	}
+
+	knowledge {
+		proPhotoSynthesis;
+		proCreateFruit;
+	}
+
+	Script: place {
+		..attNutrition += random(100);
+	}
+
+	attributes{}
+}
+
+///////////////////////////////////////////////////////////////////////////// Drives
+
+Drive: driPlantReproduction {
+	solutions {
+		proCreateFruit;
+		proPhotoSynthesis;
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////// Processes
+
+Process: proPhotoSynthesis {
+	Script: condition {
+		require(getLightLevel(self) >= 50);
+	}
+	Script: process {
+		..attNutrition += 1;
+	}
+
+	solutions {} // there is no way for a plant to create light (currently?)
+
+	Script: discovery(actor) { // there is no way for an entity to learn photosynthesisis
+		require(0);
+	}
+}
+
+Process: proCreateFruit {
+	Script: condition {
+		require(!getAttInRange("attEdible", self, 1));
+		require(.attNutrition >= 100);
+	}
+
+	Script: process {
+		fruit = create(entFruit, getTile(self));
+		..attNutrition -= 100;
+		//pickUp(self, fruit);
+	}
+}

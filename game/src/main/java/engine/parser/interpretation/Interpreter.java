@@ -15,7 +15,6 @@ import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
 import engine.parser.utils.TokenNumerifier;
 
-import javax.xml.datatype.DatatypeConfigurationException;
 import java.util.List;
 
 public class Interpreter {
@@ -155,6 +154,55 @@ public class Interpreter {
 	// ################################ Value Helper Functions ###########################
 	// ###################################################################################
 
+    // ################################################################################### Attribute
+
+    private void addName(ProtoAttribute protoAttribute) throws Exception {
+        consume(TokenConstants.ASSIGNMENT);
+
+        Token name = consume();
+        protoAttribute.setName(name.getValue());
+
+        consume(TokenConstants.SEMICOLON);
+    }
+
+    private void addInherited(ProtoAttribute protoAttribute) throws Exception {
+        protoAttribute.setInherited(true);
+
+        consume(TokenConstants.SEMICOLON);
+    }
+
+    private void addMutationChance(ProtoAttribute protoAttribute) throws Exception {
+        consume(TokenConstants.ASSIGNMENT);
+
+        Token chance = consume();
+        protoAttribute.setMutationChance(TokenNumerifier.getDouble(chance));
+
+        consume(TokenConstants.SEMICOLON);
+    }
+
+    private void addMutationExtent(ProtoAttribute protoAttribute) throws Exception {
+        consume(TokenConstants.ASSIGNMENT);
+
+        Token extent = consume();
+        protoAttribute.setMutationExtent(TokenNumerifier.getDouble(extent));
+
+        consume(TokenConstants.SEMICOLON);
+    }
+
+    private void addMutation(ProtoAttribute protoAttribute) throws Exception {
+        consume(TokenConstants.ASSIGNMENT);
+
+        Token chance = consume();
+        protoAttribute.setMutationChance(TokenNumerifier.getDouble(chance));
+
+        consume(TokenConstants.COMMA);
+
+        Token extent = consume();
+        protoAttribute.setMutationExtent(TokenNumerifier.getDouble(extent));
+
+        consume(TokenConstants.SEMICOLON);
+    }
+
 	// ################################################################################### General
 
 	private void addName(Container container) throws Exception {
@@ -162,15 +210,6 @@ public class Interpreter {
 
 		Token name = consume();
 		container.setName(name.getValue());
-
-		consume(TokenConstants.SEMICOLON);
-	}
-
-	private void addName(ProtoAttribute protoAttribute) throws Exception {
-		consume(TokenConstants.ASSIGNMENT);
-
-		Token name = consume();
-		protoAttribute.setName(name.getValue());
 
 		consume(TokenConstants.SEMICOLON);
 	}
@@ -301,6 +340,18 @@ public class Interpreter {
 			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
 				addName(protoAttribute);
 
+            } else if (TokenConstants.VALUE_INHERITED.equals(next)) { // attribute is inherited
+                addInherited(protoAttribute);
+
+            } else if (TokenConstants.VALUE_MUTATION_CHANCE.equals(next)) { // chance of attribute to mutate
+                addMutationChance(protoAttribute);
+
+            } else if (TokenConstants.VALUE_MUTATION_EXTEND.equals(next)) { // extent of mutation
+                addMutationExtent(protoAttribute);
+
+            } else if (TokenConstants.VALUE_MUTATION.equals(next)) { // mutation chance, mutation extent
+                addMutation(protoAttribute);
+
 			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
 				return;
 
@@ -375,12 +426,12 @@ public class Interpreter {
 				addName(container);
 
 			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% type specific values
-			} else if (TokenConstants.VALUE_PREFERREDHEIGHT.equals(next)) { // preferred height definition
+			} else if (TokenConstants.VALUE_PREFERRED_HEIGHT.equals(next)) { // preferred height definition
 				if (type == DataType.TILE) {
 					readPreferredHeight((TileContainer) container);
 				} else { issueTypeError(next, type); }
 
-			} else if (TokenConstants.VALUE_PREFERREDHEIGHTBLUR.equals(next)) { // preferred height blur definition
+			} else if (TokenConstants.VALUE_PREFERRED_HEIGHT_BLUR.equals(next)) { // preferred height blur definition
 				if (type == DataType.TILE) {
 					readPreferredHeightBlur((TileContainer) container);
 				} else { issueTypeError(next, type); }

@@ -52,10 +52,18 @@ public class Parser {
 			return;
 		}
 
-		for (File file : definitionsFolder.listFiles()) {
+		loadFolder(definitionsFolder, mod);
+	}
+
+	private void loadFolder(File folder, String mod) {
+		for (String fileName : folder.list()) {
+			File file = new File(folder.getAbsolutePath() + "/" + fileName);
+
 			if (file.isFile() && file.getName().endsWith(ScriptConstants.SCRIPT_FILE_SUFFIX)) {
 				System.out.println("load file: " + file.getName());
 				loadFile(file, mod);
+			} else if (file.isDirectory()) {
+				loadFolder(file, mod);
 			}
 		}
 	}

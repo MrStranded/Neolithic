@@ -1,0 +1,52 @@
+
+///////////////////////////////////////////////////////////////////////////// Effects
+
+Effect: effAchingFeet {
+    name = "Aching feet";
+
+    attributes {
+        attFatigue, 10;
+        attHealth, "-5";
+    }
+
+    Script: tick {
+        if ((.attFatigue) > 0 && chance(0.1)) {
+            ..attFatigue--;
+        }
+    }
+
+    Script: removeCondition {
+        require (.attFatigue <= 0);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////// Drives
+
+Drive: driMove {
+	Script: condition {
+		require(.attFatigue < 300);
+		require(.attNutrition > 0);
+	}
+
+	solutions {
+		proStroll;
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////// Processes
+
+Process: proStroll {
+	Script: process {
+		tile = getNeighbor(getTile(self), random(3));
+		if (self->reachable(getTile(self), tile)) {
+		    setAt(self, tile);
+		    if (chance(0.01)) {
+		        addEffect(self, effAchingFeet);
+		    }
+		}
+	}
+
+	//solutions {}
+
+	//Script: discovery {}
+}

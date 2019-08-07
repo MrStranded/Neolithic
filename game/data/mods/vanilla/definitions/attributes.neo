@@ -1,0 +1,45 @@
+// genetic
+Attribute: attLightSensitivity {
+    name = "Light sensitivity";
+    inherited;
+    mutationChance = 50;
+    mutationExtent = 5;
+}
+Attribute: attHungerSensitivity {
+    name = "Hunger sensitivity";
+    inherited;
+    mutation = 50, 3;
+}
+Attribute: attViewingDistance {
+    name = "Viewing distance";
+    inherited;
+    mutation = 5, 1;
+}
+Attribute: attStepHeight {
+    name = "Step height";
+    mutation=15,3;
+    inherited;
+}
+Attribute: attSpeed {
+    name = "Speed";
+    inherited;
+    mutation = 5, 1;
+}
+
+// behaviour
+Attribute: attCuriosity {
+    name = "Curiosity";
+    inherited;
+    mutation = 10, 5;
+}
+
+// life
+Attribute: attHealth { name = "Health"; }
+Attribute: attNutrition { name = "Nutrition"; }
+Attribute: attSleeping { name = "Sleeping"; }
+Attribute: attAge { name = "Age"; }
+Attribute: attFatigue { name = "Fatigue"; }
+Attribute: attEdible { name = "Edible"; }
+
+// environmental
+Attribute: attHumidity { name = "Humidity"; }
