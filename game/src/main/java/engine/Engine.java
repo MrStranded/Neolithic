@@ -18,7 +18,7 @@ import engine.parser.Parser;
  * It controls game logic, data and visualisation.
  */
 
-public class Engine {
+public class Engine extends Thread {
 
 	private static Renderer renderer;
 	private static Window window;
@@ -73,19 +73,26 @@ public class Engine {
 
 	/**
 	 * Starting the drawing loop and cleaning up the window after exiting the program.
+	 * This method cannot be static, because we need the sleep() method from the Thread class.
 	 */
-	public static void start() {
-		logicThread.start();
-
-		long t = System.currentTimeMillis();
+	public void start() {
+		Engine.logicThread.start();
 
 		while (renderer.displayExists()) {
-			while (System.currentTimeMillis() - t < GameConstants.MILLISECONDS_PER_FRAME) {}
-			
+			long t = System.currentTimeMillis();
+
 			hud.tick(window.getWidth(), window.getHeight());
 			renderer.render(scene, hud, gaia);
 
-			t = System.currentTimeMillis();
+			long elapsedTime = System.currentTimeMillis() - t;
+			if (elapsedTime < GameConstants.MILLISECONDS_PER_FRAME) {
+				try {
+					sleep(GameConstants.MILLISECONDS_PER_FRAME - elapsedTime);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
 		}
 	}
 

@@ -47,7 +47,7 @@ public class Instance {
 		this.id = id;
 
 		attributes = new BinaryTree<>();
-		effects = new LinkedList<>();
+		effects = new CopyOnWriteArrayList<>();
 		variables = new BinaryTree<>();
 
 		subInstances = new ArrayList<>(0);

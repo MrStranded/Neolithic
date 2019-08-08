@@ -16,6 +16,7 @@ import engine.graphics.objects.planet.Sun;
 import engine.parser.utils.Logger;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Data {
@@ -52,7 +53,7 @@ public class Data {
 
 		meshHubs = new HashMap<>(GameConstants.MAX_CONTAINERS);
 
-		instanceQueue = new LinkedList<>();
+		instanceQueue = new ConcurrentLinkedQueue<>();
 
 		// the mainContainer container contains global scripts
 		mainContainer = new Container("mainContainer", DataType.CONTAINER);
@@ -289,9 +290,9 @@ public class Data {
      * This method shuffles the positions of the instances in the instance queue.
      */
     public static void shuffleInstanceQueue() {
-        List<Instance> list = (List<Instance>) instanceQueue;
+        List<Instance> list = new ArrayList<>(instanceQueue);
         Collections.shuffle(list);
-        instanceQueue = new LinkedList<>();
+        instanceQueue = new ConcurrentLinkedQueue<>();
         instanceQueue.addAll(list);
     }
 

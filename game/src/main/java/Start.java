@@ -32,7 +32,7 @@ public class Start {
 		Engine.loadData();
 		Engine.createWorld();
 
-		Engine.start();
+		new Engine().start();
 
 		Engine.cleanUp();
 	}
