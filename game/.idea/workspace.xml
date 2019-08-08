@@ -8,14 +8,18 @@
   <component name="ChangeListManager">
     <list default="true" id="fb5f568f-e1c1-4ada-8646-68bc27407460" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/assets/meshes/monkey01.blend" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/assets/meshes/monkey01.blend" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/assets/meshes/monkey01.blend1" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/assets/meshes/monkey01.blend1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/assets/meshes/monkey01.ply" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/assets/meshes/monkey01.ply" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Start.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Start.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/constants/GameConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constants/GameConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/Engine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/Data.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/mating.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/mating.neo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/sleeping.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/sleeping.neo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/entities/creatures.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/entities/creatures.neo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/Script.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/Script.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/behaviour/Occupation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/behaviour/Occupation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/entities/Instance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/entities/Instance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/logic/topology/Pathfinding.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/logic/topology/Pathfinding.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/neolithic/.gradle/" />
@@ -81,28 +85,28 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="eating" value="1" />
-          <entry key="java" value="219" />
-          <entry key="neo" value="36" />
+          <entry key="java" value="227" />
+          <entry key="neo" value="42" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="219" />
-          <entry key="PLAIN_TEXT" value="38" />
+          <entry key="JAVA" value="227" />
+          <entry key="PLAIN_TEXT" value="44" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="19537" />
-          <entry key="neo" value="8694" />
+          <entry key="java" value="20685" />
+          <entry key="neo" value="8969" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="19567" />
+          <entry key="JAVA" value="20715" />
           <entry key="JavaScript" value="14" />
-          <entry key="PLAIN_TEXT" value="8650" />
+          <entry key="PLAIN_TEXT" value="8925" />
         </counts>
       </usages-collector>
     </session>
@@ -110,28 +114,51 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/Data.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
-              <caret line="294" column="52" selection-start-line="294" selection-start-column="52" selection-end-line="294" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/entities/Instance.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="49" column="32" selection-start-line="49" selection-start-column="32" selection-end-line="49" selection-end-column="32" />
+            <state relative-caret-position="496">
+              <caret line="105" column="36" selection-start-line="105" selection-start-column="36" selection-end-line="105" selection-end-column="36" />
+              <folding>
+                <element signature="e#3107#3108#0" expanded="true" />
+                <element signature="e#3151#3152#0" expanded="true" />
+                <element signature="e#11106#11107#0" expanded="true" />
+                <element signature="e#11138#11139#0" expanded="true" />
+                <element signature="e#11735#11736#0" expanded="true" />
+                <element signature="e#11767#11768#0" expanded="true" />
+                <element signature="e#11809#11810#0" expanded="true" />
+                <element signature="e#11867#11868#0" expanded="true" />
+                <element signature="e#13929#13930#0" expanded="true" />
+                <element signature="e#13984#13985#0" expanded="true" />
+                <element signature="e#14030#14031#0" expanded="true" />
+                <element signature="e#14063#14064#0" expanded="true" />
+                <element signature="e#14106#14107#0" expanded="true" />
+                <element signature="e#14157#14158#0" expanded="true" />
+                <element signature="e#14180#14181#0" expanded="true" />
+                <element signature="e#14196#14197#0" expanded="true" />
+                <element signature="e#14225#14226#0" expanded="true" />
+                <element signature="e#14244#14245#0" expanded="true" />
+                <element signature="e#14422#14423#0" expanded="true" />
+                <element signature="e#14448#14449#0" expanded="true" />
+                <element signature="e#14487#14488#0" expanded="true" />
+                <element signature="e#14514#14515#0" expanded="true" />
+                <element signature="e#14570#14571#0" expanded="true" />
+                <element signature="e#14611#14612#0" expanded="true" />
+                <element signature="e#14651#14652#0" expanded="true" />
+                <element signature="e#14681#14682#0" expanded="true" />
+                <element signature="e#14742#14743#0" expanded="true" />
+                <element signature="e#14789#14790#0" expanded="true" />
+                <element signature="e#14835#14836#0" expanded="true" />
+                <element signature="e#14860#14861#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseGUI.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/behaviour/Occupation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1139">
-              <caret line="74" column="47" selection-start-line="74" selection-start-column="47" selection-end-line="74" selection-end-column="47" />
+            <state relative-caret-position="374">
+              <caret line="26" column="22" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -140,28 +167,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/threads/LogicThread.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/constants/GameConstants.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="51" selection-start-line="12" selection-start-column="51" selection-end-line="12" selection-end-column="51" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/gui/GUIInterface.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="42" selection-start-line="6" selection-start-column="42" selection-end-line="6" selection-end-column="42" />
+            <state relative-caret-position="499">
+              <caret line="149" column="27" lean-forward="true" selection-start-line="149" selection-start-column="27" selection-end-line="149" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -169,26 +178,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/entities/creatures.neo">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="26" column="33" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
+            <state relative-caret-position="372">
+              <caret line="49" column="20" lean-forward="true" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/engine/Engine.java">
+        <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/mating.neo">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="89" column="76" selection-start-line="89" selection-start-column="76" selection-end-line="89" selection-end-column="76" />
+            <state relative-caret-position="340">
+              <caret line="20" column="24" lean-forward="true" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Start.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/attributes.neo">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="578">
-              <caret line="34" column="20" selection-start-line="34" selection-start-column="20" selection-end-line="34" selection-end-column="20" />
+            <state relative-caret-position="525">
+              <caret line="49" column="46" selection-start-line="49" selection-start-column="46" selection-end-line="49" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -196,8 +205,43 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/sleeping.neo">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
+            <state relative-caret-position="442">
+              <caret line="26" column="26" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/strolling.neo">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="27" column="33" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="40" column="67" selection-start-line="40" selection-start-column="67" selection-end-line="40" selection-end-column="67" />
+              <folding>
+                <element signature="e#2906#2907#0" expanded="true" />
+                <element signature="e#2981#2982#0" expanded="true" />
+                <element signature="e#3437#3438#0" expanded="true" />
+                <element signature="e#3505#3506#0" expanded="true" />
+                <element signature="e#3548#3549#0" expanded="true" />
+                <element signature="e#3575#3576#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/proto/Container.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="440">
+              <caret line="118" column="18" selection-start-line="118" selection-start-column="18" selection-end-line="118" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -215,8 +259,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>colorsVboId</find>
-      <find>colors</find>
       <find>vertices</find>
       <find>attentuation</find>
       <find>positionInView</find>
@@ -242,9 +284,11 @@
       <find>color</find>
       <find>attLife</find>
       <find>PRINT</find>
-      <find>MIX</find>
       <find>load</find>
       <find>Life</find>
+      <find>MIX</find>
+      <find>destroy</find>
+      <find>addOc</find>
     </findStrings>
     <replaceStrings>
       <replace>indicesVboId</replace>
@@ -293,12 +337,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/objects/planet/Sun.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/MainNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/BreakStatementNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" />
         <option value="$PROJECT_DIR$/src/main/java/constants/TopologyConstants.java" />
-        <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/variables/DataType.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/effects/Effect.java" />
@@ -308,7 +347,6 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/UnaryOperationExecuter.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/utils/TokenNumerifier.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/entities/Effect.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/proto/ProtoAttribute.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/Interpreter.java" />
         <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/eating.neo" />
@@ -325,25 +363,31 @@
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/Parser.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/logic/topology/GeographicCoordinates.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/parser/constants/TokenConstants.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java" />
-        <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/mating.neo" />
         <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/eating.neo" />
-        <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/attributes.neo" />
         <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/entities/items.neo" />
         <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/strolling.neo" />
         <option value="$PROJECT_DIR$/data/loadorder.txt" />
         <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/global.neo" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/renderer/Renderer.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/graphics/gui/GUIInterface.java" />
-        <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/sleeping.neo" />
-        <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/entities/creatures.neo" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseGUI.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/threads/RenderThread.java" />
         <option value="$PROJECT_DIR$/src/main/java/Start.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/Engine.java" />
         <option value="$PROJECT_DIR$/src/main/java/engine/data/Data.java" />
-        <option value="$PROJECT_DIR$/src/main/java/engine/data/entities/Instance.java" />
         <option value="$PROJECT_DIR$/src/main/java/constants/GameConstants.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseGUI.java" />
+        <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/logic/topology/Pathfinding.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/data/Script.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/data/behaviour/Occupation.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/data/entities/Instance.java" />
+        <option value="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java" />
+        <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/sleeping.neo" />
+        <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/entities/creatures.neo" />
+        <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/mating.neo" />
+        <option value="$PROJECT_DIR$/data/mods/vanilla/definitions/attributes.neo" />
       </list>
     </option>
   </component>
@@ -498,7 +542,67 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="engine" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="variables" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
               <item name="graphics" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
+              <item name="topology" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
+              <item name="parser" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
+              <item name="parser" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
+              <item name="parser" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="execution" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
+              <item name="parser" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="nodes" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="NeolithicV2" type="b2602c69:ProjectViewProjectNode" />
@@ -547,7 +651,7 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1565193733083" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1565265779269" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/opentest4j-1.0.0.jar!/" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -556,17 +660,16 @@
     <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\Projects\Neolithic\game\data\mods\vanilla\definitions\objects" />
-      <recent name="E:\Projects\Neolithic\game\data\mods\vanilla\definitions\behaviour" />
-      <recent name="$PROJECT_DIR$/src/main/java/engine/graphics/" />
-      <recent name="$PROJECT_DIR$/src/main/resources/shaders" />
-    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="engine.data" />
       <recent name="renderer" />
       <recent name="math" />
       <recent name="" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/resources" />
+      <recent name="$PROJECT_DIR$/src/main/resources/shaders" />
+      <recent name="$PROJECT_DIR$/src/main/java/math" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="engine.threads" />
@@ -575,10 +678,11 @@
       <recent name="engine.parser.scripts.exceptions" />
       <recent name="engine.data.identifiers" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/test/resources" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Projects\Neolithic\game\data\mods\vanilla\definitions\objects" />
+      <recent name="E:\Projects\Neolithic\game\data\mods\vanilla\definitions\behaviour" />
+      <recent name="$PROJECT_DIR$/src/main/java/engine/graphics/" />
       <recent name="$PROJECT_DIR$/src/main/resources/shaders" />
-      <recent name="$PROJECT_DIR$/src/main/java/math" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -742,7 +846,7 @@
       <workItem from="1565008369319" duration="7284000" />
       <workItem from="1565082687742" duration="23265000" />
       <workItem from="1565166041015" duration="19089000" />
-      <workItem from="1565251183897" duration="3239000" />
+      <workItem from="1565251183897" duration="11966000" />
     </task>
     <servers />
   </component>
@@ -779,7 +883,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="803332000" />
+    <option name="totallyTimeSpent" value="812059000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
@@ -839,36 +943,6 @@
     <select />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/BinaryOperationExecuter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="51" column="64" selection-start-line="51" selection-start-column="64" selection-end-line="51" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/effects/Effect.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/proto/ProcessContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/proto/EffectContainer.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/constants/ScriptConstants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="76" selection-start-line="12" selection-start-column="76" selection-end-line="12" selection-end-column="76" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/variables/DataType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="7" selection-start-line="17" selection-start-column="7" selection-end-line="17" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Token.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
@@ -880,6 +954,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="697">
           <caret line="51" column="39" selection-start-line="51" selection-start-column="39" selection-end-line="51" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1830#1831#0" expanded="true" />
+            <element signature="e#1930#1931#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -901,13 +980,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="748">
           <caret line="54" column="50" selection-start-line="54" selection-start-column="50" selection-end-line="54" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5457">
-          <caret line="335" column="44" selection-start-line="335" selection-start-column="44" selection-end-line="335" selection-end-column="44" />
         </state>
       </provider>
     </entry>
@@ -1002,20 +1074,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="239" column="50" selection-start-line="239" selection-start-column="50" selection-end-line="239" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/mating.neo">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="26" column="29" selection-start-line="26" selection-start-column="29" selection-end-line="26" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/eating.neo">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -1027,13 +1085,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" column="23" selection-start-line="8" selection-start-column="23" selection-end-line="8" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/strolling.neo">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="27" column="33" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
         </state>
       </provider>
     </entry>
@@ -1065,13 +1116,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/attributes.neo">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="39" column="20" selection-start-line="39" selection-start-column="20" selection-end-line="39" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/mods/mod01/definitions/test.neo">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1083,13 +1127,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="7" selection-start-column="7" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="37" lean-forward="true" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
         </state>
       </provider>
     </entry>
@@ -1108,16 +1145,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseGUI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1139">
-          <caret line="74" column="47" selection-start-line="74" selection-start-column="47" selection-end-line="74" selection-end-column="47" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/threads/LogicThread.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -1129,20 +1156,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="6" column="42" selection-start-line="6" selection-start-column="42" selection-end-line="6" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/entities/creatures.neo">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="33" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/sleeping.neo">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
         </state>
       </provider>
     </entry>
@@ -1174,10 +1187,168 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/graphics/gui/BaseGUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="582">
+          <caret line="85" column="51" selection-start-line="85" selection-start-column="51" selection-end-line="85" selection-end-column="51" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/worldGen01.neo">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="57" selection-start-line="24" selection-start-column="57" selection-end-line="24" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/logic/topology/Pathfinding.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="46" column="67" selection-start-line="46" selection-start-column="67" selection-end-line="46" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/variables/DataType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="349">
+          <caret line="238" column="33" selection-start-line="238" selection-start-column="33" selection-end-line="238" selection-end-column="33" />
+          <folding>
+            <element signature="e#8993#8994#0" expanded="true" />
+            <element signature="e#9009#9010#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/Script.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="103" column="31" selection-start-line="103" selection-start-column="31" selection-end-line="103" selection-end-column="31" />
+          <folding>
+            <element signature="e#2724#2725#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/proto/Container.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="118" column="18" selection-start-line="118" selection-start-column="18" selection-end-line="118" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="499">
+          <caret line="149" column="27" lean-forward="true" selection-start-line="149" selection-start-column="27" selection-end-line="149" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/behaviour/Occupation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="26" column="22" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/engine/data/entities/Instance.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="496">
+          <caret line="105" column="36" selection-start-line="105" selection-start-column="36" selection-end-line="105" selection-end-column="36" />
+          <folding>
+            <element signature="e#3107#3108#0" expanded="true" />
+            <element signature="e#3151#3152#0" expanded="true" />
+            <element signature="e#11106#11107#0" expanded="true" />
+            <element signature="e#11138#11139#0" expanded="true" />
+            <element signature="e#11735#11736#0" expanded="true" />
+            <element signature="e#11767#11768#0" expanded="true" />
+            <element signature="e#11809#11810#0" expanded="true" />
+            <element signature="e#11867#11868#0" expanded="true" />
+            <element signature="e#13929#13930#0" expanded="true" />
+            <element signature="e#13984#13985#0" expanded="true" />
+            <element signature="e#14030#14031#0" expanded="true" />
+            <element signature="e#14063#14064#0" expanded="true" />
+            <element signature="e#14106#14107#0" expanded="true" />
+            <element signature="e#14157#14158#0" expanded="true" />
+            <element signature="e#14180#14181#0" expanded="true" />
+            <element signature="e#14196#14197#0" expanded="true" />
+            <element signature="e#14225#14226#0" expanded="true" />
+            <element signature="e#14244#14245#0" expanded="true" />
+            <element signature="e#14422#14423#0" expanded="true" />
+            <element signature="e#14448#14449#0" expanded="true" />
+            <element signature="e#14487#14488#0" expanded="true" />
+            <element signature="e#14514#14515#0" expanded="true" />
+            <element signature="e#14570#14571#0" expanded="true" />
+            <element signature="e#14611#14612#0" expanded="true" />
+            <element signature="e#14651#14652#0" expanded="true" />
+            <element signature="e#14681#14682#0" expanded="true" />
+            <element signature="e#14742#14743#0" expanded="true" />
+            <element signature="e#14789#14790#0" expanded="true" />
+            <element signature="e#14835#14836#0" expanded="true" />
+            <element signature="e#14860#14861#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/IdentifierNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="40" column="67" selection-start-line="40" selection-start-column="67" selection-end-line="40" selection-end-column="67" />
+          <folding>
+            <element signature="e#2906#2907#0" expanded="true" />
+            <element signature="e#2981#2982#0" expanded="true" />
+            <element signature="e#3437#3438#0" expanded="true" />
+            <element signature="e#3505#3506#0" expanded="true" />
+            <element signature="e#3548#3549#0" expanded="true" />
+            <element signature="e#3575#3576#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/sleeping.neo">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
-          <caret line="49" column="32" selection-start-line="49" selection-start-column="32" selection-end-line="49" selection-end-column="32" />
+          <caret line="26" column="26" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/strolling.neo">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="27" column="33" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/entities/creatures.neo">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="372">
+          <caret line="49" column="20" lean-forward="true" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/mating.neo">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="24" lean-forward="true" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/mods/vanilla/definitions/attributes.neo">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="49" column="46" selection-start-line="49" selection-start-column="46" selection-end-line="49" selection-end-column="46" />
         </state>
       </provider>
     </entry>

@@ -101,6 +101,10 @@ public class Script implements IDInterface {
 		return id;
 	}
 
+	public String getTextId() {
+		return textId;
+	}
+
 	@Override
 	public IDInterface merge(IDInterface other) {
 		return other; // overwrite older scripts with newer ones

@@ -1,14 +1,15 @@
 package engine.data.behaviour;
 
+import engine.data.Script;
 import engine.data.entities.Instance;
 
 public class Occupation {
 
     int completeDuration = 0;
     int remainingDuration = 0;
-    String callBackScript = null;
+    Script callBackScript = null;
 
-    public Occupation(int duration, String callBackScript) {
+    public Occupation(int duration, Script callBackScript) {
         completeDuration = duration;
         this.callBackScript = callBackScript;
     }

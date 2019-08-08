@@ -16,7 +16,7 @@ Creature: cMonkey {
 		driHunger;
 		driMate;
 		driSleep;
-		driMove;
+		//driMove;
 	}
 
 	attributes {
@@ -24,7 +24,7 @@ Creature: cMonkey {
 
         attLightSensitivity, 60;
         attHungerSensitivity, 100;
-        attFatigueSensitivity, 200;
+        attFatigueSensitivity, 160;
 
         attCuriosity, 250;
         attSleepTime, 700;
@@ -51,8 +51,10 @@ Creature: cMonkey {
                  ..attNutrition--;
             }
 
-            if (chance(0.5)) {
-                ..attFatigue++;
+            ..attFatigue++;
+		} else {
+		    if (..attFatigue > 0) {
+		        ..attFatigue--;
             }
 		}
 
@@ -70,7 +72,7 @@ Creature: cMonkey {
 		    print(getEffects(self));
 		}
 
-		if (.attHealth < 0) {
+		if (.attHealth < 0) { // monkey death
 		    if (self->id == main->monkey) {
 		        main->monkey = 0;
 		    }
@@ -85,9 +87,5 @@ Creature: cMonkey {
         h1 = getHeight(from);
         h2 = getHeight(to);
         return ((h2 >= 100) && (abs(h1-h2) <= .attStepHeight));
-	}
-
-	Script: awake() {
-	    ..attFatigue = 0;
 	}
 }

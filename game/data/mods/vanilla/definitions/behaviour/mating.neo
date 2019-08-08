@@ -6,7 +6,7 @@
 Drive: driMate {
     Script: condition {
         require(self.attNutrition >= 69);
-        require(self.attFatigue < 420);
+        require(self.attFatigue < 100);
     }
 
     solutions {
@@ -21,7 +21,7 @@ Process: proMate {
         require(->mate);
     }
     Script: process {
-        addEffect(self, "Postcoital exhaustion", 60, [
+        addEffect(self, "Postcoital exhaustion", 300, [
             "attFatigue", 300
         ]);
         ..attNutrition -= 69;

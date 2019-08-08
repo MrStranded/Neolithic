@@ -33,6 +33,13 @@ public class IdentifierNode extends AbstractScriptNode {
 					variable = Variable.withName(identifier.getValue());
 					targetInstance.addVariable(variable);
 				}
+			} else if (targetContainer != null) {
+				Script targetScript = targetContainer.getScript(identifier.getValue());
+				if (targetScript != null) {
+					variable = new Variable(targetScript);
+				} else { // script does not exist -> just feed the string value of the identifier into the variable
+					variable = new Variable(identifier.getValue());
+				}
 			} else { // retrieve variable from current script scope OR retrieve container from "global" scope
 				variable = script.getVariable(identifier.getValue());
 				if (variable == null) { // script scope does not contain variable -> search through containers

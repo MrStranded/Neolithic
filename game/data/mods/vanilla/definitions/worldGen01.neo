@@ -22,7 +22,7 @@ WorldGen: genContinental {
 					monkey = create(cMonkey, t);
 				}
 			}
-			if (getType(t) == tGras) {
+			if (getType(t) == tGras && getHeight(t) > 100) {
 				if (chance(0.3)){
 					create(cTree,t);
 				}

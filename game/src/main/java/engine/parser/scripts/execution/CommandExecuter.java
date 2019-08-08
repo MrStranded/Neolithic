@@ -129,10 +129,21 @@ public class CommandExecuter {
 			if (parameters.length >= 3) {
 				Instance target = parameters[0].getInstance();
 				int duration = parameters[1].getInt();
-				String callBackScript = parameters[2].getString();
+				Script callBackScript = parameters[2].getScript();
+
+				if (callBackScript == null) {
+					Container container = Data.getContainer(target.getId());
+					if (container != null) {
+						callBackScript = container.getScript(parameters[2].getString());
+					}
+				}
 
 				if (target == null) {
 					Logger.error("Target instance value for command '" + command.getValue() + "' is invalid!");
+					return new Variable();
+				}
+				if (callBackScript == null) {
+					Logger.error("Callback Script value for command '" + command.getValue() + "' is invalid!");
 					return new Variable();
 				}
 
@@ -587,7 +598,7 @@ public class CommandExecuter {
 
 							if (Math.random() < protoAttribute.getMutationChance() / 100d) {
 								// +1 because (int) rounds the result down. Math.random() is always < 1
-								value += (int) (-protoAttribute.getMutationExtent() + Math.random() * (protoAttribute.getMutationExtent()+1d));
+								value += Math.floor(-protoAttribute.getMutationExtent() + Math.random() * (2d*protoAttribute.getMutationExtent() + 1d));
 							}
 
 							target.setAttribute(id, value);

@@ -2,10 +2,12 @@ package engine.data.variables;
 
 import engine.data.Data;
 import engine.data.IDInterface;
+import engine.data.Script;
 import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
+import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
 import java.util.List;
@@ -68,6 +70,11 @@ public class Variable implements IDInterface {
 
 	public Variable(Attribute value) {
 		this.type = DataType.ATTRIBUTE;
+		this.value = value;
+	}
+
+	public Variable(Script value) {
+		this.type = DataType.SCRIPT;
 		this.value = value;
 	}
 
@@ -220,10 +227,16 @@ public class Variable implements IDInterface {
 			case CONTAINER:
 				return ((Container) value).getName();
 			case ATTRIBUTE:
-				if ((Attribute) value != null) {
+				if (value != null) {
 					return String.valueOf(((Attribute) value).getValue());
 				} else {
 					return "(NULL ATTRIBUTE)";
+				}
+			case SCRIPT:
+				if (value != null) {
+					return ((Script) value).getTextId();
+				} else {
+					return "(NULL SCRIPT)";
 				}
 			case LIST:
 				StringBuilder values = new StringBuilder("[");
@@ -301,6 +314,18 @@ public class Variable implements IDInterface {
 		value = v;
 	}
 
+	// ----------------------------------------------- script
+	public Script getScript() {
+		if (type == DataType.SCRIPT) {
+			return (Script) value;
+		}
+		return null;
+	}
+	public void setScript(Script v) {
+		type = DataType.SCRIPT;
+		value = v;
+	}
+
 	// ----------------------------------------------- list
 	public List<Variable> getList() {
 		if (type == DataType.LIST) {
@@ -324,7 +349,7 @@ public class Variable implements IDInterface {
 
 	@Override
 	public IDInterface merge(IDInterface other) {
-		System.out.println("Variable insertion collision! " + getId() + " from " + toString() + " | " + other.getId() + " from " + other.toString() + "");
+		Logger.error("Variable insertion collision! hash from " + toString() + " : " + getId() + " | hash from " + other.toString() + " : " + other.getId() + "");
 		return other; // replace old value with new one
 	}
 
@@ -347,6 +372,8 @@ public class Variable implements IDInterface {
 				return pre + (Container) value;
 			case ATTRIBUTE:
 				return pre + (Attribute) value;
+			case SCRIPT:
+				return pre + ((Script) value).getTextId();
 			case LIST:
 				if (value != null) {
 					StringBuilder values = new StringBuilder("[");

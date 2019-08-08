@@ -73,7 +73,7 @@ public class Instance {
     }
 
 	// ###################################################################################
-	// ################################ Game Logic #######################################
+	// ################################ Running Scripts ##################################
 	// ###################################################################################
 
 	public Variable run(String textID, Variable[] parameters) {
@@ -93,6 +93,18 @@ public class Instance {
 		return new Variable();
 	}
 
+	public Variable run(Script script, Variable[] parameters) {
+		return runScript(script, parameters);
+	}
+
+	/**
+	 * Do not use this method other than in a run() method!
+	 * Finally runs the scripts and returns the result as a variable.
+	 * If the script does not exist, 1 is returned.
+	 * @param script to execute
+	 * @param parameters of the script call
+	 * @return result of script or 1
+	 */
 	private Variable runScript(Script script, Variable[] parameters) {
 		if (script != null) {
 			return script.run(this, parameters);
@@ -100,6 +112,10 @@ public class Instance {
 			return new Variable(1); // script does not exist -> interpreted as true / condition fulfilled
 		}
 	}
+
+	// ###################################################################################
+	// ################################ Game Logic #######################################
+	// ###################################################################################
 
 	private void searchProcesses(List<ContainerIdentifier> processes) {
 		if (processes != null && !processes.isEmpty()) {
@@ -156,7 +172,7 @@ public class Instance {
 	    return !run(ScriptConstants.EVENT_CAN_GO, new Variable[] {new Variable(from), new Variable(to)}).isNull();
 	}
 
-	public void addOccupation(int duration, String callBackScript) {
+	public void addOccupation(int duration, Script callBackScript) {
 	    occupations.add(new Occupation(duration, callBackScript));
     }
 
@@ -173,9 +189,6 @@ public class Instance {
             if (container != null && container.getType() == DataType.CREATURE) {
                 searchProcesses(((CreatureContainer) container).getDrives());
             }
-
-            // ----------- calculate tick script
-            run(ScriptConstants.EVENT_TICK, null);
         } else {
             // ----------- calculate occupations
 	        Occupation currentOccupation = occupations.peek();
@@ -186,6 +199,9 @@ public class Instance {
 	            occupations.poll();
             }
         }
+
+		// ----------- calculate tick script
+		run(ScriptConstants.EVENT_TICK, null);
 
         cleanEffects();
 	}
@@ -291,6 +307,9 @@ public class Instance {
 
 	public void destroy() {
 		slatedForRemoval = true;
+		if (subInstances != null) {
+			subInstances.forEach(instance -> instance.setSlatedForRemoval(true));
+		}
 		if (superInstance != null) {
 			superInstance.removeSubInstance(this);
 		}
@@ -469,6 +488,10 @@ public class Instance {
 	}
 	public void setSlatedForRemoval(boolean slatedForRemoval) {
 		this.slatedForRemoval = slatedForRemoval;
+	}
+
+	public Queue<Occupation> getOccupations() {
+		return occupations;
 	}
 
 	// ###################################################################################
