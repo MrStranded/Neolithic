@@ -20,7 +20,7 @@ WorldGen: genContinental {
 			if (getHeight(t) > 100) {
 				if (chance(0.01)) {
 					monkey = create(cMonkey, t);
-					monkey..attAge += random(2880);
+					//monkey..attAge += random(2880);
 				}
 			}
 			if (getType(t) == tGras && getHeight(t) > 100) {

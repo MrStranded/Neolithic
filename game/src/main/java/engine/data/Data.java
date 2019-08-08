@@ -40,6 +40,13 @@ public class Data {
 
 	private static Queue<Instance> instanceQueue;
 
+	/**
+	 * The publicInstanceList is used to access the instances in list form without causing a ConcurrentModificationException.
+	 * The list is regularly set by the logic thread.
+	 */
+	private static List<Instance> publicInstanceList;
+	private static boolean instanceListLocked = false;
+
 	// ###################################################################################
 	// ################################ Initialization ###################################
 	// ###################################################################################
@@ -141,8 +148,16 @@ public class Data {
 	public static List<Instance> getAllInstancesWithID(int id) {
 		List<Instance> list = new ArrayList<>();
 
+		while (instanceListLocked) { // lock on publicInstanceList -> it is currently being reset
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
 		try {
-			for (Instance instance : instanceQueue) {
+			for (Instance instance : publicInstanceList) {
 				if (instance.getId() == id) {
 					list.add(instance);
 				}
@@ -290,9 +305,9 @@ public class Data {
      * This method shuffles the positions of the instances in the instance queue.
      */
     public static void shuffleInstanceQueue() {
-        List<Instance> list = new ArrayList<>(instanceQueue);
+    	List<Instance> list = new ArrayList<>(instanceQueue);
         Collections.shuffle(list);
-        instanceQueue = new ConcurrentLinkedQueue<>();
+        instanceQueue.clear();
         instanceQueue.addAll(list);
     }
 
@@ -326,7 +341,17 @@ public class Data {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-    public static Container getMainContainer() {
+	public static List<Instance> getPublicInstanceList() {
+		return publicInstanceList;
+	}
+	public static void setPublicInstanceList(List<Instance> publicInstanceList) {
+    	instanceListLocked = true;
+    	Data.publicInstanceList = new ArrayList<>(publicInstanceList.size());
+		Data.publicInstanceList.addAll(publicInstanceList);
+		instanceListLocked = false;
+	}
+
+	public static Container getMainContainer() {
         return mainContainer;
     }
     public static Instance getMainInstance() { return mainInstance; }

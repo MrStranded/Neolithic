@@ -16,7 +16,7 @@ Effect: effHunger {
             }
         } else {
             ..attHealth--;
-            ..attFatigue++;
+            carrier..attFatigue++;
         }
     }
 

@@ -5,7 +5,7 @@
 
 Drive: driSleep {
 	Script: condition {
-		//require((.attFatigue > .attFatigueSensitivity) || (.attNutrition < 0));
+		require(.attFatigue > .attFatigueSensitivity);
 		require(getLightLevel(self) <= .attLightSensitivity);
 	}
 

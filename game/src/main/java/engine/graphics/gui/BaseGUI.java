@@ -57,7 +57,14 @@ public class BaseGUI implements GUIInterface {
 		double nrOfAtts = attributes.size();
 		List<Instance> monkeys = Data.getAllInstancesWithID(Data.getContainerID("cMonkey"));
 		double headcount = monkeys.size();
-		if (nrOfAtts == 0 || headcount == 0) { return; }
+		if (nrOfAtts == 0 || headcount == 0) {
+			GUIObject dead = new TextObject("Everybody died", fontTexture);
+			dead.setSize(windowWidth/4, 30);
+			dead.setLocation(windowWidth/2, 0);
+			dead.recalculateScale(windowWidth, windowHeight);
+			objects[0] = dead;
+			return;
+		}
 
 		int sleepingID = Data.getProtoAttributeID("attSleeping");
 
@@ -99,7 +106,7 @@ public class BaseGUI implements GUIInterface {
 
 		double nrOfChildren = 0;
 		for (Instance monkey : monkeys) {
-			nrOfChildren += monkey.getAttributeValue(Data.getContainerID("attAge")) >= monkey.getAttributeValue(Data.getContainerID("attMatureAge")) ? 0 : 1;
+			nrOfChildren += monkey.getAttributeValue(Data.getProtoAttributeID("attAge")) < monkey.getAttributeValue(Data.getProtoAttributeID("attMatureAge")) ? 1 : 0;
 		}
 
 		GUIObject sleepers = new TextObject("Children: " + ((int) nrOfChildren), fontTexture);

@@ -5,6 +5,9 @@ import engine.data.Data;
 import engine.data.entities.Instance;
 import engine.graphics.gui.window.Window;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LogicThread extends Thread {
 
 	private Window window;
@@ -16,6 +19,9 @@ public class LogicThread extends Thread {
 
 	@Override
 	public void run() {
+		int lastSize = 100;
+		List<Instance> instanceList = new ArrayList<>(lastSize);
+
 		long t = System.currentTimeMillis();
 		while (!window.isClosed()) {
 			long currentTime = System.currentTimeMillis();
@@ -24,11 +30,19 @@ public class LogicThread extends Thread {
 				for (int i = 0; i < GameConstants.INSTANCES_PER_TICK; i++) {
 					Instance instance = Data.getNextInstance();
 
+					if (instance == Data.getMainInstance()) {
+						Data.setPublicInstanceList(instanceList);
+						instanceList = new ArrayList<>(lastSize);
+						lastSize = 0;
+					}
+
 					if (instance != null) {
 						if (!instance.isSlatedForRemoval()) {
 							instance.tick();
 
 							Data.addInstanceToQueue(instance);
+							instanceList.add(instance);
+							lastSize++;
 						}
 
 						t = System.currentTimeMillis();

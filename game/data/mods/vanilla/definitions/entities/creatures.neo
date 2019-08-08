@@ -56,7 +56,7 @@ Creature: cMonkey {
             }
 		}
 
-		if (self->id == main->monkey && false) {
+		if (self->id == main->monkey) {
 		    print(self->id + " his stats: -------------------------------------");
 		    print("light sense:      " + .attLightSensitivity);
 		    print("hunger sense:     " + .attHungerSensitivity);

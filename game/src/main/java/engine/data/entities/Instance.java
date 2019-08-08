@@ -344,14 +344,18 @@ public class Instance {
     }
 
 	public void destroy() {
-		slatedForRemoval = true;
-		if (subInstances != null) {
-			subInstances.forEach(instance -> instance.setSlatedForRemoval(true));
-		}
+		recursiveSlatingForRemoval();
 		if (superInstance != null) {
 			superInstance.removeSubInstance(this);
 		}
 		superInstance = null;
+	}
+
+	private void recursiveSlatingForRemoval() {
+		slatedForRemoval = true;
+		if (subInstances != null) {
+			subInstances.forEach(Instance::recursiveSlatingForRemoval);
+		}
 	}
 
 	// ###################################################################################
