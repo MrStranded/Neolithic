@@ -68,7 +68,7 @@ public class Engine extends Thread {
 		Data.updateInstancePositions();
 		System.out.println("Executing WorldGen Script took: "+(System.currentTimeMillis()-time)+" ms");
 
-		Data.shuffleInstanceQueue();
+		//Data.shuffleInstanceQueue();
 	}
 
 	/**

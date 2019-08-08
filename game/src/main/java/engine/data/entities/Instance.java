@@ -12,6 +12,7 @@ import engine.data.proto.CreatureContainer;
 import engine.data.proto.DriveContainer;
 import engine.data.proto.ProcessContainer;
 import engine.data.Script;
+import engine.data.structures.WeightedList;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
@@ -117,44 +118,81 @@ public class Instance {
 	// ################################ Game Logic #######################################
 	// ###################################################################################
 
-	private void searchProcesses(List<ContainerIdentifier> processes) {
-		if (processes != null && !processes.isEmpty()) {
+	/**
+	 * Goes through all drives of the creature and sorts the triggered drives by their weight.
+	 * Then the method tries to execute a process of one of the drives, starting with the most important one.
+	 * @param drives to look through
+	 */
+	private void searchDrive(List<ContainerIdentifier> drives) {
+		WeightedList<Container> weightedDrives = new WeightedList<>();
+
+		if (drives != null) {
+			for (ContainerIdentifier drive : drives) {
+				Container container = drive.retrieve();
+				if (container != null) {
+
+					if (!run(container, ScriptConstants.EVENT_CONDITION, null).isNull()) { // condition is fulfilled
+
+						double weight = run(container, ScriptConstants.EVENT_GET_WEIGHT, null).getDouble();
+						weightedDrives.add(container, weight);
+
+					}
+				}
+			}
+		}
+
+		for (Container drive : weightedDrives.list()) {
+			//if (drive.getType() == DataType.DRIVE) { // look through solutions of triggered drive
+
+				Container process = searchProcesses(((DriveContainer) drive).getSolutions());
+				if (process != null) {
+
+					run(process, ScriptConstants.EVENT_PROCESS, null);
+					break; // only one process per tick
+
+				}
+			//}
+		}
+
+	}
+
+	/**
+	 * Returns the first encountered process which fulfills its condition and returns it.
+	 * Iteratively searches sub solutions.
+	 * @param processes to look through
+	 * @return process with fulfilled condition or null
+	 */
+	private Container searchProcesses(List<ContainerIdentifier> processes) {
+		if (processes != null) {
 			for (ContainerIdentifier process : processes) {
 				Container container = process.retrieve();
 				if (container != null && knowsProcess(container)) {
 					if (!run(container, ScriptConstants.EVENT_CONDITION, null).isNull()) { // condition is fulfilled
 
-						if (container.getType() == DataType.PROCESS) { // execute process
-							run(container, ScriptConstants.EVENT_PROCESS, null);
-						} else if (container.getType() == DataType.DRIVE) { // look through solutions of triggered drive
-							searchProcesses(((DriveContainer) container).getSolutions());
-						}
-						break; // only one drive / one process for resolving is executed
+						return container;
 
 					} else { // condition not fulfilled -> if process, look through alternatives
 
 						if (container.getType() == DataType.PROCESS) {
-							searchProcesses(((ProcessContainer) container).getSolutions());
+							Container solution = searchProcesses(((ProcessContainer) container).getSolutions());
+							if (solution != null) {
+								return solution;
+							}
 						}
 
 					}
 				}
 			}
 		}
+		return null;
 	}
 
 	/**
 	 * Returns true if the given entity knows the requested process.
-	 * Returns true if the given container is a drive.
 	 * @param container
 	 * @return
 	 */
 	private boolean knowsProcess(Container container) {
-		// drives require no knowledge of the processes
-		if (container.getType() == DataType.DRIVE) {
-			return true;
-		}
-
 		// check the knowledge base of the creature to see whether it knows the process
 		Container selfContainer = Data.getContainer(id);
 		if (selfContainer.getType() == DataType.CREATURE) {
@@ -187,7 +225,7 @@ public class Instance {
             // ----------- calculate drives
             Container container = Data.getContainer(id);
             if (container != null && container.getType() == DataType.CREATURE) {
-                searchProcesses(((CreatureContainer) container).getDrives());
+                searchDrive(((CreatureContainer) container).getDrives());
             }
         } else {
             // ----------- calculate occupations

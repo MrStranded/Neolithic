@@ -16,11 +16,13 @@ Creature: cMonkey {
 		driHunger;
 		driMate;
 		driSleep;
-		//driMove;
+		driMove;
 	}
 
 	attributes {
 		attHealth, 100;
+
+        attMatureAge, 1000;
 
         attLightSensitivity, 60;
         attHungerSensitivity, 100;

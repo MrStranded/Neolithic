@@ -31,6 +31,10 @@ Drive: driMove {
 	solutions {
 		proStroll;
 	}
+
+	Script: getWeight() {
+	    return(max(.attCuriosity - .attFatigue, 0));
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////// Processes
@@ -43,7 +47,7 @@ Process: proStroll {
 		    if (chance(0.01)) {
 		        addEffect(self, effAchingFeet);
 		    }
-		    self..attNutrition--;
+		    //self..attNutrition--;
 		}
 	}
 

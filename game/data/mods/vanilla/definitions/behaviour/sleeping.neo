@@ -12,6 +12,10 @@ Drive: driSleep {
 	solutions {
 		proSleep;
 	}
+
+	Script: getWeight() {
+	    return(max(.attFatigue - .attFatigueSensitivity, 0));
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////// Processes

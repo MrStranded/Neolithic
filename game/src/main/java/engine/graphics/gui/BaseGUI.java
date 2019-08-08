@@ -51,7 +51,7 @@ public class BaseGUI implements GUIInterface {
 	// ###################################################################################
 
 	public void tick(int windowWidth, int windowHeight) {
-		int slot = 2;
+		int slot = 3;
 
 		List<Integer> attributes = Data.getAllAttributeIDs();
 		double nrOfAtts = attributes.size();
@@ -96,6 +96,17 @@ public class BaseGUI implements GUIInterface {
 				slot = 1;
 			}
 		}
+
+		double nrOfChildren = 0;
+		for (Instance monkey : monkeys) {
+			nrOfChildren += monkey.getAttributeValue(Data.getContainerID("attAge")) >= monkey.getAttributeValue(Data.getContainerID("attMatureAge")) ? 0 : 1;
+		}
+
+		GUIObject sleepers = new TextObject("Children: " + ((int) nrOfChildren), fontTexture);
+		sleepers.setSize(windowWidth/4, 30);
+		sleepers.setLocation(windowWidth/2, 30);
+		sleepers.recalculateScale(windowWidth, windowHeight);
+		objects[2] = sleepers;
 	}
 
 	// ###################################################################################

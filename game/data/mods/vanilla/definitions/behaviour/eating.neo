@@ -45,6 +45,10 @@ Drive: driHunger {
 	solutions {
 		proEat;
 	}
+
+	Script: getWeight() {
+	    return(max(.attHungerSensitivity - .attNutrition, 0));
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////// Processes

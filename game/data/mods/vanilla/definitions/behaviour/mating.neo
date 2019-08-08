@@ -1,17 +1,35 @@
 
 ///////////////////////////////////////////////////////////////////////////// Effects
 
+Effect: effInfant {
+    name = "Infant";
+
+    attributes {
+        attViewingDistance, "-3";
+        attSpeed, "-1";
+    }
+
+    Script: removeCondition(carrier) {
+        require(carrier.attAge >= carrier.attMatureAge);
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////// Drives
 
 Drive: driMate {
     Script: condition {
         require(self.attNutrition >= 69);
         require(self.attFatigue < 100);
+        require(self.attAge >= self.attMatureAge);
     }
 
     solutions {
         proMate;
     }
+
+	Script: getWeight() {
+	    return(max(.attAge - .attMatureAge, 0));
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////// Processes
@@ -28,6 +46,7 @@ Process: proMate {
 
         child = create(getType(self), getTile(self));
         mixAttributes(child, self, ->mate);
+        addEffect(child, effInfant);
     }
 
     solutions {
@@ -40,7 +59,7 @@ Process: proSearchMate {
         creatures = getCreaturesInRange(getType(self), getTile(self), .attViewingDistance);
         ->mate = false;
         for (creature : creatures) {
-            if (creature != self) {
+            if (creature != self && creature.attAge >= creature.attMatureAge) {
                 ->mate = creature;
                 break;
             }
