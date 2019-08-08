@@ -10,13 +10,15 @@ Effect: effHunger {
     }
 
     Script: tick (carrier) {
-        if (carrier.attNutrition > 0) {
-            if (.attHealth < 0) {
-                ..attHealth++;
+        if (!carrier.attSleeping) {
+            if (carrier.attNutrition > 0) {
+                if (.attHealth < 0) {
+                    ..attHealth++;
+                }
+            } else {
+                ..attHealth--;
+                carrier..attFatigue++;
             }
-        } else {
-            ..attHealth--;
-            carrier..attFatigue++;
         }
     }
 
@@ -85,6 +87,7 @@ Process: proGatherFood {
 	}
 	Script: process() {
 		moveTo(self, ->food, .attSpeed);
+		pickUp(self, ->food);
 	}
 	Script: discovery() {
 		require(.attSpeed > 0);

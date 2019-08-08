@@ -18,7 +18,7 @@ import engine.parser.Parser;
  * It controls game logic, data and visualisation.
  */
 
-public class Engine extends Thread {
+public class Engine {
 
 	private static Renderer renderer;
 	private static Window window;
@@ -68,7 +68,7 @@ public class Engine extends Thread {
 		Data.updateInstancePositions();
 		System.out.println("Executing WorldGen Script took: "+(System.currentTimeMillis()-time)+" ms");
 
-		//Data.shuffleInstanceQueue();
+		Data.shuffleInstanceQueue();
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class Engine extends Thread {
 			long elapsedTime = System.currentTimeMillis() - t;
 			if (elapsedTime < GameConstants.MILLISECONDS_PER_FRAME) {
 				try {
-					sleep(GameConstants.MILLISECONDS_PER_FRAME - elapsedTime);
+					Thread.sleep(GameConstants.MILLISECONDS_PER_FRAME - elapsedTime);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

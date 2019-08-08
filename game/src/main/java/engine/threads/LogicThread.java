@@ -20,6 +20,7 @@ public class LogicThread extends Thread {
 	@Override
 	public void run() {
 		int lastSize = 100;
+		// each round (mainInstance to mainInstance) we construct the current public instance list from anew
 		List<Instance> instanceList = new ArrayList<>(lastSize);
 
 		long t = System.currentTimeMillis();
@@ -43,6 +44,8 @@ public class LogicThread extends Thread {
 							Data.addInstanceToQueue(instance);
 							instanceList.add(instance);
 							lastSize++;
+						} else {
+
 						}
 
 						t = System.currentTimeMillis();

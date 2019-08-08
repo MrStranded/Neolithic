@@ -51,7 +51,8 @@ public class BaseGUI implements GUIInterface {
 	// ###################################################################################
 
 	public void tick(int windowWidth, int windowHeight) {
-		int slot = 3;
+		clear();
+		int slot = 0;
 
 		List<Integer> attributes = Data.getAllAttributeIDs();
 		double nrOfAtts = attributes.size();
@@ -59,10 +60,10 @@ public class BaseGUI implements GUIInterface {
 		double headcount = monkeys.size();
 		if (nrOfAtts == 0 || headcount == 0) {
 			GUIObject dead = new TextObject("Everybody died", fontTexture);
-			dead.setSize(windowWidth/4, 30);
-			dead.setLocation(windowWidth/2, 0);
+			dead.setSize(windowWidth/2, 60);
+			dead.setLocation(windowWidth/4, 250);
 			dead.recalculateScale(windowWidth, windowHeight);
-			objects[0] = dead;
+			addHUDObject(dead);
 			return;
 		}
 
@@ -79,25 +80,22 @@ public class BaseGUI implements GUIInterface {
 				sleepers.setSize(windowWidth/4, 30);
 				sleepers.setLocation(windowWidth/2, 0);
 				sleepers.recalculateScale(windowWidth, windowHeight);
-				objects[0] = sleepers;
+				addHUDObject(sleepers);
 				GUIObject sleepers2 = new TextObject(" of: " + ((int) headcount), fontTexture);
 				sleepers2.setSize(windowWidth/4, 30);
 				sleepers2.setLocation(windowWidth*3/4, 0);
 				sleepers2.recalculateScale(windowWidth, windowHeight);
-				objects[1] = sleepers2;
+				addHUDObject(sleepers2);
 			}
 
-			double yPos = ((double) (slot) / (nrOfAtts+1d)) * windowHeight;
+			double yPos = ((double) (slot) / nrOfAtts) * windowHeight;
 			GUIObject out = new TextObject(Data.getProtoAttribute(id).getName() + ":   " + ((double) ((int) (sum/headcount*100d)) / 100d), fontTexture);
 
-			out.setSize(windowWidth/3d,windowHeight/(nrOfAtts+1d));
+			out.setSize(windowWidth/3d,windowHeight/nrOfAtts);
 			out.setLocation(0, yPos);
 			out.recalculateScale(windowWidth,windowHeight);
 
-			if (objects[slot] != null) {
-				objects[slot].cleanUp();
-			}
-			objects[slot] = out;
+			addHUDObject(out);
 
 			if (++slot >= MAX_OBJECTS) {
 				slot = 1;
@@ -109,16 +107,24 @@ public class BaseGUI implements GUIInterface {
 			nrOfChildren += monkey.getAttributeValue(Data.getProtoAttributeID("attAge")) < monkey.getAttributeValue(Data.getProtoAttributeID("attMatureAge")) ? 1 : 0;
 		}
 
-		GUIObject sleepers = new TextObject("Children: " + ((int) nrOfChildren), fontTexture);
-		sleepers.setSize(windowWidth/4, 30);
-		sleepers.setLocation(windowWidth/2, 30);
-		sleepers.recalculateScale(windowWidth, windowHeight);
-		objects[2] = sleepers;
+		GUIObject children = new TextObject("Children: " + ((int) nrOfChildren), fontTexture);
+		children.setSize(windowWidth/4, 30);
+		children.setLocation(windowWidth/2, 30);
+		children.recalculateScale(windowWidth, windowHeight);
+		addHUDObject(children);
 	}
 
 	// ###################################################################################
 	// ################################ Accessing ########################################
 	// ###################################################################################
+
+	private void clear() {
+		objectCounter = 0;
+		for (int i=0; i<objects.length; i++) {
+			if (objects[i] != null) { objects[i].cleanUp(); }
+			objects[i] = null;
+		}
+	}
 
 	public void addHUDObject(GUIObject guiObject) {
 		if (objects[objectCounter] != null) {

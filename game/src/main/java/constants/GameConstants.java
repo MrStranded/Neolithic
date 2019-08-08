@@ -7,7 +7,7 @@ public class GameConstants {
 	public static final int MAX_CONTAINERS = 32;
 	public static final int MAX_ATTRIBUTES = 32;
 
-	public static final long TIME_BETWEEN_TICK_LOADS = 1;
+	public static final long TIME_BETWEEN_TICK_LOADS = 0;
 	public static final int INSTANCES_PER_TICK = 100;
 
 	public static final int FRAMES_PER_SECOND = 120;

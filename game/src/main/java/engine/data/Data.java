@@ -60,7 +60,7 @@ public class Data {
 
 		meshHubs = new HashMap<>(GameConstants.MAX_CONTAINERS);
 
-		instanceQueue = new ConcurrentLinkedQueue<>();
+		instanceQueue = new LinkedList<>();//new ConcurrentLinkedQueue<>();
 
 		// the mainContainer container contains global scripts
 		mainContainer = new Container("mainContainer", DataType.CONTAINER);
@@ -147,14 +147,6 @@ public class Data {
 	 */
 	public static List<Instance> getAllInstancesWithID(int id) {
 		List<Instance> list = new ArrayList<>();
-
-		while (instanceListLocked) { // lock on publicInstanceList -> it is currently being reset
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
 
 		try {
 			for (Instance instance : publicInstanceList) {
@@ -345,10 +337,7 @@ public class Data {
 		return publicInstanceList;
 	}
 	public static void setPublicInstanceList(List<Instance> publicInstanceList) {
-    	instanceListLocked = true;
-    	Data.publicInstanceList = new ArrayList<>(publicInstanceList.size());
-		Data.publicInstanceList.addAll(publicInstanceList);
-		instanceListLocked = false;
+    	Data.publicInstanceList = publicInstanceList;
 	}
 
 	public static Container getMainContainer() {

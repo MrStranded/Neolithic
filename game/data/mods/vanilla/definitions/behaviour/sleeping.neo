@@ -22,7 +22,7 @@ Drive: driSleep {
 
 Process: proSleep {
 	Script: process {
-        deleteEffects(self, effHunger);
+        //deleteEffects(self, effHunger);
 	    addOccupation(self, .attSleepTime, proSleep->awake);
 	    ..attSleeping = 1;
 	}

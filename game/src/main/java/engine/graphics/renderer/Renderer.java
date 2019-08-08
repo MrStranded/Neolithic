@@ -257,7 +257,7 @@ public class Renderer {
 
 		PlanetObject planetObject = planet.getPlanetObject();
 
-		// Render depth map before view ports has been set up
+		// Render depth map before view port has been set up
 		if (scene.getShadowMap() != null) {
 			renderDepthMap(scene.getShadowMap(), scene, hud, planetObject);
 		}
@@ -266,9 +266,8 @@ public class Renderer {
 
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-		if (scene != null) {
-			renderScene(scene, planetObject);
-		}
+		renderScene(scene, planetObject);
+
 		if (hud != null) {
 			renderGUI(hud);
 		}

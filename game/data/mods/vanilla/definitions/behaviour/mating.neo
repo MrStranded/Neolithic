@@ -18,8 +18,8 @@ Effect: effInfant {
 
 Drive: driMate {
     Script: condition {
-        require(self.attNutrition >= 69);
-        require(self.attFatigue < 100);
+        require(self.attNutrition >= .attBabySize);
+        require(self.attFatigue < .attLibido);
         require(self.attAge >= self.attMatureAge);
     }
 
@@ -40,13 +40,14 @@ Process: proMate {
     }
     Script: process {
         addEffect(self, "Postcoital exhaustion", 300, [
-            "attFatigue", 300
+            "attFatigue", .attLibido
         ]);
-        ..attNutrition -= 69;
+        ..attNutrition -= .attBabySize;
 
         child = create(getType(self), getTile(self));
         mixAttributes(child, self, ->mate);
         addEffect(child, effInfant);
+        child..attNutrition += .attBabySize;
     }
 
     solutions {

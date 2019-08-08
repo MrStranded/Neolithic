@@ -22,7 +22,10 @@ Creature: cMonkey {
 	attributes {
 		attHealth, 100;
 
+        attLibido, 200;
         attMatureAge, 1000;
+
+        attBabySize, 50;
 
         attLightSensitivity, 60;
         attHungerSensitivity, 100;
@@ -56,7 +59,7 @@ Creature: cMonkey {
             }
 		}
 
-		if (self->id == main->monkey) {
+		if (self->id == main->monkey && false) {
 		    print(self->id + " his stats: -------------------------------------");
 		    print("light sense:      " + .attLightSensitivity);
 		    print("hunger sense:     " + .attHungerSensitivity);
@@ -78,6 +81,12 @@ Creature: cMonkey {
 		    destroy(self);
         }
 
+		if (.attAge > 10000) { // monkey age death
+		    if (chance(0.01) && !getEffects(self, effCancer)) {
+                addEffect(self, effCancer);
+		    }
+        }
+
         ..attAge++;
 	}
 
@@ -86,4 +95,19 @@ Creature: cMonkey {
         h2 = getHeight(to);
         return ((h2 >= 100) && (abs(h1-h2) <= .attStepHeight));
 	}
+}
+
+///////////////////////////////////////////////////////////////////////////// Effects
+
+Effect: effCancer {
+    Script:tick(carrier) {
+        print(carrier->id + " has cancer (" + ..attHealth);
+        if (chance(-(..attHealth)/100)) {
+            ..attHealth--;
+        }
+    }
+
+    Script: removeCondition {
+        return(false);
+    }
 }

@@ -58,7 +58,6 @@ public class Scene {
 		objects[3].scale(0.5, 0.5, 0.5);
 		objects[3].setPosition(0,0,50);
 		objects[3].setRotation(0,0,Math.PI/8);
-		Data.setMoon(objects[3]);
 
 		// sun lights
 		pointLights[1] = new PointLight(0.5,0.25,0.25);
@@ -85,6 +84,7 @@ public class Scene {
 		}
 
         Data.setSun(new Sun(objects[2], directionalLight, pointLights[1], shadowMap));
+		Data.setMoon(objects[3]);
 	}
 
 	// ###################################################################################
