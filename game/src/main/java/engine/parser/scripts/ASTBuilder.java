@@ -328,13 +328,13 @@ public class ASTBuilder {
 				if (operator.getPrecedence() < rightNode.getOperator().getPrecedence()) {
 					if (unary) {
 						AbstractScriptNode sub = rightNode.getLeft();
-						UnaryExpressionNode newLeft = new UnaryExpressionNode(operator, sub);
+						AbstractScriptNode newLeft = precedenceCorrection(operator, left, sub, true);
 						rightNode.setLeft(newLeft);
 						return rightNode;
 					}
 
 					AbstractScriptNode sub = rightNode.getLeft();
-					BinaryExpressionNode newLeft = new BinaryExpressionNode(operator, left, sub);
+					AbstractScriptNode newLeft = precedenceCorrection(operator, left, sub, false);
 					rightNode.setLeft(newLeft);
 					return rightNode;
 				}
@@ -346,13 +346,13 @@ public class ASTBuilder {
 			if (operator.getPrecedence() < rightNode.getOperator().getPrecedence()) {
 				if (unary) {
 					AbstractScriptNode sub = rightNode.getSubNode();
-					UnaryExpressionNode newSub = new UnaryExpressionNode(operator, sub);
+					AbstractScriptNode newSub = precedenceCorrection(operator, left, sub, true);
 					rightNode.setSubNode(newSub);
 					return rightNode;
 				}
 
 				AbstractScriptNode sub = rightNode.getSubNode();
-				BinaryExpressionNode newSub = new BinaryExpressionNode(operator, left, sub);
+				AbstractScriptNode newSub = precedenceCorrection(operator, left, sub, false);
 				rightNode.setSubNode(newSub);
 				return rightNode;
 			}

@@ -43,11 +43,7 @@ Creature: cMonkey {
 
 	Script: tick {
 	    if (!(.attSleeping)) { // creature is awake
-            if (.attNutrition <= 0) { // and malnourished
-                if (!getEffects(self,effHunger)) {
-                    addEffect(self, effHunger);
-                }
-            } else {
+            if (..attNutrition > 0) {
                  ..attNutrition--;
             }
 
