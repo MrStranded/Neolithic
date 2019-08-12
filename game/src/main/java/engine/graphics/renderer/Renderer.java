@@ -2,6 +2,7 @@ package engine.graphics.renderer;
 
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
+import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
 import engine.data.Data;
 import engine.graphics.gui.GUIInterface;
@@ -24,6 +25,7 @@ import org.lwjgl.opengl.GL30;
 import java.util.Collection;
 
 import static java.lang.System.exit;
+import static java.lang.System.in;
 
 /**
  * The renderer is only concerned about periodically drawing the given mesh data onto a window
@@ -246,6 +248,16 @@ public class Renderer {
 		if (keyboard.isClicked(GLFW.GLFW_KEY_G)) {
 			Data.getMainInstance().run("repopulate", null);
 		}
+		if (keyboard.isClicked(GLFW.GLFW_KEY_T)) {
+			Instance main = Data.getMainInstance();
+			int id = Data.getContainerID("cMonkey");
+
+			for (Instance instance : Data.getPublicInstanceList()) {
+				if (instance.getId() == id) {
+					instance.destroy();
+				}
+			}
+		}
 	}
 
 	// ###################################################################################
@@ -391,8 +403,12 @@ public class Renderer {
 		}
 
 		// planetary objects
-		for (MeshHub meshHub : meshHubs) {
-			meshHub.render(shaderProgram, viewMatrix, shadowMap);
+		try {
+			for (MeshHub meshHub : meshHubs) {
+				meshHub.render(shaderProgram, viewMatrix, shadowMap);
+			}
+		} catch (Exception e) {
+			// this happens when a new mesh hub is added to the hashmap while we iterate over it
 		}
 
 		shaderProgram.unbind();

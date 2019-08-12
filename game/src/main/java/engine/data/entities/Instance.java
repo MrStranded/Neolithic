@@ -344,6 +344,10 @@ public class Instance {
 		}
 	}
 
+	/** remove?
+	 *
+	 * @param other
+	 */
 	public void replaceBy(Instance other) {
 	    if (superInstance != null) { superInstance.addSubInstance(other); }
 
@@ -355,11 +359,14 @@ public class Instance {
     }
 
 	public void destroy() {
+		if (id == Data.getMainInstance().getId()) {
+			Logger.error("Cannot delete main instance!");
+		}
+
 		recursiveSlatingForRemoval();
 		if (superInstance != null) {
 			superInstance.removeSubInstance(this);
 		}
-		superInstance = null;
 	}
 
 	private void recursiveSlatingForRemoval() {
