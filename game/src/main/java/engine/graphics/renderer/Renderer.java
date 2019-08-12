@@ -369,9 +369,11 @@ public class Renderer {
 			}
 		}
 
-		// clear meshHub lists
+		// clear meshHub lists and possibly load meshes
 		for (MeshHub meshHub : meshHubs) {
 			meshHub.clear();
+
+			if (!meshHub.isMeshLoaded()) { meshHub.loadMesh(); }
 		}
 
 		// planet
@@ -384,7 +386,7 @@ public class Renderer {
 				shaderProgram.setUniform("modelLightViewMatrix", shadowMap.getViewMatrix().times(planetObject.getWorldMatrix()));
 			}
 
-			// here we pass the shaderProgram because in FacePart.render() we need set some uniforms
+			// here we pass the shaderProgram because in FacePart.render() we need to set some uniforms
 			planetObject.render(shaderProgram, camera.getPlanetaryLODMatrix(), true, true);
 		}
 

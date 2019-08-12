@@ -33,7 +33,10 @@ public class Effect extends Instance {
         } else {
             return (remainingTicks == 0);
         }
+    }
 
+    public void callBack(Instance carrier) {
+        run(ScriptConstants.EVENT_FINALLY, new Variable[]{new Variable(carrier)});
     }
 
     // ###################################################################################

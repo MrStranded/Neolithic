@@ -9,12 +9,10 @@ public enum DataType {
 	// attributes
 	ATTRIBUTE,
 
-	// effects
-	EFFECT,
-
 	// game objects
-	TILE,
 	INSTANCE,
+	EFFECT,
+	TILE,
 	ENTITY,
 	CREATURE,
 

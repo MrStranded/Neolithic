@@ -16,6 +16,7 @@ import engine.data.structures.WeightedList;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
+import engine.graphics.objects.MeshHub;
 import engine.graphics.objects.movement.MoveableObject;
 import engine.logic.topology.GeographicCoordinates;
 import engine.math.numericalObjects.Vector3;
@@ -43,6 +44,7 @@ public class Instance {
 	private boolean slatedForRemoval = false;
 
 	private MoveableObject moveableObject = null;
+	private MeshHub meshHub = null;
 
 	public Instance(int id) {
 		this.id = id;
@@ -251,7 +253,17 @@ public class Instance {
     }
 
     private void cleanEffects() {
-        effects.removeIf(effect -> effect.shouldBeRemoved(this));
+		List<Effect> newEffects = new CopyOnWriteArrayList<>();
+
+		for (Effect effect : effects) {
+			if (effect.shouldBeRemoved(this)) {
+				effect.callBack(this);
+			} else {
+				newEffects.add(effect);
+			}
+		}
+
+		effects = newEffects;
     }
 
 	// ###################################################################################
@@ -260,9 +272,8 @@ public class Instance {
 
 	public void render() {
 		// render self
-		Container container = Data.getContainer(id);
-		if (container != null && container.getMeshHub() != null) {
-			container.getMeshHub().registerObject(moveableObject);
+		if (getMeshHub() != null) { // we call getMeshHub() here, because it might have to be loaded from Data first
+			meshHub.registerObject(moveableObject);
 		}
 		// render subs
         CopyOnWriteArraySet<Instance> subs = new CopyOnWriteArraySet<>(subInstances);
@@ -400,6 +411,22 @@ public class Instance {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
+	public void setMesh(String path) {
+		meshHub = Data.getMeshHub(path);
+		if (meshHub == null) {
+			meshHub = Data.addMeshHub(path);
+		}
+	}
+
+	public MeshHub getMeshHub() {
+		if (meshHub == null) {
+			Container container = Data.getContainer(id);
+			if (container != null) {
+				meshHub = container.getMeshHub();
+			}
+		}
+		return meshHub;
+	}
 
     public String getName() {
         return name != null ? name : Data.getContainer(id) != null ? Data.getContainer(id).getName() : "Noname";
@@ -490,7 +517,14 @@ public class Instance {
 	}
 
 	public Variable getVariable(String name) {
-		return variables.get(StringConverter.toID(name));
+		Variable variable = variables.get(StringConverter.toID(name));
+
+		if (variable != null && variable.isInvalid()) {
+			variables.remove(StringConverter.toID(name));
+			return null;
+		}
+
+		return variable;
 	}
 	public void addVariable(Variable variable) {
 		variables.insert(variable);

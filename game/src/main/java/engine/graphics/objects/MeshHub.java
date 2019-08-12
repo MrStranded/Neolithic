@@ -21,6 +21,7 @@ public class MeshHub {
 	private String meshPath;
 	private Mesh mesh = null;
 	private List<MoveableObject> objects;
+	private boolean meshIsLoaded = false;
 
 	public MeshHub(String meshPath) {
 		this.meshPath = meshPath;
@@ -31,8 +32,10 @@ public class MeshHub {
 		try {
 			if (meshPath.endsWith(".obj")) {
 				mesh = OBJLoader.loadMesh(meshPath);
+				meshIsLoaded = true;
 			} else if (meshPath.endsWith(".ply")) {
 				mesh = PLYLoader.loadMesh(meshPath);
+				meshIsLoaded = true;
 			} else {
 				Logger.error("Mesh format of file '" + meshPath + "' is not supported! Use .obj or .ply files.");
 			}
@@ -54,6 +57,11 @@ public class MeshHub {
 	}
 
 	public void render(ShaderProgram shaderProgram, Matrix4 viewMatrix, ShadowMap shadowMap) {
+		if (!meshIsLoaded) {
+			Logger.error("Mesh with path '" + meshPath + "' is not loaded!");
+			return;
+		}
+
 		shaderProgram.setUniform("material", mesh.getMaterial());
 		shaderProgram.setUniform("affectedByLight", 1);
 		shaderProgram.setUniform("dynamic", 1);
@@ -86,4 +94,7 @@ public class MeshHub {
 		return meshPath;
 	}
 
+	public boolean isMeshLoaded() {
+		return meshIsLoaded;
+	}
 }

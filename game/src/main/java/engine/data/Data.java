@@ -195,7 +195,7 @@ public class Data {
 	/**
 	 * Returns the MeshHub with the specified path or null if none is found.
 	 * @param path of the mesh
-	 * @return MeshHub if existant or null otherwise
+	 * @return MeshHub if existent or null otherwise
 	 */
 	public static MeshHub getMeshHub(String path) {
 		return meshHubs.get(path);

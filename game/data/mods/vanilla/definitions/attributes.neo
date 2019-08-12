@@ -32,6 +32,9 @@ Attribute: attBabySize {
     inherited;
     mutation = 50, 10;
 }
+Attribute: attGender {
+    name = "Gender";
+}
 
 // movement
 Attribute: attViewingDistance {

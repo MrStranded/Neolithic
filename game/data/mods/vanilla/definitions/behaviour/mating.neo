@@ -12,6 +12,10 @@ Effect: effInfant {
     Script: removeCondition(carrier) {
         require(carrier.attAge >= carrier.attMatureAge);
     }
+
+    Script: finally(carrier) {
+        carrier->updateMesh();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////// Drives
@@ -21,6 +25,7 @@ Drive: driMate {
         require(self.attNutrition >= .attBabySize);
         require(self.attFatigue < .attLibido);
         require(self.attAge >= self.attMatureAge);
+        require(self.attGender <= 0); // only males want to fock
     }
 
     solutions {
@@ -45,9 +50,12 @@ Process: proMate {
         ..attNutrition -= .attBabySize;
 
         child = create(getType(self), getTile(self));
+
         mixAttributes(child, self, ->mate);
         addEffect(child, effInfant);
         child..attNutrition += .attBabySize;
+
+        ->updateMesh();
     }
 
     solutions {
@@ -60,7 +68,8 @@ Process: proSearchMate {
         creatures = getCreaturesInRange(getType(self), getTile(self), .attViewingDistance);
         ->mate = false;
         for (creature : creatures) {
-            if (creature != self && creature.attAge >= creature.attMatureAge) {
+            // males are all gender values <= 0, females are all gender values > 0. thus males*females <= 0 for heterogenous reproduction
+            if (creature != self && creature.attAge >= creature.attMatureAge && self.attGender*creature.attGender <= 0) {
                 ->mate = creature;
                 break;
             }

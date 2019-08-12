@@ -4,6 +4,7 @@ import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.Script;
 import engine.data.attributes.Attribute;
+import engine.data.entities.Effect;
 import engine.data.entities.Instance;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
@@ -341,6 +342,20 @@ public class Variable implements IDInterface {
 	// ###################################################################################
 	// ################################ Getters and Setters (IDInterface) ################
 	// ###################################################################################
+
+	/**
+	 * This method checks whether the linked instance still exists. Otherwise it denotes to remove the reference, so the garbage
+	 * collector can do his thing.
+	 * This method is called from Instance.getVariable
+	 */
+	public boolean isInvalid() {
+		if (type == DataType.INSTANCE || type == DataType.EFFECT || type == DataType.TILE) {
+			if (((Instance) value).isSlatedForRemoval()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public int getId() {

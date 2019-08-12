@@ -57,6 +57,8 @@ public enum TokenConstants {
 	CHANCE          (TokenType.COMMAND, "chance"),
 	RANDOM          (TokenType.COMMAND, "random"),
 	ABSOLUTE        (TokenType.COMMAND, "abs"),
+	MAX				(TokenType.COMMAND, "max"),
+	MIN				(TokenType.COMMAND, "min"),
 
 	// -------------------------------------------------- Entity Manipulation
 	CHANGE                  (TokenType.COMMAND, "change"),
@@ -68,6 +70,7 @@ public enum TokenConstants {
 	ADD_SPECIES_ATTRIBUTE   (TokenType.COMMAND, "addSpeciesAtt"),
 	ADD_OCCUPATION			(TokenType.COMMAND, "addOccupation"),
 	MIX_ATTRIBUTES          (TokenType.COMMAND, "mixAttributes"),
+	SET_MESH				(TokenType.COMMAND, "setMesh"),
 
 	// -------------------------------------------------- Planet Manipulation
     CHANGE_SUN_ANGLE    (TokenType.COMMAND, "changeSunAngle"),

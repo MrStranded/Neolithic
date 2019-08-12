@@ -3,7 +3,7 @@
 
 Creature: cMonkey {
 	name = "Monkey";
-	mesh = "monkey01.ply";
+	mesh = "monkey_male.ply";
 
 	knowledge {
 		proEat; proGatherFood; proPickUpFood;
@@ -44,6 +44,9 @@ Creature: cMonkey {
 		if (main->monkey == 0) {
 		    main->monkey = self->id;
         }
+
+        ..attGender = random(0,2);
+        ->updateMesh();
 	}
 
 	Script: tick {
@@ -81,7 +84,7 @@ Creature: cMonkey {
 		    destroy(self);
         }
 
-		if (.attAge > 10000) { // monkey age death
+		if (.attAge > .attMatureAge*2) { // monkey age death
 		    if (chance(0.01) && !getEffects(self, effCancer)) {
                 addEffect(self, effCancer);
 		    }
@@ -95,15 +98,33 @@ Creature: cMonkey {
         h2 = getHeight(to);
         return ((h2 >= 100) && (abs(h1-h2) <= .attStepHeight));
 	}
+
+	Script: updateMesh() {
+	    if (.attAge < .attMatureAge) {
+            if (.attGender > 0) {
+                setMesh(self, "vanilla/assets/meshes/monkey_child_female.ply");
+            } else {
+                setMesh(self, "vanilla/assets/meshes/monkey_child_male.ply");
+            }
+        } else {
+            if (.attGender > 0) {
+                setMesh(self, "vanilla/assets/meshes/monkey_female.ply");
+            } else {
+                setMesh(self, "vanilla/assets/meshes/monkey_male.ply");
+            }
+        }
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////// Effects
 
 Effect: effCancer {
     Script:tick(carrier) {
-        print(carrier->id + " has cancer (" + ..attHealth);
-        if (chance(-(..attHealth)/100)) {
+        if (chance(0.01)) {
             ..attHealth--;
+            if (..attHealth == -20) {
+                ..attSpeed--;
+            }
         }
     }
 

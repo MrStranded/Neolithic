@@ -11,6 +11,7 @@ public class ScriptConstants {
 	public static final String EVENT_PROCESS            = "process";
 	public static final String EVENT_CAN_GO 			= "reachable";
 	public static final String EVENT_REMOVE_CONDITION	= "removeCondition";
+	public static final String EVENT_FINALLY			= "finally";
 	public static final String EVENT_GET_WEIGHT			= "getWeight";
 
 }

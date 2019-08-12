@@ -154,6 +154,28 @@ public class Interpreter {
 	// ################################ Value Helper Functions ###########################
 	// ###################################################################################
 
+	// ################################################################################### General
+
+	private void addName(Container container) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token name = consume();
+		container.setName(name.getValue());
+
+		consume(TokenConstants.SEMICOLON);
+	}
+
+	private void readMeshPath(Container container) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token pathToken = consume();
+		String path = ResourcePathConstants.MOD_FOLDER + currentMod + "/" + ResourcePathConstants.MESH_FOLDER + pathToken.getValue();
+		MeshHub meshHub = Data.addMeshHub(path);
+		container.setMeshHub(meshHub);
+
+		consume(TokenConstants.SEMICOLON);
+	}
+
     // ################################################################################### Attribute
 
     private void addName(ProtoAttribute protoAttribute) throws Exception {
@@ -202,28 +224,6 @@ public class Interpreter {
 
         consume(TokenConstants.SEMICOLON);
     }
-
-	// ################################################################################### General
-
-	private void addName(Container container) throws Exception {
-		consume(TokenConstants.ASSIGNMENT);
-
-		Token name = consume();
-		container.setName(name.getValue());
-
-		consume(TokenConstants.SEMICOLON);
-	}
-
-	private void readMeshPath(Container container) throws Exception {
-		consume(TokenConstants.ASSIGNMENT);
-
-		Token pathToken = consume();
-		String path = ResourcePathConstants.MOD_FOLDER + currentMod + "/" + ResourcePathConstants.MESH_FOLDER + pathToken.getValue();
-		MeshHub meshHub = Data.addMeshHub(path);
-		container.setMeshHub(meshHub);
-
-		consume(TokenConstants.SEMICOLON);
-	}
 
 	// ################################################################################### Tile
 

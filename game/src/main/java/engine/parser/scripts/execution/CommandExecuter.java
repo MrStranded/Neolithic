@@ -1,5 +1,6 @@
 package engine.parser.scripts.execution;
 
+import constants.ResourcePathConstants;
 import constants.ScriptConstants;
 import constants.TopologyConstants;
 import engine.data.Data;
@@ -565,6 +566,56 @@ public class CommandExecuter {
                 return new Variable(list.size());
             }
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double max (double d1, double d2, ...)
+		} else if (TokenConstants.MAX.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				double max = 0;
+				boolean first = true;
+
+				for (Variable variable : parameters) {
+					if (variable.getType() == DataType.LIST) {
+						for (Variable sub : variable.getList()) {
+							if (first || sub.getDouble() > max) {
+								max = sub.getDouble();
+								first = false;
+							}
+						}
+					} else {
+						if (first || variable.getDouble() > max) {
+							max = variable.getDouble();
+							first = false;
+						}
+					}
+				}
+
+				return new Variable(max);
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double min (double d1, double d2, ...)
+		} else if (TokenConstants.MIN.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				double min = 0;
+				boolean first = true;
+
+				for (Variable variable : parameters) {
+					if (variable.getType() == DataType.LIST) {
+						for (Variable sub : variable.getList()) {
+							if (first || sub.getDouble() < min) {
+								min = sub.getDouble();
+								first = false;
+							}
+						}
+					} else {
+						if (first || variable.getDouble() < min) {
+							min = variable.getDouble();
+							first = false;
+						}
+					}
+				}
+
+				return new Variable(min);
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void mixAttributes (Instance t, Instance p1, Instance p2)
 		} else if (TokenConstants.MIX_ATTRIBUTES.equals(command)) {
 			if (requireParameters(commandNode, 3)) {
@@ -699,6 +750,25 @@ public class CommandExecuter {
 				return new Variable(parameters[0].isNull() ? 0 : 1);
 			}
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Tile setAt (Instance instance, Tile tile)
+		} else if (TokenConstants.SET_AT.equals(command)) {
+			if (requireParameters(commandNode, 2)) {
+				Instance instance = parameters[0].getInstance();
+				Tile tile = parameters[1].getTile();
+
+				if (tile == null) {
+					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+				if (instance == null) {
+					Logger.error("Instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+
+				instance.placeInto(tile);
+				return new Variable(tile);
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int setHeight (int height)
 		} else if (TokenConstants.SET_HEIGHT.equals(command)) {
 			if (requireParameters(commandNode, 2)) {
@@ -714,24 +784,21 @@ public class CommandExecuter {
 				}
 			}
 
-        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Tile setAt (Instance instance, Tile tile)
-        } else if (TokenConstants.SET_AT.equals(command)) {
-            if (requireParameters(commandNode, 2)) {
-                Instance instance = parameters[0].getInstance();
-                Tile tile = parameters[1].getTile();
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void setMesh (Instance target, String path)
+		} else if (TokenConstants.SET_MESH.equals(command)) {
+			if (requireParameters(commandNode, 2)) {
+				Instance target = parameters[0].getInstance();
+				String path = parameters[1].getString();
 
-                if (tile == null) {
-                    Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-                    return new Variable();
-                }
-                if (instance == null) {
-                    Logger.error("Instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-                    return new Variable();
-                }
+				if (target == null) {
+					Logger.error("Instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
 
-                instance.placeInto(tile);
-                return new Variable(tile);
-            }
+				target.setMesh(ResourcePathConstants.MOD_FOLDER + path);
+
+				return new Variable("Semira <3");
+			}
 
         // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string setSunAngle (double angle)
         } else if (TokenConstants.SET_SUN_ANGLE.equals(command)) {
