@@ -221,6 +221,7 @@ public class Instance {
 	// ###################################################################################
 
 	public void tick() {
+		cleanVariables();
 	    tickEffects();
 
 	    if (occupations.isEmpty()) {
@@ -265,6 +266,14 @@ public class Instance {
 
 		effects = newEffects;
     }
+
+    private void cleanVariables() {
+		for (IDInterface variable : variables.toArray()) {
+			if (((Variable) variable).isInvalid()) {
+				variables.remove(variable.getId());
+			}
+		}
+	}
 
 	// ###################################################################################
 	// ################################ Graphical ########################################
@@ -364,6 +373,7 @@ public class Instance {
 		}
 
 		recursiveSlatingForRemoval();
+		cleanVariables();
 		if (superInstance != null) {
 			superInstance.removeSubInstance(this);
 		}

@@ -37,6 +37,8 @@ public class ScriptCallNode extends AbstractScriptNode {
 		} else { // run script on self
 			result = instance.run(identifier.getValue(), ParameterCalculator.calculateParameters(instance, script, this));
 		}
+
+		target = null; // clean up, so the garbage collector can remove the instance
 		return result;
 	}
 

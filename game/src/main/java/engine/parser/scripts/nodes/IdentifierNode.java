@@ -70,6 +70,7 @@ public class IdentifierNode extends AbstractScriptNode {
 			}
 		}
 
+		target = null; // clean up, so the garbage collector can remove the instance
 		return variable;
 	}
 

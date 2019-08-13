@@ -60,7 +60,7 @@ public class Script implements IDInterface {
 			self.printVariables();
 			System.out.println("Script Variables:");
 			if (!variableStack.empty()) {
-				for (IDInterface variable : variableStack.peek().toArray()) {
+				for (IDInterface variable : variables.toArray()) {
 					System.out.println(((Variable) variable));
 				}
 			}
@@ -68,7 +68,7 @@ public class Script implements IDInterface {
 		}
 
 		// execute
-		Variable result = null;
+		Variable result = new Variable();
 		try {
 			result = root.execute(self, this);
 		} catch (ScriptInterruptedException e) {

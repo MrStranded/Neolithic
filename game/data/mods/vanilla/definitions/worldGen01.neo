@@ -7,9 +7,9 @@ WorldGen: genContinental {
 		for (t : eachTile()) {
 			if (chance(0.0025)) { // 1/4% chance
 				if (chance(0.75)) {
-					create(formPlateau, t);
+					destroy(create(formPlateau, t));
 				} else {
-					create(formHill, t);
+					destroy(create(formHill, t));
 				}
 			}
 		}
