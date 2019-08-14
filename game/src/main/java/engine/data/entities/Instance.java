@@ -32,29 +32,30 @@ public class Instance {
 	protected int id;
 	private String name = null;
 
-	private BinaryTree<Attribute> attributes;
-	private List<Effect> effects;
-	private BinaryTree<Variable> variables;
+	private BinaryTree<Attribute> attributes = null;
+	private List<Effect> effects = null;
+	private BinaryTree<Variable> variables = null;
 
-	private List<Instance> subInstances;
+	private List<Instance> subInstances = null;
 	private Instance superInstance = null;
 
-	private Queue<Occupation> occupations;
+	private Queue<Occupation> occupations = null;
 
 	private boolean slatedForRemoval = false;
 
-	private MoveableObject moveableObject = null;
+	private MoveableObject moveableObject;
 	private MeshHub meshHub = null;
 
 	public Instance(int id) {
 		this.id = id;
 
+		/*
 		attributes = new BinaryTree<>();
-		effects = new CopyOnWriteArrayList<>();
+		effects = new LinkedList<>(); //new CopyOnWriteArrayList<>();
 		variables = new BinaryTree<>();
-
-		subInstances = new ArrayList<>(0);
 		occupations = new LinkedList<>();
+		subInstances = new ArrayList<>(0);
+		*/
 
         moveableObject = new MoveableObject();
 
@@ -64,6 +65,32 @@ public class Instance {
     // ###################################################################################
     // ################################ Creation #########################################
     // ###################################################################################
+
+	private void createAttributesIfNecessary() {
+		if (attributes == null) {
+			attributes = new BinaryTree<>();
+		}
+	}
+	private void createEffectsIfNecessary() {
+		if (effects == null) {
+			effects = new LinkedList<>();
+		}
+	}
+	private void createVariablesIfNecessary() {
+		if (variables == null) {
+			variables = new BinaryTree<>();
+		}
+	}
+	private void createOccupationsIfNecessary() {
+		if (occupations == null) {
+			occupations = new LinkedList<>();
+		}
+	}
+	private void createSubInstancesIfNecessary() {
+		if (subInstances == null) {
+			subInstances = new ArrayList<>();
+		}
+	}
 
     private void inheritAttributes() {
 	    Container container = Data.getContainer(id);
@@ -213,6 +240,7 @@ public class Instance {
 	}
 
 	public void addOccupation(int duration, Script callBackScript) {
+		createOccupationsIfNecessary();
 	    occupations.add(new Occupation(duration, callBackScript));
     }
 
@@ -223,6 +251,8 @@ public class Instance {
 	public void tick() {
 		cleanVariables();
 	    tickEffects();
+
+	    createOccupationsIfNecessary();
 
 	    if (occupations.isEmpty()) {
             // ----------- calculate drives
@@ -248,13 +278,17 @@ public class Instance {
 	}
 
 	private void tickEffects() {
+		if (effects == null) { return; }
+
 	    for (Effect effect : effects) {
 	        effect.tick(this);
         }
     }
 
     private void cleanEffects() {
-		List<Effect> newEffects = new CopyOnWriteArrayList<>();
+		if (effects == null) { return; }
+
+		List<Effect> newEffects = new LinkedList<>(); //new CopyOnWriteArrayList<>();
 
 		for (Effect effect : effects) {
 			if (effect.shouldBeRemoved(this)) {
@@ -268,6 +302,8 @@ public class Instance {
     }
 
     private void cleanVariables() {
+		if (variables == null) { return; }
+
 		for (IDInterface variable : variables.toArray()) {
 			if (((Variable) variable).isInvalid()) {
 				variables.remove(variable.getId());
@@ -285,12 +321,14 @@ public class Instance {
 			meshHub.registerObject(moveableObject);
 		}
 		// render subs
-        CopyOnWriteArraySet<Instance> subs = new CopyOnWriteArraySet<>(subInstances);
-        for (Instance subInstance : subs) {
-            if (subInstance != null) {
-                subInstance.render();
-            }
-        }
+		if (subInstances != null) {
+			CopyOnWriteArraySet<Instance> subs = new CopyOnWriteArraySet<>(subInstances);
+			for (Instance subInstance : subs) {
+				if (subInstance != null) {
+					subInstance.render();
+				}
+			}
+		}
 	}
 
 	/**
@@ -348,7 +386,7 @@ public class Instance {
 				// assign values to moveable object
 				moveableObject.setPosition(pos);
 				moveableObject.setRotation(pitch + Math.PI / 2d, -yaw + Math.PI / 2d, 0);
-				moveableObject.setPreRotation(0, Math.random() * Math.PI * 2d, 0);
+				moveableObject.setPreRotation(0, Math.random() * Math.PI * 2d * 0d, 0);
 			}
 		}
 	}
@@ -360,9 +398,11 @@ public class Instance {
 	public void replaceBy(Instance other) {
 	    if (superInstance != null) { superInstance.addSubInstance(other); }
 
-	    for (Instance subInstance : subInstances) {
-	        other.addSubInstance(subInstance);
-        }
+	    if (subInstances != null) {
+			for (Instance subInstance : subInstances) {
+				other.addSubInstance(subInstance);
+			}
+		}
 
         destroy();
     }
@@ -370,10 +410,13 @@ public class Instance {
 	public void destroy() {
 		if (id == Data.getMainInstance().getId()) {
 			Logger.error("Cannot delete main instance!");
+			return;
 		}
 
 		recursiveSlatingForRemoval();
-		cleanVariables();
+		if (variables != null) {
+			variables.clear();
+		}
 		if (superInstance != null) {
 			superInstance.removeSubInstance(this);
 		}
@@ -391,22 +434,25 @@ public class Instance {
 	// ###################################################################################
 
 	public boolean contains(int subId) {
-		for (Instance instance : subInstances) {
-			if (instance.getId() == subId) {
-				return true;
+		if (subInstances != null) {
+			for (Instance instance : subInstances) {
+				if (instance.getId() == subId) {
+					return true;
+				}
 			}
 		}
 		return false;
 	}
 
 	public void addSubInstance(Instance instance) {
+		createSubInstancesIfNecessary();
 		if (instance != null) {
 			instance.setSuperInstance(this);
 			subInstances.add(instance);
 		}
 	}
 	public void removeSubInstance(Instance instance) {
-		if (instance != null) {
+		if (instance != null && subInstances != null) {
 			instance.setSuperInstance(null);
             subInstances.remove(instance);
 		}
@@ -417,11 +463,14 @@ public class Instance {
     // ###################################################################################
 
     public void addEffect(Effect effect) {
+		createEffectsIfNecessary();
 	    effects.add(effect);
     }
 
     public void deleteEffects(int containerID) {
-		effects.removeIf(effect -> ((containerID == -1) || (effect.getId() == containerID)));
+		if (effects != null) {
+			effects.removeIf(effect -> ((containerID == -1) || (effect.getId() == containerID)));
+		}
 	}
 
 	// ###################################################################################
@@ -454,14 +503,18 @@ public class Instance {
     }
 
     public List<Instance> getEffects() {
-        return new CopyOnWriteArrayList<>(effects);
+		if (effects == null) { return new LinkedList<>(); }
+
+        return new LinkedList<>(effects); //new CopyOnWriteArrayList<>(effects);
     }
 
     public Instance getSubInstanceWithAttribute(int attributeID) {
-		for (Instance instance : subInstances) {
-			if (instance != null) {
-				if (instance.getAttributeValue(attributeID) > 0) {
-					return instance;
+		if (subInstances != null) {
+			for (Instance instance : subInstances) {
+				if (instance != null) {
+					if (instance.getAttributeValue(attributeID) > 0) {
+						return instance;
+					}
 				}
 			}
 		}
@@ -471,17 +524,21 @@ public class Instance {
     public Instance getThisOrSubInstanceWithID(int containerID) {
 	    if (id == containerID) { return this; }
 
-        for (Instance instance : subInstances) {
-            if (instance != null) {
-                if (instance.getId() == containerID) {
-                    return instance;
-                }
-            }
-        }
+	    if (subInstances != null) {
+			for (Instance instance : subInstances) {
+				if (instance != null) {
+					if (instance.getId() == containerID) {
+						return instance;
+					}
+				}
+			}
+		}
         return null;
     }
 
 	public Attribute getAttribute(int attributeID) {
+		createAttributesIfNecessary();
+
 		Attribute attribute = attributes.get(attributeID);
 		if (attribute == null) {
 			attribute = new Attribute(attributeID, 0);
@@ -496,18 +553,21 @@ public class Instance {
 		// personal data
 		value += getPersonalAttributeValue(attributeID);
 		// effects
-		try {
-			for (Instance effect : new CopyOnWriteArrayList<>(effects)) {
-				value += effect.getAttributeValue(attributeID);
+		if (effects != null) {
+			try {
+				for (Effect effect : effects) {
+					value += effect.getAttributeValue(attributeID);
+				}
+			} catch (Exception e) {
+				Logger.error("Concurrent modification during 'Instance.getAttributeValue()' (effect list is currently being modified)");
 			}
-		} catch (Exception e) {
-			Logger.error("Concurrent modification during 'Instance.getAttributeValue()' (effect list is currently being modified)");
 		}
 
 		return value;
 	}
 
 	public int getPersonalAttributeValue(int attributeID) {
+		if (attributes == null) { return 0; }
 		Attribute attribute = attributes.get(attributeID);
 		return attribute != null? attribute.getValue() : 0;
 	}
@@ -519,6 +579,7 @@ public class Instance {
 	 */
 	public void setAttribute(int attributeID, int value) {
 		if (attributeID >= 0) {
+			createAttributesIfNecessary();
 			Attribute attribute = attributes.get(attributeID);
 			if (attribute == null) {
 				attributes.insert(new Attribute(attributeID, value));
@@ -529,11 +590,14 @@ public class Instance {
 	}
 	public void addAttribute(int attributeID, int value) {
 		if (attributeID >= 0) {
+			createAttributesIfNecessary();
 			attributes.insert(new Attribute(attributeID, value));
 		}
 	}
 
 	public Variable getVariable(String name) {
+		if (variables == null) { return null; }
+
 		Variable variable = variables.get(StringConverter.toID(name));
 
 		if (variable != null && variable.isInvalid()) {
@@ -544,10 +608,13 @@ public class Instance {
 		return variable;
 	}
 	public void addVariable(Variable variable) {
+		createVariablesIfNecessary();
 		variables.insert(variable);
 	}
 	public void removeVariable(String name) {
-		variables.remove(StringConverter.toID(name));
+		if (variables != null) {
+			variables.remove(StringConverter.toID(name));
+		}
 	}
 
 	public int getId() {
@@ -579,7 +646,7 @@ public class Instance {
 	public boolean isSlatedForRemoval() {
 		return slatedForRemoval;
 	}
-	public void setSlatedForRemoval(boolean slatedForRemoval) {
+	private void setSlatedForRemoval(boolean slatedForRemoval) {
 		this.slatedForRemoval = slatedForRemoval;
 	}
 

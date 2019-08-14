@@ -450,10 +450,12 @@ public class CommandExecuter {
 					return new Variable();
 				}
 
-				for (Instance item : holder.getSubInstances()) {
-					if (item != null) {
-						if (item.getAttributeValue(attributeID) > 0) {
-							return new Variable(item);
+				if (holder.getSubInstances() != null) {
+					for (Instance item : holder.getSubInstances()) {
+						if (item != null) {
+							if (item.getAttributeValue(attributeID) > 0) {
+								return new Variable(item);
+							}
 						}
 					}
 				}
