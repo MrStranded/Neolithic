@@ -56,7 +56,7 @@ public class BaseGUI implements GUIInterface {
 
 		List<Integer> attributes = Data.getAllAttributeIDs();
 		double nrOfAtts = attributes.size();
-		List<Instance> humans = Data.getAllInstancesWithID(Data.getContainerID("cHuman"));
+		List<Instance> humans = Data.getAllInstancesWithID(Data.getContainerID("cAppleTree"));
 		double headcount = humans.size();
 		if (nrOfAtts == 0 || headcount == 0) {
 			GUIObject dead = new TextObject("Everybody died", fontTexture);

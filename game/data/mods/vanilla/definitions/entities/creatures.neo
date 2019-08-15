@@ -81,7 +81,7 @@ Creature: cHuman {
 		        main->human = 0;
 		    }
 
-		    //destroy(self);
+		    destroy(self);
         }
 
 		if (.attAge > .attMatureAge*2) { // human age death

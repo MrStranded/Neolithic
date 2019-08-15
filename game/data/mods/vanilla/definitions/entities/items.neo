@@ -11,11 +11,10 @@ Entity: entApple {
 
     Script: place() {
         self->seed = create(cAppleSeed, self);
-        pickUp(self, ->seed);
     }
 
 	Script: tick() {
-	    if (chance(0.05)) {
+	    if (chance(0.001)) {
 	        ..attNutrition--;
 	    }
 

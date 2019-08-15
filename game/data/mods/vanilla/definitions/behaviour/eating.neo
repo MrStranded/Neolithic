@@ -49,6 +49,7 @@ Effect: effDigest {
 
         items = getItems(self);
         for (item : items) {
+            print("putting " + item + " into " + shit);
             pickUp(shit, item);
         }
     }

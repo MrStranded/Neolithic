@@ -7,16 +7,18 @@ Creature: cAppleTree {
 
 	drives {
 		driPlantReproduction;
+		driHeal;
 	}
 
 	knowledge {
 		proPhotoSynthesis;
 		proCreateFruit;
+		proHeal;
 	}
 
 	Script: place {
 		..attNutrition += random(100);
-		//self->fruitType = entApple;
+		self->fruitType = entApple;
 
         ->updateMesh();
 	}
@@ -29,9 +31,13 @@ Creature: cAppleTree {
 	Script: tick {
 	    ..attAge++;
 
-	    if (.attAge > .attMatureAge*2) {
-	        destroy(self);
-	    }
+		if (.attHealth < 0) { // death
+		    destroy(self);
+        }
+
+		if (.attAge > .attMatureAge*2) { // age death
+		    addEffect(self, effCancer);
+        }
 	}
 
 	Script: updateMesh() {
@@ -45,6 +51,7 @@ Creature: cAppleTree {
 
 Creature: cAppleSeed {
     name = "Apple seed";
+    mesh = "apple_seed.ply";
 
     drives { driGrowIntoTree; }
 
@@ -55,7 +62,7 @@ Creature: cAppleSeed {
     }
 
     Script: place() {
-        //self->treeType = cAppleTree;
+        self->treeType = cAppleTree;
     }
 }
 
@@ -76,6 +83,18 @@ Drive: driGrowIntoTree {
     solutions { proGrowIntoTree; }
 
     Script: getWeight { return(getLightLevel(self) - .attLightSensitivity); }
+}
+
+Drive: driHeal {
+    solutions { proHeal; }
+
+    Script: condition {
+        require(.attHealth < 100);
+    }
+
+    Script: getWeight {
+        return(100 - .attHealth);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////// Processes
@@ -102,7 +121,8 @@ Process: proCreateFruit {
 	}
 
 	Script: process {
-		fruit = create(entApple /*self->fruitType*/, getTile(self));
+	    tile = getNeighbor(getTile(self), random(3));
+		fruit = create(self->fruitType, tile);
 		..attNutrition -= .attBabySize;
 		fruit..attNutrition += .attBabySize;
 	}
@@ -111,11 +131,24 @@ Process: proCreateFruit {
 Process: proGrowIntoTree {
     Script: condition {
         require(getLightLevel(self) >= .attLightSensitivity);
+        require(!getCreaturesInRange(self->treeType, getTile(self), 0));
+        require(getHeight(self) >= 100);
+        require(getType(getTile(self)) == tGras || getType(getTile(self)) == tDirt);
     }
     Script: process {
-        tree = create(cAppleTree /*self->treeType*/, getTile(self));
+        tree = create(self->treeType, getTile(self));
         addEffect(tree, effSapling);
         destroy(self);
+    }
+}
+
+Process: proHeal {
+    Script: condition {
+        require(getLightLevel(self) < .attLightSensitivity);
+    }
+
+    Script: process {
+        ..attHealth++;
     }
 }
 
