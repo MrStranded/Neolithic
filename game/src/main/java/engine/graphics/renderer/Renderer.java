@@ -217,32 +217,34 @@ public class Renderer {
 		//scene.getShadowMap().setLightAngle(-angle);
 		//scene.getShadowMap().cameraChangedPosition();
 
+		double dist = (camera.getRadius() - 0.5d)/100d;
+
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
-			camera.rotateYaw(-0.01d);
+			camera.rotateYaw(-dist);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_D)) { // rotate right
-			camera.rotateYaw(0.01d);
+			camera.rotateYaw(dist);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_E)) { // look down
-			camera.rotateTilt(-0.01d);
+			camera.rotateTilt(-0.005d);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_Q)) { // look up
-			camera.rotateTilt(0.01d);
+			camera.rotateTilt(0.005d);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_W)) { // rotate up
-			camera.rotatePitch(-0.01d);
+			camera.rotatePitch(-dist);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_S)) { // rotate down
-			camera.rotatePitch(0.01d);
+			camera.rotatePitch(dist);
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_R)) { // go closer
-			camera.changeRadius(-camera.getRadius()/100d);
+			camera.changeRadius(-dist);
 			if (camera.getRadius() < 1d + GraphicalConstants.ZNEAR) {
 				camera.setRadius(1d + GraphicalConstants.ZNEAR);
 			}
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_F)) { // go farther away
-			camera.changeRadius(camera.getRadius()/100d);
+			camera.changeRadius(dist);
 		}
 
 		if (keyboard.isClicked(GLFW.GLFW_KEY_G)) {

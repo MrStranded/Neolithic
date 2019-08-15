@@ -1,24 +1,35 @@
 
 ///////////////////////////////////////////////////////////////////////////// Fruit
 
-Entity: entFruit {
+Entity: entApple {
 	name = "Apple";
 	mesh = "apple_6x_loose.ply";
 
 	attributes {
-		attNutrition, 50;
 		attEdible, 1;
 	}
 
+    Script: place() {
+        self->seed = create(cAppleSeed, self);
+        pickUp(self, ->seed);
+    }
+
 	Script: tick() {
-	    ..attAge++;
-		if (.attAge > 1440) {
+	    if (chance(0.05)) {
+	        ..attNutrition--;
+	    }
+
+		if (.attNutrition <= 0) {
+		    placeAt(->seed, getTile(self));
 			destroy(self);
 		}
 	}
 
 	Script: consume(actor) {
-        (addEffect(actor, effDigest))..attNutrition = .attNutrition;
+	    effect = addEffect(actor, effDigest);
+        effect..attNutrition = .attNutrition;
+
+        pickUp(effect, ->seed);
 
 		destroy(self);
 	}

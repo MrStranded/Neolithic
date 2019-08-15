@@ -88,6 +88,7 @@ public enum TokenConstants {
     GET_EFFECTS             (TokenType.COMMAND, "getEffects"),
 	GET_HEIGHT              (TokenType.COMMAND, "getHeight"),
 	GET_ITEM_ATTRIBUTE      (TokenType.COMMAND, "getItemAtt"),
+	GET_ITEMS				(TokenType.COMMAND, "getItems"),
 	GET_LIGHT_LEVEL         (TokenType.COMMAND, "getLightLevel"),
 	GET_NEIGHBOUR           (TokenType.COMMAND, "getNeighbor"), // difference between british english in code and american english in scripts
 	GET_NEIGHBOURS          (TokenType.COMMAND, "getNeighbors"),

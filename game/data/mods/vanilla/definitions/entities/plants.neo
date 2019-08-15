@@ -1,8 +1,8 @@
 
 ///////////////////////////////////////////////////////////////////////////// Tree
 
-Creature: cTree {
-	name = "Tree";
+Creature: cAppleTree {
+	name = "Apple tree";
 	mesh = "apple_tree_mature.ply";
 
 	drives {
@@ -16,9 +16,47 @@ Creature: cTree {
 
 	Script: place {
 		..attNutrition += random(100);
+		//self->fruitType = entApple;
+
+        ->updateMesh();
 	}
 
-	attributes{}
+	attributes{
+	    attMatureAge, 2880;
+	    attLightSensitivity, 50;
+	}
+
+	Script: tick {
+	    ..attAge++;
+
+	    if (.attAge > .attMatureAge*2) {
+	        destroy(self);
+	    }
+	}
+
+	Script: updateMesh() {
+	    if (.attAge < .attMatureAge) {
+            setMesh(self, "vanilla/assets/meshes/apple_tree_young.ply");
+        } else {
+            setMesh(self, "vanilla/assets/meshes/apple_tree_mature.ply");
+        }
+	}
+}
+
+Creature: cAppleSeed {
+    name = "Apple seed";
+
+    drives { driGrowIntoTree; }
+
+    knowledge { proGrowIntoTree; }
+
+    attributes {
+        attLightSensitivity, 90;
+    }
+
+    Script: place() {
+        //self->treeType = cAppleTree;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////// Drives
@@ -34,17 +72,24 @@ Drive: driPlantReproduction {
 	}
 }
 
+Drive: driGrowIntoTree {
+    solutions { proGrowIntoTree; }
+
+    Script: getWeight { return(getLightLevel(self) - .attLightSensitivity); }
+}
+
 ///////////////////////////////////////////////////////////////////////////// Processes
 
 Process: proPhotoSynthesis {
 	Script: condition {
-		require(getLightLevel(self) >= 50);
+		require(getLightLevel(self) >= .attLightSensitivity);
+		require(.attAge >= .attMatureAge);
 	}
 	Script: process {
 		..attNutrition++;
 	}
 
-	Script: discovery(actor) { // there is no way for an entity to learn photosynthesisis
+	Script: discovery(actor) { // there is no way for an entity to learn photosynthesis
 		require(0);
 	}
 }
@@ -52,12 +97,38 @@ Process: proPhotoSynthesis {
 Process: proCreateFruit {
 	Script: condition {
 		require(!getAttInRange("attEdible", self, 1));
-		require(.attNutrition >= 100);
+		require(.attNutrition >= .attBabySize);
+		require(.attAge >= .attMatureAge);
 	}
 
 	Script: process {
-		fruit = create(entFruit, getTile(self));
-		..attNutrition -= 100;
-		//pickUp(self, fruit);
+		fruit = create(entApple /*self->fruitType*/, getTile(self));
+		..attNutrition -= .attBabySize;
+		fruit..attNutrition += .attBabySize;
 	}
+}
+
+Process: proGrowIntoTree {
+    Script: condition {
+        require(getLightLevel(self) >= .attLightSensitivity);
+    }
+    Script: process {
+        tree = create(cAppleTree /*self->treeType*/, getTile(self));
+        addEffect(tree, effSapling);
+        destroy(self);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////// Effects
+
+Effect: effSapling {
+    name = "Sapling";
+
+    Script: removeCondition(carrier) {
+        require(carrier.attAge >= carrier.attMatureAge);
+    }
+
+    Script: finally(carrier) {
+        carrier->updateMesh();
+    }
 }

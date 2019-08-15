@@ -211,31 +211,29 @@ public class CommandExecuter {
                 Data.getSun().changeAngle(angle);
             }
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance create (Container container, Tile tile)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance create (Container container, Instance holder)
 		} else if (TokenConstants.CREATE.equals(command)) {
 			if (requireParameters(commandNode, 2)) {
 				Container container = parameters[0].getContainer();
-				Tile tile = parameters[1].getTile();
+				Instance holder = parameters[1].getInstance();
 
-				if (container != null && tile != null) {
-					int id = Data.getContainerID(container.getTextID());
-					Instance instance = new Instance(id);
-					instance.placeInto(tile);
-					Variable[] newParameters = new Variable[1];
-					newParameters[0] = parameters[1];
-
-					instance.run(ScriptConstants.EVENT_PLACE, newParameters);
-					Data.addInstanceToQueue(instance);
-
-					return new Variable(instance);
-				} else {
-					if (container == null) {
-						Logger.error("Cannot create Instance: Template for '" + parameters[0].getString() + "' does not exist. Line " + command.getLine());
-					}
-					if (tile == null) {
-						Logger.error("Cannot create Instance: Not a valid tile value.");
-					}
+				if (container == null) {
+					Logger.error("Cannot create Instance: Template for '" + parameters[0].getString() + "' does not exist. Line " + command.getLine());
+					return new Variable();
 				}
+				if (holder == null) {
+					Logger.error("Cannot create Instance: Not a valid holder instance value.");
+					return new Variable();
+				}
+
+				int id = Data.getContainerID(container.getTextID());
+				Instance instance = new Instance(id);
+				instance.placeInto(holder);
+
+				instance.run(ScriptConstants.EVENT_PLACE, new Variable[] {parameters[1]});
+				Data.addInstanceToQueue(instance);
+
+				return new Variable(instance);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void deleteEffects (Instance target, Container effectContainer)
@@ -458,6 +456,24 @@ public class CommandExecuter {
 							}
 						}
 					}
+				}
+				return new Variable();
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& List<instance> getItems (Instance holder)
+		} else if (TokenConstants.GET_ITEMS.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				Instance holder = parameters[0].getInstance();
+
+				if (holder == null) {
+					Logger.error("Holder instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
+					return new Variable();
+				}
+
+				if (holder.getSubInstances() != null) {
+					List<Variable> items = new ArrayList<>(holder.getSubInstances().size());
+					holder.getSubInstances().forEach(item -> items.add(new Variable(item)));
+					return new Variable(items);
 				}
 				return new Variable();
 			}

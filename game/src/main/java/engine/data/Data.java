@@ -224,7 +224,12 @@ public class Data {
 	}
 
 	public static int addContainer(Container container) {
-		if (containerID >= GameConstants.MAX_CONTAINERS || container == null) {
+		if (containerID >= GameConstants.MAX_CONTAINERS) {
+			Logger.error("More Containers than allowed! Increase MAX_CONTAINERS. (currently MAX_CONTAINERS = " + GameConstants.MAX_CONTAINERS + ")");
+			return -1;
+		}
+		if (container == null) {
+			Logger.error("container == null in Data.addContainer!");
 			return -1;
 		}
 		int id = containerID;

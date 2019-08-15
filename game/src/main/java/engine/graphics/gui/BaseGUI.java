@@ -56,8 +56,8 @@ public class BaseGUI implements GUIInterface {
 
 		List<Integer> attributes = Data.getAllAttributeIDs();
 		double nrOfAtts = attributes.size();
-		List<Instance> monkeys = Data.getAllInstancesWithID(Data.getContainerID("cMonkey"));
-		double headcount = monkeys.size();
+		List<Instance> humans = Data.getAllInstancesWithID(Data.getContainerID("cHuman"));
+		double headcount = humans.size();
 		if (nrOfAtts == 0 || headcount == 0) {
 			GUIObject dead = new TextObject("Everybody died", fontTexture);
 			dead.setSize(windowWidth/2, 60);
@@ -71,8 +71,8 @@ public class BaseGUI implements GUIInterface {
 
 		for (Integer id : attributes) {
 			double sum = 0;
-			for (Instance monkey : monkeys) {
-				sum += monkey.getAttributeValue(id);
+			for (Instance human : humans) {
+				sum += human.getAttributeValue(id);
 			}
 
 			if (id == sleepingID) {
@@ -103,8 +103,8 @@ public class BaseGUI implements GUIInterface {
 		}
 
 		double nrOfChildren = 0;
-		for (Instance monkey : monkeys) {
-			nrOfChildren += monkey.getAttributeValue(Data.getProtoAttributeID("attAge")) < monkey.getAttributeValue(Data.getProtoAttributeID("attMatureAge")) ? 1 : 0;
+		for (Instance human : humans) {
+			nrOfChildren += human.getAttributeValue(Data.getProtoAttributeID("attAge")) < human.getAttributeValue(Data.getProtoAttributeID("attMatureAge")) ? 1 : 0;
 		}
 
 		GUIObject children = new TextObject("Children: " + ((int) nrOfChildren), fontTexture);

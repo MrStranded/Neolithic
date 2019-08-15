@@ -1,8 +1,8 @@
 
-///////////////////////////////////////////////////////////////////////////// Monkey
+///////////////////////////////////////////////////////////////////////////// human
 
-Creature: cMonkey {
-	name = "Monkey";
+Creature: cHuman {
+	name = "Human";
 	mesh = "human_female_mature.ply";
 
 	knowledge {
@@ -41,8 +41,8 @@ Creature: cMonkey {
 
 	Script: place {
 		self->id = random(1000);
-		if (main->monkey == 0) {
-		    main->monkey = self->id;
+		if (main->human == 0) {
+		    main->human = self->id;
         }
 
         ..attGender = random(0,2);
@@ -62,7 +62,7 @@ Creature: cMonkey {
             }
 		}
 
-		if (self->id == main->monkey && false) {
+		if (self->id == main->human && false) {
 		    print(self->id + " his stats: -------------------------------------");
 		    print("light sense:      " + .attLightSensitivity);
 		    print("hunger sense:     " + .attHungerSensitivity);
@@ -76,15 +76,15 @@ Creature: cMonkey {
 		    print(getEffects(self));
 		}
 
-		if (.attHealth < 0) { // monkey death
-		    if (self->id == main->monkey) {
-		        main->monkey = 0;
+		if (.attHealth < 0) { // human death
+		    if (self->id == main->human) {
+		        main->human = 0;
 		    }
 
-		    destroy(self);
+		    //destroy(self);
         }
 
-		if (.attAge > .attMatureAge*2) { // monkey age death
+		if (.attAge > .attMatureAge*2) { // human age death
 		    if (chance(0.01) && !getEffects(self, effCancer)) {
                 addEffect(self, effCancer);
 		    }

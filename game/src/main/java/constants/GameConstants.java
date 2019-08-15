@@ -4,7 +4,7 @@ public class GameConstants {
 
 	public static final int DEFAULT_PLANET_SIZE = 32;
 
-	public static final int MAX_CONTAINERS = 32;
+	public static final int MAX_CONTAINERS = 64;
 	public static final int MAX_ATTRIBUTES = 32;
 
 	public static final long TIME_BETWEEN_TICK_LOADS = 0;

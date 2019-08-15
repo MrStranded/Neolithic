@@ -20,13 +20,16 @@ WorldGen: genContinental {
 		for (t : eachTile()) {
 			if (getHeight(t) > 100) {
 				if (chance(0.01)) {
-					monkey = create(cMonkey, t);
-					monkey..attAge += random(2880);
+					human = create(cHuman, t);
+					human..attAge += random(human.attMatureAge);
+					addEffect(human, effInfant);
 				}
 			}
 			if (getType(t) == tGras && getHeight(t) > 100) {
 				if (chance(0.3)){
-					create(cTree,t);
+					tree = create(cAppleTree, t);
+					tree..attAge += random(tree.attMatureAge*2);
+					addEffect(tree, effSapling);
 				}
 			}
 		}

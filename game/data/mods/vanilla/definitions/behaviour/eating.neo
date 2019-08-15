@@ -43,7 +43,15 @@ Effect: effDigest {
 
     Script: tick(carrier) { ..attNutrition--; carrier..attNutrition++; }
     Script: removeCondition() { require(.attNutrition <= 0); }
-    Script: finally(carrier) { create(entShit, getTile(carrier)); }
+
+    Script: finally(carrier) {
+        shit = create(entShit, getTile(carrier));
+
+        items = getItems(self);
+        for (item : items) {
+            pickUp(shit, item);
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////// Drives
