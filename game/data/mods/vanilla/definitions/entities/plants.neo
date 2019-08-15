@@ -3,7 +3,7 @@
 
 Creature: cTree {
 	name = "Tree";
-	mesh = "tree01.ply";
+	mesh = "apple_tree_mature.ply";
 
 	drives {
 		driPlantReproduction;

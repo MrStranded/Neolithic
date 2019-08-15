@@ -3,7 +3,7 @@
 
 Creature: cMonkey {
 	name = "Monkey";
-	mesh = "monkey_male.ply";
+	mesh = "human_female_mature.ply";
 
 	knowledge {
 		proEat; proGatherFood; proPickUpFood;
@@ -102,15 +102,15 @@ Creature: cMonkey {
 	Script: updateMesh() {
 	    if (.attAge < .attMatureAge) {
             if (.attGender > 0) {
-                setMesh(self, "vanilla/assets/meshes/monkey_child_female.ply");
+                setMesh(self, "vanilla/assets/meshes/human_female_young.ply");
             } else {
-                setMesh(self, "vanilla/assets/meshes/monkey_child_male.ply");
+                setMesh(self, "vanilla/assets/meshes/human_male_young.ply");
             }
         } else {
             if (.attGender > 0) {
-                setMesh(self, "vanilla/assets/meshes/monkey_female.ply");
+                setMesh(self, "vanilla/assets/meshes/human_female_mature.ply");
             } else {
-                setMesh(self, "vanilla/assets/meshes/monkey_male.ply");
+                setMesh(self, "vanilla/assets/meshes/human_male_mature.ply");
             }
         }
 	}

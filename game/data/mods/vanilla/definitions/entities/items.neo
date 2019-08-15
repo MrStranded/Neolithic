@@ -3,7 +3,7 @@
 
 Entity: entFruit {
 	name = "Apple";
-	mesh = "apple02.ply";
+	mesh = "apple_6x_loose.ply";
 
 	attributes {
 		attNutrition, 50;

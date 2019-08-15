@@ -8,6 +8,7 @@ WorldGen: genContinental {
 			if (chance(0.0025)) { // 1/4% chance
 				if (chance(0.75)) {
 					destroy(create(formPlateau, t));
+					//fromPlateau->place(t);
 				} else {
 					destroy(create(formHill, t));
 				}

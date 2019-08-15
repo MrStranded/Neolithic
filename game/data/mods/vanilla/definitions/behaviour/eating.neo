@@ -1,6 +1,17 @@
 
 ///////////////////////////////////////////////////////////////////////////// Effects
 
+Entity: entShit {
+    name = "Shit";
+    mesh = "shit01.ply";
+
+    Script: tick {
+        if (chance(0.01)) { destroy(self); }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////// Effects
+
 Effect: effHunger {
     name = "Hunger";
 
@@ -32,6 +43,7 @@ Effect: effDigest {
 
     Script: tick(carrier) { ..attNutrition--; carrier..attNutrition++; }
     Script: removeCondition() { require(.attNutrition <= 0); }
+    Script: finally(carrier) { create(entShit, getTile(carrier)); }
 }
 
 ///////////////////////////////////////////////////////////////////////////// Drives

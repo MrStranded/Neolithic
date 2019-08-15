@@ -1,6 +1,6 @@
 ply
 format ascii 1.0
-comment Created by Blender 2.80 (sub 75) - www.blender.org, source file: 'monkey01.blend'
+comment Created by Blender 2.80 (sub 75) - www.blender.org, source file: 'monkey_male.blend'
 element vertex 2884
 property float x
 property float y
