@@ -21,10 +21,12 @@ public class Interpreter {
 
 	private PeekingIterator<Token> tokenIterator;
 	private String currentMod;
+	private String currentFile;
 
-	public Interpreter(List<Token> tokens, String currentMod) {
+	public Interpreter(List<Token> tokens, String currentMod, String currentFile) {
 		tokenIterator = new PeekingIterator<>(tokens);
 		this.currentMod = currentMod;
+		this.currentFile = currentFile;
 	}
 
 	// ###################################################################################
@@ -483,6 +485,18 @@ public class Interpreter {
 				Logger.error("Unknown Entity definition command '" + next.getValue() + "' on line " + next.getLine());
 			}
 		}
+	}
+
+	// ###################################################################################
+	// ################################ Debugging ########################################
+	// ###################################################################################
+
+	public String getCurrentMod() {
+		return currentMod;
+	}
+
+	public String getCurrentFile() {
+		return currentFile;
 	}
 
 	// ###################################################################################

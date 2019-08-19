@@ -36,6 +36,10 @@ public class Token {
 		return type;
 	}
 
+	public void setLine(int line) {
+		this.line = line;
+	}
+
 	public int getLine() {
 		return line;
 	}

@@ -7,19 +7,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fb5f568f-e1c1-4ada-8646-68bc27407460" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/comfort.neo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/assets/meshes/human_female_mature.blend" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/assets/meshes/human_female_mature.blend" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/assets/meshes/human_female_mature.blend1" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/assets/meshes/human_female_mature.blend1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/assets/meshes/human_female_mature.ply" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/assets/meshes/human_female_mature.ply" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/eating.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/eating.neo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/mating.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/mating.neo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/entities/creatures.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/entities/creatures.neo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/strolling.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/behaviour/strolling.neo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/entities/items.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/entities/items.neo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/mods/vanilla/definitions/entities/plants.neo" beforeDir="false" afterPath="$PROJECT_DIR$/data/mods/vanilla/definitions/entities/plants.neo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/variables/Variable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/constants/ScriptConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constants/ScriptConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/Script.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/Script.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/data/entities/Instance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/data/entities/Instance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/Parser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/constants/TokenConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/constants/TokenConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/interpretation/Interpreter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/ASTBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/scripts/nodes/CommandExpressionNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/engine/parser/tokenization/Token.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/parser/InterpreterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/parser/InterpreterTest.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -63,6 +66,9 @@
         </projects_view>
       </state>
     </system>
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="NeolithicV2" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -298,7 +304,7 @@
       <workItem from="1565778350539" duration="591000" />
       <workItem from="1565790490105" duration="1850000" />
       <workItem from="1565855155618" duration="14855000" />
-      <workItem from="1566209167855" duration="6572000" />
+      <workItem from="1566209167855" duration="15546000" />
     </task>
     <servers />
   </component>
@@ -351,11 +357,15 @@
     </option>
   </component>
   <component name="XDebuggerManager">
-    <watches-manager>
-      <configuration name="Application">
-        <watch expression="Data.containers" language="JAVA" />
-      </configuration>
-    </watches-manager>
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/engine/parser/scripts/execution/CommandExecuter.java</url>
+          <line>752</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>

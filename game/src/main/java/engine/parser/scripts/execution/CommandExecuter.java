@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandExecuter {
-
+	
 	public static Variable executeCommand(Instance self, Script script, CommandExpressionNode commandNode) throws ScriptInterruptedException {
 		//System.out.println("execute command: " + commandNode.getCommand());
 
@@ -54,11 +54,12 @@ public class CommandExecuter {
 				int duration = parameters[2].getInt();
 				List<Variable> attributes = parameters[3].getList();
 
-                checkValue(commandNode, target, "target instance");
+                checkValue(script, commandNode, target, "target instance");
 
 				Effect effect = new Effect(-1);
 				effect.setName(name);
 				effect.setRemainingTicks(duration);
+				effect.setSuperInstance(target);
 
 				boolean getID = true;
 				String attributeTextID = null;
@@ -83,16 +84,21 @@ public class CommandExecuter {
 					}
 				}
 
+				effect.run(ScriptConstants.EVENT_CREATE, new Variable[] {new Variable(target)});
+
 				target.addEffect(effect);
 			} else if (requireParameters(commandNode, 2)) {
 				Instance target = parameters[0].getInstance();
 				Container container = parameters[1].getContainer();
 				int containerId = -1;
 
-                checkValue(commandNode, target, "target instance");
-                containerId = checkType(commandNode, container, parameters[1].getString());
+                checkValue(script, commandNode, target, "target instance");
+                containerId = checkType(script, commandNode, container, parameters[1].getString());
 
 				Effect effect = new Effect(containerId);
+				effect.setSuperInstance(target);
+
+				effect.run(ScriptConstants.EVENT_CREATE, new Variable[] {new Variable(target)});
 
 				target.addEffect(effect);
 
@@ -107,8 +113,8 @@ public class CommandExecuter {
 				int amount = parameters[2].getInt();
                 int attributeID = Data.getProtoAttributeID(attributeTextID);
 
-                checkValue(commandNode, target, "target instance");
-                checkAttribute(commandNode, attributeID, attributeTextID);
+                checkValue(script, commandNode, target, "target instance");
+                checkAttribute(script, commandNode, attributeID, attributeTextID);
 
 				target.addAttribute(attributeID, amount);
 			}
@@ -127,8 +133,8 @@ public class CommandExecuter {
 					}
 				}
 
-                checkValue(commandNode, target, "target instance");
-                checkValue(commandNode, callBackScript, "callback script");
+                checkValue(script, commandNode, target, "target instance");
+                checkValue(script, commandNode, callBackScript, "callback script");
 
 				target.addOccupation(duration, callBackScript);
 
@@ -136,7 +142,7 @@ public class CommandExecuter {
                 Instance target = parameters[0].getInstance();
                 int duration = parameters[1].getInt();
 
-                checkValue(commandNode, target, "target instance");
+                checkValue(script, commandNode, target, "target instance");
 
                 target.addOccupation(duration, null);
             }
@@ -158,8 +164,8 @@ public class CommandExecuter {
 				Container container = parameters[1].getContainer();
 				int containerId = -1;
 
-                checkValue(commandNode, oldInstance, "target instance");
-                containerId = checkType(commandNode, container, parameters[1].getString());
+                checkValue(script, commandNode, oldInstance, "target instance");
+                containerId = checkType(script, commandNode, container, parameters[1].getString());
 
 				if (Data.getContainer(containerId).getType() == DataType.TILE) {
 					Tile oldTile = oldInstance.getPosition();
@@ -190,8 +196,8 @@ public class CommandExecuter {
 				Instance holder = parameters[1].getInstance();
 				int containerId = -1;
 
-				containerId = checkType(commandNode, container, parameters[0].getString());
-                checkValue(commandNode, holder, "holder instance");
+				containerId = checkType(script, commandNode, container, parameters[0].getString());
+                checkValue(script, commandNode, holder, "holder instance");
 
 				Instance instance = new Instance(containerId);
 				instance.placeInto(holder);
@@ -208,7 +214,7 @@ public class CommandExecuter {
 				Instance target = parameters[0].getInstance();
 				int containerID = parameters.length >= 2 ? parameters[1].getContainerId() : -1;
 
-                checkValue(commandNode, target, "target instance");
+                checkValue(script, commandNode, target, "target instance");
 
 				target.deleteEffects(containerID);
 			}
@@ -218,7 +224,7 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 1)) {
 				Instance instance = parameters[0].getInstance();
 
-                checkValue(commandNode, instance, "target instance");
+                checkValue(script, commandNode, instance, "target instance");
 
 				instance.destroy();
 			}
@@ -250,15 +256,15 @@ public class CommandExecuter {
 				String attributeTextID = parameters[1].getString();
 				int attributeID = Data.getProtoAttributeID(attributeTextID);
 
-                checkValue(commandNode, instance, "target instance");
-                checkAttribute(commandNode, attributeID, attributeTextID);
+                checkValue(script, commandNode, instance, "target instance");
+                checkAttribute(script, commandNode, attributeID, attributeTextID);
 
                 return new Variable(instance.getAttribute(attributeID));
 			} else if (requireParameters(commandNode, 1)) {
 				String attributeTextID = parameters[0].getString();
 				int attributeID = Data.getProtoAttributeID(attributeTextID);
 
-                checkAttribute(commandNode, attributeID, attributeTextID);
+                checkAttribute(script, commandNode, attributeID, attributeTextID);
 
                 return new Variable(self.getAttribute(attributeID));
 			}
@@ -272,8 +278,8 @@ public class CommandExecuter {
 
 				int attributeID = Data.getProtoAttributeID(attributeTextID);
 
-                checkValue(commandNode, center, "center tile");
-                checkAttribute(commandNode, attributeID, attributeTextID);
+                checkValue(script, commandNode, center, "center tile");
+                checkAttribute(script, commandNode, attributeID, attributeTextID);
 
 				TileArea tileArea = new TileArea(center, radius);
 				for (Tile tile : tileArea.getTileList()) {
@@ -294,8 +300,8 @@ public class CommandExecuter {
 				Tile center = parameters[1].getTile();
 				int radius = parameters[2].getInt();
 
-                checkValue(commandNode, center, "center tile");
-                containerID = checkType(commandNode, type, parameters[0].getString());
+                checkValue(script, commandNode, center, "center tile");
+                containerID = checkType(script, commandNode, type, parameters[0].getString());
 
 				TileArea tileArea = new TileArea(center, radius);
 				for (Tile tile : tileArea.getTileList()) {
@@ -308,36 +314,13 @@ public class CommandExecuter {
 				return new Variable();
 			}
 
-        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance[] getCreaturesInRange (Container type, Tile center, int radius)
-        } else if (TokenConstants.GET_INSTANCES_IN_RANGE.equals(command)) {
-            if (requireParameters(commandNode, 3)) {
-                Container type = parameters[0].getContainer();
-                int containerID = -1;
-                Tile center = parameters[1].getTile();
-                int radius = parameters[2].getInt();
-
-                checkValue(commandNode, center, "center tile");
-                containerID = checkType(commandNode, type, parameters[0].getString());
-
-                List<Variable> creatures = new ArrayList<>();
-                TileArea tileArea = new TileArea(center, radius);
-                for (Tile tile : tileArea.getTileList()) {
-                    Instance instance = tile.getThisOrSubInstanceWithID(containerID);
-
-                    if (instance != null) {
-                        creatures.add(new Variable(instance));
-                    }
-                }
-                return new Variable(creatures);
-            }
-
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& List<Instance> getEffects (Instance target, Container effectContainer)
 		} else if (TokenConstants.GET_EFFECTS.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
 				Instance target = parameters[0].getInstance();
 				int containerID = parameters.length >= 2 ? parameters[1].getContainerId() : -1;
 
-                checkValue(commandNode, target, "target instance");
+                checkValue(script, commandNode, target, "target instance");
 
 				List<Variable> effects = new ArrayList<>();
 				for (Instance effect : target.getEffects()) {
@@ -353,9 +336,32 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 1)) {
 				Tile tile = parameters[0].getTile();
 
-                checkValue(commandNode, tile, "target tile");
+                checkValue(script, commandNode, tile, "target tile");
 
 				return new Variable(tile.getHeight());
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance[] getInstancesInRange (Container type, Tile center, int radius)
+		} else if (TokenConstants.GET_INSTANCES_IN_RANGE.equals(command)) {
+			if (requireParameters(commandNode, 3)) {
+				Container type = parameters[0].getContainer();
+				int containerID = -1;
+				Tile center = parameters[1].getTile();
+				int radius = parameters[2].getInt();
+
+				checkValue(script, commandNode, center, "center tile");
+				containerID = checkType(script, commandNode, type, parameters[0].getString());
+
+				List<Variable> creatures = new ArrayList<>();
+				TileArea tileArea = new TileArea(center, radius);
+				for (Tile tile : tileArea.getTileList()) {
+					Instance instance = tile.getThisOrSubInstanceWithID(containerID);
+
+					if (instance != null) {
+						creatures.add(new Variable(instance));
+					}
+				}
+				return new Variable(creatures);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance getItemAtt (Instance holder, String attributeTextID)
@@ -365,8 +371,8 @@ public class CommandExecuter {
 				String attributeTextID = parameters[1].getString();
 				int attributeID = Data.getProtoAttributeID(attributeTextID);
 
-                checkValue(commandNode, holder, "holder instance");
-                checkAttribute(commandNode, attributeID, attributeTextID);
+                checkValue(script, commandNode, holder, "holder instance");
+                checkAttribute(script, commandNode, attributeID, attributeTextID);
 
 				if (holder.getSubInstances() != null) {
 					for (Instance item : holder.getSubInstances()) {
@@ -385,7 +391,7 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 1)) {
 				Instance holder = parameters[0].getInstance();
 
-                checkValue(commandNode, holder, "holder instance");
+                checkValue(script, commandNode, holder, "holder instance");
 
 				if (holder.getSubInstances() != null) {
 					List<Variable> items = new ArrayList<>(holder.getSubInstances().size());
@@ -400,7 +406,7 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 1)) {
 				Tile tile = parameters[0].getTile();
 
-                checkValue(commandNode, tile, "target tile");
+                checkValue(script, commandNode, tile, "target tile");
 
 				Vector3 sunPosition = Data.getSun().getGraphicalObject().getPosition().normalize();
 				Vector3 tilePosition = tile.getTileMesh().getNormal();
@@ -416,7 +422,7 @@ public class CommandExecuter {
 				Tile tile = parameters[0].getTile();
 				int position = parameters[1].getInt();
 
-                checkValue(commandNode, tile, "target tile");
+                checkValue(script, commandNode, tile, "target tile");
 
 				if (position < 0 || position > 2) {
 					position = position % 3;
@@ -430,7 +436,7 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 1)) {
 				Tile tile = parameters[0].getTile();
 
-                checkValue(commandNode, tile, "target tile");
+                checkValue(script, commandNode, tile, "target tile");
 
 				List<Variable> tileList = new ArrayList<>(3);
 				for (Tile neighbour : Neighbour.getNeighbours(tile)) {
@@ -444,7 +450,7 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 1)) {
 				Instance instance = parameters[0].getInstance();
 
-                checkValue(commandNode, instance, "target instance");
+                checkValue(script, commandNode, instance, "target instance");
 
 				return new Variable(instance.getPosition());
 			}
@@ -455,7 +461,7 @@ public class CommandExecuter {
 				Tile center = parameters[0].getTile();
 				int radius = parameters[1].getInt();
 
-                checkValue(commandNode, center, "center tile");
+                checkValue(script, commandNode, center, "center tile");
 
 				TileArea tileArea = new TileArea(center, radius);
 				return new Variable(tileArea.getTilesAsVariableList());
@@ -466,17 +472,34 @@ public class CommandExecuter {
             if (requireParameters(commandNode,1)) {
                 Instance instance = parameters[0].getInstance();
 
-                checkValue(commandNode, instance, "target instance");
+                checkValue(script, commandNode, instance, "target instance");
 
                 return new Variable(Data.getContainer(instance.getId()));
             }
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& boolean isOnFloor(Instance instance)
+		} else if (TokenConstants.IS_ON_FLOOR.equals(command)) {
+			if (requireParameters(commandNode,1)) {
+				Instance instance = parameters[0].getInstance();
+
+				checkValue(script, commandNode, instance, "target instance");
+
+				if (instance.getSuperInstance() != null) {
+					Container superContainer = Data.getContainer(instance.getSuperInstance().getId());
+					if (superContainer != null && superContainer.getType() == DataType.TILE) {
+						return new Variable(1);
+					}
+				}
+
+				return new Variable(0);
+			}
 
         // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int length (List list)
         } else if (TokenConstants.LENGTH.equals(command)) {
             if (requireParameters(commandNode,1)) {
                 List<Variable> list = parameters[0].getList();
 
-                checkValue(commandNode, list, "list");
+                checkValue(script, commandNode, list, "list");
 
                 return new Variable(list.size());
             }
@@ -538,18 +561,18 @@ public class CommandExecuter {
 				Instance parent1 = parameters[1].getInstance();
 				Instance parent2 = parameters[2].getInstance();
 
-                checkValue(commandNode, target, "child instance");
-                checkValue(commandNode, parent1, "parent 1 instance");
-                checkValue(commandNode, parent2, "parent 2 instance");
+                checkValue(script, commandNode, target, "child instance");
+                checkValue(script, commandNode, parent1, "parent 1 instance");
+                checkValue(script, commandNode, parent2, "parent 2 instance");
 
                 List<Integer> attributes = Data.getAllAttributeIDs();
                 for (Integer id : attributes) {
 					ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
 
-                	if (protoAttribute.isInherited()) {
+                	if (protoAttribute != null && protoAttribute.isInherited()) {
                 		double v1 = parent1.getPersonalAttributeValue(id);
                 		double v2 = parent2.getPersonalAttributeValue(id);
-                		if (v1 != 0 && v2 != 0) {
+                		if (v1 != 0 || v2 != 0) {
                 			double p = Math.random();
 							int value = (int) (v1*p + v2*(1-p));
 
@@ -571,8 +594,8 @@ public class CommandExecuter {
 				Tile tile = parameters[1].getTile();
 				int steps = parameters[2].getInt();
 
-                checkValue(commandNode, tile, "target tile");
-                checkValue(commandNode, instance, "target instance");
+                checkValue(script, commandNode, tile, "target tile");
+                checkValue(script, commandNode, instance, "target instance");
 
 				Tile newPosition = Pathfinding.moveTowardsTile(instance, tile, steps);
 
@@ -588,8 +611,8 @@ public class CommandExecuter {
 				Instance holder = parameters[0].getInstance();
 				Instance item = parameters[1].getInstance();
 
-                checkValue(commandNode, holder, "holder instance");
-                checkValue(commandNode, item, "item instance");
+                checkValue(script, commandNode, holder, "holder instance");
+                checkValue(script, commandNode, item, "item instance");
 
 				//item.placeInto(holder.getPosition());
 				//holder.addSubInstance(item);
@@ -645,17 +668,17 @@ public class CommandExecuter {
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Tile setAt (Instance instance, Tile tile)
-		} else if (TokenConstants.SET_AT.equals(command)) {
+		/*} else if (TokenConstants.SET_AT.equals(command)) {
 			if (requireParameters(commandNode, 2)) {
 				Instance instance = parameters[0].getInstance();
 				Tile tile = parameters[1].getTile();
 
-                checkValue(commandNode, tile, "target tile");
-                checkValue(commandNode, instance, "target instance");
+                checkValue(script, commandNode, tile, "target tile");
+                checkValue(script, commandNode, instance, "target instance");
 
 				instance.placeInto(tile);
 				return new Variable(tile);
-			}
+			}*/
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int setHeight (int height)
 		} else if (TokenConstants.SET_HEIGHT.equals(command)) {
@@ -678,7 +701,7 @@ public class CommandExecuter {
 				Instance target = parameters[0].getInstance();
 				String path = parameters[1].getString();
 
-				checkValue(commandNode, target, "target instance");
+				checkValue(script, commandNode, target, "target instance");
 
 				target.setMesh(ResourcePathConstants.MOD_FOLDER + path);
 
@@ -713,43 +736,51 @@ public class CommandExecuter {
 
         // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& UNKNOWN COMMAND!
 		} else {
-		    Logger.error("Unknown command '" + commandNode.getCommand() + "'!");
+			Logger.error(
+					"Unknown command '" + commandNode.getCommand() + "'!" +
+					" Error on line " + commandNode.getCommand().getLine() +
+					" in command '" + commandNode.getCommand().getValue() + "'" +
+					" during execution of script '" + script.getTextId() + "' in file '" + script.getFileName() + "'."
+			);
 
         }
 
 		return new Variable();
 	}
 
-	private static void checkValue(CommandExpressionNode commandNode, Object value, String objectName) throws InvalidValueException {
+	private static void checkValue(Script script, CommandExpressionNode commandNode, Object value, String objectName) throws InvalidValueException {
         if (value == null) {
             Logger.error(
                     "Value '" + objectName + "' is invalid!" +
                     " Error on line " + commandNode.getCommand().getLine() +
-                    " in command '" + commandNode.getCommand().getValue() + "'"
+                    " in command '" + commandNode.getCommand().getValue() + "'" +
+					" during execution of script '" + script.getTextId() + "' in file '" + script.getFileName() + "'."
             );
-            throw new InvalidValueException();
+            throw new InvalidValueException("Value '" + objectName + "' is invalid!");
         }
     }
 
-    private static void checkAttribute(CommandExpressionNode commandNode, int attributeID, String attributeTextID) throws InvalidValueException {
+    private static void checkAttribute(Script script, CommandExpressionNode commandNode, int attributeID, String attributeTextID) throws InvalidValueException {
         if (attributeID == -1) {
             Logger.error(
                     "Attribute '" + attributeTextID + "' does not exist!" +
                     " Error on line " + commandNode.getCommand().getLine() +
-                    " in command '" + commandNode.getCommand().getValue() + "'"
+                    " in command '" + commandNode.getCommand().getValue() + "'" +
+					" during execution of script '" + script.getTextId() + "' in file '" + script.getFileName() + "'."
             );
             throw new InvalidValueException("Attribute '" + attributeTextID + "' does not exist!");
         }
     }
 
-    private static int checkType(CommandExpressionNode commandNode, Container type, String typeName) throws InvalidValueException {
+    private static int checkType(Script script, CommandExpressionNode commandNode, Container type, String typeName) throws InvalidValueException {
 	    int containerID = -1;
 
         if ((type == null) || ((containerID = Data.getContainerID(type.getTextID())) < 0)) {
             Logger.error(
                     "Type with name '" + typeName + "' does not exist!" +
                     " Error on line " + commandNode.getCommand().getLine() +
-                    " in command '" + commandNode.getCommand().getValue() + "'"
+                    " in command '" + commandNode.getCommand().getValue() + "'" +
+					" during execution of script '" + script.getTextId() + "' in file '" + script.getFileName() + "'."
             );
             throw new InvalidValueException("Type with name '" + typeName + "' does not exist!");
         }

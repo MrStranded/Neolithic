@@ -3,6 +3,7 @@ package engine.parser.scripts.nodes;
 import engine.data.entities.Instance;
 import engine.data.Script;
 import engine.data.variables.Variable;
+import engine.parser.scripts.exceptions.InvalidValueException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.execution.CommandExecuter;
 import engine.parser.tokenization.Token;
@@ -25,7 +26,12 @@ public class CommandExpressionNode extends AbstractScriptNode {
 
 	@Override
 	public Variable execute(Instance instance, Script script) throws ScriptInterruptedException {
-		return CommandExecuter.executeCommand(instance, script, this);
+		try {
+			return CommandExecuter.executeCommand(instance, script, this);
+		} catch (InvalidValueException e) {
+			// the execution of the command did not work due to invalid input parameters -> do nothing
+		}
+		return new Variable();
 	}
 
 	@Override

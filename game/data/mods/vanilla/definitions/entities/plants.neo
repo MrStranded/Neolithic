@@ -50,6 +50,49 @@ Creature: cAppleTree {
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////// Fruit
+
+Entity: entApple {
+	name = "Apple";
+	mesh = "apple_6x_loose.ply";
+
+	attributes {
+		attEdible, 1;
+	}
+
+	Script: place() {
+	    ->seed = create(cAppleSeed, self);
+    }
+
+    Script: mix(parent) {
+	    if (parent) {
+	        mixAttributes(->seed, parent, parent);
+	    } else {
+	        print("no parents!");
+	    }
+	}
+
+	Script: tick() {
+	    if (chance(0.001)) {
+	        ..attNutrition--;
+	    }
+
+		if (.attNutrition <= 0) {
+			destroy(self);
+		}
+	}
+
+	Script: consume(actor) {
+	    effect = addEffect(actor, effDigest);
+        effect..attNutrition = .attNutrition;
+        for (item : getItems(self)) {
+            pickUp(effect, item);
+        }
+
+		destroy(self);
+	}
+}
+
 Creature: cAppleSeed {
     name = "Apple seed";
     mesh = "apple_seed.ply";
@@ -124,6 +167,7 @@ Process: proCreateFruit {
 	Script: process {
 	    tile = getNeighbor(getTile(self), random(3));
 		fruit = create(self->fruitType, tile);
+		fruit->mix(self);
 		..attNutrition -= .attBabySize;
 		fruit..attNutrition += .attBabySize;
 	}
@@ -131,6 +175,7 @@ Process: proCreateFruit {
 
 Process: proGrowIntoTree {
     Script: condition {
+        require(isOnFloor(self));
         require(getLightLevel(self) >= .attLightSensitivity);
         require(!getInstancesInRange(self->treeType, getTile(self), 0));
         require(getHeight(self) >= 100);
@@ -138,6 +183,7 @@ Process: proGrowIntoTree {
     }
     Script: process {
         tree = create(self->treeType, getTile(self));
+        mixAttributes(tree, self, self);
         addEffect(tree, effSapling);
         destroy(self);
     }

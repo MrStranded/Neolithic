@@ -42,12 +42,11 @@ Drive: driMove {
 Process: proStroll {
 	Script: process {
 		tile = getNeighbor(getTile(self), random(3));
-		if (self->reachable(getTile(self), tile)) {
-		    setAt(self, tile);
+		newTile = moveTo(self, tile, 1);
+		if (newTile != tile) {
 		    if (chance(0.01)) {
 		        addEffect(self, effAchingFeet);
 		    }
-		    //self..attNutrition--;
 		}
 	}
 

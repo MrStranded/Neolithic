@@ -43,7 +43,7 @@ public class ASTBuilder {
 		}
 
 		MultiStatementNode root = readMultiStatement();
-		return new Script(textID, root, parameters);
+		return new Script(textID, interpreter.getCurrentFile(), root, parameters);
 	}
 
 	// ###################################################################################
@@ -204,7 +204,7 @@ public class ASTBuilder {
 
 		if (command != null) { // we have a command!
 			List<AbstractScriptNode> parameters = readParameters();
-			left = new CommandExpressionNode(command.getToken(), parameters);
+			left = new CommandExpressionNode(expression/*command.getToken()*/, parameters);
 
 		} else if (TokenConstants.SELF.equals(expression)) { // a self expression
 			left = new SelfNode();

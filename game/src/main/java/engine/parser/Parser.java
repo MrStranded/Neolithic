@@ -77,7 +77,7 @@ public class Parser {
 			List<Token> tokens = Tokenizer.tokenize(new FileReader(file));
 
 			try {
-				Interpreter interpreter = new Interpreter(tokens, currentMod);
+				Interpreter interpreter = new Interpreter(tokens, currentMod, file.getName());
 				interpreter.interpret();
 			} catch (Exception e) {
 				Logger.error("Parsing error in file: " + file.getName());

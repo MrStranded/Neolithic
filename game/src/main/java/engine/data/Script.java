@@ -19,9 +19,11 @@ public class Script implements IDInterface {
 	private AbstractScriptNode root;
 	private String[] parameterNames;
 	private Stack<BinaryTree<Variable>> variableStack;
+	private String fileName;
 
-	public Script(String textId, AbstractScriptNode root, List<String> parameterNameList) {
+	public Script(String textId, String fileName, AbstractScriptNode root, List<String> parameterNameList) {
 		this.textId = textId;
+		this.fileName = fileName;
 		this.root = root;
 
 		id = StringConverter.toID(textId);
@@ -74,8 +76,6 @@ public class Script implements IDInterface {
 		} catch (ScriptInterruptedException e) {
 			Logger.error("Script '" + textId + "' could not be executed!");
 			//e.printStackTrace();
-
-			result = new Variable();
 		}
 
 		// pop variable stack
@@ -105,6 +105,10 @@ public class Script implements IDInterface {
 
 	public String getTextId() {
 		return textId;
+	}
+
+	public String getFileName() {
+		return fileName;
 	}
 
 	@Override

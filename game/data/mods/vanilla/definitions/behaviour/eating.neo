@@ -6,7 +6,9 @@ Entity: entShit {
     mesh = "shit01.ply";
 
     Script: tick {
-        if (chance(0.01)) { destroy(self); }
+        if (chance(0.01)) {
+            destroy(self);
+        }
     }
 }
 
@@ -41,15 +43,25 @@ Effect: effHunger {
 Effect: effDigest {
     name = "Digest";
 
-    Script: tick(carrier) { ..attNutrition--; carrier..attNutrition++; }
+    Script: create() {
+        ->shit = create(entShit, self);
+    }
+
+    Script: tick(carrier) {
+        ..attNutrition -= 2;
+        carrier..attNutrition++;
+        ->shit..attNutrition++;
+    }
     Script: removeCondition() { require(.attNutrition <= 0); }
 
     Script: finally(carrier) {
-        shit = create(entShit, getTile(carrier));
+        tile = getTile(carrier);
 
-        for (itemType : ->contents) {
-            print("putting " + itemType + " into " + shit);
-            create(itemType, shit);
+        items = getItems(self);
+        if (items) {
+            for (item : items) {
+                pickUp(tile, item);
+            }
         }
     }
 }

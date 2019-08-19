@@ -30,7 +30,7 @@ public class InterpreterTest {
 		tokens.add(new Token(TokenType.SEPARATOR, "}", 0));
 
 		try {
-			new Interpreter(tokens, "").interpret();
+			new Interpreter(tokens, "", "").interpret();
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("This should not produce an error.");
@@ -49,7 +49,7 @@ public class InterpreterTest {
 		tokens.add(new Token(TokenType.SEPARATOR, "(", 0));
 
 		try {
-			new Interpreter(tokens, "").interpret();
+			new Interpreter(tokens, "", "").interpret();
 
 			fail("This should produce an error.");
 		} catch (Exception e) {

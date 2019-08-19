@@ -333,33 +333,15 @@ public class Instance {
 
 	/**
 	 * Sets the current instance as a subinstance of the given instance.
-	 * @param instance where we want to put the current instance
+	 * @param target where we want to put the current instance
 	 */
-	public void placeInto(Instance instance) {
-		if (instance != null) {
+	public void placeInto(Instance target) {
+		if (target != null) {
 			if (superInstance != null) {
 				superInstance.removeSubInstance(this);
 			}
-			instance.addSubInstance(this);
-			superInstance = instance;
-			actualizeObjectPosition();
-		}
-	}
-
-	/**
-	 * Sets the current instance at the tile position of the given instance.
-	 * @param instance at whose tile position we want to put the current instance
-	 */
-	public void placeAt(Instance instance) {
-		if (instance != null) {
-			if (superInstance != null) {
-				superInstance.removeSubInstance(this);
-			}
-			Tile position = instance.getPosition();
-			if (position != null) {
-				position.addSubInstance(this);
-				superInstance = position;
-			}
+			target.addSubInstance(this);
+			superInstance = target;
 			actualizeObjectPosition();
 		}
 	}
@@ -444,16 +426,14 @@ public class Instance {
 		return false;
 	}
 
-	public void addSubInstance(Instance instance) {
-		createSubInstancesIfNecessary();
+	private void addSubInstance(Instance instance) {
 		if (instance != null) {
-			instance.setSuperInstance(this);
+			createSubInstancesIfNecessary();
 			subInstances.add(instance);
 		}
 	}
-	public void removeSubInstance(Instance instance) {
+	private void removeSubInstance(Instance instance) {
 		if (instance != null && subInstances != null) {
-			instance.setSuperInstance(null);
             subInstances.remove(instance);
 		}
 	}
@@ -502,10 +482,8 @@ public class Instance {
         this.name = name;
     }
 
-    public List<Instance> getEffects() {
-		if (effects == null) { return new LinkedList<>(); }
-
-        return new LinkedList<>(effects); //new CopyOnWriteArrayList<>(effects);
+    public List<Effect> getEffects() {
+        return effects; //new LinkedList<>(effects); //new CopyOnWriteArrayList<>(effects);
     }
 
     public Instance getSubInstanceWithAttribute(int attributeID) {
@@ -555,11 +533,11 @@ public class Instance {
 		// effects
 		if (effects != null) {
 			try {
-				for (Effect effect : effects) {
+				for (Effect effect : getEffects()) {
 					value += effect.getAttributeValue(attributeID);
 				}
-			} catch (Exception e) {
-				Logger.error("Concurrent modification during 'Instance.getAttributeValue()' (effect list is currently being modified)");
+			} catch (ConcurrentModificationException e) {
+				//Logger.error("Concurrent modification during 'Instance.getAttributeValue()' (effect list is currently being modified)");
 			}
 		}
 

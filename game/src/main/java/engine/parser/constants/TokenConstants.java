@@ -95,6 +95,7 @@ public enum TokenConstants {
 	GET_TILE                (TokenType.COMMAND, "getTile"),
 	GET_TILES_IN_RANGE      (TokenType.COMMAND, "getTilesInRange"),
 	GET_TYPE				(TokenType.COMMAND, "getType"),
+	IS_ON_FLOOR				(TokenType.COMMAND, "isOnFloor"),
 	RANDOM_TILE             (TokenType.COMMAND, "randomTile"),
 
 	// -------------------------------------------------- Actions
