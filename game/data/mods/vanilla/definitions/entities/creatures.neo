@@ -17,6 +17,7 @@ Creature: cHuman {
 		driMate;
 		driSleep;
 		driMove;
+		driNotSitOnShit;
 	}
 
 	attributes {

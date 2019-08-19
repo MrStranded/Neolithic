@@ -309,7 +309,7 @@ public class CommandExecuter {
 			}
 
         // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance[] getCreaturesInRange (Container type, Tile center, int radius)
-        } else if (TokenConstants.GET_CREATURES_IN_RANGE.equals(command)) {
+        } else if (TokenConstants.GET_INSTANCES_IN_RANGE.equals(command)) {
             if (requireParameters(commandNode, 3)) {
                 Container type = parameters[0].getContainer();
                 int containerID = -1;
@@ -725,7 +725,7 @@ public class CommandExecuter {
             Logger.error(
                     "Value '" + objectName + "' is invalid!" +
                     " Error on line " + commandNode.getCommand().getLine() +
-                    " in command " + commandNode.getCommand().getValue()
+                    " in command '" + commandNode.getCommand().getValue() + "'"
             );
             throw new InvalidValueException();
         }
@@ -736,7 +736,7 @@ public class CommandExecuter {
             Logger.error(
                     "Attribute '" + attributeTextID + "' does not exist!" +
                     " Error on line " + commandNode.getCommand().getLine() +
-                    " in command " + commandNode.getCommand().getValue()
+                    " in command '" + commandNode.getCommand().getValue() + "'"
             );
             throw new InvalidValueException("Attribute '" + attributeTextID + "' does not exist!");
         }
@@ -749,7 +749,7 @@ public class CommandExecuter {
             Logger.error(
                     "Type with name '" + typeName + "' does not exist!" +
                     " Error on line " + commandNode.getCommand().getLine() +
-                    " in command " + commandNode.getCommand().getValue()
+                    " in command '" + commandNode.getCommand().getValue() + "'"
             );
             throw new InvalidValueException("Type with name '" + typeName + "' does not exist!");
         }

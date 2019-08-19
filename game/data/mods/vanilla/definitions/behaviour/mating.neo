@@ -63,7 +63,7 @@ Process: proMate {
 
 Process: proSearchMate {
     Script: condition {
-        creatures = getCreaturesInRange(getType(self), getTile(self), .attViewingDistance);
+        creatures = getInstancesInRange(getType(self), getTile(self), .attViewingDistance);
         ->mate = false;
         for (creature : creatures) {
             // males are all gender values <= 0, females are all gender values > 0. thus males*females <= 0 for heterogenous reproduction

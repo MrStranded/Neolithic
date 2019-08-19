@@ -26,6 +26,7 @@ Creature: cAppleTree {
 	attributes{
 	    attMatureAge, 2880;
 	    attLightSensitivity, 50;
+	    attBabySize, 50;
 	}
 
 	Script: tick {
@@ -131,7 +132,7 @@ Process: proCreateFruit {
 Process: proGrowIntoTree {
     Script: condition {
         require(getLightLevel(self) >= .attLightSensitivity);
-        require(!getCreaturesInRange(self->treeType, getTile(self), 0));
+        require(!getInstancesInRange(self->treeType, getTile(self), 0));
         require(getHeight(self) >= 100);
         require(getType(getTile(self)) == tGras || getType(getTile(self)) == tDirt);
     }

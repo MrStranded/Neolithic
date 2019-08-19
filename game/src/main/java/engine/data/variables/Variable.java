@@ -8,6 +8,7 @@ import engine.data.entities.Effect;
 import engine.data.entities.Instance;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
+import engine.data.proto.ProtoAttribute;
 import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
@@ -180,9 +181,11 @@ public class Variable implements IDInterface {
 		if (type == DataType.NUMBER) {
 			return (Double) value;
 		} else if (type == DataType.ATTRIBUTE) {
-			if ((Attribute) value != null) {
+			if (value != null) {
 				return ((Attribute) value).getValue();
 			}
+		} else if (type == DataType.LIST) {
+			return ((List<Variable>) value).size();
 		}
 		return 0d;
 	}
@@ -197,6 +200,8 @@ public class Variable implements IDInterface {
 			return ((Double) value).intValue();
 		} else if (type == DataType.ATTRIBUTE) {
 			return ((Attribute) value).getValue();
+		} else if (type == DataType.LIST) {
+			return ((List<Variable>) value).size();
 		}
 		return 0;
 	}
@@ -227,8 +232,14 @@ public class Variable implements IDInterface {
 				return (String) value;
 			case CONTAINER:
 				return ((Container) value).getName();
+			case INSTANCE:
+				return ((Instance) value).getName();
 			case ATTRIBUTE:
 				if (value != null) {
+					ProtoAttribute protoAttribute = Data.getProtoAttribute(((Attribute) value).getId());
+					if (protoAttribute != null) {
+						return protoAttribute.getName() + " (" + ((Attribute) value).getValue() + ")";
+					}
 					return String.valueOf(((Attribute) value).getValue());
 				} else {
 					return "(NULL ATTRIBUTE)";

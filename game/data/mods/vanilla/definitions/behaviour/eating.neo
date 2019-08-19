@@ -47,10 +47,9 @@ Effect: effDigest {
     Script: finally(carrier) {
         shit = create(entShit, getTile(carrier));
 
-        items = getItems(self);
-        for (item : items) {
-            print("putting " + item + " into " + shit);
-            pickUp(shit, item);
+        for (itemType : ->contents) {
+            print("putting " + itemType + " into " + shit);
+            create(itemType, shit);
         }
     }
 }

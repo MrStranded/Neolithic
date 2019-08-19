@@ -9,17 +9,12 @@ Entity: entApple {
 		attEdible, 1;
 	}
 
-    Script: place() {
-        self->seed = create(cAppleSeed, self);
-    }
-
 	Script: tick() {
 	    if (chance(0.001)) {
 	        ..attNutrition--;
 	    }
 
 		if (.attNutrition <= 0) {
-		    setAt(self->seed, getTile(self));
 			destroy(self);
 		}
 	}
@@ -27,8 +22,7 @@ Entity: entApple {
 	Script: consume(actor) {
 	    effect = addEffect(actor, effDigest);
         effect..attNutrition = .attNutrition;
-
-        pickUp(effect, ->seed);
+        effect->contents = [cAppleSeed];
 
 		destroy(self);
 	}
