@@ -20,8 +20,10 @@ import engine.logic.topology.TopologyGenerator;
 import engine.logic.topology.TileArea;
 import engine.math.numericalObjects.Vector3;
 import engine.parser.constants.TokenConstants;
+import engine.parser.scripts.exceptions.InvalidValueException;
 import engine.parser.scripts.exceptions.ReturnException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
+import engine.parser.scripts.nodes.AbstractScriptNode;
 import engine.parser.scripts.nodes.CommandExpressionNode;
 import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
@@ -52,10 +54,7 @@ public class CommandExecuter {
 				int duration = parameters[2].getInt();
 				List<Variable> attributes = parameters[3].getList();
 
-				if (target == null) {
-					Logger.error("Target instance value for command '" + command.getValue() + "' is invalid!");
-					return new Variable();
-				}
+                checkValue(commandNode, target, "target instance");
 
 				Effect effect = new Effect(-1);
 				effect.setName(name);
@@ -77,6 +76,8 @@ public class CommandExecuter {
 							effect.setAttribute(id, variable.getInt());
 						} else {
 							Logger.error("Attribute with textID '" + attributeTextID + "' does not exist!");
+							// no strong exception handling here!
+                            // the reason being, that we still try to extract the remaining attributes
 						}
 						getID = true;
 					}
@@ -86,18 +87,12 @@ public class CommandExecuter {
 			} else if (requireParameters(commandNode, 2)) {
 				Instance target = parameters[0].getInstance();
 				Container container = parameters[1].getContainer();
+				int containerId = -1;
 
-				if (target == null) {
-					Logger.error("Target instance value for command '" + command.getValue() + "' is invalid!");
-					return new Variable();
-				}
+                checkValue(commandNode, target, "target instance");
+                containerId = checkType(commandNode, container, parameters[1].getString());
 
-				if (container == null) {
-					Logger.error("Cannot create effect: Template for '" + parameters[1].getString() + "' does not exist. Line " + command.getLine());
-				}
-
-				int id = Data.getContainerID(container.getTextID());
-				Effect effect = new Effect(id);
+				Effect effect = new Effect(containerId);
 
 				target.addEffect(effect);
 
@@ -110,17 +105,10 @@ public class CommandExecuter {
 				Instance target = parameters[0].getInstance();
 				String attributeTextID = parameters[1].getString();
 				int amount = parameters[2].getInt();
+                int attributeID = Data.getProtoAttributeID(attributeTextID);
 
-				if (target == null) {
-					Logger.error("Target instance value for command '" + command.getValue() + "' is invalid!");
-					return new Variable();
-				}
-
-				int attributeID = Data.getProtoAttributeID(attributeTextID);
-				if (attributeID == -1) {
-					Logger.error("Attribute '" + attributeTextID + "' does not exist!");
-					return new Variable();
-				}
+                checkValue(commandNode, target, "target instance");
+                checkAttribute(commandNode, attributeID, attributeTextID);
 
 				target.addAttribute(attributeID, amount);
 			}
@@ -139,14 +127,8 @@ public class CommandExecuter {
 					}
 				}
 
-				if (target == null) {
-					Logger.error("Target instance value for command '" + command.getValue() + "' is invalid!");
-					return new Variable();
-				}
-				if (callBackScript == null) {
-					Logger.error("Callback Script value for command '" + command.getValue() + "' is invalid!");
-					return new Variable();
-				}
+                checkValue(commandNode, target, "target instance");
+                checkValue(commandNode, callBackScript, "callback script");
 
 				target.addOccupation(duration, callBackScript);
 
@@ -154,10 +136,7 @@ public class CommandExecuter {
                 Instance target = parameters[0].getInstance();
                 int duration = parameters[1].getInt();
 
-                if (target == null) {
-                    Logger.error("Target instance value for command '" + command.getValue() + "' is invalid!");
-                    return new Variable();
-                }
+                checkValue(commandNode, target, "target instance");
 
                 target.addOccupation(duration, null);
             }
@@ -176,27 +155,20 @@ public class CommandExecuter {
 				Logger.error("The command '" + TokenConstants.CHANGE.getValue() + "' is not supported yet!");
 
 				Instance oldInstance = parameters[0].getInstance();
-				String textID = parameters[1].getType() == DataType.CONTAINER ? parameters[1].getContainer().getTextID() : parameters[1].getString();
+				Container container = parameters[1].getContainer();
+				int containerId = -1;
 
-				if (oldInstance == null) {
-					Logger.error("Instance value for command '" + command.getValue() + "' is invalid!");
-					return new Variable();
-				}
+                checkValue(commandNode, oldInstance, "target instance");
+                containerId = checkType(commandNode, container, parameters[1].getString());
 
-				int id = Data.getContainerID(textID);
-				if (id < 0) {
-					Logger.error("Container with textID '" + textID + "' does not exist!");
-					return new Variable();
-				}
-
-				if (Data.getContainer(id).getType() == DataType.TILE) {
+				if (Data.getContainer(containerId).getType() == DataType.TILE) {
 					Tile oldTile = oldInstance.getPosition();
-					Tile newTile = new Tile(id, oldTile);
+					Tile newTile = new Tile(containerId, oldTile);
 					oldTile.replaceBy(newTile);
 
 					return new Variable(newTile);
 				} else {
-					Instance newInstance = new Instance(id);
+					Instance newInstance = new Instance(containerId);
 					oldInstance.replaceBy(newInstance);
 
 					return new Variable(newInstance);
@@ -216,18 +188,12 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 2)) {
 				Container container = parameters[0].getContainer();
 				Instance holder = parameters[1].getInstance();
+				int containerId = -1;
 
-				if (container == null) {
-					Logger.error("Cannot create Instance: Template for '" + parameters[0].getString() + "' does not exist. Line " + command.getLine());
-					return new Variable();
-				}
-				if (holder == null) {
-					Logger.error("Cannot create Instance: Not a valid holder instance value.");
-					return new Variable();
-				}
+				containerId = checkType(commandNode, container, parameters[0].getString());
+                checkValue(commandNode, holder, "holder instance");
 
-				int id = Data.getContainerID(container.getTextID());
-				Instance instance = new Instance(id);
+				Instance instance = new Instance(containerId);
 				instance.placeInto(holder);
 
 				instance.run(ScriptConstants.EVENT_PLACE, new Variable[] {parameters[1]});
@@ -242,10 +208,7 @@ public class CommandExecuter {
 				Instance target = parameters[0].getInstance();
 				int containerID = parameters.length >= 2 ? parameters[1].getContainerId() : -1;
 
-				if (target == null) {
-					Logger.error("Target value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
+                checkValue(commandNode, target, "target instance");
 
 				target.deleteEffects(containerID);
 			}
@@ -255,10 +218,7 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 1)) {
 				Instance instance = parameters[0].getInstance();
 
-				if (instance == null) {
-					Logger.error("Instance value for command '" + command.getValue() + "' is invalid!");
-					return new Variable();
-				}
+                checkValue(commandNode, instance, "target instance");
 
 				instance.destroy();
 			}
@@ -290,25 +250,17 @@ public class CommandExecuter {
 				String attributeTextID = parameters[1].getString();
 				int attributeID = Data.getProtoAttributeID(attributeTextID);
 
-				if (instance != null && attributeID >= 0) {
-					return new Variable(instance.getAttribute(attributeID));
-				} else {
-					if (instance == null) {
-						Logger.error("Instance value for command '" + command.getValue() + "' is invalid!");
-					}
-					if (attributeID == -1) {
-						Logger.error("Attribute '" + attributeTextID + "' does not exist!");
-					}
-				}
+                checkValue(commandNode, instance, "target instance");
+                checkAttribute(commandNode, attributeID, attributeTextID);
+
+                return new Variable(instance.getAttribute(attributeID));
 			} else if (requireParameters(commandNode, 1)) {
 				String attributeTextID = parameters[0].getString();
 				int attributeID = Data.getProtoAttributeID(attributeTextID);
 
-				if (attributeID >= 0) {
-					return new Variable(self.getAttribute(attributeID));
-				} else {
-					Logger.error("Attribute '" + attributeTextID + "' does not exist!");
-				}
+                checkAttribute(commandNode, attributeID, attributeTextID);
+
+                return new Variable(self.getAttribute(attributeID));
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance getAttInRange (String attributeTextID, Tile center, int radius)
@@ -320,15 +272,8 @@ public class CommandExecuter {
 
 				int attributeID = Data.getProtoAttributeID(attributeTextID);
 
-				if (center == null) {
-					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
-
-				if (attributeID == -1) {
-					Logger.error("Attribute '" + attributeTextID + "' does not exist!");
-					return new Variable();
-				}
+                checkValue(commandNode, center, "center tile");
+                checkAttribute(commandNode, attributeID, attributeTextID);
 
 				TileArea tileArea = new TileArea(center, radius);
 				for (Tile tile : tileArea.getTileList()) {
@@ -349,15 +294,8 @@ public class CommandExecuter {
 				Tile center = parameters[1].getTile();
 				int radius = parameters[2].getInt();
 
-				if (center == null) {
-					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
-
-				if ((type == null) || ((containerID = Data.getContainerID(type.getTextID())) < 0)) {
-					Logger.error("Type of value '" + parameters[0].getString() + "' does not exist!");
-					return new Variable();
-				}
+                checkValue(commandNode, center, "center tile");
+                containerID = checkType(commandNode, type, parameters[0].getString());
 
 				TileArea tileArea = new TileArea(center, radius);
 				for (Tile tile : tileArea.getTileList()) {
@@ -378,15 +316,8 @@ public class CommandExecuter {
                 Tile center = parameters[1].getTile();
                 int radius = parameters[2].getInt();
 
-                if (center == null) {
-                    Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-                    return new Variable();
-                }
-
-                if ((type == null) || ((containerID = Data.getContainerID(type.getTextID())) < 0)) {
-                    Logger.error("Type of value '" + parameters[0].getString() + "' does not exist!");
-                    return new Variable();
-                }
+                checkValue(commandNode, center, "center tile");
+                containerID = checkType(commandNode, type, parameters[0].getString());
 
                 List<Variable> creatures = new ArrayList<>();
                 TileArea tileArea = new TileArea(center, radius);
@@ -406,10 +337,7 @@ public class CommandExecuter {
 				Instance target = parameters[0].getInstance();
 				int containerID = parameters.length >= 2 ? parameters[1].getContainerId() : -1;
 
-				if (target == null) {
-					Logger.error("Target value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
+                checkValue(commandNode, target, "target instance");
 
 				List<Variable> effects = new ArrayList<>();
 				for (Instance effect : target.getEffects()) {
@@ -425,9 +353,7 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 1)) {
 				Tile tile = parameters[0].getTile();
 
-				if (tile == null) {
-					return new Variable();
-				}
+                checkValue(commandNode, tile, "target tile");
 
 				return new Variable(tile.getHeight());
 			}
@@ -439,14 +365,8 @@ public class CommandExecuter {
 				String attributeTextID = parameters[1].getString();
 				int attributeID = Data.getProtoAttributeID(attributeTextID);
 
-				if (holder == null) {
-					Logger.error("Holder instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
-				if (attributeID == -1) {
-					Logger.error("Attribute '" + attributeTextID + "' does not exist!");
-					return new Variable();
-				}
+                checkValue(commandNode, holder, "holder instance");
+                checkAttribute(commandNode, attributeID, attributeTextID);
 
 				if (holder.getSubInstances() != null) {
 					for (Instance item : holder.getSubInstances()) {
@@ -465,10 +385,7 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 1)) {
 				Instance holder = parameters[0].getInstance();
 
-				if (holder == null) {
-					Logger.error("Holder instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
+                checkValue(commandNode, holder, "holder instance");
 
 				if (holder.getSubInstances() != null) {
 					List<Variable> items = new ArrayList<>(holder.getSubInstances().size());
@@ -483,10 +400,7 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 1)) {
 				Tile tile = parameters[0].getTile();
 
-				if (tile == null) {
-					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
+                checkValue(commandNode, tile, "target tile");
 
 				Vector3 sunPosition = Data.getSun().getGraphicalObject().getPosition().normalize();
 				Vector3 tilePosition = tile.getTileMesh().getNormal();
@@ -502,10 +416,8 @@ public class CommandExecuter {
 				Tile tile = parameters[0].getTile();
 				int position = parameters[1].getInt();
 
-				if (tile == null) {
-					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
+                checkValue(commandNode, tile, "target tile");
+
 				if (position < 0 || position > 2) {
 					position = position % 3;
 				}
@@ -518,10 +430,7 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 1)) {
 				Tile tile = parameters[0].getTile();
 
-				if (tile == null) {
-					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
+                checkValue(commandNode, tile, "target tile");
 
 				List<Variable> tileList = new ArrayList<>(3);
 				for (Tile neighbour : Neighbour.getNeighbours(tile)) {
@@ -535,10 +444,7 @@ public class CommandExecuter {
 			if (requireParameters(commandNode, 1)) {
 				Instance instance = parameters[0].getInstance();
 
-				if (instance == null) {
-					Logger.error("Instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
+                checkValue(commandNode, instance, "target instance");
 
 				return new Variable(instance.getPosition());
 			}
@@ -549,10 +455,7 @@ public class CommandExecuter {
 				Tile center = parameters[0].getTile();
 				int radius = parameters[1].getInt();
 
-				if (center == null) {
-					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
+                checkValue(commandNode, center, "center tile");
 
 				TileArea tileArea = new TileArea(center, radius);
 				return new Variable(tileArea.getTilesAsVariableList());
@@ -563,10 +466,7 @@ public class CommandExecuter {
             if (requireParameters(commandNode,1)) {
                 Instance instance = parameters[0].getInstance();
 
-                if (instance == null) {
-                    Logger.error("Instance for command '" + command.getValue() + "' does not exist on line " + command.getLine());
-                    return new Variable();
-                }
+                checkValue(commandNode, instance, "target instance");
 
                 return new Variable(Data.getContainer(instance.getId()));
             }
@@ -576,10 +476,7 @@ public class CommandExecuter {
             if (requireParameters(commandNode,1)) {
                 List<Variable> list = parameters[0].getList();
 
-                if (list == null) {
-                    Logger.error("Value for command '" + command.getValue() + "' is not a list on line " + command.getLine());
-                    return new Variable();
-                }
+                checkValue(commandNode, list, "list");
 
                 return new Variable(list.size());
             }
@@ -641,18 +538,9 @@ public class CommandExecuter {
 				Instance parent1 = parameters[1].getInstance();
 				Instance parent2 = parameters[2].getInstance();
 
-                if (target == null) {
-                    Logger.error("Target instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-                    return new Variable();
-                }
-                if (parent1 == null) {
-                    Logger.error("Parent1 instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-                    return new Variable();
-                }
-                if (parent2 == null) {
-                    Logger.error("Parent2 instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-                    return new Variable();
-                }
+                checkValue(commandNode, target, "child instance");
+                checkValue(commandNode, parent1, "parent 1 instance");
+                checkValue(commandNode, parent2, "parent 2 instance");
 
                 List<Integer> attributes = Data.getAllAttributeIDs();
                 for (Integer id : attributes) {
@@ -683,14 +571,8 @@ public class CommandExecuter {
 				Tile tile = parameters[1].getTile();
 				int steps = parameters[2].getInt();
 
-				if (tile == null) {
-					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
-				if (instance == null) {
-					Logger.error("Instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
+                checkValue(commandNode, tile, "target tile");
+                checkValue(commandNode, instance, "target instance");
 
 				Tile newPosition = Pathfinding.moveTowardsTile(instance, tile, steps);
 
@@ -706,14 +588,8 @@ public class CommandExecuter {
 				Instance holder = parameters[0].getInstance();
 				Instance item = parameters[1].getInstance();
 
-				if (holder == null) {
-					Logger.error("Holder instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
-				if (item == null) {
-					Logger.error("Item instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
+                checkValue(commandNode, holder, "holder instance");
+                checkValue(commandNode, item, "item instance");
 
 				//item.placeInto(holder.getPosition());
 				//holder.addSubInstance(item);
@@ -774,14 +650,8 @@ public class CommandExecuter {
 				Instance instance = parameters[0].getInstance();
 				Tile tile = parameters[1].getTile();
 
-				if (tile == null) {
-					Logger.error("Tile value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
-				if (instance == null) {
-					Logger.error("Instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
+                checkValue(commandNode, tile, "target tile");
+                checkValue(commandNode, instance, "target instance");
 
 				instance.placeInto(tile);
 				return new Variable(tile);
@@ -808,10 +678,7 @@ public class CommandExecuter {
 				Instance target = parameters[0].getInstance();
 				String path = parameters[1].getString();
 
-				if (target == null) {
-					Logger.error("Instance value for command '" + command.getValue() + "' is invalid on line " + command.getLine());
-					return new Variable();
-				}
+				checkValue(commandNode, target, "target instance");
 
 				target.setMesh(ResourcePathConstants.MOD_FOLDER + path);
 
@@ -843,10 +710,52 @@ public class CommandExecuter {
 					return new Variable(level);
 				}
 			}
-		}
+
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& UNKNOWN COMMAND!
+		} else {
+		    Logger.error("Unknown command '" + commandNode.getCommand() + "'!");
+
+        }
 
 		return new Variable();
 	}
+
+	private static void checkValue(CommandExpressionNode commandNode, Object value, String objectName) throws InvalidValueException {
+        if (value == null) {
+            Logger.error(
+                    "Value '" + objectName + "' is invalid!" +
+                    " Error on line " + commandNode.getCommand().getLine() +
+                    " in command " + commandNode.getCommand().getValue()
+            );
+            throw new InvalidValueException();
+        }
+    }
+
+    private static void checkAttribute(CommandExpressionNode commandNode, int attributeID, String attributeTextID) throws InvalidValueException {
+        if (attributeID == -1) {
+            Logger.error(
+                    "Attribute '" + attributeTextID + "' does not exist!" +
+                    " Error on line " + commandNode.getCommand().getLine() +
+                    " in command " + commandNode.getCommand().getValue()
+            );
+            throw new InvalidValueException("Attribute '" + attributeTextID + "' does not exist!");
+        }
+    }
+
+    private static int checkType(CommandExpressionNode commandNode, Container type, String typeName) throws InvalidValueException {
+	    int containerID = -1;
+
+        if ((type == null) || ((containerID = Data.getContainerID(type.getTextID())) < 0)) {
+            Logger.error(
+                    "Type with name '" + typeName + "' does not exist!" +
+                    " Error on line " + commandNode.getCommand().getLine() +
+                    " in command " + commandNode.getCommand().getValue()
+            );
+            throw new InvalidValueException("Type with name '" + typeName + "' does not exist!");
+        }
+
+        return containerID;
+    }
 
 	private static boolean requireParameters(CommandExpressionNode commandNode, int amount) {
 		if (amount > 0 && (commandNode.getSubNodes() == null || amount > commandNode.getSubNodes().length)) {

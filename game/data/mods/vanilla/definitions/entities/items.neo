@@ -19,7 +19,7 @@ Entity: entApple {
 	    }
 
 		if (.attNutrition <= 0) {
-		    placeAt(->seed, getTile(self));
+		    setAt(self->seed, getTile(self));
 			destroy(self);
 		}
 	}

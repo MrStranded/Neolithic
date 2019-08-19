@@ -73,7 +73,9 @@ public class Script implements IDInterface {
 			result = root.execute(self, this);
 		} catch (ScriptInterruptedException e) {
 			Logger.error("Script '" + textId + "' could not be executed!");
-			e.printStackTrace();
+			//e.printStackTrace();
+
+			result = new Variable();
 		}
 
 		// pop variable stack
