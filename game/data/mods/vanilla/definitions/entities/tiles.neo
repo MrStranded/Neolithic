@@ -17,11 +17,14 @@ Tile: tDirt {
 		60;
 	}
 
-	Script: tick {
-	    /*..attAge++;
-		if (.attAge > 3) {
+	attributes {
+	    attNutrition, 10;
+	}
+
+	Script: tick { // tiles don't get ticked
+		if (.attNutrition >= 20) {
 			change(self,tGras); // no wörki-wörki yet
-		}*/
+		}
 	}
 }
 
@@ -42,7 +45,7 @@ Tile: tGras {
 	}
 
 	attributes {
-		attNutrition, 3;
+		attNutrition, 20;
 		attHumidity, 50;
 	}
 }

@@ -251,8 +251,7 @@ public class Renderer {
 			Data.getMainInstance().run("repopulate", null);
 		}
 		if (keyboard.isClicked(GLFW.GLFW_KEY_T)) {
-			Instance main = Data.getMainInstance();
-			int id = Data.getContainerID("cMonkey");
+			int id = Data.getContainerID("cHuman");
 
 			for (Instance instance : Data.getPublicInstanceList()) {
 				if (instance.getId() == id) {

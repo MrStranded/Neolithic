@@ -30,6 +30,9 @@ public class Planet {
 	public void updatePlanetMesh() {
 		planetObject.updateLODMesh();
 	}
+	public void updatePlanetMesh(Tile tile) {
+		planetObject.updateLODMesh(tile);
+	}
 
 	public PlanetObject getPlanetObject() {
 		return planetObject;

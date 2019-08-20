@@ -25,8 +25,8 @@ Creature: cAppleTree {
 
 	attributes{
 	    attMatureAge, 2880;
-	    attLightSensitivity, 50;
-	    attBabySize, 50;
+	    attLightSensitivity, 20;
+	    attBabySize, 30;
 	}
 
 	Script: tick {
@@ -45,7 +45,11 @@ Creature: cAppleTree {
 	    if (.attAge < .attMatureAge) {
             setMesh(self, "vanilla/assets/meshes/apple_tree_young.ply");
         } else {
-            setMesh(self, "vanilla/assets/meshes/apple_tree_mature.ply");
+            if (getItems(self, entApple)) {
+                setMesh(self, "vanilla/assets/meshes/apple_tree_mature_ripe.ply");
+            } else {
+                setMesh(self, "vanilla/assets/meshes/apple_tree_mature.ply");
+            }
         }
 	}
 }
@@ -58,6 +62,7 @@ Entity: entApple {
 
 	attributes {
 		attEdible, 1;
+		attMatureAge, 50;
 	}
 
 	Script: place() {
@@ -73,12 +78,23 @@ Entity: entApple {
 	}
 
 	Script: tick() {
-	    if (chance(0.001)) {
-	        ..attNutrition--;
-	    }
+	    tree = getHolder(self);
+	    if (tree && getType(tree) == cAppleTree) {
+	        if (chance(0.01)) {
+	            tile = getNeighbor(getTile(self), random(3));
+	            pickUp(tile, self);
+	            tree->updateMesh();
+	        }
+	    } else {
+            ..attAge++;
 
-		if (.attNutrition <= 0) {
-			destroy(self);
+            if (.attAge >= .attMatureAge) {
+                addEffect(getTile(self), "Fertilized", .attMatureAge, [ "attNutrition", self.attNutrition/2 ]);
+                if (->seed) {
+                    pickUp(getTile(self), ->seed);
+                }
+                destroy(self);
+            }
 		}
 	}
 
@@ -101,12 +117,14 @@ Creature: cAppleSeed {
 
     knowledge { proGrowIntoTree; }
 
-    attributes {
-        attLightSensitivity, 90;
-    }
-
     Script: place() {
         self->treeType = cAppleTree;
+    }
+
+    Script: tick() {
+        if (chance(0.001)) {
+            destroy(self);
+        }
     }
 }
 
@@ -162,29 +180,34 @@ Process: proCreateFruit {
 		require(!getAttInRange("attEdible", self, 1));
 		require(.attNutrition >= .attBabySize);
 		require(.attAge >= .attMatureAge);
+		require(!getItems(self, entApple));
 	}
 
 	Script: process {
-	    tile = getNeighbor(getTile(self), random(3));
-		fruit = create(self->fruitType, tile);
+		fruit = create(self->fruitType, self);
 		fruit->mix(self);
 		..attNutrition -= .attBabySize;
 		fruit..attNutrition += .attBabySize;
+        self->updateMesh();
 	}
 }
 
 Process: proGrowIntoTree {
     Script: condition {
+        tile = getTile(self);
+
         require(isOnFloor(self));
         require(getLightLevel(self) >= .attLightSensitivity);
-        require(!getInstancesInRange(self->treeType, getTile(self), 0));
+        require(!getInstancesInRange(self->treeType, tile, 0));
         require(getHeight(self) >= 100);
-        require(getType(getTile(self)) == tGras || getType(getTile(self)) == tDirt);
+        require(tile.attNutrition >= .attBabySize/2);
     }
     Script: process {
         tree = create(self->treeType, getTile(self));
         mixAttributes(tree, self, self);
         addEffect(tree, effSapling);
+        tree..attHealth = .attBabySize;
+
         destroy(self);
     }
 }

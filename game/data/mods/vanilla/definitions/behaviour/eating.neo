@@ -6,8 +6,19 @@ Entity: entShit {
     mesh = "shit01.ply";
 
     Script: tick {
-        if (chance(0.01)) {
-            destroy(self);
+        if (isOnFloor(self)) {
+            /*tile = getTile(self);
+            if (getType(tile) == tDirt && .attNutrition >= 20) {
+                ..attNutrition -= 20;
+                change(tile, tGras);
+            }*/
+
+            addEffect(getTile(self), "Fertilized", 1, [ self.attNutrition ]);
+            ..attNutrition--;
+
+            if (.attNutrition <= 0) {
+                destroy(self);
+            }
         }
     }
 }

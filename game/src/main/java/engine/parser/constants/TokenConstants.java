@@ -86,7 +86,9 @@ public enum TokenConstants {
 	GET_CREATURE_IN_RANGE	(TokenType.COMMAND, "getCreatureInRange"), // deprecated
     GET_INSTANCES_IN_RANGE	(TokenType.COMMAND, "getInstancesInRange"),
     GET_EFFECTS             (TokenType.COMMAND, "getEffects"),
+	GET_FULL_ATTRIBUTE      (TokenType.COMMAND, "getFullAtt"),
 	GET_HEIGHT              (TokenType.COMMAND, "getHeight"),
+	GET_HOLDER              (TokenType.COMMAND, "getHolder"),
 	GET_ITEM_ATTRIBUTE      (TokenType.COMMAND, "getItemAtt"),
 	GET_ITEMS				(TokenType.COMMAND, "getItems"),
 	GET_LIGHT_LEVEL         (TokenType.COMMAND, "getLightLevel"),

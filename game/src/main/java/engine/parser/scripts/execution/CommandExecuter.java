@@ -158,26 +158,27 @@ public class CommandExecuter {
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Instance change (Instance target, Container / String container)
 		} else if (TokenConstants.CHANGE.equals(command)) {
 			if (requireParameters(commandNode, 2)) {
-				Logger.error("The command '" + TokenConstants.CHANGE.getValue() + "' is not supported yet!");
+				//Logger.error("The command '" + TokenConstants.CHANGE.getValue() + "' is not supported yet!");
 
-				Instance oldInstance = parameters[0].getInstance();
+				Instance target = parameters[0].getInstance();
 				Container container = parameters[1].getContainer();
 				int containerId = -1;
 
-                checkValue(script, commandNode, oldInstance, "target instance");
+                checkValue(script, commandNode, target, "target instance");
                 containerId = checkType(script, commandNode, container, parameters[1].getString());
 
-				if (Data.getContainer(containerId).getType() == DataType.TILE) {
-					Tile oldTile = oldInstance.getPosition();
-					Tile newTile = new Tile(containerId, oldTile);
-					oldTile.replaceBy(newTile);
+				if (Data.getContainer(target.getId()).getType() == DataType.TILE && Data.getContainer(containerId).getType() == DataType.TILE) {
+					target.setId(containerId);
+					((Tile) target).resetColors();
+					target.inheritAttributes();
+					Data.addChangedTile((Tile) target);
 
-					return new Variable(newTile);
-				} else {
-					Instance newInstance = new Instance(containerId);
-					oldInstance.replaceBy(newInstance);
+					return new Variable(target);
+				} else if (Data.getContainer(target.getId()).getType() != DataType.TILE && Data.getContainer(containerId).getType() != DataType.TILE) {
+					target.setId(containerId);
+					target.inheritAttributes();
 
-					return new Variable(newInstance);
+					return new Variable(target);
 				}
 			}
 
@@ -331,6 +332,37 @@ public class CommandExecuter {
 				return new Variable(effects);
 			}
 
+        // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getFullAtt (Instance instance, String attributeTextID)
+        } else if (TokenConstants.GET_FULL_ATTRIBUTE.equals(command)) {
+			if (parameters.length >= 2) {
+				Instance instance = parameters[0].getInstance();
+
+				String attributeTextID = parameters[1].getString();
+				int attributeID = Data.getProtoAttributeID(attributeTextID);
+
+				checkValue(script, commandNode, instance, "target instance");
+				checkAttribute(script, commandNode, attributeID, attributeTextID);
+
+				return new Variable(instance.getFullAttributeValue(attributeID));
+			} else if (requireParameters(commandNode, 1)) {
+				String attributeTextID = parameters[0].getString();
+				int attributeID = Data.getProtoAttributeID(attributeTextID);
+
+				checkAttribute(script, commandNode, attributeID, attributeTextID);
+
+				return new Variable(self.getFullAttributeValue(attributeID));
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Instance getHolder(Instance target)
+		} else if (TokenConstants.GET_HOLDER.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				Instance target = parameters[0].getInstance();
+
+				checkValue(script, commandNode, target, "target instance");
+
+				return new Variable(target.getSuperInstance());
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getHeight (Tile tile)
 		} else if (TokenConstants.GET_HEIGHT.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
@@ -386,8 +418,15 @@ public class CommandExecuter {
 				return new Variable();
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& List<instance> getItems (Instance holder)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& List<instance> getItems (Instance holder [, Container type])
 		} else if (TokenConstants.GET_ITEMS.equals(command)) {
+			int containerID = -1;
+
+			if (parameters.length >= 2) {
+				Container type = parameters[1].getContainer();
+				containerID = checkType(script, commandNode, type, parameters[1].getString());
+			}
+
 			if (requireParameters(commandNode, 1)) {
 				Instance holder = parameters[0].getInstance();
 
@@ -395,7 +434,11 @@ public class CommandExecuter {
 
 				if (holder.getSubInstances() != null) {
 					List<Variable> items = new ArrayList<>(holder.getSubInstances().size());
-					holder.getSubInstances().forEach(item -> items.add(new Variable(item)));
+					for (Instance sub : holder.getSubInstances()) {
+						if (sub != null && (containerID == -1 || containerID == sub.getId())) {
+							items.add(new Variable(sub));
+						}
+					}
 					return new Variable(items);
 				}
 				return new Variable();

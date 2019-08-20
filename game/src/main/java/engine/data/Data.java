@@ -39,13 +39,13 @@ public class Data {
 	private static HashMap<String, MeshHub> meshHubs;
 
 	private static Queue<Instance> instanceQueue;
+	private static Queue<Tile> changedTiles;
 
 	/**
 	 * The publicInstanceList is used to access the instances in list form without causing a ConcurrentModificationException.
 	 * The list is regularly set by the logic thread.
 	 */
 	private static List<Instance> publicInstanceList;
-	private static boolean instanceListLocked = false;
 
 	// ###################################################################################
 	// ################################ Initialization ###################################
@@ -61,6 +61,7 @@ public class Data {
 		meshHubs = new HashMap<>(GameConstants.MAX_CONTAINERS);
 
 		instanceQueue = new LinkedList<>();//new ConcurrentLinkedQueue<>();
+		changedTiles = new LinkedList<>();
 
 		// the mainContainer container contains global scripts
 		mainContainer = new Container("mainContainer", DataType.CONTAINER);
@@ -264,6 +265,14 @@ public class Data {
 		}
 	}
 
+	public static void addChangedTile(Tile tile) {
+		changedTiles.add(tile);
+	}
+
+	public static void clearChangedTiles() {
+		changedTiles.clear();
+	}
+
 	// ###################################################################################
 	// ################################ Preparing for Game ###############################
 	// ###################################################################################
@@ -343,6 +352,10 @@ public class Data {
 	}
 	public static void setPublicInstanceList(List<Instance> publicInstanceList) {
     	Data.publicInstanceList = publicInstanceList;
+	}
+
+	public static Queue<Tile> getChangedTiles() {
+		return changedTiles;
 	}
 
 	public static Container getMainContainer() {

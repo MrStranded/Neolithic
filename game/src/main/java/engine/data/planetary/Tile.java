@@ -43,6 +43,11 @@ public class Tile extends Instance implements IDInterface {
 		return this;
 	}
 
+	public void resetColors() {
+		topColor = null;
+		sideColor = null;
+	}
+
 	private void createRandomizedColor() {
 		TileContainer protoTile = id > 0 ? (TileContainer) Data.getContainer(id) : null;
 

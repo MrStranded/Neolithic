@@ -92,7 +92,7 @@ public class Instance {
 		}
 	}
 
-    private void inheritAttributes() {
+    public void inheritAttributes() {
 	    Container container = Data.getContainer(id);
 
 	    if (container != null) {
@@ -252,9 +252,7 @@ public class Instance {
 		cleanVariables();
 	    tickEffects();
 
-	    createOccupationsIfNecessary();
-
-	    if (occupations.isEmpty()) {
+	    if (occupations == null || occupations.isEmpty()) {
             // ----------- calculate drives
             Container container = Data.getContainer(id);
             if (container != null && container.getType() == DataType.CREATURE) {
@@ -321,7 +319,7 @@ public class Instance {
 			meshHub.registerObject(moveableObject);
 		}
 		// render subs
-		if (subInstances != null) {
+		if (subInstances != null && Data.getContainer(id).getType() == DataType.TILE) { // only tiles draw their subs?
 			CopyOnWriteArraySet<Instance> subs = new CopyOnWriteArraySet<>(subInstances);
 			for (Instance subInstance : subs) {
 				if (subInstance != null) {
@@ -540,7 +538,20 @@ public class Instance {
 				//Logger.error("Concurrent modification during 'Instance.getAttributeValue()' (effect list is currently being modified)");
 			}
 		}
+		return value;
+	}
 
+	public int getFullAttributeValue(int attributeID) {
+		int value = 0;
+
+		// values from self
+		value += getAttributeValue(attributeID);
+		// sub instances
+		if (subInstances != null) {
+			for (Instance sub : subInstances) {
+				value += sub.getFullAttributeValue(attributeID);
+			}
+		}
 		return value;
 	}
 

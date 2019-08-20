@@ -5,6 +5,7 @@ import constants.ScriptConstants;
 import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
 import engine.data.Data;
+import engine.data.planetary.Tile;
 import engine.graphics.gui.BaseGUI;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.Scene;
@@ -12,6 +13,8 @@ import engine.graphics.gui.window.Window;
 import engine.graphics.renderer.Renderer;
 import engine.threads.LogicThread;
 import engine.parser.Parser;
+
+import java.util.Queue;
 
 /**
  * The engine binds the whole thing together.
@@ -54,8 +57,7 @@ public class Engine {
 
 		gaia = new Planet(GameConstants.DEFAULT_PLANET_SIZE);
 		Data.setPlanet(gaia);
-		//Data.addPlanetTilesToQueue();
-		//TopologyGenerator.fitTiles(gaia);
+		Data.addPlanetTilesToQueue();
 
 		long time = System.currentTimeMillis();
 		gaia.generatePlanetMesh();
@@ -81,8 +83,18 @@ public class Engine {
 		while (renderer.displayExists()) {
 			long t = System.currentTimeMillis();
 
-			hud.tick(window.getWidth(), window.getHeight());
+			Queue<Tile> tiles = Data.getChangedTiles();
+			if (!tiles.isEmpty()) {
+				gaia.updatePlanetMesh(tiles.poll());
+			}
+
+			long start = System.currentTimeMillis();
+			//hud.tick(window.getWidth(), window.getHeight());
+			//System.out.println("Calculating HUD took: " + (System.currentTimeMillis() - start) + " ms");
+
+			start = System.currentTimeMillis();
 			renderer.render(scene, hud, gaia);
+			//System.out.println("Rendering took: " + (System.currentTimeMillis() - start) + " ms");
 
 			long elapsedTime = System.currentTimeMillis() - t;
 			if (elapsedTime < GameConstants.MILLISECONDS_PER_FRAME) {

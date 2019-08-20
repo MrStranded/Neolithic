@@ -43,10 +43,6 @@ public class Pathfinding {
         Tile from = instance.getPosition();
         if (from == null || to == null) { return from; }
 
-        if (!instance.getOccupations().isEmpty()) {
-            System.out.println("WTFWTFWTF!!!!!! -> not empty occups");
-        }
-
         PriorityQueue<TileHeuristic> openList = new PriorityQueue<>();
         HashSet<Tile> closedList = new HashSet<>();
 

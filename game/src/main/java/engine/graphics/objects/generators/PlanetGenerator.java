@@ -396,4 +396,10 @@ public class PlanetGenerator {
 			updateFace(facePart);
 		}
 	}
+
+	public void updateTile(Tile tile) {
+		if (tile != null) {
+			updateFace(tile.getTileMesh());
+		}
+	}
 }

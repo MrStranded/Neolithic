@@ -1,6 +1,7 @@
 package engine.graphics.objects.planet;
 
 import engine.data.planetary.Planet;
+import engine.data.planetary.Tile;
 import engine.graphics.objects.generators.PlanetGenerator;
 import engine.graphics.objects.models.Material;
 import engine.graphics.objects.movement.MoveableObject;
@@ -44,6 +45,9 @@ public class PlanetObject extends MoveableObject {
 
 	public void updateLODMesh() {
 		planetGenerator.updatePlanet();
+	}
+	public void updateLODMesh(Tile tile) {
+		planetGenerator.updateTile(tile);
 	}
 
 	public void render(ShaderProgram shaderProgram, Matrix4 viewMatrix, boolean putDataIntoShader, boolean drawWater) {
