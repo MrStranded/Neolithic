@@ -17,6 +17,9 @@ public enum TokenConstants {
 	FORMATION   (TokenType.KEYWORD, "Formation"),
 	WORLDGEN    (TokenType.KEYWORD, "WorldGen"),
 
+	// -------------------------------------------------- Inheritance
+	INHERITS	(TokenType.KEYWORD, "inherits"),
+
 	// -------------------------------------------------- Scripts
 	SELF        (TokenType.KEYWORD, "self"),
     MAIN        (TokenType.KEYWORD, "main"),
@@ -97,6 +100,7 @@ public enum TokenConstants {
 	GET_TILE                (TokenType.COMMAND, "getTile"),
 	GET_TILES_IN_RANGE      (TokenType.COMMAND, "getTilesInRange"),
 	GET_TYPE				(TokenType.COMMAND, "getType"),
+	GET_WATER_HEIGHT        (TokenType.COMMAND, "getWaterHeight"),
 	IS_ON_FLOOR				(TokenType.COMMAND, "isOnFloor"),
 	RANDOM_TILE             (TokenType.COMMAND, "randomTile"),
 

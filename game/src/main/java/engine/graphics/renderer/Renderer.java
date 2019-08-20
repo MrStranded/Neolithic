@@ -383,10 +383,14 @@ public class Renderer {
 		}
 
 		// clear meshHub lists and possibly load meshes
-		for (MeshHub meshHub : meshHubs) {
-			meshHub.clear();
+		try {
+			for (MeshHub meshHub : meshHubs) {
+				meshHub.clear();
 
-			if (!meshHub.isMeshLoaded()) { meshHub.loadMesh(); }
+				if (!meshHub.isMeshLoaded()) { meshHub.loadMesh(); }
+			}
+		} catch (Exception e) {
+			// this happens when a new mesh hub is added to the hashmap while we iterate over it
 		}
 
 		// planet

@@ -1,24 +1,9 @@
 
 ///////////////////////////////////////////////////////////////////////////// human
 
-Creature: cHuman {
+Creature: cHuman inherits cLandAnimal {
 	name = "Human";
 	mesh = "human_female_mature.ply";
-
-	knowledge {
-		proEat; proGatherFood; proPickUpFood;
-		proMate; proSearchMate;
-		proSleep;
-		proStroll;
-	}
-
-	drives {
-		driHunger;
-		driMate;
-		driSleep;
-		driMove;
-		driNotSitOnShit;
-	}
 
 	attributes {
 		attHealth, 100;
@@ -40,17 +25,17 @@ Creature: cHuman {
 		attStepHeight, 24;
 	}
 
-	Script: place {
+	/*Script: place {
 		self->id = random(1000);
 		if (main->human == 0) {
 		    main->human = self->id;
         }
 
-        ..attGender = random(0,2);
+        ..attGender = random(0,2)*2 - 1; // this results in either -1 or 1
         ->updateMesh();
-	}
+	}*/
 
-	Script: tick {
+	/*Script: tick {
 	    if (!(.attSleeping)) { // creature is awake
             if (..attNutrition > 0) {
                  ..attNutrition--;
@@ -92,13 +77,7 @@ Creature: cHuman {
         }
 
         ..attAge++;
-	}
-
-	Script: reachable (from, to) {
-        h1 = getHeight(from);
-        h2 = getHeight(to);
-        return ((h2 >= 100) && (abs(h1-h2) <= .attStepHeight));
-	}
+	}*/
 
 	Script: updateMesh() {
 	    if (.attAge < .attMatureAge) {

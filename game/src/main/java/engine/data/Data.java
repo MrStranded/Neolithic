@@ -284,6 +284,11 @@ public class Data {
 				container.finalizeScripts();
 			}
 		}
+		for (Container container : containers) {
+			if (container != null) {
+				container.finalizeInheritance();
+			}
+		}
 	}
 
 	/**

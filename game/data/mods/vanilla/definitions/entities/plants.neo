@@ -62,7 +62,7 @@ Entity: entApple {
 
 	attributes {
 		attEdible, 1;
-		attMatureAge, 50;
+		attMatureAge, 100;
 	}
 
 	Script: place() {
@@ -80,7 +80,7 @@ Entity: entApple {
 	Script: tick() {
 	    tree = getHolder(self);
 	    if (tree && getType(tree) == cAppleTree) {
-	        if (chance(0.01)) {
+	        if (chance(0.07)) {
 	            tile = getNeighbor(getTile(self), random(3));
 	            pickUp(tile, self);
 	            tree->updateMesh();

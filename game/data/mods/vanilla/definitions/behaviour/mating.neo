@@ -67,7 +67,7 @@ Process: proSearchMate {
         ->mate = false;
         for (creature : creatures) {
             // males are all gender values <= 0, females are all gender values > 0. thus males*females <= 0 for heterogenous reproduction
-            if (creature != self && creature.attAge >= creature.attMatureAge && self.attGender*creature.attGender <= 0 && getType(creature) == getType(self)) {
+            if (creature != self && creature.attAge >= creature.attMatureAge && self.attGender*creature.attGender < 0 && getType(creature) == getType(self)) {
                 ->mate = creature;
                 break;
             }

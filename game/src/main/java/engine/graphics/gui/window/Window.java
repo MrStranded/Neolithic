@@ -12,6 +12,7 @@ public class Window {
 
 	private String title;
 	private int width,height;
+	private boolean centered = true, resizable = true;
 
 	private Renderer renderer;
 	private long window;
@@ -20,6 +21,15 @@ public class Window {
 		this.title = title;
 		this.width = width;
 		this.height = height;
+	}
+
+	public Window(int width, int height, String title, boolean centered, boolean resizable) {
+		this.title = title;
+		this.width = width;
+		this.height = height;
+
+		this.centered = centered;
+		this.resizable = resizable;
 	}
 
 	// ###################################################################################
@@ -47,7 +57,11 @@ public class Window {
 		// Configure GLFW
 		GLFW.glfwDefaultWindowHints(); // optional, the current window hints are already the default
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE); // the window will stay hidden after creation
-		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_TRUE); // the window will be resizable
+		if (resizable) {
+			GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_TRUE); // the window will be resizable
+		} else {
+			GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_FALSE); // the window will not be resizable
+		}
 
 		// Create the window
 		window = GLFW.glfwCreateWindow(width, height, title, 0, 0);
@@ -69,6 +83,8 @@ public class Window {
 	}
 
 	private void createResizeCallback() {
+		if (!resizable) { return; }
+
 		// Setup a resize callback. It will be called every time the window is resized.
 		Window self = this;
 		GLFW.glfwSetWindowSizeCallback(window, new GLFWWindowSizeCallback(){
@@ -97,11 +113,13 @@ public class Window {
 			GLFWVidMode vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 
 			// Center the window
-			GLFW.glfwSetWindowPos(
-					window,
-					(vidmode.width() - pWidth.get(0)) / 2,
-					(vidmode.height() - pHeight.get(0)) / 2
-			);
+			if (centered) {
+				GLFW.glfwSetWindowPos(
+						window,
+						(vidmode.width() - pWidth.get(0)) / 2,
+						(vidmode.height() - pHeight.get(0)) / 2
+				);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} // the stack frame is popped automatically

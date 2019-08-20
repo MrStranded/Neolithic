@@ -520,6 +520,16 @@ public class CommandExecuter {
                 return new Variable(Data.getContainer(instance.getId()));
             }
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getWaterHeight (Tile tile)
+		} else if (TokenConstants.GET_WATER_HEIGHT.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				Tile tile = parameters[0].getTile();
+
+				checkValue(script, commandNode, tile, "target tile");
+
+				return new Variable(tile.getWaterHeight());
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& boolean isOnFloor(Instance instance)
 		} else if (TokenConstants.IS_ON_FLOOR.equals(command)) {
 			if (requireParameters(commandNode,1)) {

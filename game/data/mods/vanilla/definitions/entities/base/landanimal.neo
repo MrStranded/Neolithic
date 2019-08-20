@@ -1,0 +1,59 @@
+
+///////////////////////////////////////////////////////////////////////////// land animal
+
+Creature: cLandAnimal {
+	name = "Land animal";
+
+	knowledge {
+		proEat; proGatherFood; proPickUpFood;
+		proMate; proSearchMate;
+		proSleep;
+		proStroll;
+	}
+
+	drives {
+		driHunger;
+		driMate;
+		driSleep;
+		driMove;
+		driNotSitOnShit;
+	}
+
+	Script: place {
+        ..attGender = random(0,2)*2 - 1; // this results in either -1 or 1
+	}
+
+	Script: tick {
+	    if (!(.attSleeping)) { // creature is awake
+            if (..attNutrition > 0) {
+                 ..attNutrition--;
+            }
+
+            ..attFatigue++;
+		} else {
+		    if (..attFatigue > 0) {
+		        ..attFatigue--;
+            }
+		}
+
+		if (.attHealth < 0) { // death
+		    destroy(self);
+        }
+
+		if (.attAge > .attMatureAge*2) { // age death
+		    if (chance(0.01) && !getEffects(self, effCancer)) {
+                addEffect(self, effCancer);
+		    }
+        }
+
+        ..attAge++;
+	}
+
+	Script: reachable (from, to) {
+        h1 = getHeight(from);
+        h2 = getHeight(to);
+        hw = getWaterHeight(to);
+        return ((h2 >= hw - .attStepHeight) && (abs(h1-h2) <= .attStepHeight));
+	}
+
+}

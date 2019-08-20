@@ -15,6 +15,7 @@ import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
 import engine.parser.utils.TokenNumerifier;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Interpreter {
@@ -149,6 +150,23 @@ public class Interpreter {
 			if (next.getValue() != null && next.getValue().length() > 0) {
 				identifiers.add(new ContainerIdentifier(next.getValue()));
 			}
+		}
+	}
+
+	private void feedPrecursors(List<ContainerIdentifier> identifiers) throws Exception {
+		consume(TokenConstants.INHERITS);
+
+		boolean first = true;
+		Token next;
+		while (!TokenConstants.CURLY_BRACKETS_OPEN.equals(peek())) {
+			if (!first) { consume(TokenConstants.COMMA); }
+
+			next = consume();
+			if (next.getValue() != null && next.getValue().length() > 0) {
+				identifiers.add(new ContainerIdentifier(next.getValue()));
+			}
+
+			first = false;
 		}
 	}
 
@@ -370,6 +388,13 @@ public class Interpreter {
 	private void createEntity(final DataType type) throws Exception {
 		consume(TokenConstants.COLON);
 		Token textID = consume();
+
+		List<ContainerIdentifier> precursors = null;
+		if (TokenConstants.INHERITS.equals(peek())) {
+			precursors = new ArrayList<>(0);
+			feedPrecursors(precursors);
+		}
+
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
 		Container container;
@@ -416,6 +441,9 @@ public class Interpreter {
 				default:
 					Logger.error("Unknown entity constructor type '" + type + "' for '" + textID.getValue() + "' on line " + textID.getLine());
 					return;
+			}
+			if (precursors != null) {
+				container.setInheritedContainers(precursors);
 			}
 			Data.addContainer(container);
 		}

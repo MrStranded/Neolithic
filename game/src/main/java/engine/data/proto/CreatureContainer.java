@@ -1,5 +1,8 @@
 package engine.data.proto;
 
+import engine.data.IDInterface;
+import engine.data.Script;
+import engine.data.attributes.Attribute;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.variables.DataType;
 
@@ -18,6 +21,20 @@ public class CreatureContainer extends Container {
 
 		knowledge = new ArrayList<>(4);
 		drives = new ArrayList<>(2);
+	}
+
+	// ###################################################################################
+	// ################################ Finalization #####################################
+	// ###################################################################################
+
+	@Override
+	protected void inheritBehaviour(Container container) {
+		if (container.getType() == DataType.CREATURE) {
+			CreatureContainer creatureContainer = (CreatureContainer) container;
+
+			drives.addAll(creatureContainer.getDrives());
+			knowledge.addAll(creatureContainer.getKnowledge());
+		}
 	}
 
 	// ###################################################################################

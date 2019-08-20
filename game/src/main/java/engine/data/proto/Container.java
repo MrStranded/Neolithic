@@ -5,6 +5,7 @@ import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.attributes.PreAttribute;
 import engine.data.Script;
+import engine.data.identifiers.ContainerIdentifier;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.graphics.objects.MeshHub;
@@ -34,6 +35,8 @@ public class Container {
 
 	// loading process
 	private List<PreAttribute> preAttributeList;
+	private List<ContainerIdentifier> inheritedContainers;
+	private boolean hasInherited = false;
 
 	public Container(String textID, DataType type) {
 		this.textID = textID;
@@ -42,6 +45,7 @@ public class Container {
 		scripts = new BinaryTree<>();
 
 		preAttributeList = new ArrayList<>(8);
+		inheritedContainers = new ArrayList<>(0);
 	}
 
 	// ###################################################################################
@@ -65,6 +69,45 @@ public class Container {
 
 	public void finalizeScripts() {
 		// maybe unnecessary -> delete?
+	}
+
+	public void finalizeInheritance() {
+		if (hasInherited) { return; }
+
+		for (ContainerIdentifier containerIdentifier : inheritedContainers) {
+			Container container = containerIdentifier.retrieve();
+			if (container != null) {
+				container.finalizeInheritance();
+
+				inheritAttributes(container);
+				inheritScripts(container);
+				inheritBehaviour(container);
+			}
+		}
+
+		hasInherited = true;
+	}
+
+	private void inheritAttributes(Container container) {
+		for (IDInterface attributeID : container.getAttributes()) {
+			addAttribute((Attribute) attributeID);
+		}
+	}
+
+	private void inheritScripts(Container container) {
+		for (IDInterface scriptID : container.getScripts()) {
+			Script script = (Script) scriptID;
+			if (script != null) {
+				Script previous = getScript(script.getTextId());
+				if (previous == null) {
+					addScript(script);
+				}
+			}
+		}
+	}
+
+	protected void inheritBehaviour(Container container) {
+		// is overwritten in CreatureContainer
 	}
 
 	// ###################################################################################
@@ -121,6 +164,16 @@ public class Container {
 			return scripts.get(StringConverter.toID(textID));
 		}
 		return null;
+	}
+
+	public void addInheritance(String textID) {
+		inheritedContainers.add(new ContainerIdentifier(textID));
+	}
+	public List<ContainerIdentifier> getInheritedContainers() {
+		return inheritedContainers;
+	}
+	public void setInheritedContainers(List<ContainerIdentifier> inheritedContainers) {
+		this.inheritedContainers = inheritedContainers;
 	}
 
 	public MeshHub getMeshHub() {
