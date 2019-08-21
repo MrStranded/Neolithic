@@ -15,6 +15,9 @@ import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.input.KeyboardInput;
 import engine.input.MouseInput;
 import engine.graphics.gui.window.Window;
+import engine.math.MatrixCalculations;
+import engine.math.numericalObjects.Vector3;
+import engine.math.numericalObjects.Vector4;
 import load.StringLoader;
 import engine.math.numericalObjects.Matrix4;
 import org.lwjgl.glfw.GLFW;
@@ -25,7 +28,7 @@ import org.lwjgl.opengl.GL30;
 import java.util.Collection;
 
 import static java.lang.System.exit;
-import static java.lang.System.in;
+import static java.lang.System.setOut;
 
 /**
  * The renderer is only concerned about periodically drawing the given mesh data onto a window
@@ -40,6 +43,7 @@ public class Renderer {
 	private ShaderProgram depthShaderProgram;
 
 	private Matrix4 projectionMatrix;
+	private Matrix4 invertedProjectionMatrix;
 	private Matrix4 orthographicMatrix;
 
 	/**
@@ -70,7 +74,7 @@ public class Renderer {
 		initializeUniforms();
 		initializeInput();
 
-		calculateProjectionMatrix();
+		calculateProjectionMatrizes();
 		calculateOrthographicMatrix();
 	}
 
@@ -163,13 +167,13 @@ public class Renderer {
 	// ###################################################################################
 
 	public void recalculateAspectRatio() {
-		calculateProjectionMatrix();
+		calculateProjectionMatrizes();
 		calculateOrthographicMatrix();
 
 		aspectRatioHasChanged = true;
 	}
 
-	private void calculateProjectionMatrix() {
+	private void calculateProjectionMatrizes() {
 		double aspectRatio = getAspectRatio();
 
 		// values are multiplied with znear so the size of objects on the screen is independant from the znear value
@@ -181,6 +185,9 @@ public class Renderer {
 				GraphicalConstants.ZNEAR,
 				GraphicalConstants.ZFAR
 		);
+
+		// we need the inverted projection matrix to create intersection rays from the mouse position
+		invertedProjectionMatrix = MatrixCalculations.invert(projectionMatrix);
 	}
 
 	private void calculateOrthographicMatrix() {
@@ -237,14 +244,15 @@ public class Renderer {
 		if (keyboard.isPressed(GLFW.GLFW_KEY_S)) { // rotate down
 			camera.rotatePitch(dist);
 		}
+		camera.changeRadius(-dist*mouse.getZSpeed()*3); // scrolling wheel
 		if (keyboard.isPressed(GLFW.GLFW_KEY_R)) { // go closer
 			camera.changeRadius(-dist);
-			if (camera.getRadius() < 1d + GraphicalConstants.ZNEAR) {
-				camera.setRadius(1d + GraphicalConstants.ZNEAR);
-			}
 		}
 		if (keyboard.isPressed(GLFW.GLFW_KEY_F)) { // go farther away
 			camera.changeRadius(dist);
+		}
+		if (camera.getRadius() < 1d + GraphicalConstants.ZNEAR) { // ensure not to go too close
+			camera.setRadius(1d + GraphicalConstants.ZNEAR);
 		}
 
 		if (keyboard.isClicked(GLFW.GLFW_KEY_G)) {
@@ -259,6 +267,37 @@ public class Renderer {
 				}
 			}
 		}
+
+		if (mouse.isLeftButtonClicked()) {
+			System.out.println("mouse clicked: " + mouse.getXPos() + " , " + mouse.getYPos());
+
+			double aspectRatio = window.getWidth() / window.getHeight();
+			double positionX = 2d * aspectRatio * mouse.getXPos() / window.getWidth() - aspectRatio;
+			double positionY = 2d * (window.getHeight() - mouse.getYPos()) / window.getHeight() - 1d;
+
+			System.out.println("normalized device space: " + positionX + " , " + positionY);
+
+			//into frustum. vectors times -z=w to get into homogeneous space
+			Vector4 rayOrigin = new Vector4(0,0,0,1);
+			Vector4 rayDestination = new Vector4(-positionX, -positionY, -1, 1);
+
+			// run them backwards through rendering pipeline
+			rayOrigin = Data.getPlanet().getPlanetObject().getInvertedWorldMatrix().times(
+						camera.getInvertedViewMatrix().times(
+						invertedProjectionMatrix.times(rayOrigin))).standardizeInplace();
+			rayDestination = Data.getPlanet().getPlanetObject().getInvertedWorldMatrix().times(
+						camera.getInvertedViewMatrix().times(
+						invertedProjectionMatrix.times(rayDestination))).standardizeInplace();
+
+			System.out.println("ray origin: " + rayOrigin);
+			System.out.println("ray destination: " + rayDestination);
+			System.out.println("lenghts: " + rayOrigin.extractVector3().lengthSquared() + " , " + rayDestination.extractVector3().lengthSquared());
+
+			Vector3 rayDirection = rayDestination.extractVector3().minus(rayOrigin.extractVector3());
+			System.out.println("direction: " + rayDirection);
+		}
+
+		mouse.flush();
 	}
 
 	// ###################################################################################

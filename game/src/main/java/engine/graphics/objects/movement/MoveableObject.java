@@ -1,5 +1,6 @@
 package engine.graphics.objects.movement;
 
+import engine.math.MatrixCalculations;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
 import engine.math.numericalObjects.Vector4;
@@ -241,5 +242,9 @@ public class MoveableObject {
 			changed = false;
 		}
 		return matrix;
+	}
+
+	public Matrix4 getInvertedWorldMatrix() {
+		return MatrixCalculations.invert(matrix);
 	}
 }

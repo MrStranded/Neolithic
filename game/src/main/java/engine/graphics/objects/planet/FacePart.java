@@ -93,8 +93,8 @@ public class FacePart {
 		if (distanceQuotient < 1d) {
 			distanceQuotient = 1d;
 		}
-		
-		factor = factor / distanceQuotient;
+
+		factor /= distanceQuotient;
 
 		int detailLevel = (int) ((double) depth*factor);
 		// on camera facing side, go at least one level deep if close enough

@@ -1,6 +1,7 @@
 package engine.graphics.objects.movement;
 
 import constants.GraphicalConstants;
+import engine.math.MatrixCalculations;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
 import engine.math.Transformations;
@@ -92,6 +93,14 @@ public class MoveableCamera {
 				Transformations.translate(new Vector3(0,0, -radius)).times(
 				Transformations.rotateX(-pitch).times(
 				Transformations.rotateY(-yaw))));
+	}
+
+	public Matrix4 getInvertedViewMatrix() {
+		/*return  Transformations.rotateY(yaw).times(
+				Transformations.rotateX(pitch).times(
+				Transformations.translate(new Vector3(0,0, radius)).times(
+				Transformations.rotateX(tilt))));*/
+		return MatrixCalculations.invert(getViewMatrix());
 	}
 
 	/**
