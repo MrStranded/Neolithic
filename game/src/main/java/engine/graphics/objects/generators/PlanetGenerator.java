@@ -57,8 +57,12 @@ public class PlanetGenerator {
 		return new Vector3(0,0,0);
 	}
 
-	private double getHeightFactor(double height) {
+	public static double getHeightFactor(double height) {
 		return (TopologyConstants.PLANET_MINIMUM_HEIGHT + height) / TopologyConstants.PLANET_MINIMUM_HEIGHT;
+	}
+
+	private double getWeightedHeight(double maxHeight, double sumHeight) {
+		return maxHeight/4d + sumHeight*3d/16d;
 	}
 
 	// ###################################################################################
@@ -73,7 +77,7 @@ public class PlanetGenerator {
 		} else {
 			height = facePart.getHeight();
 		}
-		double f = getHeightFactor(height);
+		double f = PlanetGenerator.getHeightFactor(height);
 
 		Vector3[] upper = new Vector3[3];
 
@@ -158,7 +162,7 @@ public class PlanetGenerator {
 			}
 
 			if (otherHeight < height) {
-				double lowerFactor = getHeightFactor(otherHeight);
+				double lowerFactor = PlanetGenerator.getHeightFactor(otherHeight);
 
 				lower[0] = facePart.getCorner1().times(lowerFactor);
 				lower[1] = facePart.getCorner2().times(lowerFactor);
@@ -321,8 +325,8 @@ public class PlanetGenerator {
 				}
 			}
 
-			facePart.setHeight(maxHeight/4d + sumHeight*3d/16d);
-			facePart.setWaterHeight(maxWaterHeight/4d + sumWaterHeight*3d/16d);
+			facePart.setHeight(getWeightedHeight(maxHeight, sumHeight));
+			facePart.setWaterHeight(getWeightedHeight(maxWaterHeight, sumWaterHeight));
 			facePart.setTopColor(sumTopColor.times(0.25d));
 			facePart.setSideColor(sumSideColor.times(0.25d));
 		} else {

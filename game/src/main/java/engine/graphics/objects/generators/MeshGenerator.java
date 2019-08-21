@@ -1,6 +1,7 @@
 package engine.graphics.objects.generators;
 
 import engine.graphics.objects.models.Mesh;
+import engine.graphics.objects.planet.FacePart;
 import engine.math.numericalObjects.Vector3;
 
 public class MeshGenerator {
@@ -14,6 +15,104 @@ public class MeshGenerator {
 	private static final float ANGLE = 2f * (float) Math.PI / 5f;
 	private static final float HALFANGLE = ANGLE / 2f;
 
+	// ###################################################################################
+	// ################################ Arrow ############################################
+	// ###################################################################################
+
+	public static Mesh createArrow(Vector3 rayOrigin, Vector3 rayDestination) {
+		float[] vertices = {
+				(float) rayOrigin.getX(), (float) rayOrigin.getY(), (float) rayOrigin.getZ(),  // left bottom
+				(float) rayOrigin.getX(), (float) rayOrigin.getY()+0.1f, (float) rayOrigin.getZ(),  // right bottom
+				(float) rayDestination.getX(), (float) rayDestination.getY(), (float) rayDestination.getZ(),  // left top
+				(float) rayDestination.getX(), (float) rayDestination.getY()+0.1f, (float) rayDestination.getZ()   // right top
+		};
+
+
+		float[] normals = {
+				0, 1, 0,
+				0, 1, 0,
+				0, 1, 0,
+				0, 1, 0,
+				0, -1, 0,
+				0, -1, 0,
+				0, -1, 0,
+				0, -1, 0
+		};
+
+		int[] indices = {
+				0,1,2,
+				1,3,2,
+				0,2,1,
+				1,2,3
+		};
+
+		float[] textureCoordinates = {
+				0f, 1f,
+				1f, 1f,
+				0f, 0f,
+				1f, 0f,
+				0f, 1f,
+				1f, 1f,
+				0f, 0f,
+				1f, 0f
+		};
+
+		float[] colors = {
+				1f, 1f, 1f, 1f,
+				1f, 1f, 1f, 1f,
+				1f, 1f, 1f, 1f,
+				1f, 1f, 1f, 1f,
+				1f, 1f, 1f, 1f,
+				1f, 1f, 1f, 1f,
+				1f, 1f, 1f, 1f,
+				1f, 1f, 1f, 1f
+		};
+
+		return new Mesh(vertices, indices, normals, textureCoordinates, colors);
+	}
+
+	// ###################################################################################
+	// ################################ Quad #############################################
+	// ###################################################################################
+
+	public static Mesh createFacePartOverlay(FacePart facePart) {
+		double f = PlanetGenerator.getHeightFactor(facePart.getMaxHeight()) * 1.05;
+
+		Vector3 c1 = facePart.getCorner1().times(f);
+		Vector3 c2 = facePart.getCorner2().times(f);
+		Vector3 c3 = facePart.getCorner3().times(f);
+
+		float[] vertices = {
+				(float) c1.getX(), (float) c1.getY(), (float) c1.getZ(),
+				(float) c2.getX(), (float) c2.getY(), (float) c2.getZ(),
+				(float) c3.getX(), (float) c3.getY(), (float) c3.getZ()
+		};
+
+		float[] normals = {
+				0, 0, 1,
+				0, 0, 1,
+				0, 0, 1
+		};
+
+		int[] indices = {
+				0,1,2
+		};
+
+		float[] textureCoordinates = {
+				0f, 1f,
+				1f, 1f,
+				0f, 0f
+		};
+
+		float[] colors = {
+				0f, 0f, 0f, 1f,
+				0f, 0f, 0f, 1f,
+				0f, 0f, 0f, 1f
+		};
+
+		return new Mesh(vertices, indices, normals, textureCoordinates, colors);
+	}
+	
 	// ###################################################################################
 	// ################################ Quad #############################################
 	// ###################################################################################

@@ -4,6 +4,7 @@ import constants.GraphicalConstants;
 import engine.data.Data;
 import engine.graphics.objects.generators.MeshGenerator;
 import engine.graphics.objects.light.*;
+import engine.graphics.objects.planet.FacePart;
 import engine.graphics.objects.planet.Sun;
 import engine.graphics.objects.textures.Texture;
 import engine.math.numericalObjects.Vector3;
@@ -32,7 +33,7 @@ public class Scene {
 		Texture grasTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/gras.png");
 		Texture moonTexture = TextureLoader.loadTexture("data/mods/vanilla/assets/textures/moon.png");
 
-		objects = new GraphicalObject[4];
+		objects = new GraphicalObject[8];
 		pointLights = new PointLight[3];
 		spotLights = new SpotLight[8];
 		double sunDistance = GraphicalConstants.SUN_DISTANCE;
@@ -102,6 +103,17 @@ public class Scene {
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
+
+	public void setArrow(Vector3 rayOrigin, Vector3 rayDestination) {
+		objects[4] = new GraphicalObject(MeshGenerator.createArrow(rayOrigin, rayDestination));
+	}
+	public void setFacePartOverlay(FacePart facePart) {
+		if (facePart == null) {
+			objects[5] = null;
+		} else {
+			objects[5] = new GraphicalObject(MeshGenerator.createFacePartOverlay(facePart));
+		}
+	}
 
 	public Camera getCamera() {
 		return camera;

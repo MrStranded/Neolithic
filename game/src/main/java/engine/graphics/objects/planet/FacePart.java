@@ -2,6 +2,7 @@ package engine.graphics.objects.planet;
 
 import constants.TopologyConstants;
 import engine.data.planetary.Tile;
+import engine.graphics.objects.generators.PlanetGenerator;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.shaders.ShaderProgram;
@@ -31,6 +32,7 @@ public class FacePart {
 	private Vector3 corner1, corner2, corner3;
 
 	private int depth;
+	private boolean rendersSelf = false;
 
 	public FacePart(Vector3 corner1, Vector3 corner2, Vector3 corner3) {
 		this.corner1 = corner1;
@@ -45,6 +47,8 @@ public class FacePart {
 	// ###################################################################################
 
 	private void renderSelf(ShaderProgram shaderProgram, boolean putDataIntoShader, boolean drawWater) {
+		rendersSelf = true;
+
 		if (drawWater) {
 			if (waterMesh != null) {
 				if (putDataIntoShader) {
@@ -71,6 +75,8 @@ public class FacePart {
 	}
 	
 	public void render(ShaderProgram shaderProgram, Matrix4 viewWorldMatrix, int depth, boolean putDataIntoShader, boolean drawWater) {
+		rendersSelf = false;
+
 		// performance!!!
 		if (quarterFaces == null) {
 			renderSelf(shaderProgram, putDataIntoShader,drawWater);
@@ -121,11 +127,13 @@ public class FacePart {
 	// ###################################################################################
 
 	public boolean intersects(Vector3 rayOrigin, Vector3 rayDirection) {
-		boolean intersects;
+		if (normal.dot(rayDirection) > 0) { return false; }
 
-		intersects = intersectsTriangle(rayOrigin, rayDirection, corner1, corner2.minus(corner1), corner3.minus(corner1));
+		double f = PlanetGenerator.getHeightFactor(getMaxHeight());
+		boolean intersects = intersectsTriangle(rayOrigin, rayDirection,
+				corner1.times(f), corner2.times(f), corner3.times(f));
 
-		if (!intersects) {
+		/*if (!intersects) {
 			Vector3[] corners = new Vector3[]{corner1, corner2, corner3};
 			for (int i = 0; i < 3; i++) {
 				int j = (i + 1) % 3;
@@ -133,25 +141,34 @@ public class FacePart {
 				intersects = intersectsTriangle(rayOrigin, rayDirection, new Vector3(0,0,0), corners[i], corners[j]);
 				if (intersects) { break; }
 			}
-		}
+		}*/
 
 		return intersects;
 	}
 
-	private boolean intersectsTriangle(Vector3 rayOrigin, Vector3 rayDirection, Vector3 planeOrigin, Vector3 planeA, Vector3 planeB) {
-		Vector3 planeNormal = planeA.cross(planeB).normalize();
+	private boolean intersectsTriangle(Vector3 rayOrigin, Vector3 rayDirection, Vector3 corner1, Vector3 corner2, Vector3 corner3) {
+		Vector3 planeX = corner2.minus(corner1);
+		Vector3 planeY = corner3.minus(corner1);
+		Vector3 planeNormal = planeX.cross(planeY).normalize();
 
-		double denom = planeNormal.dot(rayDirection);
-		if (Math.abs(denom) > 0.0001d) { // your favorite epsilon
-			double t = (planeOrigin.minus(rayOrigin)).dot(planeNormal) / denom;
-			Vector3 intersection = rayOrigin.plus(rayDirection.times(t));
-			double lenghtA = intersection.minus(planeOrigin).dot(planeA);
-			double lenghtB = intersection.minus(planeOrigin).dot(planeB);
+		double cos = planeNormal.dot(rayDirection); // cos = cos(theta) because |planeNormal| = |rayDirection| = 1
+		if (Math.abs(cos) < 0.01d) { // your favorite epsilon
+			return false;
+		}
 
-			if (lenghtA > 0 && lenghtB > 0) {
-				if (lenghtA/planeA.length() + lenghtB/planeB.length() < 1) {
-					return true;
-				}
+		//double t = (corner1.minus(rayOrigin)).dot(planeNormal); // t = |lineToPlaneOrigin| * cos(theta)
+		//Vector3 intersection = rayOrigin.plus(rayDirection.times(t / cos));
+
+		double t = (planeNormal.dot(corner1) - planeNormal.dot(rayOrigin)) / planeNormal.dot(rayDirection);
+		Vector3 intersection = rayOrigin.plus(rayDirection.times(t));
+
+		double lengthA = (intersection.minus(corner1)).dot(planeX) / planeX.lengthSquared();
+		double lengthB = (intersection.minus(corner1)).dot(planeY) / planeY.lengthSquared();
+		System.out.println("lengths: " + planeX.lengthSquared() + " , " + planeY.lengthSquared());
+
+		if (lengthA > 0 && lengthB > 0) {
+			if (lengthA + lengthB < 1) {
+				return true;
 			}
 		}
 
@@ -159,13 +176,11 @@ public class FacePart {
 	}
 
 	public FacePart getIntersectedFacePart(Vector3 rayOrigin, Vector3 rayDirection) {
-		if (normal.dot(rayDirection) > 0) { return null; }
-
 		if (quarterFaces != null) {
 			FacePart closest = null;
 			for (FacePart facePart : quarterFaces) {
 				if (facePart.intersects(rayOrigin, rayDirection)) {
-					if (closest == null || facePart.closerToCamera(rayOrigin, rayDirection, closest)) {
+					if (closest == null || facePart.closerToCamera(closest, rayOrigin)) {
 						closest = facePart;
 					}
 				}
@@ -173,16 +188,16 @@ public class FacePart {
 
 			if (closest != null) {
 				return closest.getIntersectedFacePart(rayOrigin, rayDirection);
+			} else {
+				return this;
 			}
-		} else if (tile != null) {
-			return this;
 		}
 
-		return null;
+		return this;
 	}
 
-	public boolean closerToCamera(Vector3 rayOrigin, Vector3 rayDirection, FacePart other) {
-		return mid.minus(rayOrigin).lengthSquared() < other.mid.minus(rayOrigin).lengthSquared();
+	public boolean closerToCamera(FacePart other, Vector3 rayOrigin) {
+		return (mid.minus(rayOrigin).lengthSquared() < other.mid.minus(rayOrigin).lengthSquared());
 	}
 
 	// ###################################################################################
@@ -234,6 +249,10 @@ public class FacePart {
 	 */
 	public void setWaterMid(Vector3 waterMid) {
 		this.waterMid = waterMid;
+	}
+
+	public double getMaxHeight() {
+		return Math.max(height, waterHeight);
 	}
 
 	public double getHeight() {

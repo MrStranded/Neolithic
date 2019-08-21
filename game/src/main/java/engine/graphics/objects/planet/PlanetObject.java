@@ -80,14 +80,17 @@ public class PlanetObject extends MoveableObject {
 
 		for (FacePart facePart : faceParts) {
 			if (facePart.intersects(rayOrigin, rayDirection)) {
-				if (closest == null || facePart.closerToCamera(rayOrigin, rayDirection, closest)) {
+				System.out.println("intersects: " + facePart);
+				if (closest == null || facePart.closerToCamera(closest, rayOrigin)) {
 					closest = facePart;
 				}
 			}
 		}
 
 		if (closest != null) {
-			return closest.getIntersectedFacePart(rayOrigin, rayDirection);
+			return closest;//.getIntersectedFacePart(rayOrigin, rayDirection);
+		} else {
+			System.out.println("planet not clicked");
 		}
 
 		return null;

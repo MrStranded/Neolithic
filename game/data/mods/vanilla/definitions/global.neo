@@ -7,7 +7,7 @@ Script: tick {
     if (->minute >= 60) {
         ->minute = 0;
         ->hour++;
-        print("Day: " + ->day + " | Hour: " + ->hour);
+        //print("Day: " + ->day + " | Hour: " + ->hour);
     }
 
     if (->hour >= 24) {
