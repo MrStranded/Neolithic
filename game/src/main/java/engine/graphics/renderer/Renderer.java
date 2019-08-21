@@ -2,13 +2,16 @@ package engine.graphics.renderer;
 
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
+import constants.ScriptConstants;
 import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
 import engine.data.Data;
+import engine.data.variables.Variable;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.*;
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.light.*;
+import engine.graphics.objects.planet.FacePart;
 import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
@@ -278,23 +281,40 @@ public class Renderer {
 			System.out.println("normalized device space: " + positionX + " , " + positionY);
 
 			//into frustum. vectors times -z=w to get into homogeneous space
-			Vector4 rayOrigin = new Vector4(0,0,0,1);
-			Vector4 rayDestination = new Vector4(-positionX, -positionY, -1, 1);
+			Vector4 rayOrigin4 = new Vector4(0,0,0,1);//new Vector4(-positionX/GraphicalConstants.ZNEAR,-positionY/GraphicalConstants.ZNEAR,0,1);
+			Vector4 rayDestination4 = new Vector4(positionX, positionY, 1, 1);
 
 			// run them backwards through rendering pipeline
-			rayOrigin = Data.getPlanet().getPlanetObject().getInvertedWorldMatrix().times(
-						camera.getInvertedViewMatrix().times(
-						invertedProjectionMatrix.times(rayOrigin))).standardizeInplace();
-			rayDestination = Data.getPlanet().getPlanetObject().getInvertedWorldMatrix().times(
-						camera.getInvertedViewMatrix().times(
-						invertedProjectionMatrix.times(rayDestination))).standardizeInplace();
+			Matrix4 invertedPipeline =  Data.getPlanet().getPlanetObject().getInvertedWorldMatrix().times(
+										camera.getInvertedViewMatrix().times(
+										invertedProjectionMatrix));
 
+			Vector3 rayOrigin = invertedPipeline.times(rayOrigin4).standardizeInplace().extractVector3();
+			Vector3 rayDestination = invertedPipeline.times(rayDestination4).standardizeInplace().extractVector3();
+
+			System.out.println();
 			System.out.println("ray origin: " + rayOrigin);
 			System.out.println("ray destination: " + rayDestination);
-			System.out.println("lenghts: " + rayOrigin.extractVector3().lengthSquared() + " , " + rayDestination.extractVector3().lengthSquared());
+			System.out.println();
+			System.out.println("lenghts: " + rayOrigin.lengthSquared() + " , " + rayDestination.lengthSquared());
 
-			Vector3 rayDirection = rayDestination.extractVector3().minus(rayOrigin.extractVector3());
+			Vector3 rayDirection = rayDestination.minus(rayOrigin);
 			System.out.println("direction: " + rayDirection);
+
+			FacePart clickedPart = Data.getPlanet().getPlanetObject().getIntersectedFacePart(rayOrigin, rayDirection);
+			if (clickedPart != null) {
+				System.out.println("clicked facepart: " + clickedPart);
+				if (clickedPart.getTile() != null) {
+					System.out.println("/////////////////////////////////////////////////////////////////////////////");
+					System.out.println("clicked tile: " + clickedPart.getTile());
+
+					Instance instance = new Instance(Data.getContainerID("entBoulder"));
+					instance.placeInto(clickedPart.getTile());
+
+					instance.run(ScriptConstants.EVENT_PLACE, new Variable[] {new Variable(clickedPart.getTile())});
+					Data.addInstanceToQueue(instance);
+				}
+			}
 		}
 
 		mouse.flush();

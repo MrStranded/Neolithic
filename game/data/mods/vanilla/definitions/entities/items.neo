@@ -1,1 +1,9 @@
 
+Entity: entBoulder {
+    name = "Boulder";
+    mesh = "stone01.ply";
+
+    Script: place(tile) {
+        print("placed boulder on " + tile);
+    }
+}

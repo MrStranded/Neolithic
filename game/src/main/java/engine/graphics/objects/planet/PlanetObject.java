@@ -8,6 +8,7 @@ import engine.graphics.objects.movement.MoveableObject;
 import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
+import engine.math.numericalObjects.Vector3;
 
 public class PlanetObject extends MoveableObject {
 
@@ -68,6 +69,28 @@ public class PlanetObject extends MoveableObject {
 				}
 			}
 		}
+	}
+
+	// ###################################################################################
+	// ################################ Picking With Mouse ###############################
+	// ###################################################################################
+
+	public FacePart getIntersectedFacePart(Vector3 rayOrigin, Vector3 rayDirection) {
+		FacePart closest = null;
+
+		for (FacePart facePart : faceParts) {
+			if (facePart.intersects(rayOrigin, rayDirection)) {
+				if (closest == null || facePart.closerToCamera(rayOrigin, rayDirection, closest)) {
+					closest = facePart;
+				}
+			}
+		}
+
+		if (closest != null) {
+			return closest.getIntersectedFacePart(rayOrigin, rayDirection);
+		}
+
+		return null;
 	}
 
 	// ###################################################################################

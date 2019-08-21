@@ -147,6 +147,18 @@ public class Instance {
 	// ################################ Game Logic #######################################
 	// ###################################################################################
 
+	public void change(int containerId) {
+		if (Data.getContainer(id).getType() == DataType.TILE && Data.getContainer(containerId).getType() == DataType.TILE) {
+			id = containerId;
+			((Tile) this).resetColors();
+			inheritAttributes();
+			Data.addChangedTile((Tile) this);
+		} else if (Data.getContainer(id).getType() != DataType.TILE && Data.getContainer(containerId).getType() != DataType.TILE) {
+			id = containerId;
+			inheritAttributes();
+		}
+	}
+
 	/**
 	 * Goes through all drives of the creature and sorts the triggered drives by their weight.
 	 * Then the method tries to execute a process of one of the drives, starting with the most important one.

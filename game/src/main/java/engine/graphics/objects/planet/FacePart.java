@@ -117,6 +117,75 @@ public class FacePart {
 	}
 
 	// ###################################################################################
+	// ################################ Picking with Mouse ###############################
+	// ###################################################################################
+
+	public boolean intersects(Vector3 rayOrigin, Vector3 rayDirection) {
+		boolean intersects;
+
+		intersects = intersectsTriangle(rayOrigin, rayDirection, corner1, corner2.minus(corner1), corner3.minus(corner1));
+
+		if (!intersects) {
+			Vector3[] corners = new Vector3[]{corner1, corner2, corner3};
+			for (int i = 0; i < 3; i++) {
+				int j = (i + 1) % 3;
+
+				intersects = intersectsTriangle(rayOrigin, rayDirection, new Vector3(0,0,0), corners[i], corners[j]);
+				if (intersects) { break; }
+			}
+		}
+
+		return intersects;
+	}
+
+	private boolean intersectsTriangle(Vector3 rayOrigin, Vector3 rayDirection, Vector3 planeOrigin, Vector3 planeA, Vector3 planeB) {
+		Vector3 planeNormal = planeA.cross(planeB).normalize();
+
+		double denom = planeNormal.dot(rayDirection);
+		if (Math.abs(denom) > 0.0001d) { // your favorite epsilon
+			double t = (planeOrigin.minus(rayOrigin)).dot(planeNormal) / denom;
+			Vector3 intersection = rayOrigin.plus(rayDirection.times(t));
+			double lenghtA = intersection.minus(planeOrigin).dot(planeA);
+			double lenghtB = intersection.minus(planeOrigin).dot(planeB);
+
+			if (lenghtA > 0 && lenghtB > 0) {
+				if (lenghtA/planeA.length() + lenghtB/planeB.length() < 1) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public FacePart getIntersectedFacePart(Vector3 rayOrigin, Vector3 rayDirection) {
+		if (normal.dot(rayDirection) > 0) { return null; }
+
+		if (quarterFaces != null) {
+			FacePart closest = null;
+			for (FacePart facePart : quarterFaces) {
+				if (facePart.intersects(rayOrigin, rayDirection)) {
+					if (closest == null || facePart.closerToCamera(rayOrigin, rayDirection, closest)) {
+						closest = facePart;
+					}
+				}
+			}
+
+			if (closest != null) {
+				return closest.getIntersectedFacePart(rayOrigin, rayDirection);
+			}
+		} else if (tile != null) {
+			return this;
+		}
+
+		return null;
+	}
+
+	public boolean closerToCamera(Vector3 rayOrigin, Vector3 rayDirection, FacePart other) {
+		return mid.minus(rayOrigin).lengthSquared() < other.mid.minus(rayOrigin).lengthSquared();
+	}
+
+	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 

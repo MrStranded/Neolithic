@@ -167,19 +167,9 @@ public class CommandExecuter {
                 checkValue(script, commandNode, target, "target instance");
                 containerId = checkType(script, commandNode, container, parameters[1].getString());
 
-				if (Data.getContainer(target.getId()).getType() == DataType.TILE && Data.getContainer(containerId).getType() == DataType.TILE) {
-					target.setId(containerId);
-					((Tile) target).resetColors();
-					target.inheritAttributes();
-					Data.addChangedTile((Tile) target);
+                target.change(containerId);
 
-					return new Variable(target);
-				} else if (Data.getContainer(target.getId()).getType() != DataType.TILE && Data.getContainer(containerId).getType() != DataType.TILE) {
-					target.setId(containerId);
-					target.inheritAttributes();
-
-					return new Variable(target);
-				}
+				return new Variable(target);
 			}
 
         // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void changeSunAngle (double angle)
