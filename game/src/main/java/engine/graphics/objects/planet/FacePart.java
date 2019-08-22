@@ -183,7 +183,7 @@ public class FacePart {
 		Vector3 v = corner3.minus(corner1);
         Vector3 planeNormal = u.cross(v).normalize();
 
-        if (planeNormal.dot(rayDirection) > 0) { return false; }
+        //if (planeNormal.dot(rayDirection) >= 0) { return false; }
 
         double t = (planeNormal.dot(corner1) - planeNormal.dot(rayOrigin)) / planeNormal.dot(rayDirection);
         intersection = rayOrigin.plus(rayDirection.times(t));

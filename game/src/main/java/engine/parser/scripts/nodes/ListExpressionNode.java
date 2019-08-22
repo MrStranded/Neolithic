@@ -1,12 +1,9 @@
 package engine.parser.scripts.nodes;
 
-import engine.data.Script;
+import engine.data.scripts.Script;
 import engine.data.entities.Instance;
 import engine.data.variables.Variable;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
-import engine.parser.tokenization.Token;
-import engine.parser.utils.TokenNumerifier;
-import org.lwjgl.system.CallbackI;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -36,3 +36,20 @@ Script: repopulate() {
         }
     }
 }
+
+Script: armageddon {
+    for (c : eachCreature()) {
+        if (getType(c) == cHuman) {
+            destroy(c);
+        }
+    }
+}
+
+Script: clickedTile(tile) {
+    boulder = getInstanceInRange(entBoulder, tile, 0);
+    if (boulder) {
+        destroy(boulder);
+    } else {
+        create(entBoulder, tile);
+    }
+}

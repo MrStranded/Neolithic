@@ -4,7 +4,7 @@ import constants.ResourcePathConstants;
 import constants.ScriptConstants;
 import constants.TopologyConstants;
 import engine.data.Data;
-import engine.data.Script;
+import engine.data.scripts.Script;
 import engine.data.entities.Effect;
 import engine.data.entities.Instance;
 import engine.data.planetary.Face;
@@ -23,7 +23,6 @@ import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.exceptions.InvalidValueException;
 import engine.parser.scripts.exceptions.ReturnException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
-import engine.parser.scripts.nodes.AbstractScriptNode;
 import engine.parser.scripts.nodes.CommandExpressionNode;
 import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
@@ -233,6 +232,24 @@ public class CommandExecuter {
 				return new Variable(tileList);
 			}
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list eachEntity ()
+		} else if (TokenConstants.EACH_ENTITY.equals(command)) {
+			List<Variable> entities = new ArrayList<>(Data.getPublicInstanceList().size()/2);
+			for (Instance instance : Data.getInstanceQueue()) {
+				entities.add(new Variable(instance));
+			}
+			return new Variable(entities);
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list eachCreature ()
+		} else if (TokenConstants.EACH_CREATURE.equals(command)) {
+			List<Variable> creatures = new ArrayList<>(Data.getPublicInstanceList().size()/2);
+			for (Instance instance : Data.getInstanceQueue()) {
+				if (Data.getContainer(instance.getId()).getType() == DataType.CREATURE) {
+					creatures.add(new Variable(instance));
+				}
+			}
+			return new Variable(creatures);
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int fitTiles ()
 		} else if (TokenConstants.FIT_TILES.equals(command)) {
 			if (Data.getPlanet() != null) {
@@ -283,8 +300,8 @@ public class CommandExecuter {
 				return new Variable();
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance getCreatureInRange (Container type, Tile center, int radius)
-		} else if (TokenConstants.GET_CREATURE_IN_RANGE.equals(command)) {
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance getInstanceInRange (Container type, Tile center, int radius)
+		} else if (TokenConstants.GET_INSTANCE_IN_RANGE.equals(command)) {
 			if (requireParameters(commandNode, 3)) {
 				Container type = parameters[0].getContainer();
 				int containerID = -1;
@@ -296,10 +313,12 @@ public class CommandExecuter {
 
 				TileArea tileArea = new TileArea(center, radius);
 				for (Tile tile : tileArea.getTileList()) {
-					Instance instance = tile.getThisOrSubInstanceWithID(containerID);
+					if (tile != null) {
+						Instance instance = tile.getThisOrSubInstanceWithID(containerID);
 
-					if (instance != null) {
-						return new Variable(instance);
+						if (instance != null) {
+							return new Variable(instance);
+						}
 					}
 				}
 				return new Variable();

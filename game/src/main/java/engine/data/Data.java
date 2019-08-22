@@ -7,6 +7,8 @@ import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
+import engine.data.scripts.Script;
+import engine.data.scripts.ScriptRun;
 import engine.data.variables.DataType;
 import engine.graphics.gui.BaseGUI;
 import engine.graphics.gui.GUIInterface;
@@ -40,6 +42,7 @@ public class Data {
 
 	private static Queue<Instance> instanceQueue;
 	private static Queue<Tile> changedTiles;
+	private static Queue<ScriptRun> scriptRuns;
 
 	/**
 	 * The publicInstanceList is used to access the instances in list form without causing a ConcurrentModificationException.
@@ -62,6 +65,7 @@ public class Data {
 
 		instanceQueue = new LinkedList<>();//new ConcurrentLinkedQueue<>();
 		changedTiles = new LinkedList<>();
+		scriptRuns = new LinkedList<>();
 
 		// the mainContainer container contains global scripts
 		mainContainer = new Container("mainContainer", DataType.CONTAINER);
@@ -273,6 +277,10 @@ public class Data {
 		changedTiles.clear();
 	}
 
+	public static void addScriptRun(ScriptRun scriptRun) {
+		scriptRuns.add(scriptRun);
+	}
+
 	// ###################################################################################
 	// ################################ Preparing for Game ###############################
 	// ###################################################################################
@@ -359,8 +367,18 @@ public class Data {
     	Data.publicInstanceList = publicInstanceList;
 	}
 
+	/**
+	 * Should only be accessed in logic thread!
+	 * @return internal instance queue
+	 */
+	public static Queue<Instance> getInstanceQueue() { return instanceQueue; }
+
 	public static Queue<Tile> getChangedTiles() {
 		return changedTiles;
+	}
+
+	public static Queue<ScriptRun> getScriptRuns() {
+    	return scriptRuns;
 	}
 
 	public static Container getMainContainer() {

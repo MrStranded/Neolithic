@@ -1,8 +1,5 @@
 package engine.data.proto;
 
-import engine.data.IDInterface;
-import engine.data.Script;
-import engine.data.attributes.Attribute;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.variables.DataType;
 

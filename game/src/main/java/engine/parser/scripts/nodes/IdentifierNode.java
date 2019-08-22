@@ -1,10 +1,9 @@
 package engine.parser.scripts.nodes;
 
 import engine.data.Data;
-import engine.data.Script;
+import engine.data.scripts.Script;
 import engine.data.entities.Instance;
 import engine.data.identifiers.AttributeIdentifier;
-import engine.data.identifiers.ContainerIdentifier;
 import engine.data.proto.Container;
 import engine.data.variables.Variable;
 import engine.parser.tokenization.Token;

@@ -7,7 +7,7 @@ import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.proto.*;
-import engine.data.Script;
+import engine.data.scripts.Script;
 import engine.data.variables.DataType;
 import engine.parser.interpretation.Interpreter;
 import engine.parser.tokenization.Token;

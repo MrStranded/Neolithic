@@ -1,7 +1,7 @@
 package engine.parser.scripts.nodes;
 
 import engine.data.entities.Instance;
-import engine.data.Script;
+import engine.data.scripts.Script;
 import engine.data.variables.Variable;
 import engine.parser.scripts.exceptions.BreakException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;

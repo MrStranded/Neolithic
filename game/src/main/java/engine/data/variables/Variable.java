@@ -2,9 +2,8 @@ package engine.data.variables;
 
 import engine.data.Data;
 import engine.data.IDInterface;
-import engine.data.Script;
+import engine.data.scripts.Script;
 import engine.data.attributes.Attribute;
-import engine.data.entities.Effect;
 import engine.data.entities.Instance;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;

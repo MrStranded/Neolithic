@@ -28,15 +28,24 @@ public class LogicThread extends Thread {
 			long currentTime = System.currentTimeMillis();
 
 			if (currentTime - t >= GameConstants.TIME_BETWEEN_TICK_LOADS) {
+
+				// running pending externally called scripts
+				if (!Data.getScriptRuns().isEmpty()) {
+					Data.getScriptRuns().poll().run();
+				}
+
+				// calculating instances load
 				for (int i = 0; i < GameConstants.INSTANCES_PER_TICK; i++) {
 					Instance instance = Data.getNextInstance();
 
+					// special handling the main instance -> updating current public instance list
 					if (instance == Data.getMainInstance()) {
 						Data.setPublicInstanceList(instanceList);
 						instanceList = new ArrayList<>(lastSize);
 						lastSize = 0;
 					}
 
+					// treating the instance itself
 					if (instance != null) {
 						if (!instance.isSlatedForRemoval()) {
 							instance.tick();
@@ -44,13 +53,11 @@ public class LogicThread extends Thread {
 							Data.addInstanceToQueue(instance);
 							instanceList.add(instance);
 							lastSize++;
-						} else {
-
 						}
-
-						t = System.currentTimeMillis();
 					}
 				}
+
+				t = System.currentTimeMillis();
 			} else {
 				try {
 					sleep((GameConstants.TIME_BETWEEN_TICK_LOADS - (currentTime - t)));

@@ -11,7 +11,7 @@ import engine.data.Data;
 import engine.data.proto.CreatureContainer;
 import engine.data.proto.DriveContainer;
 import engine.data.proto.ProcessContainer;
-import engine.data.Script;
+import engine.data.scripts.Script;
 import engine.data.structures.WeightedList;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
@@ -24,7 +24,6 @@ import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Instance {

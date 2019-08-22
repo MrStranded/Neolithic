@@ -1,4 +1,4 @@
-package engine.data;
+package engine.data.scripts;
 
 import engine.data.IDInterface;
 import engine.data.entities.Instance;

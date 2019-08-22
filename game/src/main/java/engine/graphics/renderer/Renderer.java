@@ -6,6 +6,8 @@ import constants.ScriptConstants;
 import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
 import engine.data.Data;
+import engine.data.planetary.Tile;
+import engine.data.scripts.ScriptRun;
 import engine.data.variables.Variable;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.*;
@@ -19,6 +21,7 @@ import engine.input.KeyboardInput;
 import engine.input.MouseInput;
 import engine.graphics.gui.window.Window;
 import engine.math.MatrixCalculations;
+import engine.math.MousePicking;
 import engine.math.numericalObjects.Vector3;
 import engine.math.numericalObjects.Vector4;
 import load.StringLoader;
@@ -259,58 +262,21 @@ public class Renderer {
 		}
 
 		if (keyboard.isClicked(GLFW.GLFW_KEY_G)) {
-			Data.getMainInstance().run("repopulate", null);
+			Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "repopulate", null));
 		}
 		if (keyboard.isClicked(GLFW.GLFW_KEY_T)) {
-			int id = Data.getContainerID("cHuman");
-
-			for (Instance instance : Data.getPublicInstanceList()) {
-				if (instance.getId() == id) {
-					instance.destroy();
-				}
-			}
+			Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "armageddon", null));
 		}
 
 		if (mouse.isLeftButtonClicked()) {
 			System.out.println();
 			System.out.println("mouse clicked: " + mouse.getXPos() + " , " + mouse.getYPos());
 
-			double aspectRatio = window.getWidth() / window.getHeight();
-			double positionX = 2d * aspectRatio * mouse.getXPos() / window.getWidth() - aspectRatio;
-			double positionY = 2d * (window.getHeight() - mouse.getYPos()) / window.getHeight() - 1d;
+			Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), this, scene);
 
-			//System.out.println("normalized device space: " + positionX + " , " + positionY);
-
-			//into frustum. vectors times -z=w to get into homogeneous space
-			Vector4 rayOrigin4 = new Vector4(positionX,positionY,0,1);//new Vector4(-positionX/GraphicalConstants.ZNEAR,-positionY/GraphicalConstants.ZNEAR,0,1);
-			Vector4 rayDestination4 = new Vector4(positionX, positionY, 1, 1);
-
-			// run them backwards through rendering pipeline
-			Matrix4 invertedPipeline =  Data.getPlanet().getPlanetObject().getInvertedWorldMatrix().times(
-										camera.getInvertedViewMatrix().times(
-										invertedProjectionMatrix));
-
-			Vector3 rayOrigin = invertedPipeline.times(rayOrigin4).standardize().extractVector3();
-			Vector3 rayDestination = invertedPipeline.times(rayDestination4).standardize().extractVector3();
-
-			/*System.out.println();
-			System.out.println("ray origin: " + rayOrigin);
-			System.out.println("ray destination: " + rayDestination);
-			System.out.println();
-			System.out.println("lenghts: " + rayOrigin.lengthSquared() + " , " + rayDestination.lengthSquared());
-*/
-			Vector3 rayDirection = rayDestination.minus(rayOrigin).normalize();
-			//System.out.println("direction: " + rayDirection);
-			//scene.setArrow(rayOrigin, rayDestination);
-
-			FacePart clickedPart = Data.getPlanet().getPlanetObject().getIntersectedFacePart(rayOrigin, rayDirection);
-			scene.setFacePartOverlay(clickedPart);
-			if (clickedPart != null) {
-				System.out.println("clicked facepart: " + clickedPart);
-				if (clickedPart.getTile() != null) {
-					//System.out.println("/////////////////////////////////////////////////////////////////////////////");
-					//System.out.println("clicked tile: " + clickedPart.getTile());
-				}
+			if (clickedTile != null) {
+                scene.setFacePartOverlay(clickedTile.getTileMesh());
+				Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "clickedTile", new Variable[]{new Variable(clickedTile)}));
 			}
 		}
 
@@ -543,7 +509,18 @@ public class Renderer {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public double getAspectRatio() {
+
+    public Window getWindow() {
+        return window;
+    }
+
+    public Matrix4 getInvertedPipeline(Scene scene) {
+	    return  Data.getPlanet().getPlanetObject().getInvertedWorldMatrix().times(
+                scene.getCamera().getInvertedViewMatrix().times(
+                invertedProjectionMatrix));
+    }
+
+    public double getAspectRatio() {
 		return (double) window.getWidth() / (double) window.getHeight();
 	}
 }
