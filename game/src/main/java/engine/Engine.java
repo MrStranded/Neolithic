@@ -89,7 +89,7 @@ public class Engine {
 			}
 
 			long start = System.currentTimeMillis();
-			//hud.tick(window.getWidth(), window.getHeight());
+			hud.tick(window.getWidth(), window.getHeight());
 			//System.out.println("Calculating HUD took: " + (System.currentTimeMillis() - start) + " ms");
 
 			start = System.currentTimeMillis();

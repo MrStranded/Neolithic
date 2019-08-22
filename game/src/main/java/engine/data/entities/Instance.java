@@ -382,22 +382,6 @@ public class Instance {
 		}
 	}
 
-	/** remove?
-	 *
-	 * @param other
-	 */
-	public void replaceBy(Instance other) {
-	    if (superInstance != null) { superInstance.addSubInstance(other); }
-
-	    if (subInstances != null) {
-			for (Instance subInstance : subInstances) {
-				other.addSubInstance(subInstance);
-			}
-		}
-
-        destroy();
-    }
-
 	public void destroy() {
 		if (id == Data.getMainInstance().getId()) {
 			Logger.error("Cannot delete main instance!");

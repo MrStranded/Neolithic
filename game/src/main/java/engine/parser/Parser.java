@@ -41,7 +41,7 @@ public class Parser {
 			loadMod(mod);
 		}
 
-		Data.finalizeIDs();
+		Data.prepareForGame();
 	}
 
 	private void loadMod(String mod) {

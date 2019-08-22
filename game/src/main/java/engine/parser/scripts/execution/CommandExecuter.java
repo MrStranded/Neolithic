@@ -333,9 +333,11 @@ public class CommandExecuter {
                 checkValue(script, commandNode, target, "target instance");
 
 				List<Variable> effects = new ArrayList<>();
-				for (Instance effect : target.getEffects()) {
-					if ((containerID == -1) || (containerID == effect.getId())) {
-						effects.add(new Variable(effect));
+				if (target.getEffects() != null) {
+					for (Instance effect : target.getEffects()) {
+						if ((containerID == -1) || (containerID == effect.getId())) {
+							effects.add(new Variable(effect));
+						}
 					}
 				}
 				return new Variable(effects);

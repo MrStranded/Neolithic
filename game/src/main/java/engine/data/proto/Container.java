@@ -98,8 +98,7 @@ public class Container {
 		for (IDInterface scriptID : container.getScripts()) {
 			Script script = (Script) scriptID;
 			if (script != null) {
-				Script previous = getScript(script.getTextId());
-				if (previous == null) {
+				if (getScript(script.getTextId()) == null) {
 					addScript(script);
 				}
 			}

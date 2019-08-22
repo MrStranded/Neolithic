@@ -285,7 +285,7 @@ public class Data {
 	// ################################ Preparing for Game ###############################
 	// ###################################################################################
 
-	public static void finalizeIDs() {
+	public static void prepareForGame() {
 		for (Container container : containers) {
 			if (container != null) {
 				container.finalizeAttributes();

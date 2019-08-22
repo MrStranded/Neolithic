@@ -21,6 +21,7 @@ Creature: cLandAnimal {
 
 	Script: place {
         ..attGender = random(0,2)*2 - 1; // this results in either -1 or 1
+        ->updateMesh();
 	}
 
 	Script: tick {

@@ -46,10 +46,17 @@ Script: armageddon {
 }
 
 Script: clickedTile(tile) {
-    boulder = getInstanceInRange(entBoulder, tile, 0);
+    /*boulder = getInstanceInRange(entBoulder, tile, 0);
     if (boulder) {
         destroy(boulder);
     } else {
         create(entBoulder, tile);
-    }
+    }*/
+
+    adam = create(cHuman, tile);
+    adam..attGender = -1;
+    adam->updateMesh();
+    eva = create(cHuman, tile);
+    eva..attGender = 1;
+    eva->updateMesh();
 }
