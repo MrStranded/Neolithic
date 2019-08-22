@@ -301,7 +301,7 @@ public class Renderer {
 */
 			Vector3 rayDirection = rayDestination.minus(rayOrigin).normalize();
 			//System.out.println("direction: " + rayDirection);
-			scene.setArrow(rayOrigin, rayDestination);
+			//scene.setArrow(rayOrigin, rayDestination);
 
 			FacePart clickedPart = Data.getPlanet().getPlanetObject().getIntersectedFacePart(rayOrigin, rayDirection);
 			scene.setFacePartOverlay(clickedPart);

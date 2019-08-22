@@ -4,6 +4,7 @@ import constants.GraphicalConstants;
 import engine.data.Data;
 import engine.graphics.objects.generators.MeshGenerator;
 import engine.graphics.objects.light.*;
+import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.objects.planet.Sun;
 import engine.graphics.objects.textures.Texture;
@@ -114,6 +115,12 @@ public class Scene {
 			objects[5] = new GraphicalObject(MeshGenerator.createFacePartOverlay(facePart));
 		}
 	}
+	public void setIntersection(Vector3 intersection) {
+	    if (intersection == null) { return; }
+	    objects[6] = new GraphicalObject(MeshGenerator.createCube(false));
+	    objects[6].setScale(0.02, 0.02, 0.02);
+	    objects[6].setPosition(intersection);
+    }
 
 	public Camera getCamera() {
 		return camera;

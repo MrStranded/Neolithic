@@ -76,38 +76,50 @@ public class MeshGenerator {
 	// ###################################################################################
 
 	public static Mesh createFacePartOverlay(FacePart facePart) {
-		double f = PlanetGenerator.getHeightFactor(facePart.getMaxHeight()) * 1.05;
+		double f = PlanetGenerator.getHeightFactor(facePart.getMaxHeight()) * 1.001;
 
 		Vector3 c1 = facePart.getCorner1().times(f);
 		Vector3 c2 = facePart.getCorner2().times(f);
 		Vector3 c3 = facePart.getCorner3().times(f);
 
+		Vector3 mid = (c1.plus(c2).plus(c3)).times(1d/3d);
+		c1.plusInplace((c1.minus(mid)).times(0.05));
+        c2.plusInplace((c2.minus(mid)).times(0.05));
+        c3.plusInplace((c3.minus(mid)).times(0.05));
+
 		float[] vertices = {
 				(float) c1.getX(), (float) c1.getY(), (float) c1.getZ(),
 				(float) c2.getX(), (float) c2.getY(), (float) c2.getZ(),
-				(float) c3.getX(), (float) c3.getY(), (float) c3.getZ()
+				(float) c3.getX(), (float) c3.getY(), (float) c3.getZ(),
+                0,0,0
 		};
 
 		float[] normals = {
 				0, 0, 1,
 				0, 0, 1,
-				0, 0, 1
+				0, 0, 1,
+                0, 0, 1
 		};
 
 		int[] indices = {
-				0,1,2
+				0,1,2,
+                3,1,0,
+                3,2,1,
+                3,0,2
 		};
 
 		float[] textureCoordinates = {
 				0f, 1f,
 				1f, 1f,
-				0f, 0f
+				0f, 0f,
+                1f, 0f,
 		};
 
 		float[] colors = {
-				0f, 0f, 0f, 1f,
-				0f, 0f, 0f, 1f,
-				0f, 0f, 0f, 1f
+				1f, 0f, 0f, 0.5f,
+				1f, 0f, 0f, 0.5f,
+				1f, 0f, 0f, 0.5f,
+                1f, 0f, 0f, 0.5f
 		};
 
 		return new Mesh(vertices, indices, normals, textureCoordinates, colors);

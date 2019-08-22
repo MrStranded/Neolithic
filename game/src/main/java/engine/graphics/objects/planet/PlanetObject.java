@@ -2,9 +2,11 @@ package engine.graphics.objects.planet;
 
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
+import engine.graphics.objects.Scene;
 import engine.graphics.objects.generators.PlanetGenerator;
 import engine.graphics.objects.models.Material;
 import engine.graphics.objects.movement.MoveableObject;
+import engine.graphics.renderer.Renderer;
 import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
@@ -79,16 +81,16 @@ public class PlanetObject extends MoveableObject {
 		FacePart closest = null;
 
 		for (FacePart facePart : faceParts) {
-			if (facePart.intersects(rayOrigin, rayDirection)) {
-				System.out.println("intersects: " + facePart);
-				if (closest == null || facePart.closerToCamera(closest, rayOrigin)) {
-					closest = facePart;
+		    FacePart intersectedPart = facePart.intersects(rayOrigin, rayDirection);
+			if (intersectedPart != null) {
+				if (closest == null || intersectedPart.closerToCamera(closest, rayOrigin)) {
+					closest = intersectedPart;
 				}
 			}
 		}
 
 		if (closest != null) {
-			return closest;//.getIntersectedFacePart(rayOrigin, rayDirection);
+			return closest;
 		} else {
 			System.out.println("planet not clicked");
 		}

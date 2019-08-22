@@ -1,9 +1,13 @@
 package engine.graphics.objects.planet;
 
 import constants.TopologyConstants;
+import engine.data.planetary.Face;
+import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
+import engine.graphics.objects.Scene;
 import engine.graphics.objects.generators.PlanetGenerator;
 import engine.graphics.objects.models.Mesh;
+import engine.graphics.renderer.Renderer;
 import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
@@ -33,6 +37,7 @@ public class FacePart {
 
 	private int depth;
 	private boolean rendersSelf = false;
+	private Vector3 intersection = null;
 
 	public FacePart(Vector3 corner1, Vector3 corner2, Vector3 corner3) {
 		this.corner1 = corner1;
@@ -126,78 +131,84 @@ public class FacePart {
 	// ################################ Picking with Mouse ###############################
 	// ###################################################################################
 
-	public boolean intersects(Vector3 rayOrigin, Vector3 rayDirection) {
-		if (normal.dot(rayDirection) > 0) { return false; }
+	public FacePart intersects(Vector3 rayOrigin, Vector3 rayDirection) {
+	    intersection = null;
+		if (normal.dot(rayDirection) >= 0) { return null; }
 
-		double f = PlanetGenerator.getHeightFactor(getMaxHeight());
-		boolean intersects = intersectsTriangle(rayOrigin, rayDirection,
-				corner1.times(f), corner2.times(f), corner3.times(f));
+        if (rendersSelf || quarterFaces == null) {
 
-		/*if (!intersects) {
-			Vector3[] corners = new Vector3[]{corner1, corner2, corner3};
-			for (int i = 0; i < 3; i++) {
-				int j = (i + 1) % 3;
+            double f = PlanetGenerator.getHeightFactor(getMaxHeight());
+            Vector3[] corners = new Vector3[]{corner1.times(f), corner2.times(f), corner3.times(f)};
+            boolean intersects = intersectsTriangle(rayOrigin, rayDirection,
+                    corners[0], corners[1], corners[2]);
 
-				intersects = intersectsTriangle(rayOrigin, rayDirection, new Vector3(0,0,0), corners[i], corners[j]);
-				if (intersects) { break; }
-			}
-		}*/
+            // why doesn't this work?
+            if (!intersects) {
+                Vector3 planetOrigin = new Vector3(0,0,0);
+                for (int i = 0; i < 3; i++) {
+                    int j = (i + 1) % 3;
 
-		return intersects;
+                    intersects = intersectsTriangle(rayOrigin, rayDirection,
+                            planetOrigin, corners[j], corners[i]);
+                    if (intersects) { return this; }
+                }
+            }
+
+            if (intersects) {
+                return this;
+            }
+
+        } else {
+
+            FacePart closest = null;
+
+            for (FacePart facePart : quarterFaces) {
+                FacePart intersectedPart = facePart.intersects(rayOrigin, rayDirection);
+                if (intersectedPart != null) {
+                    if (closest == null || intersectedPart.closerToCamera(closest, rayOrigin)) {
+                        closest = intersectedPart;
+                    }
+                }
+            }
+
+            return closest;
+
+        }
+
+		return null;
 	}
 
 	private boolean intersectsTriangle(Vector3 rayOrigin, Vector3 rayDirection, Vector3 corner1, Vector3 corner2, Vector3 corner3) {
-		Vector3 planeX = corner2.minus(corner1);
-		Vector3 planeY = corner3.minus(corner1);
-		Vector3 planeNormal = planeX.cross(planeY).normalize();
+		Vector3 u = corner2.minus(corner1);
+		Vector3 v = corner3.minus(corner1);
+        Vector3 planeNormal = u.cross(v).normalize();
 
-		double cos = planeNormal.dot(rayDirection); // cos = cos(theta) because |planeNormal| = |rayDirection| = 1
-		if (Math.abs(cos) < 0.01d) { // your favorite epsilon
-			return false;
-		}
+        if (planeNormal.dot(rayDirection) > 0) { return false; }
 
-		//double t = (corner1.minus(rayOrigin)).dot(planeNormal); // t = |lineToPlaneOrigin| * cos(theta)
-		//Vector3 intersection = rayOrigin.plus(rayDirection.times(t / cos));
+        double t = (planeNormal.dot(corner1) - planeNormal.dot(rayOrigin)) / planeNormal.dot(rayDirection);
+        intersection = rayOrigin.plus(rayDirection.times(t));
 
-		double t = (planeNormal.dot(corner1) - planeNormal.dot(rayOrigin)) / planeNormal.dot(rayDirection);
-		Vector3 intersection = rayOrigin.plus(rayDirection.times(t));
+        Vector3 w = intersection.minus(corner1);
+        double denominator = (u.dot(v) * u.dot(v)) - u.dot(u) * v.dot(v);
 
-		double lengthA = (intersection.minus(corner1)).dot(planeX) / planeX.lengthSquared();
-		double lengthB = (intersection.minus(corner1)).dot(planeY) / planeY.lengthSquared();
-		System.out.println("lengths: " + planeX.lengthSquared() + " , " + planeY.lengthSquared());
-
-		if (lengthA > 0 && lengthB > 0) {
-			if (lengthA + lengthB < 1) {
-				return true;
-			}
-		}
+        double lengthA = ((u.dot(v)) * (w.dot(v)) - (w.dot(u)) * v.dot(v)) / denominator;
+        if (lengthA > 0 && lengthA < 1) {
+            double lengthB = ((u.dot(v)) * (w.dot(u)) - (w.dot(v)) * u.dot(u)) / denominator;
+            if (lengthB > 0 && lengthA + lengthB < 1) {
+                return true;
+            }
+        }
 
 		return false;
 	}
 
-	public FacePart getIntersectedFacePart(Vector3 rayOrigin, Vector3 rayDirection) {
-		if (quarterFaces != null) {
-			FacePart closest = null;
-			for (FacePart facePart : quarterFaces) {
-				if (facePart.intersects(rayOrigin, rayDirection)) {
-					if (closest == null || facePart.closerToCamera(closest, rayOrigin)) {
-						closest = facePart;
-					}
-				}
-			}
-
-			if (closest != null) {
-				return closest.getIntersectedFacePart(rayOrigin, rayDirection);
-			} else {
-				return this;
-			}
-		}
-
-		return this;
-	}
-
 	public boolean closerToCamera(FacePart other, Vector3 rayOrigin) {
-		return (mid.minus(rayOrigin).lengthSquared() < other.mid.minus(rayOrigin).lengthSquared());
+	    if (other.intersection == null) { return true; }
+	    if (intersection == null) { return false; }
+
+	    //double fSelf = PlanetGenerator.getHeightFactor(height);
+	    //double fOther = PlanetGenerator.getHeightFactor(other.height);
+		return ((intersection).minus(rayOrigin).lengthSquared() < (other.intersection).minus(rayOrigin).lengthSquared());
 	}
 
 	// ###################################################################################
@@ -220,6 +231,10 @@ public class FacePart {
 	public Vector3 getCorner3() {
 		return corner3;
 	}
+
+	public Vector3 getIntersection() {
+	    return intersection;
+    }
 
 	public Vector3 getMid() {
 		return mid;
