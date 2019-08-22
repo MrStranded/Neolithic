@@ -2,7 +2,7 @@
 
 Script: tick {
     // one minute
-    ->minute++;
+    ->minute += 1;
 
     if (->minute >= 60) {
         ->minute = 0;
@@ -27,25 +27,33 @@ Script: setTime (hour, minute) {
 }
 
 Script: repopulate() {
-    for (t : eachTile()) {
-        if (getHeight(t) > 100) {
-            if (chance(0.01)) {
-                human = create(cHuman, t);
-                human..attAge += random(2880);
-            }
-        }
-    }
+	for (t : eachTile()) {
+		if (getHeight(t) > 100) {
+			if (chance(0.01)) {
+				human = create(cHuman, t);
+				human..attAge += random(human.attMatureAge);
+				addEffect(human, effInfant);
+			}
+		}
+		if (getType(t) == tGras && getHeight(t) > 100) {
+			if (chance(0.3)){
+				tree = create(cAppleTree, t);
+				tree..attAge += random(tree.attMatureAge*2);
+				addEffect(tree, effSapling);
+			}
+		}
+	}
 }
 
 Script: armageddon {
     for (c : eachCreature()) {
-        if (getType(c) == cHuman) {
+        //if (getType(c) == cHuman) {
             destroy(c);
-        }
+        //}
     }
 }
 
-Script: clickedTile(tile) {
+Script: rightClick(tile) {
     /*boulder = getInstanceInRange(entBoulder, tile, 0);
     if (boulder) {
         destroy(boulder);
@@ -59,4 +67,16 @@ Script: clickedTile(tile) {
     eva = create(cHuman, tile);
     eva..attGender = 1;
     eva->updateMesh();
+}
+
+Script: leftClick(tile) {
+	tree = getInstanceInRange(cAppleTree, tile, 0);
+	if (tree) {
+		destroy(tree);
+	} else {
+		tree=create(cAppleTree,tile);
+		tree..attNutrition=50;
+		tree..attAge=2880;
+		tree->updateMesh();
+	}
 }

@@ -1,0 +1,56 @@
+Drive: driExplore {
+	Script: condition() {
+		require(! .attSleeping);
+		require(.attAge > .attMatureAge);
+
+		hunger = .attHungerSensitivity - .attNutrition;
+		require(.attCuriosity > .attLibido + hunger);
+	}
+
+	solutions {
+		proGoFarAway;
+		proChooseDestination;
+	}
+
+	Script: getWeight() {
+		hunger = .attHungerSensitivity - .attNutrition;
+		return(.attCuriosity - .attLibido - hunger);
+	}
+}
+
+Process: proGoFarAway {
+	Script: condition() {
+		require(->destination);
+	}
+
+	Script: process() {
+		if (moveTo(self, ->destination, .attSpeed) == destination) {
+			print("reached the goal!");
+			->destination = false;
+		}
+	}
+}
+
+Process: proChooseDestination {
+	Script: condition() {
+		require(chance(0.01));
+	}
+
+	Script: process() {
+		print("going on an adventure!");
+		tiles = getTilesInRange(self, .attViewingDistance*2);
+		tile = random(tiles);
+		i = 0;
+		for (t : tiles) {
+			if (i == tile){
+				if (getWaterHeight(t) < getHeight(t)){
+					->destination=t;
+					break;
+				} else {
+					i = random(i+1, tiles);
+				}
+			}
+			i++;
+		}
+	}
+}

@@ -147,15 +147,12 @@ public class Instance {
 	// ###################################################################################
 
 	public void change(int containerId) {
-		if (Data.getContainer(id).getType() == DataType.TILE && Data.getContainer(containerId).getType() == DataType.TILE) {
-			id = containerId;
+		if (Data.getContainer(containerId).getType() == DataType.TILE) {
 			((Tile) this).resetColors();
-			inheritAttributes();
 			Data.addChangedTile((Tile) this);
-		} else if (Data.getContainer(id).getType() != DataType.TILE && Data.getContainer(containerId).getType() != DataType.TILE) {
-			id = containerId;
-			inheritAttributes();
 		}
+		id = containerId;
+		inheritAttributes();
 	}
 
 	/**
@@ -604,9 +601,7 @@ public class Instance {
 	public int getId() {
 		return id;
 	}
-	public void setId(int id) {
-		this.id = id;
-	}
+	// no setId, use change(id) instead!
 
 	public Tile getPosition() {
 		if (superInstance != null) {

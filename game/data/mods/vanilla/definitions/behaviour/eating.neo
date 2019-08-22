@@ -7,13 +7,13 @@ Entity: entShit {
 
     Script: tick {
         if (isOnFloor(self)) {
-            /*tile = getTile(self);
-            if (getType(tile) == tDirt && .attNutrition >= 20) {
-                ..attNutrition -= 20;
+            tile = getTile(self);
+            if (getType(tile) == tDirt && .attNutrition >= 10) {
+                ..attNutrition -= 10;
                 change(tile, tGras);
-            }*/
+            }
 
-            addEffect(getTile(self), "Fertilized", 1, [ self.attNutrition ]);
+            addEffect(getTile(self), "Fertilized", 1, [ ..attNutrition ]);
             ..attNutrition--;
 
             if (.attNutrition <= 0) {
@@ -97,6 +97,21 @@ Drive: driHunger {
 	}
 }
 
+Drive: driHording {
+	Script: condition {
+		require(! .attSleeping);
+		require(getFullAtt(self, "attNutrition") < .attGreed);
+	}
+
+	solutions {
+		proGatherFood;
+	}
+
+	Script: getWeight() {
+		return(.attGreed - getFullAtt(self, "attNutrition"));
+	}
+}
+
 ///////////////////////////////////////////////////////////////////////////// Processes
 
 Process: proEat {
@@ -111,6 +126,7 @@ Process: proEat {
 	solutions {
 		proPickUpFood;
 		proGatherFood;
+		proBeg;
 	}
 }
 
@@ -137,8 +153,48 @@ Process: proGatherFood {
 		require(.attSpeed > 0);
 		require(.attViewingDistance > 0);
 	}
+}
+
+Process: proBeg {
+	Script: condition {
+		//print("trying to beg");
+		require(->patron);
+		require(isNeighbor(self, ->patron));
+
+		->food = getItemAtt(->patron, "attEdible");
+		require(->food);
+
+		hunger = .attHungerSensitivity - .attNutrition;
+		require(hunger > .attPride);
+		require(hunger > ->patron.attGreed - ->patron.attPride);
+	}
+
+	Script: process {
+		pickUp(self, ->food);
+		->patron = false;
+	}
 
 	solutions {
-	    proStroll;
+		proSearchPatron;
+	}
+}
+
+Process: proSearchPatron {
+	Script: condition {
+		//print("looking for patron");
+		creatures = getInstancesInRange(getType(self), getTile(self), .attViewingDistance);
+		->patron = false;
+		for (creature : creatures) {
+			if (creature != self && getItemAtt(creature, "attEdible")) {
+				->patron = creature;
+				break;
+			}
+		}
+		require(->patron);
+	}
+
+	Script: process {
+		//print("moving to patron");
+		moveTo(self, ->patron, .attSpeed);
 	}
 }

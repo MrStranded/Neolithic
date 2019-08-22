@@ -2,8 +2,7 @@ package engine.graphics.renderer;
 
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
-import constants.ScriptConstants;
-import engine.data.entities.Instance;
+import engine.data.options.GameOptions;
 import engine.data.planetary.Planet;
 import engine.data.Data;
 import engine.data.planetary.Tile;
@@ -13,7 +12,6 @@ import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.*;
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.light.*;
-import engine.graphics.objects.planet.FacePart;
 import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
@@ -22,8 +20,6 @@ import engine.input.MouseInput;
 import engine.graphics.gui.window.Window;
 import engine.math.MatrixCalculations;
 import engine.math.MousePicking;
-import engine.math.numericalObjects.Vector3;
-import engine.math.numericalObjects.Vector4;
 import load.StringLoader;
 import engine.math.numericalObjects.Matrix4;
 import org.lwjgl.glfw.GLFW;
@@ -34,7 +30,6 @@ import org.lwjgl.opengl.GL30;
 import java.util.Collection;
 
 import static java.lang.System.exit;
-import static java.lang.System.setOut;
 
 /**
  * The renderer is only concerned about periodically drawing the given mesh data onto a window
@@ -268,15 +263,25 @@ public class Renderer {
 			Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "armageddon", null));
 		}
 
+		if (keyboard.isClicked(GLFW.GLFW_KEY_X)) {
+			GameOptions.printPerformance = !GameOptions.printPerformance;
+		}
+		if (keyboard.isClicked(GLFW.GLFW_KEY_SPACE)) {
+			GameOptions.runTicks = !GameOptions.runTicks;
+		}
+
 		if (mouse.isLeftButtonClicked()) {
-			System.out.println();
-			System.out.println("mouse clicked: " + mouse.getXPos() + " , " + mouse.getYPos());
-
 			Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), this, scene);
-
 			if (clickedTile != null) {
-                scene.setFacePartOverlay(clickedTile.getTileMesh());
-				Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "clickedTile", new Variable[]{new Variable(clickedTile)}));
+                //scene.setFacePartOverlay(clickedTile.getTileMesh());
+				Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "leftClick", new Variable[]{new Variable(clickedTile)}));
+			}
+		}
+		if (mouse.isRightButtonClicked()) {
+			Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), this, scene);
+			if (clickedTile != null) {
+				//scene.setFacePartOverlay(clickedTile.getTileMesh());
+				Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "rightClick", new Variable[]{new Variable(clickedTile)}));
 			}
 		}
 
@@ -293,18 +298,39 @@ public class Renderer {
 		PlanetObject planetObject = planet.getPlanetObject();
 
 		// Render depth map before view port has been set up
+		long start = System.currentTimeMillis();
 		if (scene.getShadowMap() != null) {
 			renderDepthMap(scene.getShadowMap(), scene, hud, planetObject);
+		}
+		if (GameOptions.printPerformance) {
+			long dt = (System.currentTimeMillis() - start);
+			if (dt > 100) {
+				System.out.println("Rendering Shadow Map took: " + dt);
+			}
 		}
 
 		GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
 
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
+		start = System.currentTimeMillis();
 		renderScene(scene, planetObject);
+		if (GameOptions.printPerformance) {
+			long dt = (System.currentTimeMillis() - start);
+			if (dt > 100) {
+				System.out.println("Rendering Scene took: " + dt);
+			}
+		}
 
 		if (hud != null) {
+			start = System.currentTimeMillis();
 			renderGUI(hud);
+			if (GameOptions.printPerformance) {
+				long dt = (System.currentTimeMillis() - start);
+				if (dt > 100) {
+					System.out.println("Rendering HUD took: " + dt);
+				}
+			}
 		}
 
 		flip();

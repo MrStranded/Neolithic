@@ -59,7 +59,7 @@ public class TopologyGenerator {
 				int bestFit = calculateBestTile(tile.getHeight(), tileList);
 
 				if (bestFit >= 0) {
-					tile.setId(bestFit);
+					tile.change(bestFit);
 				}
 			}
 		}

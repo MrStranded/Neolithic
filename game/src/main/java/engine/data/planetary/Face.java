@@ -18,7 +18,7 @@ public class Face {
 		for (int y=0; y<size; y++) {
 			for (int x=0; x<size; x++) {
 				int i = y*size + x;
-				tiles[i] = new Tile(0, x, y, this);
+				tiles[i] = new Tile(-1, x, y, this);
 			}
 		}
 	}

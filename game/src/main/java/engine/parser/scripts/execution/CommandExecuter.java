@@ -541,6 +541,26 @@ public class CommandExecuter {
 				return new Variable(tile.getWaterHeight());
 			}
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list<tile> isNeighbor (Tile origin, Tile target)
+		} else if (TokenConstants.IS_NEIGHBOUR.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				Tile origin = parameters[0].getTile();
+				Tile target = parameters[1].getTile();
+
+				checkValue(script, commandNode, origin, "origin tile");
+				checkValue(script, commandNode, target, "target tile");
+
+				if (origin == target) {
+					return new Variable(1);
+				}
+
+				for (Tile neighbour : Neighbour.getNeighbours(origin)) {
+					if (origin == neighbour) {
+						return new Variable(1);
+					}
+				}
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& boolean isOnFloor(Instance instance)
 		} else if (TokenConstants.IS_ON_FLOOR.equals(command)) {
 			if (requireParameters(commandNode,1)) {
@@ -728,7 +748,11 @@ public class CommandExecuter {
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int require (variable)
 		} else if (TokenConstants.REQUIRE.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
-				return new Variable(parameters[0].isNull() ? 0 : 1);
+				boolean fulfilled = !parameters[0].isNull();
+				if (!fulfilled) {
+					throw new ReturnException(new Variable(0));
+				}
+				return new Variable(1);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Tile setAt (Instance instance, Tile tile)

@@ -24,6 +24,7 @@ Creature: cAppleTree {
 	}
 
 	attributes{
+		attSize, 60;
 	    attMatureAge, 2880;
 	    attLightSensitivity, 20;
 	    attBabySize, 30;
@@ -66,15 +67,12 @@ Entity: entApple {
 	}
 
 	Script: place() {
-	    ->seed = create(cAppleSeed, self);
+
     }
 
-    Script: mix(parent) {
-	    if (parent) {
-	        mixAttributes(->seed, parent, parent);
-	    } else {
-	        print("no parents!");
-	    }
+    Script: createSeed(parent) {
+		->seed = create(cAppleSeed, self);
+        mixAttributes(->seed, parent, parent);
 	}
 
 	Script: tick() {
@@ -122,7 +120,7 @@ Creature: cAppleSeed {
     }
 
     Script: tick() {
-        if (chance(0.001)) {
+        if (isOnFloor(self) && chance(0.01)) {
             destroy(self);
         }
     }
@@ -185,9 +183,9 @@ Process: proCreateFruit {
 
 	Script: process {
 		fruit = create(self->fruitType, self);
-		fruit->mix(self);
 		..attNutrition -= .attBabySize;
 		fruit..attNutrition += .attBabySize;
+		fruit->createSeed(self);
         self->updateMesh();
 	}
 }
@@ -198,9 +196,9 @@ Process: proGrowIntoTree {
 
         require(isOnFloor(self));
         require(getLightLevel(self) >= .attLightSensitivity);
-        require(!getInstancesInRange(self->treeType, tile, 0));
+        require(getFullAtt(tile, "attSize") + ->treeType.attSize <= 100);
         require(getHeight(self) >= 100);
-        require(tile.attNutrition >= .attBabySize/2);
+        require(tile.attNutrition >= .attBabySize);
     }
     Script: process {
         tree = create(self->treeType, getTile(self));

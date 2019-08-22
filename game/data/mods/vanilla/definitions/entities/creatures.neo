@@ -6,6 +6,7 @@ Creature: cHuman inherits cLandAnimal {
 	mesh = "human_female_mature.ply";
 
 	attributes {
+		attSize, 10;
 		attHealth, 100;
 
         attLibido, 200;
@@ -13,16 +14,27 @@ Creature: cHuman inherits cLandAnimal {
 
         attBabySize, 50;
 
-        attLightSensitivity, 60;
+        attLightSensitivity, 42;
         attHungerSensitivity, 100;
-        attFatigueSensitivity, 160;
+        attFatigueSensitivity, 200;
 
         attCuriosity, 250;
-        attSleepTime, 700;
+        attGreed, 100, 50;
+        attPride, 100, 50;
 
 		attSpeed, 3;
 		attViewingDistance, 7;
 		attStepHeight, 24;
+	}
+
+	drives {
+		driHording;
+		driExplore;
+	}
+
+	knowledge {
+		proBeg; proSearchPatron;
+		proChooseDestination; proGoFarAway;
 	}
 
 	/*Script: place {

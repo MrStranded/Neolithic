@@ -47,14 +47,15 @@ Creature: cLandAnimal {
 		    }
         }
 
-        ..attAge++;
+        ..attAge += 1;
 	}
 
 	Script: reachable (from, to) {
         h1 = getHeight(from);
         h2 = getHeight(to);
         hw = getWaterHeight(to);
-        return ((h2 >= hw - .attStepHeight) && (abs(h1-h2) <= .attStepHeight));
+		freeSpace = 100 - getFullAtt(to, "attSize");
+        return ((h2 >= hw - .attStepHeight) && (abs(h1-h2) <= .attStepHeight) && freeSpace >= .attSize);
 	}
 
 }

@@ -102,6 +102,7 @@ public enum TokenConstants {
 	GET_TYPE				(TokenType.COMMAND, "getType"),
 	GET_WATER_HEIGHT        (TokenType.COMMAND, "getWaterHeight"),
 	IS_ON_FLOOR				(TokenType.COMMAND, "isOnFloor"),
+	IS_NEIGHBOUR            (TokenType.COMMAND, "isNeighbor"),
 	RANDOM_TILE             (TokenType.COMMAND, "randomTile"),
 
 	// -------------------------------------------------- Actions

@@ -1,4 +1,8 @@
 package engine.data.options;
 
-public class Options {
+public class GameOptions {
+
+	public static boolean printPerformance = true;
+	public static boolean runTicks = false;
+
 }

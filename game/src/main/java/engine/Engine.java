@@ -3,6 +3,7 @@ package engine;
 import constants.GameConstants;
 import constants.ScriptConstants;
 import engine.data.entities.Instance;
+import engine.data.options.GameOptions;
 import engine.data.planetary.Planet;
 import engine.data.Data;
 import engine.data.planetary.Tile;
@@ -57,7 +58,7 @@ public class Engine {
 
 		gaia = new Planet(GameConstants.DEFAULT_PLANET_SIZE);
 		Data.setPlanet(gaia);
-		Data.addPlanetTilesToQueue();
+		//Data.addPlanetTilesToQueue();
 
 		long time = System.currentTimeMillis();
 		gaia.generatePlanetMesh();
@@ -89,12 +90,26 @@ public class Engine {
 			}
 
 			long start = System.currentTimeMillis();
-			hud.tick(window.getWidth(), window.getHeight());
-			System.out.println("Calculating HUD took: " + (System.currentTimeMillis() - start) + " ms");
+
+			if (GameOptions.runTicks) {
+				hud.tick(window.getWidth(), window.getHeight());
+			}
+
+			if (GameOptions.printPerformance) {
+				long dt = (System.currentTimeMillis() - start);
+				if (dt > 100) {
+					System.out.println("Calculating HUD took: " + dt);
+				}
+			}
 
 			start = System.currentTimeMillis();
 			renderer.render(scene, hud, gaia);
-			System.out.println("Rendering took: " + (System.currentTimeMillis() - start) + " ms");
+			if (GameOptions.printPerformance) {
+				long dt = (System.currentTimeMillis() - start);
+				if (dt > 100) {
+					System.out.println("Rendering took: " + dt);
+				}
+			}
 
 			long elapsedTime = System.currentTimeMillis() - t;
 			if (elapsedTime < GameConstants.MILLISECONDS_PER_FRAME) {

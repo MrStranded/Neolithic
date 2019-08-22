@@ -57,13 +57,13 @@ public class Container {
 		for (PreAttribute preAttribute : preAttributeList) {
 			int id = Data.getProtoAttributeID(preAttribute.getTextID());
 			if (id >= 0) {
-				attributes.insert(new Attribute(id, preAttribute.getValue()));
+				attributes.insert(new Attribute(id, preAttribute.getValue(), preAttribute.getVariation()));
 			} else {
                 Logger.error("Attribute with textID '" + preAttribute.getTextID() + "' is never declared!");
 			}
 		}
 		// free the memory
-		preAttributeList.clear();
+		//preAttributeList.clear();
 		preAttributeList = null;
 	}
 

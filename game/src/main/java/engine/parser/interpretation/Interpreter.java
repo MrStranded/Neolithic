@@ -133,9 +133,14 @@ public class Interpreter {
 		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(next = consume())) {
 			consume(TokenConstants.COMMA);
 			Token value = consume();//consumeNumber();
+			int variation = 0;
+			if (TokenConstants.COMMA.equals(peek())) {
+				consume(TokenConstants.COMMA);
+				variation = TokenNumerifier.getInt(consume());
+			}
             consume(TokenConstants.SEMICOLON);
 
-            PreAttribute preAttribute = new PreAttribute(next.getValue(), TokenNumerifier.getInt(value));
+            PreAttribute preAttribute = new PreAttribute(next.getValue(), TokenNumerifier.getInt(value), variation);
             container.addPreAttribute(preAttribute);
 		}
 	}

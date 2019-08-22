@@ -18,18 +18,10 @@ WorldGen: genContinental {
 		fitTiles();
 
 		for (t : eachTile()) {
-			/*if (getHeight(t) > 100) {
-				if (chance(0.01)) {
-					human = create(cHuman, t);
-					human..attAge += random(human.attMatureAge);
-					addEffect(human, effInfant);
-				}
-			}*/
-			if (getType(t) == tGras && getHeight(t) > 100) {
-				if (chance(0.3)){
-					tree = create(cAppleTree, t);
-					tree..attAge += random(tree.attMatureAge*2);
-					addEffect(tree, effSapling);
+			if (getHeight(t) > 150) {
+				d = getHeight(t) - 150;
+				if (chance(d/300)) {
+					create(entBoulder, t);
 				}
 			}
 		}
