@@ -79,3 +79,23 @@ Formation: formPlateau {
 		}
 	}
 }
+
+WorldGen: genDesert {
+	name = "Desert";
+
+	Script: generate {
+		setWaterLevel(50);
+
+		for (t : eachTile()) {
+			setHeight(t, 51);
+		}
+
+		for (t : eachTile()) {
+			if (chance(0.01)) {
+				setHeight(t, 49);
+			}
+		}
+
+		fitTiles();
+	}
+}
