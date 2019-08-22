@@ -24,6 +24,7 @@ Effect: effAchingFeet {
 
 Drive: driMove {
 	Script: condition {
+	    require(! .attSleeping);
 		require(.attFatigue < .attCuriosity);
 		require(.attNutrition > 30);
 	}

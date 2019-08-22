@@ -275,7 +275,7 @@ public class Renderer {
 			Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), this, scene);
 
 			if (clickedTile != null) {
-                //scene.setFacePartOverlay(clickedTile.getTileMesh());
+                scene.setFacePartOverlay(clickedTile.getTileMesh());
 				Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "clickedTile", new Variable[]{new Variable(clickedTile)}));
 			}
 		}

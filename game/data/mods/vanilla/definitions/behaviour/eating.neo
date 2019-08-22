@@ -81,6 +81,7 @@ Effect: effDigest {
 
 Drive: driHunger {
 	Script: condition {
+	    require(! .attSleeping);
 	    if (.attNutrition <= 0 && !getEffects(self, effHunger)) {
 	        addEffect(self, effHunger);
 	    }

@@ -1,12 +1,25 @@
 
 ///////////////////////////////////////////////////////////////////////////// Effects
 
+Effect: effSleep {
+    name = "Sleeping";
+
+    attributes {
+        attSleeping, 1;
+    }
+
+    Script: removeCondition(carrier) {
+        require(getLightLevel(carrier) > carrier.attLightSensitivity);
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////// Drives
 
 Drive: driSleep {
 	Script: condition {
 		require(.attFatigue > .attFatigueSensitivity);
 		require(getLightLevel(self) <= .attLightSensitivity);
+	    require(! .attSleeping);
 	}
 
 	solutions {
@@ -23,8 +36,8 @@ Drive: driSleep {
 Process: proSleep {
 	Script: process {
         //deleteEffects(self, effHunger);
-	    addOccupation(self, .attSleepTime, proSleep->awake);
-	    ..attSleeping = 1;
+	    //addOccupation(self, .attSleepTime, proSleep->awake);
+	    addEffect(self, effSleep);
 	}
 
 	Script: awake {

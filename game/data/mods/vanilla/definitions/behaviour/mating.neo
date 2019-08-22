@@ -22,6 +22,7 @@ Effect: effInfant {
 
 Drive: driMate {
     Script: condition {
+	    require(! .attSleeping);
         require(self.attNutrition >= .attBabySize);
         require(self.attFatigue < .attLibido);
         require(self.attAge >= self.attMatureAge);

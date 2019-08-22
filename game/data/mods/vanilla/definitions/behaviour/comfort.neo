@@ -5,6 +5,7 @@
 
 Drive: driNotSitOnShit {
 	Script: condition {
+	    require(! .attSleeping);
 		require(getInstancesInRange(entShit, self, 0));
 	}
 

@@ -90,11 +90,11 @@ public class Engine {
 
 			long start = System.currentTimeMillis();
 			hud.tick(window.getWidth(), window.getHeight());
-			//System.out.println("Calculating HUD took: " + (System.currentTimeMillis() - start) + " ms");
+			System.out.println("Calculating HUD took: " + (System.currentTimeMillis() - start) + " ms");
 
 			start = System.currentTimeMillis();
 			renderer.render(scene, hud, gaia);
-			//System.out.println("Rendering took: " + (System.currentTimeMillis() - start) + " ms");
+			System.out.println("Rendering took: " + (System.currentTimeMillis() - start) + " ms");
 
 			long elapsedTime = System.currentTimeMillis() - t;
 			if (elapsedTime < GameConstants.MILLISECONDS_PER_FRAME) {
