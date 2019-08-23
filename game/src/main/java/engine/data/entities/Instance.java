@@ -327,11 +327,13 @@ public class Instance {
 			meshHub.registerObject(moveableObject);
 		}
 		// render subs
-		if (subInstances != null && Data.getContainer(id).getType() == DataType.TILE) { // only tiles draw their subs?
-			CopyOnWriteArraySet<Instance> subs = new CopyOnWriteArraySet<>(subInstances);
-			for (Instance subInstance : subs) {
-				if (subInstance != null) {
-					subInstance.render();
+		if (subInstances != null) {
+			if (Data.getContainer(id) != null && Data.getContainer(id).getType() == DataType.TILE) { // only tiles draw their subs?
+				CopyOnWriteArraySet<Instance> subs = new CopyOnWriteArraySet<>(subInstances);
+				for (Instance subInstance : subs) {
+					if (subInstance != null) {
+						subInstance.render();
+					}
 				}
 			}
 		}

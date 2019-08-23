@@ -65,8 +65,8 @@ public class Engine {
 		System.out.println("Generating LOD Mesh took: "+(System.currentTimeMillis()-time)+" ms");
 
 		time = System.currentTimeMillis();
-		Instance worldGen = new Instance(Data.getContainerID("genContinental"));
-		worldGen.run(ScriptConstants.EVENT_GENERATE_WORLD, null);
+		/*Instance worldGen = new Instance(Data.getContainerID("genContinental"));
+		worldGen.run(ScriptConstants.EVENT_GENERATE_WORLD, null);*/
 		gaia.updatePlanetMesh();
 		Data.updateInstancePositions();
 		System.out.println("Executing WorldGen Script took: "+(System.currentTimeMillis()-time)+" ms");
@@ -91,9 +91,7 @@ public class Engine {
 
 			long start = System.currentTimeMillis();
 
-			if (GameOptions.runTicks) {
-				hud.tick(window.getWidth(), window.getHeight());
-			}
+			hud.tick(window.getWidth(), window.getHeight());
 
 			if (GameOptions.printPerformance) {
 				long dt = (System.currentTimeMillis() - start);

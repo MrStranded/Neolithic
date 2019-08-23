@@ -69,14 +69,16 @@ Script: rightClick(tile) {
     eva->updateMesh();
 }
 
-Script: leftClick(tile) {
-	tree = getInstanceInRange(cAppleTree, tile, 0);
-	if (tree) {
-		destroy(tree);
+Script: leftClick(tile, type) {
+	instance = getInstanceInRange(type, tile, 0);
+	if (instance) {
+		destroy(instance);
 	} else {
-		tree=create(cAppleTree,tile);
-		tree..attNutrition=50;
-		tree..attAge=2880;
-		tree->updateMesh();
+		instance = create(type,tile);
+		if (type == cAppleTree) {
+			instance..attNutrition=50;
+			instance..attAge=2880;
+			instance->updateMesh();
+		}
 	}
 }

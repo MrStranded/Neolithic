@@ -1,12 +1,15 @@
 package engine.graphics.renderer;
 
+import constants.GameConstants;
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
 import engine.data.options.GameOptions;
 import engine.data.planetary.Planet;
 import engine.data.Data;
 import engine.data.planetary.Tile;
+import engine.data.proto.Container;
 import engine.data.scripts.ScriptRun;
+import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.*;
@@ -270,18 +273,68 @@ public class Renderer {
 			GameOptions.runTicks = !GameOptions.runTicks;
 		}
 
+		if (keyboard.isClicked(GLFW.GLFW_KEY_UP)) {
+			int id = GameOptions.currentContainerId + 1;
+			while (true) {
+				if (id >= GameConstants.MAX_CONTAINERS) {
+					id -= GameConstants.MAX_CONTAINERS;
+				}
+				Container container = Data.getContainer(id);
+				if (container != null) {
+					if (container.getType() == DataType.CREATURE || container.getType() == DataType.FORMATION || container.getType() == DataType.ENTITY) {
+						GameOptions.currentContainerId = id;
+						break;
+					}
+				}
+				id++;
+			}
+		}
+		if (keyboard.isClicked(GLFW.GLFW_KEY_DOWN)) {
+			int id = GameOptions.currentContainerId - 1;
+			while (true) {
+				if (id < 0) {
+					id += GameConstants.MAX_CONTAINERS;
+				}
+				Container container = Data.getContainer(id);
+				if (container != null) {
+					if (container.getType() == DataType.CREATURE || container.getType() == DataType.FORMATION || container.getType() == DataType.ENTITY) {
+						GameOptions.currentContainerId = id;
+						break;
+					}
+				}
+				id--;
+			}
+		}
+
 		if (mouse.isLeftButtonClicked()) {
 			Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), this, scene);
 			if (clickedTile != null) {
                 //scene.setFacePartOverlay(clickedTile.getTileMesh());
-				Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "leftClick", new Variable[]{new Variable(clickedTile)}));
+				Data.addScriptRun(new ScriptRun(
+						Data.getMainInstance(),
+						"leftClick",
+						new Variable[]{
+								new Variable(clickedTile),
+								new Variable(Data.getContainer(GameOptions.currentContainerId))}));
+			}
+			Container container = Data.getContainer(GameOptions.currentContainerId);
+			if (container != null) {
+				if (container.getType() == DataType.FORMATION) {
+					Data.getPlanet().updatePlanetMesh();
+					Data.updateInstancePositions();
+				}
 			}
 		}
 		if (mouse.isRightButtonClicked()) {
 			Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), this, scene);
 			if (clickedTile != null) {
 				//scene.setFacePartOverlay(clickedTile.getTileMesh());
-				Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "rightClick", new Variable[]{new Variable(clickedTile)}));
+				Data.addScriptRun(new ScriptRun(
+						Data.getMainInstance(),
+						"rightClick",
+						new Variable[]{
+								new Variable(clickedTile),
+								new Variable(Data.getContainer(GameOptions.currentContainerId))}));
 			}
 		}
 

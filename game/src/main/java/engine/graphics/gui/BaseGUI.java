@@ -2,6 +2,8 @@ package engine.graphics.gui;
 
 import engine.data.Data;
 import engine.data.entities.Instance;
+import engine.data.options.GameOptions;
+import engine.data.proto.Container;
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.gui.TextObject;
 import engine.graphics.objects.textures.FontTexture;
@@ -52,6 +54,18 @@ public class BaseGUI implements GUIInterface {
 
 	public void tick(int windowWidth, int windowHeight) {
 		clear();
+
+		Container currentSelection = Data.getContainer(GameOptions.currentContainerId);
+		GUIObject selection = new TextObject(currentSelection != null ? currentSelection.getName() : String.valueOf(GameOptions.currentContainerId), fontTexture);
+		selection.setSize(windowWidth/4, windowHeight/8);
+		selection.setLocation(windowWidth*3/4, windowHeight*7/8);
+		selection.recalculateScale(windowWidth, windowHeight);
+		addHUDObject(selection);
+
+		if (!GameOptions.runTicks) {
+			return;
+		}
+
 		int slot = 0;
 
 		List<Integer> attributes = Data.getAllAttributeIDs();

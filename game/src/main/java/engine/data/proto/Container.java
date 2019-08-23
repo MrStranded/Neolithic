@@ -29,7 +29,7 @@ public class Container {
 	private MeshHub meshHub = null;
 
 	// game logic
-	private String name = "[NAME]";
+	private String name;
 	private BinaryTree<Attribute> attributes;
 	private BinaryTree<Script> scripts;
 
@@ -122,6 +122,7 @@ public class Container {
 	}
 
 	public String getName() {
+		if (name == null) { return textID; }
 		return name;
 	}
 	public void setName(String name) {
