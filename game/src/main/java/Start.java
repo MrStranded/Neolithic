@@ -10,6 +10,9 @@ import engine.Engine;
  * Running the program:
  * - go sure to use this VM argument: -Dsun.java2d.opengl=true
  *
+ * Possibly, you also want to use this:
+ * - VM argument: -XX:+UseConcMarkSweepGC
+ *
  * On Windows, this other option may improve performance and stability:
  * -Dsun.java2d.noddraw=true
  *

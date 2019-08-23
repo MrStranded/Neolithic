@@ -67,8 +67,6 @@ public class Engine {
 		time = System.currentTimeMillis();
 		/*Instance worldGen = new Instance(Data.getContainerID("genContinental"));
 		worldGen.run(ScriptConstants.EVENT_GENERATE_WORLD, null);*/
-		gaia.updatePlanetMesh();
-		Data.updateInstancePositions();
 		System.out.println("Executing WorldGen Script took: "+(System.currentTimeMillis()-time)+" ms");
 
 		Data.shuffleInstanceQueue();
@@ -84,15 +82,27 @@ public class Engine {
 		while (renderer.displayExists()) {
 			long t = System.currentTimeMillis();
 
-			Queue<Tile> tiles = Data.getChangedTiles();
+			/*Queue<Tile> tiles = Data.getChangedTiles();
 			if (!tiles.isEmpty()) {
 				gaia.updatePlanetMesh(tiles.poll());
-			}
+			}*/
 
 			long start = System.currentTimeMillis();
+			if (Data.shouldUpdatePlanetMesh()) {
+				gaia.updatePlanetMesh();
+				Data.updateInstancePositions();
+				Data.setUpdatePlanetMesh(false);
+				gaia.clearChangeFlags();
+			}
+			if (GameOptions.printPerformance) {
+				long dt = (System.currentTimeMillis() - start);
+				if (dt > 100) {
+					System.out.println("Updating Planet Mesh took: " + dt);
+				}
+			}
 
+			start = System.currentTimeMillis();
 			hud.tick(window.getWidth(), window.getHeight());
-
 			if (GameOptions.printPerformance) {
 				long dt = (System.currentTimeMillis() - start);
 				if (dt > 100) {

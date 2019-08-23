@@ -107,6 +107,9 @@ public class Tile extends Instance implements IDInterface {
 		return height;
 	}
 	public void setHeight(int height) {
+		if (tileMesh != null) {
+			tileMesh.setChanged(this.height != height);
+		}
 		this.height = height;
 	}
 
@@ -114,6 +117,9 @@ public class Tile extends Instance implements IDInterface {
 		return waterHeight;
 	}
 	public void setWaterHeight(int waterHeight) {
+		if (tileMesh != null) {
+			tileMesh.setChanged(this.waterHeight != waterHeight);
+		}
 		this.waterHeight = waterHeight;
 	}
 

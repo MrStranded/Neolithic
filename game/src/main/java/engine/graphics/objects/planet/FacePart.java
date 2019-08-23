@@ -24,6 +24,7 @@ public class FacePart {
 
 	private Vector3 mid, waterMid;
 
+	private FacePart superFace;
 	private FacePart[] quarterFaces;
 
 	private double height = 0;
@@ -38,11 +39,14 @@ public class FacePart {
 	private int depth;
 	private boolean rendersSelf = false;
 	private Vector3 intersection = null;
+	private boolean changed = false;
 
-	public FacePart(Vector3 corner1, Vector3 corner2, Vector3 corner3) {
+	public FacePart(Vector3 corner1, Vector3 corner2, Vector3 corner3, FacePart superFace) {
 		this.corner1 = corner1;
 		this.corner2 = corner2;
 		this.corner3 = corner3;
+
+		this.superFace = superFace;
 
 		normal = (corner1.plus(corner2).plus(corner3)).normalize();
 	}
@@ -212,6 +216,21 @@ public class FacePart {
 	}
 
 	// ###################################################################################
+	// ################################ Clearing Change Flag #############################
+	// ###################################################################################
+
+	public void clearChangeFlags() {
+		changed = false;
+		if (quarterFaces != null) {
+			for (FacePart facePart : quarterFaces) {
+				if (facePart.hasChanged()) {
+					facePart.clearChangeFlags();
+				}
+			}
+		}
+	}
+
+	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
@@ -331,5 +350,15 @@ public class FacePart {
 	}
 	public void setDepth(int depth) {
 		this.depth = depth;
+	}
+
+	public boolean hasChanged() {
+		return changed;
+	}
+	public void setChanged(boolean changed) {
+		this.changed = changed;
+		if (changed && superFace != null/* && !superFace.hasChanged()*/) {
+			superFace.setChanged(true);
+		}
 	}
 }

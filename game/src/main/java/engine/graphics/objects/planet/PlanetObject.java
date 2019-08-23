@@ -53,6 +53,14 @@ public class PlanetObject extends MoveableObject {
 		planetGenerator.updateTile(tile);
 	}
 
+	public void clearChangeFlags() {
+		for (FacePart facePart : faceParts) {
+			if (facePart.hasChanged()) {
+				facePart.clearChangeFlags();
+			}
+		}
+	}
+
 	public void render(ShaderProgram shaderProgram, Matrix4 viewMatrix, boolean putDataIntoShader, boolean drawWater) {
 		Matrix4 viewWorldMatrix = viewMatrix.times(getWorldMatrix());
 

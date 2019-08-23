@@ -1,6 +1,7 @@
 package engine.graphics.objects.generators;
 
 import constants.TopologyConstants;
+import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.graphics.objects.models.Material;
@@ -232,13 +233,14 @@ public class PlanetGenerator {
 	// ################################ Face #############################################
 	// ###################################################################################
 
-	private FacePart createFace(Vector3 corner1, Vector3 corner2, Vector3 corner3, int size, int depth, int facePos, int tileX, int tileY) {
+	private FacePart createFace(Vector3 corner1, Vector3 corner2, Vector3 corner3, FacePart superFace, int size, int depth, int facePos, int tileX, int tileY) {
 		corner1 = corner1.normalize();
 		corner2 = corner2.normalize();
 		corner3 = corner3.normalize();
 
-		FacePart facePart = new FacePart(corner1, corner2, corner3);
+		FacePart facePart = new FacePart(corner1, corner2, corner3, superFace);
 		facePart.setDepth(depth);
+		facePart.setChanged(true);
 
 		int newSize = size / 2;
 
@@ -255,6 +257,7 @@ public class PlanetGenerator {
 					corner1,
 					corner1.plus(dx),
 					corner1.plus(dy),
+					facePart,
 					newSize,
 					depth + 1,
 					facePos, tileX, tileY
@@ -263,6 +266,7 @@ public class PlanetGenerator {
 					corner1.plus(dx),
 					corner1.plus(dx).plus(dx),
 					corner1.plus(dy).plus(dx),
+					facePart,
 					newSize,
 					depth + 1,
 					facePos, tileX + newSize, tileY
@@ -271,6 +275,7 @@ public class PlanetGenerator {
 					corner1.plus(dy),
 					corner1.plus(dx).plus(dy),
 					corner1.plus(dy).plus(dy),
+					facePart,
 					newSize,
 					depth + 1,
 					facePos, tileX, tileY + newSize
@@ -279,6 +284,7 @@ public class PlanetGenerator {
 					corner1.plus(dx).plus(dy),
 					corner1.plus(dy),
 					corner1.plus(dx),
+					facePart,
 					newSize,
 					depth + 1,
 					facePos, planet.getSize() - newSize - tileX, planet.getSize() - newSize - tileY
@@ -312,7 +318,9 @@ public class PlanetGenerator {
 
 			for (FacePart subFace : facePart.getQuarterFaces()) {
 				if (subFace != null) {
-					updateFace(subFace);
+					if (subFace.hasChanged()) {
+						updateFace(subFace);
+					}
 
 					if (subFace.getHeight() > maxHeight) { maxHeight = subFace.getHeight(); }
 					if (subFace.getWaterHeight() > maxWaterHeight) { maxWaterHeight = subFace.getWaterHeight(); }
@@ -387,7 +395,7 @@ public class PlanetGenerator {
 					}
 
 					int face = (y*2 + f) * 5 + x;
-					faces[face] = createFace(corner1, corner2, corner3, planet.getSize(), 1, face, 0, 0);
+					faces[face] = createFace(corner1, corner2, corner3, null, planet.getSize(), 1, face, 0, 0);
 				}
 			}
 		}
@@ -397,7 +405,9 @@ public class PlanetGenerator {
 
 	public void updatePlanet() {
 		for (FacePart facePart : planetObject.getFaceParts()) {
-			updateFace(facePart);
+			if (facePart.hasChanged()) {
+				updateFace(facePart);
+			}
 		}
 	}
 

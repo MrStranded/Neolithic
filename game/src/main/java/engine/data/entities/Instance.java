@@ -149,7 +149,6 @@ public class Instance {
 	public void change(int containerId) {
 		if (Data.getContainer(containerId).getType() == DataType.TILE) {
 			((Tile) this).resetColors();
-			Data.addChangedTile((Tile) this);
 		}
 		id = containerId;
 		inheritAttributes();

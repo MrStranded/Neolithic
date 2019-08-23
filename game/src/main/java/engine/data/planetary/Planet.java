@@ -33,6 +33,9 @@ public class Planet {
 	public void updatePlanetMesh(Tile tile) {
 		planetObject.updateLODMesh(tile);
 	}
+	public void clearChangeFlags() {
+		planetObject.clearChangeFlags();
+	}
 
 	public PlanetObject getPlanetObject() {
 		return planetObject;

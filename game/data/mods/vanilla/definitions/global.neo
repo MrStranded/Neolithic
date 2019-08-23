@@ -80,5 +80,8 @@ Script: leftClick(tile, type) {
 			instance..attAge=2880;
 			instance->updateMesh();
 		}
+
+		fitTiles();
+		updatePlanetMesh();
 	}
 }

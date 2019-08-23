@@ -822,6 +822,10 @@ public class CommandExecuter {
 				}
 			}
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void updatePlanetMesh ()
+		} else if (TokenConstants.UPDATE_PLANET_MESH.equals(command)) {
+			Data.setUpdatePlanetMesh(true);
+
         // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& UNKNOWN COMMAND!
 		} else {
 			Logger.error(

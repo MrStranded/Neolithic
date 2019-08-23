@@ -9,7 +9,7 @@ Effect: effSleep {
     }
 
     Script: removeCondition(carrier) {
-        require(getLightLevel(carrier) > carrier.attLightSensitivity);
+        require(getLightLevel(carrier) > carrier.attLightSensitivity || carrier.attFatigue <= 0);
     }
 }
 
@@ -17,9 +17,8 @@ Effect: effSleep {
 
 Drive: driSleep {
 	Script: condition {
-		require(.attFatigue > .attFatigueSensitivity);
-		require(getLightLevel(self) <= .attLightSensitivity);
 	    require(! .attSleeping);
+		require(.attFatigue > .attFatigueSensitivity || getLightLevel(self) <= .attLightSensitivity);
 	}
 
 	solutions {

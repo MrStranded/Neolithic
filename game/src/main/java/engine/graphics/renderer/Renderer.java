@@ -13,6 +13,7 @@ import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.*;
+import engine.graphics.objects.generators.PlanetGenerator;
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.light.*;
 import engine.graphics.objects.planet.PlanetObject;
@@ -21,6 +22,7 @@ import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.input.KeyboardInput;
 import engine.input.MouseInput;
 import engine.graphics.gui.window.Window;
+import engine.logic.topology.TopologyGenerator;
 import engine.math.MatrixCalculations;
 import engine.math.MousePicking;
 import load.StringLoader;
@@ -316,13 +318,6 @@ public class Renderer {
 						new Variable[]{
 								new Variable(clickedTile),
 								new Variable(Data.getContainer(GameOptions.currentContainerId))}));
-			}
-			Container container = Data.getContainer(GameOptions.currentContainerId);
-			if (container != null) {
-				if (container.getType() == DataType.FORMATION) {
-					Data.getPlanet().updatePlanetMesh();
-					Data.updateInstancePositions();
-				}
 			}
 		}
 		if (mouse.isRightButtonClicked()) {

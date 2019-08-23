@@ -41,8 +41,8 @@ public class Data {
 	private static HashMap<String, MeshHub> meshHubs;
 
 	private static Queue<Instance> instanceQueue;
-	private static Queue<Tile> changedTiles;
 	private static Queue<ScriptRun> scriptRuns;
+	private static boolean updatePlanetMesh = true;
 
 	/**
 	 * The publicInstanceList is used to access the instances in list form without causing a ConcurrentModificationException.
@@ -64,7 +64,6 @@ public class Data {
 		meshHubs = new HashMap<>(GameConstants.MAX_CONTAINERS);
 
 		instanceQueue = new LinkedList<>();//new ConcurrentLinkedQueue<>();
-		changedTiles = new LinkedList<>();
 		scriptRuns = new LinkedList<>();
 
 		// the mainContainer container contains global scripts
@@ -269,14 +268,6 @@ public class Data {
 		}
 	}
 
-	public static void addChangedTile(Tile tile) {
-		changedTiles.add(tile);
-	}
-
-	public static void clearChangedTiles() {
-		changedTiles.clear();
-	}
-
 	public static void addScriptRun(ScriptRun scriptRun) {
 		scriptRuns.add(scriptRun);
 	}
@@ -316,7 +307,12 @@ public class Data {
 	 */
 	public static void updateInstancePositions() {
 		for (Instance instance : instanceQueue) {
-			instance.actualizeObjectPosition();
+			Tile tile = instance.getPosition();
+			if (Data.getContainer(instance.getId()) != null && Data.getContainer(instance.getId()).getType() != DataType.TILE) {
+				if (tile != null && tile.getTileMesh().hasChanged()) {
+					instance.actualizeObjectPosition();
+				}
+			}
 		}
 	}
 
@@ -373,8 +369,12 @@ public class Data {
 	 */
 	public static Queue<Instance> getInstanceQueue() { return instanceQueue; }
 
-	public static Queue<Tile> getChangedTiles() {
-		return changedTiles;
+	public static boolean shouldUpdatePlanetMesh() {
+		return updatePlanetMesh;
+	}
+
+	public static void setUpdatePlanetMesh(boolean updatePlanetMesh) {
+		Data.updatePlanetMesh = updatePlanetMesh;
 	}
 
 	public static Queue<ScriptRun> getScriptRuns() {

@@ -82,6 +82,7 @@ public enum TokenConstants {
 	SET_HEIGHT          (TokenType.COMMAND, "setHeight"),
 	SET_WATER_LEVEL     (TokenType.COMMAND, "setWaterLevel"),
     SET_SUN_ANGLE       (TokenType.COMMAND, "setSunAngle"),
+	UPDATE_PLANET_MESH	(TokenType.COMMAND, "updatePlanetMesh"),
 
 	// -------------------------------------------------- Retrieval
 	GET_ATTRIBUTE           (TokenType.COMMAND, "getAtt"),

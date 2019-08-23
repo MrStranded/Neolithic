@@ -9,7 +9,7 @@ Creature: cHuman inherits cLandAnimal {
 		attSize, 10;
 		attHealth, 100;
 
-        attLibido, 200;
+        attLibido, 250;
         attMatureAge, 1000;
 
         attBabySize, 50;
