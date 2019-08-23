@@ -357,7 +357,7 @@ public class FacePart {
 	}
 	public void setChanged(boolean changed) {
 		this.changed = changed;
-		if (changed && superFace != null/* && !superFace.hasChanged()*/) {
+		if (changed && superFace != null && !superFace.hasChanged()) {
 			superFace.setChanged(true);
 		}
 	}

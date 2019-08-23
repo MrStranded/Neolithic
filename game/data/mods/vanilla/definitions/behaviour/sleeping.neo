@@ -9,7 +9,7 @@ Effect: effSleep {
     }
 
     Script: removeCondition(carrier) {
-        require(getLightLevel(carrier) > carrier.attLightSensitivity || carrier.attFatigue <= 0);
+        require(getLightLevel(carrier) > carrier.attLightSensitivity && carrier.attFatigue < carrier.attFatigueSensitivity);
     }
 }
 

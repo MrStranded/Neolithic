@@ -26,7 +26,7 @@ Drive: driMate {
         require(self.attNutrition >= .attBabySize);
         require(self.attFatigue < .attLibido);
         require(self.attAge >= self.attMatureAge);
-        require(self.attGender <= 0); // only males want to fock
+        //require(self.attGender <= 0); // only males want to fock
     }
 
     solutions {
@@ -34,7 +34,8 @@ Drive: driMate {
     }
 
 	Script: getWeight() {
-	    return(max(.attAge - .attMatureAge, 0));
+	    timeSinceLastSex = .attAge - ->lastSex;
+	    return(.attAge - .attMatureAge + timeSinceLastSex);
 	}
 }
 
@@ -49,6 +50,7 @@ Process: proMate {
             "attFatigue", .attLibido
         ]);
         ..attNutrition -= .attBabySize;
+        ->lastSex = .attAge;
 
         child = create(getType(self), getTile(self));
 

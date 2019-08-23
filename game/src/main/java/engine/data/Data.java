@@ -306,11 +306,13 @@ public class Data {
 	 * This method actualizes the positions of all the instances on the planet with the (possibly) new facePart.getMid()s.
 	 */
 	public static void updateInstancePositions() {
-		for (Instance instance : instanceQueue) {
-			Tile tile = instance.getPosition();
-			if (Data.getContainer(instance.getId()) != null && Data.getContainer(instance.getId()).getType() != DataType.TILE) {
-				if (tile != null && tile.getTileMesh().hasChanged()) {
-					instance.actualizeObjectPosition();
+		if (publicInstanceList != null) {
+			for (Instance instance : publicInstanceList) {
+				Tile tile = instance.getPosition();
+				if (Data.getContainer(instance.getId()) != null && Data.getContainer(instance.getId()).getType() != DataType.TILE) {
+					if (tile != null && tile.getTileMesh().hasChanged()) {
+						instance.actualizeObjectPosition();
+					}
 				}
 			}
 		}

@@ -524,11 +524,11 @@ public class Instance {
 		// effects
 		if (effects != null) {
 			try {
-				for (Effect effect : getEffects()) {
+				for (Effect effect : effects) {
 					value += effect.getAttributeValue(attributeID);
 				}
 			} catch (ConcurrentModificationException e) {
-				//Logger.error("Concurrent modification during 'Instance.getAttributeValue()' (effect list is currently being modified)");
+				Logger.error("Concurrent modification during 'Instance.getAttributeValue()' (effect list is currently being modified)");
 			}
 		}
 		return value;

@@ -324,7 +324,7 @@ public class ASTBuilder {
 
 			if (!rightNode.isBracketed()) { // only correct when right node is not bracketed
 				// current operator binds more strongly than the one from the right expression -> rehang
-				if (operator.getPrecedence() < rightNode.getOperator().getPrecedence()) {
+				if (operator.getPrecedence() <= rightNode.getOperator().getPrecedence()) {
 					if (unary) {
 						AbstractScriptNode sub = rightNode.getLeft();
 						AbstractScriptNode newLeft = precedenceCorrection(operator, left, sub, true);
@@ -342,7 +342,7 @@ public class ASTBuilder {
 			UnaryExpressionNode rightNode = ((UnaryExpressionNode) right);
 
 			// current operator binds more strongly than the one from the right expression -> rehang
-			if (operator.getPrecedence() < rightNode.getOperator().getPrecedence()) {
+			if (operator.getPrecedence() <= rightNode.getOperator().getPrecedence()) {
 				if (unary) {
 					AbstractScriptNode sub = rightNode.getSubNode();
 					AbstractScriptNode newSub = precedenceCorrection(operator, left, sub, true);
