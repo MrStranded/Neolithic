@@ -2,6 +2,7 @@ package engine.parser.interpretation;
 
 import constants.ResourcePathConstants;
 import engine.data.Data;
+import engine.data.proto.Container;
 import engine.data.scripts.Script;
 import engine.data.attributes.PreAttribute;
 import engine.data.identifiers.ContainerIdentifier;
@@ -15,6 +16,7 @@ import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
 import engine.parser.utils.TokenNumerifier;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -250,6 +252,51 @@ public class Interpreter {
         consume(TokenConstants.SEMICOLON);
     }
 
+	private void addLowerBound(ProtoAttribute protoAttribute) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token value = consume();
+		protoAttribute.setLowerBound(TokenNumerifier.getInt(value));
+
+		consume(TokenConstants.SEMICOLON);
+	}
+
+	private void addUpperBound(ProtoAttribute protoAttribute) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token value = consume();
+		protoAttribute.setUpperBound(TokenNumerifier.getInt(value));
+
+		consume(TokenConstants.SEMICOLON);
+	}
+
+	private void addBounds(ProtoAttribute protoAttribute) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token lower = consume();
+		protoAttribute.setLowerBound(TokenNumerifier.getInt(lower));
+
+		consume(TokenConstants.COMMA);
+
+		Token upper = consume();
+		protoAttribute.setUpperBound(TokenNumerifier.getInt(upper));
+
+		consume(TokenConstants.SEMICOLON);
+	}
+
+	private void addGuiColor(ProtoAttribute protoAttribute) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+		Token r = consume();
+		consume(TokenConstants.COMMA);
+		Token g = consume();
+		consume(TokenConstants.COMMA);
+		Token b = consume();
+
+		protoAttribute.setGuiColor(new Color(TokenNumerifier.getInt(r),TokenNumerifier.getInt(g),TokenNumerifier.getInt(b)));
+
+		consume(TokenConstants.SEMICOLON);
+	}
+
 	// ################################################################################### Tile
 
 	private void readPreferredHeight(TileContainer container) throws Exception {
@@ -367,15 +414,22 @@ public class Interpreter {
 
             } else if (TokenConstants.VALUE_INHERITED.equals(next)) { // attribute is inherited
                 addInherited(protoAttribute);
-
             } else if (TokenConstants.VALUE_MUTATION_CHANCE.equals(next)) { // chance of attribute to mutate
                 addMutationChance(protoAttribute);
-
             } else if (TokenConstants.VALUE_MUTATION_EXTEND.equals(next)) { // extent of mutation
                 addMutationExtent(protoAttribute);
-
             } else if (TokenConstants.VALUE_MUTATION.equals(next)) { // mutation chance, mutation extent
                 addMutation(protoAttribute);
+
+			} else if (TokenConstants.VALUE_LOWER_BOUND.equals(next)) { // lower bound
+				addLowerBound(protoAttribute);
+			} else if (TokenConstants.VALUE_UPPER_BOUND.equals(next)) { // upper bound
+				addUpperBound(protoAttribute);
+			} else if (TokenConstants.VALUE_BOUNDS.equals(next)) { // lower bound, upper bound
+				addBounds(protoAttribute);
+
+			} else if (TokenConstants.VALUE_GUI_COLOR.equals(next)) { // gui color
+				addGuiColor(protoAttribute);
 
 			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
 				return;

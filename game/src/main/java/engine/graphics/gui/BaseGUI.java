@@ -62,7 +62,7 @@ public class BaseGUI implements GUIInterface {
 		selection.recalculateScale(windowWidth, windowHeight);
 		addHUDObject(selection);
 
-		if (!GameOptions.runTicks) {
+		if (true || !GameOptions.runTicks) {
 			return;
 		}
 

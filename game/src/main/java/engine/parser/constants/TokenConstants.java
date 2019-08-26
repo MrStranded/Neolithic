@@ -48,6 +48,10 @@ public enum TokenConstants {
 	VALUE_MUTATION_CHANCE       (TokenType.KEYWORD, "mutationChance"),
 	VALUE_MUTATION_EXTEND       (TokenType.KEYWORD, "mutationExtent"),
 	VALUE_MUTATION              (TokenType.KEYWORD, "mutation"),
+	VALUE_LOWER_BOUND           (TokenType.KEYWORD, "lower"),
+	VALUE_UPPER_BOUND           (TokenType.KEYWORD, "upper"),
+	VALUE_BOUNDS              	(TokenType.KEYWORD, "bounds"),
+	VALUE_GUI_COLOR             (TokenType.KEYWORD, "color"),
 
 	// -------------------------------------------------- List Instantiators
 	VALUES_KNOWLEDGE        (TokenType.KEYWORD, "knowledge"),

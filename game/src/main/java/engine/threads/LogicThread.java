@@ -4,6 +4,7 @@ import constants.GameConstants;
 import engine.data.Data;
 import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
+import engine.graphics.gui.GuiData;
 import engine.graphics.gui.window.Window;
 
 import java.util.ArrayList;
@@ -11,10 +12,7 @@ import java.util.List;
 
 public class LogicThread extends Thread {
 
-	private Window window;
-
-	public LogicThread(Window window) {
-		this.window = window;
+	public LogicThread() {
 		setDaemon(true);
 	}
 
@@ -25,7 +23,7 @@ public class LogicThread extends Thread {
 		List<Instance> instanceList = new ArrayList<>(lastSize);
 
 		long t = System.currentTimeMillis();
-		while (!window.isClosed()) {
+		while (!GuiData.getRenderWindow().isClosed()) {
 			long currentTime = System.currentTimeMillis();
 
 			if (currentTime - t >= GameConstants.TIME_BETWEEN_TICK_LOADS) {
@@ -45,12 +43,15 @@ public class LogicThread extends Thread {
 							Data.setPublicInstanceList(instanceList);
 							instanceList = new ArrayList<>(lastSize);
 							lastSize = 0;
+
+							GuiData.getStatisticsWindow().tick();
 						}
 
 						// treating the instance itself
 						if (instance != null) {
 							if (!instance.isSlatedForRemoval()) {
 								instance.tick();
+								GuiData.getStatisticsWindow().register(instance);
 
 								Data.addInstanceToQueue(instance);
 								instanceList.add(instance);

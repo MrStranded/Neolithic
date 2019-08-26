@@ -1,21 +1,12 @@
 package engine;
 
 import constants.GameConstants;
-import constants.ScriptConstants;
-import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
 import engine.data.planetary.Planet;
 import engine.data.Data;
-import engine.data.planetary.Tile;
-import engine.graphics.gui.BaseGUI;
-import engine.graphics.gui.GUIInterface;
-import engine.graphics.objects.Scene;
-import engine.graphics.gui.window.Window;
-import engine.graphics.renderer.Renderer;
+import engine.graphics.gui.GuiData;
 import engine.threads.LogicThread;
 import engine.parser.Parser;
-
-import java.util.Queue;
 
 /**
  * The engine binds the whole thing together.
@@ -24,23 +15,14 @@ import java.util.Queue;
 
 public class Engine {
 
-	private static Renderer renderer;
-	private static Window window;
-	private static Scene scene;
-	private static GUIInterface hud;
-
 	private static LogicThread logicThread;
 
 	private static Planet gaia;
 
 	public static void initialize() {
-		window = new Window(800,600,"Neolithic");
-		window.initialize();
+		GuiData.initialize();
 
-		renderer = new Renderer(window);
-		renderer.initialize();
-
-		logicThread = new LogicThread(window);
+		logicThread = new LogicThread();
 	}
 
 	public static void loadData() {
@@ -53,9 +35,6 @@ public class Engine {
 	}
 
 	public static void createWorld() {
-		scene = new Scene();
-		hud = new BaseGUI();
-
 		gaia = new Planet(GameConstants.DEFAULT_PLANET_SIZE);
 		Data.setPlanet(gaia);
 		//Data.addPlanetTilesToQueue();
@@ -79,7 +58,7 @@ public class Engine {
 	public void start() {
 		Engine.logicThread.start();
 
-		while (renderer.displayExists()) {
+		while (GuiData.getRenderer().displayExists()) {
 			long t = System.currentTimeMillis();
 
 			/*Queue<Tile> tiles = Data.getChangedTiles();
@@ -102,7 +81,8 @@ public class Engine {
 			}
 
 			start = System.currentTimeMillis();
-			hud.tick(window.getWidth(), window.getHeight());
+			GuiData.getHud().tick(GuiData.getRenderWindow().getWidth(), GuiData.getRenderWindow().getHeight());
+			GuiData.getStatisticsWindow().refresh();
 			if (GameOptions.printPerformance) {
 				long dt = (System.currentTimeMillis() - start);
 				if (dt > 100) {
@@ -111,7 +91,7 @@ public class Engine {
 			}
 
 			start = System.currentTimeMillis();
-			renderer.render(scene, hud, gaia);
+			GuiData.getRenderer().render(GuiData.getScene(), GuiData.getHud(), gaia);
 			if (GameOptions.printPerformance) {
 				long dt = (System.currentTimeMillis() - start);
 				if (dt > 100) {
@@ -132,13 +112,8 @@ public class Engine {
 	}
 
 	public static void cleanUp() {
-		if (renderer != null) { renderer.cleanUp(); }
-		if (scene != null) { scene.cleanUp(); }
-		if (hud != null) { hud.cleanUp(); }
-
 		Data.clear();
-
-		if (window != null) { window.destroy(); }
+		GuiData.clear();
 	}
 
 }

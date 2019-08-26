@@ -1,6 +1,7 @@
 package engine.data.structures.trees.binary;
 
 import engine.data.IDInterface;
+import engine.data.structures.Registrator;
 
 /**
  * My own implementation of an AVL tree.
@@ -324,7 +325,6 @@ public class BinaryTree<T extends IDInterface> {
 
 		node.setLeft(null);
 		node.setRight(null);
-		//node.setValue(null);
 	}
 
 	// ###################################################################################
@@ -396,6 +396,26 @@ public class BinaryTree<T extends IDInterface> {
 			index = addToArray(node.getRight(), array, index);
 		}
 		return index;
+	}
+
+	// ###################################################################################
+	// ################################ For each #########################################
+	// ###################################################################################
+
+	public void forEach(Registrator registrator) {
+		if (root != null) {
+			eachNode(root, registrator);
+		}
+	}
+
+	private void eachNode(BinaryTreeNode<T> node, Registrator registrator) {
+		registrator.register(node.getValue());
+		if (node.getLeft() != null) {
+			eachNode(node.getLeft(), registrator);
+		}
+		if (node.getRight() != null) {
+			eachNode(node.getRight(), registrator);
+		}
 	}
 
 	// ###################################################################################
