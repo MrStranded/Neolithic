@@ -5,7 +5,7 @@ Creature: cLandAnimal {
 	name = "Land animal";
 
 	knowledge {
-		proEat; proGatherFood; proPickUpFood;
+		proEatVegetarian; proGatherFood; proPickUpFood;
 		proMate; proSearchMate;
 		proSleep;
 		proStroll;
@@ -56,6 +56,17 @@ Creature: cLandAnimal {
         hw = getWaterHeight(to);
 		freeSpace = 100 - getFullAtt(to, "attSize");
         return ((h2 >= hw - .attStepHeight) && (abs(h1-h2) <= .attStepHeight) && freeSpace >= .attSize);
+	}
+
+	Script: consume(actor) {
+	    effect = addEffect(actor, effDigest);
+        effect..attNutrition = .attNutrition;
+        for (item : getItems(self)) {
+            pickUp(effect, item);
+        }
+
+        print(self + " is eaten by " + actor);
+		destroy(self);
 	}
 
 }

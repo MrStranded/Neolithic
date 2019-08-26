@@ -62,7 +62,7 @@ Entity: entApple {
 	mesh = "apple_6x_loose.ply";
 
 	attributes {
-		attEdible, 1;
+		attVegetarian, 1;
 		attMatureAge, 100;
 	}
 
@@ -175,7 +175,7 @@ Process: proPhotoSynthesis {
 
 Process: proCreateFruit {
 	Script: condition {
-		require(!getAttInRange("attEdible", self, 1));
+		require(!getAttInRange("attVegetarian", self, 1));
 		require(.attNutrition >= .attBabySize);
 		require(.attAge >= .attMatureAge);
 		require(!getItems(self, entApple));

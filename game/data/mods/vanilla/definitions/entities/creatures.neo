@@ -1,13 +1,14 @@
 
 ///////////////////////////////////////////////////////////////////////////// human
 
-Creature: cHuman inherits cLandAnimal {
+Creature: cHuman inherits cLandAnimal, bHerbivore {
 	name = "Human";
 	mesh = "human_female_mature.ply";
 
 	attributes {
 		attSize, 10;
 		attHealth, 100;
+		attMeat, 1;
 
         attLibido, 250;
         attMatureAge, 1000;
@@ -37,60 +38,6 @@ Creature: cHuman inherits cLandAnimal {
 		proChooseDestination; proGoFarAway;
 	}
 
-	/*Script: place {
-		self->id = random(1000);
-		if (main->human == 0) {
-		    main->human = self->id;
-        }
-
-        ..attGender = random(0,2)*2 - 1; // this results in either -1 or 1
-        ->updateMesh();
-	}*/
-
-	/*Script: tick {
-	    if (!(.attSleeping)) { // creature is awake
-            if (..attNutrition > 0) {
-                 ..attNutrition--;
-            }
-
-            ..attFatigue++;
-		} else {
-		    if (..attFatigue > 0) {
-		        ..attFatigue--;
-            }
-		}
-
-		if (self->id == main->human && false) {
-		    print(self->id + " his stats: -------------------------------------");
-		    print("light sense:      " + .attLightSensitivity);
-		    print("hunger sense:     " + .attHungerSensitivity);
-		    print("fatigue sense:    " + .attFatigueSensitivity);
-		    print("curiosity:        " + .attCuriosity);
-		    print("sleep time:       " + .attSleepTime);
-		    print("speed:            " + .attSpeed);
-		    print("viewing distance: " + .attViewingDistance);
-		    print("step height:      " + .attStepHeight);
-		    print("sleeping: " + .attSleeping + "   health: " + .attHealth + "   nutrition: " + .attNutrition + "   fatigue: " + .attFatigue);
-		    print(getEffects(self));
-		}
-
-		if (.attHealth < 0) { // human death
-		    if (self->id == main->human) {
-		        main->human = 0;
-		    }
-
-		    destroy(self);
-        }
-
-		if (.attAge > .attMatureAge*2) { // human age death
-		    if (chance(0.01) && !getEffects(self, effCancer)) {
-                addEffect(self, effCancer);
-		    }
-        }
-
-        ..attAge++;
-	}*/
-
 	Script: updateMesh() {
 	    if (.attAge < .attMatureAge) {
             if (.attGender > 0) {
@@ -106,6 +53,36 @@ Creature: cHuman inherits cLandAnimal {
             }
         }
 	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////// tiger
+
+Creature: cTiger inherits cLandAnimal, bCarnivore {
+	name = "Tiger";
+	mesh = "tiger.ply";
+
+	attributes {
+		attSize, 20;
+		attHealth, 300;
+
+        attLibido, 350;
+        attMatureAge, 700;
+
+        attBabySize, 100;
+        attBiteSize, 30;
+
+        attLightSensitivity, 10;
+        attHungerSensitivity, 100;
+        attFatigueSensitivity, 300;
+
+        attCuriosity, 350;
+
+		attSpeed, 4;
+		attViewingDistance, 8;
+		attStepHeight, 24;
+	}
+
 }
 
 ///////////////////////////////////////////////////////////////////////////// Effects

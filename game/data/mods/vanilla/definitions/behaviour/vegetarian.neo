@@ -1,0 +1,43 @@
+
+///////////////////////////////////////////////////////////////////////////// Processes
+
+Process: proEatVegetarian {
+	Script: condition {
+		require(getItemAtt(self, "attVegetarian"));
+	}
+	Script: process {
+		item = getItemAtt(self, "attVegetarian");
+		item->consume(self);
+	}
+
+	solutions {
+		proPickUpFood;
+		proGatherFood;
+		proBeg;
+	}
+}
+
+Process: proPickUpFood {
+	Script: condition {
+	    ->food = getAttInRange("attVegetarian",self,0);
+		require(->food);
+	}
+	Script: process() {
+		pickUp(self, ->food);
+	}
+}
+
+Process: proGatherFood {
+	Script: condition {
+		->food = getAttInRange("attVegetarian",self,.attViewingDistance);
+		require(->food);
+	}
+	Script: process() {
+		moveTo(self, ->food, .attSpeed);
+		pickUp(self, ->food);
+	}
+	Script: discovery() {
+		require(.attSpeed > 0);
+		require(.attViewingDistance > 0);
+	}
+}

@@ -1,0 +1,65 @@
+
+///////////////////////////////////////////////////////////////////////////// Effects
+
+Effect: effBite {
+    name = "Bite";
+
+    attributes {
+        attHealth, "-10"; // default value
+    }
+
+    Script: tick (carrier) {
+        if (carrier.attSleeping) {
+            if (carrier.attNutrition > 0) {
+                if (.attHealth < 0) {
+                    ..attHealth++;
+                }
+            } else {
+                ..attHealth--;
+                carrier..attFatigue++;
+            }
+        }
+    }
+
+    Script: removeCondition {
+        require(.attHealth >= 0);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////// Processes
+
+Process: proEatMeat {
+	Script: condition {
+		require(getItemAtt(self, "attMeat"));
+	}
+	Script: process {
+		item = getItemAtt(self, "attMeat");
+	    print(self + " eats " + item);
+		item->consume(self);
+	}
+
+	solutions {
+	    proCollectMeat;
+	}
+}
+
+Process: proCollectMeat {
+    Script: condition {
+        if (! ->target) {
+            ->target = getAttInRange("attMeat", self, .attViewingDistance);
+        }
+        require(->target);
+    }
+
+    Script: process {
+	    print(self + " hunts " + ->target);
+        tile = moveTo(self, ->target, .attSpeed);
+        if (getTile(->target) == tile) {
+            print("reached target");
+
+            //bite = addEffect(->target, effBite);
+            //bite..attHealth = - .attBiteSize;
+            (->target)->consume(self);
+        }
+    }
+}

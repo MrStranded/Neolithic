@@ -1,0 +1,10 @@
+
+///////////////////////////////////////////////////////////////////////////// vegetarian
+
+Creature: bHerbivore {
+	name = "Herbivore";
+
+	knowledge {
+		proEatVegetarian; proGatherFood; proPickUpFood;
+	}
+}

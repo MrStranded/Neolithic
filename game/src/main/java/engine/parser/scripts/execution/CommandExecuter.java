@@ -686,7 +686,7 @@ public class CommandExecuter {
 				if (newPosition != instance.getPosition()) {
 					instance.placeInto(newPosition);
 				}
-				return new Variable();
+				return new Variable(newPosition);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance pickUp (Instance holder, Instance item)

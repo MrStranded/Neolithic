@@ -20,6 +20,11 @@ Attribute: attFatigueSensitivity {
     inherited;
     mutation = 50, 200;
 }
+Attribute: attBiteSize {
+    name = "Bite size";
+    inherited;
+    mutation = 50, 10;
+}
 
 // reproduction
 Attribute: attLibido {
@@ -76,7 +81,8 @@ Attribute: attNutrition { name = "Nutrition"; }
 Attribute: attSleeping { name = "Sleeping"; }
 Attribute: attAge { name = "Age"; }
 Attribute: attFatigue { name = "Fatigue"; }
-Attribute: attEdible { name = "Edible"; }
+Attribute: attVegetarian { name = "Vegetarian"; }
+Attribute: attMeat { name = "Meat"; }
 
 // environmental
 Attribute: attHumidity { name = "Humidity"; }

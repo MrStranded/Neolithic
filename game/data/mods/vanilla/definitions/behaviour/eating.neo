@@ -89,7 +89,8 @@ Drive: driHunger {
 	}
 
 	solutions {
-		proEat;
+		proEatVegetarian;
+		proEatMeat;
 	}
 
 	Script: getWeight() {
@@ -97,104 +98,3 @@ Drive: driHunger {
 	}
 }
 
-Drive: driHording {
-	Script: condition {
-		require(! .attSleeping);
-		require(getFullAtt(self, "attNutrition") < .attGreed);
-	}
-
-	solutions {
-		proGatherFood;
-	}
-
-	Script: getWeight() {
-		return(.attGreed - getFullAtt(self, "attNutrition"));
-	}
-}
-
-///////////////////////////////////////////////////////////////////////////// Processes
-
-Process: proEat {
-	Script: condition {
-		require(getItemAtt(self, "attEdible"));
-	}
-	Script: process {
-		item = getItemAtt(self, "attEdible");
-		item->consume(self);
-	}
-
-	solutions {
-		proPickUpFood;
-		proGatherFood;
-		proBeg;
-	}
-}
-
-Process: proPickUpFood {
-	Script: condition {
-	    ->food = getAttInRange("attEdible",self,0);
-		require(->food);
-	}
-	Script: process() {
-		pickUp(self, ->food);
-	}
-}
-
-Process: proGatherFood {
-	Script: condition {
-		->food = getAttInRange("attEdible",self,.attViewingDistance);
-		require(->food);
-	}
-	Script: process() {
-		moveTo(self, ->food, .attSpeed);
-		pickUp(self, ->food);
-	}
-	Script: discovery() {
-		require(.attSpeed > 0);
-		require(.attViewingDistance > 0);
-	}
-}
-
-Process: proBeg {
-	Script: condition {
-		//print("trying to beg");
-		require(->patron);
-		require(isNeighbor(self, ->patron));
-
-		->food = getItemAtt(->patron, "attEdible");
-		require(->food);
-
-		hunger = .attHungerSensitivity - .attNutrition;
-		require(hunger > .attPride);
-		require(hunger > ->patron.attGreed - ->patron.attPride);
-	}
-
-	Script: process {
-		pickUp(self, ->food);
-		->patron = false;
-	}
-
-	solutions {
-		proSearchPatron;
-	}
-}
-
-Process: proSearchPatron {
-	Script: condition {
-		//print("looking for patron");
-		creatures = getInstancesInRange(getType(self), getTile(self), .attViewingDistance);
-		->patron = false;
-		for (creature : creatures) {
-			if (creature != self && getItemAtt(creature, "attEdible")) {
-				->patron = creature;
-				break;
-			}
-		}
-		require(->patron);
-	}
-
-	Script: process {
-		//print("moving to patron");
-		moveTo(self, ->patron, .attSpeed);
-	}
-}

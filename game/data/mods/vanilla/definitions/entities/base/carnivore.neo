@@ -1,0 +1,10 @@
+
+///////////////////////////////////////////////////////////////////////////// carnivore
+
+Creature: bCarnivore {
+	name = "Carnivore";
+
+	knowledge {
+		proEatMeat; proCollectMeat;
+	}
+}

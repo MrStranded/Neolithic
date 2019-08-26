@@ -238,7 +238,7 @@ public class Instance {
 				}
 			}
 		}
-        Logger.log(Data.getContainer(id).getType() + " does not know " + container.getTextID());
+        //Logger.log(Data.getContainer(id).getType() + " does not know " + container.getTextID());
 		return false;
 	}
 
