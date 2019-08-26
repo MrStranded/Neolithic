@@ -76,7 +76,12 @@ Attribute: attPride {
 }
 
 // life
-Attribute: attHealth { name = "Health"; }
+Attribute: attHealth {
+    name = "Health";
+    lower = 0;
+    upper = 200;
+    color = 100, 100, 100;
+}
 Attribute: attNutrition {
     name = "Nutrition";
     lower = 0;

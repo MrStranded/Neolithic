@@ -25,11 +25,11 @@ Creature: cLandAnimal {
 	}
 
 	Script: tick {
-	    if (!(.attSleeping)) { // creature is awake
-            if (..attNutrition > 0) {
-                 ..attNutrition--;
-            }
+        if (..attNutrition > 0) {
+             ..attNutrition--;
+        }
 
+	    if (!(.attSleeping)) { // creature is awake
             ..attFatigue++;
 		} else {
 		    if (..attFatigue > 0) {
@@ -61,9 +61,9 @@ Creature: cLandAnimal {
 	Script: consume(actor) {
 	    effect = addEffect(actor, effDigest);
         effect..attNutrition = .attNutrition;
-        for (item : getItems(self)) {
+        /*for (item : getItems(self)) {
             pickUp(effect, item);
-        }
+        }*/
 
         print(self + " is eaten by " + actor);
 		destroy(self);
