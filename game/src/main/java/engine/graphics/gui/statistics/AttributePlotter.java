@@ -44,7 +44,7 @@ public class AttributePlotter implements Registrator {
             }
             double d = upper - lower;
             double value = currentInstance.getAttributeValue(attribute.getId());
-            statisticsPanel.mark(value / d, protoAttribute.getGuiColor());
+            statisticsPanel.mark(value / d, protoAttribute.getGuiColor(), 64);
         }
     }
 

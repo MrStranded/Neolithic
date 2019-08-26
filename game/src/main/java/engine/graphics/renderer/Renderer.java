@@ -3,6 +3,7 @@ package engine.graphics.renderer;
 import constants.GameConstants;
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
+import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
 import engine.data.planetary.Planet;
 import engine.data.Data;
@@ -250,7 +251,7 @@ public class Renderer {
 		if (keyboard.isPressed(GLFW.GLFW_KEY_S)) { // rotate down
 			camera.rotatePitch(dist);
 		}
-		camera.changeRadius(-dist*mouse.getZSpeed()*3); // scrolling wheel
+		//camera.changeRadius(-dist*mouse.getZSpeed()*3); // scrolling wheel
 		if (keyboard.isPressed(GLFW.GLFW_KEY_R)) { // go closer
 			camera.changeRadius(-dist);
 		}
@@ -276,35 +277,19 @@ public class Renderer {
 		}
 
 		if (keyboard.isClicked(GLFW.GLFW_KEY_UP)) {
-			int id = GameOptions.currentContainerId + 1;
-			while (true) {
-				if (id >= GameConstants.MAX_CONTAINERS) {
-					id -= GameConstants.MAX_CONTAINERS;
-				}
-				Container container = Data.getContainer(id);
-				if (container != null) {
-					if (container.getType() == DataType.CREATURE || container.getType() == DataType.FORMATION || container.getType() == DataType.ENTITY) {
-						GameOptions.currentContainerId = id;
-						break;
-					}
-				}
-				id++;
-			}
+			nextType(1);
 		}
 		if (keyboard.isClicked(GLFW.GLFW_KEY_DOWN)) {
-			int id = GameOptions.currentContainerId - 1;
-			while (true) {
-				if (id < 0) {
-					id += GameConstants.MAX_CONTAINERS;
-				}
-				Container container = Data.getContainer(id);
-				if (container != null) {
-					if (container.getType() == DataType.CREATURE || container.getType() == DataType.FORMATION || container.getType() == DataType.ENTITY) {
-						GameOptions.currentContainerId = id;
-						break;
-					}
-				}
-				id--;
+			nextType(-1);
+		}
+		if (mouse.getZSpeed() > 0) {
+			for (int i = 0; i < mouse.getZSpeed(); i++) {
+				nextType(1);
+			}
+		}
+		if (mouse.getZSpeed() < 0) {
+			for (int i = 0; i < -mouse.getZSpeed(); i++) {
+				nextType(-1);
 			}
 		}
 
@@ -323,6 +308,16 @@ public class Renderer {
 		if (mouse.isRightButtonClicked()) {
 			Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), this, scene);
 			if (clickedTile != null) {
+				if (clickedTile.getSubInstances() == null) {
+					GameOptions.selectedInstance = clickedTile;
+				} else {
+					for (Instance sub : clickedTile.getSubInstances()) {
+						GameOptions.selectedInstance = sub;
+						break;
+					}
+				}
+			}
+			/*if (clickedTile != null) {
 				//scene.setFacePartOverlay(clickedTile.getTileMesh());
 				Data.addScriptRun(new ScriptRun(
 						Data.getMainInstance(),
@@ -330,10 +325,30 @@ public class Renderer {
 						new Variable[]{
 								new Variable(clickedTile),
 								new Variable(Data.getContainer(GameOptions.currentContainerId))}));
-			}
+			}*/
 		}
 
 		mouse.flush();
+	}
+
+	private void nextType(int direction) {
+		int id = GameOptions.currentContainerId + direction;
+		while (true) {
+			if (id < 0) {
+				id += GameConstants.MAX_CONTAINERS;
+			} else if (id >= GameConstants.MAX_CONTAINERS) {
+				id -= GameConstants.MAX_CONTAINERS;
+			}
+
+			Container container = Data.getContainer(id);
+			if (container != null) {
+				if (container.getType() == DataType.CREATURE || container.getType() == DataType.FORMATION || container.getType() == DataType.ENTITY) {
+					GameOptions.currentContainerId = id;
+					break;
+				}
+			}
+			id += direction;
+		}
 	}
 
 	// ###################################################################################

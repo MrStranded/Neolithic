@@ -1,9 +1,12 @@
 package engine.graphics.gui;
 
 import engine.data.Data;
+import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
 import engine.data.proto.Container;
+import engine.data.proto.ProtoAttribute;
+import engine.data.structures.trees.binary.BinaryTree;
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.gui.TextObject;
 import engine.graphics.objects.textures.FontTexture;
@@ -18,6 +21,7 @@ public class BaseGUI implements GUIInterface {
 
 	private final int MAX_OBJECTS = 32;
 	private int objectCounter = 0;
+	private int yPos = 0;
 
 	public BaseGUI() {
 		objects = new GUIObject[MAX_OBJECTS];
@@ -62,70 +66,46 @@ public class BaseGUI implements GUIInterface {
 		selection.recalculateScale(windowWidth, windowHeight);
 		addHUDObject(selection);
 
-		if (true || !GameOptions.runTicks) {
-			return;
+		if (GameOptions.selectedInstance != null && !GameOptions.selectedInstance.isSlatedForRemoval()) {
+			yPos = 0;
+			printInstance(GameOptions.selectedInstance, windowWidth, windowHeight);
 		}
+	}
 
-		int slot = 0;
+	private void printInstance(Instance instance, int windowWidth, int windowHeight) {
+		if (instance != null) {
+			yPos = printInfo(instance.getName() + " on " + instance.getPosition(), windowWidth, windowHeight, yPos);
 
-		List<Integer> attributes = Data.getAllAttributeIDs();
-		double nrOfAtts = attributes.size();
-		List<Instance> humans = Data.getAllInstancesWithID(Data.getContainerID("cTiger"));
-		double headcount = humans.size();
-		if (nrOfAtts == 0 || headcount == 0) {
-			GUIObject dead = new TextObject("Everybody died", fontTexture);
-			dead.setSize(windowWidth/2, 60);
-			dead.setLocation(windowWidth/4, 250);
-			dead.recalculateScale(windowWidth, windowHeight);
-			addHUDObject(dead);
-			return;
-		}
+			BinaryTree<Attribute> tree = instance.getAttributes();
+			if (tree != null) {
+				tree.forEach(idInterface -> {
+					Attribute attribute = (Attribute) idInterface;
+					ProtoAttribute protoAttribute = Data.getProtoAttribute(attribute.getId());
 
-		int sleepingID = Data.getProtoAttributeID("attSleeping");
-
-		for (Integer id : attributes) {
-			double sum = 0;
-			for (Instance human : humans) {
-				sum += human.getAttributeValue(id);
+					yPos = printInfo(protoAttribute.getName() + ": " + instance.getAttributeValue(attribute.getId()), windowWidth, windowHeight, yPos);
+				});
 			}
 
-			if (id == sleepingID) {
-				GUIObject sleepers = new TextObject("Sleeping: " + ((int) sum), fontTexture);
-				sleepers.setSize(windowWidth/4, 30);
-				sleepers.setLocation(windowWidth/2, 0);
-				sleepers.recalculateScale(windowWidth, windowHeight);
-				addHUDObject(sleepers);
-				GUIObject sleepers2 = new TextObject(" of: " + ((int) headcount), fontTexture);
-				sleepers2.setSize(windowWidth/4, 30);
-				sleepers2.setLocation(windowWidth*3/4, 0);
-				sleepers2.recalculateScale(windowWidth, windowHeight);
-				addHUDObject(sleepers2);
-			}
-
-			double yPos = ((double) (slot) / nrOfAtts) * windowHeight;
-			GUIObject out = new TextObject(Data.getProtoAttribute(id).getName() + ":   " + ((double) ((int) (sum/headcount*100d)) / 100d), fontTexture);
-
-			out.setSize(windowWidth/3d,windowHeight/nrOfAtts);
-			out.setLocation(0, yPos);
-			out.recalculateScale(windowWidth,windowHeight);
-
-			addHUDObject(out);
-
-			if (++slot >= MAX_OBJECTS) {
-				slot = 1;
+			List<Instance> subs = instance.getSubInstances();
+			if (subs != null) {
+				try {
+					for (Instance sub : subs) {
+						printInstance(sub, windowWidth, windowHeight);
+					}
+				} catch (Exception e) {
+					// a concurrent modification exception
+				}
 			}
 		}
+	}
 
-		double nrOfChildren = 0;
-		for (Instance human : humans) {
-			nrOfChildren += human.getAttributeValue(Data.getProtoAttributeID("attAge")) < human.getAttributeValue(Data.getProtoAttributeID("attMatureAge")) ? 1 : 0;
-		}
-
-		GUIObject children = new TextObject("Children: " + ((int) nrOfChildren), fontTexture);
-		children.setSize(windowWidth/4, 30);
-		children.setLocation(windowWidth/2, 30);
-		children.recalculateScale(windowWidth, windowHeight);
-		addHUDObject(children);
+	private int printInfo(String info, int windowWidth, int windowHeight, int yPos) {
+		GUIObject text = new TextObject(info, fontTexture);
+		text.setSize(windowWidth/4, windowHeight/32);
+		text.setLocation(0, yPos);
+		text.recalculateScale(windowWidth, windowHeight);
+		addHUDObject(text);
+		return yPos + windowHeight/32;
 	}
 
 	// ###################################################################################

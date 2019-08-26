@@ -1,5 +1,6 @@
 package engine.graphics.gui.statistics;
 
+import constants.GameConstants;
 import engine.data.Data;
 import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
@@ -29,12 +30,12 @@ public class StatisticsWindow {
 
         frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800,600);
+        frame.setPreferredSize(new Dimension(width+1,height+1));
 
-        Insets inset = frame.getInsets();
-        statistics = new StatisticsPanel(width - (inset.left + inset.right), height - (inset.top + inset.bottom));
+        statistics = new StatisticsPanel(width, height);
 
         frame.add(statistics);
+        frame.pack();
         frame.setVisible(true);
 
         attributePlotter = new AttributePlotter(statistics);
@@ -49,6 +50,15 @@ public class StatisticsWindow {
     }
 
     public void tick() {
+        for (int id = 0; id < GameConstants.MAX_ATTRIBUTES; id++) {
+            ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
+
+            if (protoAttribute != null && protoAttribute.getGuiColor() != null) {
+                double value = StatisticsData.getAverage(id);
+                statistics.fatMark(getRelativePosition(id, value), protoAttribute.getGuiColor(), 255);
+            }
+        }
+
         StatisticsData.clear();
         statistics.tick();
     }
@@ -57,12 +67,44 @@ public class StatisticsWindow {
         StatisticsData.add(instance.getId());
 
         if (instance.getId() == GameOptions.currentContainerId) {
-            attributePlotter.setCurrentInstance(instance);
+            /*attributePlotter.setCurrentInstance(instance);
             BinaryTree<Attribute> tree = instance.getAttributes();
             if (tree != null) {
                 tree.forEach(attributePlotter);
+            }*/
+            for (int id = 0; id < GameConstants.MAX_ATTRIBUTES; id++) {
+                ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
+
+                if (protoAttribute != null && protoAttribute.getGuiColor() != null) {
+                    double value = instance.getAttributeValue(id);
+
+                    statistics.mark(getRelativePosition(id, value), protoAttribute.getGuiColor(), 64);
+                }
             }
         }
+    }
+
+    private double getRelativePosition(int id, double value) {
+        ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
+
+        if (protoAttribute != null && protoAttribute.getGuiColor() != null) {
+            StatisticsData.registerAttributeValue(id, (int) value);
+            int lower, upper;
+            if (protoAttribute.isHasLowerBound()) {
+                lower = protoAttribute.getLowerBound();
+            } else {
+                lower = StatisticsData.getLowest(id);
+            }
+            if (protoAttribute.isHasUpperBound()) {
+                upper = protoAttribute.getUpperBound();
+            } else {
+                upper = StatisticsData.getHighest(id);
+            }
+            double d = upper - lower;
+            return value / d;
+        }
+
+        return -1;
     }
 
 }

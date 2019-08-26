@@ -22,11 +22,18 @@ public class StatisticsPanel extends JPanel {
         img = new BufferedImage(width, height-border, BufferedImage.TYPE_INT_RGB);
     }
 
-    public void mark(double relativeHeight, Color color) {
-        int y = (int) ((height - border - 1) * (1 - relativeHeight)) + 1;
+    public void mark(double relativeHeight, Color color, int alpha) {
+        int y = (int) ((height - border - 1) * (1 - relativeHeight));
         Graphics g = img.getGraphics();
-        g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 128));
+        g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
         g.drawRect(currentPosition, y, 1, 1);
+    }
+
+    public void fatMark(double relativeHeight, Color color, int alpha) {
+        int y = (int) ((height - border - 1) * (1 - relativeHeight));
+        Graphics g = img.getGraphics();
+        g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
+        g.drawRect(currentPosition, y-1, 1, 3);
     }
 
     public void tick() {
