@@ -1,8 +1,12 @@
 package engine.graphics.gui.statistics;
 
 import engine.data.Data;
+import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
+import engine.data.proto.ProtoAttribute;
+import engine.data.structures.Registrator;
+import engine.data.structures.trees.binary.BinaryTree;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +21,8 @@ public class StatisticsWindow {
     private JLabel currentType;
     private StatisticsPanel statistics;
 
+    private AttributePlotter attributePlotter;
+
     public StatisticsWindow(int width, int height, String title) {
         this.width = width;
         this.height = height;
@@ -27,9 +33,11 @@ public class StatisticsWindow {
 
         Insets inset = frame.getInsets();
         statistics = new StatisticsPanel(width - (inset.left + inset.right), height - (inset.top + inset.bottom));
-        frame.add(statistics);
 
+        frame.add(statistics);
         frame.setVisible(true);
+
+        attributePlotter = new AttributePlotter(statistics);
     }
 
     public void close() {
@@ -49,8 +57,11 @@ public class StatisticsWindow {
         StatisticsData.add(instance.getId());
 
         if (instance.getId() == GameOptions.currentContainerId) {
-            double nut = instance.getAttributeValue(Data.getProtoAttributeID("attNutrition"));
-            statistics.mark(nut / 200);
+            attributePlotter.setCurrentInstance(instance);
+            BinaryTree<Attribute> tree = instance.getAttributes();
+            if (tree != null) {
+                tree.forEach(attributePlotter);
+            }
         }
     }
 

@@ -77,10 +77,23 @@ Attribute: attPride {
 
 // life
 Attribute: attHealth { name = "Health"; }
-Attribute: attNutrition { name = "Nutrition"; }
-Attribute: attSleeping { name = "Sleeping"; }
+Attribute: attNutrition {
+    name = "Nutrition";
+    lower = 0;
+    color = 255, 0, 0;
+}
+Attribute: attSleeping {
+    name = "Sleeping";
+    lower = 0;
+    upper = 2;
+    color = 0, 0, 255;
+}
 Attribute: attAge { name = "Age"; }
-Attribute: attFatigue { name = "Fatigue"; }
+Attribute: attFatigue {
+    name = "Fatigue";
+    bounds = 0, 500;
+    color = 0, 255, 0;
+}
 Attribute: attVegetarian { name = "Vegetarian"; }
 Attribute: attMeat { name = "Meat"; }
 

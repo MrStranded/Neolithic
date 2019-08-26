@@ -11,6 +11,7 @@ public class StatisticsPanel extends JPanel {
 
     private int currentPosition = 0;
     private int width, height;
+    private int border = 30;
     private BufferedImage img;
 
     public StatisticsPanel(int width, int height) {
@@ -18,13 +19,13 @@ public class StatisticsPanel extends JPanel {
 
         this.width = width;
         this.height = height;
-        img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        img = new BufferedImage(width, height-border, BufferedImage.TYPE_INT_RGB);
     }
 
-    public void mark(double relativeHeight) {
-        int y = (int) (height * (1 - relativeHeight));
+    public void mark(double relativeHeight, Color color) {
+        int y = (int) ((height - border - 1) * (1 - relativeHeight)) + 1;
         Graphics g = img.getGraphics();
-        g.setColor(new Color(0,0,0));
+        g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 128));
         g.drawRect(currentPosition, y, 1, 1);
     }
 
@@ -33,18 +34,21 @@ public class StatisticsPanel extends JPanel {
 
         Graphics g = img.getGraphics();
         g.setColor(new Color(255,255,255));
-        g.drawRect(currentPosition, 0, 1, height);
+        g.drawRect(currentPosition, 0, 1, height - border);
 
         g.setColor(new Color(255, 150, 100));
-        g.drawRect((currentPosition + 1) % width, 0 , 1, height);
+        g.drawRect((currentPosition + 1) % width, 0 , 1, height - border);
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        g.drawImage(img, 0,0, null);
+        g.clearRect(0,0,width,height);
+        g.drawImage(img, 0,border, null);
 
         engine.data.proto.Container container = Data.getContainer(GameOptions.currentContainerId);
         if (container != null) {
+            g.setColor(new Color(200, 200, 200));
+            g.drawRect(0,0,width,border);
             g.setColor(new Color(0,0,0));
             g.drawString("Current selection: " + container.getName(), 10, 20);
             g.drawString("Count: " + StatisticsData.getCount(GameOptions.currentContainerId), width/2 + 10, 20);

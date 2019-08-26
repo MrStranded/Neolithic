@@ -16,7 +16,7 @@ public class ProtoAttribute {
 	private boolean hasUpperBound = false;
 	private int upperBound = 0;
 
-	private Color guiColor = new Color(0,0,0);
+	private Color guiColor = null;
 
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################

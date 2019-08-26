@@ -505,6 +505,10 @@ public class Instance {
         return null;
     }
 
+	public BinaryTree<Attribute> getAttributes() {
+		return attributes;
+	}
+
 	public Attribute getAttribute(int attributeID) {
 		createAttributesIfNecessary();
 
