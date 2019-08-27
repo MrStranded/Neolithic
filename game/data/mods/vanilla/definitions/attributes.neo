@@ -79,7 +79,7 @@ Attribute: attPride {
 Attribute: attHealth {
     name = "Health";
     lower = 0;
-    upper = 200;
+    upper = 300;
     color = 100, 100, 100;
 }
 Attribute: attNutrition {

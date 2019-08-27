@@ -275,6 +275,10 @@ public class Renderer {
 		if (keyboard.isClicked(GLFW.GLFW_KEY_SPACE)) {
 			GameOptions.runTicks = !GameOptions.runTicks;
 		}
+		if (keyboard.isClicked(GLFW.GLFW_KEY_PERIOD)) {
+		    GameOptions.runTicks = true;
+		    GameOptions.stopAtNextTick = true;
+        }
 
 		if (keyboard.isClicked(GLFW.GLFW_KEY_UP)) {
 			nextType(1);

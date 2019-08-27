@@ -15,7 +15,6 @@ Effect: effBite {
                     ..attHealth++;
                 }
             } else {
-                ..attHealth--;
                 carrier..attFatigue++;
             }
         }
@@ -55,11 +54,14 @@ Process: proCollectMeat {
 	    print(self + " hunts " + ->target);
         tile = moveTo(self, ->target, .attSpeed);
         if (getTile(->target) == tile) {
-            print("reached target");
+            print("bites target");
 
-            //bite = addEffect(->target, effBite);
-            //bite..attHealth = - .attBiteSize;
-            (->target)->consume(self);
+            bite = addEffect(->target, effBite);
+            bite..attHealth = - .attBiteSize;
+            if (->target.attHealth <= 0) {
+                ->target->consume(self);
+                ->target = false;
+            }
         }
     }
 }

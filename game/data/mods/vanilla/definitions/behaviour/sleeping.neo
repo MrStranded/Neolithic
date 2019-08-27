@@ -33,6 +33,10 @@ Drive: driSleep {
 ///////////////////////////////////////////////////////////////////////////// Processes
 
 Process: proSleep {
+    Script: condition {
+        require(getHeight(self) > getWaterHeight(self));
+    }
+
 	Script: process {
         //deleteEffects(self, effHunger);
 	    //addOccupation(self, .attSleepTime, proSleep->awake);

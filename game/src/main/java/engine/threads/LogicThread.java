@@ -45,6 +45,10 @@ public class LogicThread extends Thread {
 							lastSize = 0;
 
 							GuiData.getStatisticsWindow().tick();
+							if (GameOptions.stopAtNextTick) {
+								GameOptions.stopAtNextTick = false;
+								GameOptions.runTicks = false;
+							}
 						}
 
 						// treating the instance itself

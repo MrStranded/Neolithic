@@ -30,13 +30,14 @@ public class StatisticsWindow {
 
         frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(width+1,height+1));
+        frame.setSize(new Dimension(width,height));
+        frame.setVisible(true);
 
-        statistics = new StatisticsPanel(width, height);
+        Insets insets = frame.getInsets();
+        statistics = new StatisticsPanel(width - (insets.left + insets.right), height - (insets.top + insets.bottom));
 
         frame.add(statistics);
-        frame.pack();
-        frame.setVisible(true);
+        frame.repaint();
 
         attributePlotter = new AttributePlotter(statistics);
     }
