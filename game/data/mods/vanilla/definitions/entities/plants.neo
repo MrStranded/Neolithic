@@ -32,7 +32,7 @@ Creature: cAppleTree {
 		attSize, 60;
 	    attMatureAge, 2880;
 	    attLightSensitivity, 20;
-	    attBabySize, 30;
+	    attBabySize, 100;
 	}
 
 	Script: tick {
@@ -168,6 +168,7 @@ Process: proPhotoSynthesis {
 	Script: condition {
 		require(getLightLevel(self) + getTile(self).attLightLevel >= .attLightSensitivity);
 		require(.attAge >= .attMatureAge);
+		require(.attNutrition < .attBabySize*3);
 	}
 	Script: process {
 		..attNutrition++;

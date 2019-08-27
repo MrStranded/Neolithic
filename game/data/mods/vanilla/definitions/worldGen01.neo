@@ -30,7 +30,7 @@ WorldGen: genContinental {
 
 Formation: formMountain {
 	Script: place(tile) {
-		height = random(220,250);
+		height = random(220,420);
 		self->lift(tile, height);
 	}
 

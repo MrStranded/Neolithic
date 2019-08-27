@@ -29,7 +29,7 @@ public class StatisticsWindow {
         frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        statistics = new StatisticsPanel(width, height/2);
+        statistics = new StatisticsPanel(width, height);
         currentType = new JLabel("Current type: ");
         currentType.setPreferredSize(new Dimension(width, 30));
         options = new JPanel();

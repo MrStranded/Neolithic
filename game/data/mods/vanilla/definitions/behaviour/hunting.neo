@@ -45,6 +45,7 @@ Process: proEatMeat {
 Process: proCollectMeat {
     Script: condition {
         if (! ->target) {
+            print(self + " searching for target");
             creatures = getInstancesInRange(getType(self), getTile(self), .attViewingDistance);
             backup = false;
             for (creature : creatures) {
@@ -57,10 +58,11 @@ Process: proCollectMeat {
                     }
                 }
             }
-            if (backup && .attNutrition == 0) {
+            if (! ->target && backup && .attNutrition == 0) {
                 ->target = backup;
             }
         }
+        print("target: " + ->target);
         require(->target);
     }
 

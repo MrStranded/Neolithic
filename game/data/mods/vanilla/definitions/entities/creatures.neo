@@ -14,6 +14,7 @@ Creature: cHuman inherits cLandAnimal, bHerbivore {
         attMatureAge, 1000;
 
         attBabySize, 50;
+        attEfficiency, 50;
 
         attLightSensitivity, 42;
         attHungerSensitivity, 111;
@@ -71,6 +72,7 @@ Creature: cTiger inherits cLandAnimal, bCarnivore {
 
         attBabySize, 100;
         attBiteSize, 30;
+        attEfficiency, 80;
 
         attLightSensitivity, 10;
         attHungerSensitivity, 100;

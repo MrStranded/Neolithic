@@ -462,10 +462,11 @@ public class CommandExecuter {
 
                 checkValue(script, commandNode, tile, "target tile");
 
-				Vector3 sunPosition = Data.getSun().getGraphicalObject().getPosition().normalize();
+				Vector3 sunPosition = Data.getSun().getGraphicalObject().getPosition();//.normalize();
 				Vector3 tilePosition = tile.getTileMesh().getNormal();
 
-				double dotProduct = sunPosition.dot(tilePosition); // ranges from -1 to 1
+				double dotProduct = sunPosition.dot(tilePosition); // ranges from -sunPosition.length^2 to sunPosition.length^2
+				dotProduct = Math.signum(dotProduct) * dotProduct*dotProduct / sunPosition.lengthSquared();
 
 				return new Variable(50d * (dotProduct + 1d)); // ranges from 0 to 100
 			}

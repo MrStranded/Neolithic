@@ -59,9 +59,12 @@ Effect: effDigest {
     }
 
     Script: tick(carrier) {
-        ..attNutrition -= 2;
-        carrier..attNutrition++;
-        ->shit..attNutrition++;
+        ..attNutrition--;
+        if (chance(carrier.attEfficiency / 100)) {
+            carrier..attNutrition++;
+        } else {
+            ->shit..attNutrition++;
+        }
     }
     Script: removeCondition() { require(.attNutrition <= 0); }
 

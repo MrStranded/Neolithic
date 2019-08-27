@@ -10,6 +10,7 @@ Attribute: attLightSensitivity {
     inherited;
     mutationChance = 50;
     mutationExtent = 20;
+    color = 128, 255, 0;
 }
 Attribute: attHungerSensitivity {
     name = "Hunger sensitivity";
@@ -28,13 +29,20 @@ Attribute: attBiteSize {
     inherited;
     mutation = 50, 10;
 }
+Attribute: attEfficiency {
+    name = "Digestive efficiency";
+    inherited;
+    mutation = 50, 3;
+    bounds = 0,100;
+    color = 255, 255, 0;
+}
 
 // reproduction
 Attribute: attLibido {
     name = "Libido";
     inherited;
     mutation = 100, 20;
-    color = 255, 255, 0;
+    color = 255, 0, 255;
 }
 Attribute: attBabySize {
     name = "Baby size";
