@@ -230,7 +230,7 @@ public class Variable implements IDInterface {
 			case STRING:
 				return (String) value;
 			case CONTAINER:
-				return ((Container) value).getName();
+				return value != null ? ((Container) value).getName() : "(NULL CONTAINER)";
 			case INSTANCE:
 				return ((Instance) value).getName();
 			case ATTRIBUTE:

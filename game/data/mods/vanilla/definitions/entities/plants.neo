@@ -203,7 +203,7 @@ Process: proGrowIntoTree {
         require(isOnFloor(self));
         require(getLightLevel(self) >= .attLightSensitivity);
         require(getFullAtt(tile, "attSize") + ->treeType.attSize <= 100);
-        require(getHeight(self) >= 100);
+        require(getHeight(self) >= getWaterHeight(self));
         require(tile.attNutrition >= .attBabySize);
     }
     Script: process {

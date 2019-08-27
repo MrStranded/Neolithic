@@ -66,6 +66,8 @@ public enum TokenConstants {
 	ABSOLUTE        (TokenType.COMMAND, "abs"),
 	MAX				(TokenType.COMMAND, "max"),
 	MIN				(TokenType.COMMAND, "min"),
+	FLOOR			(TokenType.COMMAND, "floor"),
+	CEIL			(TokenType.COMMAND, "ceil"),
 
 	// -------------------------------------------------- Entity Manipulation
 	CHANGE                  (TokenType.COMMAND, "change"),
@@ -84,6 +86,7 @@ public enum TokenConstants {
 	CREATE_FORMATION    (TokenType.COMMAND, "createFormation"),
 	FIT_TILES           (TokenType.COMMAND, "fitTiles"),
 	SET_HEIGHT          (TokenType.COMMAND, "setHeight"),
+	SET_WATER_HEIGHT    (TokenType.COMMAND, "setWaterHeight"),
 	SET_WATER_LEVEL     (TokenType.COMMAND, "setWaterLevel"),
     SET_SUN_ANGLE       (TokenType.COMMAND, "setSunAngle"),
 	UPDATE_PLANET_MESH	(TokenType.COMMAND, "updatePlanetMesh"),
@@ -93,6 +96,7 @@ public enum TokenConstants {
 	GET_ATTRIBUTE_IN_RANGE  (TokenType.COMMAND, "getAttInRange"),
 	GET_INSTANCE_IN_RANGE	(TokenType.COMMAND, "getInstanceInRange"), // deprecated
     GET_INSTANCES_IN_RANGE	(TokenType.COMMAND, "getInstancesInRange"),
+	GET_EFFECT              (TokenType.COMMAND, "getEffect"),
     GET_EFFECTS             (TokenType.COMMAND, "getEffects"),
 	GET_FULL_ATTRIBUTE      (TokenType.COMMAND, "getFullAtt"),
 	GET_HEIGHT              (TokenType.COMMAND, "getHeight"),
@@ -106,6 +110,7 @@ public enum TokenConstants {
 	GET_TILES_IN_RANGE      (TokenType.COMMAND, "getTilesInRange"),
 	GET_TYPE				(TokenType.COMMAND, "getType"),
 	GET_WATER_HEIGHT        (TokenType.COMMAND, "getWaterHeight"),
+	HAS_EFFECT              (TokenType.COMMAND, "hasEffect"),
 	IS_ON_FLOOR				(TokenType.COMMAND, "isOnFloor"),
 	IS_NEIGHBOUR            (TokenType.COMMAND, "isNeighbor"),
 	RANDOM_TILE             (TokenType.COMMAND, "randomTile"),
@@ -124,6 +129,7 @@ public enum TokenConstants {
 
     // -------------------------------------------------- Lists
     LENGTH          (TokenType.COMMAND, "length"),
+	CONTAINS		(TokenType.COMMAND, "contains"),
 
 	// -------------------------------------------------- Iterators
 	EACH_TILE       (TokenType.COMMAND, "eachTile"),

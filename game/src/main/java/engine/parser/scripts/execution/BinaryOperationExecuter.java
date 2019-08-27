@@ -6,6 +6,7 @@ import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
+import engine.parser.scripts.nodes.AbstractScriptNode;
 import engine.parser.scripts.nodes.BinaryExpressionNode;
 import engine.parser.scripts.nodes.IdentifierNode;
 import engine.parser.scripts.nodes.ScriptCallNode;
@@ -145,6 +146,19 @@ public class BinaryOperationExecuter {
 				return left;
 			} else if (left.getType() == DataType.ATTRIBUTE) { // attribute addition
 				return left.quickSetAttributeValue(left.getDouble() + right.getDouble());
+			} else if (left.getType() == DataType.LIST) { // list concatenation
+				if (right.getType() == DataType.LIST) { // merge two lists
+					List<Variable> leftList = left.getList();
+					List<Variable> rightList = right.getList();
+					leftList.addAll(rightList);
+					left.setList(leftList);
+					return left;
+				} else { // add element to list
+					List<Variable> leftList = left.getList();
+					leftList.add(right);
+					left.setList(leftList);
+					return left;
+				}
 			} else { // string concatenation
 				left.setString(left.getString() + right.getString());
 				return left;

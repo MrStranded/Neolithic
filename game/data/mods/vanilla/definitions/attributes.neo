@@ -4,6 +4,7 @@ Attribute: attMatureAge {
     inherited;
     mutation = 100, 500;
     color = 0, 64, 128;
+    lower = 0;
 }
 Attribute: attLightSensitivity {
     name = "Light sensitivity";
@@ -117,3 +118,7 @@ Attribute: attMeat { name = "Meat"; }
 Attribute: attHumidity { name = "Humidity"; }
 Attribute: attSize { name = "Size"; }
 Attribute: attLightLevel { name = "Light level"; }
+Attribute: attWater {
+    name = "Water";
+    color = 20, 100, 220;
+}

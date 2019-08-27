@@ -28,6 +28,32 @@ WorldGen: genContinental {
 	}
 }
 
+Formation: formRiver {
+    Script: place(tile) {
+        self->carve(tile, []);
+    }
+
+    Script: carve(tile, riverTiles) {
+        lowest = 0;
+        for (n : getNeighbors(tile)) {
+            if (!contains(riverTiles, n)) {
+                if (lowest == 0 || getHeight(n) < lowest) {
+                    lowest = getHeight(n);
+                    next = n;
+                }
+            }
+        }
+
+        if (lowest >= 90) {
+            setHeight(tile, lowest - 10);
+            setWaterHeight(tile, max(lowest - 5, 100));
+            riverTiles += [tile];
+
+            self->carve(next, riverTiles);
+        }
+    }
+}
+
 Formation: formMountain {
 	Script: place(tile) {
 		height = random(220,420);

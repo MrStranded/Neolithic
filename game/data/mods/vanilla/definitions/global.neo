@@ -28,7 +28,7 @@ Script: setTime (hour, minute) {
 
 Script: repopulate() {
 	for (t : eachTile()) {
-		if (getHeight(t) > 100) {
+		if (getHeight(t) > getWaterHeight(t)) {
 			if (chance(0.01)) {
 				human = create(cHuman, t);
 				human..attAge += random(human.attMatureAge);

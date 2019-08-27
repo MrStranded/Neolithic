@@ -13,8 +13,9 @@ Effect: effSleep {
             return(true);
         }
 
-        require(getLightLevel(carrier) > carrier.attLightSensitivity);// && carrier.attFatigue < carrier.attFatigueSensitivity);
-        require(carrier.attFatigue <= 0);
+        lightLevel = getLightLevel(carrier) + getTile(carrier).attLightLevel;
+        require(lightLevel > carrier.attLightSensitivity);// && carrier.attFatigue < carrier.attFatigueSensitivity);
+        require(carrier.attFatigue <= carrier.attFatigueSensitivity*lightLevel/100);
     }
 }
 

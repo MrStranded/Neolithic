@@ -7,6 +7,7 @@ import engine.data.Data;
 import engine.data.proto.TileContainer;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.renderer.color.RGBA;
+import engine.logic.topology.Neighbour;
 
 public class Tile extends Instance implements IDInterface {
 
@@ -107,20 +108,38 @@ public class Tile extends Instance implements IDInterface {
 		return height;
 	}
 	public void setHeight(int height) {
-		if (tileMesh != null) {
-			tileMesh.setChanged(this.height != height);
-		}
+		boolean hasChanged = (this.height != height);
 		this.height = height;
+		if (hasChanged) {
+			setChanged(true);
+			for (Tile neighbour : Neighbour.getNeighbours(this)) {
+				if (neighbour != null) {
+					neighbour.setChanged(true);
+				}
+			}
+		}
 	}
 
 	public int getWaterHeight() {
 		return waterHeight;
 	}
 	public void setWaterHeight(int waterHeight) {
-		if (tileMesh != null) {
-			tileMesh.setChanged(this.waterHeight != waterHeight);
-		}
+		boolean hasChanged = (this.waterHeight != waterHeight);
 		this.waterHeight = waterHeight;
+		if (hasChanged) {
+			setChanged(true);
+			for (Tile neighbour : Neighbour.getNeighbours(this)) {
+				if (neighbour != null) {
+					neighbour.setChanged(true);
+				}
+			}
+		}
+	}
+
+	public void setChanged(boolean changed) {
+		if (tileMesh != null) {
+			tileMesh.setChanged(changed);
+		}
 	}
 
 	public RGBA getTopColor() {

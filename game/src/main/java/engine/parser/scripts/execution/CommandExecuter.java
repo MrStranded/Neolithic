@@ -146,6 +146,12 @@ public class CommandExecuter {
                 target.addOccupation(duration, null);
             }
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int ceil ()
+		} else if (TokenConstants.CEIL.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				return new Variable(Math.ceil(parameters[0].getDouble()));
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double chance (double probability)
 		} else if (TokenConstants.CHANCE.equals(command)) {
 			if (requireParameters(commandNode, 1)) {
@@ -177,7 +183,27 @@ public class CommandExecuter {
                 double angle = parameters[0].getDouble();
 
                 Data.getSun().changeAngle(angle);
+
+				return new Variable(0);
             }
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& boolean contains (List list, Variable element)
+		} else if (TokenConstants.CONTAINS.equals(command)) {
+			if (requireParameters(commandNode, 2)) {
+				List<Variable> list = parameters[0].getList();
+				Variable element = parameters[1];
+
+				checkValue(script, commandNode, list, "list");
+				checkValue(script, commandNode, element, "search element");
+
+				for (Variable variable : list) {
+					if (variable != null && variable.equals(element)) {
+						return new Variable(1);
+					}
+				}
+
+				return new Variable(0);
+			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance create (Container container, Instance holder)
 		} else if (TokenConstants.CREATE.equals(command)) {
@@ -256,6 +282,12 @@ public class CommandExecuter {
 				TopologyGenerator.fitTiles(Data.getPlanet());
 			}
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int floor ()
+		} else if (TokenConstants.FLOOR.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				return new Variable(Math.floor(parameters[0].getDouble()));
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getAttributeValue ([Instance instance,] String attribute)
 		} else if (TokenConstants.GET_ATTRIBUTE.equals(command)) {
 			if (parameters.length >= 2) {
@@ -322,6 +354,25 @@ public class CommandExecuter {
 					}
 				}
 				return new Variable();
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Effect getEffect (Instance target, Container effectContainer)
+		} else if (TokenConstants.GET_EFFECT.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				Instance target = parameters[0].getInstance();
+				int containerID = parameters.length >= 2 ? parameters[1].getContainerId() : -1;
+
+				checkValue(script, commandNode, target, "target instance");
+
+				List<Variable> effects = new ArrayList<>();
+				if (target.getEffects() != null) {
+					for (Instance effect : target.getEffects()) {
+						if ((containerID == -1) || (containerID == effect.getId())) {
+							return new Variable(effect);
+						}
+					}
+				}
+				return new Variable(0);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& List<Instance> getEffects (Instance target, Container effectContainer)
@@ -540,6 +591,24 @@ public class CommandExecuter {
 				checkValue(script, commandNode, tile, "target tile");
 
 				return new Variable(tile.getWaterHeight());
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& boolean hasEffect (Instance target, Container effectContainer)
+		} else if (TokenConstants.HAS_EFFECT.equals(command)) {
+			if (requireParameters(commandNode, 1)) {
+				Instance target = parameters[0].getInstance();
+				int containerID = parameters.length >= 2 ? parameters[1].getContainerId() : -1;
+
+				checkValue(script, commandNode, target, "target instance");
+
+				if (target.getEffects() != null) {
+					for (Instance effect : target.getEffects()) {
+						if ((containerID == -1) || (containerID == effect.getId())) {
+							return new Variable(1);
+						}
+					}
+				}
+				return new Variable(0);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list<tile> isNeighbor (Tile origin, Tile target)
@@ -806,6 +875,21 @@ public class CommandExecuter {
 
                 return new Variable("Semira <3");
             }
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int setWaterHeight (int height)
+		} else if (TokenConstants.SET_WATER_HEIGHT.equals(command)) {
+			if (requireParameters(commandNode, 2)) {
+				Tile tile = parameters[0].getTile();
+				int height = parameters[1].getInt();
+
+				if (tile != null) {
+					if (height < 0) { height = 0; }
+					if (height > TopologyConstants.PLANET_MAXIMUM_HEIGHT) { height = (int) TopologyConstants.PLANET_MAXIMUM_HEIGHT; }
+					tile.setWaterHeight(height);
+
+					return new Variable(height);
+				}
+			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int setWaterLevel (int level)
 		} else if (TokenConstants.SET_WATER_LEVEL.equals(command)) {
