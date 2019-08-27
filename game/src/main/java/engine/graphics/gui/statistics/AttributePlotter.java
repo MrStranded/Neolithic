@@ -27,25 +27,8 @@ public class AttributePlotter implements Registrator {
         }
 
         Attribute attribute = (Attribute) idInterface;
-        ProtoAttribute protoAttribute = Data.getProtoAttribute(attribute.getId());
-
-        if (protoAttribute != null && protoAttribute.getGuiColor() != null) {
-            StatisticsData.registerAttributeValue(attribute.getId(), attribute.getValue());
-            int lower, upper;
-            if (protoAttribute.isHasLowerBound()) {
-                lower = protoAttribute.getLowerBound();
-            } else {
-                lower = StatisticsData.getLowest(attribute.getId());
-            }
-            if (protoAttribute.isHasUpperBound()) {
-                upper = protoAttribute.getUpperBound();
-            } else {
-                upper = StatisticsData.getHighest(attribute.getId());
-            }
-            double d = upper - lower;
-            double value = currentInstance.getAttributeValue(attribute.getId());
-            statisticsPanel.mark(value / d, protoAttribute.getGuiColor(), 64);
-        }
+        StatisticsData.registerAttributeValue(attribute.getId(), attribute.getValue());
+        statisticsPanel.markAttribute(currentInstance, attribute.getId(), attribute.getValue());
     }
 
 }

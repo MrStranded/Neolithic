@@ -5,7 +5,6 @@ Creature: cLandAnimal {
 	name = "Land animal";
 
 	knowledge {
-		proEatVegetarian; proGatherFood; proPickUpFood;
 		proMate; proSearchMate;
 		proSleep;
 		proStroll;
@@ -17,6 +16,10 @@ Creature: cLandAnimal {
 		driSleep;
 		driMove;
 		driNotSitOnShit;
+	}
+
+	attributes {
+	    attMeat, 1;
 	}
 
 	Script: place {
@@ -38,6 +41,7 @@ Creature: cLandAnimal {
 		}
 
 		if (.attHealth < 0) { // death
+		    print(self + " died from death");
 		    destroy(self);
         }
 
@@ -59,6 +63,7 @@ Creature: cLandAnimal {
 	}
 
 	Script: consume(actor) {
+	    print("consume");
 	    effect = addEffect(actor, effDigest);
         effect..attNutrition = .attNutrition;
         /*for (item : getItems(self)) {

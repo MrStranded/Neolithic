@@ -190,9 +190,6 @@ public class Data {
 	 * @return next creature in queue
 	 */
 	public static Instance getNextInstance() {
-		if (instanceQueue.isEmpty()) {
-			return null;
-		}
 		return instanceQueue.poll();
 	}
 

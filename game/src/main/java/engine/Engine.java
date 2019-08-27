@@ -8,6 +8,8 @@ import engine.graphics.gui.GuiData;
 import engine.threads.LogicThread;
 import engine.parser.Parser;
 
+import java.awt.*;
+
 /**
  * The engine binds the whole thing together.
  * It controls game logic, data and visualisation.

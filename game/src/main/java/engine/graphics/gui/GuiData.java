@@ -5,7 +5,11 @@ import engine.graphics.gui.window.Window;
 import engine.graphics.objects.Scene;
 import engine.graphics.renderer.Renderer;
 
+import java.awt.*;
+
 public class GuiData {
+
+    private static Dimension screenSize;
 
     private static Renderer renderer;
     private static Window renderWindow;
@@ -19,13 +23,15 @@ public class GuiData {
     // ###################################################################################
 
     public static void initialize() {
-        renderWindow = new Window(800,600,"Neolithic");
-        renderWindow.initialize();
+        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        renderWindow = new Window((int) screenSize.getWidth()/2,(int) screenSize.getHeight()*3/4,"Neolithic");
+        //renderWindow.initialize();
 
         renderer = new Renderer(renderWindow);
-        renderer.initialize();
+        //renderer.initialize();
 
-        statisticsWindow = new StatisticsWindow(800, 600, "Statistics");
+        statisticsWindow = new StatisticsWindow((int) screenSize.getWidth()/2,(int) screenSize.getHeight()*3/4, "Statistics");
 
         scene = new Scene();
         hud = new BaseGUI();

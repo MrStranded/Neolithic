@@ -45,7 +45,21 @@ Process: proEatMeat {
 Process: proCollectMeat {
     Script: condition {
         if (! ->target) {
-            ->target = getAttInRange("attMeat", self, .attViewingDistance);
+            creatures = getInstancesInRange(getType(self), getTile(self), .attViewingDistance);
+            backup = false;
+            for (creature : creatures) {
+                if (creature != self) {
+                    if (getType(creature) != getType(self)) {
+                        ->target = creature;
+                        break;
+                    } else {
+                        backup = creature;
+                    }
+                }
+            }
+            if (backup && .attNutrition == 0) {
+                ->target = backup;
+            }
         }
         require(->target);
     }
@@ -59,7 +73,9 @@ Process: proCollectMeat {
             bite = addEffect(->target, effBite);
             bite..attHealth = - .attBiteSize;
             if (->target.attHealth <= 0) {
-                ->target->consume(self);
+                print("target died: " + ->target);
+                (->target)->consume(self);
+                print("after consume");
                 ->target = false;
             }
         }

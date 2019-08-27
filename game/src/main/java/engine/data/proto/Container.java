@@ -89,19 +89,25 @@ public class Container {
 	}
 
 	private void inheritAttributes(Container container) {
-		for (IDInterface attributeID : container.getAttributes()) {
-			addAttribute((Attribute) attributeID);
+		BinaryTree<Attribute> tree = container.getAttributes();
+		if (tree != null) {
+			tree.forEach(attributeIdentifier -> {
+				addAttribute((Attribute) attributeIdentifier);
+			});
 		}
 	}
 
 	private void inheritScripts(Container container) {
-		for (IDInterface scriptID : container.getScripts()) {
-			Script script = (Script) scriptID;
-			if (script != null) {
-				if (getScript(script.getTextId()) == null) {
-					addScript(script);
+		BinaryTree<Script> tree = container.getScripts();
+		if (tree != null) {
+			tree.forEach(scriptIdentifier -> {
+				Script script = (Script) scriptIdentifier;
+				if (script != null) {
+					if (getScript(script.getTextId()) == null) {
+						addScript(script);
+					}
 				}
-			}
+			});
 		}
 	}
 
@@ -138,8 +144,8 @@ public class Container {
 		return attribute != null? attribute.getValue() : 0;
 	}
 
-	public IDInterface[] getAttributes() {
-		return attributes.toArray();
+	public BinaryTree<Attribute> getAttributes() {
+		return attributes;
 	}
 
 	public void addAttribute(Attribute attribute) {
@@ -183,7 +189,7 @@ public class Container {
 		this.meshHub = meshHub;
 	}
 
-	public IDInterface[] getScripts() {
-		return scripts.toArray();
+	public BinaryTree<Script> getScripts() {
+		return scripts;
 	}
 }

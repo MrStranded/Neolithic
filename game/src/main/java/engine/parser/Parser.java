@@ -118,7 +118,7 @@ public class Parser {
 		while ((container = Data.getContainer(i++)) != null) {
 			System.out.println(container.getType() + ": " + container.getTextID() + ", " + container.getName());
 
-			IDInterface[] attributes = container.getAttributes();
+			IDInterface[] attributes = container.getAttributes().toArray();
 			if (attributes != null) {
 				for (IDInterface idInterface : attributes) {
 					Attribute attribute = (Attribute) idInterface;
@@ -143,7 +143,7 @@ public class Parser {
 				}
 			}
 
-			IDInterface[] scripts = container.getScripts();
+			IDInterface[] scripts = container.getScripts().toArray();
 			if (scripts != null) {
 				for (IDInterface idInterface : scripts) {
 					Script script = (Script) idInterface;

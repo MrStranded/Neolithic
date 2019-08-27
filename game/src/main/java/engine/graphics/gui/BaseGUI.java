@@ -19,7 +19,7 @@ public class BaseGUI implements GUIInterface {
 	private GUIObject[] objects;
 	private FontTexture fontTexture;
 
-	private final int MAX_OBJECTS = 32;
+	private final int MAX_OBJECTS = 64;
 	private int objectCounter = 0;
 	private int yPos = 0;
 

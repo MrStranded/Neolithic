@@ -21,6 +21,8 @@ public class Window {
 		this.title = title;
 		this.width = width;
 		this.height = height;
+
+		initialize();
 	}
 
 	public Window(int width, int height, String title, boolean centered, boolean resizable) {
@@ -30,6 +32,8 @@ public class Window {
 
 		this.centered = centered;
 		this.resizable = resizable;
+
+		initialize();
 	}
 
 	// ###################################################################################
@@ -116,8 +120,8 @@ public class Window {
 			if (centered) {
 				GLFW.glfwSetWindowPos(
 						window,
-						(vidmode.width() - pWidth.get(0)) / 2,
-						(vidmode.height() - pHeight.get(0)) / 2
+						(vidmode.width() /*- pWidth.get(0))*/ / 2),
+						/*(vidmode.height() - pHeight.get(0)) / 2*/30
 				);
 			}
 		} catch (Exception e) {

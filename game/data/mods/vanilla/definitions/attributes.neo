@@ -3,6 +3,7 @@ Attribute: attMatureAge {
     name = "Age of maturity";
     inherited;
     mutation = 100, 500;
+    color = 0, 64, 128;
 }
 Attribute: attLightSensitivity {
     name = "Light sensitivity";
@@ -14,11 +15,13 @@ Attribute: attHungerSensitivity {
     name = "Hunger sensitivity";
     inherited;
     mutation = 50, 20;
+    color = 128,0,0;
 }
 Attribute: attFatigueSensitivity {
     name = "Fatigue sensitivity";
     inherited;
     mutation = 50, 200;
+    color = 0, 128, 0;
 }
 Attribute: attBiteSize {
     name = "Bite size";
@@ -31,6 +34,7 @@ Attribute: attLibido {
     name = "Libido";
     inherited;
     mutation = 100, 20;
+    color = 255, 255, 0;
 }
 Attribute: attBabySize {
     name = "Baby size";
@@ -85,6 +89,7 @@ Attribute: attHealth {
 Attribute: attNutrition {
     name = "Nutrition";
     lower = 0;
+    upper = 1000;
     color = 255, 0, 0;
 }
 Attribute: attSleeping {
@@ -93,7 +98,10 @@ Attribute: attSleeping {
     upper = 1;
     color = 0, 0, 255;
 }
-Attribute: attAge { name = "Age"; }
+Attribute: attAge {
+    name = "Age";
+    color = 0, 128, 255;
+}
 Attribute: attFatigue {
     name = "Fatigue";
     bounds = 0, 500;

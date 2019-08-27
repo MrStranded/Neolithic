@@ -2,12 +2,9 @@ package engine.graphics.gui.statistics;
 
 import constants.GameConstants;
 import engine.data.Data;
-import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
 import engine.data.proto.ProtoAttribute;
-import engine.data.structures.Registrator;
-import engine.data.structures.trees.binary.BinaryTree;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,14 +27,16 @@ public class StatisticsWindow {
 
         frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(new Dimension(width,height));
-        frame.setVisible(true);
 
         Insets insets = frame.getInsets();
         statistics = new StatisticsPanel(width - (insets.left + insets.right), height - (insets.top + insets.bottom));
 
         frame.add(statistics);
-        frame.repaint();
+        frame.pack();
+        //frame.setSize(new Dimension(width,height));
+        frame.setVisible(true);
+
+        //frame.repaint();
 
         attributePlotter = new AttributePlotter(statistics);
     }
@@ -51,17 +50,8 @@ public class StatisticsWindow {
     }
 
     public void tick() {
-        for (int id = 0; id < GameConstants.MAX_ATTRIBUTES; id++) {
-            ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
-
-            if (protoAttribute != null && protoAttribute.getGuiColor() != null) {
-                double value = StatisticsData.getAverage(id);
-                statistics.fatMark(getRelativePosition(id, value), protoAttribute.getGuiColor(), 255);
-            }
-        }
-
-        StatisticsData.clear();
         statistics.tick();
+        StatisticsData.clear();
     }
 
     public void register(Instance instance) {
@@ -73,39 +63,8 @@ public class StatisticsWindow {
             if (tree != null) {
                 tree.forEach(attributePlotter);
             }*/
-            for (int id = 0; id < GameConstants.MAX_ATTRIBUTES; id++) {
-                ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
-
-                if (protoAttribute != null && protoAttribute.getGuiColor() != null) {
-                    double value = instance.getAttributeValue(id);
-
-                    statistics.mark(getRelativePosition(id, value), protoAttribute.getGuiColor(), 64);
-                }
-            }
+            statistics.register(instance);
         }
-    }
-
-    private double getRelativePosition(int id, double value) {
-        ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
-
-        if (protoAttribute != null && protoAttribute.getGuiColor() != null) {
-            StatisticsData.registerAttributeValue(id, (int) value);
-            int lower, upper;
-            if (protoAttribute.isHasLowerBound()) {
-                lower = protoAttribute.getLowerBound();
-            } else {
-                lower = StatisticsData.getLowest(id);
-            }
-            if (protoAttribute.isHasUpperBound()) {
-                upper = protoAttribute.getUpperBound();
-            } else {
-                upper = StatisticsData.getHighest(id);
-            }
-            double d = upper - lower;
-            return value / d;
-        }
-
-        return -1;
     }
 
 }

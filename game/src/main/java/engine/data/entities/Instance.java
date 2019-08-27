@@ -6,11 +6,8 @@ import engine.data.identifiers.ContainerIdentifier;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.planetary.Tile;
-import engine.data.proto.Container;
+import engine.data.proto.*;
 import engine.data.Data;
-import engine.data.proto.CreatureContainer;
-import engine.data.proto.DriveContainer;
-import engine.data.proto.ProcessContainer;
 import engine.data.scripts.Script;
 import engine.data.structures.WeightedList;
 import engine.data.structures.trees.binary.BinaryTree;
@@ -95,9 +92,12 @@ public class Instance {
 	    Container container = Data.getContainer(id);
 
 	    if (container != null) {
-	        for (IDInterface attributeID : container.getAttributes()) {
-	            addAttribute(attributeID.getId(), container.getAttributeValue(attributeID.getId()));
-            }
+	    	BinaryTree<Attribute> tree = container.getAttributes();
+	    	if (tree != null) {
+	    		tree.forEach(attributeID -> {
+					addAttribute(attributeID.getId(), container.getAttributeValue(attributeID.getId()));
+				});
+			}
         }
     }
 
@@ -321,6 +321,9 @@ public class Instance {
 	// ###################################################################################
 
 	public void render() {
+		if (slatedForRemoval) {
+			return;
+		}
 		// render self
 		if (getMeshHub() != null) { // we call getMeshHub() here, because it might have to be loaded from Data first
 			meshHub.registerObject(moveableObject);
@@ -491,11 +494,12 @@ public class Instance {
 	}
 
     public Instance getThisOrSubInstanceWithID(int containerID) {
+		if (slatedForRemoval) { return null; }
 	    if (id == containerID) { return this; }
 
 	    if (subInstances != null) {
 			for (Instance instance : subInstances) {
-				if (instance != null) {
+				if (instance != null && !instance.isSlatedForRemoval()) {
 					if (instance.getId() == containerID) {
 						return instance;
 					}
@@ -542,7 +546,7 @@ public class Instance {
 		int value = 0;
 
 		// values from self
-		value += getAttributeValue(attributeID);
+		value += getPersonalAttributeValue(attributeID);
 		// sub instances
 		if (subInstances != null) {
 			for (Instance sub : subInstances) {
@@ -555,7 +559,30 @@ public class Instance {
 	public int getPersonalAttributeValue(int attributeID) {
 		if (attributes == null) { return 0; }
 		Attribute attribute = attributes.get(attributeID);
-		return attribute != null? attribute.getValue() : 0;
+
+		if (attribute == null) { return 0; }
+
+		return attribute.getValue();
+	}
+
+	private int checkBounds(int attributeId, int value) {
+		Container container = Data.getContainer(id);
+		if (container == null || container.getType() != DataType.CREATURE) {
+			return value;
+		}
+
+		ProtoAttribute protoAttribute = Data.getProtoAttribute(attributeId);
+		if (protoAttribute == null) {
+			return value;
+		}
+
+		if (protoAttribute.hasLowerBound() && value < protoAttribute.getLowerBound()) {
+			value = protoAttribute.getLowerBound();
+		} else if (protoAttribute.hasUpperBound() && value > protoAttribute.getUpperBound()) {
+			value = protoAttribute.getUpperBound();
+		}
+
+		return value;
 	}
 
 	/**
@@ -568,16 +595,16 @@ public class Instance {
 			createAttributesIfNecessary();
 			Attribute attribute = attributes.get(attributeID);
 			if (attribute == null) {
-				attributes.insert(new Attribute(attributeID, value));
+				attributes.insert(new Attribute(attributeID, checkBounds(attributeID, value)));
 			} else {
-				attribute.setValue(value);
+				attribute.setValue(checkBounds(attributeID, value));
 			}
 		}
 	}
 	public void addAttribute(int attributeID, int value) {
 		if (attributeID >= 0) {
 			createAttributesIfNecessary();
-			attributes.insert(new Attribute(attributeID, value));
+			attributes.insert(new Attribute(attributeID, checkBounds(attributeID, value)));
 		}
 	}
 

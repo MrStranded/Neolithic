@@ -53,10 +53,10 @@ public class LogicThread extends Thread {
 
 						// treating the instance itself
 						if (instance != null) {
-							if (!instance.isSlatedForRemoval()) {
-								instance.tick();
-								GuiData.getStatisticsWindow().register(instance);
+							instance.tick();
+							GuiData.getStatisticsWindow().register(instance);
 
+							if (!instance.isSlatedForRemoval()) {
 								Data.addInstanceToQueue(instance);
 								instanceList.add(instance);
 								lastSize++;

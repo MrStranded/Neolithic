@@ -58,7 +58,7 @@ public class ProtoAttribute {
 		this.mutationExtent = mutationExtent;
 	}
 
-	public boolean isHasLowerBound() {
+	public boolean hasLowerBound() {
 		return hasLowerBound;
 	}
 	public void setHasLowerBound(boolean hasLowerBound) {
@@ -73,7 +73,7 @@ public class ProtoAttribute {
 		this.lowerBound = lowerBound;
 	}
 
-	public boolean isHasUpperBound() {
+	public boolean hasUpperBound() {
 		return hasUpperBound;
 	}
 	public void setHasUpperBound(boolean hasUpperBound) {

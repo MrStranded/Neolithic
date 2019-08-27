@@ -67,6 +67,8 @@ public class Renderer {
 	public Renderer(Window window) {
 		this.window = window;
 		window.setRenderer(this);
+
+		initialize();
 	}
 
 	// ###################################################################################
