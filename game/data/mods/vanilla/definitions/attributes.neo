@@ -82,29 +82,24 @@ Attribute: attPride {
 // life
 Attribute: attHealth {
     name = "Health";
-    lower = 0;
-    upper = 300;
     color = 100, 100, 100;
 }
 Attribute: attNutrition {
     name = "Nutrition";
-    lower = 0;
-    upper = 1000;
     color = 255, 0, 0;
 }
 Attribute: attSleeping {
     name = "Sleeping";
-    lower = 0;
-    upper = 1;
+    bounds = 0,1;
     color = 0, 0, 255;
 }
 Attribute: attAge {
     name = "Age";
+    lower = 0;
     color = 0, 128, 255;
 }
 Attribute: attFatigue {
     name = "Fatigue";
-    bounds = 0, 500;
     color = 0, 255, 0;
 }
 Attribute: attVegetarian { name = "Vegetarian"; }
@@ -113,3 +108,4 @@ Attribute: attMeat { name = "Meat"; }
 // environmental
 Attribute: attHumidity { name = "Humidity"; }
 Attribute: attSize { name = "Size"; }
+Attribute: attLightLevel { name = "Light level"; }

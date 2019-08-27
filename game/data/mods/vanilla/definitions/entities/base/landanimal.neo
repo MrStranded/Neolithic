@@ -28,24 +28,24 @@ Creature: cLandAnimal {
 	}
 
 	Script: tick {
-        if (..attNutrition > 0) {
-             ..attNutrition--;
+	    if (..attNutrition > 0) {
+            ..attNutrition--;
         }
 
 	    if (!(.attSleeping)) { // creature is awake
             ..attFatigue++;
 		} else {
 		    if (..attFatigue > 0) {
-		        ..attFatigue--;
+                ..attFatigue--;
             }
 		}
 
-		if (.attHealth < 0) { // death
+		if (.attHealth <= 0) { // death
 		    print(self + " died from death");
 		    destroy(self);
         }
 
-		if (.attAge > .attMatureAge*2) { // age death
+		if (.attAge >= .attMatureAge*2) { // age death
 		    if (chance(0.01) && !getEffects(self, effCancer)) {
                 addEffect(self, effCancer);
 		    }
@@ -74,4 +74,21 @@ Creature: cLandAnimal {
 		destroy(self);
 	}
 
+}
+
+///////////////////////////////////////////////////////////////////////////// Effects
+
+Effect: effCancer {
+    Script:tick(carrier) {
+        if (chance(0.01)) {
+            ..attHealth--;
+            if (..attHealth == -20) {
+                ..attSpeed--;
+            }
+        }
+    }
+
+    Script: removeCondition {
+        return(false);
+    }
 }

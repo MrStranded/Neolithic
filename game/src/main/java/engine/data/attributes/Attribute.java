@@ -2,12 +2,16 @@ package engine.data.attributes;
 
 import engine.data.Data;
 import engine.data.IDInterface;
+import engine.data.proto.Container;
+import engine.data.proto.ProtoAttribute;
+import engine.data.variables.DataType;
 
 public class Attribute implements IDInterface {
 
 	private int id;
 	private int value = 0;
 	private int variation = 0;
+	private boolean bounded = false;
 
 	public Attribute(int id) {
 		this.id = id;
@@ -16,12 +20,45 @@ public class Attribute implements IDInterface {
 	public Attribute(int id, int value) {
 		this.id = id;
 		this.value = value;
+
+		establishBoundedness();
 	}
 
 	public Attribute(int id, int value, int variation) {
 		this.id = id;
 		this.value = value;
 		this.variation = variation;
+
+		establishBoundedness();
+	}
+
+	// ###################################################################################
+	// ################################ Bounds ###########################################
+	// ###################################################################################
+
+	private void establishBoundedness() {
+		ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
+		if (protoAttribute != null) {
+			bounded = protoAttribute.hasLowerBound() || protoAttribute.hasUpperBound();
+		}
+	}
+
+	private void checkBounds() {
+		Container container = Data.getContainer(id);
+		if (container == null) {
+			return;
+		}
+
+		ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
+		if (protoAttribute == null) {
+			return;
+		}
+
+		if (protoAttribute.hasLowerBound() && value < protoAttribute.getLowerBound()) {
+			value = protoAttribute.getLowerBound();
+		} else if (protoAttribute.hasUpperBound() && value > protoAttribute.getUpperBound()) {
+			value = protoAttribute.getUpperBound();
+		}
 	}
 
 	// ###################################################################################
@@ -47,6 +84,18 @@ public class Attribute implements IDInterface {
 	}
 	public void setValue(int value) {
 		this.value = value;
+
+		if (bounded) { checkBounds(); }
+	}
+
+	public boolean isBounded() {
+		return bounded;
+	}
+
+	public void setBounded(boolean bounded) {
+		this.bounded = bounded;
+
+		if (bounded) { checkBounds(); }
 	}
 
 	@Override

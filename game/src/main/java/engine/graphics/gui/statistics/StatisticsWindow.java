@@ -18,6 +18,7 @@ public class StatisticsWindow {
     private JFrame frame;
     private JLabel currentType;
     private StatisticsPanel statistics;
+    private JPanel options;
 
     private AttributePlotter attributePlotter;
 
@@ -28,15 +29,19 @@ public class StatisticsWindow {
         frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Insets insets = frame.getInsets();
-        statistics = new StatisticsPanel(width - (insets.left + insets.right), height - (insets.top + insets.bottom));
+        statistics = new StatisticsPanel(width, height/2);
+        currentType = new JLabel("Current type: ");
+        currentType.setPreferredSize(new Dimension(width, 30));
+        options = new JPanel();
+        options.setPreferredSize(new Dimension(width, height/2));
 
+        /*frame.getContentPane().add(currentType);
+        frame.getContentPane().add(statistics);
+        frame.getContentPane().add(options);*/
         frame.add(statistics);
-        frame.pack();
-        //frame.setSize(new Dimension(width,height));
-        frame.setVisible(true);
 
-        //frame.repaint();
+        frame.pack();
+        frame.setVisible(true);
 
         attributePlotter = new AttributePlotter(statistics);
     }

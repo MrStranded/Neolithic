@@ -32,6 +32,7 @@ public class StatisticsPanel extends JPanel {
 
             if (protoAttribute != null && protoAttribute.getGuiColor() != null) {
                 double value = instance.getAttributeValue(id);
+                StatisticsData.registerAttributeValue(id, (int) value);
 
                 mark(getAbsolutePosition(getRelativePosition(id, value)), protoAttribute.getGuiColor(), 64);
             }
@@ -39,6 +40,7 @@ public class StatisticsPanel extends JPanel {
     }
 
     public void markAttribute(Instance instance, int id, int value) {
+        StatisticsData.registerAttributeValue(id, value);
         ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
 
         if (protoAttribute != null && protoAttribute.getGuiColor() != null) {

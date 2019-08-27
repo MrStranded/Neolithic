@@ -10,14 +10,14 @@ Creature: cHuman inherits cLandAnimal, bHerbivore {
 		attHealth, 100;
 		attMeat, 1;
 
-        attLibido, 250;
+        attLibido, 275;
         attMatureAge, 1000;
 
         attBabySize, 50;
 
         attLightSensitivity, 42;
-        attHungerSensitivity, 100;
-        attFatigueSensitivity, 200;
+        attHungerSensitivity, 111;
+        attFatigueSensitivity, 400;
 
         attCuriosity, 250;
         attGreed, 100, 50;
@@ -85,19 +85,3 @@ Creature: cTiger inherits cLandAnimal, bCarnivore {
 
 }
 
-///////////////////////////////////////////////////////////////////////////// Effects
-
-Effect: effCancer {
-    Script:tick(carrier) {
-        if (chance(0.01)) {
-            ..attHealth--;
-            if (..attHealth == -20) {
-                ..attSpeed--;
-            }
-        }
-    }
-
-    Script: removeCondition {
-        return(false);
-    }
-}

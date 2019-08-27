@@ -21,6 +21,11 @@ Creature: cAppleTree {
 		self->fruitType = entApple;
 
         ->updateMesh();
+
+        for (n : getNeighbors(self)) {
+            effect = addEffect(n, effShadow);
+            effect->cause = self;
+        }
 	}
 
 	attributes{
@@ -161,7 +166,7 @@ Drive: driHeal {
 
 Process: proPhotoSynthesis {
 	Script: condition {
-		require(getLightLevel(self) >= .attLightSensitivity);
+		require(getLightLevel(self) + getTile(self).attLightLevel >= .attLightSensitivity);
 		require(.attAge >= .attMatureAge);
 	}
 	Script: process {
@@ -233,3 +238,17 @@ Effect: effSapling {
         carrier->updateMesh();
     }
 }
+
+
+Effect: effShadow {
+    name = "Shadow";
+
+    attributes {
+        attLightLevel, "-10";
+    }
+
+    Script: removeCondition() {
+        require(! ->cause);
+    }
+}
+

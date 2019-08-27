@@ -27,7 +27,6 @@ public class AttributePlotter implements Registrator {
         }
 
         Attribute attribute = (Attribute) idInterface;
-        StatisticsData.registerAttributeValue(attribute.getId(), attribute.getValue());
         statisticsPanel.markAttribute(currentInstance, attribute.getId(), attribute.getValue());
     }
 

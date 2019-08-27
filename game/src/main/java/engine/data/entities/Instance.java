@@ -565,26 +565,6 @@ public class Instance {
 		return attribute.getValue();
 	}
 
-	private int checkBounds(int attributeId, int value) {
-		Container container = Data.getContainer(id);
-		if (container == null || container.getType() != DataType.CREATURE) {
-			return value;
-		}
-
-		ProtoAttribute protoAttribute = Data.getProtoAttribute(attributeId);
-		if (protoAttribute == null) {
-			return value;
-		}
-
-		if (protoAttribute.hasLowerBound() && value < protoAttribute.getLowerBound()) {
-			value = protoAttribute.getLowerBound();
-		} else if (protoAttribute.hasUpperBound() && value > protoAttribute.getUpperBound()) {
-			value = protoAttribute.getUpperBound();
-		}
-
-		return value;
-	}
-
 	/**
 	 * Sets the personal attribute of the instance exactly to the given value.
 	 * @param attributeID
@@ -595,16 +575,16 @@ public class Instance {
 			createAttributesIfNecessary();
 			Attribute attribute = attributes.get(attributeID);
 			if (attribute == null) {
-				attributes.insert(new Attribute(attributeID, checkBounds(attributeID, value)));
+				attributes.insert(new Attribute(attributeID, value));
 			} else {
-				attribute.setValue(checkBounds(attributeID, value));
+				attribute.setValue(value);
 			}
 		}
 	}
 	public void addAttribute(int attributeID, int value) {
 		if (attributeID >= 0) {
 			createAttributesIfNecessary();
-			attributes.insert(new Attribute(attributeID, checkBounds(attributeID, value)));
+			attributes.insert(new Attribute(attributeID, value));
 		}
 	}
 
