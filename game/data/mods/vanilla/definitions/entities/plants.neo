@@ -38,6 +38,10 @@ Creature: cAppleTree {
 	Script: tick {
 	    ..attAge++;
 
+	    if (getWaterHeight(self) > getHeight(self)) {
+	        ..attHealth--;
+	    }
+
 		if (.attHealth < 0) { // death
 		    destroy(self);
         }

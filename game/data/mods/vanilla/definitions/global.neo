@@ -34,13 +34,13 @@ Script: repopulate() {
 				human..attAge += random(human.attMatureAge);
 				addEffect(human, effInfant);
 			}
-		}
-		if (getType(t) == tGras && getHeight(t) > 100) {
-			if (chance(0.3)){
-				tree = create(cAppleTree, t);
-				tree..attAge += random(tree.attMatureAge*2);
-				addEffect(tree, effSapling);
-			}
+            if (getType(t) == tGras && getHeight(t) > 100) {
+                if (chance(0.3)){
+                    tree = create(cAppleTree, t);
+                    tree..attAge += random(tree.attMatureAge*2);
+                    addEffect(tree, effSapling);
+                }
+            }
 		}
 	}
 }

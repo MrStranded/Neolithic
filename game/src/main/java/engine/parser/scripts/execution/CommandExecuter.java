@@ -435,6 +435,19 @@ public class CommandExecuter {
 				return new Variable(tile.getHeight());
 			}
 
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance getInstance (Container type, Tile tile)
+		} else if (TokenConstants.GET_INSTANCE.equals(command)) {
+			if (requireParameters(commandNode, 2)) {
+				Container type = parameters[0].getContainer();
+				int containerID = -1;
+				Tile tile = parameters[1].getTile();
+
+				checkValue(script, commandNode, tile, "target tile");
+				containerID = checkType(script, commandNode, type, parameters[0].getString());
+
+				return new Variable(tile.getThisOrSubInstanceWithID(containerID));
+			}
+
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance[] getInstancesInRange (Container type, Tile center, int radius)
 		} else if (TokenConstants.GET_INSTANCES_IN_RANGE.equals(command)) {
 			if (requireParameters(commandNode, 3)) {

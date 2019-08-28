@@ -2,7 +2,7 @@ Entity: entSource {
     name = "Sweet water source";
 
     Script: tick {
-        water = getInstanceInRange(entWater, self, 0);
+        water = getInstance(entWater, self);
 
         if (water) {
             water..attWater++;
@@ -21,33 +21,39 @@ Entity: entWater {
         }
 
         h = getHeight(self) + ..attWater;
-        lowest = h;
-        for (n : getNeighbors(self)) {
-            oh = getHeight(n) + getFullAtt(n, "attWater");
-            if (oh < lowest) {
-                lowest = oh;
-                next = n;
-            }
-        }
 
-        if (next) {
-            d = floor((h - lowest) / 2);
-            if (d > 0) {
-                ..attWater -= d;
-                h -= d;
-
-                if (lowest > 100) {
-                    other = getInstanceInRange(entWater, next, 0);
-                    if (other) {
-                        other..attWater += d;
-                    } else {
-                        (create(entWater, getTile(next)))..attWater += d;
-                    }
+        if (..attWater > 0) {
+            lowest = h;
+            for (n : getNeighbors(self)) {
+                oh = getHeight(n) + getFullAtt(n, "attWater");
+                if (oh < lowest) {
+                    lowest = oh;
+                    next = n;
                 }
+            }
 
-                if (chance(0.2)) {
-                    setHeight(self, getHeight(self) - 1);
-                    setHeight(next, getHeight(next) + 1);
+            if (next) {
+                d = floor(min((h - lowest) / 2, ..attWater / 2));
+                if (d > 0) {
+                    ..attWater -= d;
+                    h -= d;
+
+                    if (lowest > 100) {
+                        other = getInstance(entWater, next);
+                        if (other) {
+                            other..attWater += d;
+                        } else {
+                            (create(entWater, getTile(next)))..attWater += d;
+                        }
+                    }
+
+                    h1 = getHeight(self);
+                    h2 = getHeight(next);
+                    if (h1 > h2 + 1 && chance(0.05)) {
+                        h--;
+                        setHeight(self, h1 - 1);
+                        setHeight(next, h2 + 1);
+                    }
                 }
             }
         }
