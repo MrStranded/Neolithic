@@ -19,6 +19,7 @@ Tile: tDirt {
 
 	attributes {
 	    attNutrition, 10;
+	    attSediment, 15;
 	}
 
 	Script: tick { // tiles don't get ticked
@@ -47,6 +48,7 @@ Tile: tGras {
 	attributes {
 		attNutrition, 20;
 		attHumidity, 50;
+	    attSediment, 10;
 	}
 }
 
@@ -65,9 +67,17 @@ Tile: tSand {
 		110,10;
 		90;
 	}
+
+	attributes {
+	    attSediment, 20;
+	}
 }
 
 Tile: tStone {
 	preferredHeight = 255;preferredHeightBlur = 10;
 	name = "Stone"; topColor {150,10;150;120;}
+
+	attributes {
+	    attSediment, 5;
+	}
 }

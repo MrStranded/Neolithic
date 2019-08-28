@@ -19,6 +19,12 @@ Attribute: attHungerSensitivity {
     mutation = 50, 20;
     color = 128,0,0;
 }
+Attribute: attThirstSensitivity {
+    name = "Thirst sensitivity";
+    inherited;
+    mutation = 30, 1;
+    color = 0,128,128;
+}
 Attribute: attFatigueSensitivity {
     name = "Fatigue sensitivity";
     inherited;
@@ -97,6 +103,10 @@ Attribute: attNutrition {
     name = "Nutrition";
     color = 255, 0, 0;
 }
+Attribute: attHydrated {
+    name = "Hydrated";
+    color = 0, 255, 255;
+}
 Attribute: attSleeping {
     name = "Sleeping";
     bounds = 0,1;
@@ -122,3 +132,4 @@ Attribute: attWater {
     name = "Water";
     color = 20, 100, 220;
 }
+Attribute: attSediment { name = "Sediment"; }

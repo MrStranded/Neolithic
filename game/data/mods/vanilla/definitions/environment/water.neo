@@ -47,12 +47,15 @@ Entity: entWater {
                         }
                     }
 
-                    h1 = getHeight(self);
-                    h2 = getHeight(next);
-                    if (h1 > h2 + 1 && chance(0.05)) {
-                        h--;
-                        setHeight(self, h1 - 1);
-                        setHeight(next, h2 + 1);
+                    if (getTile(self)..attSediment > 0) {
+                        h1 = getHeight(self);
+                        h2 = getHeight(next);
+                        if (h1 > h2 + 1 && chance(getTile(self)..attSediment / 100)) {
+                            h--;
+                            getTile(self)..attSediment--;
+                            setHeight(self, h1 - 1);
+                            setHeight(next, h2 + 1);
+                        }
                     }
                 }
             }

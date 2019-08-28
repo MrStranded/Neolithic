@@ -5,12 +5,14 @@ Creature: cLandAnimal {
 	name = "Land animal";
 
 	knowledge {
+	    proDrink; proSearchWater;
 		proMate; proSearchMate;
 		proSleep;
 		proStroll;
 	}
 
 	drives {
+	    driThirst;
 		driHunger;
 		driMate;
 		driSleep;

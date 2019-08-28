@@ -18,6 +18,7 @@ Creature: cHuman inherits cLandAnimal, bHerbivore {
 
         attLightSensitivity, 42;
         attHungerSensitivity, 111;
+        attThirstSensitivity, 3;
         attFatigueSensitivity, 400;
 
         attCuriosity, 250;
@@ -76,6 +77,7 @@ Creature: cTiger inherits cLandAnimal, bCarnivore {
 
         attLightSensitivity, 10;
         attHungerSensitivity, 100;
+        attThirstSensitivity, 2;
         attFatigueSensitivity, 300;
 
         attCuriosity, 350;

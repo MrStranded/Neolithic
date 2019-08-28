@@ -1,0 +1,97 @@
+
+///////////////////////////////////////////////////////////////////////////// Effects
+
+Effect: effThirsty {
+    name = "Thirsty";
+
+    attributes {
+        attHealth, "-1";
+        attSpeed, "-1";
+    }
+
+    Script: tick (carrier) {
+        if (!carrier.attSleeping) {
+            if (carrier.attHydrated > 0) {
+                if (.attHealth < 0) {
+                    ..attHealth++;
+                }
+            } else {
+                ..attHealth--;
+            }
+        }
+    }
+
+    Script: removeCondition {
+        require(.attHealth >= 0);
+    }
+}
+
+Effect: effDrink {
+    name = "Drink";
+
+    attributes {
+        attHydrated, 10;
+    }
+
+    Script: tick(carrier) {
+        if (chance(0.005)) {
+            ..attHydrated--;
+        }
+    }
+    Script: removeCondition() { require(.attHydrated <= 0); }
+}
+
+///////////////////////////////////////////////////////////////////////////// Drives
+
+Drive: driDrink {
+	Script: condition {
+	    require(! .attSleeping);
+	    if (.attHydrated <= 0 && !getEffects(self, effThirsty)) {
+	        addEffect(self, effThirsty);
+	    }
+		require(.attHydrated <= .attThirstSensitivity);
+	}
+
+	solutions {
+	    proDrink;
+	}
+
+	Script: getWeight() {
+	    return((.attThirstSensitivity - .attHydrated) * 100);
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////// Processes
+
+Process: proDrink {
+    Script: condition {
+        ->source = getInstance(entWater, getTile(self));
+        require(->source);
+    }
+
+    Script: process {
+        addEffect(self, effDrink);
+        ->source..attWater--;
+        ->source = false;
+    }
+
+    solutions {
+        proSearchWater;
+    }
+}
+
+Process: proSearchWater {
+    Script: condition {
+        if (! ->source) {
+            for (s : getInstancesInRange(entWater, self, ..attViewingDistance) {
+                ->source = s;
+                break;
+            }
+        }
+        require(->source);
+    }
+
+    Script: process {
+        moveTo(self, ->source, ..attSpeed);
+    }
+}
