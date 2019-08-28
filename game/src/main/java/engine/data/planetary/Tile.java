@@ -109,14 +109,15 @@ public class Tile extends Instance implements IDInterface {
 	}
 	public void setHeight(int height) {
 		boolean hasChanged = (this.height != height);
-		this.height = height;
 		if (hasChanged) {
+			this.height = height;
 			setChanged(true);
 			for (Tile neighbour : Neighbour.getNeighbours(this)) {
 				if (neighbour != null) {
 					neighbour.setChanged(true);
 				}
 			}
+			actualizeObjectPositions();
 		}
 	}
 
@@ -125,13 +126,22 @@ public class Tile extends Instance implements IDInterface {
 	}
 	public void setWaterHeight(int waterHeight) {
 		boolean hasChanged = (this.waterHeight != waterHeight);
-		this.waterHeight = waterHeight;
 		if (hasChanged) {
+			this.waterHeight = waterHeight;
 			setChanged(true);
 			for (Tile neighbour : Neighbour.getNeighbours(this)) {
 				if (neighbour != null) {
 					neighbour.setChanged(true);
 				}
+			}
+			actualizeObjectPositions();
+		}
+	}
+
+	private void actualizeObjectPositions() {
+		if (getSubInstances() != null) {
+			for (Instance instance : getSubInstances()) {
+				instance.actualizeObjectPosition();
 			}
 		}
 	}

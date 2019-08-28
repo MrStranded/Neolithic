@@ -1,6 +1,8 @@
 package engine;
 
 import constants.GameConstants;
+import constants.ScriptConstants;
+import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
 import engine.data.planetary.Planet;
 import engine.data.Data;
@@ -46,8 +48,8 @@ public class Engine {
 		System.out.println("Generating LOD Mesh took: "+(System.currentTimeMillis()-time)+" ms");
 
 		time = System.currentTimeMillis();
-		/*Instance worldGen = new Instance(Data.getContainerID("genContinental"));
-		worldGen.run(ScriptConstants.EVENT_GENERATE_WORLD, null);*/
+		Instance worldGen = new Instance(Data.getContainerID("genContinental"));
+		worldGen.run(ScriptConstants.EVENT_GENERATE_WORLD, null);
 		System.out.println("Executing WorldGen Script took: "+(System.currentTimeMillis()-time)+" ms");
 
 		Data.shuffleInstanceQueue();
@@ -71,9 +73,9 @@ public class Engine {
 			long start = System.currentTimeMillis();
 			if (Data.shouldUpdatePlanetMesh()) {
 				gaia.updatePlanetMesh();
-				Data.updateInstancePositions();
+				//Data.updateInstancePositions();
 				Data.setUpdatePlanetMesh(false);
-				gaia.clearChangeFlags();
+				//gaia.clearChangeFlags();
 			}
 			if (GameOptions.printPerformance) {
 				long dt = (System.currentTimeMillis() - start);

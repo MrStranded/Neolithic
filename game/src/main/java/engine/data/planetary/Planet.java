@@ -1,5 +1,6 @@
 package engine.data.planetary;
 
+import engine.graphics.objects.planet.FacePart;
 import engine.graphics.objects.planet.PlanetObject;
 
 public class Planet {
@@ -28,10 +29,19 @@ public class Planet {
 	}
 
 	public void updatePlanetMesh() {
+		for (Face face : faces) {
+			for (Tile tile : face.getTiles()) {
+				FacePart tileMesh = tile.getTileMesh();
+				if (tileMesh != null) {
+					tileMesh.setOldHeight(tileMesh.getHeight());
+					tileMesh.setOldWaterHeight(tileMesh.getWaterHeight());
+
+					tileMesh.setHeight(tile.getHeight());
+					tileMesh.setWaterHeight(tile.getWaterHeight());
+				}
+			}
+		}
 		planetObject.updateLODMesh();
-	}
-	public void updatePlanetMesh(Tile tile) {
-		planetObject.updateLODMesh(tile);
 	}
 	public void clearChangeFlags() {
 		planetObject.clearChangeFlags();

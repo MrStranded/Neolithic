@@ -3,8 +3,9 @@ WorldGen: genContinental {
 
 	Script: generate {
 		setWaterLevel(100);
+		print("water level set");
 
-		for (t : eachTile()) {
+		/*for (t : eachTile()) {
 			if (chance(0.0025)) { // 1/4% chance
 				if (chance(0.75)) {
 					destroy(create(formPlateau, t));
@@ -24,34 +25,8 @@ WorldGen: genContinental {
 					create(entBoulder, t);
 				}
 			}
-		}
+		}*/
 	}
-}
-
-Formation: formRiver {
-    Script: place(tile) {
-        self->carve(tile, []);
-    }
-
-    Script: carve(tile, riverTiles) {
-        lowest = 0;
-        for (n : getNeighbors(tile)) {
-            if (!contains(riverTiles, n)) {
-                if (lowest == 0 || getHeight(n) < lowest) {
-                    lowest = getHeight(n);
-                    next = n;
-                }
-            }
-        }
-
-        if (lowest >= 90) {
-            setHeight(tile, lowest - 10);
-            setWaterHeight(tile, max(lowest - 5, 100));
-            riverTiles += [tile];
-
-            self->carve(next, riverTiles);
-        }
-    }
 }
 
 Formation: formMountain {

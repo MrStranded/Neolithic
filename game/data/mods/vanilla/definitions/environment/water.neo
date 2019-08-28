@@ -58,10 +58,8 @@ Entity: entWater {
             }
         }
 
-        if (h != getWaterHeight(self)) {
-            setWaterHeight(self, h);
-            updatePlanetMesh();
-        }
+        setWaterHeight(self, h);
+	    updatePlanetMesh();
 
         if (..attWater <= 0) {
             destroy(self);

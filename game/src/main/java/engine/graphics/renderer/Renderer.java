@@ -270,6 +270,9 @@ public class Renderer {
 		if (keyboard.isClicked(GLFW.GLFW_KEY_T)) {
 			Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "armageddon", null));
 		}
+		if (keyboard.isClicked(GLFW.GLFW_KEY_O)) {
+			Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "fit", null));
+		}
 
 		if (keyboard.isClicked(GLFW.GLFW_KEY_X)) {
 			GameOptions.printPerformance = !GameOptions.printPerformance;

@@ -338,4 +338,20 @@ public class Mesh {
 	public void setMaterial(Material material) {
 		this.material = material;
 	}
+
+	public float[] getVertices() {
+		return vertices;
+	}
+	public int[] getIndices() {
+		return indices;
+	}
+	public float[] getNormals() {
+		return normals;
+	}
+	public float[] getTextureCoordinates() {
+		return textureCoordinates;
+	}
+	public float[] getColors() {
+		return colors;
+	}
 }

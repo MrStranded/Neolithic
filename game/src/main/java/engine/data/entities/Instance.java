@@ -15,6 +15,7 @@ import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.objects.movement.MoveableObject;
+import engine.graphics.objects.planet.FacePart;
 import engine.logic.topology.GeographicCoordinates;
 import engine.math.numericalObjects.Vector3;
 import engine.parser.utils.Logger;
@@ -147,11 +148,12 @@ public class Instance {
 	// ###################################################################################
 
 	public void change(int containerId) {
-		if (Data.getContainer(containerId).getType() == DataType.TILE) {
-			((Tile) this).resetColors();
-		}
 		id = containerId;
 		inheritAttributes();
+		if (Data.getContainer(containerId).getType() == DataType.TILE) {
+			((Tile) this).resetColors();
+			((Tile) this).setChanged(true);
+		}
 	}
 
 	/**
@@ -365,11 +367,12 @@ public class Instance {
 				double yaw = GeographicCoordinates.getLongitude(position);
 				Vector3 pos;
 				// set position
-				if (position.getHeight() > position.getWaterHeight()) {
+				/*if (position.getHeight() > position.getWaterHeight()) {
 					pos = position.getTileMesh().getMid();
 				} else {
 					pos = position.getTileMesh().getWaterMid();
-				}
+				}*/
+				pos = position.getTileMesh().getMid();
 				// set correct scale
 				if (Data.getPlanet() != null) {
 					double scaleFactor = 1d / (double) Data.getPlanet().getSize();

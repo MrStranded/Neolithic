@@ -30,6 +30,9 @@ public class FacePart {
 	private double height = 0;
 	private double waterHeight = TopologyConstants.PLANET_OZEAN_HEIGHT;
 
+	private double oldHeight = height;
+	private double oldWaterHeight = waterHeight;
+
 	private Tile tile;
 	private RGBA topColor = TopologyConstants.TILE_DEFAULT_COLOR;
 	private RGBA sideColor = topColor.times(TopologyConstants.TILE_SIDE_COLOR_FACTOR);
@@ -303,7 +306,21 @@ public class FacePart {
 		this.waterHeight = waterHeight;
 	}
 
-	public RGBA getTopColor() {
+    public double getOldHeight() {
+        return oldHeight;
+    }
+    public void setOldHeight(double oldHeight) {
+        this.oldHeight = oldHeight;
+    }
+
+    public double getOldWaterHeight() {
+        return oldWaterHeight;
+    }
+    public void setOldWaterHeight(double oldWaterHeight) {
+        this.oldWaterHeight = oldWaterHeight;
+    }
+
+    public RGBA getTopColor() {
 		return topColor;
 	}
 	public void setTopColor(RGBA topColor) {
@@ -357,7 +374,7 @@ public class FacePart {
 	}
 	public void setChanged(boolean changed) {
 		this.changed = changed;
-		if (changed && superFace != null && !superFace.hasChanged()) {
+		if (changed && superFace != null/* && !superFace.hasChanged()*/) {
 			superFace.setChanged(true);
 		}
 	}

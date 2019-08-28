@@ -45,6 +45,13 @@ Script: repopulate() {
 	}
 }
 
+Script: fit {
+    print("pre");
+    fitTiles();
+    print("post");
+	updatePlanetMesh();
+}
+
 Script: armageddon {
     for (c : eachCreature()) {
         //if (getType(c) == cHuman) {
@@ -82,8 +89,7 @@ Script: leftClick(tile, type) {
 		} else if (type == cTiger) {
 		    instance..attNutrition = 50;
 		}
-
-		fitTiles();
-		updatePlanetMesh();
 	}
+
+	updatePlanetMesh();
 }
