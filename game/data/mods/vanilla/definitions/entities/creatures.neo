@@ -7,23 +7,23 @@ Creature: cHuman inherits cLandAnimal, bHerbivore {
 
 	attributes {
 		attSize, 10;
-		attHealth, 100;
+		attHealth, 150;
 		attMeat, 1;
 
-        attLibido, 275;
-        attMatureAge, 1000;
+        attLibido, 300;
+        attMatureAge, 500;
 
-        attBabySize, 50;
+        attBabySize, 100;
         attEfficiency, 50;
 
         attLightSensitivity, 42;
-        attHungerSensitivity, 111;
-        attThirstSensitivity, 30;
-        attFatigueSensitivity, 400;
+        attHungerSensitivity, 200;
+        attThirstSensitivity, 40;
+        attFatigueSensitivity, 350;
 
         attCuriosity, 250;
-        attGreed, 100, 50;
-        attPride, 100, 50;
+        attGreed, 200, 50;
+        attPride, 200, 50;
 
 		attSpeed, 3;
 		attViewingDistance, 7;
@@ -68,7 +68,7 @@ Creature: cTiger inherits cLandAnimal, bCarnivore {
 		attSize, 20;
 		attHealth, 300;
 
-        attLibido, 350;
+        attLibido, 500;
         attMatureAge, 700;
 
         attBabySize, 100;
@@ -76,14 +76,14 @@ Creature: cTiger inherits cLandAnimal, bCarnivore {
         attEfficiency, 80;
 
         attLightSensitivity, 70;
-        attHungerSensitivity, 300;
-        attThirstSensitivity, 40;
+        attHungerSensitivity, 500;
+        attThirstSensitivity, 50;
         attFatigueSensitivity, 300;
 
         attCuriosity, 250;
 
 		attSpeed, 4;
-		attViewingDistance, 8;
+		attViewingDistance, 9;
 		attStepHeight, 24;
 	}
 

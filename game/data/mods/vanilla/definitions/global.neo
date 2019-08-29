@@ -68,12 +68,16 @@ Script: rightClick(tile) {
         create(entBoulder, tile);
     }*/
 
-    adam = create(cHuman, tile);
+    /*adam = create(cHuman, tile);
     adam..attGender = -1;
     adam->updateMesh();
     eva = create(cHuman, tile);
     eva..attGender = 1;
-    eva->updateMesh();
+    eva->updateMesh();*/
+
+    for (n : getNeighbors(tile)) {
+        create(entBoulder, n);
+    }
 }
 
 Script: leftClick(tile, type) {
