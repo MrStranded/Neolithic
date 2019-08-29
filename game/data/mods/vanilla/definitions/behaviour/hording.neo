@@ -8,7 +8,7 @@ Drive: driHording {
 	}
 
 	solutions {
-		proGatherFood;
+		proPickUpFruit;
 	}
 
 	Script: getWeight() {

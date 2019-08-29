@@ -10,14 +10,12 @@ Effect: effThirsty {
     }
 
     Script: tick (carrier) {
-        if (!carrier.attSleeping) {
-            if (carrier.attHydrated > 0) {
-                if (.attHealth < 0) {
-                    ..attHealth++;
-                }
-            } else {
-                ..attHealth--;
+        if (carrier.attHydrated > 0) {
+            if (.attHealth < 0) {
+                ..attHealth++;
             }
+        } else {
+            ..attHealth--;
         }
     }
 
@@ -43,7 +41,7 @@ Effect: effDrink {
 
 ///////////////////////////////////////////////////////////////////////////// Drives
 
-Drive: driDrink {
+Drive: driThirst {
 	Script: condition {
 	    require(! .attSleeping);
 	    if (.attHydrated <= 0 && !getEffects(self, effThirsty)) {
@@ -57,7 +55,7 @@ Drive: driDrink {
 	}
 
 	Script: getWeight() {
-	    return((.attThirstSensitivity - .attHydrated) * 100);
+	    return((.attThirstSensitivity - .attHydrated) * 10);
 	}
 }
 
@@ -83,15 +81,12 @@ Process: proDrink {
 Process: proSearchWater {
     Script: condition {
         if (! ->source) {
-            for (s : getInstancesInRange(entWater, self, ..attViewingDistance) {
-                ->source = s;
-                break;
-            }
+            ->source = getInstanceInRange(entWater, self, .attViewingDistance);
         }
         require(->source);
     }
 
     Script: process {
-        moveTo(self, ->source, ..attSpeed);
+        moveTo(self, ->source, .attSpeed);
     }
 }

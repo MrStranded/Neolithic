@@ -29,24 +29,38 @@ Effect: effBite {
 
 Process: proEatMeat {
 	Script: condition {
-		require(getItemAtt(self, "attMeat"));
+	    ->carcass = getInstanceInRange(entCarcass, self, 1);
+	    print("tiger wanna eat? carcass: " + ->carcass);
+		require(->carcass);
 	}
 	Script: process {
-		item = getItemAtt(self, "attMeat");
-	    print(self + " eats " + item);
-		item->consume(self);
+	    print(self + " eats " + ->carcass);
+		->carcass->consume(self);
 	}
 
 	solutions {
-	    proCollectMeat;
+	    proLookForCarcass;
+	    proKillAnimal;
 	}
 }
 
-Process: proCollectMeat {
+Process: proLookForCarcass {
+    Script: condition {
+        ->carcass = getInstanceInRange(entCarcass, self, .attViewingDistance);
+	    print("tiger search carcass: " + ->carcass);
+        require(->carcass);
+    }
+
+    Script: process {
+        moveTo(self, ->carcass, .attSpeed);
+    }
+}
+
+Process: proKillAnimal {
     Script: condition {
         if (! ->target) {
             print(self + " searching for target");
-            creatures = getInstancesInRange(getType(self), getTile(self), .attViewingDistance);
+            creatures = getAttsInRange("attMeat", getTile(self), .attViewingDistance);
             backup = false;
             for (creature : creatures) {
                 if (creature != self) {
@@ -74,12 +88,6 @@ Process: proCollectMeat {
 
             bite = addEffect(->target, effBite);
             bite..attHealth = - .attBiteSize;
-            if (->target.attHealth <= 0) {
-                print("target died: " + ->target);
-                (->target)->consume(self);
-                print("after consume");
-                ->target = false;
-            }
         }
     }
 }

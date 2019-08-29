@@ -94,9 +94,11 @@ public enum TokenConstants {
 	// -------------------------------------------------- Retrieval
 	GET_ATTRIBUTE           (TokenType.COMMAND, "getAtt"),
 	GET_ATTRIBUTE_IN_RANGE  (TokenType.COMMAND, "getAttInRange"),
+	GET_ATTRIBUTES_IN_RANGE  (TokenType.COMMAND, "getAttsInRange"),
 	GET_INSTANCE			(TokenType.COMMAND, "getInstance"),
 	GET_INSTANCE_IN_RANGE	(TokenType.COMMAND, "getInstanceInRange"), // deprecated
     GET_INSTANCES_IN_RANGE	(TokenType.COMMAND, "getInstancesInRange"),
+	GET_CREATURES_IN_RANGE	(TokenType.COMMAND, "getCreaturesInRange"),
 	GET_EFFECT              (TokenType.COMMAND, "getEffect"),
     GET_EFFECTS             (TokenType.COMMAND, "getEffects"),
 	GET_FULL_ATTRIBUTE      (TokenType.COMMAND, "getFullAtt"),

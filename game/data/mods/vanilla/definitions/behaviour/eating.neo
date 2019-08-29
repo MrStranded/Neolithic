@@ -97,7 +97,7 @@ Drive: driHunger {
 	}
 
 	Script: getWeight() {
-	    return(max(.attHungerSensitivity - .attNutrition, 0));
+	    return(.attHungerSensitivity - .attNutrition);
 	}
 }
 

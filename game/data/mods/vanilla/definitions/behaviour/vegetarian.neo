@@ -3,6 +3,7 @@
 
 Process: proEatVegetarian {
 	Script: condition {
+	    print("has food? " + getItemAtt(self, "attVegetarian"));
 		require(getItemAtt(self, "attVegetarian"));
 	}
 	Script: process {
@@ -12,29 +13,42 @@ Process: proEatVegetarian {
 
 	solutions {
 		proPickUpFood;
-		proGatherFood;
 		proBeg;
 	}
 }
 
 Process: proPickUpFood {
 	Script: condition {
-	    ->food = getAttInRange("attVegetarian",self,0);
-		require(->food);
+	    food = getAttInRange("attVegetarian",self,1);
+	    print("tries to pick up: " + food);
+	    require(food);
 	}
 	Script: process() {
-		pickUp(self, ->food);
+	    print("pick it up");
+		pickUp(self, getAttInRange("attVegetarian",self,1));
+	}
+
+	solutions {
+		proGatherFood;
 	}
 }
 
 Process: proGatherFood {
 	Script: condition {
-		->food = getAttInRange("attVegetarian",self,.attViewingDistance);
+	    if (! ->food) {
+            ->food = getAttInRange("attVegetarian",self,.attViewingDistance);
+        }
+		print("looking for food: " + ->food);
 		require(->food);
 	}
 	Script: process() {
-		moveTo(self, ->food, .attSpeed);
-		pickUp(self, ->food);
+	    start = getTile(self);
+	    destination = moveTo(self, ->food, .attSpeed);
+		print("moved from " + start + " to " + destination);
+		if (destination == getTile(->food)) {
+		    ->food = false;
+		    print("reached food");
+		}
 	}
 	Script: discovery() {
 		require(.attSpeed > 0);

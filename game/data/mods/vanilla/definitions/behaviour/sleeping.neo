@@ -14,7 +14,7 @@ Effect: effSleep {
         }
 
         lightLevel = getLightLevel(carrier) + getTile(carrier).attLightLevel;
-        require(lightLevel > carrier.attLightSensitivity);// && carrier.attFatigue < carrier.attFatigueSensitivity);
+        require(lightLevel > carrier.attLightSensitivity);
         require(carrier.attFatigue <= carrier.attFatigueSensitivity*lightLevel/100);
     }
 }
@@ -24,7 +24,7 @@ Effect: effSleep {
 Drive: driSleep {
 	Script: condition {
 	    require(! .attSleeping);
-		require(.attFatigue > .attFatigueSensitivity && getLightLevel(self) <= .attLightSensitivity);
+		require(.attFatigue > .attFatigueSensitivity || getLightLevel(self) <= .attLightSensitivity);
 		require(.attHealth > 0);
 	}
 

@@ -5,6 +5,6 @@ Creature: bCarnivore {
 	name = "Carnivore";
 
 	knowledge {
-		proEatMeat; proCollectMeat;
+		proEatMeat; proLookForCarcass; proKillAnimal;
 	}
 }

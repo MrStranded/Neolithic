@@ -32,7 +32,7 @@ Creature: cAppleTree {
 		attSize, 60;
 	    attMatureAge, 2880;
 	    attLightSensitivity, 20;
-	    attBabySize, 100;
+	    attBabySize, 200;
 	}
 
 	Script: tick {
@@ -73,6 +73,7 @@ Entity: entApple {
 	attributes {
 		attVegetarian, 1;
 		attMatureAge, 100;
+		attNutrition, 100; // default value
 	}
 
 	Script: place() {
@@ -175,7 +176,7 @@ Process: proPhotoSynthesis {
 		require(.attNutrition < .attBabySize*3);
 	}
 	Script: process {
-		..attNutrition++;
+		..attNutrition += 2;
 	}
 
 	Script: discovery(actor) { // there is no way for an entity to learn photosynthesis

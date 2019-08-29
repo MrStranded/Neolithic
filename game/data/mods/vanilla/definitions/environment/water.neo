@@ -2,7 +2,7 @@ Entity: entSource {
     name = "Sweet water source";
 
     Script: tick {
-        water = getInstance(entWater, self);
+        water = getInstance(entWater, getTile(self));
 
         if (water) {
             water..attWater++;

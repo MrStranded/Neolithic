@@ -27,7 +27,7 @@ public class Pathfinding {
 
         @Override
         public int compareTo(TileHeuristic o) {
-            return (int) ((h+g) - (o.h+o.g));
+            return (int) ((h+g*0.001) - (o.h+o.g*0.001));
         }
     }
 
@@ -62,7 +62,8 @@ public class Pathfinding {
             for (Tile neighbour : Neighbour.getNeighbours(currentTile.tile)) {
                 if (!closedList.contains(neighbour)) {
                     if (instance.canGo(currentTile.tile, neighbour)) {
-                        openList.add(new TileHeuristic(neighbour, getHeuristic(neighbour, to), currentTile.g + 1));
+                        double h = getHeuristic(neighbour, to);
+                        openList.add(new TileHeuristic(neighbour, h, currentTile.g + 1));
                     }
                 }
             }
@@ -74,15 +75,15 @@ public class Pathfinding {
     public static double getHeuristic(Tile from, Tile to) {
         if (from == null || to == null) { return 0; }
 
-        return getSquaredDistance(from, to) * Data.getPlanet().getSize() * TopologyConstants.HEURISTIC_MULTIPLIER; // this brings the distance to a range of 0.25 to 25
+        return getSquaredDistance(from, to) * Data.getPlanet().getSize() * TopologyConstants.HEURISTIC_MULTIPLIER; // this brings the distance to a range of about 0.25 to 25
     }
 
     public static double getSquaredDistance(Tile from, Tile to) {
         if (from == null || to == null) { return 0; }
         if (from.getHeight() == 0 || to.getHeight() == 0) { return 0; }
 
-        Vector3 normalizedMidFrom = new Vector3(from.getTileMesh().getMid()).times(1d / (double) from.getHeight());
-        Vector3 normalizedMidTo = new Vector3(to.getTileMesh().getMid()).times(1d / (double) to.getHeight());
+        Vector3 normalizedMidFrom = /*from.getTileMesh().getMid();//*/new Vector3(from.getTileMesh().getMid()).times(1d / (double) from.getHeight());
+        Vector3 normalizedMidTo = /*to.getTileMesh().getMid();//*/new Vector3(to.getTileMesh().getMid()).times(1d / (double) to.getHeight());
 
         return    ( normalizedMidTo.getX()-normalizedMidFrom.getX() )*( normalizedMidTo.getX()-normalizedMidFrom.getX() )
                 + ( normalizedMidTo.getY()-normalizedMidFrom.getY() )*( normalizedMidTo.getY()-normalizedMidFrom.getY() )

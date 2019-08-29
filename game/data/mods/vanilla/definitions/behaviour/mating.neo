@@ -35,7 +35,7 @@ Drive: driMate {
 
 	Script: getWeight() {
 	    timeSinceLastSex = .attAge - ->lastSex;
-	    return(.attAge - .attMatureAge + timeSinceLastSex);
+	    return(.attAge - .attMatureAge + timeSinceLastSex + (.attLibido - .attFatigue));
 	}
 }
 

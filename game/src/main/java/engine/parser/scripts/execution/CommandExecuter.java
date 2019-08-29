@@ -268,6 +268,10 @@ public class CommandExecuter {
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list eachCreature ()
 		} else if (TokenConstants.EACH_CREATURE.equals(command)) {
+			if (Data.getPublicInstanceList() == null) {
+				return new Variable(new ArrayList<Variable>(0));
+			}
+
 			List<Variable> creatures = new ArrayList<>(Data.getPublicInstanceList().size()/2);
 			for (Instance instance : Data.getInstanceQueue()) {
 				if (Data.getContainer(instance.getId()).getType() == DataType.CREATURE) {
@@ -332,28 +336,50 @@ public class CommandExecuter {
 				return new Variable();
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance getInstanceInRange (Container type, Tile center, int radius)
-		} else if (TokenConstants.GET_INSTANCE_IN_RANGE.equals(command)) {
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list getAttsInRange (String attributeTextID, Tile center, int radius)
+		} else if (TokenConstants.GET_ATTRIBUTES_IN_RANGE.equals(command)) {
 			if (requireParameters(commandNode, 3)) {
-				Container type = parameters[0].getContainer();
-				int containerID = -1;
+				String attributeTextID = parameters[0].getString();
 				Tile center = parameters[1].getTile();
 				int radius = parameters[2].getInt();
 
-                checkValue(script, commandNode, center, "center tile");
-                containerID = checkType(script, commandNode, type, parameters[0].getString());
+				int attributeID = Data.getProtoAttributeID(attributeTextID);
+
+				checkValue(script, commandNode, center, "center tile");
+				checkAttribute(script, commandNode, attributeID, attributeTextID);
 
 				TileArea tileArea = new TileArea(center, radius);
+				List<Variable> instanceList = new ArrayList<>();
 				for (Tile tile : tileArea.getTileList()) {
-					if (tile != null) {
-						Instance instance = tile.getThisOrSubInstanceWithID(containerID);
+					Instance instance = tile.getSubInstanceWithAttribute(attributeID);
 
-						if (instance != null) {
-							return new Variable(instance);
+					if (instance != null) {
+						instanceList.add(new Variable(instance));
+					}
+				}
+				return new Variable(instanceList);
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list getCreaturesInRange (Tile center, int radius)
+		} else if (TokenConstants.GET_CREATURES_IN_RANGE.equals(command)) {
+			if (requireParameters(commandNode, 2)) {
+				Tile center = parameters[0].getTile();
+				int radius = parameters[1].getInt();
+
+				checkValue(script, commandNode, center, "center tile");
+
+				List<Variable> creatures = new ArrayList<>();
+				TileArea tileArea = new TileArea(center, radius);
+				for (Tile tile : tileArea.getTileList()) {
+					if (tile.getSubInstances() != null) {
+						for (Instance sub : tile.getSubInstances()) {
+							if (Data.getContainer(sub.getId()).getType() == DataType.CREATURE) {
+								creatures.add(new Variable(sub));
+							}
 						}
 					}
 				}
-				return new Variable();
+				return new Variable(creatures);
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Effect getEffect (Instance target, Container effectContainer)
@@ -435,17 +461,41 @@ public class CommandExecuter {
 				return new Variable(tile.getHeight());
 			}
 
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance getInstance (Container type, Tile tile)
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance getInstance (Container type, Instance instance)
 		} else if (TokenConstants.GET_INSTANCE.equals(command)) {
 			if (requireParameters(commandNode, 2)) {
 				Container type = parameters[0].getContainer();
 				int containerID = -1;
-				Tile tile = parameters[1].getTile();
+				Instance instance = parameters[1].getInstance();
 
-				checkValue(script, commandNode, tile, "target tile");
+				checkValue(script, commandNode, instance, "target instance");
 				containerID = checkType(script, commandNode, type, parameters[0].getString());
 
-				return new Variable(tile.getThisOrSubInstanceWithID(containerID));
+				return new Variable(instance.getThisOrSubInstanceWithID(containerID));
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance getInstanceInRange (Container type, Tile center, int radius)
+		} else if (TokenConstants.GET_INSTANCE_IN_RANGE.equals(command)) {
+			if (requireParameters(commandNode, 3)) {
+				Container type = parameters[0].getContainer();
+				int containerID = -1;
+				Tile center = parameters[1].getTile();
+				int radius = parameters[2].getInt();
+
+				checkValue(script, commandNode, center, "center tile");
+				containerID = checkType(script, commandNode, type, parameters[0].getString());
+
+				TileArea tileArea = new TileArea(center, radius);
+				for (Tile tile : tileArea.getTileList()) {
+					if (tile != null) {
+						Instance instance = tile.getThisOrSubInstanceWithID(containerID);
+
+						if (instance != null) {
+							return new Variable(instance);
+						}
+					}
+				}
+				return new Variable();
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance[] getInstancesInRange (Container type, Tile center, int radius)
@@ -516,7 +566,7 @@ public class CommandExecuter {
 					}
 					return new Variable(items);
 				}
-				return new Variable();
+				return new Variable(new ArrayList<>(0));
 			}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double getLightLevel (Tile tile)

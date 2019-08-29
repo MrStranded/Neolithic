@@ -42,11 +42,6 @@ Creature: cLandAnimal {
             }
 		}
 
-		if (.attHealth <= 0) { // death
-		    print(self + " died from death");
-		    destroy(self);
-        }
-
 		if (.attAge >= .attMatureAge*2) { // age death
 		    if (chance(0.01) && !getEffects(self, effCancer)) {
                 addEffect(self, effCancer);
@@ -54,6 +49,13 @@ Creature: cLandAnimal {
         }
 
         ..attAge += 1;
+
+		if (.attHealth <= 0) { // death
+		    print(self + " died from death");
+		    carcass = create(entCarcass, getTile(self));
+		    carcass..attNutrition = .attNutrition;
+		    destroy(self);
+        }
 	}
 
 	Script: reachable (from, to) {
@@ -64,18 +66,35 @@ Creature: cLandAnimal {
         return ((h2 >= hw - .attStepHeight) && (abs(h1-h2) <= .attStepHeight) && freeSpace >= .attSize);
 	}
 
+}
+
+///////////////////////////////////////////////////////////////////////////// carcass
+
+Entity: entCarcass {
+    name = "Carcass";
+    mesh = "carcass_medium.ply";
+
+    attributes {
+        attMeat, 1;
+        attNutrition, 100; // default value
+    }
+
+    Script: tick {
+        ..attNutrition--;
+        if (.attNutrition <= 0) {
+            destroy(self);
+        }
+    }
+
 	Script: consume(actor) {
-	    print("consume");
+	    print(actor + " consumes carcass");
 	    effect = addEffect(actor, effDigest);
         effect..attNutrition = .attNutrition;
-        /*for (item : getItems(self)) {
+        for (item : getItems(self)) {
             pickUp(effect, item);
-        }*/
-
-        print(self + " is eaten by " + actor);
+        }
 		destroy(self);
 	}
-
 }
 
 ///////////////////////////////////////////////////////////////////////////// Effects

@@ -34,7 +34,7 @@ Drive: driMove {
 	}
 
 	Script: getWeight() {
-	    return(max(.attCuriosity - .attFatigue, 0));
+	    return((.attCuriosity - .attFatigue) / 2);
 	}
 }
 

@@ -360,7 +360,7 @@ public class Variable implements IDInterface {
 	 */
 	public boolean isInvalid() {
 		if (type == DataType.INSTANCE || type == DataType.EFFECT || type == DataType.TILE) {
-			if (((Instance) value).isSlatedForRemoval()) {
+			if (value == null || ((Instance) value).isSlatedForRemoval()) {
 				return true;
 			}
 		}

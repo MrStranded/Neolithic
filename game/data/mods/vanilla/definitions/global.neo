@@ -35,7 +35,7 @@ Script: repopulate() {
 				addEffect(human, effInfant);
 			}
             if (getType(t) == tGras && getHeight(t) > 100) {
-                if (chance(0.3)){
+                if (chance(0.7)){
                     tree = create(cAppleTree, t);
                     tree..attAge += random(tree.attMatureAge*2);
                     addEffect(tree, effSapling);
