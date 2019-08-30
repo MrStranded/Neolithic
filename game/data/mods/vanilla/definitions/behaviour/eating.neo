@@ -34,14 +34,16 @@ Effect: effHunger {
     }
 
     Script: tick (carrier) {
-        if (!carrier.attSleeping) {
+        if (!carrier.attSleeping || chance(0.1)) {
             if (carrier.attNutrition > 0) {
                 if (.attHealth < 0) {
                     ..attHealth++;
                 }
             } else {
-                ..attHealth--;
-                carrier..attFatigue++;
+                if (chance(0.5)) {
+                    ..attHealth--;
+                    carrier..attFatigue++;
+                }
             }
         }
     }

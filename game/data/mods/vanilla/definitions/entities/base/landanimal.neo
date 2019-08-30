@@ -31,10 +31,14 @@ Creature: cLandAnimal {
 
 	Script: tick {
 	    if (..attNutrition > 0) {
-            ..attNutrition--;
+	        if (! .attSleeping) {
+                ..attNutrition--;
+            } else if (chance(0.1)) {
+                ..attNutrition--;
+            }
         }
 
-	    if (!(.attSleeping)) { // creature is awake
+	    if (! .attSleeping) { // creature is awake
             ..attFatigue++;
 		} else {
 		    if (..attFatigue > 0) {
@@ -42,7 +46,7 @@ Creature: cLandAnimal {
             }
 		}
 
-		if (.attAge >= .attMatureAge*2) { // age death
+		if (.attAge >= .attMatureAge) { // age death
 		    if (chance(0.01) && !getEffects(self, effCancer)) {
                 addEffect(self, effCancer);
 		    }
@@ -80,7 +84,10 @@ Entity: entCarcass {
     }
 
     Script: tick {
-        ..attNutrition--;
+        if (chance(0.1)) {
+            ..attNutrition--;
+        }
+
         if (.attNutrition <= 0) {
             destroy(self);
         }

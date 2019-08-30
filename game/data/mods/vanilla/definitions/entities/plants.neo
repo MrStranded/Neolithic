@@ -38,16 +38,20 @@ Creature: cAppleTree {
 	Script: tick {
 	    ..attAge++;
 
+        if (chance(0.01)) {
+            create(entBranch, getNeighbor(self, random(3)));
+        }
+
 	    if (getWaterHeight(self) > getHeight(self)) {
 	        ..attHealth--;
 	    }
 
-		if (.attHealth < 0) { // death
-		    destroy(self);
-        }
-
 		if (.attAge > .attMatureAge*2) { // age death
 		    addEffect(self, effCancer);
+        }
+
+		if (.attHealth < 0) { // death
+		    destroy(self);
         }
 	}
 

@@ -1,0 +1,44 @@
+Entity: entHut {
+    name = "Hut";
+    mesh = "hut01.ply";
+
+    attributes {
+        attSize, 60;
+        attHealth, 100;
+    }
+
+
+    Script: place {
+        effect = addEffect(getTile(self), effShadow);
+        effect->cause = self;
+    }
+
+    Script: tick {
+        if (getWaterHeight(self) > getHeight(self)) {
+            ..attHealth--;
+        }
+        if (chance(0.01)) {
+            ..attHealth--;
+        }
+
+        if (.attHealth <= 0) {
+            destroy(self);
+        }
+    }
+}
+
+Entity: entBranch {
+    name = "Branch";
+    mesh = "branch01.ply";
+
+    attributes {
+        attMatureAge, 100;
+    }
+
+    Script: tick {
+        ..attAge++;
+        if (.attAge >= .attMatureAge) {
+            destroy(self);
+        }
+    }
+}

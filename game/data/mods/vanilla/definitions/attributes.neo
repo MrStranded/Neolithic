@@ -58,6 +58,7 @@ Attribute: attBabySize {
 }
 Attribute: attGender {
     name = "Gender";
+    color = 128, 0, 128;
 }
 
 // movement

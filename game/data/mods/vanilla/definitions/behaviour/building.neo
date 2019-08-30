@@ -1,0 +1,69 @@
+
+///////////////////////////////////////////////////////////////////////////// Drives
+
+Drive: driBuildCamp {
+    Script: condition {
+        require(! ->camp);
+    }
+
+    Script: getWeight() {
+        return(200);
+    }
+
+    solutions {
+        proSearchHut;
+        proBuildHut;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////// Processes
+
+Process: proSearchHut {
+    Script: condition {
+        huts = getInstancesInRange(entHut, self, .attViewingDistance);
+        for (hut : huts) {
+            if (! hut->owner) {
+                ->camp = hut;
+            }
+        }
+        require(->camp);
+    }
+
+    Script: process {
+        ->camp->owner = self;
+    }
+}
+
+Process: proBuildHut {
+    Script: condition {
+        require(getFullAtt(getTile(self), "attSize") <= 40);
+        require(getHeight(self) > getWaterHeight(self));
+        require(getItems(self, entBranch) >= 3);
+    }
+
+    Script: process {
+        ->camp = create(entHut, getTile(self));
+        ->camp->owner = self;
+    }
+
+    solutions {
+        proCollectBranch;
+    }
+}
+
+Process: proCollectBranch {
+    Script: condition {
+        if (! ->branch) {
+            ->branch = getInstanceInRange(entBranch, self, .attViewingDistance);
+        }
+        require(->branch);
+    }
+
+    Script: process {
+        tile = moveTo(->branch, self, .attSpeed);
+        if (tile == getTile(->branch)) {
+            pickUp(self, ->branch);
+            ->branch = false;
+        }
+    }
+}

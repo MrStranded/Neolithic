@@ -91,7 +91,11 @@ Script: leftClick(tile, type) {
 			instance..attAge = 2880;
 			instance->updateMesh();
 		} else if (type == cTiger) {
-		    instance..attNutrition = 50;
+		    instance..attNutrition = 100;
+		    instance..attHydrated = 30;
+		} else if (type == cHuman) {
+		    instance..attNutrition = 100;
+		    instance..attHydrated = 30;
 		}
 	}
 

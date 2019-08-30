@@ -33,11 +33,13 @@ Creature: cHuman inherits cLandAnimal, bHerbivore {
 	drives {
 		driHording;
 		driExplore;
+		driBuildCamp;
 	}
 
 	knowledge {
 		proBeg; proSearchPatron;
 		proChooseDestination; proGoFarAway;
+		proSearchHut; proBuildHut; proCollectBranch;
 	}
 
 	Script: updateMesh() {
@@ -75,7 +77,7 @@ Creature: cTiger inherits cLandAnimal, bCarnivore {
         attBiteSize, 30;
         attEfficiency, 80;
 
-        attLightSensitivity, 70;
+        attLightSensitivity, 40;
         attHungerSensitivity, 500;
         attThirstSensitivity, 50;
         attFatigueSensitivity, 300;

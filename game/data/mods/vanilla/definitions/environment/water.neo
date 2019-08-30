@@ -53,6 +53,7 @@ Entity: entWater {
                         if (h1 > h2 + 1 && chance(getTile(self)..attSediment / 100)) {
                             h--;
                             getTile(self)..attSediment--;
+                            next..attSediment++;
                             setHeight(self, h1 - 1);
                             setHeight(next, h2 + 1);
                         }

@@ -24,7 +24,7 @@ Effect: effSleep {
 Drive: driSleep {
 	Script: condition {
 	    require(! .attSleeping);
-		require(.attFatigue > .attFatigueSensitivity || getLightLevel(self) <= .attLightSensitivity);
+		require(.attFatigue > .attFatigueSensitivity || getLightLevel(self) + getTile(self).attLightLevel <= .attLightSensitivity);
 		require(.attHealth > 0);
 	}
 
@@ -42,6 +42,9 @@ Drive: driSleep {
 Process: proSleep {
     Script: condition {
         require(getHeight(self) > getWaterHeight(self));
+        if (->camp) {
+            require(getTile(->camp) == getTile(self));
+        }
     }
 
 	Script: process {
@@ -53,4 +56,18 @@ Process: proSleep {
 	Script: awake {
 	    ..attSleeping = 0;
 	}
+
+	solutions {
+	    proGoToCamp;
+	}
+}
+
+Process: proGoToCamp {
+    Script: condition {
+        require(->camp);
+    }
+
+    Script: process {
+        moveTo(self, ->camp, .attSpeed);
+    }
 }

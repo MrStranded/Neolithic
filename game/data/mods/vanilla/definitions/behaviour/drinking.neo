@@ -15,7 +15,9 @@ Effect: effThirsty {
                 ..attHealth++;
             }
         } else {
-            ..attHealth--;
+            if (chance(0.5)) {
+                ..attHealth--;
+            }
         }
     }
 
