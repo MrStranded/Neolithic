@@ -29,7 +29,7 @@ public class GraphicalObject extends MoveableObject {
 	// ###################################################################################
 
 	public void cleanUp() {
-		mesh.cleanUp();
+		if (mesh != null) { mesh.cleanUp(); }
 	}
 
 	// ###################################################################################

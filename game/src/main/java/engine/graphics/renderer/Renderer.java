@@ -233,7 +233,7 @@ public class Renderer {
 		//scene.getShadowMap().setLightAngle(-angle);
 		//scene.getShadowMap().cameraChangedPosition();
 
-		double dist = (camera.getRadius() - 0.5d)/100d;
+		double dist = 0.02d; //(camera.getRadius() - 0.5d)/100d;
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
 			camera.rotateYaw(-dist);
@@ -394,16 +394,16 @@ public class Renderer {
 			}
 		}
 
-		if (hud != null) {
-			start = System.currentTimeMillis();
-			renderGUI(hud);
-			if (GameOptions.printPerformance) {
-				long dt = (System.currentTimeMillis() - start);
-				if (dt > 100) {
-					System.out.println("Rendering HUD took: " + dt);
-				}
-			}
-		}
+//		if (hud != null) {
+//			start = System.currentTimeMillis();
+//			renderGUI(hud);
+//			if (GameOptions.printPerformance) {
+//				long dt = (System.currentTimeMillis() - start);
+//				if (dt > 100) {
+//					System.out.println("Rendering HUD took: " + dt);
+//				}
+//			}
+//		}
 
 		flip();
 

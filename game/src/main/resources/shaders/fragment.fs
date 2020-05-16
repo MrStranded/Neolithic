@@ -248,6 +248,7 @@ void main() {
 
         fragmentColor = outColor * (ambientC * ambientLight + pointLightColor + spotLightColor + shadowFactor * directionalLightColor);
     } else {
+
         fragmentColor = outColor * ambientC;
     }
 }

@@ -10,7 +10,8 @@ import engine.graphics.gui.GuiData;
 import engine.threads.LogicThread;
 import engine.parser.Parser;
 
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The engine binds the whole thing together.
@@ -23,10 +24,40 @@ public class Engine {
 
 	private static Planet gaia;
 
+	private static List<Task> tasks;
+
+	// ###################################################################################
+	// ################################ Setup ############################################
+	// ###################################################################################
+
+	private Engine() {}
+
 	public static void initialize() {
 		GuiData.initialize();
 
 		logicThread = new LogicThread();
+
+		tasks = new ArrayList<>(3);
+
+		addTask("Updating Planet Mesh", () -> {
+			if (Data.shouldUpdatePlanetMesh()) {
+				gaia.updatePlanetMesh();
+				Data.setUpdatePlanetMesh(false);
+			}
+		}, 100);
+
+		addTask("Calculating HUD", () -> {
+			GuiData.getHud().tick(GuiData.getRenderWindow().getWidth(), GuiData.getRenderWindow().getHeight());
+			GuiData.getStatisticsWindow().refresh();
+		}, 100);
+
+		addTask("Rendering", () -> {
+			GuiData.getRenderer().render(GuiData.getScene(), GuiData.getHud(), gaia);
+		}, 100);
+	}
+
+	private static void addTask(String description, MeasuredAction action, int minTimeForOutput) {
+		tasks.add(new Task(description, action, minTimeForOutput));
 	}
 
 	public static void loadData() {
@@ -43,65 +74,37 @@ public class Engine {
 		Data.setPlanet(gaia);
 		//Data.addPlanetTilesToQueue();
 
-		long time = System.currentTimeMillis();
-		gaia.generatePlanetMesh();
-		System.out.println("Generating LOD Mesh took: "+(System.currentTimeMillis()-time)+" ms");
+		new Task("Generating LOD Mesh", () -> gaia.generatePlanetMesh()).execute();
 
-		time = System.currentTimeMillis();
-		Instance worldGen = new Instance(Data.getContainerID("genContinental"));
-		worldGen.run(ScriptConstants.EVENT_GENERATE_WORLD, null);
-		System.out.println("Executing WorldGen Script took: "+(System.currentTimeMillis()-time)+" ms");
+		new Task("Executing WorldGen Script", () -> {
+			Instance worldGen = new Instance(Data.getContainerID("genContinental"));
+			worldGen.run(ScriptConstants.EVENT_GENERATE_WORLD, null);
+		}).execute();
 
 		Data.shuffleInstanceQueue();
+	}
+
+	// ###################################################################################
+	// ################################ Running ##########################################
+	// ###################################################################################
+
+	public static void startLogic() {
+		if (! Engine.logicThread.isAlive()) {
+			new Engine().start();
+		}
 	}
 
 	/**
 	 * Starting the drawing loop and cleaning up the window after exiting the program.
 	 * This method cannot be static, because we need the sleep() method from the Thread class.
 	 */
-	public void start() {
+	private void start() {
 		Engine.logicThread.start();
 
 		while (GuiData.getRenderer().displayExists()) {
 			long t = System.currentTimeMillis();
 
-			/*Queue<Tile> tiles = Data.getChangedTiles();
-			if (!tiles.isEmpty()) {
-				gaia.updatePlanetMesh(tiles.poll());
-			}*/
-
-			long start = System.currentTimeMillis();
-			if (Data.shouldUpdatePlanetMesh()) {
-				gaia.updatePlanetMesh();
-				//Data.updateInstancePositions();
-				Data.setUpdatePlanetMesh(false);
-				//gaia.clearChangeFlags();
-			}
-			if (GameOptions.printPerformance) {
-				long dt = (System.currentTimeMillis() - start);
-				if (dt > 100) {
-					System.out.println("Updating Planet Mesh took: " + dt);
-				}
-			}
-
-			start = System.currentTimeMillis();
-			GuiData.getHud().tick(GuiData.getRenderWindow().getWidth(), GuiData.getRenderWindow().getHeight());
-			GuiData.getStatisticsWindow().refresh();
-			if (GameOptions.printPerformance) {
-				long dt = (System.currentTimeMillis() - start);
-				if (dt > 100) {
-					System.out.println("Calculating HUD took: " + dt);
-				}
-			}
-
-			start = System.currentTimeMillis();
-			GuiData.getRenderer().render(GuiData.getScene(), GuiData.getHud(), gaia);
-			if (GameOptions.printPerformance) {
-				long dt = (System.currentTimeMillis() - start);
-				if (dt > 100) {
-					System.out.println("Rendering took: " + dt);
-				}
-			}
+			tasks.forEach(Task::execute);
 
 			long elapsedTime = System.currentTimeMillis() - t;
 			if (elapsedTime < GameConstants.MILLISECONDS_PER_FRAME) {
@@ -111,13 +114,54 @@ public class Engine {
 					e.printStackTrace();
 				}
 			}
-
 		}
 	}
+
+	// ###################################################################################
+	// ################################ Clean Up #########################################
+	// ###################################################################################
 
 	public static void cleanUp() {
 		Data.clear();
 		GuiData.clear();
+	}
+
+	// ###################################################################################
+	// ################################ Private Classes ##################################
+	// ###################################################################################
+
+	private static class Task {
+		String description;
+		MeasuredAction action;
+		int minTimeForOutput;
+
+		Task(String description, MeasuredAction action) {
+			this(description, action, 0);
+		}
+
+		Task(String description, MeasuredAction action, int minTimeForOutput) {
+			this.description = description;
+			this.action = action;
+			this.minTimeForOutput = minTimeForOutput;
+		}
+
+		void execute() {
+			long start = System.currentTimeMillis();
+
+			action.execute();
+
+			if (GameOptions.printPerformance) {
+				long dt = (System.currentTimeMillis() - start);
+				if (dt >= minTimeForOutput) {
+					System.out.println(description + " took: " + dt);
+				}
+			}
+		}
+	}
+
+	@FunctionalInterface
+	private interface MeasuredAction {
+		void execute();
 	}
 
 }

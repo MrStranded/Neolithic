@@ -22,6 +22,9 @@ import engine.Engine;
  * -Xss<size>        set java thread stack size
  *
  * java -Xms1024m -Xmx2048m Start
+ *
+ * To use LWJGL Debug (provided the jar is in the lib folder):
+ * -javaagent:lib/lwjglx-debug-1.0.0.jar
  */
 
 public class Start {
@@ -35,7 +38,7 @@ public class Start {
 		Engine.loadData();
 		Engine.createWorld();
 
-		new Engine().start();
+		Engine.startLogic();
 
 		Engine.cleanUp();
 	}

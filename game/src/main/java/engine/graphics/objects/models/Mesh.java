@@ -4,6 +4,7 @@ import engine.graphics.renderer.color.RGBA;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.MemoryUtil;
 
+import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -64,82 +65,82 @@ public class Mesh {
 	}
 
 	public void registerData() {
-		FloatBuffer verticesBuffer = null;
+		// ------------------ whole object
+		bind();
+
+		// ------------------ index part
+		loadIndexBuffer();
+
+		// ------------------ vertex part
+		loadDataBuffer(vertices, positionsVboId, 0, 3);
+
+		// ------------------ normal part
+		loadDataBuffer(normals, normalsVboId, 1, 3);
+
+		// ------------------ texture part
+		loadDataBuffer(textureCoordinates, textureVboId, 2, 2);
+
+		// ------------------ color part
+		loadDataBuffer(colors, colorVboId, 3, 4);
+
+		// ------------------ unbind
+		unbind();
+	}
+
+	private void bind() {
+		GL30.glBindVertexArray(vertexArrayObjectId);
+	}
+
+	private void unbind() {
+		// Unbind the VBO
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		// Unbind the VAO
+		GL30.glBindVertexArray(0);
+	}
+
+	private void loadIndexBuffer() {
 		IntBuffer indicesBuffer = null;
-		FloatBuffer normalsBuffer = null;
-		FloatBuffer textureBuffer = null;
-		FloatBuffer colorsBuffer = null;
 
 		try {
-			// ------------------ whole object
-			GL30.glBindVertexArray(vertexArrayObjectId);
-
-			// ------------------ index part
 			indicesBuffer = MemoryUtil.memAllocInt(indices.length);
 			indicesBuffer.put(indices).flip();
 
 			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesVboId);
 			GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL15.GL_STATIC_DRAW);
 
-			// ------------------ vertex part
-			verticesBuffer = MemoryUtil.memAllocFloat(vertices.length);
-			verticesBuffer.put(vertices).flip();
+		} catch (Exception e) {
+			e.printStackTrace();
 
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, positionsVboId);
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, verticesBuffer, GL15.GL_STATIC_DRAW);
-
-			GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
-
-			// ------------------ normal part
-			normalsBuffer = MemoryUtil.memAllocFloat(normals.length);
-			normalsBuffer.put(normals).flip();
-
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, normalsVboId);
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, normalsBuffer, GL15.GL_STATIC_DRAW);
-
-			GL20.glVertexAttribPointer(1, 3, GL11.GL_FLOAT, false, 0, 0);
-
-			// ------------------ texture part
-			textureBuffer = MemoryUtil.memAllocFloat(textureCoordinates.length);
-			textureBuffer.put(textureCoordinates).flip();
-
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, textureVboId);
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, textureBuffer, GL15.GL_STATIC_DRAW);
-
-			GL20.glVertexAttribPointer(2, 2, GL11.GL_FLOAT, false, 0, 0);
-
-			// ------------------ color part
-			colorsBuffer = MemoryUtil.memAllocFloat(colors.length);
-			colorsBuffer.put(colors).flip();
-
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, colorVboId);
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colorsBuffer, GL15.GL_STATIC_DRAW);
-
-			GL20.glVertexAttribPointer(3, 4, GL11.GL_FLOAT, false, 0, 0);
-
-			// ------------------ unbind
-			// Unbind the VBO
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-			// Unbind the VAO
-			GL30.glBindVertexArray(0);
 		} finally {
-
 			// ------------------ buffer clean up
-			if (verticesBuffer != null) {
-				MemoryUtil.memFree(verticesBuffer);
-			}
-			if (indicesBuffer != null) {
-				MemoryUtil.memFree(indicesBuffer);
-			}
-			if (normalsBuffer != null) {
-				MemoryUtil.memFree(normalsBuffer);
-			}
-			if (textureBuffer != null) {
-				MemoryUtil.memFree(textureBuffer);
-			}
-			if (colorsBuffer != null) {
-				MemoryUtil.memFree(colorsBuffer);
-			}
+			freeBuffer(indicesBuffer);
+		}
+	}
+
+	private void loadDataBuffer(float[] data, int bufferVboId, int index, int size) {
+		FloatBuffer dataBuffer = null;
+
+		try {
+			dataBuffer = MemoryUtil.memAllocFloat(data.length);
+			dataBuffer.put(data).flip();
+
+			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, bufferVboId);
+			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, dataBuffer, GL15.GL_STATIC_DRAW);
+
+			GL20.glVertexAttribPointer(index, size, GL11.GL_FLOAT, false, 0, 0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			// ------------------ buffer clean up
+			freeBuffer(dataBuffer);
+		}
+	}
+
+	private void freeBuffer(Buffer buffer) {
+		if (buffer != null) {
+			MemoryUtil.memFree(buffer);
 		}
 	}
 

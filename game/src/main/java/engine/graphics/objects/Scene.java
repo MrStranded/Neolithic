@@ -49,7 +49,7 @@ public class Scene {
 
 		// sun
 		objects[2] = new GraphicalObject(MeshGenerator.createIcosahedron());
-		objects[2].scale(10,10,10);
+		objects[2].scale(1000,1000,1000); // 10
 		objects[2].setPosition(0,0,sunDistance);
 		objects[2].getMesh().setColor(1,1,0.5f);
 		objects[2].setAffectedByLight(false);
@@ -57,7 +57,7 @@ public class Scene {
 		// moon
 		objects[3] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		objects[3].getMesh().getMaterial().setTexture(moonTexture);
-		objects[3].scale(0.5, 0.5, 0.5);
+		objects[3].scale(50, 50, 50); // 0.5
 		objects[3].setPosition(0,0,50);
 		objects[3].setRotation(0,0,Math.PI/8);
 
