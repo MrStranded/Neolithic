@@ -1,4 +1,4 @@
-#version 130
+#version 450
 
 // ----------- constants
 
@@ -248,6 +248,7 @@ void main() {
 
         fragmentColor = outColor * (ambientC * ambientLight + pointLightColor + spotLightColor + shadowFactor * directionalLightColor);
     } else {
+
         fragmentColor = outColor * ambientC;
     }
 }

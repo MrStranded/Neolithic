@@ -11,6 +11,7 @@ import engine.threads.LogicThread;
 import engine.parser.Parser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,34 +38,29 @@ public class Engine {
 
 		logicThread = new LogicThread();
 
-		tasks = new ArrayList<>(3);
+		tasks = new ArrayList<>(Arrays.asList(
+				new Task("Updating Planet Mesh", () -> {
+					if (Data.shouldUpdatePlanetMesh()) {
+						gaia.updatePlanetMesh();
+						Data.setUpdatePlanetMesh(false);
+					}
+				}, 100),
 
-		addTask("Updating Planet Mesh", () -> {
-			if (Data.shouldUpdatePlanetMesh()) {
-				gaia.updatePlanetMesh();
-				Data.setUpdatePlanetMesh(false);
-			}
-		}, 100);
+				new Task("Calculating HUD", () -> {
+					GuiData.getHud().tick(GuiData.getRenderWindow().getWidth(), GuiData.getRenderWindow().getHeight());
+					GuiData.getStatisticsWindow().refresh();
+				}, 100),
 
-		addTask("Calculating HUD", () -> {
-			GuiData.getHud().tick(GuiData.getRenderWindow().getWidth(), GuiData.getRenderWindow().getHeight());
-			GuiData.getStatisticsWindow().refresh();
-		}, 100);
-
-		addTask("Rendering", () -> {
-			GuiData.getRenderer().render(GuiData.getScene(), GuiData.getHud(), gaia);
-		}, 100);
-	}
-
-	private static void addTask(String description, MeasuredAction action, int minTimeForOutput) {
-		tasks.add(new Task(description, action, minTimeForOutput));
+				new Task("Rendering", () -> {
+					GuiData.getRenderer().render(GuiData.getScene(), GuiData.getHud(), gaia);
+				}, 100)
+		));
 	}
 
 	public static void loadData() {
-		Parser parser = new Parser();
-
 		Data.initialize();
-		parser.load();
+
+		new Parser().load();
 
 		Data.load();
 	}

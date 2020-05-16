@@ -22,11 +22,11 @@ public class Mesh {
 
 	private final int vertexCount;
 
-	private float[] vertices;
-	private int[] indices;
-	private float[] normals;
-	private float[] textureCoordinates;
-	private float[] colors;
+	private final float[] vertices;
+	private final int[] indices;
+	private final float[] normals;
+	private final float[] textureCoordinates;
+	private final float[] colors;
 
 	public Mesh(float[] vertices, int[] indices, float[] normals, float[] textureCoordinates, float[] colors) {
 		this.vertices = vertices;
@@ -40,24 +40,20 @@ public class Mesh {
 
 		// set up static data
 
-		// ------------------ whole object
+		// ------------------------------------ whole object
 		vertexCount = indices.length;
 
 		vertexArrayObjectId = GL30.glGenVertexArrays();
 
-		// ------------------ vertex part
-		positionsVboId = GL15.glGenBuffers();
-
-		// ------------------ index part
+		// ------------------------------------ index part
 		indicesVboId = GL15.glGenBuffers();
-
-		// ------------------ normal part
+		// ------------------------------------ vertex part
+		positionsVboId = GL15.glGenBuffers();
+		// ------------------------------------ normal part
 		normalsVboId = GL15.glGenBuffers();
-
-		// ------------------ texture part
+		// ------------------------------------ texture part
 		textureVboId = GL15.glGenBuffers();
-
-		// ------------------ color part
+		// ------------------------------------ color part
 		colorVboId = GL15.glGenBuffers();
 
 		// register mesh data
@@ -65,25 +61,24 @@ public class Mesh {
 	}
 
 	public void registerData() {
-		// ------------------ whole object
 		bind();
 
-		// ------------------ index part
+		/*
+		This was the strangest error. On new computer with AMD graphics card, the indices of the data buffers seemingly
+		changed. The "normal" indices are mentioned as comments. Is there another cause?
+		 */
+
+		// ------------------------------------ index part
 		loadIndexBuffer();
+		// ------------------------------------ vertex part
+		loadDataBuffer(vertices, positionsVboId, 2, 3); // index = 0
+		// ------------------------------------ normal part
+		loadDataBuffer(normals, normalsVboId, 1, 3); // index = 1
+		// ------------------------------------ texture part
+		loadDataBuffer(textureCoordinates, textureVboId, 3, 2); // index = 2
+		// ------------------------------------ color part
+		loadDataBuffer(colors, colorVboId, 0, 4); // index = 3
 
-		// ------------------ vertex part
-		loadDataBuffer(vertices, positionsVboId, 0, 3);
-
-		// ------------------ normal part
-		loadDataBuffer(normals, normalsVboId, 1, 3);
-
-		// ------------------ texture part
-		loadDataBuffer(textureCoordinates, textureVboId, 2, 2);
-
-		// ------------------ color part
-		loadDataBuffer(colors, colorVboId, 3, 4);
-
-		// ------------------ unbind
 		unbind();
 	}
 
@@ -112,7 +107,6 @@ public class Mesh {
 			e.printStackTrace();
 
 		} finally {
-			// ------------------ buffer clean up
 			freeBuffer(indicesBuffer);
 		}
 	}
@@ -133,7 +127,6 @@ public class Mesh {
 			e.printStackTrace();
 
 		} finally {
-			// ------------------ buffer clean up
 			freeBuffer(dataBuffer);
 		}
 	}
