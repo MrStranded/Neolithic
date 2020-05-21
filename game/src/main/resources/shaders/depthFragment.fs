@@ -1,4 +1,4 @@
-#version 130
+#version 450
 
 void main() {
     gl_FragDepth = gl_FragCoord.z;

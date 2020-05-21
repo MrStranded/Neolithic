@@ -90,9 +90,8 @@ public class TextObject extends GUIObject {
 		}
 
 		Mesh mesh = new Mesh(
-				FloatConverter.FloatListToFloatArray(positions),
-				IntegerConverter.IntegerListToIntArray(indices),
-				normals,
+                IntegerConverter.IntegerListToIntArray(indices), FloatConverter.FloatListToFloatArray(positions),
+                normals,
 				FloatConverter.FloatListToFloatArray(textureCoordinates),
 				FloatConverter.FloatListToFloatArray(colors)
 		);

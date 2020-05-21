@@ -1,9 +1,9 @@
 #version 450
 
 in vec3 inPosition;
-in vec3 inNormal;
 in vec2 inTextureCoordinates;
 in vec4 inColor;
+in vec3 inNormal;
 
 out vec3 outPosition;
 out vec3 outNormal;

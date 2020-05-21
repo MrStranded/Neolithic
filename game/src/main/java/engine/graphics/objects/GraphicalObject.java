@@ -24,6 +24,14 @@ public class GraphicalObject extends MoveableObject {
 		mesh.render(useDepthTest);
 	}
 
+	public void renderForShadowMap() {
+		mesh.renderForShadowMap();
+	}
+
+	public void renderForGUI() {
+		mesh.renderForGUI();
+	}
+
 	// ###################################################################################
 	// ################################ Clean Up #########################################
 	// ###################################################################################

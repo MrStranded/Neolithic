@@ -105,9 +105,8 @@ public class OBJLoader {
 
 		// ---------------------- creating mesh
 		return new Mesh(
-				VectorConverter.Vector3ArrayToFloatArray(verticesArray),
-				IntegerConverter.IntegerListToIntArray(indicesList),
-				VectorConverter.Vector3ArrayToFloatArray(normalsArray),
+                IntegerConverter.IntegerListToIntArray(indicesList), VectorConverter.Vector3ArrayToFloatArray(verticesArray),
+                VectorConverter.Vector3ArrayToFloatArray(normalsArray),
 				VectorConverter.Vector2ArrayToFloatArray(texturesArray),
 				colors
 		);

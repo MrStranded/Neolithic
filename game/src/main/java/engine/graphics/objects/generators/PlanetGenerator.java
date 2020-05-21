@@ -1,7 +1,6 @@
 package engine.graphics.objects.generators;
 
 import constants.TopologyConstants;
-import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.graphics.objects.models.Material;
@@ -237,7 +236,7 @@ public class PlanetGenerator {
 		// ------------------------------------- texture coordinates
 		float[] textureCoordniates = new float[vertices.length]; // no texture support for planets so far
 
-		Mesh mesh = new Mesh(vertices, indices, normals, textureCoordniates, colors);
+		Mesh mesh = new Mesh(indices, vertices, normals, textureCoordniates, colors);
 		if (water) { // set water material
 			mesh.setMaterial(waterMaterial);
 		}
@@ -434,7 +433,7 @@ public class PlanetGenerator {
 			}
 		}
 
-		facePart.setMesh(new Mesh(mesh.getVertices(), mesh.getIndices(), mesh.getNormals(), mesh.getTextureCoordinates(), ColorConverter.RGBAListToFloatArray(colorList)));
+		facePart.setMesh(new Mesh(mesh.getIndices(), mesh.getVertices(), mesh.getNormals(), mesh.getTextureCoordinates(), ColorConverter.RGBAListToFloatArray(colorList)));
 	}
 
 	// ###################################################################################

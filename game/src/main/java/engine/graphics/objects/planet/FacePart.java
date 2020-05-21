@@ -67,8 +67,10 @@ public class FacePart {
 					if (waterMesh.getMaterial() != null) {
 						shaderProgram.setUniform("material", waterMesh.getMaterial());
 					}
+					waterMesh.render(true);
+				} else {
+					waterMesh.renderForShadowMap();
 				}
-				waterMesh.render(true);
 			}
 		} else {
 			if (waterMesh == null) {
@@ -76,8 +78,10 @@ public class FacePart {
 					if (mesh.getMaterial() != null) {
 						shaderProgram.setUniform("material", mesh.getMaterial());
 					}
+					mesh.render(true);
+				} else {
+					mesh.renderForShadowMap();
 				}
-				mesh.render(true);
 			}
 		}
 		// render all objects on the current tile, but only if we're in the real draw situation (not shadow map drawing)

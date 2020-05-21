@@ -7,9 +7,11 @@ import engine.data.options.GameOptions;
 import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
 import engine.data.structures.trees.binary.BinaryTree;
+import engine.graphics.objects.generators.MeshGenerator;
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.gui.TextObject;
 import engine.graphics.objects.textures.FontTexture;
+import load.TextureLoader;
 
 import java.awt.*;
 import java.util.List;
@@ -36,20 +38,21 @@ public class BaseGUI implements GUIInterface {
 		}
 		GUIObject banner = new TextObject("Neolithic - A Stone Age Game", fontTexture);
 		banner.setSize(600,30);
-		banner.setPosition(0,0,0.5d);
-		banner.setPosition(0,0,-0.25d);
+//		banner.setPosition(0,0,0.5d);
+//		banner.setPosition(0,0,-0.25d);
+		banner.setLocation(-300,0);
 		banner.setRelativeScreenPositionX(RelativeScreenPosition.CENTER);
 		addHUDObject(banner);
 
-		/*objects[0] = new GUIObject(MeshGenerator.createQuad());
+		objects[0] = new GUIObject(MeshGenerator.createQuad());
 		objects[0].getMesh().getMaterial().setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png"));
 		objects[0].setSize(200,200);
-		//objects[0].setLocation(0,100);
-		objects[0].placeInto(0,0,-0.5d);
+		objects[0].setLocation(0,100);
+//		objects[0].placeInto(0,0,-0.5d);
 		//objects[0].getMesh().setTopColor(0.5f, 0.5f, 0.5f, 0.5f);
 		//objects[0].setLocation(200, 400);
 		//objects[0].setRelativeScreenPosition(RelativeScreenPosition.RIGHT, RelativeScreenPosition.BOTTOM);
-		objects[0].setRelativeScreenPosition(RelativeScreenPosition.LEFT, RelativeScreenPosition.TOP);*/
+		objects[0].setRelativeScreenPosition(RelativeScreenPosition.LEFT, RelativeScreenPosition.TOP);
 	}
 
 	// ###################################################################################
@@ -61,12 +64,12 @@ public class BaseGUI implements GUIInterface {
 
 		Container currentSelection = Data.getContainer(GameOptions.currentContainerId);
 		GUIObject selection = new TextObject(currentSelection != null ? currentSelection.getName() : String.valueOf(GameOptions.currentContainerId), fontTexture);
-		selection.setSize(windowWidth/4, windowHeight/8);
-		selection.setLocation(windowWidth*3/4, windowHeight*7/8);
+		selection.setSize(windowWidth / 4.0, windowHeight / 8.0);
+		selection.setLocation(windowWidth * 3.0/4.0, windowHeight * 7.0/8.0);
 		selection.recalculateScale(windowWidth, windowHeight);
 		addHUDObject(selection);
 
-		if (GameOptions.selectedInstance != null && !GameOptions.selectedInstance.isSlatedForRemoval()) {
+		if (GameOptions.selectedInstance != null && ! GameOptions.selectedInstance.isSlatedForRemoval()) {
 			yPos = 0;
 			printInstance(GameOptions.selectedInstance, windowWidth, windowHeight);
 		}
@@ -126,9 +129,7 @@ public class BaseGUI implements GUIInterface {
 		}
 		objects[objectCounter] = guiObject;
 
-		if (++objectCounter >= MAX_OBJECTS) {
-			objectCounter = 0;
-		}
+		objectCounter = (objectCounter + 1) % MAX_OBJECTS;
 	}
 
 	// ###################################################################################

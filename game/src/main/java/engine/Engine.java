@@ -3,7 +3,6 @@ package engine;
 import constants.GameConstants;
 import constants.ScriptConstants;
 import engine.data.entities.Instance;
-import engine.data.options.GameOptions;
 import engine.data.planetary.Planet;
 import engine.data.Data;
 import engine.graphics.gui.GuiData;
@@ -25,7 +24,7 @@ public class Engine {
 
 	private static Planet gaia;
 
-	private static List<Task> tasks;
+	private static List<TimedTask> tasks;
 
 	// ###################################################################################
 	// ################################ Setup ############################################
@@ -38,23 +37,23 @@ public class Engine {
 
 		logicThread = new LogicThread();
 
-		tasks = new ArrayList<>(Arrays.asList(
-				new Task("Updating Planet Mesh", () -> {
+		tasks = TimedTask.listOf(
+				new TimedTask("Updating Planet Mesh", () -> {
 					if (Data.shouldUpdatePlanetMesh()) {
 						gaia.updatePlanetMesh();
 						Data.setUpdatePlanetMesh(false);
 					}
 				}, 100),
 
-				new Task("Calculating HUD", () -> {
+				new TimedTask("Calculating HUD", () -> {
 					GuiData.getHud().tick(GuiData.getRenderWindow().getWidth(), GuiData.getRenderWindow().getHeight());
 					GuiData.getStatisticsWindow().refresh();
 				}, 100),
 
-				new Task("Rendering", () -> {
+				new TimedTask("Rendering", () -> {
 					GuiData.getRenderer().render(GuiData.getScene(), GuiData.getHud(), gaia);
 				}, 100)
-		));
+		);
 	}
 
 	public static void loadData() {
@@ -70,9 +69,9 @@ public class Engine {
 		Data.setPlanet(gaia);
 		//Data.addPlanetTilesToQueue();
 
-		new Task("Generating LOD Mesh", () -> gaia.generatePlanetMesh()).execute();
+		new TimedTask("Generating LOD Mesh", () -> gaia.generatePlanetMesh()).execute();
 
-		new Task("Executing WorldGen Script", () -> {
+		new TimedTask("Executing WorldGen Script", () -> {
 			Instance worldGen = new Instance(Data.getContainerID("genContinental"));
 			worldGen.run(ScriptConstants.EVENT_GENERATE_WORLD, null);
 		}).execute();
@@ -100,7 +99,7 @@ public class Engine {
 		while (GuiData.getRenderer().displayExists()) {
 			long t = System.currentTimeMillis();
 
-			tasks.forEach(Task::execute);
+			tasks.forEach(TimedTask::execute);
 
 			long elapsedTime = System.currentTimeMillis() - t;
 			if (elapsedTime < GameConstants.MILLISECONDS_PER_FRAME) {
@@ -121,43 +120,4 @@ public class Engine {
 		Data.clear();
 		GuiData.clear();
 	}
-
-	// ###################################################################################
-	// ################################ Private Classes ##################################
-	// ###################################################################################
-
-	private static class Task {
-		String description;
-		MeasuredAction action;
-		int minTimeForOutput;
-
-		Task(String description, MeasuredAction action) {
-			this(description, action, 0);
-		}
-
-		Task(String description, MeasuredAction action, int minTimeForOutput) {
-			this.description = description;
-			this.action = action;
-			this.minTimeForOutput = minTimeForOutput;
-		}
-
-		void execute() {
-			long start = System.currentTimeMillis();
-
-			action.execute();
-
-			if (GameOptions.printPerformance) {
-				long dt = (System.currentTimeMillis() - start);
-				if (dt >= minTimeForOutput) {
-					System.out.println(description + " took: " + dt);
-				}
-			}
-		}
-	}
-
-	@FunctionalInterface
-	private interface MeasuredAction {
-		void execute();
-	}
-
 }

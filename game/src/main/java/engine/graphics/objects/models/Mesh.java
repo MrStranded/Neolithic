@@ -11,26 +11,26 @@ import java.nio.IntBuffer;
 public class Mesh {
 
 	private final int vertexArrayObjectId; // Vertex Array Object Id
-	private final int positionsVboId; // Positions Vertex Buffer Object Id
 	private final int indicesVboId; // Indices Vertex Buffer Object Id
-	private final int normalsVboId; // Colors Vertex Buffer Object Id
-	private final int textureVboId; // Texture Coordinates Vertex Buffer Object Id
-	private final int colorVboId; // Color Vertex Buffer Object Id
+	private final int verticesVboId;
+	private final int normalsVboId;
+	private final int textureCoordinatesVboId;
+	private final int colorsVboId;
 
 	private Material material; // the Material, containing also the texture
 	//private RGBA color; // color of the mesh
 
 	private final int vertexCount;
 
-	private final float[] vertices;
 	private final int[] indices;
+	private final float[] vertices;
 	private final float[] normals;
 	private final float[] textureCoordinates;
 	private final float[] colors;
 
-	public Mesh(float[] vertices, int[] indices, float[] normals, float[] textureCoordinates, float[] colors) {
-		this.vertices = vertices;
+	public Mesh(int[] indices, float[] vertices, float[] normals, float[] textureCoordinates, float[] colors) {
 		this.indices = indices;
+		this.vertices = vertices;
 		this.normals = normals;
 		this.textureCoordinates = textureCoordinates;
 		this.colors = colors;
@@ -47,14 +47,11 @@ public class Mesh {
 
 		// ------------------------------------ index part
 		indicesVboId = GL15.glGenBuffers();
-		// ------------------------------------ vertex part
-		positionsVboId = GL15.glGenBuffers();
-		// ------------------------------------ normal part
+		// ------------------------------------ attributes part
+		verticesVboId = GL15.glGenBuffers();
 		normalsVboId = GL15.glGenBuffers();
-		// ------------------------------------ texture part
-		textureVboId = GL15.glGenBuffers();
-		// ------------------------------------ color part
-		colorVboId = GL15.glGenBuffers();
+		textureCoordinatesVboId = GL15.glGenBuffers();
+		colorsVboId = GL15.glGenBuffers();
 
 		// register mesh data
 		registerData();
@@ -63,21 +60,8 @@ public class Mesh {
 	public void registerData() {
 		bind();
 
-		/*
-		This was the strangest error. On new computer with AMD graphics card, the indices of the data buffers seemingly
-		changed. The "normal" indices are mentioned as comments. Is there another cause?
-		 */
-
-		// ------------------------------------ index part
 		loadIndexBuffer();
-		// ------------------------------------ vertex part
-		loadDataBuffer(vertices, positionsVboId, 2, 3); // index = 0
-		// ------------------------------------ normal part
-		loadDataBuffer(normals, normalsVboId, 1, 3); // index = 1
-		// ------------------------------------ texture part
-		loadDataBuffer(textureCoordinates, textureVboId, 3, 2); // index = 2
-		// ------------------------------------ color part
-		loadDataBuffer(colors, colorVboId, 0, 4); // index = 3
+		loadDataBuffers();
 
 		unbind();
 	}
@@ -87,10 +71,10 @@ public class Mesh {
 	}
 
 	private void unbind() {
-		// Unbind the VBO
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 		// Unbind the VAO
 		GL30.glBindVertexArray(0);
+		// Unbind the VBO
+//		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 	}
 
 	private void loadIndexBuffer() {
@@ -111,7 +95,19 @@ public class Mesh {
 		}
 	}
 
-	private void loadDataBuffer(float[] data, int bufferVboId, int index, int size) {
+	private void loadDataBuffers() {
+		bindBuffer(0, verticesVboId, vertices, 3);
+		bindBuffer(1, textureCoordinatesVboId, textureCoordinates, 2);
+		bindBuffer(2, colorsVboId, colors, 4);
+		bindBuffer(3, normalsVboId, normals, 3);
+
+		setAttributeFormat(0,3);
+		setAttributeFormat(1,2);
+		setAttributeFormat(2,4);
+		setAttributeFormat(3,3);
+	}
+
+	private void bindBuffer(int bindingIndex, int bufferVboId, float[] data, int size) {
 		FloatBuffer dataBuffer = null;
 
 		try {
@@ -121,7 +117,7 @@ public class Mesh {
 			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, bufferVboId);
 			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, dataBuffer, GL15.GL_STATIC_DRAW);
 
-			GL20.glVertexAttribPointer(index, size, GL11.GL_FLOAT, false, 0, 0);
+			GL43.glBindVertexBuffer(bindingIndex, bufferVboId, 0, size * 4);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -129,6 +125,11 @@ public class Mesh {
 		} finally {
 			freeBuffer(dataBuffer);
 		}
+	}
+
+	private void setAttributeFormat(int attributeIndex, int size) {
+		GL43.glVertexAttribFormat(attributeIndex, size, GL11.GL_FLOAT, false, 0);
+		GL43.glVertexAttribBinding(attributeIndex, attributeIndex);
 	}
 
 	private void freeBuffer(Buffer buffer) {
@@ -148,35 +149,19 @@ public class Mesh {
 	 * @param useDepthTest whether to use depth test or not
 	 */
 	public void render(boolean useDepthTest) {
-		// Activate first texture unit
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		// Bind the texture
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.hasTexture() ? material.getTexture().getTextureId() : 0);
-
-		// Bind to the VAO
-		GL30.glBindVertexArray(vertexArrayObjectId);
-		GL20.glEnableVertexAttribArray(0);
-		GL20.glEnableVertexAttribArray(1);
-		GL20.glEnableVertexAttribArray(2);
-		GL20.glEnableVertexAttribArray(3);
+		prepareRender();
 
 		if (!useDepthTest) {
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 		}
 
-		// Draw the mesh
-		GL11.glDrawElements(GL11.GL_TRIANGLES, vertexCount, GL11.GL_UNSIGNED_INT, 0);
+		pureRender();
 
 		if (!useDepthTest) {
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 		}
 
-		// Restore state
-		GL20.glDisableVertexAttribArray(0);
-		GL20.glDisableVertexAttribArray(1);
-		GL20.glDisableVertexAttribArray(2);
-		GL20.glDisableVertexAttribArray(3);
-		GL30.glBindVertexArray(0);
+		postRender();
 	}
 
 	/**
@@ -219,23 +204,39 @@ public class Mesh {
 		GL30.glBindVertexArray(0);
 	}
 
+	public void renderForShadowMap() {
+		// Bind to the VAO
+		GL30.glBindVertexArray(vertexArrayObjectId);
+		GL20.glEnableVertexAttribArray(0);
+
+		// Draw the mesh
+		GL11.glDrawElements(GL11.GL_TRIANGLES, vertexCount, GL11.GL_UNSIGNED_INT, 0);
+
+		// Restore state
+		GL20.glDisableVertexAttribArray(0);
+		GL30.glBindVertexArray(0);
+	}
+
+	public void renderForGUI() {
+		// Bind to the VAO
+		GL30.glBindVertexArray(vertexArrayObjectId);
+		GL20.glEnableVertexAttribArray(0);
+		GL20.glEnableVertexAttribArray(1);
+		GL20.glEnableVertexAttribArray(2);
+
+		// Draw the mesh
+		GL11.glDrawElements(GL11.GL_TRIANGLES, vertexCount, GL11.GL_UNSIGNED_INT, 0);
+
+		// Restore state
+		GL20.glDisableVertexAttribArray(0);
+		GL20.glDisableVertexAttribArray(1);
+		GL20.glDisableVertexAttribArray(2);
+		GL30.glBindVertexArray(0);
+	}
+
 	// ###################################################################################
 	// ################################ Modification #####################################
 	// ###################################################################################
-
-	public void setZValues(float z) {
-		for (int i=2; i<vertices.length; i+=3) {
-			vertices[i] = z;
-		}
-		registerData();
-	}
-
-	public void randomizeTextureCoordinates() {
-		for (int i=0; i<textureCoordinates.length; i++) {
-			textureCoordinates[i] = (float) Math.random();
-		}
-		registerData();
-	}
 
 	/**
 	 * This method ensures that the x and y coordinates of the vertices reach (at most) from (0,0) to (1,1).
@@ -293,13 +294,16 @@ public class Mesh {
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);
 		GL20.glDisableVertexAttribArray(2);
+		GL20.glDisableVertexAttribArray(3);
 
 		// Delete the VBOs
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-		GL15.glDeleteBuffers(positionsVboId);
-		GL15.glDeleteBuffers(indicesVboId);
+
+		GL15.glDeleteBuffers(verticesVboId);
 		GL15.glDeleteBuffers(normalsVboId);
-		GL15.glDeleteBuffers(textureVboId);
+		GL15.glDeleteBuffers(textureCoordinatesVboId);
+		GL15.glDeleteBuffers(colorsVboId);
+		GL15.glDeleteBuffers(indicesVboId);
 
 		// Delete the VAO
 		GL30.glBindVertexArray(0);
@@ -317,7 +321,7 @@ public class Mesh {
 		setColor(r, g, b, 1);
 	}
 	public void setColor(float r, float g, float b, float a) {
-		for (int i=0; i<colors.length/4; i++) {
+		for (int i = 0; i < colors.length / 4; i++) {
 			colors[i*4 + 0] = r;
 			colors[i*4 + 1] = g;
 			colors[i*4 + 2] = b;

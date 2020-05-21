@@ -3,6 +3,7 @@ package engine.graphics.renderer;
 import constants.GameConstants;
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
+import engine.TimedTask;
 import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
 import engine.data.planetary.Planet;
@@ -33,7 +34,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
-import java.util.Collection;
+import java.util.*;
 
 import static java.lang.System.exit;
 
@@ -62,6 +63,13 @@ public class Renderer {
 	private MouseInput mouse;
 	private KeyboardInput keyboard;
 
+	private List<TimedTask> tasks = Collections.emptyList();
+
+	private Scene scene = null;
+	private GUIInterface hud = null;
+	private Planet planet = null;
+	private PlanetObject planetObject = null;
+
 	private double angle = 0;
 
 	public Renderer(Window window) {
@@ -85,6 +93,8 @@ public class Renderer {
 
 		calculateProjectionMatrizes();
 		calculateOrthographicMatrix();
+
+		initializeTasks();
 	}
 
 	private void initializeShaders() {
@@ -93,7 +103,7 @@ public class Renderer {
 			shaderProgram = new ShaderProgram();
 			shaderProgram.createVertexShader(StringLoader.read(ResourcePathConstants.WORLD_VERTEX_SHADER));
 			shaderProgram.createFragmentShader(StringLoader.read(ResourcePathConstants.WORLD_FRAGMENT_SHADER));
-			shaderProgram.link();
+			shaderProgram.linkNormal();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -105,7 +115,7 @@ public class Renderer {
 			hudShaderProgram = new ShaderProgram();
 			hudShaderProgram.createVertexShader(StringLoader.read(ResourcePathConstants.HUD_VERTEX_SHADER));
 			hudShaderProgram.createFragmentShader(StringLoader.read(ResourcePathConstants.HUD_FRAGMENT_SHADER));
-			hudShaderProgram.link();
+			hudShaderProgram.linkHUD();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -117,7 +127,7 @@ public class Renderer {
 			depthShaderProgram = new ShaderProgram();
 			depthShaderProgram.createVertexShader(StringLoader.read(ResourcePathConstants.DEPTH_VERTEX_SHADER));
 			depthShaderProgram.createFragmentShader(StringLoader.read(ResourcePathConstants.DEPTH_FRAGMENT_SHADER));
-			depthShaderProgram.link();
+			depthShaderProgram.linkDepth();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -160,6 +170,7 @@ public class Renderer {
 			// ---------------------------------------------------------- shadow maps
 			depthShaderProgram.createUniform("orthographicProjectionMatrix");
 			depthShaderProgram.createUniform("modelLightViewMatrix");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			exit(1);
@@ -169,6 +180,21 @@ public class Renderer {
 	private void initializeInput() {
 		mouse = new MouseInput(window);
 		keyboard = new KeyboardInput(window);
+	}
+
+	private void initializeTasks() {
+		tasks = TimedTask.listOf(
+				new TimedTask("Rendering Shadow Map", () -> renderDepthMap(scene.getShadowMap()), 100),
+
+				new TimedTask("Rendering Scene", () -> {
+					GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
+					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
+					renderScene();
+				}, 100),
+
+				new TimedTask("Rendering HUD", this::renderGUI, 100)
+		);
 	}
 
 	// ###################################################################################
@@ -233,7 +259,7 @@ public class Renderer {
 		//scene.getShadowMap().setLightAngle(-angle);
 		//scene.getShadowMap().cameraChangedPosition();
 
-		double dist = 0.02d; //(camera.getRadius() - 0.5d)/100d;
+		double dist = (camera.getRadius() - 0.5d) / 100d;
 
 		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
 			camera.rotateYaw(-dist);
@@ -365,45 +391,14 @@ public class Renderer {
 	// ###################################################################################
 
 	public void render(Scene scene, GUIInterface hud, Planet planet) {
+		this.scene = scene;
+		this.hud = hud;
+		this.planet = planet;
+		this.planetObject = planet != null ? planet.getPlanetObject() : null;
+
 		processInput(scene);
 
-		PlanetObject planetObject = planet.getPlanetObject();
-
-		// Render depth map before view port has been set up
-		long start = System.currentTimeMillis();
-		if (scene.getShadowMap() != null) {
-			renderDepthMap(scene.getShadowMap(), scene, hud, planetObject);
-		}
-		if (GameOptions.printPerformance) {
-			long dt = (System.currentTimeMillis() - start);
-			if (dt > 100) {
-				System.out.println("Rendering Shadow Map took: " + dt);
-			}
-		}
-
-		GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
-
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-
-		start = System.currentTimeMillis();
-		renderScene(scene, planetObject);
-		if (GameOptions.printPerformance) {
-			long dt = (System.currentTimeMillis() - start);
-			if (dt > 100) {
-				System.out.println("Rendering Scene took: " + dt);
-			}
-		}
-
-//		if (hud != null) {
-//			start = System.currentTimeMillis();
-//			renderGUI(hud);
-//			if (GameOptions.printPerformance) {
-//				long dt = (System.currentTimeMillis() - start);
-//				if (dt > 100) {
-//					System.out.println("Rendering HUD took: " + dt);
-//				}
-//			}
-//		}
+		tasks.forEach(TimedTask::execute);
 
 		flip();
 
@@ -416,7 +411,11 @@ public class Renderer {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Depth Map
 
-	private void renderDepthMap(ShadowMap shadowMap, Scene scene, GUIInterface hud, PlanetObject planetObject) {
+	private void renderDepthMap(ShadowMap shadowMap) {
+		Objects.requireNonNull(scene);
+		Objects.requireNonNull(hud);
+		Objects.requireNonNull(shadowMap);
+
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, shadowMap.getDepthMapFBO());
 		GL11.glViewport(0, 0, GraphicalConstants.SHADOWMAP_SIZE, GraphicalConstants.SHADOWMAP_SIZE);
 
@@ -432,7 +431,7 @@ public class Renderer {
 			if (object != null) {
 				depthShaderProgram.setUniform("modelLightViewMatrix", viewMatrix.times(object.getWorldMatrix()));
 
-				object.render();
+				object.renderForShadowMap();
 			}
 		}
 
@@ -447,12 +446,14 @@ public class Renderer {
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 
 		// shadow map into hud object 0
-		//hud.getHUDObjects()[0].getMesh().getMaterial().setTexture(shadowMap.getDepthMap());
+		hud.getHUDObjects()[0].getMesh().getMaterial().setTexture(shadowMap.getDepthMap());
 	}
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Scene
 
-	private void renderScene(Scene scene, PlanetObject planetObject) {
+	private void renderScene() {
+		Objects.requireNonNull(scene);
+
 		shaderProgram.bind();
 
 		Camera camera = scene.getCamera();
@@ -510,6 +511,7 @@ public class Renderer {
 				if (!meshHub.isMeshLoaded()) { meshHub.loadMesh(); }
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			// this happens when a new mesh hub is added to the hashmap while we iterate over it
 		}
 
@@ -533,6 +535,7 @@ public class Renderer {
 				meshHub.render(shaderProgram, viewMatrix, shadowMap);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			// this happens when a new mesh hub is added to the hashmap while we iterate over it
 		}
 
@@ -555,7 +558,9 @@ public class Renderer {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GUI
 
-	private void renderGUI(GUIInterface hud) {
+	private void renderGUI() {
+		Objects.requireNonNull(hud);
+
 		hudShaderProgram.bind();
 
 		// set used texture (id = 0)
@@ -569,7 +574,7 @@ public class Renderer {
 
 				hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
 				//hudShaderProgram.setUniform("color", object.getMesh().getTopColor());
-				object.render();
+				object.renderForGUI();
 			}
 		}
 

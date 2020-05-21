@@ -1,4 +1,4 @@
-#version 130
+#version 450
 
 in vec2 outTextureCoordinates;
 in vec4 outColor;

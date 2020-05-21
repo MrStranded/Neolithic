@@ -5,7 +5,7 @@ WorldGen: genContinental {
 		setWaterLevel(100);
 		print("water level set");
 
-		/*for (t : eachTile()) {
+		for (t : eachTile()) {
 			if (chance(0.0025)) { // 1/4% chance
 				if (chance(0.75)) {
 					destroy(create(formPlateau, t));
@@ -25,7 +25,7 @@ WorldGen: genContinental {
 					create(entBoulder, t);
 				}
 			}
-		}*/
+		}
 	}
 }
 

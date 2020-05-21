@@ -78,8 +78,30 @@ public class ShaderProgram {
 		return shaderId;
 	}
 
-	public void link() throws Exception {
+	public void linkNormal() throws Exception {
+		GL20.glBindAttribLocation(programId, 0, "inPosition");
+		GL20.glBindAttribLocation(programId, 1, "inTextureCoordinates");
+		GL20.glBindAttribLocation(programId, 2, "inColor");
+		GL20.glBindAttribLocation(programId, 3, "inNormal");
 
+		link();
+	}
+
+	public void linkDepth() throws Exception {
+		GL20.glBindAttribLocation(programId, 0, "inPosition");
+
+		link();
+	}
+
+	public void linkHUD() throws Exception {
+		GL20.glBindAttribLocation(programId, 0, "inPosition");
+		GL20.glBindAttribLocation(programId, 1, "inTextureCoordinates");
+		GL20.glBindAttribLocation(programId, 2, "inColor");
+
+		link();
+	}
+
+	private void link() throws Exception {
 		GL20.glLinkProgram(programId);
 		if (GL20.glGetProgrami(programId, GL20.GL_LINK_STATUS) == 0) {
 			throw new Exception("Error while linking Shader code: " + GL20.glGetProgramInfoLog(programId, 1024));

@@ -55,7 +55,7 @@ public class Scene {
 		objects[2].setAffectedByLight(false);
 
 		// moon
-		objects[3] = new GraphicalObject(MeshGenerator.createCube(false));
+		objects[3] = new GraphicalObject(MeshGenerator.createIcosahedron());
 		objects[3].getMesh().getMaterial().setTexture(moonTexture);
 		objects[3].scale(0.5, 0.5, 0.5); // 0.5
 		objects[3].setPosition(0,0,50);
