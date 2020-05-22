@@ -114,8 +114,9 @@ public enum TokenConstants {
 	GET_TYPE				(TokenType.COMMAND, "getType"),
 	GET_WATER_HEIGHT        (TokenType.COMMAND, "getWaterHeight"),
 	HAS_EFFECT              (TokenType.COMMAND, "hasEffect"),
-	IS_ON_FLOOR				(TokenType.COMMAND, "isOnFloor"),
 	IS_NEIGHBOUR            (TokenType.COMMAND, "isNeighbor"),
+	IS_ON_FLOOR				(TokenType.COMMAND, "isOnFloor"),
+	IS_SELECTED				(TokenType.COMMAND, "isSelected"),
 	RANDOM_TILE             (TokenType.COMMAND, "randomTile"),
 
 	// -------------------------------------------------- Actions

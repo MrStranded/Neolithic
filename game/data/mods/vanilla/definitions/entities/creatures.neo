@@ -8,7 +8,6 @@ Creature: cHuman inherits cLandAnimal, bHerbivore {
 	attributes {
 		attSize, 10;
 		attHealth, 150;
-		attMeat, 1;
 
         attLibido, 300;
         attMatureAge, 500;

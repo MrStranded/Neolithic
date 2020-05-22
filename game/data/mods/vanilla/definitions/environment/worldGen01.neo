@@ -2,7 +2,7 @@ WorldGen: genContinental {
 	name = "Continental";
 
 	Script: generate {
-		setWaterLevel(100);
+		/*setWaterLevel(100);
 		print("water level set");
 
 		for (t : eachTile()) {
@@ -25,7 +25,7 @@ WorldGen: genContinental {
 					create(entBoulder, t);
 				}
 			}
-		}
+		}*/
 	}
 }
 

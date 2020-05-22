@@ -4,6 +4,7 @@ import constants.ResourcePathConstants;
 import constants.ScriptConstants;
 import constants.TopologyConstants;
 import engine.data.Data;
+import engine.data.options.GameOptions;
 import engine.data.scripts.Script;
 import engine.data.entities.Effect;
 import engine.data.entities.Instance;
@@ -709,6 +710,16 @@ public class CommandExecuter {
 				}
 
 				return new Variable(0);
+			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& boolean isSelected(Instance instance)
+		} else if (TokenConstants.IS_SELECTED.equals(command)) {
+			if (requireParameters(commandNode,1)) {
+				Instance instance = parameters[0].getInstance();
+
+				checkValue(script, commandNode, instance, "target instance");
+
+				return new Variable(instance == GameOptions.selectedInstance);
 			}
 
         // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int length (List list)

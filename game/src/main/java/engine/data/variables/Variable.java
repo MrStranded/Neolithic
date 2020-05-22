@@ -44,6 +44,11 @@ public class Variable implements IDInterface {
 	// ################################ Specific Constructors ############################
 	// ###################################################################################
 
+	public Variable(boolean value) {
+		this.type = DataType.NUMBER;
+		this.value = value ? 1.0 : 0.0;
+	}
+
 	public Variable(double value) {
 		this.type = DataType.NUMBER;
 		this.value = value;

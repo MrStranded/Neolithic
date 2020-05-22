@@ -60,21 +60,21 @@ public class BaseGUI implements GUIInterface {
 	// ###################################################################################
 
 	public void tick(int windowWidth, int windowHeight) {
-//		clear();
-//
-//		Container currentSelection = Data.getContainer(GameOptions.currentContainerId);
-//		GUIObject selection = new TextObject(currentSelection != null ? currentSelection.getName() : String.valueOf(GameOptions.currentContainerId), fontTexture);
-//		selection.setSize(windowWidth / 4.0, windowHeight / 8.0);
-//		selection.setLocation(0, 0);
-//		selection.setRelativeScreenPosition(RelativeScreenPosition.LEFT, RelativeScreenPosition.TOP);
-////		selection.setLocation(windowWidth * 3.0/4.0, windowHeight * 7.0/8.0);
-//		selection.recalculateScale(windowWidth, windowHeight);
-//		addHUDObject(selection);
-//
-//		if (GameOptions.selectedInstance != null && ! GameOptions.selectedInstance.isSlatedForRemoval()) {
-//			yPos = 0;
-//			printInstance(GameOptions.selectedInstance, windowWidth, windowHeight);
-//		}
+		clear();
+
+		Container currentSelection = Data.getContainer(GameOptions.currentContainerId);
+		GUIObject selection = new TextObject(currentSelection != null ? currentSelection.getName() : String.valueOf(GameOptions.currentContainerId), fontTexture);
+		selection.setSize(windowWidth * 0.25, windowHeight * 0.125);
+		selection.setLocation(windowWidth * 0.75, windowHeight * 0.875);
+		selection.setRelativeScreenPosition(RelativeScreenPosition.LEFT, RelativeScreenPosition.TOP);
+//		selection.setLocation(windowWidth * 3.0/4.0, windowHeight * 7.0/8.0);
+		selection.recalculateScale(windowWidth, windowHeight);
+		addHUDObject(selection);
+
+		if (GameOptions.selectedInstance != null && ! GameOptions.selectedInstance.isSlatedForRemoval()) {
+			yPos = 0;
+			printInstance(GameOptions.selectedInstance, windowWidth, windowHeight);
+		}
 	}
 
 	private void printInstance(Instance instance, int windowWidth, int windowHeight) {
@@ -99,6 +99,7 @@ public class BaseGUI implements GUIInterface {
 					}
 				} catch (Exception e) {
 					// a concurrent modification exception
+					e.printStackTrace();
 				}
 			}
 		}

@@ -18,7 +18,7 @@ public class IfStatementNode extends AbstractScriptNode {
 	public Variable execute(Instance instance, Script script) throws ScriptInterruptedException {
 		Variable condition = subNodes[0].execute(instance, script);
 
-		if (!condition.isNull()) {
+		if (! condition.isNull()) {
 			return subNodes[1].execute(instance, script);
 		} else {
 			if (subNodes[2] != null) {
