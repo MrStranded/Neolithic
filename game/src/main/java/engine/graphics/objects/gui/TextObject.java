@@ -25,9 +25,9 @@ public class TextObject extends GUIObject {
 		char[] characters = text.toCharArray();
 		int numberOfCharacters = characters.length;
 
+		List<Integer> indices = new ArrayList<>();
 		List<Float> positions = new ArrayList<>();
 		List<Float> textureCoordinates = new ArrayList<>();
-		List<Integer> indices = new ArrayList<>();
 		List<Float> colors = new ArrayList<>();
 		float[] normals = new float[0];
 
@@ -89,13 +89,23 @@ public class TextObject extends GUIObject {
 			xPos += charWidth;
 		}
 
+		// normalizing mesh
+		for (int i = 0; i < positions.size(); i++) {
+			if (i % 3 == 0) {
+				positions.set(i, positions.get(i) / xPos);
+			} else if (i % 3 == 1) {
+				positions.set(i, positions.get(i) / fontHeight + 1f);
+			}
+		}
+
 		Mesh mesh = new Mesh(
-                IntegerConverter.IntegerListToIntArray(indices), FloatConverter.FloatListToFloatArray(positions),
-                normals,
+                IntegerConverter.IntegerListToIntArray(indices),
+				FloatConverter.FloatListToFloatArray(positions),
 				FloatConverter.FloatListToFloatArray(textureCoordinates),
-				FloatConverter.FloatListToFloatArray(colors)
+				FloatConverter.FloatListToFloatArray(colors),
+				normals
 		);
-		mesh.normalize();
+
 		mesh.getMaterial().setTexture(fontTexture.getTexture());
 		return mesh;
 	}

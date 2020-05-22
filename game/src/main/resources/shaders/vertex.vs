@@ -6,9 +6,9 @@ in vec4 inColor;
 in vec3 inNormal;
 
 out vec3 outPosition;
-out vec3 outNormal;
 out vec2 outTextureCoordinates;
 out vec4 outColor;
+out vec3 outNormal;
 
 out vec4 lightPosition;
 

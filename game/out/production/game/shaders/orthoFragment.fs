@@ -10,9 +10,10 @@ uniform sampler2D textureSampler;
 
 void main() {
     vec4 textureColor = texture(textureSampler, outTextureCoordinates);
+
+    // textureColor.w is the alpha value of the texture
     if (textureColor.w == 0.0) {
         discard;
-        //fragmentColor = vec4(outTextureCoordinates, 0.0, 1.0);
     } else {
         fragmentColor = outColor * textureColor;
     }

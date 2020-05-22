@@ -68,7 +68,7 @@ public class MeshGenerator {
 				1f, 1f, 1f, 1f
 		};
 
-		return new Mesh(indices, vertices, normals, textureCoordinates, colors);
+		return new Mesh(indices, vertices, textureCoordinates, colors, normals);
 	}
 
 	// ###################################################################################
@@ -122,7 +122,7 @@ public class MeshGenerator {
                 1f, 0f, 0f, 0.5f
 		};
 
-		return new Mesh(indices, vertices, normals, textureCoordinates, colors);
+		return new Mesh(indices, vertices, textureCoordinates, colors, normals);
 	}
 	
 	// ###################################################################################
@@ -163,7 +163,7 @@ public class MeshGenerator {
 				1f, 1f, 1f, 1f
 		};
 
-		return new Mesh(indices, vertices, normals, textureCoordinates, colors);
+		return new Mesh(indices, vertices, textureCoordinates, colors, normals);
 	}
 
 	// ###################################################################################
@@ -224,7 +224,7 @@ public class MeshGenerator {
 			colors[i] = 1f;
 		}
 
-		return new Mesh(indices, vertices, normals, textureCoordinates, colors);
+		return new Mesh(indices, vertices, textureCoordinates, colors, normals);
 	}
 
 	// ###################################################################################
@@ -314,7 +314,7 @@ public class MeshGenerator {
 			colors[i] = 1f;
 		}
 
-		return new Mesh(indices, vertices, normals, textureCoordniates, colors);
+		return new Mesh(indices, vertices, textureCoordniates, colors, normals);
 	}
 
 	private static float[] createOutwardFacingNormals(float[] vertices) {

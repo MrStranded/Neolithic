@@ -60,7 +60,7 @@ public class ShaderProgram {
 
 		int shaderId = GL20.glCreateShader(shaderType);
 		if (shaderId == 0) {
-			throw new Exception("Error while creating shader of type " + shaderType);
+			throw new Exception("Error while creating shader '" + shaderCode + "' of type " + shaderType);
 		}
 
 		GL20.glShaderSource(shaderId, shaderCode);
@@ -71,9 +71,6 @@ public class ShaderProgram {
 		}
 
 		GL20.glAttachShader(programId, shaderId);
-
-		// Setup Vertex Attributes ( https://stackoverflow.com/questions/21354301/glsl-syntax-problems-unexpected-new-identifier )
-		//GL20.glBindAttribLocation(programId, 0, "location");
 
 		return shaderId;
 	}

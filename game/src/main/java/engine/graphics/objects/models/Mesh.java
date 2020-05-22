@@ -28,12 +28,14 @@ public class Mesh {
 	private final float[] textureCoordinates;
 	private final float[] colors;
 
-	public Mesh(int[] indices, float[] vertices, float[] normals, float[] textureCoordinates, float[] colors) {
+	public Mesh(int[] indices, float[] vertices, float[] textureCoordinates, float[] colors, float[] normals) {
 		this.indices = indices;
 		this.vertices = vertices;
-		this.normals = normals;
 		this.textureCoordinates = textureCoordinates;
 		this.colors = colors;
+		this.normals = normals;
+
+		vertexCount = indices.length;
 
 		material = new Material();
 		//color = new RGBA(1,1,1,1);
@@ -41,8 +43,6 @@ public class Mesh {
 		// set up static data
 
 		// ------------------------------------ whole object
-		vertexCount = indices.length;
-
 		vertexArrayObjectId = GL30.glGenVertexArrays();
 
 		// ------------------------------------ index part
@@ -218,6 +218,11 @@ public class Mesh {
 	}
 
 	public void renderForGUI() {
+		// Activate first texture unit
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		// Bind the texture
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.hasTexture() ? material.getTexture().getTextureId() : 0);
+
 		// Bind to the VAO
 		GL30.glBindVertexArray(vertexArrayObjectId);
 		GL20.glEnableVertexAttribArray(0);
@@ -303,6 +308,7 @@ public class Mesh {
 		GL15.glDeleteBuffers(normalsVboId);
 		GL15.glDeleteBuffers(textureCoordinatesVboId);
 		GL15.glDeleteBuffers(colorsVboId);
+
 		GL15.glDeleteBuffers(indicesVboId);
 
 		// Delete the VAO

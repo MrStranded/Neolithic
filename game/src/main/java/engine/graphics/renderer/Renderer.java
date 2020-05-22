@@ -98,7 +98,6 @@ public class Renderer {
 	}
 
 	private void initializeShaders() {
-		// loading and linking the shaders
 		try {
 			shaderProgram = new ShaderProgram();
 			shaderProgram.createVertexShader(StringLoader.read(ResourcePathConstants.WORLD_VERTEX_SHADER));
@@ -110,7 +109,6 @@ public class Renderer {
 	}
 
 	private void initializeHUDShaders() {
-		// loading and linking the shaders
 		try {
 			hudShaderProgram = new ShaderProgram();
 			hudShaderProgram.createVertexShader(StringLoader.read(ResourcePathConstants.HUD_VERTEX_SHADER));
@@ -122,7 +120,6 @@ public class Renderer {
 	}
 
 	private void initializeDepthShaders() {
-		// loading and linking the shaders
 		try {
 			depthShaderProgram = new ShaderProgram();
 			depthShaderProgram.createVertexShader(StringLoader.read(ResourcePathConstants.DEPTH_VERTEX_SHADER));
@@ -446,7 +443,7 @@ public class Renderer {
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 
 		// shadow map into hud object 0
-		hud.getHUDObjects()[0].getMesh().getMaterial().setTexture(shadowMap.getDepthMap());
+//		hud.getHUDObjects()[0].getMesh().getMaterial().setTexture(shadowMap.getDepthMap());
 	}
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Scene
@@ -605,6 +602,9 @@ public class Renderer {
 		}
 		if (hudShaderProgram != null) {
 			hudShaderProgram.cleanup();
+		}
+		if (depthShaderProgram != null) {
+			depthShaderProgram.cleanup();
 		}
 	}
 

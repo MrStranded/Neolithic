@@ -236,7 +236,7 @@ public class PlanetGenerator {
 		// ------------------------------------- texture coordinates
 		float[] textureCoordniates = new float[vertices.length]; // no texture support for planets so far
 
-		Mesh mesh = new Mesh(indices, vertices, normals, textureCoordniates, colors);
+		Mesh mesh = new Mesh(indices, vertices, textureCoordniates, colors, normals);
 		if (water) { // set water material
 			mesh.setMaterial(waterMaterial);
 		}
@@ -433,7 +433,7 @@ public class PlanetGenerator {
 			}
 		}
 
-		facePart.setMesh(new Mesh(mesh.getIndices(), mesh.getVertices(), mesh.getNormals(), mesh.getTextureCoordinates(), ColorConverter.RGBAListToFloatArray(colorList)));
+		facePart.setMesh(new Mesh(mesh.getIndices(), mesh.getVertices(), mesh.getTextureCoordinates(), ColorConverter.RGBAListToFloatArray(colorList), mesh.getNormals()));
 	}
 
 	// ###################################################################################

@@ -53,7 +53,7 @@ public class FontTexture {
 		}
 		graphics.dispose();
 
-		// Check wheter there already is a corresponding font texture file and create it if necessary
+		// Check whether there already is a corresponding font texture file and create it if necessary
 		String filePath = ResourcePathConstants.FONT_FOLDER + getFontFileName();
 
 		if (!(new File(filePath).exists())) {
@@ -94,8 +94,7 @@ public class FontTexture {
 
 	private String getFontFileName() {
 		if (font == null) return "";
-		return
-				font.getFontName() + "_" +
+		return 	font.getFontName() + "_" +
 				font.getStyle() + "_" +
 				font.getSize() + "_" +
 				charSetName +

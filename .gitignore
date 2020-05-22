@@ -15,3 +15,5 @@ game/old/
 game/out/
 
 *.log
+
+*.iml

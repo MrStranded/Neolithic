@@ -137,9 +137,7 @@ public class PLYLoader {
 		// ---------------------- creating mesh
 		return new Mesh(
                 IntegerConverter.IntegerListToIntArray(indicesList), VectorConverter.Vector3ListToFloatArray(verticesList),
-                VectorConverter.Vector3ListToFloatArray(normalsList),
-				VectorConverter.Vector2ListToFloatArray(texturesList),
-				ColorConverter.RGBAListToFloatArray(colorsList)
-		);
+                VectorConverter.Vector2ListToFloatArray(texturesList), ColorConverter.RGBAListToFloatArray(colorsList), VectorConverter.Vector3ListToFloatArray(normalsList)
+        );
 	}
 }
