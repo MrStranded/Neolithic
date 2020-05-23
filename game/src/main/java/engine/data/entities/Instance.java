@@ -46,14 +46,6 @@ public class Instance {
 	public Instance(int id) {
 		this.id = id;
 
-		/*
-		attributes = new BinaryTree<>();
-		effects = new LinkedList<>(); //new CopyOnWriteArrayList<>();
-		variables = new BinaryTree<>();
-		occupations = new LinkedList<>();
-		subInstances = new ArrayList<>(0);
-		*/
-
         moveableObject = new MoveableObject();
 
         inheritAttributes();
@@ -444,7 +436,12 @@ public class Instance {
 	    effects.add(effect);
     }
 
-    public void deleteEffects(int containerID) {
+	/**
+	 * Deletes all effects with the given id from the instance.
+	 * If the given id is -1, then all effects are deleted.
+	 * @param containerID effect id
+	 */
+	public void deleteEffects(int containerID) {
 		if (effects != null) {
 			effects.removeIf(effect -> ((containerID == -1) || (effect.getId() == containerID)));
 		}

@@ -6,11 +6,10 @@ import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
 import engine.data.Data;
 import engine.graphics.gui.GuiData;
+import engine.parser.scripts.execution.CommandExecutor;
 import engine.threads.LogicThread;
 import engine.parser.Parser;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -58,6 +57,7 @@ public class Engine {
 
 	public static void loadData() {
 		Data.initialize();
+		CommandExecutor.initialize();
 
 		new Parser().load();
 

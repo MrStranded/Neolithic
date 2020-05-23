@@ -36,7 +36,7 @@ Process: proSearchHut {
 
 Process: proBuildHut {
     Script: condition {
-        require(getFullAtt(getTile(self), "attSize") <= 40);
+        require(getFullAtt("attSize", getTile(self)) <= 40);
         require(getHeight(self) > getWaterHeight(self));
         require(getItems(self, entBranch) >= 3);
     }

@@ -25,7 +25,7 @@ Entity: entWater {
         if (..attWater > 0) {
             lowest = h;
             for (n : getNeighbors(self)) {
-                oh = getHeight(n) + getFullAtt(n, "attWater");
+                oh = getHeight(n) + getFullAtt("attWater", n);
                 if (oh < lowest) {
                     lowest = oh;
                     next = n;
