@@ -2,6 +2,8 @@ package engine.parser.scripts.execution.commands;
 
 import engine.data.Data;
 import engine.data.entities.Instance;
+import engine.data.options.GameOptions;
+import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.variables.DataType;
@@ -354,6 +356,27 @@ public class RetrievalCommands implements CommandProvider {
                     }
 
                     return new Variable(0);
+                }),
+
+                // &&&&&&&&&&&&&&&&&&&&&&&&&&& boolean isSelected(Instance instance)
+                new Command(TokenConstants.IS_SELECTED.getValue(), 1, (self, parameters) -> {
+                    Instance instance = parameters[0].getInstance();
+                    CommandUtils.checkValueExists(instance, "target instance");
+                    return new Variable(instance == GameOptions.selectedInstance);
+                }),
+
+                // &&&&&&&&&&&&&&&&&&&&&&&&&&& tile randomTile ()
+                new Command(TokenConstants.RANDOM_TILE.getValue(), 0, (self, parameters) -> {
+                    Planet planet = Data.getPlanet();
+                    if (planet != null) {
+                        int f = (int) (Math.random() * 20d);
+                        int x = (int) (Math.random() * planet.getSize());
+                        int y = (int) (Math.random() * planet.getSize());
+
+                        Tile tile = planet.getFace(f).getTile(x,y);
+                        return new Variable(tile);
+                    }
+                    return new Variable();
                 })
 
         );

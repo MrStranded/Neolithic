@@ -1,11 +1,13 @@
 package engine.parser.scripts.execution.commands;
 
+import constants.ResourcePathConstants;
 import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.attributes.Attribute;
 import engine.data.entities.Effect;
 import engine.data.entities.Instance;
 import engine.data.proto.Container;
+import engine.data.proto.ProtoAttribute;
 import engine.data.scripts.Script;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
@@ -146,8 +148,50 @@ public class EntityManipulationCommands implements CommandProvider {
                     instance.destroy();
 
                     return new Variable();
-                })
+                }),
 
+                // &&&&&&&&&&&&&&&&&&&&&&&&&&& Instance mixAttributes (Instance t, Instance p1, Instance p2)
+                new Command(TokenConstants.MIX_ATTRIBUTES.getValue(), 3, (self, parameters) -> {
+                    Instance child = parameters[0].getInstance();
+                    CommandUtils.checkValueExists(child, "child instance");
+                    Instance parent1 = parameters[1].getInstance();
+                    CommandUtils.checkValueExists(parent1, "parent 1 instance");
+                    Instance parent2 = parameters[2].getInstance();
+                    CommandUtils.checkValueExists(parent2, "parent 2 instance");
+
+                    List<Integer> attributes = Data.getAllAttributeIDs();
+                    for (Integer id : attributes) {
+                        ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
+
+                        if (protoAttribute != null && protoAttribute.isInherited()) {
+                            double v1 = parent1.getPersonalAttributeValue(id);
+                            double v2 = parent2.getPersonalAttributeValue(id);
+                            if (v1 != 0 || v2 != 0) {
+                                double p = Math.random();
+                                int value = (int) (v1*p + v2*(1-p));
+
+                                if (Math.random() < protoAttribute.getMutationChance() / 100d) {
+                                    // +1 because (int) rounds the result down. Math.random() is always < 1
+                                    value += Math.floor(-protoAttribute.getMutationExtent() + Math.random() * (2d*protoAttribute.getMutationExtent() + 1d));
+                                }
+
+                                child.setAttribute(id, value);
+                            }
+                        }
+                    }
+                    return new Variable(child);
+                }),
+
+                // &&&&&&&&&&&&&&&&&&&&&&&&&&& void setMesh (Instance target, String path)
+                new Command(TokenConstants.SET_MESH.getValue(), 2, (self, parameters) -> {
+                    Instance target = parameters[0].getInstance();
+                    CommandUtils.checkValueExists(target, "target instance");
+                    String path = parameters[1].getString();
+
+                    target.setMesh(ResourcePathConstants.MOD_FOLDER + path);
+
+                    return new Variable("Semira <3");
+                })
 
         );
     }
