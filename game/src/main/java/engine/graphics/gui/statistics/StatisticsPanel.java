@@ -16,6 +16,7 @@ public class StatisticsPanel extends JPanel {
     private int width, height;
     private final int border = 30;
     private BufferedImage img;
+    private Graphics g;
 
     public StatisticsPanel(int width, int height) {
         super();
@@ -24,6 +25,7 @@ public class StatisticsPanel extends JPanel {
         this.height = height;
         img = new BufferedImage(width, height-border, BufferedImage.TYPE_INT_RGB);
         setPreferredSize(new Dimension(width, height));
+        g = img.getGraphics();
     }
 
     public void register(Instance instance) {
@@ -50,13 +52,11 @@ public class StatisticsPanel extends JPanel {
     }
 
     public void mark(int y, Color color, int alpha) {
-        Graphics g = img.getGraphics();
         g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
         g.drawRect(currentPosition, y, 1, 1);
     }
 
     public void fatMark(int y, Color color, int alpha) {
-        Graphics g = img.getGraphics();
         g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
         g.drawRect(currentPosition, y-1, 1, 3);
     }
@@ -89,8 +89,6 @@ public class StatisticsPanel extends JPanel {
     }
 
     public void tick() {
-        Graphics g = img.getGraphics();
-
         g.setColor(new Color (255,255,255));
         g.fillRect(currentPosition + 3, 0, 150, height - border);
 

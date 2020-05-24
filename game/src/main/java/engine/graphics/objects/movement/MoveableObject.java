@@ -19,8 +19,7 @@ public class MoveableObject {
 	// TAU constant
 	private static final double TAU = Math.PI*2d;
 
-	public MoveableObject() {
-	}
+	public MoveableObject() {}
 
 	// ###################################################################################
 	// ################################ Position #########################################

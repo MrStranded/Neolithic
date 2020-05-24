@@ -1,35 +1,17 @@
 package engine.parser.scripts.execution;
 
-import constants.ResourcePathConstants;
-import constants.ScriptConstants;
-import constants.TopologyConstants;
-import engine.data.Data;
-import engine.data.options.GameOptions;
-import engine.data.scripts.Script;
-import engine.data.entities.Effect;
 import engine.data.entities.Instance;
-import engine.data.planetary.Face;
-import engine.data.planetary.Planet;
-import engine.data.planetary.Tile;
-import engine.data.proto.Container;
-import engine.data.proto.ProtoAttribute;
-import engine.data.variables.DataType;
+import engine.data.scripts.Script;
 import engine.data.variables.Variable;
-import engine.logic.topology.Neighbour;
-import engine.logic.topology.Pathfinding;
-import engine.logic.topology.TopologyGenerator;
-import engine.logic.topology.TileArea;
-import engine.math.numericalObjects.Vector3;
-import engine.parser.constants.TokenConstants;
-import engine.parser.scripts.exceptions.InvalidValueException;
-import engine.parser.scripts.exceptions.ReturnException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.execution.commands.*;
 import engine.parser.scripts.nodes.CommandExpressionNode;
-import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CommandExecutor {
 
@@ -57,7 +39,7 @@ public class CommandExecutor {
 	
 	public static Variable executeCommand(Instance self, Script script, CommandExpressionNode commandNode) throws ScriptInterruptedException {
 		if (commands == null) {
-			Logger.error("Command have not been initialized! -> CommandExecutor.initialize()");
+			Logger.error("Commands have not been initialized! -> CommandExecutor.initialize()");
 			return new Variable();
 		}
 

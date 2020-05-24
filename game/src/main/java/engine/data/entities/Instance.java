@@ -1,13 +1,16 @@
 package engine.data.entities;
 
 import constants.ScriptConstants;
-import engine.data.behaviour.Occupation;
-import engine.data.identifiers.ContainerIdentifier;
+import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
+import engine.data.behaviour.Occupation;
+import engine.data.identifiers.ContainerIdentifier;
 import engine.data.planetary.Tile;
-import engine.data.proto.*;
-import engine.data.Data;
+import engine.data.proto.Container;
+import engine.data.proto.CreatureContainer;
+import engine.data.proto.DriveContainer;
+import engine.data.proto.ProcessContainer;
 import engine.data.scripts.Script;
 import engine.data.structures.WeightedList;
 import engine.data.structures.trees.binary.BinaryTree;
@@ -15,7 +18,6 @@ import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.objects.movement.MoveableObject;
-import engine.graphics.objects.planet.FacePart;
 import engine.logic.topology.GeographicCoordinates;
 import engine.math.numericalObjects.Vector3;
 import engine.parser.utils.Logger;
@@ -40,13 +42,11 @@ public class Instance {
 
 	private boolean slatedForRemoval = false;
 
-	private MoveableObject moveableObject;
+	private MoveableObject moveableObject = null;
 	private MeshHub meshHub = null;
 
 	public Instance(int id) {
 		this.id = id;
-
-        moveableObject = new MoveableObject();
 
         inheritAttributes();
 	}
@@ -315,7 +315,7 @@ public class Instance {
 	// ###################################################################################
 
 	public void render() {
-		if (slatedForRemoval) {
+		if (slatedForRemoval || moveableObject == null) {
 			return;
 		}
 		// render self
@@ -351,31 +351,35 @@ public class Instance {
 	}
 
 	public void actualizeObjectPosition() {
-		if (superInstance != null && moveableObject != null) {
-			Tile position = superInstance.getPosition();
-			if (position != null) {
-				// get rotation angles
-				double pitch = GeographicCoordinates.getLatitude(position);
-				double yaw = GeographicCoordinates.getLongitude(position);
-				Vector3 pos;
-				// set position
-				/*if (position.getHeight() > position.getWaterHeight()) {
-					pos = position.getTileMesh().getMid();
-				} else {
-					pos = position.getTileMesh().getWaterMid();
-				}*/
-				pos = position.getTileMesh().getMid();
-				// set correct scale
-				if (Data.getPlanet() != null) {
-					double scaleFactor = 1d / (double) Data.getPlanet().getSize();
-					moveableObject.setScale(scaleFactor, scaleFactor, scaleFactor);
-				}
-				// assign values to moveable object
-				moveableObject.setPosition(pos);
-				moveableObject.setRotation(pitch + Math.PI / 2d, -yaw + Math.PI / 2d, 0);
-				moveableObject.setPreRotation(0, Math.random() * Math.PI * 2d * 0d, 0);
-			}
+		if (superInstance == null) { return; }
+
+		if (moveableObject == null) {
+			moveableObject = new MoveableObject();
 		}
+
+		Tile position = superInstance.getPosition();
+		if (position == null) { return; }
+
+		// get rotation angles
+		double pitch = GeographicCoordinates.getLatitude(position);
+		double yaw = GeographicCoordinates.getLongitude(position);
+		Vector3 pos;
+		// set position
+		/*if (position.getHeight() > position.getWaterHeight()) {
+			pos = position.getTileMesh().getMid();
+		} else {
+			pos = position.getTileMesh().getWaterMid();
+		}*/
+		pos = position.getTileMesh().getMid();
+		// set correct scale
+		if (Data.getPlanet() != null) {
+			double scaleFactor = 1d / (double) Data.getPlanet().getSize();
+			moveableObject.setScale(scaleFactor, scaleFactor, scaleFactor);
+		}
+		// assign values to moveable object
+		moveableObject.setPosition(pos);
+		moveableObject.setRotation(pitch + Math.PI / 2d, -yaw + Math.PI / 2d, 0);
+		moveableObject.setPreRotation(0, Math.random() * Math.PI * 2d * 0d, 0);
 	}
 
 	public void destroy() {

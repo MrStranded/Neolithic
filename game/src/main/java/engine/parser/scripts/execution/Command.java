@@ -1,15 +1,9 @@
 package engine.parser.scripts.execution;
 
-import engine.data.Data;
 import engine.data.entities.Instance;
-import engine.data.proto.Container;
-import engine.data.scripts.Script;
 import engine.data.variables.Variable;
-import engine.parser.scripts.exceptions.InvalidValueException;
 import engine.parser.scripts.exceptions.NotEnoughParametersException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
-import engine.parser.scripts.nodes.CommandExpressionNode;
-import engine.parser.utils.Logger;
 
 public class Command {
 
@@ -31,11 +25,17 @@ public class Command {
 
     private void checkNumberOfParameters(Variable[] parameters) throws NotEnoughParametersException {
         if (parameters.length < minNumberOfParameters) {
-            throw new NotEnoughParametersException("The command '" + command + "' requires " + minNumberOfParameters + " parameters but only received " + parameters.length);
+            throw new NotEnoughParametersException("The command '" + command + "' requires at least " + minNumberOfParameters + " " +
+                    "parameters but only received " + parameters.length);
         }
     }
 
     public String getName() {
+        return command;
+    }
+
+    @Override
+    public String toString() {
         return command;
     }
 
