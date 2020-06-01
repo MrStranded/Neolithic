@@ -1,10 +1,8 @@
 package engine.graphics.gui.statistics;
 
-import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
-import engine.data.proto.ProtoAttribute;
 import engine.data.structures.Registrator;
 
 public class AttributePlotter implements Registrator {

@@ -53,7 +53,9 @@ public class StatisticsPanel extends JPanel {
 
     public void mark(int y, Color color, int alpha) {
         g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
-        g.drawRect(currentPosition, y, 1, 1);
+//        g.drawRect(currentPosition, y, 1, 1);
+        // drawRect() seems to cause a quite aggressive memory leak where tons of PhantomReferences are created
+        // whyyyy?
     }
 
     public void fatMark(int y, Color color, int alpha) {

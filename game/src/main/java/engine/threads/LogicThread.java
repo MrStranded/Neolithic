@@ -65,6 +65,8 @@ public class LogicThread extends Thread {
 					}
 				}
 
+//				System.gc();
+
 				if (GameOptions.printPerformance) {
 					long dt = (System.currentTimeMillis() - t);
 					if (dt > 100) {
