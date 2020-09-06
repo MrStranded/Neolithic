@@ -27,6 +27,7 @@ public class Container {
 
 	// graphical
 	private MeshHub meshHub = null;
+	private double opacity = 1.0;
 
 	// game logic
 	private String name;
@@ -187,6 +188,15 @@ public class Container {
 	}
 	public void setMeshHub(MeshHub meshHub) {
 		this.meshHub = meshHub;
+		if (meshHub != null) { meshHub.setMeshOpacity(opacity); }
+	}
+
+	public double getOpacity() {
+		return opacity;
+	}
+	public void setOpacity(double opacity) {
+		this.opacity = opacity;
+		if (meshHub != null) { meshHub.setMeshOpacity(opacity); }
 	}
 
 	public BinaryTree<Script> getScripts() {

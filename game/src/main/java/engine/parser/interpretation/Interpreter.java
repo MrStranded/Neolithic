@@ -19,6 +19,7 @@ import engine.parser.utils.TokenNumerifier;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class Interpreter {
 
@@ -203,7 +204,25 @@ public class Interpreter {
 		consume(TokenConstants.SEMICOLON);
 	}
 
-    // ################################################################################### Attribute
+	private void readOpacity(Container container) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token opacityToken = consume();
+		container.setOpacity(TokenNumerifier.getDouble(opacityToken));
+
+		consume(TokenConstants.SEMICOLON);
+	}
+
+	private void readNumberValue(Consumer<Double> valueSetter) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token value = consume();
+		valueSetter.accept(TokenNumerifier.getDouble(value));
+
+		consume(TokenConstants.SEMICOLON);
+	}
+
+	// ################################################################################### Attribute
 
     private void addName(ProtoAttribute protoAttribute) throws Exception {
         consume(TokenConstants.ASSIGNMENT);
@@ -538,6 +557,11 @@ public class Interpreter {
 			} else if (TokenConstants.VALUE_MESH.equals(next)) { // mesh path definition
 				if (type == DataType.ENTITY || type == DataType.CREATURE) {
 					readMeshPath(container);
+				} else { issueTypeError(next, type); }
+
+			} else if (TokenConstants.VALUE_OPACITY.equals(next)) { // mesh path definition
+				if (type == DataType.ENTITY || type == DataType.CREATURE) {
+					readOpacity(container);
 				} else { issueTypeError(next, type); }
 
 			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% value lists

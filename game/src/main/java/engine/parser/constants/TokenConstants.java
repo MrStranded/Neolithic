@@ -38,6 +38,8 @@ public enum TokenConstants {
 	// -------------------------------------------------- Engine Values
 	VALUE_NAME                  (TokenType.KEYWORD, "name"),
 	VALUE_MESH                  (TokenType.KEYWORD, "mesh"),
+	VALUE_OPACITY				(TokenType.KEYWORD, "opacity"),
+	VALUE_TICKS					(TokenType.KEYWORD, "ticks"),
 	// -------------------------------------------------- Tiles
 	VALUE_TOP_COLOR             (TokenType.KEYWORD, "topColor"),
 	VALUE_SIDE_COLOR            (TokenType.KEYWORD, "sideColor"),

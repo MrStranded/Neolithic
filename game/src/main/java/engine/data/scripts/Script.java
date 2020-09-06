@@ -4,6 +4,7 @@ import engine.data.IDInterface;
 import engine.data.entities.Instance;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.Variable;
+import engine.parser.scripts.exceptions.ReturnException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.nodes.AbstractScriptNode;
 import engine.parser.utils.Logger;
@@ -73,6 +74,8 @@ public class Script implements IDInterface {
 		Variable result = new Variable();
 		try {
 			result = root.execute(self, this);
+		} catch (ReturnException returnException) {
+			result = returnException.getReturnValue();
 		} catch (ScriptInterruptedException e) {
 			Logger.error("Script '" + textId + "' could not be executed!");
 			//e.printStackTrace();

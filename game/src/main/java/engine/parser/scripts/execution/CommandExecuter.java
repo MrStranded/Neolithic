@@ -938,10 +938,11 @@ public class CommandExecuter {
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& variable return (variable)
 			case RETURN:
-				if (requireParameters(commandNode, 1)) {
+				if (parameters.length >= 1) {
 					throw new ReturnException(parameters[0]);
 				}
-				break;
+
+				throw new ReturnException();
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int require (variable)
 			case REQUIRE:

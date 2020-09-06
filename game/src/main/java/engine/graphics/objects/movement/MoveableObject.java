@@ -1,5 +1,6 @@
 package engine.graphics.objects.movement;
 
+import engine.graphics.objects.models.Material;
 import engine.math.MatrixCalculations;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
@@ -16,10 +17,23 @@ public class MoveableObject {
 	private Matrix4 matrix;
 	private boolean changed = true;
 
+	private Material material = new Material();
+
 	// TAU constant
 	private static final double TAU = Math.PI*2d;
 
 	public MoveableObject() {}
+
+	// ###################################################################################
+	// ################################ Material #########################################
+	// ###################################################################################
+
+	public void setMaterial(Material material) {
+		this.material = material;
+	}
+	public Material getMaterial() {
+		return material;
+	}
 
 	// ###################################################################################
 	// ################################ Position #########################################

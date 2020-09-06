@@ -48,12 +48,17 @@ public class Instance {
 	public Instance(int id) {
 		this.id = id;
 
+		initMoveableObject();
         inheritAttributes();
 	}
 
     // ###################################################################################
     // ################################ Creation #########################################
     // ###################################################################################
+
+	private void initMoveableObject() {
+		moveableObject = new MoveableObject();
+	}
 
 	private void createAttributesIfNecessary() {
 		if (attributes == null) {
@@ -253,22 +258,22 @@ public class Instance {
 		cleanVariables();
 	    tickEffects();
 
-	    if (occupations == null || occupations.isEmpty()) {
-            // ----------- calculate drives
-            Container container = Data.getContainer(id);
-            if (container != null && container.getType() == DataType.CREATURE) {
-                searchDrive(((CreatureContainer) container).getDrives());
-            }
-        } else {
-            // ----------- calculate occupations
-	        Occupation currentOccupation = occupations.peek();
-	        currentOccupation.tick();
+		if (occupations == null || occupations.isEmpty()) {
+			// ----------- calculate drives
+			Container container = Data.getContainer(id);
+			if (container != null && container.getType() == DataType.CREATURE) {
+				searchDrive(((CreatureContainer) container).getDrives());
+			}
+		} else {
+			// ----------- calculate occupations
+			Occupation currentOccupation = occupations.peek();
+			currentOccupation.tick();
 
-	        if (currentOccupation.isFinished()) {
-	            currentOccupation.callBack(this);
-	            occupations.poll();
-            }
-        }
+			if (currentOccupation.isFinished()) {
+				currentOccupation.callBack(this);
+				occupations.poll();
+			}
+		}
 
 		// ----------- calculate tick script
 		run(ScriptConstants.EVENT_TICK, null);
