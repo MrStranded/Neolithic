@@ -23,18 +23,14 @@ public class MultiStatementNode extends AbstractScriptNode {
 	public Variable execute(Instance instance, Script script) throws ScriptInterruptedException {
 		boolean allTrue = true;
 
-		try {
-            for (AbstractScriptNode node : subNodes) {
-                Variable variable = node.execute(instance, script);
-                if (node.getClass() == CommandExpressionNode.class) {
-                    if (TokenConstants.REQUIRE.equals(((CommandExpressionNode) node).getCommand())) {
-                        allTrue = !variable.isNull() && allTrue; // allTrue is only true if all require command subNodes return Variables that are not null
-                    }
-                }
-            }
-        } catch (ReturnException returnException) {
-		    return returnException.getReturnValue();
-        }
+		for (AbstractScriptNode node : subNodes) {
+			Variable variable = node.execute(instance, script);
+			if (node.getClass() == CommandExpressionNode.class) {
+				if (TokenConstants.REQUIRE.equals(((CommandExpressionNode) node).getCommand())) {
+					allTrue = !variable.isNull() && allTrue; // allTrue is only true if all require command subNodes return Variables that are not null
+				}
+			}
+		}
 
 		return new Variable(allTrue ? 1 : 0);
 	}

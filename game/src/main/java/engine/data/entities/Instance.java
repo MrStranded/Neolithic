@@ -15,7 +15,6 @@ import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.objects.movement.MoveableObject;
-import engine.graphics.objects.planet.FacePart;
 import engine.logic.topology.GeographicCoordinates;
 import engine.math.numericalObjects.Vector3;
 import engine.parser.utils.Logger;
@@ -46,22 +45,17 @@ public class Instance {
 	public Instance(int id) {
 		this.id = id;
 
-		/*
-		attributes = new BinaryTree<>();
-		effects = new LinkedList<>(); //new CopyOnWriteArrayList<>();
-		variables = new BinaryTree<>();
-		occupations = new LinkedList<>();
-		subInstances = new ArrayList<>(0);
-		*/
-
-        moveableObject = new MoveableObject();
-
+		initMoveableObject();
         inheritAttributes();
 	}
 
     // ###################################################################################
     // ################################ Creation #########################################
     // ###################################################################################
+
+	private void initMoveableObject() {
+		moveableObject = new MoveableObject();
+	}
 
 	private void createAttributesIfNecessary() {
 		if (attributes == null) {
@@ -261,22 +255,22 @@ public class Instance {
 		cleanVariables();
 	    tickEffects();
 
-	    if (occupations == null || occupations.isEmpty()) {
-            // ----------- calculate drives
-            Container container = Data.getContainer(id);
-            if (container != null && container.getType() == DataType.CREATURE) {
-                searchDrive(((CreatureContainer) container).getDrives());
-            }
-        } else {
-            // ----------- calculate occupations
-	        Occupation currentOccupation = occupations.peek();
-	        currentOccupation.tick();
+		if (occupations == null || occupations.isEmpty()) {
+			// ----------- calculate drives
+			Container container = Data.getContainer(id);
+			if (container != null && container.getType() == DataType.CREATURE) {
+				searchDrive(((CreatureContainer) container).getDrives());
+			}
+		} else {
+			// ----------- calculate occupations
+			Occupation currentOccupation = occupations.peek();
+			currentOccupation.tick();
 
-	        if (currentOccupation.isFinished()) {
-	            currentOccupation.callBack(this);
-	            occupations.poll();
-            }
-        }
+			if (currentOccupation.isFinished()) {
+				currentOccupation.callBack(this);
+				occupations.poll();
+			}
+		}
 
 		// ----------- calculate tick script
 		run(ScriptConstants.EVENT_TICK, null);

@@ -14,7 +14,9 @@ public class StatisticsPanel extends JPanel {
 
     private int currentPosition = 0;
     private int width, height;
-    private final int border = 30;
+    private double verticalPointRange;
+    private static final int TOP_BAR_HEIGHT = 30;
+    private static final int VERTICAL_MARGIN = 3;
     private BufferedImage img;
 
     public StatisticsPanel(int width, int height) {
@@ -22,7 +24,8 @@ public class StatisticsPanel extends JPanel {
 
         this.width = width;
         this.height = height;
-        img = new BufferedImage(width, height-border, BufferedImage.TYPE_INT_RGB);
+        verticalPointRange = (height - TOP_BAR_HEIGHT - VERTICAL_MARGIN*2 - 1.0);
+        img = new BufferedImage(width, height - TOP_BAR_HEIGHT, BufferedImage.TYPE_INT_RGB);
         setPreferredSize(new Dimension(width, height));
     }
 
@@ -62,7 +65,7 @@ public class StatisticsPanel extends JPanel {
     }
 
     private int getAbsolutePosition(double relativeHeight) {
-        return (int) ((height - border - 1) * (1 - relativeHeight));
+        return (int) (verticalPointRange * (1.0 - relativeHeight)) + VERTICAL_MARGIN;
     }
 
     private double getRelativePosition(int id, double value) {
@@ -92,7 +95,7 @@ public class StatisticsPanel extends JPanel {
         Graphics g = img.getGraphics();
 
         g.setColor(new Color (255,255,255));
-        g.fillRect(currentPosition + 3, 0, 150, height - border);
+        g.fillRect(currentPosition + 3, 0, 150, height - TOP_BAR_HEIGHT);
 
         for (int id = 0; id < GameConstants.MAX_ATTRIBUTES; id++) {
             ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
@@ -110,21 +113,21 @@ public class StatisticsPanel extends JPanel {
         currentPosition = (currentPosition + 1) % width;
 
         g.setColor(new Color(255,255,255));
-        g.drawRect(currentPosition, 0, 1, height - border);
+        g.drawRect(currentPosition, 0, 1, height - TOP_BAR_HEIGHT);
 
         g.setColor(new Color(255, 150, 100));
-        g.drawRect((currentPosition + 1) % width, 0 , 1, height - border);
+        g.drawRect((currentPosition + 1) % width, 0 , 1, height - TOP_BAR_HEIGHT);
     }
 
     @Override
     public void paintComponent(Graphics g) {
         g.clearRect(0,0,width,height);
-        g.drawImage(img, 0,border, null);
+        g.drawImage(img, 0, TOP_BAR_HEIGHT, null);
 
         engine.data.proto.Container container = Data.getContainer(GameOptions.currentContainerId);
         if (container != null) {
             g.setColor(new Color(200, 200, 200));
-            g.drawRect(0,0,width,border);
+            g.drawRect(0,0,width, TOP_BAR_HEIGHT);
             g.setColor(new Color(0,0,0));
             g.drawString("Current selection: " + container.getName(), 10, 20);
             g.drawString("Count: " + StatisticsData.getCount(GameOptions.currentContainerId), width/2 + 10, 20);

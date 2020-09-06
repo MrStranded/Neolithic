@@ -336,6 +336,13 @@ public class Mesh {
 		registerData();
 	}
 
+	public void setAlpha(float a) {
+		for (int i = 0; i < colors.length / 4; i++) {
+			colors[i*4 + 3] = a;
+		}
+		registerData();
+	}
+
 	public Material getMaterial() {
 		return material;
 	}

@@ -20,6 +20,7 @@ public class MeshHub {
 
 	private String meshPath;
 	private Mesh mesh = null;
+	private double opacity = 1.0;
 	private List<MoveableObject> objects;
 	private boolean meshIsLoaded = false;
 
@@ -37,12 +38,32 @@ public class MeshHub {
 				mesh = PLYLoader.loadMesh(meshPath);
 				meshIsLoaded = true;
 			} else {
-				Logger.error("Mesh format of file '" + meshPath + "' is not supported! Use .obj or .ply files.");
+				Logger.error("Mesh format of file '" + meshPath + "' is not supported! Use .obj or .ply files");
+			}
+
+			if (opacity < 1.0 && mesh != null) {
+				mesh.setAlpha((float) opacity);
 			}
 		} catch (Exception e) {
 			Logger.error("Could not load mesh: '" + meshPath + "'");
 			e.printStackTrace();
 		}
+	}
+
+	public void setMeshOpacity(double opacity) {
+		if (opacity >= 1.0) {
+			Logger.log("Tried setting opacity with value >= 1.0: " + opacity + " Operation is aborted");
+			return;
+		}
+
+		this.opacity = Math.max(0.0, opacity);
+
+		if (mesh == null) {
+			Logger.log("Mesh not yet loaded. Could not set opacity '" + opacity + "' on mesh with path '" + meshPath + "'");
+			return;
+		}
+
+		mesh.setAlpha((float) opacity);
 	}
 
 	public void registerObject(MoveableObject object) {

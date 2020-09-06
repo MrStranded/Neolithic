@@ -24,7 +24,7 @@ Tile: tDirt {
 
 	Script: tick { // tiles don't get ticked
 		if (.attNutrition >= 20) {
-			change(self,tGras);
+			change(self, tGras);
 		}
 	}
 }

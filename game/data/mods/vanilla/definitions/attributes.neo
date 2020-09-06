@@ -1,3 +1,9 @@
+// system
+Attribute: attTicks {
+    name = "Ticks until tick() script execution";
+    lower = 0;
+}
+
 // genetic
 Attribute: attMatureAge {
     name = "Age of maturity";
