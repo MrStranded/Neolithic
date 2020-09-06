@@ -319,9 +319,7 @@ public class PlanetGenerator {
 	}
 
 	private void updateFace(FacePart facePart) {
-		if (!facePart.hasChanged()) {
-			return;
-		}
+		if (!facePart.hasChanged()) { return; }
 		facePart.setChanged(false);
 
 		Tile tile = null;
@@ -340,11 +338,14 @@ public class PlanetGenerator {
 				if (subFace != null) {
 					updateFace(subFace);
 
-					if (subFace.getHeight() > maxHeight) { maxHeight = subFace.getHeight(); }
-					if (subFace.getWaterHeight() > maxWaterHeight) { maxWaterHeight = subFace.getWaterHeight(); }
+					double subHeight = subFace.getHeight();
+					double subWaterHeight = subFace.getWaterHeight();
 
-					sumHeight += subFace.getHeight();
-					sumWaterHeight += subFace.getWaterHeight();
+					if (subHeight > maxHeight) { maxHeight = subHeight; }
+					if (subWaterHeight > maxWaterHeight) { maxWaterHeight = subWaterHeight; }
+
+					sumHeight += subHeight;
+					sumWaterHeight += subWaterHeight;
 
 					sumTopColor = sumTopColor.plus(subFace.getTopColor());
 					sumSideColor = sumSideColor.plus(subFace.getSideColor());
@@ -371,14 +372,12 @@ public class PlanetGenerator {
 		}
 
 		//if (newWaterHeight != facePart.getOldWaterHeight() || newHeight != facePart.getOldHeight()) {
+			facePart.cleanMeshes();
+			Mesh faceMesh = createTile(facePart, tile, smallest);
 			if (newWaterHeight > newHeight) {
-				Mesh waterMesh = createTile(facePart, tile, smallest);
-				facePart.setWaterMesh(waterMesh);
-				facePart.setMesh(null);
+				facePart.setWaterMesh(faceMesh);
 			} else {
-				Mesh faceMesh = createTile(facePart, tile, smallest);
 				facePart.setMesh(faceMesh);
-				facePart.setWaterMesh(null);
 			}
 		//} else {
 			// only reset colors here

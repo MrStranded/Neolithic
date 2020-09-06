@@ -223,7 +223,7 @@ public class FacePart {
 	}
 
 	// ###################################################################################
-	// ################################ Clearing Change Flag #############################
+	// ################################ Clearing Change Flag & Clean Up ##################
 	// ###################################################################################
 
 	public void clearChangeFlags() {
@@ -235,6 +235,14 @@ public class FacePart {
 				}
 			}
 		}
+	}
+
+	public void cleanMeshes() {
+		if (mesh != null) { mesh.cleanUp(); }
+		if (waterMesh != null) { waterMesh.cleanUp(); }
+
+		mesh = null;
+		waterMesh = null;
 	}
 
 	// ###################################################################################
