@@ -716,6 +716,54 @@ public class CommandExecuter {
 				}
 				break;
 
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& boolean isCloserToEquator (Tile subject, Tile other)
+			case IS_CLOSER_TO_EQUATOR:
+				if (requireParameters(commandNode, 2)) {
+					Tile subject = parameters[0].getTile();
+					Tile challenger = parameters[1].getTile();
+
+					checkValue(script, commandNode, subject, "subject tile");
+					checkValue(script, commandNode, challenger, "challenger tile");
+
+					Vector3 subjectPosition = subject.getTileMesh().getNormal();
+					Vector3 challengerPosition = challenger.getTileMesh().getNormal();
+
+					return new Variable(Math.abs(subjectPosition.getY()) < Math.abs(challengerPosition.getY()));
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& boolean isFartherNorth (Tile subject, Tile other)
+			case IS_FARTHER_NORTH:
+				if (requireParameters(commandNode, 2)) {
+					Tile subject = parameters[0].getTile();
+					Tile challenger = parameters[1].getTile();
+
+					checkValue(script, commandNode, subject, "subject tile");
+					checkValue(script, commandNode, challenger, "challenger tile");
+
+					Vector3 subjectPosition = subject.getTileMesh().getNormal();
+					Vector3 challengerPosition = challenger.getTileMesh().getNormal();
+
+					return new Variable(subjectPosition.getY() > challengerPosition.getY());
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& boolean isFartherSouth (Tile subject, Tile other)
+			case IS_FARTHER_SOUTH:
+				if (requireParameters(commandNode, 2)) {
+					Tile subject = parameters[0].getTile();
+					Tile challenger = parameters[1].getTile();
+
+					checkValue(script, commandNode, subject, "subject tile");
+					checkValue(script, commandNode, challenger, "challenger tile");
+
+					Vector3 subjectPosition = subject.getTileMesh().getNormal();
+					Vector3 challengerPosition = challenger.getTileMesh().getNormal();
+
+					return new Variable(subjectPosition.getY() < challengerPosition.getY());
+				}
+				break;
+
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list<tile> isNeighbor (Tile origin, Tile target)
 			case IS_NEIGHBOUR:
 				if (requireParameters(commandNode, 1)) {
