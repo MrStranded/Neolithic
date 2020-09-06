@@ -18,6 +18,10 @@ Entity: entWater {
     Script: tick {
         if (chance(0.01)) {
             ..attWater--;
+
+            if (chance(0.5)) {
+                ->createCloud(self, 5);
+            }
         }
 
         h = getHeight(self) + ..attWater;
@@ -38,20 +42,8 @@ Entity: entWater {
                     ..attWater -= d;
                     h -= d;
 
-                    if (lowest > 100) {
-                        other = getInstance(entWater, next);
-                        if (other) {
-                            other..attWater += d;
-                        } else {
-                            (create(entWater, getTile(next)))..attWater += d;
-                        }
-                    } else {
-                        other = getInstance(entCloud, next);
-                        if (other) {
-                            other..attHumidity += 50;
-                        } else {
-                            (create(entCloud, getTile(next)))..attHumidity += 50;
-                        }
+                    if (lowest > 100 || getHeight(next) - getWaterHeight(next) <= d) {
+                        ->createWater(next, d);
                     }
 
                     if (getTile(self)..attSediment > 0) {
@@ -69,11 +61,32 @@ Entity: entWater {
             }
         }
 
-        setWaterHeight(self, h);
+        setWaterHeight(self, max(h, 100));
 	    updatePlanetMesh();
 
-        if (..attWater <= 0) {
+        isInOcean = getHeight(self) + .attWater < 100;
+        if (isInOcean) { ->createCloud(self, 20); }
+
+        if (..attWater <= 0 || isInOcean) {
             destroy(self);
+        }
+    }
+
+    Script: createWater(target, water) {
+        other = getInstance(entWater, getTile(target));
+        if (other) {
+            other..attWater += water;
+        } else {
+            (create(entWater, getTile(getTile(target))))..attWater += water;
+        }
+    }
+
+    Script: createCloud(target, humidity) {
+        other = getInstance(entCloud, getTile(target));
+        if (other) {
+            other..attHumidity += humidity;
+        } else {
+            (create(entCloud, getTile(target)))..attHumidity += humidity;
         }
     }
 }
@@ -85,43 +98,58 @@ Entity: entCloud {
 	opacity = 0.25;
 
 	attributes {
-	    attTicks, 20;
+	    attTicks, 10;
 	}
 
     Script: tick {
         ..attTicks--;
-        if (.attTicks > 0) {
-            print("inside nr of ticks: " + .attTicks);
-            return();
-        }
+        if (.attTicks > 0) { return(); }
         ..attTicks = entCloud.attTicks;
-        print("outside nr of ticks: " + .attTicks);
 
-        tile = getNeighbor(self, random(3));
+        neighbors = getNeighbors(self);
+        for (n : neighbors) {
+            if (->isBetterTile(n, tile)) {
+                tile = n;
+            }
+        }
+
         other = getInstance(entCloud, tile);
         if (other) {
             other..attHumidity += self..attHumidity;
             destroy(self);
             return();
-        } else {
-            moveTo(self, tile, 1);
         }
 
-        if (..attHumidity > 100) {
+        heightIncrease = getHeight(tile) - getHeight(self);
+        moveTo(self, tile, 1);
+
+        if (.attHumidity >= 100 || chance((.attHumidity + heightIncrease) / 100)) {
             tile = getTile(self);
             other = getInstance(entWater, tile);
             if (other) {
                 other..attWater += 1;
             } else {
-                if (getHeight(tile) > getWaterHeight(tile)) {
+                if (getHeight(tile) >= getWaterHeight(tile)) {
                     (create(entWater, tile))..attWater += 1;
                 }
             }
             ..attHumidity -= 100;
         }
 
-        if (..attHumidity <= 0) {
+        if (getLightLevel(self) >= 70) { ..attHumidity -= 3; }
+
+        if (.attHumidity <= 0) {
             destroy(self);
+        }
+    }
+
+    Script: isBetterTile(subject, challenger) {
+        if (!challenger) { return(true); }
+
+        if (chance(0.9)) {
+            return(isCloserToEquator(subject, challenger));
+        } else {
+            return(getHeight(subject) > getHeight(challenger));
         }
     }
 }

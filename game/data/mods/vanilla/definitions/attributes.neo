@@ -132,7 +132,10 @@ Attribute: attVegetarian { name = "Vegetarian"; }
 Attribute: attMeat { name = "Meat"; }
 
 // environmental
-Attribute: attHumidity { name = "Humidity"; }
+Attribute: attHumidity {
+    name = "Humidity";
+    color = 50, 80, 150;
+}
 Attribute: attSize { name = "Size"; }
 Attribute: attLightLevel { name = "Light level"; }
 Attribute: attWater {
