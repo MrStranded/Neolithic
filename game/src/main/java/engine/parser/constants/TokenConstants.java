@@ -39,7 +39,7 @@ public enum TokenConstants {
 	VALUE_NAME                  (TokenType.KEYWORD, "name"),
 	VALUE_MESH                  (TokenType.KEYWORD, "mesh"),
 	VALUE_OPACITY				(TokenType.KEYWORD, "opacity"),
-	VALUE_TICKS					(TokenType.KEYWORD, "ticks"),
+	VALUE_RUN_TICKS				(TokenType.KEYWORD, "runTicks"),
 	// -------------------------------------------------- Tiles
 	VALUE_TOP_COLOR             (TokenType.KEYWORD, "topColor"),
 	VALUE_SIDE_COLOR            (TokenType.KEYWORD, "sideColor"),
@@ -82,6 +82,7 @@ public enum TokenConstants {
 	ADD_OCCUPATION			(TokenType.COMMAND, "addOccupation"),
 	MIX_ATTRIBUTES          (TokenType.COMMAND, "mixAttributes"),
 	SET_MESH				(TokenType.COMMAND, "setMesh"),
+	DELAY_NEXT_TICK			(TokenType.COMMAND, "delayNextTick"),
 
 	// -------------------------------------------------- Planet Manipulation
     CHANGE_SUN_ANGLE    (TokenType.COMMAND, "changeSunAngle"),

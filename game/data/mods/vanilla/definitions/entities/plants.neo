@@ -46,6 +46,12 @@ Creature: cAppleTree {
 	        ..attHealth--;
 	    }
 
+	    if (getTile(self).attHumidity <= 0) {
+	        ..attHealth--;
+	    } else {
+	        getTile(self)..attHumidity--;
+	    }
+
 		if (.attAge > .attMatureAge*2) { // age death
 		    addEffect(self, effCancer);
         }

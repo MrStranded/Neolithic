@@ -374,7 +374,10 @@ public class Renderer {
 
 			Container container = Data.getContainer(id);
 			if (container != null) {
-				if (container.getType() == DataType.CREATURE || container.getType() == DataType.FORMATION || container.getType() == DataType.ENTITY) {
+				if (container.getType() == DataType.CREATURE
+						|| container.getType() == DataType.FORMATION
+						|| container.getType() == DataType.TILE
+						|| container.getType() == DataType.ENTITY) {
 					GameOptions.currentContainerId = id;
 					break;
 				}

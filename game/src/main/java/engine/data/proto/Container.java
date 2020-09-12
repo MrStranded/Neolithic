@@ -31,6 +31,7 @@ public class Container {
 
 	// game logic
 	private String name;
+	private boolean runTickScripts = true;
 	private BinaryTree<Attribute> attributes;
 	private BinaryTree<Script> scripts;
 
@@ -197,6 +198,13 @@ public class Container {
 	public void setOpacity(double opacity) {
 		this.opacity = opacity;
 		if (meshHub != null) { meshHub.setMeshOpacity(opacity); }
+	}
+
+	public boolean isRunTickScripts() {
+		return runTickScripts;
+	}
+	public void setRunTickScripts(boolean runTickScripts) {
+		this.runTickScripts = runTickScripts;
 	}
 
 	public BinaryTree<Script> getScripts() {
