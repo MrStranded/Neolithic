@@ -10,6 +10,7 @@ import engine.data.proto.TileContainer;
 import engine.data.variables.DataType;
 import engine.logic.topology.Neighbour;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class TopologyGenerator {
@@ -45,15 +46,18 @@ public class TopologyGenerator {
 			}
 		}
 
-		fitTiles(planet);
+		fitTiles(planet, Data.getContainersOfType(DataType.TILE));
 	}
 
 	/**
-	 * Iterates over each tile and assigns best fitting tile type to it.
+	 * Iterates over each tile and assigns best fitting tile type from given list to it.
 	 * @param planet to fit topology on
 	 */
-	public static void fitTiles(Planet planet) {
-		List<Container> tileList = Data.getContainersOfType(DataType.TILE);
+	public static void fitTiles(Planet planet, List<Container> tileList) {
+		if (tileList == null) {
+			return;
+		}
+
 		for (Face face : planet.getFaces()) {
 			for (Tile tile : face.getTiles()) {
 				int bestFit = calculateBestTile(tile.getHeight(), tileList);

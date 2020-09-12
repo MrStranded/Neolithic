@@ -65,7 +65,16 @@ Entity: entWater {
 	    updatePlanetMesh();
 
         isInOcean = getHeight(self) + .attWater < 100;
-        if (isInOcean) { ->createCloud(self, 20); }
+        if (isInOcean) {
+            tile = getTile(self);
+            if (chance(0.75)) { tile = getNeighbor(self, random(3)); }
+
+            if (getLightLevel(self) >= 70) {
+                ->createCloud(tile, 25);
+            } else {
+                ->createCloud(tile, 10);
+            }
+        }
 
         if (..attWater <= 0 || isInOcean) {
             destroy(self);
@@ -91,7 +100,6 @@ Entity: entWater {
     }
 }
 
-
 Entity: entCloud {
     name = "Cloud";
 	mesh = "cloud.ply";
@@ -102,9 +110,7 @@ Entity: entCloud {
 	}
 
     Script: tick {
-        ..attTicks--;
-        if (.attTicks > 0) { return(); }
-        ..attTicks = entCloud.attTicks;
+        delayNextTick(self, .attTicks);
 
         neighbors = getNeighbors(self);
         for (n : neighbors) {
@@ -125,14 +131,7 @@ Entity: entCloud {
 
         if (.attHumidity >= 100 || chance((.attHumidity + heightIncrease) / 100)) {
             tile = getTile(self);
-            other = getInstance(entWater, tile);
-            if (other) {
-                other..attWater += 1;
-            } else {
-                if (getHeight(tile) >= getWaterHeight(tile)) {
-                    (create(entWater, tile))..attWater += 1;
-                }
-            }
+            (create(entRain, tile))..attWater += 1;
             ..attHumidity -= 100;
         }
 
@@ -150,6 +149,32 @@ Entity: entCloud {
             return(isCloserToEquator(subject, challenger));
         } else {
             return(getHeight(subject) > getHeight(challenger));
+        }
+    }
+}
+
+Entity: entRain {
+    name = "Rain";
+    mesh = "raindrops.ply";
+    opacity = 0.25;
+
+    Script: tick {
+        if (chance(0.5)) {
+            tile = getTile(self);
+            other = getInstance(entWater, tile);
+            if (other) {
+                other..attWater += 1;
+            } else {
+                if (getHeight(tile) >= getWaterHeight(tile)) {
+                    //(create(entWater, tile))..attWater += 1;
+                    tile..attHumidity += 100;
+                }
+            }
+            ..attWater--;
+        }
+
+        if (.attWater <= 0) {
+            destroy(self);
         }
     }
 }

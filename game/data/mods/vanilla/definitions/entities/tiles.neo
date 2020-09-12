@@ -1,7 +1,7 @@
 
 ///////////////////////////////////////////////////////////////////////////// Tiles
 
-Tile: tDirt {
+Tile: tDirt inherits tSoakingHumidity {
 	name = "Dirt";
 
 	preferredHeight = 120,20;
@@ -22,14 +22,21 @@ Tile: tDirt {
 	    attSediment, 15;
 	}
 
-	Script: tick { // tiles don't get ticked
-		if (.attNutrition >= 20) {
-			change(self, tGras);
+	Script: update {
+		if (.attHumidity >= 50) {
+		    if (chance(0.05)) {
+		        ..attHumidity -= 30;
+			    change(self, tGras);
+			}
+		} else if (.attHumidity <= 0) {
+		    if (chance(0.005)) {
+		        change(self, tSand);
+		    }
 		}
 	}
 }
 
-Tile: tGras {
+Tile: tGras inherits tSoakingHumidity {
 	name = "Gras";
 	preferredHeight = 150;
 	preferredHeightBlur = 50;
@@ -47,14 +54,21 @@ Tile: tGras {
 
 	attributes {
 		attNutrition, 20;
-		attHumidity, 50;
+		//attHumidity, 50;
 	    attSediment, 10;
+	}
+
+	Script: update {
+		if (.attHumidity <= 0) {
+		    if (chance(0.01)) {
+		        change(self, tDirt);
+		    }
+		}
 	}
 }
 
-Tile: tSand {
+Tile: tSand inherits tSoakingHumidity {
 	name = "Sand";
-
 	preferredHeight = 100,5;
 
 	topColor {
@@ -70,10 +84,58 @@ Tile: tSand {
 
 	attributes {
 	    attSediment, 20;
+	    attTicks, 40;
+	}
+
+	Script: update {
+		if (.attHumidity >= 50) {
+		    if (chance(0.1)) {
+		        ..attHumidity -= 30;
+		        change(self, tDirt);
+		    }
+		}
 	}
 }
 
+Tile: tSoakingHumidity {
+	preferredHeight = 250;
+
+	topColor {
+		0; 0; 255;
+	}
+	sideColor {
+	    255; 0; 0;
+	}
+
+    attributes {
+        attTicks, 20;
+    }
+
+    Script: tick {
+        delayTick(self, .attTicks);
+
+        water = getInstance(entWater, self);
+        if (water) {
+            ..attHumidity += 100;
+        } else {
+            for (n : getNeighbors(self)) {
+                if (n.attHumidity >= .attHumidity + 20) {
+                    ..attHumidity += 10;
+                    n..attHumidity -= 10;
+                }
+            }
+        }
+
+        if (..attHumidity >= 100) {
+            ..attHumidity = 100;
+        }
+
+        ->update();
+    }
+}
+
 Tile: tStone {
+    runTicks = false;
 	preferredHeight = 255;preferredHeightBlur = 10;
 	name = "Stone"; topColor {150,10;150;120;}
 

@@ -41,6 +41,7 @@ public class Instance {
 	private Queue<Occupation> occupations = null;
 
 	private boolean slatedForRemoval = false;
+	private int delayUntilNextTick = 0;
 
 	private MoveableObject moveableObject = null;
 	private MeshHub meshHub = null;
@@ -258,25 +259,34 @@ public class Instance {
 		cleanVariables();
 	    tickEffects();
 
-		if (occupations == null || occupations.isEmpty()) {
-			// ----------- calculate drives
-			Container container = Data.getContainer(id);
-			if (container != null && container.getType() == DataType.CREATURE) {
-				searchDrive(((CreatureContainer) container).getDrives());
+	    Optional<Container> container = getContainer();
+	    boolean runTickScripts = container.map(Container::isRunTickScripts).orElse(true);
+
+	    if (runTickScripts && delayUntilNextTick <= 0) {
+	    	delayUntilNextTick = 0;
+
+			if (occupations == null || occupations.isEmpty()) {
+				// ----------- calculate drives
+				if (container.isPresent() && container.get().getType() == DataType.CREATURE) {
+					searchDrive(((CreatureContainer) container.get()).getDrives());
+				}
+			} else {
+				// ----------- calculate occupations
+				Occupation currentOccupation = occupations.peek();
+				currentOccupation.tick();
+
+				if (currentOccupation.isFinished()) {
+					currentOccupation.callBack(this);
+					occupations.poll();
+				}
 			}
+
+			// ----------- calculate tick script
+			run(ScriptConstants.EVENT_TICK, null);
+
 		} else {
-			// ----------- calculate occupations
-			Occupation currentOccupation = occupations.peek();
-			currentOccupation.tick();
-
-			if (currentOccupation.isFinished()) {
-				currentOccupation.callBack(this);
-				occupations.poll();
-			}
+			if (runTickScripts) { delayUntilNextTick--; }
 		}
-
-		// ----------- calculate tick script
-		run(ScriptConstants.EVENT_TICK, null);
 
         cleanEffects();
 	}
@@ -459,6 +469,10 @@ public class Instance {
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
+
+	public Optional<Container> getContainer() {
+		return Optional.ofNullable(Data.getContainer(id));
+	}
 
 	public void setMesh(String path) {
 		meshHub = Data.getMeshHub(path);
@@ -652,6 +666,14 @@ public class Instance {
 
 	public Queue<Occupation> getOccupations() {
 		return occupations;
+	}
+
+	public int getDelayUntilNextTick() {
+		return delayUntilNextTick;
+	}
+
+	public void setDelayUntilNextTick(int delayUntilNextTick) {
+		this.delayUntilNextTick = delayUntilNextTick;
 	}
 
 	// ###################################################################################

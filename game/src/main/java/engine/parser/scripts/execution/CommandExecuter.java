@@ -29,6 +29,7 @@ import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CommandExecuter {
@@ -239,6 +240,18 @@ public class CommandExecuter {
 				}
 				break;
 
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void delayNextTick (Instance target, int ticks)
+			case DELAY_NEXT_TICK:
+				if (requireParameters(commandNode, 2)) {
+					Instance target = parameters[0].getInstance();
+					int ticks = parameters[1].getInt();
+
+					checkValue(script, commandNode, target, "target instance");
+
+					target.setDelayUntilNextTick(ticks);
+				}
+				break;
+
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void deleteEffects (Instance target, Container effectContainer)
 			case DELETE_EFFECTS:
 				if (requireParameters(commandNode, 1)) {
@@ -301,7 +314,25 @@ public class CommandExecuter {
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int fitTiles ()
 			case FIT_TILES:
 				if (Data.getPlanet() != null) {
-					TopologyGenerator.fitTiles(Data.getPlanet());
+					List<Container> tileList;
+
+					if (parameters.length > 0) {
+						tileList = new ArrayList<>();
+
+						for (Variable parameter : parameters) {
+							Container tileContainer = parameter.getContainer();
+							checkType(script, commandNode, tileContainer, parameter.getString());
+
+							if (tileContainer.getType() == DataType.TILE) {
+								tileList.add(tileContainer);
+							}
+						}
+
+					} else {
+						tileList = Data.getContainersOfType(DataType.TILE);
+					}
+
+					TopologyGenerator.fitTiles(Data.getPlanet(), tileList);
 				}
 				break;
 

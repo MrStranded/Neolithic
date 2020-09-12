@@ -2,23 +2,22 @@ WorldGen: genContinental {
 	name = "Continental";
 
 	Script: generate {
-		/*setWaterLevel(100);
+		setWaterLevel(100);
 		print("water level set");
 
 		for (t : eachTile()) {
 			if (chance(0.0025)) { // 1/4% chance
-				if (chance(0.75)) {
+				if (chance(0.5)) {
 					destroy(create(formPlateau, t));
-					//fromPlateau->place(t);
+				} else if (chance(0.5)) {
+					destroy(create(formMountain, t));
 				} else {
 					destroy(create(formHill, t));
 				}
 			}
 		}
 
-		fitTiles();
-
-		for (t : eachTile()) {
+		/*for (t : eachTile()) {
 			if (getHeight(t) > 150) {
 				d = getHeight(t) - 150;
 				if (chance(d/300)) {
@@ -26,6 +25,8 @@ WorldGen: genContinental {
 				}
 			}
 		}*/
+
+		fitTiles(tGras, tDirt, tSand, tStone);
 	}
 }
 
@@ -33,6 +34,10 @@ Formation: formMountain {
 	Script: place(tile) {
 		height = random(220,420);
 		self->lift(tile, height);
+
+		if (chance(0.5)) {
+		    create(entSource, getNeighbor(self, random(3)));
+		}
 	}
 
 	Script: lift(tile, height) {
@@ -71,6 +76,10 @@ Formation: formPlateau {
 		if (height >= 170) { height = random(130,220);}
 		distance = random(12,20);
 		self->lift(tile, height, distance);
+
+		if (chance(0.5)) {
+		    create(entSource, getNeighbor(self, random(3)));
+		}
 	}
 
 	Script: lift(tile, height, distance) {

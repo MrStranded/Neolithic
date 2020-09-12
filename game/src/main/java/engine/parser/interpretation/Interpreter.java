@@ -184,14 +184,14 @@ public class Interpreter {
 
 	// ################################################################################### General
 
-	private void addName(Container container) throws Exception {
-		consume(TokenConstants.ASSIGNMENT);
-
-		Token name = consume();
-		container.setName(name.getValue());
-
-		consume(TokenConstants.SEMICOLON);
-	}
+//	private void readName(Container container) throws Exception {
+//		consume(TokenConstants.ASSIGNMENT);
+//
+//		Token name = consume();
+//		container.setName(name.getValue());
+//
+//		consume(TokenConstants.SEMICOLON);
+//	}
 
 	private void readMeshPath(Container container) throws Exception {
 		consume(TokenConstants.ASSIGNMENT);
@@ -204,11 +204,11 @@ public class Interpreter {
 		consume(TokenConstants.SEMICOLON);
 	}
 
-	private void readOpacity(Container container) throws Exception {
+	private void readStringValue(Consumer<String> valueSetter) throws Exception {
 		consume(TokenConstants.ASSIGNMENT);
 
-		Token opacityToken = consume();
-		container.setOpacity(TokenNumerifier.getDouble(opacityToken));
+		Token value = consume();
+		valueSetter.accept(value.getValue());
 
 		consume(TokenConstants.SEMICOLON);
 	}
@@ -222,9 +222,28 @@ public class Interpreter {
 		consume(TokenConstants.SEMICOLON);
 	}
 
+	private void readBooleanValue(Consumer<Boolean> valueSetter) throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token token = consume();
+		boolean value;
+
+		if (TokenConstants.TRUE.equals(token)) {
+			value = true;
+		} else if (TokenConstants.FALSE.equals(token)) {
+			value = false;
+		} else {
+			value = TokenNumerifier.getDouble(token) != 0;
+		}
+
+		valueSetter.accept(value);
+
+		consume(TokenConstants.SEMICOLON);
+	}
+
 	// ################################################################################### Attribute
 
-    private void addName(ProtoAttribute protoAttribute) throws Exception {
+    private void readName(ProtoAttribute protoAttribute) throws Exception {
         consume(TokenConstants.ASSIGNMENT);
 
         Token name = consume();
@@ -429,7 +448,7 @@ public class Interpreter {
 		while (true) {
 			Token next = consume();
 			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
-				addName(protoAttribute);
+				readName(protoAttribute);
 
             } else if (TokenConstants.VALUE_INHERITED.equals(next)) { // attribute is inherited
                 addInherited(protoAttribute);
@@ -520,6 +539,7 @@ public class Interpreter {
 					Logger.error("Unknown entity constructor type '" + type + "' for '" + textID.getValue() + "' on line " + textID.getLine());
 					return;
 			}
+
 			if (precursors != null) {
 				container.setInheritedContainers(precursors);
 			}
@@ -531,7 +551,8 @@ public class Interpreter {
 			Token next = consume();
 			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% name
 			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
-				addName(container);
+//				readName(container);
+				readStringValue(container::setName);
 
 			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% type specific values
 			} else if (TokenConstants.VALUE_PREFERRED_HEIGHT.equals(next)) { // preferred height definition
@@ -559,9 +580,18 @@ public class Interpreter {
 					readMeshPath(container);
 				} else { issueTypeError(next, type); }
 
-			} else if (TokenConstants.VALUE_OPACITY.equals(next)) { // mesh path definition
+			} else if (TokenConstants.VALUE_OPACITY.equals(next)) { // opacity definition
 				if (type == DataType.ENTITY || type == DataType.CREATURE) {
-					readOpacity(container);
+//					readOpacity(container);
+					readNumberValue(container::setOpacity);
+				} else { issueTypeError(next, type); }
+
+			} else if (TokenConstants.VALUE_RUN_TICKS.equals(next)) { // run ticks flag definition
+				if (type == DataType.ENTITY
+						|| type == DataType.CREATURE
+						|| type == DataType.TILE
+						|| type == DataType.INSTANCE) {
+					readBooleanValue(container::setRunTickScripts);
 				} else { issueTypeError(next, type); }
 
 			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% value lists

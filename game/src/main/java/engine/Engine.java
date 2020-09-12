@@ -67,7 +67,7 @@ public class Engine {
 	public static void createWorld() {
 		gaia = new Planet(GameConstants.DEFAULT_PLANET_SIZE);
 		Data.setPlanet(gaia);
-		//Data.addPlanetTilesToQueue();
+		Data.addPlanetTilesToQueue();
 
 		new TimedTask("Generating LOD Mesh", () -> gaia.generatePlanetMesh()).execute();
 
