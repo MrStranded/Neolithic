@@ -17,14 +17,13 @@ WorldGen: genContinental {
 			}
 		}
 
-		/*for (t : eachTile()) {
-			if (getHeight(t) > 150) {
-				d = getHeight(t) - 150;
-				if (chance(d/300)) {
-					create(entBoulder, t);
+		for (t : eachTile()) {
+			if (getHeight(t) > 120) {
+				if (chance(0.001)) {
+					create(entDeepSource, t);
 				}
 			}
-		}*/
+		}
 
 		fitTiles(tGras, tDirt, tSand, tStone);
 	}

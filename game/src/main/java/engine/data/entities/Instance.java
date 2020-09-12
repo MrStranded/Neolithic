@@ -599,6 +599,10 @@ public class Instance {
 		}
 	}
 
+	public BinaryTree<Variable> getVariables() {
+		return variables;
+	}
+
 	public Variable getVariable(String name) {
 		if (variables == null) { return null; }
 

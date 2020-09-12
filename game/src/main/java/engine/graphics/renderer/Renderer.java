@@ -21,6 +21,7 @@ import engine.graphics.objects.light.*;
 import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
+import engine.input.IngameInteractions;
 import engine.input.KeyboardInput;
 import engine.input.MouseInput;
 import engine.graphics.gui.window.Window;
@@ -60,8 +61,7 @@ public class Renderer {
 	 */
 	private boolean aspectRatioHasChanged = true;
 
-	private MouseInput mouse;
-	private KeyboardInput keyboard;
+	private IngameInteractions ingameInteractions;
 
 	private List<TimedTask> tasks = Collections.emptyList();
 
@@ -84,17 +84,22 @@ public class Renderer {
 	// ###################################################################################
 
 	public void initialize() {
+		initializeInput();
+
 		initializeShaders();
 		initializeHUDShaders();
 		initializeDepthShaders();
 
 		initializeUniforms();
-		initializeInput();
 
 		calculateProjectionMatrizes();
 		calculateOrthographicMatrix();
 
 		initializeTasks();
+	}
+
+	private void initializeInput() {
+		ingameInteractions = new IngameInteractions(window, this);
 	}
 
 	private void initializeShaders() {
@@ -174,10 +179,6 @@ public class Renderer {
 		}
 	}
 
-	private void initializeInput() {
-		mouse = new MouseInput(window);
-		keyboard = new KeyboardInput(window);
-	}
 
 	private void initializeTasks() {
 		tasks = TimedTask.listOf(
@@ -233,158 +234,7 @@ public class Renderer {
 		);
 	}
 
-	// ###################################################################################
-	// ################################ Input SHOULD NOT STAY HERE !!!! ##################
-	// ###################################################################################
 
-	private void processInput(Scene scene) {
-		/*double angleStep = 0.0025d;
-		angle += angleStep;
-		if (angle > Math.PI*2d) {
-			angle -= Math.PI*2d;
-		}*/
-
-		//GraphicalObject[] objects = scene.getObjects();
-		Camera camera = scene.getCamera();
-
-		//objects[2].rotateYAroundOrigin(-angleStep); // sun
-		//Data.getMoon().rotateYAroundOrigin(angleStep*2d); // moon
-		//camera.rotateYaw(-angleStep);
-		//scene.getDirectionalLight().rotateY(-angleStep);
-		//scene.getPointLights()[1].rotateYAroundOrigin(-angleStep);
-
-		//scene.getShadowMap().setLightAngle(-angle);
-		//scene.getShadowMap().cameraChangedPosition();
-
-		double dist = (camera.getRadius() - 0.5d) / 100d;
-
-		if (keyboard.isPressed(GLFW.GLFW_KEY_A)) { // rotate left
-			camera.rotateYaw(-dist);
-		}
-		if (keyboard.isPressed(GLFW.GLFW_KEY_D)) { // rotate right
-			camera.rotateYaw(dist);
-		}
-		if (keyboard.isPressed(GLFW.GLFW_KEY_E)) { // look down
-			camera.rotateTilt(-0.005d);
-		}
-		if (keyboard.isPressed(GLFW.GLFW_KEY_Q)) { // look up
-			camera.rotateTilt(0.005d);
-		}
-		if (keyboard.isPressed(GLFW.GLFW_KEY_W)) { // rotate up
-			camera.rotatePitch(-dist);
-		}
-		if (keyboard.isPressed(GLFW.GLFW_KEY_S)) { // rotate down
-			camera.rotatePitch(dist);
-		}
-		//camera.changeRadius(-dist*mouse.getZSpeed()*3); // scrolling wheel
-		if (keyboard.isPressed(GLFW.GLFW_KEY_R)) { // go closer
-			camera.changeRadius(-dist);
-		}
-		if (keyboard.isPressed(GLFW.GLFW_KEY_F)) { // go farther away
-			camera.changeRadius(dist);
-		}
-		if (camera.getRadius() < 1d + GraphicalConstants.ZNEAR) { // ensure not to go too close
-			camera.setRadius(1d + GraphicalConstants.ZNEAR);
-		}
-
-		if (keyboard.isClicked(GLFW.GLFW_KEY_G)) {
-			Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "repopulate", null));
-		}
-		if (keyboard.isClicked(GLFW.GLFW_KEY_T)) {
-			Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "armageddon", null));
-		}
-		if (keyboard.isClicked(GLFW.GLFW_KEY_O)) {
-			Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "fit", null));
-		}
-
-		if (keyboard.isClicked(GLFW.GLFW_KEY_X)) {
-			GameOptions.printPerformance = !GameOptions.printPerformance;
-		}
-		if (keyboard.isClicked(GLFW.GLFW_KEY_SPACE)) {
-			GameOptions.runTicks = !GameOptions.runTicks;
-		}
-		if (keyboard.isClicked(GLFW.GLFW_KEY_PERIOD)) {
-		    GameOptions.runTicks = true;
-		    GameOptions.stopAtNextTick = true;
-        }
-
-		if (keyboard.isClicked(GLFW.GLFW_KEY_UP)) {
-			nextType(1);
-		}
-		if (keyboard.isClicked(GLFW.GLFW_KEY_DOWN)) {
-			nextType(-1);
-		}
-		if (mouse.getZSpeed() > 0) {
-			for (int i = 0; i < mouse.getZSpeed(); i++) {
-				nextType(1);
-			}
-		}
-		if (mouse.getZSpeed() < 0) {
-			for (int i = 0; i < -mouse.getZSpeed(); i++) {
-				nextType(-1);
-			}
-		}
-
-		if (mouse.isLeftButtonClicked()) {
-			Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), this, scene);
-			if (clickedTile != null) {
-                //scene.setFacePartOverlay(clickedTile.getTileMesh());
-				Data.addScriptRun(new ScriptRun(
-						Data.getMainInstance(),
-						"leftClick",
-						new Variable[]{
-								new Variable(clickedTile),
-								new Variable(Data.getContainer(GameOptions.currentContainerId))}));
-			}
-		}
-		if (mouse.isRightButtonClicked()) {
-			Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), this, scene);
-			if (clickedTile != null) {
-				if (clickedTile.getSubInstances() == null) {
-					GameOptions.selectedInstance = clickedTile;
-				} else {
-					for (Instance sub : clickedTile.getSubInstances()) {
-						GameOptions.selectedInstance = sub;
-						break;
-					}
-				}
-			}
-			/*if (clickedTile != null) {
-				//scene.setFacePartOverlay(clickedTile.getTileMesh());
-				Data.addScriptRun(new ScriptRun(
-						Data.getMainInstance(),
-						"rightClick",
-						new Variable[]{
-								new Variable(clickedTile),
-								new Variable(Data.getContainer(GameOptions.currentContainerId))}));
-			}*/
-		}
-
-		mouse.flush();
-	}
-
-	private void nextType(int direction) {
-		int id = GameOptions.currentContainerId + direction;
-		while (true) {
-			if (id < 0) {
-				id += GameConstants.MAX_CONTAINERS;
-			} else if (id >= GameConstants.MAX_CONTAINERS) {
-				id -= GameConstants.MAX_CONTAINERS;
-			}
-
-			Container container = Data.getContainer(id);
-			if (container != null) {
-				if (container.getType() == DataType.CREATURE
-						|| container.getType() == DataType.FORMATION
-						|| container.getType() == DataType.TILE
-						|| container.getType() == DataType.ENTITY) {
-					GameOptions.currentContainerId = id;
-					break;
-				}
-			}
-			id += direction;
-		}
-	}
 
 	// ###################################################################################
 	// ################################ Rendering ########################################
@@ -396,17 +246,11 @@ public class Renderer {
 		this.planet = planet;
 		this.planetObject = planet != null ? planet.getPlanetObject() : null;
 
-		processInput(scene);
+		ingameInteractions.processInput(scene);
 
 		tasks.forEach(TimedTask::execute);
 
 		flip();
-
-		// closing window
-		if (keyboard.isClicked(GLFW.GLFW_KEY_ESCAPE)) {
-			//cleanUp(); // somehow enabling this here causes the program to not close properly anymore
-			window.close();
-		}
 	}
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Depth Map

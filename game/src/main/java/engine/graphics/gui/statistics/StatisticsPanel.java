@@ -124,6 +124,10 @@ public class StatisticsPanel extends JPanel {
         g.clearRect(0,0,width,height);
         g.drawImage(img, 0, TOP_BAR_HEIGHT, null);
 
+        drawTopBar(g);
+    }
+
+    private void drawTopBar(Graphics g) {
         engine.data.proto.Container container = Data.getContainer(GameOptions.currentContainerId);
         if (container != null) {
             g.setColor(new Color(200, 200, 200));
