@@ -11,6 +11,7 @@ import engine.graphics.objects.generators.MeshGenerator;
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.gui.TextObject;
 import engine.graphics.objects.textures.FontTexture;
+import engine.parser.utils.Logger;
 import load.TextureLoader;
 
 import java.awt.*;
@@ -95,11 +96,12 @@ public class BaseGUI implements GUIInterface {
 			if (subs != null) {
 				try {
 					for (Instance sub : subs) {
+						yPos += 10;
 						printInstance(sub, windowWidth, windowHeight);
 					}
 				} catch (Exception e) {
 					// a concurrent modification exception
-					e.printStackTrace();
+					Logger.error("Concurrent modification exception during BaseGUI drawing");
 				}
 			}
 		}

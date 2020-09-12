@@ -2,6 +2,8 @@ package engine.graphics.gui.statistics;
 
 import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
+import engine.data.proto.ProtoAttribute;
+import engine.parser.utils.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,9 +15,8 @@ public class StatisticsWindow {
     private String title;
 
     private JFrame frame;
-    private JLabel currentType;
     private StatisticsPanel statistics;
-    private JPanel options;
+    private InstanceDetailPanel detailPanel;
 
     private AttributePlotter attributePlotter;
 
@@ -27,15 +28,13 @@ public class StatisticsWindow {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         statistics = new StatisticsPanel(width, height);
-        currentType = new JLabel("Current type: ");
-        currentType.setPreferredSize(new Dimension(width, 30));
-        options = new JPanel();
-        options.setPreferredSize(new Dimension(width, height/2));
+        detailPanel = new InstanceDetailPanel(width, height);
 
-        /*frame.getContentPane().add(currentType);
-        frame.getContentPane().add(statistics);
-        frame.getContentPane().add(options);*/
-        frame.add(statistics);
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("Statistics", statistics);
+        tabbedPane.addTab("Instance Details", detailPanel);
+
+        frame.add(tabbedPane);
 
         frame.pack();
         frame.setVisible(true);
@@ -48,11 +47,22 @@ public class StatisticsWindow {
     }
 
     public void refresh() {
-        statistics.repaint();
+        if (statistics.isVisible()) {
+            statistics.repaint();
+        }
+
+        if (detailPanel.isVisible()) {
+            detailPanel.repaint();
+        }
     }
 
     public void tick() {
         statistics.tick();
+
+        if (detailPanel.isVisible()) {
+            detailPanel.tick();
+        }
+
         StatisticsData.clear();
     }
 
@@ -60,11 +70,6 @@ public class StatisticsWindow {
         StatisticsData.add(instance.getId());
 
         if (instance.getId() == GameOptions.currentContainerId) {
-            /*attributePlotter.setCurrentInstance(instance);
-            BinaryTree<Attribute> tree = instance.getAttributes();
-            if (tree != null) {
-                tree.forEach(attributePlotter);
-            }*/
             statistics.register(instance);
         }
     }

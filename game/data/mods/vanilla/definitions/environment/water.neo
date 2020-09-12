@@ -12,6 +12,18 @@ Entity: entSource {
     }
 }
 
+Entity: entDeepSource {
+    name = "Deep water source";
+
+    attributes { attTicks, 10; }
+
+    Script: tick {
+        delayTick(.attTicks);
+
+        getTile(self)..attHumidity += 20;
+    }
+}
+
 Entity: entWater {
     name = "Sweet water";
 
@@ -37,7 +49,7 @@ Entity: entWater {
             }
 
             if (next) {
-                d = floor( min( (h - lowest) / 2, ..attWater / 2 ) );
+                d = floor( min( (h - lowest) / 2, (..attWater + 1) / 2 ) );
                 if (d > 0) {
                     ..attWater -= d;
                     h -= d;

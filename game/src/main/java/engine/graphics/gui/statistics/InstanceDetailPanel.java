@@ -1,0 +1,192 @@
+package engine.graphics.gui.statistics;
+
+import engine.data.Data;
+import engine.data.attributes.Attribute;
+import engine.data.entities.Instance;
+import engine.data.options.GameOptions;
+import engine.data.proto.ProtoAttribute;
+import engine.data.structures.trees.binary.BinaryTree;
+import engine.data.variables.Variable;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
+
+public class InstanceDetailPanel extends JPanel implements MouseListener {
+
+    private int width, height;
+    private BufferedImage img;
+
+    private int currentYPosition = 0;
+
+    private List<InstanceButton> buttons;
+
+    public InstanceDetailPanel(int width, int height) {
+        super();
+
+        this.width = width;
+        this.height = height;
+        img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        setPreferredSize(new Dimension(width, height));
+
+        addMouseListener(this);
+    }
+
+    public void tick() {
+        Graphics g = img.getGraphics();
+
+        g.setColor(new Color (255,255,255));
+        g.fillRect(0, 0, width, height);
+
+        if (buttons != null) { buttons.clear(); }
+        buttons = new ArrayList<>(8);
+
+        drawInstance(g, GameOptions.selectedInstance, 10, 10);
+        drawAttributes(g, GameOptions.selectedInstance, 10, height / 2);
+        drawVariables(g, GameOptions.selectedInstance, 320, height / 2);
+    }
+
+    private int drawInstance(Graphics g, Instance instance, int xPos, int yPos) {
+        if (instance != null) {
+            g.setColor(new Color (65, 167, 215));
+            g.fillRect(xPos - 3, yPos - 3, 145, 20);
+            buttons.add(new InstanceButton(instance, xPos -3, yPos -3, 145, 20));
+
+            g.setColor(new Color (0,0,0));
+            g.drawString(instance.getName(), xPos, yPos + 12);
+
+            List<Instance> subInstances = instance.getSubInstances();
+            if (subInstances != null) {
+                boolean first = true;
+
+                for (Instance sub : subInstances) {
+                    if (! first) { yPos += 25; }
+                    first = false;
+
+                    yPos = drawInstance(g, sub, xPos + 150, yPos);
+                }
+            }
+        }
+
+        return yPos;
+    }
+
+    private void drawAttributes(Graphics g, Instance instance, int xPos, int yPos) {
+        if (instance == null) { return; }
+
+        setCurrentYPosition(yPos);
+        BinaryTree<Attribute> tree = instance.getAttributes();
+
+        if (tree != null) {
+            tree.forEach(idInterface -> {
+                Attribute attribute = (Attribute) idInterface;
+                ProtoAttribute protoAttribute = Data.getProtoAttribute(attribute.getId());
+
+                if (protoAttribute != null && protoAttribute.getGuiColor() != null) {
+                    Color attributeColor = protoAttribute.getGuiColor();
+
+                    g.setColor(getInverted(attributeColor));
+                    g.fillRect(xPos - 3, getCurrentYPosition() - 3, 300, 18);
+
+                    g.setColor(attributeColor);
+                    g.drawString(protoAttribute.getName(), xPos, getCurrentYPosition() + 12);
+                    g.drawString(String.valueOf(instance.getAttributeValue(attribute.getId())), xPos + 200, getCurrentYPosition() + 12);
+                    
+                    setCurrentYPosition(getCurrentYPosition() + 20);
+                }
+            });
+        }
+    }
+
+    private void drawVariables(Graphics g, Instance instance, int xPos, int yPos) {
+        if (instance == null) { return; }
+
+        g.setColor(new Color(0,0,0));
+        setCurrentYPosition(yPos);
+        BinaryTree<Variable> tree = instance.getVariables();
+
+        if (tree != null) {
+            tree.forEach(varId -> {
+                Variable variable = (Variable) varId;
+                g.drawString(String.valueOf(variable.toString()), xPos, getCurrentYPosition() + 12);
+                setCurrentYPosition(getCurrentYPosition() + 20);
+            });
+        }
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        g.clearRect(0,0,width,height);
+        g.drawImage(img, 0, 0, null);
+    }
+
+    private Color getInverted(Color c) {
+        return new Color(
+                (c.getRed() + 128) % 255,
+                (c.getGreen() + 128) % 255,
+                (c.getBlue() + 128) % 255
+        );
+    }
+
+    public int getCurrentYPosition() {
+        return currentYPosition;
+    }
+    public void setCurrentYPosition(int currentYPosition) {
+        this.currentYPosition = currentYPosition;
+    }
+
+    static class InstanceButton {
+        private int xPos, yPos, width, height;
+        private Instance instance;
+
+        public InstanceButton(Instance instance, int xPos, int yPos, int width, int height) {
+            this.instance = instance;
+            this.xPos = xPos;
+            this.yPos = yPos;
+            this.width = width;
+            this.height = height;
+        }
+
+        public boolean isClicked(int x, int y) {
+            return (x >= xPos && x < xPos + width)
+                    && (y >= yPos && y < yPos + height);
+        }
+
+        public Instance getInstance() { return instance; }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (buttons != null) {
+            buttons.forEach(button -> {
+                if (button.isClicked(e.getX(), e.getY())) {
+                    GameOptions.selectedInstance = button.getInstance();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+}
