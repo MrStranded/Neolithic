@@ -6,6 +6,7 @@ import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
 import engine.data.proto.ProtoAttribute;
 import engine.data.structures.trees.binary.BinaryTree;
+import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 
 import javax.swing.*;
@@ -15,6 +16,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class InstanceDetailPanel extends JPanel implements MouseListener {
 
@@ -36,7 +38,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         addMouseListener(this);
     }
 
-    public void tick() {
+    public void update() {
         Graphics g = img.getGraphics();
 
         g.setColor(new Color (255,255,255));
@@ -48,6 +50,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         drawInstance(g, GameOptions.selectedInstance, 10, 10);
         drawAttributes(g, GameOptions.selectedInstance, 10, height / 2);
         drawVariables(g, GameOptions.selectedInstance, 320, height / 2);
+        drawInstanceSpecificInfo(g, GameOptions.selectedInstance, 530, height / 2);
     }
 
     private int drawInstance(Graphics g, Instance instance, int xPos, int yPos) {
@@ -118,8 +121,28 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         }
     }
 
+    private void drawInstanceSpecificInfo(Graphics g, Instance instance, int xPos, int yPos) {
+        if (instance == null) { return; }
+
+        Optional<engine.data.proto.Container> container = instance.getContainer();
+        if (container.isEmpty()) { return; }
+
+        g.setColor(new Color(0,0,0));
+
+        g.drawString(container.get().getName() + " - " + container.get().getType(), xPos, yPos + 12);
+
+        if (container.get().getType() == DataType.TILE) {
+            g.drawString("Tile height: ", xPos, yPos + 32);
+            g.drawString(String.valueOf(instance.getPosition().getHeight()), xPos + 150, yPos + 32);
+            g.drawString("Water height: ", xPos, yPos + 52);
+            g.drawString(String.valueOf(instance.getPosition().getWaterHeight()), xPos + 150, yPos + 52);
+        }
+    }
+
     @Override
     public void paintComponent(Graphics g) {
+        update();
+
         g.clearRect(0,0,width,height);
         g.drawImage(img, 0, 0, null);
     }
