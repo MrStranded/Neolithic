@@ -32,13 +32,13 @@ Entity: entWater {
             ..attWater--;
 
             if (chance(0.5)) {
-                ->createCloud(self, 5);
+                ->createCloud(self, 5 + 20 * getLightLevel(self) / 100);
             }
         }
 
-        h = getHeight(self) + ..attWater;
+        h = getHeight(self) + .attWater;
 
-        if (..attWater > 0) {
+        if (.attWater > 0) {
             lowest = h;
             for (n : getNeighbors(self)) {
                 oh = getHeight(n) + getFullAtt("attWater", n);
@@ -49,19 +49,15 @@ Entity: entWater {
             }
 
             if (next) {
-                d = floor( min( (h - lowest) / 2, (..attWater + 1) / 2 ) );
+                d = floor( min( (h - lowest) / 2, (.attWater + 1) / 2 ) );
                 if (d > 0) {
                     ..attWater -= d;
                     h -= d;
 
-                    if (lowest > 100 || getHeight(next) - getWaterHeight(next) <= d) {
-                        ->createWater(next, d);
-                    }
-
-                    if (getTile(self)..attSediment > 0) {
+                    if (getTile(self).attSediment > 0) {
                         h1 = getHeight(self);
                         h2 = getHeight(next);
-                        if (h1 > h2 + 1 && chance(getTile(self)..attSediment / 100)) {
+                        if (h1 > h2 + 1 && chance(getTile(self).attSediment / 100)) {
                             h--;
                             getTile(self)..attSediment--;
                             next..attSediment++;
@@ -69,37 +65,43 @@ Entity: entWater {
                             setHeight(next, h2 + 1);
                         }
                     }
+
+                    if (lowest > 100 || getHeight(next) - getWaterHeight(next) <= d) {
+                        ->createWater(next, d);
+                    }
                 }
             }
         }
 
-        setWaterHeight(self, max(h, 100));
-	    updatePlanetMesh();
-
-        isInOcean = getHeight(self) + .attWater < 100;
+        isInOcean = h < 100;
         if (isInOcean) {
             tile = getTile(self);
             if (chance(0.75)) { tile = getNeighbor(self, random(3)); }
 
-            if (getLightLevel(self) >= 70) {
-                ->createCloud(tile, 25);
-            } else {
-                ->createCloud(tile, 10);
-            }
+            ->createCloud(tile, 5 + 20 * getLightLevel(self) / 100);
         }
 
-        if (..attWater <= 0 || isInOcean) {
+        ->updateWaterHeight();
+
+        if (.attWater <= 0 || isInOcean) {
             destroy(self);
         }
     }
 
+    Script: updateWaterHeight {
+        setWaterHeight(self, max(getHeight(self) + .attWater, 100));
+        updatePlanetMesh();
+    }
+
     Script: createWater(target, water) {
         other = getInstance(entWater, getTile(target));
-        if (other) {
-            other..attWater += water;
-        } else {
-            (create(entWater, getTile(getTile(target))))..attWater += water;
+
+        if (!other) {
+            other = create(entWater, getTile(target));
         }
+
+        other..attWater += water;
+        other->updateWaterHeight();
     }
 
     Script: createCloud(target, humidity) {

@@ -59,10 +59,6 @@ public class StatisticsWindow {
     public void tick() {
         statistics.tick();
 
-        if (detailPanel.isVisible()) {
-            detailPanel.tick();
-        }
-
         StatisticsData.clear();
     }
 
