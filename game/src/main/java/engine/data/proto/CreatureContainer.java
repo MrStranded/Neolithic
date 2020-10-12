@@ -1,5 +1,6 @@
 package engine.data.proto;
 
+import constants.ScriptConstants;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.variables.DataType;
 
@@ -10,14 +11,14 @@ public class CreatureContainer extends Container {
 
 	//private BinaryTree<Process> knownProcesses;
 
-	private List<ContainerIdentifier> knowledge;
-	private List<ContainerIdentifier> drives;
+//	private List<ContainerIdentifier> knowledge;
+//	private List<ContainerIdentifier> drives;
 
 	public CreatureContainer(String textID) {
 		super(textID, DataType.CREATURE);
 
-		knowledge = new ArrayList<>(4);
-		drives = new ArrayList<>(2);
+//		knowledge = new ArrayList<>(4);
+//		drives = new ArrayList<>(2);
 	}
 
 	// ###################################################################################
@@ -29,8 +30,11 @@ public class CreatureContainer extends Container {
 		if (container.getType() == DataType.CREATURE) {
 			CreatureContainer creatureContainer = (CreatureContainer) container;
 
-			drives.addAll(creatureContainer.getDrives());
-			knowledge.addAll(creatureContainer.getKnowledge());
+//			drives.addAll(creatureContainer.getDrives());
+//			knowledge.addAll(creatureContainer.getKnowledge());
+
+			getDefaultStage().getIdList(ScriptConstants.KEY_DRIVES).addAll(creatureContainer.getDrives());
+			getDefaultStage().getIdList(ScriptConstants.KEY_KNOWLEDGE).addAll(creatureContainer.getKnowledge());
 		}
 	}
 
@@ -39,10 +43,12 @@ public class CreatureContainer extends Container {
 	// ###################################################################################
 
 	public List<ContainerIdentifier> getKnowledge() {
-		return knowledge;
+//		return knowledge;
+		return getDefaultStage().getIdList(ScriptConstants.KEY_KNOWLEDGE);
 	}
 
 	public List<ContainerIdentifier> getDrives() {
-		return drives;
+//		return drives;
+		return getDefaultStage().getIdList(ScriptConstants.KEY_DRIVES);
 	}
 }

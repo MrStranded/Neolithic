@@ -16,4 +16,15 @@ public class ScriptConstants {
 	public static final String EVENT_FINALLY			= "finally";
 	public static final String EVENT_GET_WEIGHT			= "getWeight";
 
+	public static final String DEFAULT_STAGE = "DEF";
+
+	public static final String KEY_ATTRIBUTES = "attributes";
+	public static final String KEY_SCIPTS = "scripts";
+	public static final String KEY_NAME = "name";
+	public static final String KEY_OPACITY = "opacity";
+	public static final String KEY_INHERITED_CONATINERS = "inherited";
+	public static final String KEY_SOLUTIONS = "solutions";
+	public static final String KEY_KNOWLEDGE = "knowledge";
+	public static final String KEY_DRIVES = "drives";
+
 }

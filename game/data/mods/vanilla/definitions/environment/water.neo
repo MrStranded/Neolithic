@@ -81,7 +81,7 @@ Entity: entWater {
     }
 
     Script: erode(from, to) {
-        if (chance(0.25)) {
+        if (chance(0.125)) {
             n = getNeighbor(from, random(3));
             if (n != from) { from = n; }
         }
