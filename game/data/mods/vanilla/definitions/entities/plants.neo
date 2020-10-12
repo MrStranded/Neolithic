@@ -16,7 +16,7 @@ Creature: cAppleTree {
 		proHeal;
 	}
 
-	Script: place {
+	Script: create {
 		..attNutrition += random(100);
 		self->fruitType = entApple;
 
@@ -29,13 +29,15 @@ Creature: cAppleTree {
 	}
 
 	attributes{
+	    attTicks, 2;
 		attSize, 60;
-	    attMatureAge, 2880;
+	    attMatureAge, 420;//2880;
 	    attLightSensitivity, 20;
-	    attBabySize, 200;
+	    attBabySize, 100;
 	}
 
 	Script: tick {
+	    delayNextTick(self, .attTicks);
 	    ..attAge++;
 
         if (chance(0.01)) {
@@ -52,7 +54,7 @@ Creature: cAppleTree {
 	        getTile(self)..attHumidity--;
 	    }
 
-		if (.attAge > .attMatureAge*2) { // age death
+		if (.attAge > .attMatureAge * 3) { // age death
 		    addEffect(self, effCancer);
         }
 
@@ -85,10 +87,6 @@ Entity: entApple {
 		attMatureAge, 100;
 		attNutrition, 100; // default value
 	}
-
-	Script: place() {
-
-    }
 
     Script: createSeed(parent) {
 		->seed = create(cAppleSeed, self);
@@ -135,7 +133,7 @@ Creature: cAppleSeed {
 
     knowledge { proGrowIntoTree; }
 
-    Script: place() {
+    Script: create() {
         self->treeType = cAppleTree;
     }
 

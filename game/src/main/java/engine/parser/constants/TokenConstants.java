@@ -74,6 +74,7 @@ public enum TokenConstants {
 	// -------------------------------------------------- Entity Manipulation
 	CHANGE                  (TokenType.COMMAND, "change"),
 	CREATE                  (TokenType.COMMAND, "create"),
+	GET_OR_CREATE           (TokenType.COMMAND, "getOrCreate"),
 	DESTROY                 (TokenType.COMMAND, "destroy"),
 	DELETE_EFFECTS			(TokenType.COMMAND, "deleteEffects"),
 	ADD_EFFECT				(TokenType.COMMAND, "addEffect"),
@@ -129,6 +130,9 @@ public enum TokenConstants {
 	SET_AT          (TokenType.COMMAND, "setAt"),
 	MOVE_TO         (TokenType.COMMAND, "moveTo"),
 	PICK_UP         (TokenType.COMMAND, "pickUp"),
+
+	// -------------------------------------------------- System
+	GET_MEMORY_ADDRESS		(TokenType.COMMAND, "getMemoryAddress"),
 
 	// -------------------------------------------------- GUI
 	PRINT           (TokenType.COMMAND, "print"),

@@ -5,21 +5,22 @@ import engine.data.entities.Instance;
 
 public class Occupation {
 
-    int completeDuration = 0;
-    int remainingDuration = 0;
-    Script callBackScript = null;
+    int completeDuration;
+    int remainingDuration;
+    Script callBackScript;
 
     public Occupation(int duration, Script callBackScript) {
         completeDuration = duration;
+        remainingDuration = duration;
         this.callBackScript = callBackScript;
     }
 
     public boolean isFinished() {
-        return remainingDuration >= completeDuration;
+        return remainingDuration <= 0;
     }
 
     public void tick() {
-        remainingDuration++;
+        remainingDuration--;
     }
 
     public void callBack(Instance instance) {

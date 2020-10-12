@@ -6,6 +6,7 @@ import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.behaviour.Occupation;
 import engine.data.identifiers.ContainerIdentifier;
+import engine.data.options.GameOptions;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.CreatureContainer;
@@ -51,6 +52,9 @@ public class Instance {
 
 		initMoveableObject();
         inheritAttributes();
+
+//		run(ScriptConstants.EVENT_CREATE, new Variable[] {});
+		Data.addInstanceToQueue(this);
 	}
 
     // ###################################################################################
@@ -146,12 +150,17 @@ public class Instance {
 	// ###################################################################################
 
 	public void change(int containerId) {
+		Container oldContainer = getContainer().orElse(null);
 		id = containerId;
+		Container newContainer = getContainer().orElse(null);
+
 		inheritAttributes();
-		if (Data.getContainer(containerId).getType() == DataType.TILE) {
+		if (newContainer != null && newContainer.getType() == DataType.TILE) {
 			((Tile) this).resetColors();
 			((Tile) this).setChanged(true);
 		}
+
+		run(ScriptConstants.EVENT_CHANGE, new Variable[] {new Variable(oldContainer), new Variable(newContainer)});
 	}
 
 	/**
@@ -171,7 +180,6 @@ public class Instance {
 
 						double weight = run(container, ScriptConstants.EVENT_GET_WEIGHT, null).getDouble();
 						weightedDrives.add(container, weight);
-
 					}
 				}
 			}
@@ -263,7 +271,6 @@ public class Instance {
 	    boolean runTickScripts = container.map(Container::isRunTickScripts).orElse(true);
 
 	    if (runTickScripts && delayUntilNextTick <= 0) {
-	    	delayUntilNextTick = 0;
 
 			if (occupations == null || occupations.isEmpty()) {
 				// ----------- calculate drives
@@ -285,7 +292,9 @@ public class Instance {
 			run(ScriptConstants.EVENT_TICK, null);
 
 		} else {
-			if (runTickScripts) { delayUntilNextTick--; }
+			if (runTickScripts) {
+				delayUntilNextTick--;
+			}
 		}
 
         cleanEffects();
@@ -362,14 +371,39 @@ public class Instance {
 			target.addSubInstance(this);
 			superInstance = target;
 			actualizeObjectPosition();
+
+			run(ScriptConstants.EVENT_PLACE, new Variable[] {new Variable(target)});
 		}
 	}
 
 	public void actualizeObjectPosition() {
-		if (superInstance == null) { return; }
-
-		if (moveableObject == null) {
-			moveableObject = new MoveableObject();
+		if (superInstance != null && moveableObject != null) {
+			Tile position = superInstance.getPosition();
+			if (position != null) {
+				// get rotation angles
+				double pitch = GeographicCoordinates.getLatitude(position);
+				double yaw = GeographicCoordinates.getLongitude(position);
+				Vector3 pos;
+				// set position
+				/*if (position.getHeight() > position.getWaterHeight()) {
+					pos = position.getTileMesh().getMid();
+				} else {
+					pos = position.getTileMesh().getWaterMid();
+				}*/
+//				double heightFactor = (Math.max(position.getHeight(), position.getWaterHeight()) + TopologyConstants.PLANET_MINIMUM_HEIGHT)
+//						/ (TopologyConstants.PLANET_MINIMUM_HEIGHT + TopologyConstants.PLANET_MAXIMUM_HEIGHT);
+//				pos = position.getTileMesh().getNormal().times(heightFactor);
+				pos = position.getTileMesh().getMid();
+				// set correct scale
+				if (Data.getPlanet() != null) {
+					double scaleFactor = 1d / (double) Data.getPlanet().getSize();
+					moveableObject.setScale(scaleFactor, scaleFactor, scaleFactor);
+				}
+				// assign values to moveable object
+				moveableObject.setPosition(pos);
+				moveableObject.setRotation(pitch + Math.PI / 2d, -yaw + Math.PI / 2d, 0);
+				moveableObject.setPreRotation(0, Math.random() * Math.PI * 2d * 0d, 0);
+			}
 		}
 
 		Tile position = superInstance.getPosition();
@@ -413,6 +447,10 @@ public class Instance {
 	}
 
 	private void recursiveSlatingForRemoval() {
+		if (this == GameOptions.selectedInstance) {
+			GameOptions.selectedInstance = null;
+		}
+
 		slatedForRemoval = true;
 		if (subInstances != null) {
 			subInstances.forEach(Instance::recursiveSlatingForRemoval);
@@ -675,7 +713,6 @@ public class Instance {
 	public int getDelayUntilNextTick() {
 		return delayUntilNextTick;
 	}
-
 	public void setDelayUntilNextTick(int delayUntilNextTick) {
 		this.delayUntilNextTick = delayUntilNextTick;
 	}
@@ -683,6 +720,10 @@ public class Instance {
 	// ###################################################################################
 	// ################################ Debugging ########################################
 	// ###################################################################################
+
+	public String getMemoryAddress() {
+		return String.valueOf(System.identityHashCode(this));
+	}
 
 	public String toString() {
 		return "Instance (id = " + Data.getContainer(id).getTextID() + (name != null ? " Name: " + name : "") + ")";

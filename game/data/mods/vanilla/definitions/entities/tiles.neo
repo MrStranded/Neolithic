@@ -111,8 +111,13 @@ Tile: tSoakingHumidity {
         attTicks, 20;
     }
 
+    Script: change {
+        delayNextTick(self, random(.attTicks));
+    }
+
     Script: tick {
-        delayTick(self, .attTicks);
+        delayNextTick(self, .attTicks);
+        ..attHumidity -= 1;
 
         water = getInstance(entWater, self);
         if (water) {
@@ -124,10 +129,6 @@ Tile: tSoakingHumidity {
                     n..attHumidity -= 10;
                 }
             }
-        }
-
-        if (..attHumidity >= 100) {
-            ..attHumidity = 100;
         }
 
         ->update();

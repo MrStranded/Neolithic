@@ -376,7 +376,14 @@ public class Renderer {
 		// planetary objects
 		try {
 			for (MeshHub meshHub : meshHubs) {
-				meshHub.render(shaderProgram, viewMatrix, shadowMap);
+				if (meshHub.isOpaque()) {
+					meshHub.render(shaderProgram, viewMatrix, shadowMap);
+				}
+			}
+			for (MeshHub meshHub : meshHubs) {
+				if (! meshHub.isOpaque()) {
+					meshHub.render(shaderProgram, viewMatrix, shadowMap);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -38,6 +38,8 @@ public class Planet {
 
 					tileMesh.setHeight(tile.getHeight());
 					tileMesh.setWaterHeight(tile.getWaterHeight());
+
+					tile.actualizeObjectPosition();
 				}
 			}
 		}

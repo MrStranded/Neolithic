@@ -15,9 +15,9 @@ Entity: entHut {
 
     Script: tick {
         if (getWaterHeight(self) > getHeight(self)) {
-            ..attHealth--;
+            ..attHealth -= 5;
         }
-        if (chance(0.01)) {
+        if (chance(0.05)) {
             ..attHealth--;
         }
 

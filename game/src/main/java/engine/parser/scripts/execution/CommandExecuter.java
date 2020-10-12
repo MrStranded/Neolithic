@@ -4,21 +4,21 @@ import constants.ResourcePathConstants;
 import constants.ScriptConstants;
 import constants.TopologyConstants;
 import engine.data.Data;
-import engine.data.options.GameOptions;
-import engine.data.scripts.Script;
 import engine.data.entities.Effect;
 import engine.data.entities.Instance;
+import engine.data.options.GameOptions;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
+import engine.data.scripts.Script;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.logic.topology.Neighbour;
 import engine.logic.topology.Pathfinding;
-import engine.logic.topology.TopologyGenerator;
 import engine.logic.topology.TileArea;
+import engine.logic.topology.TopologyGenerator;
 import engine.math.numericalObjects.Vector3;
 import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.exceptions.InvalidValueException;
@@ -29,11 +29,10 @@ import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CommandExecuter {
-	
+
 	public static Variable executeCommand(Instance self, Script script, CommandExpressionNode commandNode) throws ScriptInterruptedException {
 		//System.out.println("execute command: " + commandNode.getCommand());
 
@@ -233,8 +232,7 @@ public class CommandExecuter {
 					Instance instance = new Instance(containerId);
 					instance.placeInto(holder);
 
-					instance.run(ScriptConstants.EVENT_PLACE, new Variable[] {parameters[1]});
-					Data.addInstanceToQueue(instance);
+					instance.run(ScriptConstants.EVENT_CREATE, new Variable[] {parameters[1]});
 
 					return new Variable(instance);
 				}
@@ -651,6 +649,17 @@ public class CommandExecuter {
 				}
 				break;
 
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string getMachineAddress (Instance instance)
+			case GET_MEMORY_ADDRESS:
+				if (requireParameters(commandNode, 1)) {
+					Instance instance = parameters[0].getInstance();
+
+					checkValue(script, commandNode, instance, "target instance");
+
+					return new Variable(instance.getMemoryAddress());
+				}
+				break;
+
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile getNeighbor (Tile tile, int position)
 			case GET_NEIGHBOUR:
 				if (requireParameters(commandNode, 2)) {
@@ -679,6 +688,29 @@ public class CommandExecuter {
 						tileList.add(new Variable(neighbour));
 					}
 					return new Variable(tileList);
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& instance getOrCreate (Container container, Instance holder)
+			case GET_OR_CREATE:
+				if (requireParameters(commandNode, 2)) {
+					Container container = parameters[0].getContainer();
+					Instance holder = parameters[1].getInstance();
+					int containerId = -1;
+
+					containerId = checkType(script, commandNode, container, parameters[0].getString());
+					checkValue(script, commandNode, holder, "holder instance");
+
+					Instance instance = holder.getThisOrSubInstanceWithID(containerId);
+					if (instance == null) {
+						instance = new Instance(containerId);
+
+						instance.run(ScriptConstants.EVENT_CREATE, new Variable[] {parameters[1]});
+//						Data.addInstanceToQueue(instance);
+					}
+					instance.placeInto(holder);
+
+					return new Variable(instance);
 				}
 				break;
 
@@ -1131,7 +1163,7 @@ public class CommandExecuter {
 	private static void checkValue(Script script, CommandExpressionNode commandNode, Object value, String objectName) throws InvalidValueException {
         if (value == null) {
             Logger.error(
-                    "Value '" + objectName + "' is invalid!" +
+                    "Value '" + objectName + "' is empty!" +
                     " Error on line " + commandNode.getCommand().getLine() +
                     " in command '" + commandNode.getCommand().getValue() + "'" +
 					" during execution of script '" + script.getTextId() + "' in file '" + script.getFileName() + "'."

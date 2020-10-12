@@ -50,6 +50,10 @@ public class MeshHub {
 		}
 	}
 
+	public boolean isOpaque() {
+		return opacity >= 1;
+	}
+
 	public void setMeshOpacity(double opacity) {
 		if (opacity >= 1.0) {
 			Logger.log("Tried setting opacity with value >= 1.0: " + opacity + " Operation is aborted");
