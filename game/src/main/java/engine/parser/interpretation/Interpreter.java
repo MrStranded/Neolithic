@@ -1,6 +1,7 @@
 package engine.parser.interpretation;
 
 import constants.ResourcePathConstants;
+import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.proto.Container;
 import engine.data.scripts.Script;
@@ -26,6 +27,7 @@ public class Interpreter {
 	private PeekingIterator<Token> tokenIterator;
 	private String currentMod;
 	private String currentFile;
+	private String currentStage;
 
 	public Interpreter(List<Token> tokens, String currentMod, String currentFile) {
 		tokenIterator = new PeekingIterator<>(tokens);
@@ -485,6 +487,7 @@ public class Interpreter {
 	private void createEntity(final DataType type) throws Exception {
 		consume(TokenConstants.COLON);
 		Token textID = consume();
+		currentStage = ScriptConstants.DEFAULT_STAGE;
 
 		List<ContainerIdentifier> precursors = null;
 		if (TokenConstants.INHERITS.equals(peek())) {
@@ -494,46 +497,45 @@ public class Interpreter {
 
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
-		Container container;
-
 		// does such a container already exist?
-		container = Data.getContainer(Data.getContainerID(textID.getValue()));
-		if (container != null) {
-			if (container.getType() != type) {
+		Container setupContainer = Data.getContainer(Data.getContainerID(textID.getValue()));
+		if (setupContainer != null) {
+			if (setupContainer.getType() != type) {
 				String errorMessage = "Line " + textID.getLine()
 						+ ": An object with textID '" + textID.getValue()
-						+ "' already exists, but has type " + container.getType()
+						+ "' already exists, but has type " + setupContainer.getType()
 						+ " instead of " + type + ".";
 
 				Logger.error(errorMessage);
 				throw new Exception(errorMessage);
 			}
+
 		} else {
 			// container creation
 			switch (type) {
 				case ENTITY:
-					container = new Container(textID.getValue(), DataType.ENTITY);
+					setupContainer = new Container(textID.getValue(), DataType.ENTITY);
 					break;
 				case EFFECT:
-					container = new Container(textID.getValue(), DataType.EFFECT);
+					setupContainer = new Container(textID.getValue(), DataType.EFFECT);
 					break;
 				case TILE:
-					container = new TileContainer(textID.getValue());
+					setupContainer = new TileContainer(textID.getValue());
 					break;
 				case CREATURE:
-					container = new CreatureContainer(textID.getValue());
+					setupContainer = new CreatureContainer(textID.getValue());
 					break;
 				case DRIVE:
-					container = new DriveContainer(textID.getValue());
+					setupContainer = new DriveContainer(textID.getValue());
 					break;
 				case PROCESS:
-					container = new ProcessContainer(textID.getValue());
+					setupContainer = new ProcessContainer(textID.getValue());
 					break;
 				case FORMATION:
-					container = new Container(textID.getValue(), DataType.FORMATION);
+					setupContainer = new Container(textID.getValue(), DataType.FORMATION);
 					break;
 				case WORLDGEN:
-					container = new Container(textID.getValue(), DataType.WORLDGEN);
+					setupContainer = new Container(textID.getValue(), DataType.WORLDGEN);
 					break;
 				default:
 					Logger.error("Unknown entity constructor type '" + type + "' for '" + textID.getValue() + "' on line " + textID.getLine());
@@ -541,10 +543,12 @@ public class Interpreter {
 			}
 
 			if (precursors != null) {
-				container.setInheritedContainers(precursors);
+				setupContainer.setInheritedContainers(precursors);
 			}
-			Data.addContainer(container);
+			Data.addContainer(setupContainer);
 		}
+
+		final Container container = setupContainer;
 
 		// container filling
 		while (true) {
@@ -552,7 +556,8 @@ public class Interpreter {
 			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% name
 			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
 //				readName(container);
-				readStringValue(container::setName);
+//				readStringValue(name -> container.setName(currentStage, name));
+				readStringValue(name -> container.getStage(currentStage).set(ScriptConstants.KEY_NAME, name));
 
 			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% type specific values
 			} else if (TokenConstants.VALUE_PREFERRED_HEIGHT.equals(next)) { // preferred height definition

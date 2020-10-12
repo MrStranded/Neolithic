@@ -92,16 +92,14 @@ public class Instance {
 	}
 
     public void inheritAttributes() {
-	    Container container = Data.getContainer(id);
-
-	    if (container != null) {
-	    	BinaryTree<Attribute> tree = container.getAttributes();
-	    	if (tree != null) {
-	    		tree.forEach(attributeID -> {
+	    getContainer().ifPresent(container -> {
+			BinaryTree<Attribute> tree = container.getAttributes();
+			if (tree != null) {
+				tree.forEach(attributeID -> {
 					addAttribute(attributeID.getId(), container.getAttributeValue(attributeID.getId()));
 				});
 			}
-        }
+		});
     }
 
 	// ###################################################################################
@@ -109,12 +107,10 @@ public class Instance {
 	// ###################################################################################
 
 	public Variable run(String textID, Variable[] parameters) {
-		Container container = Data.getContainer(id);
-		if (container != null) {
+		return getContainer().map(container -> {
 			Script script = container.getScript(textID);
 			return runScript(script, parameters);
-		}
-		return new Variable();
+		}).orElse(new Variable());
 	}
 
 	public Variable run(Container scriptContainer, String textID, Variable[] parameters) {
@@ -237,17 +233,17 @@ public class Instance {
 	 * @return
 	 */
 	private boolean knowsProcess(Container container) {
-		// check the knowledge base of the creature to see whether it knows the process
-		Container selfContainer = Data.getContainer(id);
-		if (selfContainer.getType() == DataType.CREATURE) {
-			for (ContainerIdentifier knowledge : ((CreatureContainer) selfContainer).getKnowledge()) {
-				if (knowledge.identifies(container)) {
-					return true;
-				}
-			}
-		}
-        //Logger.log(Data.getContainer(id).getType() + " does not know " + container.getTextID());
-		return false;
+		return getContainer()
+				.filter(c -> c.getType() == DataType.CREATURE)
+				.map(c -> {
+					for (ContainerIdentifier knowledge : ((CreatureContainer) c).getKnowledge()) {
+						if (knowledge.identifies(container)) {
+							return true;
+						}
+					}
+					return false;
+				})
+				.orElse(false);
 	}
 
 	public boolean canGo(Tile from, Tile to) {
@@ -530,7 +526,7 @@ public class Instance {
 	}
 
     public String getName() {
-        return name != null ? name : Data.getContainer(id) != null ? Data.getContainer(id).getName() : "Noname";
+        return name != null ? name : getContainer().map(Container::getName).orElse("Noname");
     }
 
     public void setName(String name) {

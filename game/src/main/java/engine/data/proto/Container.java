@@ -1,5 +1,6 @@
 package engine.data.proto;
 
+import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
@@ -13,7 +14,9 @@ import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The container class holds values that apply to several instances of a certain type (defined by their id).
@@ -30,24 +33,29 @@ public class Container {
 	private double opacity = 1.0;
 
 	// game logic
-	private String name;
+//	private String name;
 	private boolean runTickScripts = true;
-	private BinaryTree<Attribute> attributes;
-	private BinaryTree<Script> scripts;
+//	private BinaryTree<Attribute> attributes;
+//	private BinaryTree<Script> scripts;
+
+	// stages
+	private Map<String, StageScope> stages;
 
 	// loading process
 	private List<PreAttribute> preAttributeList;
-	private List<ContainerIdentifier> inheritedContainers;
+//	private List<ContainerIdentifier> inheritedContainers;
 	private boolean hasInherited = false;
 
 	public Container(String textID, DataType type) {
 		this.textID = textID;
 		this.type = type;
-		attributes = new BinaryTree<>();
-		scripts = new BinaryTree<>();
+//		attributes = new BinaryTree<>();
+//		scripts = new BinaryTree<>();
 
 		preAttributeList = new ArrayList<>(8);
-		inheritedContainers = new ArrayList<>(0);
+//		inheritedContainers = new ArrayList<>(0);
+
+		stages = new HashMap<>(8);
 	}
 
 	// ###################################################################################
@@ -59,7 +67,10 @@ public class Container {
 		for (PreAttribute preAttribute : preAttributeList) {
 			int id = Data.getProtoAttributeID(preAttribute.getTextID());
 			if (id >= 0) {
-				attributes.insert(new Attribute(id, preAttribute.getValue(), preAttribute.getVariation()));
+				getDefaultStage().getAttributes().insert(
+						new Attribute(id, preAttribute.getValue(), preAttribute.getVariation())
+				);
+//				attributes.insert(new Attribute(id, preAttribute.getValue(), preAttribute.getVariation()));
 			} else {
                 Logger.error("Attribute with textID '" + preAttribute.getTextID() + "' is never declared!");
 			}
@@ -76,7 +87,7 @@ public class Container {
 	public void finalizeInheritance() {
 		if (hasInherited) { return; }
 
-		for (ContainerIdentifier containerIdentifier : inheritedContainers) {
+		for (ContainerIdentifier containerIdentifier : getDefaultStage().getIdList(ScriptConstants.KEY_INHERITED_CONATINERS)) {
 			Container container = containerIdentifier.retrieve();
 			if (container != null) {
 				container.finalizeInheritance();
@@ -121,6 +132,22 @@ public class Container {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
+	public StageScope getDefaultStage() {
+		return stages.computeIfAbsent(ScriptConstants.DEFAULT_STAGE, key -> new StageScope());
+	}
+
+	/**
+	 * Retrieves specified stage scope if present.<br>
+	 * If it is not present, but the given stage key is not null, a new stage scope with the given stage key is created.<br>
+	 * If the given stage key is null, the default stage scope is retrieved.
+	 * @param stage key
+	 * @return stage scope with specified stage key
+	 */
+	public StageScope getStage(String stage) {
+		if (stage == null) { stage = ScriptConstants.DEFAULT_STAGE; }
+		return stages.computeIfAbsent(stage, key -> new StageScope());
+	}
+
 	public String getTextID() {
 		return textID;
 	}
@@ -130,29 +157,34 @@ public class Container {
 	}
 
 	public String getName() {
-		if (name == null) { return textID; }
-		return name;
+		String name = getDefaultStage().getString(ScriptConstants.KEY_NAME);
+		if (name == null || "".equals(name)) { return textID; }
+		return getDefaultStage().getString(ScriptConstants.KEY_NAME);
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String stage, String name) {
+//		this.name = name;
+		getStage(stage).set(ScriptConstants.KEY_NAME, name);
 	}
 
 	public Attribute getAttribute(int attributeID) {
-		return attributes.get(attributeID);
+//		return attributes.get(attributeID);
+		return getDefaultStage().getAttribute(attributeID);
 	}
 
 	public int getAttributeValue(int attributeID) {
-		Attribute attribute = attributes.get(attributeID);
+		Attribute attribute = getAttribute(attributeID);
 		return attribute != null? attribute.getValue() : 0;
 	}
 
 	public BinaryTree<Attribute> getAttributes() {
-		return attributes;
+		return getDefaultStage().getAttributes();
+//		return attributes;
 	}
 
 	public void addAttribute(Attribute attribute) {
 		if (attribute != null) {
-			attributes.insert(attribute);
+			getDefaultStage().getAttributes().insert(attribute);
+//			attributes.insert(attribute);
 		}
 	}
 
@@ -164,24 +196,29 @@ public class Container {
 
 	public void addScript(Script script) {
 		if (script != null) {
-			scripts.insert(script);
+			getDefaultStage().getScripts().insert(script);
+//			scripts.insert(script);
 		}
 	}
 	public Script getScript(String textID) {
-		if (scripts != null) {
-			return scripts.get(StringConverter.toID(textID));
-		}
-		return null;
+		return getDefaultStage().getScripts().get(StringConverter.toID(textID));
+//		if (scripts != null) {
+//			return scripts.get(StringConverter.toID(textID));
+//		}
+//		return null;
 	}
 
 	public void addInheritance(String textID) {
-		inheritedContainers.add(new ContainerIdentifier(textID));
+		getDefaultStage().getIdList(ScriptConstants.KEY_INHERITED_CONATINERS).add(new ContainerIdentifier(textID));
+//		inheritedContainers.add(new ContainerIdentifier(textID));
 	}
 	public List<ContainerIdentifier> getInheritedContainers() {
-		return inheritedContainers;
+		return getDefaultStage().getIdList(ScriptConstants.KEY_INHERITED_CONATINERS);
+//		return inheritedContainers;
 	}
 	public void setInheritedContainers(List<ContainerIdentifier> inheritedContainers) {
-		this.inheritedContainers = inheritedContainers;
+		getDefaultStage().set(ScriptConstants.KEY_INHERITED_CONATINERS, inheritedContainers);
+//		this.inheritedContainers = inheritedContainers;
 	}
 
 	public MeshHub getMeshHub() {
@@ -193,10 +230,12 @@ public class Container {
 	}
 
 	public double getOpacity() {
-		return opacity;
+		return getDefaultStage().getDouble(ScriptConstants.KEY_OPACITY);
+//		return opacity;
 	}
 	public void setOpacity(double opacity) {
-		this.opacity = opacity;
+		getDefaultStage().set(ScriptConstants.KEY_OPACITY, opacity);
+//		this.opacity = opacity;
 		if (meshHub != null) { meshHub.setMeshOpacity(opacity); }
 	}
 
@@ -208,6 +247,8 @@ public class Container {
 	}
 
 	public BinaryTree<Script> getScripts() {
-		return scripts;
+//		return scripts;
+		return getDefaultStage().getScripts();
 	}
+
 }
