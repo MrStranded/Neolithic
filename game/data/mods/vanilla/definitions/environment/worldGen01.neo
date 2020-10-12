@@ -19,62 +19,48 @@ WorldGen: genContinental {
 
 		for (t : eachTile()) {
 			if (getHeight(t) > 120) {
-				if (chance(0.001)) {
+				if (chance(0.005)) {
 					create(entDeepSource, t);
 				}
 			}
 		}
 
-		fitTiles(tGras, tDirt, tSand, tStone);
+		fitTiles(tSand, tStone);
+	    updatePlanetMesh();
 	}
 }
 
-Formation: formMountain {
-	Script: place(tile) {
+Formation: formMountain inherits formLift {
+    attributes {
+        attMinDeviation, 2; attMaxDeviation, 40;
+    }
+
+	Script: create(tile) {
 		height = random(220,420);
-		self->lift(tile, height);
+		lift(self, height);
 
 		if (chance(0.5)) {
 		    create(entSource, getNeighbor(self, random(3)));
 		}
 	}
 
-	Script: lift(tile, height) {
-		if (height > getHeight(tile)) {
-			setHeight(tile, height);
-
-			for (n : getNeighbors(tile)) {
-				deviation = random(2,40);
-				lift(n, height - deviation);
-			}
-		}
-	}
 }
 
-Formation: formHill {
-	Script: place(tile) {
+Formation: formHill inherits formLift {
+
+	Script: create() {
 		height = random(150,200);
-		self->lift(tile, height);
+		self->lift(self, height);
 	}
 
-	Script: lift(tile, height) {
-		if (height > getHeight(tile)) {
-			setHeight(tile, height);
-
-			for (n : getNeighbors(tile)) {
-				deviation = random(1,12);
-				lift(n, height - deviation);
-			}
-		}
-	}
 }
 
 Formation: formPlateau {
-	Script: place(tile) {
+	Script: create() {
 		height = random(110,230);
 		if (height >= 170) { height = random(130,220);}
 		distance = random(12,20);
-		self->lift(tile, height, distance);
+		self->lift(self, height, distance);
 
 		if (chance(0.5)) {
 		    create(entSource, getNeighbor(self, random(3)));
@@ -94,6 +80,67 @@ Formation: formPlateau {
 					deviation = random(30,50);
 				}
 				lift(getNeighbor(tile, i), height - deviation, distance - 1);
+			}
+		}
+	}
+}
+
+Formation: formMound inherits formLift {
+
+    attributes {
+        attMinDeviation, 1; attMaxDeviation, 20;
+    }
+
+	Script: create() {
+	    ->lift(self, getHeight(self) + 50);
+	    updatePlanetMesh();
+	    destroy(self);
+	}
+}
+
+Formation: formHole inherits formSink {
+
+    attributes {
+        attMinSink, 1; attMaxSink, 20;
+    }
+
+	Script: create() {
+	    ->sink(self, getHeight(self) - 50);
+	    updatePlanetMesh();
+	    destroy(self);
+	}
+}
+
+Formation: formLift {
+    attributes {
+        attMinDeviation, 1;
+        attMaxDeviation, 12;
+    }
+
+	Script: lift(tile, height) {
+		if (height > getHeight(tile)) {
+			setHeight(tile, height);
+
+			for (n : getNeighbors(tile)) {
+				deviation = random(.attMinDeviation, .attMaxDeviation);
+				lift(n, height - deviation);
+			}
+		}
+	}
+}
+Formation: formSink {
+    attributes {
+        attMinSink, 1;
+        attMaxSink, 12;
+    }
+
+	Script: sink(tile, height) {
+		if (height < getHeight(tile)) {
+			setHeight(tile, height);
+
+			for (n : getNeighbors(tile)) {
+				deviation = random(.attMinSink, .attMaxSink);
+				sink(n, height + deviation);
 			}
 		}
 	}

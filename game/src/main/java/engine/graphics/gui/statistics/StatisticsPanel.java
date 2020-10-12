@@ -102,6 +102,8 @@ public class StatisticsPanel extends JPanel {
 
             if (protoAttribute != null && protoAttribute.getGuiColor() != null) {
                 double value = StatisticsData.getAverage(id);
+                if (value == 0) { continue; }
+
                 int yPos = getAbsolutePosition(getRelativePosition(id, value));
                 fatMark(yPos, protoAttribute.getGuiColor(), 255);
 

@@ -62,14 +62,14 @@ public class Scene {
 		objects[3].setRotation(0,0,Math.PI/8);
 
 		// sun lights
-		pointLights[1] = new PointLight(0.5,0.25,0.25);
+		pointLights[1] = new PointLight(0.75,0.5,0.5);
 		pointLights[1].setAttenuation(Attenuation.CONSTANT());
 		pointLights[1].setPosition(0,0,sunDistance);
 
 		directionalLight = new DirectionalLight(0.5,0.5,0.5);
 		directionalLight.setDirection(new Vector3(0,0,-1));
 
-		ambientLight = new AmbientLight(0.5,0.5,0.5);
+		ambientLight = new AmbientLight(0.25,0.25,0.25);
 		//ambientLight = new AmbientLight(0.75,0.75,0.75);
 
 		// camera

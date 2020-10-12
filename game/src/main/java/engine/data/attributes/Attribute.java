@@ -80,7 +80,7 @@ public class Attribute implements IDInterface {
 		if (variation == 0) {
 			return value;
 		}
-		return value - variation + (int) ((double) (variation + 1) * (Math.random() * 2d));
+		return value - variation + (int) (Math.random() * ((double) (variation) * 2d + 1d));
 	}
 	public void setValue(int value) {
 		this.value = value;

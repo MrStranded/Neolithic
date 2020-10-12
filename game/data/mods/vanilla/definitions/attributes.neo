@@ -135,6 +135,7 @@ Attribute: attMeat { name = "Meat"; }
 Attribute: attHumidity {
     name = "Humidity";
     color = 50, 80, 150;
+    bounds = 0, 100;
 }
 Attribute: attSize { name = "Size"; }
 Attribute: attLightLevel { name = "Light level"; }
@@ -142,4 +143,13 @@ Attribute: attWater {
     name = "Water";
     color = 20, 100, 220;
 }
-Attribute: attSediment { name = "Sediment"; }
+Attribute: attSourceStrength {
+    name = "Source strength";
+    color = 10, 50, 110;
+}
+Attribute: attSediment {
+    name = "Sediment";
+    color = 150, 130, 60;
+}
+Attribute: attMinDeviation { name = "Minimum deviation"; }
+Attribute: attMaxDeviation { name = "Maximum deviation"; }

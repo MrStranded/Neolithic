@@ -1,5 +1,6 @@
 package engine.logic.topology;
 
+import constants.ScriptConstants;
 import constants.TopologyConstants;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
@@ -8,6 +9,7 @@ import engine.data.proto.Container;
 import engine.data.Data;
 import engine.data.proto.TileContainer;
 import engine.data.variables.DataType;
+import engine.data.variables.Variable;
 import engine.logic.topology.Neighbour;
 
 import java.util.Arrays;

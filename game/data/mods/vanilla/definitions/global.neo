@@ -46,9 +46,7 @@ Script: repopulate() {
 }
 
 Script: fit {
-    print("pre");
-    fitTiles();
-    print("post");
+    fitTiles(tSand, tStone);
 	updatePlanetMesh();
 }
 

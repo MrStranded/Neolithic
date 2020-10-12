@@ -70,7 +70,6 @@ public class Data {
 		mainContainer = new Container("mainContainer", DataType.CONTAINER);
 		int mainID = addContainer(mainContainer);
 		mainInstance = new Instance(mainID);
-		instanceQueue.add(mainInstance);
 	}
 
 	// ###################################################################################
@@ -324,16 +323,6 @@ public class Data {
         instanceQueue.clear();
         instanceQueue.addAll(list);
     }
-
-    public static void addPlanetTilesToQueue() {
-    	if (planet != null) {
-    		for (Face face : planet.getFaces()) {
-    			for (Tile tile : face.getTiles()) {
-    				instanceQueue.add(tile);
-				}
-			}
-		}
-	}
 
 	// ###################################################################################
 	// ################################ Clearing the Data ################################

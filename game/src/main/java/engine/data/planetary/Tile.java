@@ -150,6 +150,11 @@ public class Tile extends Instance implements IDInterface {
 		if (tileMesh != null) {
 			tileMesh.setChanged(changed);
 		}
+
+		// when tile has been updated
+		if (! changed) {
+			actualizeObjectPositions();
+		}
 	}
 
 	public RGBA getTopColor() {

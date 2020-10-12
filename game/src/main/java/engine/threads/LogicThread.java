@@ -23,13 +23,13 @@ public class LogicThread extends Thread {
 		List<Instance> instanceList = new ArrayList<>(lastSize);
 
 		long t = System.currentTimeMillis();
-		while (!GuiData.getRenderWindow().isClosed()) {
+		while (! GuiData.getRenderWindow().isClosed()) {
 			long currentTime = System.currentTimeMillis();
 
 			if (currentTime - t >= GameConstants.TIME_BETWEEN_TICK_LOADS) {
 
 				// running pending externally called scripts
-				if (!Data.getScriptRuns().isEmpty()) {
+				if (! Data.getScriptRuns().isEmpty()) {
 					Data.getScriptRuns().poll().run();
 				}
 
@@ -41,10 +41,11 @@ public class LogicThread extends Thread {
 						// special handling the main instance -> updating current public instance list
 						if (instance == Data.getMainInstance()) {
 							Data.setPublicInstanceList(instanceList);
-							instanceList = new ArrayList<>(lastSize);
+							instanceList = new ArrayList<>(lastSize * 5 / 4);
 							lastSize = 0;
 
 							GuiData.getStatisticsWindow().tick();
+
 							if (GameOptions.stopAtNextTick) {
 								GameOptions.stopAtNextTick = false;
 								GameOptions.runTicks = false;
@@ -54,9 +55,10 @@ public class LogicThread extends Thread {
 						// treating the instance itself
 						if (instance != null) {
 							instance.tick();
-							GuiData.getStatisticsWindow().register(instance);
 
-							if (!instance.isSlatedForRemoval()) {
+							if (! instance.isSlatedForRemoval()) {
+								GuiData.getStatisticsWindow().register(instance);
+
 								Data.addInstanceToQueue(instance);
 								instanceList.add(instance);
 								lastSize++;

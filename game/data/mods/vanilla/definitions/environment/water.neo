@@ -1,14 +1,13 @@
 Entity: entSource {
     name = "Sweet water source";
+    mesh = "source.ply";
+
+    attributes { attSourceStrength, 2, 1; }
 
     Script: tick {
-        water = getInstance(entWater, getTile(self));
-
-        if (water) {
-            water..attWater++;
-        } else {
-            (create(entWater, getTile(self)))..attWater++;
-        }
+        water = getOrCreate(entWater, getTile(self));
+        water..attWater += .attSourceStrength;
+        water->updateWaterHeight();
     }
 }
 
@@ -20,7 +19,7 @@ Entity: entDeepSource {
     Script: tick {
         delayTick(.attTicks);
 
-        getTile(self)..attHumidity += 20;
+        getTile(self)..attHumidity += 40;
     }
 }
 
@@ -52,28 +51,21 @@ Entity: entWater {
                 d = floor( min( (h - lowest) / 2, (.attWater + 1) / 2 ) );
                 if (d > 0) {
                     ..attWater -= d;
-                    h -= d;
 
-                    if (getTile(self).attSediment > 0) {
-                        h1 = getHeight(self);
-                        h2 = getHeight(next);
-                        if (h1 > h2 + 1 && chance(getTile(self).attSediment / 100)) {
-                            h--;
-                            getTile(self)..attSediment--;
-                            next..attSediment++;
-                            setHeight(self, h1 - 1);
-                            setHeight(next, h2 + 1);
-                        }
-                    }
+                    erode(self, next);
 
                     if (lowest > 100 || getHeight(next) - getWaterHeight(next) <= d) {
                         ->createWater(next, d);
                     }
                 }
             }
+
+            /*if (..attWater <= 0 && getInstance(entSource, getTile(self))) {
+                print("After calcing " + self + ", " + getTile(self) + " (" + getMemoryAddress(self) + ")");
+            }*/
         }
 
-        isInOcean = h < 100;
+        isInOcean = getHeight(self) + .attWater < 100;
         if (isInOcean) {
             tile = getTile(self);
             if (chance(0.75)) { tile = getNeighbor(self, random(3)); }
@@ -88,29 +80,47 @@ Entity: entWater {
         }
     }
 
+    Script: erode(from, to) {
+        if (chance(0.25)) {
+            n = getNeighbor(from, random(3));
+            if (n != from) { from = n; }
+        }
+
+        if (getTile(from).attSediment > 0) {
+            h1 = getHeight(from);
+            h2 = getHeight(to);
+
+            if (h1 > h2 + 1 && chance(getTile(from).attSediment / 100)) {
+                getTile(from)..attSediment--;
+                getTile(to)..attSediment++;
+
+                setHeight(from, h1 - 1);
+                setHeight(to, h2 + 1);
+            }
+        }
+    }
+
     Script: updateWaterHeight {
-        setWaterHeight(self, max(getHeight(self) + .attWater, 100));
+        if (.attWater > 0) {
+            setWaterHeight(self, max(getHeight(self) + .attWater, 100));
+        } else {
+            /*if (getInstance(entSource, getTile(self))) {
+                print("Setting water level to sea level on " + self + ", " + getTile(self) + " (water: " + .attWater + ")");
+            }*/
+            setWaterHeight(self, 100);
+        }
         updatePlanetMesh();
     }
 
     Script: createWater(target, water) {
-        other = getInstance(entWater, getTile(target));
-
-        if (!other) {
-            other = create(entWater, getTile(target));
-        }
+        other = getOrCreate(entWater, getTile(target));
 
         other..attWater += water;
         other->updateWaterHeight();
     }
 
     Script: createCloud(target, humidity) {
-        other = getInstance(entCloud, getTile(target));
-        if (other) {
-            other..attHumidity += humidity;
-        } else {
-            (create(entCloud, getTile(target)))..attHumidity += humidity;
-        }
+        getOrCreate(entCloud, getTile(target))..attHumidity += humidity;
     }
 }
 

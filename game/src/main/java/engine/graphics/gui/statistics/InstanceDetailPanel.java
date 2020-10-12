@@ -1,9 +1,14 @@
 package engine.graphics.gui.statistics;
 
+import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.attributes.Attribute;
+import engine.data.behaviour.Occupation;
 import engine.data.entities.Instance;
+import engine.data.identifiers.ContainerIdentifier;
 import engine.data.options.GameOptions;
+import engine.data.proto.Container;
+import engine.data.proto.CreatureContainer;
 import engine.data.proto.ProtoAttribute;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
@@ -49,8 +54,8 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
 
         drawInstance(g, GameOptions.selectedInstance, 10, 10);
         drawAttributes(g, GameOptions.selectedInstance, 10, height / 2);
-        drawVariables(g, GameOptions.selectedInstance, 320, height / 2);
-        drawInstanceSpecificInfo(g, GameOptions.selectedInstance, 530, height / 2);
+        drawVariables(g, GameOptions.selectedInstance, 310, height / 2);
+        drawInstanceSpecificInfo(g, GameOptions.selectedInstance, 710, height / 2);
     }
 
     private int drawInstance(Graphics g, Instance instance, int xPos, int yPos) {
@@ -89,11 +94,12 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
                 Attribute attribute = (Attribute) idInterface;
                 ProtoAttribute protoAttribute = Data.getProtoAttribute(attribute.getId());
 
-                if (protoAttribute != null && protoAttribute.getGuiColor() != null) {
+                if (protoAttribute != null) {
                     Color attributeColor = protoAttribute.getGuiColor();
+                    if (attributeColor == null) { attributeColor = new Color(0,0,0); }
 
                     g.setColor(getInverted(attributeColor));
-                    g.fillRect(xPos - 3, getCurrentYPosition() - 3, 300, 18);
+                    g.fillRect(xPos - 3, getCurrentYPosition() - 3, 290, 18);
 
                     g.setColor(attributeColor);
                     g.drawString(protoAttribute.getName(), xPos, getCurrentYPosition() + 12);
@@ -130,12 +136,57 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         g.setColor(new Color(0,0,0));
 
         g.drawString(container.get().getName() + " - " + container.get().getType(), xPos, yPos + 12);
+        if (container.get().isRunTickScripts()) {
+            g.drawString("(" + instance.getDelayUntilNextTick() + ")", xPos + 200, yPos + 12);
+        }
+        yPos += 20;
+
+        g.drawString(instance.getMemoryAddress(), xPos + 50, yPos + 12);
+        yPos += 20;
 
         if (container.get().getType() == DataType.TILE) {
-            g.drawString("Tile height: ", xPos, yPos + 32);
-            g.drawString(String.valueOf(instance.getPosition().getHeight()), xPos + 150, yPos + 32);
-            g.drawString("Water height: ", xPos, yPos + 52);
-            g.drawString(String.valueOf(instance.getPosition().getWaterHeight()), xPos + 150, yPos + 52);
+            g.drawString("Tile height: ", xPos, yPos + 12);
+            g.drawString(String.valueOf(instance.getPosition().getHeight()), xPos + 150, yPos + 12);
+            yPos += 20;
+
+            g.drawString("Water height: ", xPos, yPos + 12);
+            g.drawString(String.valueOf(instance.getPosition().getWaterHeight()), xPos + 150, yPos + 12);
+            yPos += 20;
+        }
+
+        if (container.get().getType() == DataType.CREATURE) {
+            if (instance.getOccupations() != null) {
+                g.drawString("Occupations:", xPos, yPos + 12);
+                yPos += 20;
+
+                for (Occupation occupation : instance.getOccupations()) {
+                    g.drawString(occupation.toString(), xPos + 10, yPos + 12);
+                    yPos += 20;
+                }
+            }
+
+            CreatureContainer creatureContainer = (CreatureContainer) container.get();
+            if (creatureContainer.getDrives() != null) {
+                g.drawString("Drives:", xPos, yPos + 12);
+                yPos += 20;
+
+                for (ContainerIdentifier identifier : creatureContainer.getDrives()) {
+                    Container drive = identifier.retrieve();
+
+                    if (drive != null) {
+                        g.drawString(drive.getName(), xPos + 10, yPos + 12);
+
+//                        if (! instance.run(creatureContainer, ScriptConstants.EVENT_CONDITION, null).isNull()) { // condition is fulfilled
+//                            g.drawString("triggered", xPos + 110, yPos + 12);
+//
+//                            double weight = instance.run(creatureContainer, ScriptConstants.EVENT_GET_WEIGHT, null).getDouble();
+//                            g.drawString(String.valueOf(weight), xPos + 170, yPos + 12);
+//                        }
+
+                        yPos += 20;
+                    }
+                }
+            }
         }
     }
 

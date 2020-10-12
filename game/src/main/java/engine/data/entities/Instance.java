@@ -1,13 +1,17 @@
 package engine.data.entities;
 
 import constants.ScriptConstants;
-import engine.data.behaviour.Occupation;
-import engine.data.identifiers.ContainerIdentifier;
+import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
+import engine.data.behaviour.Occupation;
+import engine.data.identifiers.ContainerIdentifier;
+import engine.data.options.GameOptions;
 import engine.data.planetary.Tile;
-import engine.data.proto.*;
-import engine.data.Data;
+import engine.data.proto.Container;
+import engine.data.proto.CreatureContainer;
+import engine.data.proto.DriveContainer;
+import engine.data.proto.ProcessContainer;
 import engine.data.scripts.Script;
 import engine.data.structures.WeightedList;
 import engine.data.structures.trees.binary.BinaryTree;
@@ -48,6 +52,9 @@ public class Instance {
 
 		initMoveableObject();
         inheritAttributes();
+
+//		run(ScriptConstants.EVENT_CREATE, new Variable[] {});
+		Data.addInstanceToQueue(this);
 	}
 
     // ###################################################################################
@@ -143,12 +150,17 @@ public class Instance {
 	// ###################################################################################
 
 	public void change(int containerId) {
+		Container oldContainer = getContainer().orElse(null);
 		id = containerId;
+		Container newContainer = getContainer().orElse(null);
+
 		inheritAttributes();
-		if (Data.getContainer(containerId).getType() == DataType.TILE) {
+		if (newContainer != null && newContainer.getType() == DataType.TILE) {
 			((Tile) this).resetColors();
 			((Tile) this).setChanged(true);
 		}
+
+		run(ScriptConstants.EVENT_CHANGE, new Variable[] {new Variable(oldContainer), new Variable(newContainer)});
 	}
 
 	/**
@@ -168,7 +180,6 @@ public class Instance {
 
 						double weight = run(container, ScriptConstants.EVENT_GET_WEIGHT, null).getDouble();
 						weightedDrives.add(container, weight);
-
 					}
 				}
 			}
@@ -260,7 +271,6 @@ public class Instance {
 	    boolean runTickScripts = container.map(Container::isRunTickScripts).orElse(true);
 
 	    if (runTickScripts && delayUntilNextTick <= 0) {
-	    	delayUntilNextTick = 0;
 
 			if (occupations == null || occupations.isEmpty()) {
 				// ----------- calculate drives
@@ -282,7 +292,9 @@ public class Instance {
 			run(ScriptConstants.EVENT_TICK, null);
 
 		} else {
-			if (runTickScripts) { delayUntilNextTick--; }
+			if (runTickScripts) {
+				delayUntilNextTick--;
+			}
 		}
 
         cleanEffects();
@@ -359,6 +371,8 @@ public class Instance {
 			target.addSubInstance(this);
 			superInstance = target;
 			actualizeObjectPosition();
+
+			run(ScriptConstants.EVENT_PLACE, new Variable[] {new Variable(target)});
 		}
 	}
 
@@ -376,6 +390,9 @@ public class Instance {
 				} else {
 					pos = position.getTileMesh().getWaterMid();
 				}*/
+//				double heightFactor = (Math.max(position.getHeight(), position.getWaterHeight()) + TopologyConstants.PLANET_MINIMUM_HEIGHT)
+//						/ (TopologyConstants.PLANET_MINIMUM_HEIGHT + TopologyConstants.PLANET_MAXIMUM_HEIGHT);
+//				pos = position.getTileMesh().getNormal().times(heightFactor);
 				pos = position.getTileMesh().getMid();
 				// set correct scale
 				if (Data.getPlanet() != null) {
@@ -406,6 +423,10 @@ public class Instance {
 	}
 
 	private void recursiveSlatingForRemoval() {
+		if (this == GameOptions.selectedInstance) {
+			GameOptions.selectedInstance = null;
+		}
+
 		slatedForRemoval = true;
 		if (subInstances != null) {
 			subInstances.forEach(Instance::recursiveSlatingForRemoval);
@@ -663,7 +684,6 @@ public class Instance {
 	public int getDelayUntilNextTick() {
 		return delayUntilNextTick;
 	}
-
 	public void setDelayUntilNextTick(int delayUntilNextTick) {
 		this.delayUntilNextTick = delayUntilNextTick;
 	}
@@ -671,6 +691,10 @@ public class Instance {
 	// ###################################################################################
 	// ################################ Debugging ########################################
 	// ###################################################################################
+
+	public String getMemoryAddress() {
+		return String.valueOf(System.identityHashCode(this));
+	}
 
 	public String toString() {
 		return "Instance (id = " + Data.getContainer(id).getTextID() + (name != null ? " Name: " + name : "") + ")";

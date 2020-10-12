@@ -319,7 +319,7 @@ public class PlanetGenerator {
 	}
 
 	private void updateFace(FacePart facePart) {
-		if (!facePart.hasChanged()) { return; }
+		if (! facePart.hasChanged()) { return; }
 		facePart.setChanged(false);
 
 		Tile tile = null;
@@ -364,8 +364,11 @@ public class PlanetGenerator {
 			tile = facePart.getTile();
 			smallest = true;
 
-			newHeight = facePart.getHeight();//tile.getHeight();
-			newWaterHeight = facePart.getWaterHeight();//tile.getWaterHeight();
+			newHeight = tile.getHeight();//facePart.getHeight();//tile.getHeight();
+			newWaterHeight = tile.getWaterHeight();//facePart.getWaterHeight();//tile.getWaterHeight();
+
+			facePart.setHeight(newHeight);
+			facePart.setWaterHeight(newWaterHeight);
 
 			facePart.setTopColor(tile.getTopColor());
 			facePart.setSideColor(tile.getSideColor());
