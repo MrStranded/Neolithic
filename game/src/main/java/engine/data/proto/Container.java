@@ -13,10 +13,7 @@ import engine.graphics.objects.MeshHub;
 import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The container class holds values that apply to several instances of a certain type (defined by their id).
@@ -28,32 +25,18 @@ public class Container {
 	private String textID;
 	private DataType type;
 
-	// graphical
-	private MeshHub meshHub = null;
-	private double opacity = 1.0;
-
-	// game logic
-//	private String name;
-	private boolean runTickScripts = true;
-//	private BinaryTree<Attribute> attributes;
-//	private BinaryTree<Script> scripts;
-
 	// stages
 	private Map<String, StageScope> stages;
 
 	// loading process
 	private List<PreAttribute> preAttributeList;
-//	private List<ContainerIdentifier> inheritedContainers;
 	private boolean hasInherited = false;
 
 	public Container(String textID, DataType type) {
 		this.textID = textID;
 		this.type = type;
-//		attributes = new BinaryTree<>();
-//		scripts = new BinaryTree<>();
 
 		preAttributeList = new ArrayList<>(8);
-//		inheritedContainers = new ArrayList<>(0);
 
 		stages = new HashMap<>(8);
 	}
@@ -67,27 +50,22 @@ public class Container {
 		for (PreAttribute preAttribute : preAttributeList) {
 			int id = Data.getProtoAttributeID(preAttribute.getTextID());
 			if (id >= 0) {
-				getDefaultStage().getAttributes().insert(
+				getAttributes(preAttribute.getStage()).insert(
 						new Attribute(id, preAttribute.getValue(), preAttribute.getVariation())
 				);
-//				attributes.insert(new Attribute(id, preAttribute.getValue(), preAttribute.getVariation()));
 			} else {
                 Logger.error("Attribute with textID '" + preAttribute.getTextID() + "' is never declared!");
 			}
 		}
 		// free the memory
-		//preAttributeList.clear();
 		preAttributeList = null;
-	}
-
-	public void finalizeScripts() {
-		// maybe unnecessary -> delete?
 	}
 
 	public void finalizeInheritance() {
 		if (hasInherited) { return; }
 
-		for (ContainerIdentifier containerIdentifier : getDefaultStage().getIdList(ScriptConstants.KEY_INHERITED_CONATINERS)) {
+		for (ContainerIdentifier containerIdentifier
+				: getPropertyList(null, ScriptConstants.KEY_INHERITED_CONATINERS).orElse(Collections.emptyList())) {
 			Container container = containerIdentifier.retrieve();
 			if (container != null) {
 				container.finalizeInheritance();
@@ -102,25 +80,28 @@ public class Container {
 	}
 
 	private void inheritAttributes(Container container) {
-		BinaryTree<Attribute> tree = container.getAttributes();
-		if (tree != null) {
-			tree.forEach(attributeIdentifier -> {
-				addAttribute((Attribute) attributeIdentifier);
-			});
+		for (String stage : container.getStages()) {
+			BinaryTree<Attribute> tree = container.getAttributes(stage);
+			if (tree != null) {
+				tree.forEach(attribute -> {
+					addAttribute(stage, attribute);
+				});
+			}
 		}
 	}
 
 	private void inheritScripts(Container container) {
-		BinaryTree<Script> tree = container.getScripts();
-		if (tree != null) {
-			tree.forEach(scriptIdentifier -> {
-				Script script = (Script) scriptIdentifier;
-				if (script != null) {
-					if (getScript(script.getTextId()) == null) {
-						addScript(script);
+		for (String stage : container.getStages()) {
+			BinaryTree<Script> tree = container.getScripts(stage);
+			if (tree != null) {
+				tree.forEach(script -> {
+					if (script != null) {
+						if (getScript(stage, script.getTextId()) == null) {
+							addScript(stage, script);
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 	}
 
@@ -132,20 +113,10 @@ public class Container {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public StageScope getDefaultStage() {
-		return stages.computeIfAbsent(ScriptConstants.DEFAULT_STAGE, key -> new StageScope());
-	}
-
-	/**
-	 * Retrieves specified stage scope if present.<br>
-	 * If it is not present, but the given stage key is not null, a new stage scope with the given stage key is created.<br>
-	 * If the given stage key is null, the default stage scope is retrieved.
-	 * @param stage key
-	 * @return stage scope with specified stage key
-	 */
-	public StageScope getStage(String stage) {
-		if (stage == null) { stage = ScriptConstants.DEFAULT_STAGE; }
-		return stages.computeIfAbsent(stage, key -> new StageScope());
+	public void addPreAttribute(PreAttribute preAttribute) {
+		if (preAttribute != null) {
+			preAttributeList.add(preAttribute);
+		}
 	}
 
 	public String getTextID() {
@@ -156,99 +127,142 @@ public class Container {
 		return type;
 	}
 
-	public String getName() {
-		String name = getDefaultStage().getString(ScriptConstants.KEY_NAME);
-		if (name == null || "".equals(name)) { return textID; }
-		return getDefaultStage().getString(ScriptConstants.KEY_NAME);
-	}
-	public void setName(String stage, String name) {
-//		this.name = name;
-		getStage(stage).set(ScriptConstants.KEY_NAME, name);
+	// ###################################################################################
+	// ################################ Stages & Properties ##############################
+	// ###################################################################################
+
+	public Set<String> getStages() {
+		return stages.keySet();
 	}
 
-	public Attribute getAttribute(int attributeID) {
-//		return attributes.get(attributeID);
-		return getDefaultStage().getAttribute(attributeID);
+	protected StageScope getDefaultStage() {
+		return stages.computeIfAbsent(ScriptConstants.DEFAULT_STAGE, key -> new StageScope());
 	}
 
+	/**
+	 * Retrieves specified stage scope if present.<br>
+	 * If it is not present, but the given stage key is not null, a new stage scope with the given stage key is created.<br>
+	 * If the given stage key is null, the default stage scope is retrieved.
+	 * @param stage key
+	 * @return stage scope with specified stage key
+	 */
+	private StageScope getStage(String stage) {
+		if (stage == null) { stage = ScriptConstants.DEFAULT_STAGE; }
+		return stages.computeIfAbsent(stage, key -> new StageScope());
+	}
+
+	public void setProperty(String stage, String key, Object value) {
+		getStage(stage).set(key, value);
+	}
+
+	public Optional<String> getPropertyString(String stage, String key) {
+		return getStage(stage).getString(key)
+				.or(() -> getDefaultStage().getString(key));
+	}
+	public Optional<Boolean> getPropertyBoolean(String stage, String key) {
+		return getStage(stage).getBoolean(key)
+				.or(() -> getDefaultStage().getBoolean(key));
+	}
+	public Optional<Integer> getPropertyInt(String stage, String key) {
+		return getStage(stage).getInt(key)
+				.or(() -> getDefaultStage().getInt(key));
+	}
+	public Optional<Double> getPropertyDouble(String stage, String key) {
+		return getStage(stage).getDouble(key)
+				.or(() -> getDefaultStage().getDouble(key));
+	}
+	public Optional<List<ContainerIdentifier>> getPropertyList(String stage, String key) {
+		return getStage(stage).getIdList(key)
+				.or(() -> getDefaultStage().getIdList(key));
+	}
+	public List<ContainerIdentifier> getOrCreatePropertyList(String stage, String key) {
+		Optional<List<ContainerIdentifier>> list = getStage(stage).getIdList(key)
+				.or(() -> getDefaultStage().getIdList(key));
+
+		if (list.isPresent()) { return list.get(); }
+
+		List<ContainerIdentifier> l = new ArrayList<ContainerIdentifier>(4);
+		getStage(stage).set(key, l);
+		return l;
+	}
+
+	public BinaryTree<Attribute> getAttributes(String stage) {
+		BinaryTree<Attribute> result = getStage(stage).getAttributes();
+		if (result == null) { result = getDefaultStage().getAttributes(); }
+		if (result == null) {
+			result = new BinaryTree<>();
+			getStage(null).set(ScriptConstants.KEY_ATTRIBUTES, result);
+		}
+		return result;
+	}
+	public Attribute getAttribute(String stage, int attributeID) {
+		Attribute result = getStage(stage).getAttribute(attributeID);
+		if (result == null) { result = getDefaultStage().getAttribute(attributeID); }
+		return result;
+	}
 	public int getAttributeValue(int attributeID) {
-		Attribute attribute = getAttribute(attributeID);
+		Attribute attribute = getAttribute(null, attributeID);
 		return attribute != null? attribute.getValue() : 0;
 	}
-
-	public BinaryTree<Attribute> getAttributes() {
-		return getDefaultStage().getAttributes();
-//		return attributes;
-	}
-
-	public void addAttribute(Attribute attribute) {
+	public void addAttribute(String stage, Attribute attribute) {
+		BinaryTree<Attribute> attributes = getAttributes(stage);
 		if (attribute != null) {
-			getDefaultStage().getAttributes().insert(attribute);
-//			attributes.insert(attribute);
+			attributes.insert(attribute);
 		}
 	}
 
-	public void addPreAttribute(PreAttribute preAttribute) {
-		if (preAttribute != null) {
-			preAttributeList.add(preAttribute);
+	public BinaryTree<Script> getScripts(String stage) {
+		BinaryTree<Script> result = getStage(stage).getScripts();
+		if (result == null) { result = getDefaultStage().getScripts(); }
+		if (result == null) {
+			result = new BinaryTree<>();
+			getStage(stage).set(ScriptConstants.KEY_SCIPTS, result);
 		}
+		return result;
 	}
-
-	public void addScript(Script script) {
+	public Script getScript(String stage, String textID) {
+		int id = StringConverter.toID(textID);
+		Script result = getStage(stage).getScript(id);
+		if (result == null) { result = getDefaultStage().getScript(id); }
+		return result;
+	}
+	public void addScript(String stage, Script script) {
 		if (script != null) {
-			getDefaultStage().getScripts().insert(script);
-//			scripts.insert(script);
+			getScripts(stage).insert(script);
 		}
 	}
-	public Script getScript(String textID) {
-		return getDefaultStage().getScripts().get(StringConverter.toID(textID));
-//		if (scripts != null) {
-//			return scripts.get(StringConverter.toID(textID));
-//		}
-//		return null;
-	}
 
-	public void addInheritance(String textID) {
-		getDefaultStage().getIdList(ScriptConstants.KEY_INHERITED_CONATINERS).add(new ContainerIdentifier(textID));
-//		inheritedContainers.add(new ContainerIdentifier(textID));
-	}
+//	public void addInheritance(String textID) {
+//		getDefaultStage().getIdList(ScriptConstants.KEY_INHERITED_CONATINERS).add(new ContainerIdentifier(textID));
+//	}
 	public List<ContainerIdentifier> getInheritedContainers() {
-		return getDefaultStage().getIdList(ScriptConstants.KEY_INHERITED_CONATINERS);
-//		return inheritedContainers;
+		return getDefaultStage().getIdList(ScriptConstants.KEY_INHERITED_CONATINERS).orElse(Collections.emptyList());
 	}
 	public void setInheritedContainers(List<ContainerIdentifier> inheritedContainers) {
 		getDefaultStage().set(ScriptConstants.KEY_INHERITED_CONATINERS, inheritedContainers);
-//		this.inheritedContainers = inheritedContainers;
 	}
 
-	public MeshHub getMeshHub() {
-		return meshHub;
+	// ###################################################################################
+	// ################################ Accessor Wrappers ################################
+	// ###################################################################################
+
+	public String getName() {
+		return getPropertyString(null, ScriptConstants.KEY_NAME).orElse(textID);
 	}
-	public void setMeshHub(MeshHub meshHub) {
-		this.meshHub = meshHub;
-		if (meshHub != null) { meshHub.setMeshOpacity(opacity); }
+
+	public String getMeshPath(String stage) {
+		return getPropertyString(stage, ScriptConstants.KEY_MESH).orElse(null);
 	}
 
 	public double getOpacity() {
-		return getDefaultStage().getDouble(ScriptConstants.KEY_OPACITY);
-//		return opacity;
-	}
-	public void setOpacity(double opacity) {
-		getDefaultStage().set(ScriptConstants.KEY_OPACITY, opacity);
-//		this.opacity = opacity;
-		if (meshHub != null) { meshHub.setMeshOpacity(opacity); }
+		return getPropertyDouble(null, ScriptConstants.KEY_OPACITY).orElse(1d);
 	}
 
 	public boolean isRunTickScripts() {
-		return runTickScripts;
+		return getPropertyBoolean(null, ScriptConstants.KEY_RUN_TICK_SCRIPT).orElse(true);
 	}
 	public void setRunTickScripts(boolean runTickScripts) {
-		this.runTickScripts = runTickScripts;
-	}
-
-	public BinaryTree<Script> getScripts() {
-//		return scripts;
-		return getDefaultStage().getScripts();
+		setProperty(null, ScriptConstants.KEY_RUN_TICK_SCRIPT, runTickScripts);
 	}
 
 }

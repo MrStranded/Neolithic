@@ -33,7 +33,7 @@ public class IdentifierNode extends AbstractScriptNode {
 					targetInstance.addVariable(variable);
 				}
 			} else if (targetContainer != null) {
-				Script targetScript = targetContainer.getScript(identifier.getValue());
+				Script targetScript = targetContainer.getScript(instance.getStage(), identifier.getValue());
 				if (targetScript != null) {
 					variable = new Variable(targetScript);
 				} else { // script does not exist -> just feed the string value of the identifier into the variable

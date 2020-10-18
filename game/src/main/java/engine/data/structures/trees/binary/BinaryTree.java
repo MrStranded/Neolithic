@@ -402,13 +402,13 @@ public class BinaryTree<T extends IDInterface> {
 	// ################################ For each #########################################
 	// ###################################################################################
 
-	public void forEach(Registrator registrator) {
+	public void forEach(Registrator<T> registrator) {
 		if (root != null) {
 			eachNode(root, registrator);
 		}
 	}
 
-	private void eachNode(BinaryTreeNode<T> node, Registrator registrator) {
+	private void eachNode(BinaryTreeNode<T> node, Registrator<T> registrator) {
 		registrator.register(node.getValue());
 		if (node.getLeft() != null) {
 			eachNode(node.getLeft(), registrator);

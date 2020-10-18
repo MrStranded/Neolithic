@@ -7,11 +7,13 @@ package engine.data.attributes;
 public class PreAttribute {
 
 	private String textID;
+	private String stage;
 	private int value;
 	private int variation;
 
-	public PreAttribute(String textID, int value, int variation) {
+	public PreAttribute(String textID, String stage, int value, int variation) {
 		this.textID = textID;
+		this.stage = stage;
 		this.value = value;
 		this.variation = variation;
 	}
@@ -19,11 +21,10 @@ public class PreAttribute {
 	public String getTextID() {
 		return textID;
 	}
-
+	public String getStage() { return stage; }
 	public int getValue() {
 		return value;
 	}
-
 	public int getVariation() {
 		return variation;
 	}

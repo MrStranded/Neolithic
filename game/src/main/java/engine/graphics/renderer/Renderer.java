@@ -28,6 +28,7 @@ import engine.graphics.gui.window.Window;
 import engine.logic.topology.TopologyGenerator;
 import engine.math.MatrixCalculations;
 import engine.math.MousePicking;
+import engine.parser.utils.Logger;
 import load.StringLoader;
 import engine.math.numericalObjects.Matrix4;
 import org.lwjgl.glfw.GLFW;
@@ -352,8 +353,12 @@ public class Renderer {
 			for (MeshHub meshHub : meshHubs) {
 				meshHub.clear();
 
-				if (!meshHub.isMeshLoaded()) { meshHub.loadMesh(); }
+				if (!meshHub.isMeshLoaded()) {
+					meshHub.loadMesh();
+				}
 			}
+		} catch (ConcurrentModificationException e) {
+			Logger.error("ConcurrentModificationException during rendering");
 		} catch (Exception e) {
 			e.printStackTrace();
 			// this happens when a new mesh hub is added to the hashmap while we iterate over it

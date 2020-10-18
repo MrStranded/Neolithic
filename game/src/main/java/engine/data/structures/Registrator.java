@@ -1,9 +1,7 @@
 package engine.data.structures;
 
-import engine.data.IDInterface;
+public interface Registrator<T> {
 
-public interface Registrator {
-
-    void register(IDInterface idInterface);
+    void register(T element);
 
 }

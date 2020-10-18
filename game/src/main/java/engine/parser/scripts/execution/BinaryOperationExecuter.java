@@ -50,8 +50,11 @@ public class BinaryOperationExecuter {
 				subNode.markAsAttributeIdentifier();
 				subNode.setRetrieveCompleteAttributeValue(true);
 			} else {
-				Logger.error("Wrong argument type after point operator: '" + binaryNode.getRight().getClass() + "' on line " + operator.getLine());
-				Logger.error("Argument:");
+				Logger.error("Wrong argument type after point operator: '" + binaryNode.getRight().getClass() + System.lineSeparator() +
+						" Error on line " + operator.getLine() + System.lineSeparator() +
+						" during execution of script '" + script.getTextId() + "'" + System.lineSeparator() +
+						" in file '" + script.getFileName() + "'." + System.lineSeparator() +
+						" Argument:");
 				binaryNode.getRight().print("   ");
 			}
 
@@ -64,8 +67,11 @@ public class BinaryOperationExecuter {
 				subNode.setTarget(left);
 				subNode.markAsAttributeIdentifier();
 			} else {
-				Logger.error("Wrong argument type after double point operator: '" + binaryNode.getRight().getClass() + "' on line " + operator.getLine());
-				Logger.error("Argument:");
+				Logger.error("Wrong argument type after double point operator: '" + binaryNode.getRight().getClass() + System.lineSeparator() +
+						" Error on line " + operator.getLine() + System.lineSeparator() +
+						" during execution of script '" + script.getTextId() + "'" + System.lineSeparator() +
+						" in file '" + script.getFileName() + "'." + System.lineSeparator() +
+						" Argument:");
 				binaryNode.getRight().print("   ");
 			}
 
@@ -114,7 +120,11 @@ public class BinaryOperationExecuter {
 			Variable right = binaryNode.getRight().execute(self, script);
 
 			if (right.isNull()) {
-				Logger.error("Cannot divide by zero! Line: " + operator.getLine());
+				Logger.error("Cannot divide by zero!" + System.lineSeparator() +
+						" Error on line " + operator.getLine() + System.lineSeparator() +
+						" during execution of script '" + script.getTextId() + "'" + System.lineSeparator() +
+						" in file '" + script.getFileName() + "'."
+				);
 				return new Variable();
 			}
 
@@ -125,7 +135,11 @@ public class BinaryOperationExecuter {
 			Variable right = binaryNode.getRight().execute(self, script);
 
 			if (right.isNull()) {
-				Logger.error("Cannot calculate modulo with zero! Line: " + operator.getLine());
+				Logger.error("Cannot calculate modulo with zero!" + System.lineSeparator() +
+						" Error on line " + operator.getLine() + System.lineSeparator() +
+						" during execution of script '" + script.getTextId() + "'" + System.lineSeparator() +
+						" in file '" + script.getFileName() + "'."
+				);
 				return new Variable();
 			}
 
@@ -191,7 +205,11 @@ public class BinaryOperationExecuter {
 			Variable right = binaryNode.getRight().execute(self, script);
 
 			if (right.isNull()) {
-				Logger.error("Cannot divide by zero! Line: " + operator.getLine());
+				Logger.error("Cannot divide by zero!" + System.lineSeparator() +
+						"Error on line " + operator.getLine() + System.lineSeparator() +
+						"during execution of script '" + script.getTextId() + "'" + System.lineSeparator() +
+						"in file '" + script.getFileName() + "'."
+				);
 				return new Variable();
 			}
 
@@ -207,7 +225,11 @@ public class BinaryOperationExecuter {
 			Variable right = binaryNode.getRight().execute(self, script);
 
 			if (right.isNull()) {
-				Logger.error("Cannot calculate modulo with zero! Line: " + operator.getLine());
+				Logger.error("Cannot calculate modulo with zero!" + System.lineSeparator() +
+						" Error on line " + operator.getLine() + System.lineSeparator() +
+						" during execution of script '" + script.getTextId() + "'" + System.lineSeparator() +
+						" in file '" + script.getFileName() + "'."
+				);
 				return new Variable();
 			}
 

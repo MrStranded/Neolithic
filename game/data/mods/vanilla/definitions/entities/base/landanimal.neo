@@ -55,7 +55,6 @@ Creature: cLandAnimal {
         ..attAge += 1;
 
 		if (.attHealth <= 0) { // death
-		    print(self + " died from death");
 		    carcass = create(entCarcass, getTile(self));
 		    carcass..attNutrition = .attNutrition;
 		    destroy(self);

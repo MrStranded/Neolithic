@@ -77,6 +77,9 @@ public class IngameInteractions {
         if (keyboard.isClicked(GLFW.GLFW_KEY_X)) {
             GameOptions.printPerformance = !GameOptions.printPerformance;
         }
+        if (keyboard.isClicked(GLFW.GLFW_KEY_P)) {
+            GameOptions.plotEntities = !GameOptions.plotEntities;
+        }
         if (keyboard.isClicked(GLFW.GLFW_KEY_SPACE)) {
             GameOptions.runTicks = !GameOptions.runTicks;
         }

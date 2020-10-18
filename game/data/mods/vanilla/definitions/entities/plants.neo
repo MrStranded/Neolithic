@@ -1,9 +1,9 @@
 
-///////////////////////////////////////////////////////////////////////////// Tree
-
 Creature: cAppleTree {
-	name = "Apple tree";
-	mesh = "apple_tree_mature.ply";
+
+    name = "Apple tree";
+    mesh = "apple_tree_mature.ply";
+    fruit = "entApple";
 
 	drives {
 		driPlantReproduction;
@@ -16,24 +16,45 @@ Creature: cAppleTree {
 		proHeal;
 	}
 
-	Script: create {
-		..attNutrition += random(100);
-		self->fruitType = entApple;
-
-        ->updateMesh();
-
-        for (n : getNeighbors(self)) {
-            effect = addEffect(n, effShadow);
-            effect->cause = self;
-        }
-	}
-
 	attributes{
+	    attMaxHealth, 100;
 	    attTicks, 2;
 		attSize, 60;
 	    attMatureAge, 420;//2880;
 	    attLightSensitivity, 20;
 	    attBabySize, 100;
+	}
+
+    Stage: seed {
+        name = "Apple seed";
+        mesh = "apple_seed.ply";
+
+        drives { driGrowIntoTree; }
+        knowledge { proGrowIntoTree; }
+
+        Script: tick() {
+            if (isOnFloor(self) && chance(0.001)) {
+                destroy(self);
+            }
+        }
+    }
+
+    Stage: sapling {
+        mesh = "apple_tree_young.ply";
+    }
+
+    Stage: ripe {
+        mesh = "apple_tree_mature_ripe.ply";
+    }
+
+	Script: create {
+		..attNutrition += 100;
+		..attHealth = .attMaxHealth;
+
+        for (n : getNeighbors(self)) {
+            effect = addEffect(n, effShadow);
+            effect->cause = self;
+        }
 	}
 
 	Script: tick {
@@ -52,6 +73,7 @@ Creature: cAppleTree {
 	        ..attHealth--;
 	    } else {
 	        getTile(self)..attHumidity--;
+	        ..attHealth++;
 	    }
 
 		if (.attAge > .attMatureAge * 3) { // age death
@@ -63,18 +85,14 @@ Creature: cAppleTree {
         }
 	}
 
-	Script: updateMesh() {
-	    if (.attAge < .attMatureAge) {
-            setMesh(self, "vanilla/assets/meshes/apple_tree_young.ply");
-        } else {
-            if (getItems(self, entApple)) {
-                setMesh(self, "vanilla/assets/meshes/apple_tree_mature_ripe.ply");
-            } else {
-                setMesh(self, "vanilla/assets/meshes/apple_tree_mature.ply");
-            }
-        }
+    Script: inherit(parent) {
+        mixAttributes(self, parent, parent);
 	}
 }
+
+
+///////////////////////////////////////////////////////////////////////////// Tree
+
 
 ///////////////////////////////////////////////////////////////////////////// Fruit
 
@@ -88,26 +106,22 @@ Entity: entApple {
 		attNutrition, 100; // default value
 	}
 
-    Script: createSeed(parent) {
-		->seed = create(cAppleSeed, self);
-        mixAttributes(->seed, parent, parent);
-	}
-
 	Script: tick() {
 	    tree = getHolder(self);
-	    if (tree && getType(tree) == cAppleTree) {
+	    if (tree && inStage(tree, "ripe")) {
 	        if (chance(0.07)) {
 	            tile = getNeighbor(getTile(self), random(3));
 	            pickUp(tile, self);
-	            tree->updateMesh();
+	            setDefaultStage(tree);
 	        }
 	    } else {
             ..attAge++;
 
             if (.attAge >= .attMatureAge) {
                 addEffect(getTile(self), "Fertilized", .attMatureAge, [ "attNutrition", self.attNutrition/2 ]);
-                if (->seed) {
-                    pickUp(getTile(self), ->seed);
+
+                for (seed : getItems(self)) {
+                    pickUp(getTile(self), seed);
                 }
                 destroy(self);
             }
@@ -125,25 +139,6 @@ Entity: entApple {
 	}
 }
 
-Creature: cAppleSeed {
-    name = "Apple seed";
-    mesh = "apple_seed.ply";
-
-    drives { driGrowIntoTree; }
-
-    knowledge { proGrowIntoTree; }
-
-    Script: create() {
-        self->treeType = cAppleTree;
-    }
-
-    Script: tick() {
-        if (isOnFloor(self) && chance(0.01)) {
-            destroy(self);
-        }
-    }
-}
-
 ///////////////////////////////////////////////////////////////////////////// Drives
 
 Drive: driPlantReproduction {
@@ -153,7 +148,7 @@ Drive: driPlantReproduction {
 	}
 
 	Script: getWeight {
-	    return(.attNutrition);
+	    return(100 * .attNutrition / .attBabySize);
 	}
 }
 
@@ -167,11 +162,11 @@ Drive: driHeal {
     solutions { proHeal; }
 
     Script: condition {
-        require(.attHealth < 100);
+        require(.attHealth < .attMaxHealth);
     }
 
     Script: getWeight {
-        return(100 - .attHealth);
+        return(100 - .attHealth / .attMaxHealth);
     }
 }
 
@@ -180,7 +175,7 @@ Drive: driHeal {
 Process: proPhotoSynthesis {
 	Script: condition {
 		require(getLightLevel(self) + getTile(self).attLightLevel >= .attLightSensitivity);
-		require(.attAge >= .attMatureAge);
+		require(getStage(self) != "seed");
 		require(.attNutrition < .attBabySize*3);
 	}
 	Script: process {
@@ -194,18 +189,20 @@ Process: proPhotoSynthesis {
 
 Process: proCreateFruit {
 	Script: condition {
-		require(!getAttInRange("attVegetarian", self, 1));
 		require(.attNutrition >= .attBabySize);
-		require(.attAge >= .attMatureAge);
-		require(!getItems(self, entApple));
+		require(inDefaultStage(self));
 	}
 
 	Script: process {
-		fruit = create(self->fruitType, self);
+	    setStage(self, "ripe");
+
+		fruit = create(getProperty(self, "fruit"), self);
 		..attNutrition -= .attBabySize;
 		fruit..attNutrition += .attBabySize;
-		fruit->createSeed(self);
-        self->updateMesh();
+
+		seed = create(getType(self), fruit);
+        setStage(seed, "seed");
+		seed->inherit(self);
 	}
 }
 
@@ -215,17 +212,15 @@ Process: proGrowIntoTree {
 
         require(isOnFloor(self));
         require(getLightLevel(self) >= .attLightSensitivity);
-        require(getFullAtt("attSize", tile) + ->treeType.attSize <= 100);
+        require(getFullAtt(tile, "attSize") < 100);
         require(getHeight(self) >= getWaterHeight(self));
-        require(tile.attNutrition >= .attBabySize);
+
+        //print(tile.attNutrition + " >= " + .attBabySize);
+        //require(tile.attNutrition >= .attBabySize);
     }
     Script: process {
-        tree = create(self->treeType, getTile(self));
-        mixAttributes(tree, self, self);
-        addEffect(tree, effSapling);
-        tree..attHealth = .attBabySize;
-
-        destroy(self);
+        setStage(self, "sapling");
+        addEffect(self, effSapling);
     }
 }
 
@@ -249,7 +244,7 @@ Effect: effSapling {
     }
 
     Script: finally(carrier) {
-        carrier->updateMesh();
+        setDefaultStage(self);
     }
 }
 

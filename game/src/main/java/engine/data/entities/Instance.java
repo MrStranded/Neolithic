@@ -31,6 +31,7 @@ public class Instance {
 
 	protected int id;
 	private String name = null;
+	private String stage = ScriptConstants.DEFAULT_STAGE;
 
 	private BinaryTree<Attribute> attributes = null;
 	private List<Effect> effects = null;
@@ -53,7 +54,6 @@ public class Instance {
 		initMoveableObject();
         inheritAttributes();
 
-//		run(ScriptConstants.EVENT_CREATE, new Variable[] {});
 		Data.addInstanceToQueue(this);
 	}
 
@@ -93,10 +93,11 @@ public class Instance {
 
     public void inheritAttributes() {
 	    getContainer().ifPresent(container -> {
-			BinaryTree<Attribute> tree = container.getAttributes();
+	    	if (attributes != null) { attributes.clear(); }
+			BinaryTree<Attribute> tree = container.getAttributes(stage);
 			if (tree != null) {
-				tree.forEach(attributeID -> {
-					addAttribute(attributeID.getId(), container.getAttributeValue(attributeID.getId()));
+				tree.forEach(attribute -> {
+					addAttribute(attribute.getId(), attribute.getValue());
 				});
 			}
 		});
@@ -108,14 +109,14 @@ public class Instance {
 
 	public Variable run(String textID, Variable[] parameters) {
 		return getContainer().map(container -> {
-			Script script = container.getScript(textID);
+			Script script = container.getScript(stage, textID);
 			return runScript(script, parameters);
 		}).orElse(new Variable());
 	}
 
 	public Variable run(Container scriptContainer, String textID, Variable[] parameters) {
 		if (scriptContainer != null) {
-			Script script = scriptContainer.getScript(textID);
+			Script script = scriptContainer.getScript(stage, textID);
 			return runScript(script, parameters);
 		}
 		return new Variable();
@@ -184,7 +185,7 @@ public class Instance {
 		for (Container drive : weightedDrives.list()) {
 			//if (drive.getType() == DataType.DRIVE) { // look through solutions of triggered drive
 
-				Container process = searchProcesses(((DriveContainer) drive).getSolutions());
+				Container process = searchProcesses(((DriveContainer) drive).getSolutions(stage));
 				if (process != null) {
 
 					run(process, ScriptConstants.EVENT_PROCESS, null);
@@ -214,7 +215,7 @@ public class Instance {
 					} else { // condition not fulfilled -> if process, look through alternatives
 
 						if (container.getType() == DataType.PROCESS) {
-							Container solution = searchProcesses(((ProcessContainer) container).getSolutions());
+							Container solution = searchProcesses(((ProcessContainer) container).getSolutions(stage));
 							if (solution != null) {
 								return solution;
 							}
@@ -236,7 +237,7 @@ public class Instance {
 		return getContainer()
 				.filter(c -> c.getType() == DataType.CREATURE)
 				.map(c -> {
-					for (ContainerIdentifier knowledge : ((CreatureContainer) c).getKnowledge()) {
+					for (ContainerIdentifier knowledge : ((CreatureContainer) c).getKnowledge(stage)) {
 						if (knowledge.identifies(container)) {
 							return true;
 						}
@@ -271,7 +272,7 @@ public class Instance {
 			if (occupations == null || occupations.isEmpty()) {
 				// ----------- calculate drives
 				if (container.isPresent() && container.get().getType() == DataType.CREATURE) {
-					searchDrive(((CreatureContainer) container.get()).getDrives());
+					searchDrive(((CreatureContainer) container.get()).getDrives(stage));
 				}
 			} else {
 				// ----------- calculate occupations
@@ -517,12 +518,22 @@ public class Instance {
 
 	public MeshHub getMeshHub() {
 		if (meshHub == null) {
-			Container container = Data.getContainer(id);
-			if (container != null) {
-				meshHub = container.getMeshHub();
-			}
+			meshHub = createMeshHub();
 		}
 		return meshHub;
+	}
+
+	private MeshHub createMeshHub() {
+		return getContainer().map(container -> {
+			String path = container.getMeshPath(stage);
+
+			MeshHub meshHub = null;
+			if (path != null) {
+				meshHub = Data.addMeshHub(path);
+				meshHub.setMeshOpacity(container.getOpacity());
+			}
+			return meshHub;
+		}).orElse(null);
 	}
 
     public String getName() {
@@ -711,6 +722,15 @@ public class Instance {
 	}
 	public void setDelayUntilNextTick(int delayUntilNextTick) {
 		this.delayUntilNextTick = delayUntilNextTick;
+	}
+
+	public String getStage() {
+		return stage;
+	}
+	public void setStage(String stage) {
+		this.stage = stage;
+		meshHub = null;
+		inheritAttributes();
 	}
 
 	// ###################################################################################

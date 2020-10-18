@@ -5,16 +5,17 @@ WorldGen: genContinental {
 		setWaterLevel(100);
 		print("water level set");
 
-		for (t : eachTile()) {
-			if (chance(0.0025)) { // 1/4% chance
-				if (chance(0.5)) {
-					destroy(create(formPlateau, t));
-				} else if (chance(0.5)) {
-					destroy(create(formMountain, t));
-				} else {
-					destroy(create(formHill, t));
-				}
+		/*for (t : eachTile()) {
+			if (chance(0.00125)) { // 1/8% chance
+                destroy(create(formIsland, t));
 			}
+		}*/
+
+		islands = random(1, 4);
+		tiles = eachTile();
+		for (i = 0; i < islands; i++) {
+		    destroy(create(formIsland, random(tiles)));
+            print("Created island " + i);
 		}
 
 		for (t : eachTile()) {
@@ -25,9 +26,36 @@ WorldGen: genContinental {
 			}
 		}
 
-		fitTiles(tSand, tStone);
+		fitTiles(tSand, tDirt, tStone);
 	    updatePlanetMesh();
 	}
+}
+
+Formation: formIsland inherits entTrail {
+    name = "Island";
+
+    Script: create(tile) {
+        islandParts(tile, formHill, random(1, 6));
+        islandParts(tile, formPlateau, random(1, 5));
+        islandParts(tile, formMountain, random(0, 4));
+        //islandParts(tile, entSource, random(0, 2));
+        create(entSource, tile);
+    }
+
+    Script: islandParts(tile, type, count) {
+        for (i = 0; i < count; i++) {
+            create(type, trail(tile, 50));
+        }
+    }
+}
+
+Entity: entTrail {
+    Script: trail(tile, steps) {
+        for (i = 0; i < steps; i++) {
+            tile = getNeighbor(tile, random(3));
+        }
+        return(tile);
+    }
 }
 
 Formation: formMountain inherits formLift {
@@ -36,12 +64,8 @@ Formation: formMountain inherits formLift {
     }
 
 	Script: create(tile) {
-		height = random(220,420);
+		height = random(200,300);
 		lift(self, height);
-
-		if (chance(0.5)) {
-		    create(entSource, getNeighbor(self, random(3)));
-		}
 	}
 
 }
@@ -55,7 +79,7 @@ Formation: formHill inherits formLift {
 
 }
 
-Formation: formPlateau {
+Formation: formPlateau inherits entTrail {
 	Script: create() {
 		height = random(110,230);
 		if (height >= 170) { height = random(130,220);}
@@ -63,7 +87,7 @@ Formation: formPlateau {
 		self->lift(self, height, distance);
 
 		if (chance(0.5)) {
-		    create(entSource, getNeighbor(self, random(3)));
+		    create(entSource, trail(self, random(3, 7)));
 		}
 	}
 
@@ -101,7 +125,7 @@ Formation: formMound inherits formLift {
 Formation: formHole inherits formSink {
 
     attributes {
-        attMinSink, 1; attMaxSink, 20;
+        attMinDeviation, 1; attMaxDeviation, 20;
     }
 
 	Script: create() {
@@ -117,6 +141,10 @@ Formation: formLift {
         attMaxDeviation, 12;
     }
 
+    Script: create() {
+        print("This formation cannot be created directly. Instead use another formation that inherits from this formation.");
+    }
+
 	Script: lift(tile, height) {
 		if (height > getHeight(tile)) {
 			setHeight(tile, height);
@@ -130,8 +158,12 @@ Formation: formLift {
 }
 Formation: formSink {
     attributes {
-        attMinSink, 1;
-        attMaxSink, 12;
+        attMinDeviation, 1;
+        attMaxDeviation, 12;
+    }
+
+    Script: create() {
+        print("This formation cannot be created directly. Instead use another formation that inherits from this formation.");
     }
 
 	Script: sink(tile, height) {
@@ -139,7 +171,7 @@ Formation: formSink {
 			setHeight(tile, height);
 
 			for (n : getNeighbors(tile)) {
-				deviation = random(.attMinSink, .attMaxSink);
+				deviation = random(.attMinDeviation, .attMaxDeviation);
 				sink(n, height + deviation);
 			}
 		}

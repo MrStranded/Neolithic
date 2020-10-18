@@ -90,8 +90,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         BinaryTree<Attribute> tree = instance.getAttributes();
 
         if (tree != null) {
-            tree.forEach(idInterface -> {
-                Attribute attribute = (Attribute) idInterface;
+            tree.forEach(attribute -> {
                 ProtoAttribute protoAttribute = Data.getProtoAttribute(attribute.getId());
 
                 if (protoAttribute != null) {
@@ -119,8 +118,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         BinaryTree<Variable> tree = instance.getVariables();
 
         if (tree != null) {
-            tree.forEach(varId -> {
-                Variable variable = (Variable) varId;
+            tree.forEach(variable -> {
                 g.drawString(String.valueOf(variable.toString()), xPos, getCurrentYPosition() + 12);
                 setCurrentYPosition(getCurrentYPosition() + 20);
             });
@@ -140,6 +138,11 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
             g.drawString("(" + instance.getDelayUntilNextTick() + ")", xPos + 200, yPos + 12);
         }
         yPos += 20;
+
+        if (instance.getStage() != null && !ScriptConstants.DEFAULT_STAGE.equals(instance.getStage())) {
+            g.drawString("Stage: " + instance.getStage(), xPos + 50, yPos + 12);
+            yPos += 20;
+        }
 
         g.drawString(instance.getMemoryAddress(), xPos + 50, yPos + 12);
         yPos += 20;
@@ -166,11 +169,11 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
             }
 
             CreatureContainer creatureContainer = (CreatureContainer) container.get();
-            if (creatureContainer.getDrives() != null) {
+            if (creatureContainer.getDrives(instance.getStage()) != null) {
                 g.drawString("Drives:", xPos, yPos + 12);
                 yPos += 20;
 
-                for (ContainerIdentifier identifier : creatureContainer.getDrives()) {
+                for (ContainerIdentifier identifier : creatureContainer.getDrives(instance.getStage())) {
                     Container drive = identifier.retrieve();
 
                     if (drive != null) {
