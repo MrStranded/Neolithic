@@ -37,7 +37,7 @@ public class FacePart {
 	private RGBA topColor = TopologyConstants.TILE_DEFAULT_COLOR;
 	private RGBA sideColor = topColor.times(TopologyConstants.TILE_SIDE_COLOR_FACTOR);
 
-	private Vector3 corner1, corner2, corner3;
+	private final Vector3 corner1, corner2, corner3;
 
 	private int depth;
 	private boolean rendersSelf = false;
@@ -93,7 +93,6 @@ public class FacePart {
 	public void render(ShaderProgram shaderProgram, Matrix4 viewWorldMatrix, int depth, boolean putDataIntoShader, boolean drawWater) {
 		rendersSelf = false;
 
-		// performance!!!
 		if (quarterFaces == null) {
 			renderSelf(shaderProgram, putDataIntoShader,drawWater);
 			return;

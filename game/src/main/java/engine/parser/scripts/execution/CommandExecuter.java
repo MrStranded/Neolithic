@@ -96,6 +96,8 @@ public class CommandExecuter {
 					effect.run(ScriptConstants.EVENT_CREATE, new Variable[] {new Variable(target)});
 
 					target.addEffect(effect);
+					return new Variable(effect);
+
 				} else if (requireParameters(commandNode, 2)) {
 					Instance target = parameters[0].getInstance();
 					Container container = parameters[1].getContainer();
