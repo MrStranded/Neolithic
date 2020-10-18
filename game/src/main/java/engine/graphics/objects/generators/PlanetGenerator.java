@@ -71,13 +71,8 @@ public class PlanetGenerator {
 
 	private Mesh createTile(FacePart facePart, Tile tile, boolean smallest) {
 		// ------------------------------------- vector value setup
-		double height;
 		boolean water = facePart.getWaterHeight() > facePart.getHeight();
-		if (water) {
-			height = facePart.getWaterHeight();
-		} else {
-			height = facePart.getHeight();
-		}
+		double height = Math.max(facePart.getHeight(), facePart.getWaterHeight());
 		double f = PlanetGenerator.getHeightFactor(height);
 
 		Vector3[] upper = new Vector3[3];
@@ -164,19 +159,10 @@ public class PlanetGenerator {
 				if (otherPart == null) {
 					otherHeight = 0;
 				} else {
-					if (water) {
-						//if (otherPart == null) {
-						//	otherHeight = Math.max(neighbours[i].getHeight(), neighbours[i].getWaterHeight());
-						//} else {
-							otherHeight = Math.max(otherPart.getHeight(), otherPart.getWaterHeight());
-						//}
-					} else {
-						//if (otherPart == null) {
-						//	otherHeight = neighbours[i].getHeight();
-						//} else {
-							otherHeight = otherPart.getHeight();
-						//}
-					}
+					otherHeight = water
+							? Math.max(otherPart.getHeight(), otherPart.getWaterHeight())
+							: otherPart.getHeight();
+					otherHeight--;
 				}
 			}
 

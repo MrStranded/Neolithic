@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Neo Script - Commands</title>
+
+    <link rel="stylesheet" href="commands.css">
+    <script src="commands.js"></script>
+</head>
+<body>
+    <script>
+        printBody();
+
+        function printBody() {
+            document.write(`
+                <div class="outer">
+                    <div class="sidebar"><ul>
+            `);
+
+            commands.forEach(command => printLink(command));
+
+            document.write(`
+                    </ul></div>
+                    <div class="content">
+            `);
+
+            commands.forEach(command => printCommand(command));
+
+            document.write(`
+                    </div>
+                </div>
+            `);
+        }
+
+        function printLink(command) {
+            let parameters = constructParameterString(command);
+
+            document.write(`<li><a href="#${command.name}${command.parameters.length}">
+                                <span class="headerType">${command.type}</span>:
+                                <span class="headerName">${command.name}</span> (
+                                <span class="headerParameters">${parameters}</span>)</a></li>`);
+        }
+
+        function printCommand(command) {
+            let parameters = constructParameterString(command);
+
+            document.write(`<div class="commandContainer" id="${command.name}${command.parameters.length}">
+                            <h2><span class="headerType">${command.type}</span>:
+                                <span class="headerName">${command.name}</span> (
+                                <span class="headerParameters">${parameters}</span>)</h2>`);
+
+            printParameters(command);
+
+            document.write(`<p class="commandDescription">${command.description}</p>
+                            </div>`);
+
+            printExample(command);
+        }
+
+        function constructParameterString(command) {
+            let parameters = '';
+            command.parameters.forEach(p => {
+                parameters += ', ';
+                if (p.optional) { parameters += '['; }
+                parameters += p.name;
+                if (p.optional) { parameters += ']'; }
+            });
+            return parameters.substr(2);
+        }
+
+        function printParameters(command) {
+            document.write(`<div class="parameterContainer">`);
+
+            command.parameters.forEach(parameter => printParameter(parameter));
+
+            document.write(`</div>`)
+        }
+
+        function printParameter(parameter) {
+            if (parameter === undefined) { return; }
+
+            document.write(`<p class="parameterField">${parameter.type}: ${parameter.name}</p>`);
+
+            if (parameter.description !== undefined) {
+                document.write(`<p class="parameterDescription">${parameter.description}</p>`);
+            }
+        }
+
+        function printExample(command) {
+            if (command.example === undefined) { return; }
+
+            document.write(`
+                <p class="exampleTitle">Example:</p>
+                <div class="exampleContainer">${command.example}</div>
+            `);
+        }
+    </script>
+</body>
+</html>

@@ -44,7 +44,7 @@ public class LogicThread extends Thread {
 							instanceList = new ArrayList<>(lastSize * 5 / 4);
 							lastSize = 0;
 
-							GuiData.getStatisticsWindow().tick();
+							if (GameOptions.plotEntities) { GuiData.getStatisticsWindow().tick(); }
 
 							if (GameOptions.stopAtNextTick) {
 								GameOptions.stopAtNextTick = false;

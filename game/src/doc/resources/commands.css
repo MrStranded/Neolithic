@@ -1,0 +1,109 @@
+/* -------------------------------------------------------------- */
+/* ------------------------------| Main */
+/* -------------------------------------------------------------- */
+
+.outer {
+
+}
+
+.sidebar {
+  position: fixed;
+  width: 300px;
+  height: 100vh;
+  background-color: silver;
+}
+
+.content {
+  margin-left: 420px;
+  width: calc(100vw - 540px);
+  /*max-width: 920px;*/
+  /*margin-left: calc(50vw - 460px);*/
+}
+
+/* -------------------------------------------------------------- */
+/* ------------------------------| Sidebar */
+/* -------------------------------------------------------------- */
+
+a {
+  display: block;
+  padding: 10px 20px 10px 0;
+  color: #2c4557;
+}
+
+/* -------------------------------------------------------------- */
+/* ------------------------------| Command */
+/* -------------------------------------------------------------- */
+
+.commandContainer {
+  background-color: slategray;
+}
+
+/* -------------------------------------------------------------- */
+/* ------------------------------| Header */
+/* -------------------------------------------------------------- */
+
+h2 {
+  padding: 20px 50px;
+  margin-bottom: 0;
+}
+
+.headerType {
+  color: #2c4557;
+}
+
+.headerName {
+  color: #253441;
+}
+
+.headerParameters {
+  color: #353833;
+  font-style: italic;
+}
+
+/* -------------------------------------------------------------- */
+/* ------------------------------| Parameters */
+/* -------------------------------------------------------------- */
+
+.parameterContainer {
+  padding: 20px 50px;
+  background-color: silver;
+}
+
+.parameterField {
+  font-style: italic;
+  font-weight: bold;
+}
+.parameterDescription {
+  margin-left: 100px;
+  font-style: italic;
+}
+
+/* -------------------------------------------------------------- */
+/* ------------------------------| Description */
+/* -------------------------------------------------------------- */
+
+.commandDescription {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 20px 100px;
+  background-color: lightslategrey;
+  color: #253441;
+}
+
+/* -------------------------------------------------------------- */
+/* ------------------------------| Header */
+/* -------------------------------------------------------------- */
+
+.exampleTitle {
+  margin: 0;
+  padding: 10px 50px;
+  font-weight: bold;
+  background-color: #8e9db0;
+}
+
+.exampleContainer {
+  font-family: monospace;
+  padding: 20px 100px;
+  background-color: #9eadc0;
+  color: #4E4E4E;
+}
