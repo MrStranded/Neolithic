@@ -84,10 +84,8 @@ public class BaseGUI implements GUIInterface {
 
 			BinaryTree<Attribute> tree = instance.getAttributes();
 			if (tree != null) {
-				tree.forEach(idInterface -> {
-					Attribute attribute = (Attribute) idInterface;
+				tree.forEach(attribute -> {
 					ProtoAttribute protoAttribute = Data.getProtoAttribute(attribute.getId());
-
 					yPos = printInfo(protoAttribute.getName() + ": " + instance.getAttributeValue(attribute.getId()), windowWidth, windowHeight, yPos);
 				});
 			}

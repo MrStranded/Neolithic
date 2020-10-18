@@ -6,7 +6,7 @@ Entity: entShit {
     mesh = "shit01.ply";
 
     Script: tick {
-        if (isOnFloor(self)) {
+        //if (isOnFloor(self)) {
             tile = getTile(self);
             if (getType(tile) == tDirt && .attNutrition >= 10) {
                 ..attNutrition -= 10;
@@ -19,7 +19,7 @@ Entity: entShit {
             if (.attNutrition <= 0) {
                 destroy(self);
             }
-        }
+       // }
     }
 }
 

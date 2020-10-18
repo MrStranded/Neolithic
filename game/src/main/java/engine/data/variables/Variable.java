@@ -322,6 +322,8 @@ public class Variable implements IDInterface {
 	public Container getContainer() {
 		if (type == DataType.CONTAINER) {
 			return (Container) value;
+		} else if (type == DataType.STRING) {
+			return Data.getContainer((String) value);
 		}
 		return null;
 	}

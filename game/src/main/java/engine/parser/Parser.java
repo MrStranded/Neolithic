@@ -118,36 +118,40 @@ public class Parser {
 		while ((container = Data.getContainer(i++)) != null) {
 			System.out.println(container.getType() + ": " + container.getTextID() + ", " + container.getName());
 
-			IDInterface[] attributes = container.getAttributes().toArray();
-			if (attributes != null) {
-				for (IDInterface idInterface : attributes) {
-					Attribute attribute = (Attribute) idInterface;
-					System.out.println("-> Att: " + attribute.getId() + " (" + Data.getProtoAttribute(attribute.getId()).getTextID() + ") " + ", " + attribute.getValue());
-				}
-			}
+			for (String stage : container.getStages()) {
+				System.out.println("Stage: " + stage);
 
-			if (container.getType() == DataType.CREATURE) {
-				for (ContainerIdentifier process : ((CreatureContainer) container).getKnowledge()) {
-					System.out.println("-> Pro: " + process);
+				IDInterface[] attributes = container.getAttributes(stage).toArray();
+				if (attributes != null) {
+					for (IDInterface idInterface : attributes) {
+						Attribute attribute = (Attribute) idInterface;
+						System.out.println("   -> Att: " + attribute.getId() + " (" + Data.getProtoAttribute(attribute.getId()).getTextID() + ") " + ", " + attribute.getValue());
+					}
 				}
-				for (ContainerIdentifier drive : ((CreatureContainer) container).getDrives()) {
-					System.out.println("-> Dri: " + drive);
-				}
-			} else if (container.getType() == DataType.DRIVE) {
-				for (ContainerIdentifier solution : ((DriveContainer) container).getSolutions()) {
-					System.out.println("-> Sol: " + solution);
-				}
-			} else if (container.getType() == DataType.PROCESS) {
-				for (ContainerIdentifier alternative : ((ProcessContainer) container).getSolutions()) {
-					System.out.println("-> Sol: " + alternative);
-				}
-			}
 
-			IDInterface[] scripts = container.getScripts().toArray();
-			if (scripts != null) {
-				for (IDInterface idInterface : scripts) {
-					Script script = (Script) idInterface;
-					script.print();
+				if (container.getType() == DataType.CREATURE) {
+					for (ContainerIdentifier process : ((CreatureContainer) container).getKnowledge(stage)) {
+						System.out.println("   -> Pro: " + process);
+					}
+					for (ContainerIdentifier drive : ((CreatureContainer) container).getDrives(stage)) {
+						System.out.println("   -> Dri: " + drive);
+					}
+				} else if (container.getType() == DataType.DRIVE) {
+					for (ContainerIdentifier solution : ((DriveContainer) container).getSolutions(stage)) {
+						System.out.println("   -> Sol: " + solution);
+					}
+				} else if (container.getType() == DataType.PROCESS) {
+					for (ContainerIdentifier alternative : ((ProcessContainer) container).getSolutions(stage)) {
+						System.out.println("   -> Sol: " + alternative);
+					}
+				}
+
+				IDInterface[] scripts = container.getScripts(stage).toArray();
+				if (scripts != null) {
+					for (IDInterface idInterface : scripts) {
+						Script script = (Script) idInterface;
+						script.print();
+					}
 				}
 			}
 		}

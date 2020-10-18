@@ -10,7 +10,7 @@ Attribute: attMatureAge {
     inherited;
     mutation = 100, 500;
     color = 0, 64, 128;
-    lower = 0;
+    lower = 1;
 }
 Attribute: attLightSensitivity {
     name = "Light sensitivity";
@@ -61,6 +61,7 @@ Attribute: attBabySize {
     name = "Baby size";
     inherited;
     mutation = 50, 10;
+    lower = 1;
 }
 Attribute: attGender {
     name = "Gender";
@@ -105,6 +106,13 @@ Attribute: attPride {
 Attribute: attHealth {
     name = "Health";
     color = 100, 100, 100;
+}
+Attribute: attMaxHealth {
+    name = "Maximum Health";
+    color = 75, 75, 75;
+    inherited;
+    mutation = 50, 10;
+    lower = 1;
 }
 Attribute: attNutrition {
     name = "Nutrition";

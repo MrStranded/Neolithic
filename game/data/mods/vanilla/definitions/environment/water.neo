@@ -17,7 +17,7 @@ Entity: entDeepSource {
     attributes { attTicks, 10; }
 
     Script: tick {
-        delayTick(.attTicks);
+        delayNextTick(self, .attTicks);
 
         getTile(self)..attHumidity += 40;
     }

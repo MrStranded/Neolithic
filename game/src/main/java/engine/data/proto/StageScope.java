@@ -22,23 +22,24 @@ public class StageScope {
         return valueMap.get(key);
     }
 
-    private Object getOrCreate(String key, Function<String, Object> create) {
-        return valueMap.computeIfAbsent(key, create);
+    public Optional<Boolean> getBoolean(String key) {
+        Object value = get(key);
+        return value instanceof Boolean ? Optional.of((Boolean) value) : Optional.empty();
     }
 
-    public int getInt(String key) {
+    public Optional<Integer> getInt(String key) {
         Object value = get(key);
-        return value instanceof Integer ? (Integer) value : 0;
+        return value instanceof Integer ? Optional.of((Integer) value) : Optional.empty();
     }
 
-    public double getDouble(String key) {
+    public Optional<Double> getDouble(String key) {
         Object value = get(key);
-        return value instanceof Double ? (Double) value : 0;
+        return value instanceof Double ? Optional.of((Double) value) : Optional.empty();
     }
 
-    public String getString(String key) {
+    public Optional<String> getString(String key) {
         Object value = get(key);
-        return value instanceof String ? (String) value : "";
+        return value instanceof String ? Optional.of((String) value) : Optional.empty();
     }
 
     public RGBA getRGBA(String key) {
@@ -46,29 +47,29 @@ public class StageScope {
         return value instanceof RGBA ? (RGBA) value : new RGBA();
     }
 
-    public List<ContainerIdentifier> getIdList(String key) {
-        Object value = getOrCreate(key, k -> new ArrayList<ContainerIdentifier>());
-        return value instanceof List ? (List) value : Collections.emptyList();
+    public Optional<List<ContainerIdentifier>> getIdList(String key) {
+        Object value = get(key);
+        return value instanceof List ? Optional.of((List) value) : Optional.empty();
     }
 
     public BinaryTree<Attribute> getAttributes() {
-        Object value = getOrCreate(ScriptConstants.KEY_ATTRIBUTES, k -> new BinaryTree<Attribute>());
-        return value instanceof BinaryTree ? (BinaryTree) value : new BinaryTree<>();
+        Object value = get(ScriptConstants.KEY_ATTRIBUTES);
+        return value instanceof BinaryTree ? (BinaryTree) value : null;
     }
 
     public Attribute getAttribute(int id) {
         BinaryTree<Attribute> attributes = getAttributes();
-        return attributes.get(id);
+        return attributes != null ? attributes.get(id) :null;
     }
 
     public BinaryTree<Script> getScripts() {
-        Object value = getOrCreate(ScriptConstants.KEY_SCIPTS, k -> new BinaryTree<Script>());
-        return value instanceof BinaryTree ? (BinaryTree) value : new BinaryTree<>();
+        Object value = get(ScriptConstants.KEY_SCIPTS);
+        return value instanceof BinaryTree ? (BinaryTree) value : null;
     }
 
     public Script getScript(int id) {
         BinaryTree<Script> scripts = getScripts();
-        return scripts.get(id);
+        return scripts != null ? scripts.get(id) : null;
     }
 
 }

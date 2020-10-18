@@ -57,7 +57,7 @@ public class LogicThread extends Thread {
 							instance.tick();
 
 							if (! instance.isSlatedForRemoval()) {
-								GuiData.getStatisticsWindow().register(instance);
+								if (GameOptions.plotEntities) { GuiData.getStatisticsWindow().register(instance); }
 
 								Data.addInstanceToQueue(instance);
 								instanceList.add(instance);

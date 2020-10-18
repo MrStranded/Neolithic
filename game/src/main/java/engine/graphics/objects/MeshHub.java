@@ -55,15 +55,10 @@ public class MeshHub {
 	}
 
 	public void setMeshOpacity(double opacity) {
-		if (opacity >= 1.0) {
-			Logger.log("Tried setting opacity with value >= 1.0: " + opacity + " Operation is aborted");
-			return;
-		}
-
-		this.opacity = Math.max(0.0, opacity);
+		this.opacity = Math.min(1.0, Math.max(0.0, opacity));
 
 		if (mesh == null) {
-			Logger.log("Mesh not yet loaded. Could not set opacity '" + opacity + "' on mesh with path '" + meshPath + "'");
+			Logger.error("Mesh not yet loaded. Could not set opacity '" + opacity + "' on mesh with path '" + meshPath + "'");
 			return;
 		}
 

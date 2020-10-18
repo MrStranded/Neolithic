@@ -145,9 +145,26 @@ public class Interpreter {
 			}
             consume(TokenConstants.SEMICOLON);
 
-            PreAttribute preAttribute = new PreAttribute(next.getValue(), TokenNumerifier.getInt(value), variation);
+            PreAttribute preAttribute = new PreAttribute(next.getValue(), currentStage, TokenNumerifier.getInt(value), variation);
             container.addPreAttribute(preAttribute);
 		}
+	}
+
+	private List<ContainerIdentifier> readTextIDList() throws Exception {
+		consume(TokenConstants.CURLY_BRACKETS_OPEN);
+
+		List<ContainerIdentifier> result = new ArrayList<>(4);
+
+		Token next;
+		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(next = consume())) {
+			consume(TokenConstants.SEMICOLON);
+
+			if (next.getValue() != null && next.getValue().length() > 0) {
+				result.add(new ContainerIdentifier(next.getValue()));
+			}
+		}
+
+		return result;
 	}
 
 	private void feedTextIDList(List<ContainerIdentifier> identifiers) throws Exception {
@@ -186,24 +203,40 @@ public class Interpreter {
 
 	// ################################################################################### General
 
-//	private void readName(Container container) throws Exception {
-//		consume(TokenConstants.ASSIGNMENT);
-//
-//		Token name = consume();
-//		container.setName(name.getValue());
-//
-//		consume(TokenConstants.SEMICOLON);
-//	}
-
 	private void readMeshPath(Container container) throws Exception {
 		consume(TokenConstants.ASSIGNMENT);
 
 		Token pathToken = consume();
 		String path = ResourcePathConstants.MOD_FOLDER + currentMod + "/" + ResourcePathConstants.MESH_FOLDER + pathToken.getValue();
-		MeshHub meshHub = Data.addMeshHub(path);
-		container.setMeshHub(meshHub);
+		container.setProperty(currentStage, ScriptConstants.KEY_MESH, path);
 
 		consume(TokenConstants.SEMICOLON);
+	}
+
+	private Object readProperty() throws Exception {
+		consume(TokenConstants.ASSIGNMENT);
+
+		Token value = consume();
+		Object result;
+
+		if (TokenNumerifier.isNumber(value, true)) {
+			result = TokenNumerifier.getDouble(value);
+
+		} else if (TokenNumerifier.isNumber(value, false)) {
+			result = TokenNumerifier.getInt(value);
+
+		} else if (TokenConstants.TRUE.equals(value)) {
+			result = true;
+
+		} else if (TokenConstants.FALSE.equals(value)) {
+			result = false;
+
+		} else {
+			result = value.getValue();
+		}
+
+		consume(TokenConstants.SEMICOLON);
+		return result;
 	}
 
 	private void readStringValue(Consumer<String> valueSetter) throws Exception {
@@ -425,7 +458,7 @@ public class Interpreter {
 
 		if (textId.getValue() != null && textId.getValue().length() > 0) {
 			Script script = (new ASTBuilder(this)).buildScript(textId.getValue());
-			container.addScript(script);
+			container.addScript(currentStage, script);
 		} else {
 			String errorMessage = "Script has no textID (Script : textID { ...) on line " + textId.getLine();
 
@@ -548,19 +581,16 @@ public class Interpreter {
 			Data.addContainer(setupContainer);
 		}
 
-		final Container container = setupContainer;
-
 		// container filling
+		readStage(setupContainer, type);
+	}
+
+	private void readStage(Container container, DataType type) throws Exception {
 		while (true) {
 			Token next = consume();
-			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% name
-			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
-//				readName(container);
-//				readStringValue(name -> container.setName(currentStage, name));
-				readStringValue(name -> container.getStage(currentStage).set(ScriptConstants.KEY_NAME, name));
 
-			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% type specific values
-			} else if (TokenConstants.VALUE_PREFERRED_HEIGHT.equals(next)) { // preferred height definition
+				// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% type specific values
+			if (TokenConstants.VALUE_PREFERRED_HEIGHT.equals(next)) { // preferred height definition
 				if (type == DataType.TILE) {
 					readPreferredHeight((TileContainer) container);
 				} else { issueTypeError(next, type); }
@@ -585,50 +615,42 @@ public class Interpreter {
 					readMeshPath(container);
 				} else { issueTypeError(next, type); }
 
-			} else if (TokenConstants.VALUE_OPACITY.equals(next)) { // opacity definition
-				if (type == DataType.ENTITY || type == DataType.CREATURE) {
-//					readOpacity(container);
-					readNumberValue(container::setOpacity);
-				} else { issueTypeError(next, type); }
-
-			} else if (TokenConstants.VALUE_RUN_TICKS.equals(next)) { // run ticks flag definition
-				if (type == DataType.ENTITY
-						|| type == DataType.CREATURE
-						|| type == DataType.TILE
-						|| type == DataType.INSTANCE) {
-					readBooleanValue(container::setRunTickScripts);
-				} else { issueTypeError(next, type); }
-
-			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% value lists
+				// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% attribute lists
 			} else if (TokenConstants.VALUES_ATTRIBUTES.equals(next)) { // list of attributes
 				feedAttributes(container);
 
-			} else if (TokenConstants.VALUES_KNOWLEDGE.equals(next)) { // list of known processes
-				if (type == DataType.CREATURE) {
-					feedTextIDList(((CreatureContainer) container).getKnowledge());
-				} else { issueTypeError(next, type); }
-
-			} else if (TokenConstants.VALUES_DRIVES.equals(next)) { // list of drives
-				if (type == DataType.CREATURE) {
-					feedTextIDList(((CreatureContainer) container).getDrives());
-				} else { issueTypeError(next, type); }
-
-			} else if (TokenConstants.VALUES_SOLUTIONS.equals(next)) { // list of solutions
-				if (type == DataType.DRIVE) {
-					feedTextIDList(((DriveContainer) container).getSolutions());
-				} else if (type == DataType.PROCESS) {
-					feedTextIDList(((ProcessContainer) container).getSolutions());
-				} else { issueTypeError(next, type); }
-
-			// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% general data
+				// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% scripts
 			} else if (TokenConstants.SCRIPT.equals(next)) { // Script
 				addScript(container);
 
-			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition
+				// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% stage scopes
+			} else if (TokenConstants.STAGE.equals(next)) { // Stage attributes
+				String previousStage = currentStage;
+
+				consume(TokenConstants.COLON);
+				currentStage = consume().getValue();
+				consume(TokenConstants.CURLY_BRACKETS_OPEN);
+
+				readStage(container, type);
+				currentStage = previousStage;
+
+				// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end of stage scope
+			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition || stage scope
 				return;
 
-			} else { // unknown command
-				Logger.error("Unknown Entity definition command '" + next.getValue() + "' on line " + next.getLine());
+				// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% properties & id lists
+			} else {
+				Token operator = peek();
+
+				if (TokenConstants.ASSIGNMENT.equals(operator)) {
+					container.setProperty(currentStage, next.getValue(), readProperty());
+
+				} else if (TokenConstants.CURLY_BRACKETS_OPEN.equals(operator)) {
+					container.setProperty(currentStage, next.getValue(), readTextIDList());
+
+				} else {
+					Logger.error("Unknown Entity definition command '" + next.getValue() + "' on line " + next.getLine());
+				}
 			}
 		}
 	}

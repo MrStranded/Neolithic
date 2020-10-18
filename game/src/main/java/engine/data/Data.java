@@ -276,7 +276,6 @@ public class Data {
 		for (Container container : containers) {
 			if (container != null) {
 				container.finalizeAttributes();
-				container.finalizeScripts();
 			}
 		}
 		for (Container container : containers) {

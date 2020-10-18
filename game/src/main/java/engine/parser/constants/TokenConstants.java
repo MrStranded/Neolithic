@@ -16,6 +16,7 @@ public enum TokenConstants {
 	DRIVE       (TokenType.KEYWORD, "Drive"),
 	FORMATION   (TokenType.KEYWORD, "Formation"),
 	WORLDGEN    (TokenType.KEYWORD, "WorldGen"),
+	STAGE	    (TokenType.KEYWORD, "Stage"),
 
 	// -------------------------------------------------- Inheritance
 	INHERITS	(TokenType.KEYWORD, "inherits"),
@@ -113,6 +114,7 @@ public enum TokenConstants {
 	GET_LIGHT_LEVEL         (TokenType.COMMAND, "getLightLevel"),
 	GET_NEIGHBOUR           (TokenType.COMMAND, "getNeighbor"), // difference between british english in code and american english in scripts
 	GET_NEIGHBOURS          (TokenType.COMMAND, "getNeighbors"),
+	GET_PROPERTY        	(TokenType.COMMAND, "getProperty"),
 	GET_TILE                (TokenType.COMMAND, "getTile"),
 	GET_TILES_IN_RANGE      (TokenType.COMMAND, "getTilesInRange"),
 	GET_TYPE				(TokenType.COMMAND, "getType"),
@@ -125,6 +127,13 @@ public enum TokenConstants {
 	IS_ON_FLOOR				(TokenType.COMMAND, "isOnFloor"),
 	IS_SELECTED				(TokenType.COMMAND, "isSelected"),
 	RANDOM_TILE             (TokenType.COMMAND, "randomTile"),
+
+	// -------------------------------------------------- Stages
+	GET_STAGE				(TokenType.COMMAND, "getStage"),
+	IN_STAGE				(TokenType.COMMAND, "inStage"),
+	IN_DEFAULT_STAGE		(TokenType.COMMAND, "inDefaultStage"),
+	SET_STAGE				(TokenType.COMMAND, "setStage"),
+	SET_DEFAULT_STAGE		(TokenType.COMMAND, "setDefaultStage"),
 
 	// -------------------------------------------------- Actions
 	SET_AT          (TokenType.COMMAND, "setAt"),

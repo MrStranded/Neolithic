@@ -37,7 +37,7 @@ public class AttributeIdentifier {
 			return null;
 		}
 		checkID();
-		return container.getAttribute(id);
+		return container.getAttribute(null, id);
 	}
 
 	/**

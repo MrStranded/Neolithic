@@ -20,8 +20,6 @@ public class StatisticsWindow {
     private StatisticsPanel statistics;
     private InstanceDetailPanel detailPanel;
 
-    private AttributePlotter attributePlotter;
-
     public StatisticsWindow(int width, int height, String title) {
         this.width = width;
         this.height = height;
@@ -40,8 +38,6 @@ public class StatisticsWindow {
 
         frame.pack();
         frame.setVisible(true);
-
-        attributePlotter = new AttributePlotter(statistics);
     }
 
     public void close() {
