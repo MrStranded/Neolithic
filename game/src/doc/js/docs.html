@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Neo Script - Commands</title>
 
+    <link rel="stylesheet" href="cssReset.css">
+    <link rel="stylesheet" href="variables.css">
     <link rel="stylesheet" href="commands.css">
     <script src="commands.js"></script>
 </head>
@@ -11,22 +13,35 @@
     <script>
         printBody();
 
+        function toggleSidebar() {
+            let sidebar = document.getElementById("sidebar");
+            sidebar.classList.toggle("open");
+        }
+        function closeSidebar() {
+            let sidebar = document.getElementById("sidebar");
+            sidebar.classList.remove("open");
+        }
+
         function printBody() {
             document.write(`
-                <div class="outer">
-                    <div class="sidebar"><ul>
+                <div class="outer" id="top">
+                    <div class="sidebar" id="sidebar">
+                        <button class="button sidebarToggle" onclick="toggleSidebar();">\></button>
+                        <ul>
             `);
 
             commands.forEach(command => printLink(command));
 
             document.write(`
-                    </ul></div>
+                        </ul>
+                    </div>
                     <div class="content">
             `);
 
             commands.forEach(command => printCommand(command));
 
             document.write(`
+                        <a class="button toTop" href="#top">Up</a>
                     </div>
                 </div>
             `);
@@ -35,26 +50,27 @@
         function printLink(command) {
             let parameters = constructParameterString(command);
 
-            document.write(`<li><a href="#${command.name}${command.parameters.length}">
-                                <span class="headerType">${command.type}</span>:
-                                <span class="headerName">${command.name}</span> (
-                                <span class="headerParameters">${parameters}</span>)</a></li>`);
+            document.write(`<li><a class="toCommand" href="#${command.name}${command.parameters.length}" onclick="closeSidebar();">
+                                <span class="type">${command.type}</span>:
+                                <span class="name">${command.name}</span> (
+                                <span class="parameter">${parameters}</span>)</a></li>`);
         }
 
         function printCommand(command) {
             let parameters = constructParameterString(command);
 
             document.write(`<div class="commandContainer" id="${command.name}${command.parameters.length}">
-                            <h2><span class="headerType">${command.type}</span>:
-                                <span class="headerName">${command.name}</span> (
-                                <span class="headerParameters">${parameters}</span>)</h2>`);
+                            <h2><span class="type">${command.type}</span>:
+                                <span class="name">${command.name}</span> (
+                                <span class="parameter">${parameters}</span>)</h2>`);
 
             printParameters(command);
 
-            document.write(`<p class="commandDescription">${command.description}</p>
-                            </div>`);
+            document.write(`<p class="commandDescription">${command.description}</p>`);
 
             printExample(command);
+
+            document.write(`</div>`);
         }
 
         function constructParameterString(command) {
@@ -79,7 +95,7 @@
         function printParameter(parameter) {
             if (parameter === undefined) { return; }
 
-            document.write(`<p class="parameterField">${parameter.type}: ${parameter.name}</p>`);
+            document.write(`<p class="parameterField"><span class="type">${parameter.type}</span>: <span class="parameter">${parameter.name}</span></p>`);
 
             if (parameter.description !== undefined) {
                 document.write(`<p class="parameterDescription">${parameter.description}</p>`);
