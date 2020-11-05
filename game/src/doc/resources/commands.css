@@ -55,7 +55,7 @@ body {
   transition: all 0.3s;
 }
 .button:hover {
-  box-shadow: 0 0 5px var(--neo-color-main);
+  box-shadow: 0 0 5px var(--neo-color-attention);
   background-image: radial-gradient(32px, var(--neo-color-main), var(--neo-color-attention));
   opacity: 1;
 
@@ -69,6 +69,19 @@ body {
   left: calc(100% + 5px);
   top: 5px;
   z-index: 420;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+.flex .sidebarButton {
+  width: 120px;
+  background-image: linear-gradient(to right, var(--neo-color-main), var(--neo-color-attention));
+}
+.flex .sidebarButton:hover {
+  box-shadow: 0 0 5px var(--neo-color-attention);
+  background-image: linear-gradient(to right, var(--neo-color-attention), var(--neo-color-main));
 }
 
 .content {
@@ -160,10 +173,11 @@ a.toCommand:hover {
 /* -------------------------------------------------------------- */
 
 .commandContainer {
+  position: relative;
   margin-top: 10px;
   margin-bottom: 10px;
-  overflow: hidden;
   border-radius: 20px;
+  overflow: hidden;
 
   background-color: var(--neo-color-main);
   box-shadow: 0 0 5px var(--neo-color-main);
@@ -174,12 +188,26 @@ a.toCommand:hover {
   transition: all 0.3s;
 }
 
-
 .commandContainer:hover {
   box-shadow: 0 0 100px var(--neo-color-main);
   opacity: 1;
 
   transform: scale(1.01);
+}
+
+.toggleCommand {
+  position: absolute;
+  right: 10px;
+  top: 13px;
+  z-index: 100;
+  width: 69px;
+  height: 30px;
+
+  line-height: 30px;
+  font-size: 16px;
+}
+.closed .toggleCommand {
+  background-image: radial-gradient(50px, var(--neo-color-attention), var(--neo-color-main));
 }
 
 /* -------------------------------------------------------------- */
@@ -212,6 +240,11 @@ h2 {
 .parameterContainer {
   padding: 10px 50px 20px;
   background-color: var(--neo-color-secondary);
+
+  transition: all 0.3s;
+}
+.closed .parameterContainer {
+  display: none;
 }
 
 .parameterField {
@@ -233,6 +266,11 @@ h2 {
   margin-bottom: 0;
   padding: 20px 50px;
   background-color: var(--neo-color-main);
+
+  transition: all 0.3s;
+}
+.closed .commandDescription {
+  display: none;
 }
 
 /* -------------------------------------------------------------- */
@@ -245,10 +283,18 @@ h2 {
   font-weight: bold;
   background-color: var(--neo-color-tertiary);
 }
+.closed .exampleTitle {
+  display: none;
+}
 
 .exampleContainer {
   font-family: monospace;
   padding: 20px 100px;
   background-color: var(--neo-color-tertiary);
   color: var(--neo-text-example);
+
+  transition: all 0.3s;
+}
+.closed .exampleContainer {
+  display: none;
 }
