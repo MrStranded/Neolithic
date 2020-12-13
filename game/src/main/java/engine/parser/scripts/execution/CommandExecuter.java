@@ -132,33 +132,29 @@ public class CommandExecuter {
 				}
 				break;
 
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void addOccupation (Instance instance, int duration[, String callBackScript])
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void addOccupation (Instance target, int duration[, String callBackScript])
 			case ADD_OCCUPATION:
-				if (parameters.length >= 3) {
+				if (requireParameters(commandNode, 2)) {
 					Instance target = parameters[0].getInstance();
 					int duration = parameters[1].getInt();
-					Script callBackScript = parameters[2].getScript();
+					Script callBackScript = null;
 
 					checkValue(script, commandNode, target, "target instance");
 
-					if (callBackScript == null) {
-						Container container = Data.getContainer(target.getId());
-						if (container != null) {
-							callBackScript = container.getScript(target.getStage(), parameters[2].getString());
+					if (parameters.length >= 3) {
+						callBackScript = parameters[2].getScript();
+
+						if (callBackScript == null) {
+							Container container = Data.getContainer(target.getId());
+							if (container != null) {
+								callBackScript = container.getScript(target.getStage(), parameters[2].getString());
+							}
 						}
+
+						checkValue(script, commandNode, callBackScript, "callback script");
 					}
 
-					checkValue(script, commandNode, callBackScript, "callback script");
-
 					target.addOccupation(duration, callBackScript);
-
-				} else if (requireParameters(commandNode, 2)) {
-					Instance target = parameters[0].getInstance();
-					int duration = parameters[1].getInt();
-
-					checkValue(script, commandNode, target, "target instance");
-
-					target.addOccupation(duration, null);
 				}
 				break;
 
@@ -169,7 +165,7 @@ public class CommandExecuter {
 				}
 				break;
 
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double chance (double probability)
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& boolean chance (double probability)
 			case CHANCE:
 				if (requireParameters(commandNode, 1)) {
 					double chance = parameters[0].getDouble();
