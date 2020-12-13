@@ -86,7 +86,7 @@
         function printCommand(command) {
             let parameters = constructParameterString(command);
 
-            document.write(`<div class="commandContainer" id="${command.name}${command.parameters.length}">
+            document.write(`<div class="commandContainer closed" id="${command.name}${command.parameters.length}">
                             <button class="button toggleCommand" onclick="toggleCommand('${command.name}${command.parameters.length}')">Toggle</button>
                             <h2><span class="type">${command.type}</span>:
                                 <span class="name">${command.name}</span> (
