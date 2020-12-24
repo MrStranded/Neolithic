@@ -35,6 +35,7 @@ public enum TokenConstants {
 	FOR         (TokenType.KEYWORD, "for"),
 	WHILE       (TokenType.KEYWORD, "while"),
     BREAK       (TokenType.KEYWORD, "break"),
+    RETURN      (TokenType.KEYWORD, "return"),
 
 	// -------------------------------------------------- Engine Values
 	VALUE_NAME                  (TokenType.KEYWORD, "name"),
@@ -148,7 +149,7 @@ public enum TokenConstants {
 
 	// -------------------------------------------------- Return Commands
 	REQUIRE         (TokenType.COMMAND, "require"),
-	RETURN          (TokenType.COMMAND, "return"),
+//	RETURN          (TokenType.COMMAND, "return"),
 
     // -------------------------------------------------- Lists
     LENGTH          (TokenType.COMMAND, "length"),
@@ -159,7 +160,7 @@ public enum TokenConstants {
 	EACH_ENTITY     (TokenType.COMMAND, "eachEntity"),
 	EACH_CREATURE   (TokenType.COMMAND, "eachCreature"),
 
-	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Seperators
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Separators
 	// -------------------------------------------------- Brackets
 	ROUND_BRACKETS_OPEN     (TokenType.SEPARATOR, "("),
 	ROUND_BRACKETS_CLOSE    (TokenType.SEPARATOR, ")"),

@@ -18,7 +18,7 @@ WorldGen: genContinental {
             print("Created island " + i);
 		}
 
-		for (t : eachTile()) {
+		for (t : tiles) {
 			if (getHeight(t) > 120) {
 				if (chance(0.005)) {
 					create(entDeepSource, t);
@@ -34,7 +34,7 @@ WorldGen: genContinental {
 Formation: formIsland inherits entTrail {
     name = "Island";
 
-    Script: create(tile) {
+    Script: new(tile) {
         islandParts(tile, formHill, random(1, 6));
         islandParts(tile, formPlateau, random(1, 5));
         islandParts(tile, formMountain, random(0, 4));
@@ -63,7 +63,7 @@ Formation: formMountain inherits formLift {
         attMinDeviation, 2; attMaxDeviation, 40;
     }
 
-	Script: create(tile) {
+	Script: new(tile) {
 		height = random(200,300);
 		lift(self, height);
 	}
@@ -72,7 +72,7 @@ Formation: formMountain inherits formLift {
 
 Formation: formHill inherits formLift {
 
-	Script: create() {
+	Script: new() {
 		height = random(150,200);
 		self->lift(self, height);
 	}
@@ -80,7 +80,7 @@ Formation: formHill inherits formLift {
 }
 
 Formation: formPlateau inherits entTrail {
-	Script: create() {
+	Script: new() {
 		height = random(110,230);
 		if (height >= 170) { height = random(130,220);}
 		distance = random(12,20);
@@ -115,7 +115,7 @@ Formation: formMound inherits formLift {
         attMinDeviation, 1; attMaxDeviation, 20;
     }
 
-	Script: create() {
+	Script: new() {
 	    ->lift(self, getHeight(self) + 50);
 	    updatePlanetMesh();
 	    destroy(self);
@@ -128,7 +128,7 @@ Formation: formHole inherits formSink {
         attMinDeviation, 1; attMaxDeviation, 20;
     }
 
-	Script: create() {
+	Script: new() {
 	    ->sink(self, getHeight(self) - 50);
 	    updatePlanetMesh();
 	    destroy(self);
@@ -141,7 +141,7 @@ Formation: formLift {
         attMaxDeviation, 12;
     }
 
-    Script: create() {
+    Script: new() {
         print("This formation cannot be created directly. Instead use another formation that inherits from this formation.");
     }
 
@@ -162,7 +162,7 @@ Formation: formSink {
         attMaxDeviation, 12;
     }
 
-    Script: create() {
+    Script: new() {
         print("This formation cannot be created directly. Instead use another formation that inherits from this formation.");
     }
 

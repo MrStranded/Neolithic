@@ -56,7 +56,7 @@ Effect: effHunger {
 Effect: effDigest {
     name = "Digest";
 
-    Script: create() {
+    Script: new() {
         ->shit = create(entShit, self);
     }
 

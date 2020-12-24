@@ -6,6 +6,7 @@ import engine.data.attributes.Attribute;
 import engine.data.behaviour.Occupation;
 import engine.data.entities.Instance;
 import engine.data.identifiers.ContainerIdentifier;
+import engine.data.interaction.SelectedInstance;
 import engine.data.options.GameOptions;
 import engine.data.proto.Container;
 import engine.data.proto.CreatureContainer;
@@ -19,9 +20,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
 public class InstanceDetailPanel extends JPanel implements MouseListener {
 
@@ -31,6 +31,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
     private int currentYPosition = 0;
 
     private List<InstanceButton> buttons;
+
 
     public InstanceDetailPanel(int width, int height) {
         super();
@@ -158,6 +159,9 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         }
 
         if (container.get().getType() == DataType.CREATURE) {
+            g.drawString("Cur. task: " + SelectedInstance.instance().getCurrentTaskName(), xPos, yPos + 12);
+            yPos += 20;
+
             if (instance.getOccupations() != null) {
                 g.drawString("Occupations:", xPos, yPos + 12);
                 yPos += 20;
@@ -179,12 +183,14 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
                     if (drive != null) {
                         g.drawString(drive.getName(), xPos + 10, yPos + 12);
 
-//                        if (! instance.run(creatureContainer, ScriptConstants.EVENT_CONDITION, null).isNull()) { // condition is fulfilled
-//                            g.drawString("triggered", xPos + 110, yPos + 12);
-//
-//                            double weight = instance.run(creatureContainer, ScriptConstants.EVENT_GET_WEIGHT, null).getDouble();
-//                            g.drawString(String.valueOf(weight), xPos + 170, yPos + 12);
-//                        }
+                        Variable condition = SelectedInstance.instance().getDriveCondition(drive.getTextID());
+
+                        if (condition.notNull()) { // condition is fulfilled
+                            g.drawString("triggered", xPos + 110, yPos + 12);
+
+                            Variable weight = SelectedInstance.instance().getDriveWeight(drive.getTextID());
+                            g.drawString(weight.getString(), xPos + 170, yPos + 12);
+                        }
 
                         yPos += 20;
                     }

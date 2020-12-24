@@ -120,6 +120,10 @@ public class Variable implements IDInterface {
 		}
 	}
 
+	public boolean notNull() {
+		return ! isNull();
+	}
+
 	public boolean hasName() {
 		return (name != null);
 	}

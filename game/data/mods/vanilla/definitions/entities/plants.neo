@@ -1,4 +1,3 @@
-
 Creature: cAppleTree {
 
     name = "Apple tree";
@@ -7,13 +6,13 @@ Creature: cAppleTree {
 
 	drives {
 		driPlantReproduction;
-		driHeal;
+		driGrow;
 	}
 
 	knowledge {
 		proPhotoSynthesis;
 		proCreateFruit;
-		proHeal;
+		proGrow;
 	}
 
 	attributes{
@@ -22,7 +21,7 @@ Creature: cAppleTree {
 		attSize, 60;
 	    attMatureAge, 420;//2880;
 	    attLightSensitivity, 20;
-	    attBabySize, 100;
+	    //attBabySize, 100;
 	}
 
     Stage: seed {
@@ -47,9 +46,8 @@ Creature: cAppleTree {
         mesh = "apple_tree_mature_ripe.ply";
     }
 
-	Script: create {
+	Script: new {
 		..attNutrition += 100;
-		..attHealth = .attMaxHealth;
 
         for (n : getNeighbors(self)) {
             effect = addEffect(n, effShadow);
@@ -69,18 +67,11 @@ Creature: cAppleTree {
 	        ..attHealth--;
 	    }
 
-	    if (getTile(self).attHumidity <= 0) {
-	        ..attHealth--;
-	    } else {
-	        getTile(self)..attHumidity--;
-	        ..attHealth++;
-	    }
-
 		if (.attAge > .attMatureAge * 3) { // age death
 		    addEffect(self, effCancer);
         }
 
-		if (.attHealth < 0) { // death
+		if (.attHealth < - .attMaxHealth) { // death
 		    destroy(self);
         }
 	}
@@ -148,7 +139,7 @@ Drive: driPlantReproduction {
 	}
 
 	Script: getWeight {
-	    return(100 * .attNutrition / .attBabySize);
+	    return(100 * .attNutrition / .attMaxHealth);
 	}
 }
 
@@ -158,15 +149,13 @@ Drive: driGrowIntoTree {
     Script: getWeight { return(getLightLevel(self) - .attLightSensitivity); }
 }
 
-Drive: driHeal {
-    solutions { proHeal; }
+Drive: driGrow {
+    solutions { proGrow; }
 
-    Script: condition {
-        require(.attHealth < .attMaxHealth);
-    }
+    Script: condition { return true; }
 
     Script: getWeight {
-        return(100 - .attHealth / .attMaxHealth);
+        return(50 - .attHealth / .attMaxHealth);
     }
 }
 
@@ -176,10 +165,10 @@ Process: proPhotoSynthesis {
 	Script: condition {
 		require(getLightLevel(self) + getTile(self).attLightLevel >= .attLightSensitivity);
 		require(getStage(self) != "seed");
-		require(.attNutrition < .attBabySize*3);
 	}
 	Script: process {
-		..attNutrition += 2;
+		..attNutrition += 1;
+		getTile(self)..attHumidity--;
 	}
 
 	Script: discovery(actor) { // there is no way for an entity to learn photosynthesis
@@ -189,7 +178,7 @@ Process: proPhotoSynthesis {
 
 Process: proCreateFruit {
 	Script: condition {
-		require(.attNutrition >= .attBabySize);
+		require(.attNutrition >= .attMaxHealth);
 		require(inDefaultStage(self));
 	}
 
@@ -197,8 +186,8 @@ Process: proCreateFruit {
 	    setStage(self, "ripe");
 
 		fruit = create(getProperty(self, "fruit"), self);
-		..attNutrition -= .attBabySize;
-		fruit..attNutrition += .attBabySize;
+		..attNutrition -= .attMaxHealth;
+		fruit..attNutrition += .attMaxHealth;
 
 		seed = create(getType(self), fruit);
         setStage(seed, "seed");
@@ -224,13 +213,15 @@ Process: proGrowIntoTree {
     }
 }
 
-Process: proHeal {
+Process: proGrow {
     Script: condition {
-        require(getLightLevel(self) < .attLightSensitivity);
+        require(.attHealth < 0);
+        require(.attNutrition > 0);
     }
 
     Script: process {
         ..attHealth++;
+        ..attNutrition--;
     }
 }
 

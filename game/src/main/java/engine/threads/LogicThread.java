@@ -3,8 +3,10 @@ package engine.threads;
 import constants.GameConstants;
 import engine.data.Data;
 import engine.data.entities.Instance;
+import engine.data.interaction.SelectedInstance;
 import engine.data.options.GameOptions;
 import engine.graphics.gui.GuiData;
+import engine.graphics.gui.statistics.InstanceDetailPanel;
 import engine.graphics.gui.window.Window;
 
 import java.util.ArrayList;
