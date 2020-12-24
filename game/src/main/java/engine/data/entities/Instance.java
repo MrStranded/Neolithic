@@ -6,6 +6,7 @@ import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.behaviour.Occupation;
 import engine.data.identifiers.ContainerIdentifier;
+import engine.data.interaction.SelectedInstance;
 import engine.data.options.GameOptions;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
@@ -17,6 +18,7 @@ import engine.data.structures.WeightedList;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
+import engine.graphics.gui.statistics.InstanceDetailPanel;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.objects.movement.MoveableObject;
 import engine.logic.topology.GeographicCoordinates;
@@ -166,33 +168,39 @@ public class Instance {
 	 * @param drives to look through
 	 */
 	private void searchDrive(List<ContainerIdentifier> drives) {
+		if (drives == null) { return; }
+
 		WeightedList<Container> weightedDrives = new WeightedList<>();
 
-		if (drives != null) {
-			for (ContainerIdentifier drive : drives) {
-				Container container = drive.retrieve();
-				if (container != null) {
+		for (ContainerIdentifier drive : drives) {
+			Container container = drive.retrieve();
+			if (container != null) {
 
-					if (!run(container, ScriptConstants.EVENT_CONDITION, null).isNull()) { // condition is fulfilled
+				Variable condition = run(container, ScriptConstants.EVENT_CONDITION, null);
+				Variable weight = null;
+				if (condition.notNull()) { // condition is fulfilled
+					weight = run(container, ScriptConstants.EVENT_GET_WEIGHT, null);
+					weightedDrives.add(container, weight.getDouble());
+				}
 
-						double weight = run(container, ScriptConstants.EVENT_GET_WEIGHT, null).getDouble();
-						weightedDrives.add(container, weight);
-					}
+				if (this == GameOptions.selectedInstance) {
+					SelectedInstance.instance().putDrive(container.getTextID(), condition, weight);
 				}
 			}
 		}
 
 		for (Container drive : weightedDrives.list()) {
-			//if (drive.getType() == DataType.DRIVE) { // look through solutions of triggered drive
+			Container process = searchProcesses(((DriveContainer) drive).getSolutions(stage));
+			if (process != null) {
 
-				Container process = searchProcesses(((DriveContainer) drive).getSolutions(stage));
-				if (process != null) {
+				Variable result = run(process, ScriptConstants.EVENT_PROCESS, null);
 
-					run(process, ScriptConstants.EVENT_PROCESS, null);
-					break; // only one process per tick
-
+				if (this == GameOptions.selectedInstance) {
+					SelectedInstance.instance().putCurrentTask(process.getName(), result);
 				}
-			//}
+
+				break; // only one process per tick
+			}
 		}
 
 	}
@@ -268,6 +276,7 @@ public class Instance {
 	    boolean runTickScripts = container.map(Container::isRunTickScripts).orElse(true);
 
 	    if (runTickScripts && delayUntilNextTick <= 0) {
+			if (this == GameOptions.selectedInstance) { SelectedInstance.instance().clear(); }
 
 			if (occupations == null || occupations.isEmpty()) {
 				// ----------- calculate drives

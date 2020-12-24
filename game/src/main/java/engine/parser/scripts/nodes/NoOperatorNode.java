@@ -1,21 +1,21 @@
 package engine.parser.scripts.nodes;
 
 import engine.data.Data;
-import engine.data.scripts.Script;
 import engine.data.entities.Instance;
+import engine.data.scripts.Script;
 import engine.data.variables.Variable;
 
-public class MainNode extends AbstractScriptNode {
+public class NoOperatorNode extends AbstractScriptNode {
 
-	public MainNode() {}
+	public NoOperatorNode() {}
 
 	@Override
 	public Variable execute(Instance instance, Script script) {
-		return new Variable(Data.getMainInstance());
+		return new Variable();
 	}
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "Main");
+		System.out.println(indentation + "NOP");
 	}
 }

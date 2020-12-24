@@ -3,19 +3,19 @@
 Script: tick {
     // one minute
     ->minute += 1;
+    changeSunAngle(0.25); // 0.25 * 60 * 24 = 360
 
     if (->minute >= 60) {
         ->minute = 0;
         ->hour++;
-        //print("Day: " + ->day + " | Hour: " + ->hour);
+		
+		if (->hour >= 24) {
+			->hour = 0;
+			->day++;
+		}
+	
+        print("Day: " + ->day + " | Hour: " + ->hour);
     }
-
-    if (->hour >= 24) {
-        ->hour = 0;
-        ->day++;
-    }
-
-    changeSunAngle(0.25); // 0.25 * 60 * 24 = 360
 }
 
 Script: setTime (hour, minute) {
@@ -34,7 +34,7 @@ Script: repopulate() {
 				human..attAge += random(human.attMatureAge);
 				addEffect(human, effInfant);
 			}
-            if (getType(t) == tGras && getHeight(t) > 100) {
+            if ((getType(t) == tGras || getType(t) == tDirt) && getHeight(t) > 100) {
                 if (chance(0.7)){
                     tree = create(cAppleTree, t);
                     tree..attAge += random(tree.attMatureAge*2);

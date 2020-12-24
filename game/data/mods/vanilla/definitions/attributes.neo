@@ -108,7 +108,7 @@ Attribute: attHealth {
     color = 100, 100, 100;
 }
 Attribute: attMaxHealth {
-    name = "Maximum Health";
+    name = "Constitution";
     color = 75, 75, 75;
     inherited;
     mutation = 50, 10;

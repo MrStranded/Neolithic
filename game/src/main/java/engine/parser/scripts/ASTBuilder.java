@@ -69,6 +69,9 @@ public class ASTBuilder {
 				} else if (TokenConstants.BREAK.equals(next)) { // break statement
 					nodeList.add(readBreakStatement());
 
+				} else if (TokenConstants.RETURN.equals(next)) { // break statement
+					nodeList.add(readReturnStatement());
+
 				} else { // expression (induced by eg. 'self')
 					nodeList.add(readExpression());
 					interpreter.consume(TokenConstants.SEMICOLON);
@@ -190,6 +193,38 @@ public class ASTBuilder {
 		interpreter.consume(TokenConstants.SEMICOLON);
 
 		return new BreakStatementNode();
+	}
+
+	// ###################################################################################
+	// ################################ Return Statement ##################################
+	// ###################################################################################
+
+	private ReturnStatementNode readReturnStatement() throws Exception {
+		interpreter.consume(TokenConstants.RETURN);
+
+		Token next = interpreter.peek();
+		if (TokenConstants.SEMICOLON.equals(next)) { // no return value
+			interpreter.consume(TokenConstants.SEMICOLON);
+			return new ReturnStatementNode();
+		}
+
+		if (TokenConstants.ROUND_BRACKETS_OPEN.equals(next)){
+			interpreter.consume(TokenConstants.ROUND_BRACKETS_OPEN);
+
+			AbstractScriptNode value = null;
+
+			if (! TokenConstants.ROUND_BRACKETS_CLOSE.equals(interpreter.peek())) {
+				value = readExpression();
+			}
+
+			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
+			interpreter.consume(TokenConstants.SEMICOLON);
+			return value != null ? new ReturnStatementNode(value) : new ReturnStatementNode();
+		}
+
+		AbstractScriptNode value = readExpression();
+		interpreter.consume(TokenConstants.SEMICOLON);
+		return new ReturnStatementNode(value);
 	}
 
 	// ###################################################################################

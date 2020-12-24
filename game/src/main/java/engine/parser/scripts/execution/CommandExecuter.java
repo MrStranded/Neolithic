@@ -93,7 +93,7 @@ public class CommandExecuter {
 						}
 					}
 
-					effect.run(ScriptConstants.EVENT_CREATE, new Variable[] {new Variable(target)});
+					effect.run(ScriptConstants.EVENT_NEW, new Variable[] {new Variable(target)});
 
 					target.addEffect(effect);
 					return new Variable(effect);
@@ -109,7 +109,7 @@ public class CommandExecuter {
 					Effect effect = new Effect(containerId);
 					effect.setSuperInstance(target);
 
-					effect.run(ScriptConstants.EVENT_CREATE, new Variable[] {new Variable(target)});
+					effect.run(ScriptConstants.EVENT_NEW, new Variable[] {new Variable(target)});
 
 					target.addEffect(effect);
 
@@ -233,7 +233,7 @@ public class CommandExecuter {
 					Instance instance = new Instance(containerId);
 					instance.placeInto(holder);
 
-					instance.run(ScriptConstants.EVENT_CREATE, new Variable[] {parameters[1]});
+					instance.run(ScriptConstants.EVENT_NEW, new Variable[] {parameters[1]});
 
 					return new Variable(instance);
 				}
@@ -722,7 +722,7 @@ public class CommandExecuter {
 					if (instance == null) {
 						instance = new Instance(containerId);
 
-						instance.run(ScriptConstants.EVENT_CREATE, new Variable[] {parameters[1]});
+						instance.run(ScriptConstants.EVENT_NEW, new Variable[] {parameters[1]});
 //						Data.addInstanceToQueue(instance);
 					}
 					instance.placeInto(holder);
