@@ -63,7 +63,7 @@ public class BaseGUI implements GUIInterface {
 	public void tick(int windowWidth, int windowHeight) {
 		clear();
 
-		Container currentSelection = Data.getContainer(GameOptions.currentContainerId);
+		Container currentSelection = Data.getContainer(GameOptions.currentContainerId).orElse(null);
 		GUIObject selection = new TextObject(currentSelection != null ? currentSelection.getName() : String.valueOf(GameOptions.currentContainerId), fontTexture);
 		selection.setSize(windowWidth * 0.25, windowHeight * 0.125);
 		selection.setLocation(windowWidth * 0.75, windowHeight * 0.875);

@@ -67,8 +67,8 @@ public class Data {
 	public static void initializeReload() {
 		idToTextId = new HashMap<>((int) (instanceQueue.size() * 1.5));
 		instanceQueue.forEach(instance -> {
-			Container container = getContainer(instance.getId());
-			idToTextId.put(instance.getId(), container != null ? container.getTextID() : TokenConstants.MAIN.getValue());
+			Optional<Container> container = getContainer(instance.getId());
+			idToTextId.put(instance.getId(), container.map(Container::getTextID).orElse(TokenConstants.MAIN.getValue()));
 		});
 
 		prepareProto();
@@ -111,14 +111,14 @@ public class Data {
 	// ################################ Retrieval ########################################
 	// ###################################################################################
 
-	public static Container getContainer(int id) {
+	public static Optional<Container> getContainer(int id) {
 		if (id >= 0 && id < containerID) {
-			return containers[id];
+			return Optional.of(containers[id]);
 		}
-		return null;
+		return Optional.empty();
 	}
 
-	public static Container getContainer(String textID) {
+	public static Optional<Container> getContainer(String textID) {
 		return getContainer(getContainerID(textID));
 	}
 
@@ -335,10 +335,11 @@ public class Data {
 		if (publicInstanceList != null) {
 			for (Instance instance : publicInstanceList) {
 				Tile tile = instance.getPosition();
-				if (Data.getContainer(instance.getId()) != null && Data.getContainer(instance.getId()).getType() != DataType.TILE) {
-					if (tile != null && tile.getTileMesh().hasChanged()) {
-						instance.actualizeObjectPosition();
-					}
+				if (tile != null && tile.getTileMesh().hasChanged()) {
+
+					Optional<Container> container = Data.getContainer(instance.getId());
+					container.filter(c -> c.getType() != DataType.TILE)
+							.ifPresent(c -> instance.actualizeObjectPosition());
 				}
 			}
 		}

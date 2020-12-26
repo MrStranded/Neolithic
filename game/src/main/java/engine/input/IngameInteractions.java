@@ -16,6 +16,8 @@ import engine.graphics.renderer.Renderer;
 import engine.math.MousePicking;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.Optional;
+
 public class IngameInteractions {
 
     private Window window;
@@ -115,9 +117,10 @@ public class IngameInteractions {
                 Data.addScriptRun(new ScriptRun(
                         Data.getMainInstance(),
                         "leftClick",
-                        new Variable[]{
+                        new Variable[] {
                                 new Variable(clickedTile),
-                                new Variable(Data.getContainer(GameOptions.currentContainerId))}));
+                                new Variable(Data.getContainer(GameOptions.currentContainerId).orElse(null))
+                        }));
             }
         }
         if (mouse.isRightButtonClicked()) {
@@ -161,12 +164,12 @@ public class IngameInteractions {
                 id -= GameConstants.MAX_CONTAINERS;
             }
 
-            Container container = Data.getContainer(id);
-            if (container != null) {
-                if (container.getType() == DataType.CREATURE
-                        || container.getType() == DataType.FORMATION
-                        || container.getType() == DataType.TILE
-                        || container.getType() == DataType.ENTITY) {
+            Optional<Container> container = Data.getContainer(id);
+            if (container.isPresent()) {
+                if (container.get().getType() == DataType.CREATURE
+                        || container.get().getType() == DataType.FORMATION
+                        || container.get().getType() == DataType.TILE
+                        || container.get().getType() == DataType.ENTITY) {
                     GameOptions.currentContainerId = id;
                     break;
                 }

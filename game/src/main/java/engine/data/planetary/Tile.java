@@ -50,7 +50,7 @@ public class Tile extends Instance implements IDInterface {
 	}
 
 	private void createRandomizedColor() {
-		TileContainer protoTile = id > 0 ? (TileContainer) Data.getContainer(id) : null;
+		TileContainer protoTile = (TileContainer) Data.getContainer(id).orElse(null);
 
 		if (protoTile != null) {
 			RGBA protoTopColor = protoTile.getTopColor();

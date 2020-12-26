@@ -6,6 +6,8 @@ import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
 import engine.data.variables.DataType;
 
+import java.util.Optional;
+
 public class Attribute implements IDInterface {
 
 	private int id;
@@ -44,15 +46,11 @@ public class Attribute implements IDInterface {
 	}
 
 	private void checkBounds() {
-		Container container = Data.getContainer(id);
-		if (container == null) {
-			return;
-		}
+		Optional<Container> container = Data.getContainer(id);
+		if (container.isEmpty()) { return; }
 
 		ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
-		if (protoAttribute == null) {
-			return;
-		}
+		if (protoAttribute == null) { return; }
 
 		if (protoAttribute.hasLowerBound() && value < protoAttribute.getLowerBound()) {
 			value = protoAttribute.getLowerBound();

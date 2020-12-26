@@ -31,6 +31,7 @@ import engine.parser.utils.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class CommandExecuter {
 
@@ -145,10 +146,8 @@ public class CommandExecuter {
 						callBackScript = parameters[2].getScript();
 
 						if (callBackScript == null) {
-							Container container = Data.getContainer(target.getId());
-							if (container != null) {
-								callBackScript = container.getScript(target.getStage(), parameters[2].getString());
-							}
+							Optional<Container> container = Data.getContainer(target.getId());
+							callBackScript = container.map(c -> c.getScript(target.getStage(), parameters[2].getString())).orElse(null);
 						}
 
 						checkValue(script, commandNode, callBackScript, "callback script");
@@ -304,7 +303,7 @@ public class CommandExecuter {
 
 				List<Variable> creatures = new ArrayList<>(Data.getPublicInstanceList().size()/2);
 				for (Instance instance : Data.getInstanceQueue()) {
-					if (Data.getContainer(instance.getId()).getType() == DataType.CREATURE) {
+					if (Data.getContainer(instance.getId()).filter(c -> c.getType() == DataType.CREATURE).isPresent()) {
 						creatures.add(new Variable(instance));
 					}
 				}
@@ -426,7 +425,7 @@ public class CommandExecuter {
 					for (Tile tile : tileArea.getTileList()) {
 						if (tile.getSubInstances() != null) {
 							for (Instance sub : tile.getSubInstances()) {
-								if (Data.getContainer(sub.getId()).getType() == DataType.CREATURE) {
+								if (Data.getContainer(sub.getId()).filter(c -> c.getType() == DataType.CREATURE).isPresent()) {
 									creatures2.add(new Variable(sub));
 								}
 							}
@@ -908,10 +907,9 @@ public class CommandExecuter {
 					checkValue(script, commandNode, instance, "target instance");
 
 					if (instance.getSuperInstance() != null) {
-						Container superContainer = Data.getContainer(instance.getSuperInstance().getId());
-						if (superContainer != null && superContainer.getType() == DataType.TILE) {
-							return new Variable(1);
-						}
+						return Data.getContainer(instance.getSuperInstance().getId())
+								.filter(c -> c.getType() == DataType.TILE)
+								.map(c -> new Variable(1)).orElse(new Variable());
 					}
 
 					return new Variable(0);

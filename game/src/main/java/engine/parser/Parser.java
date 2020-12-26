@@ -115,7 +115,7 @@ public class Parser {
 
 		i = 0;
 		Container container;
-		while ((container = Data.getContainer(i++)) != null) {
+		while ((container = Data.getContainer(i++).orElse(null)) != null) {
 			System.out.println(container.getType() + ": " + container.getTextID() + ", " + container.getName());
 
 			for (String stage : container.getStages()) {

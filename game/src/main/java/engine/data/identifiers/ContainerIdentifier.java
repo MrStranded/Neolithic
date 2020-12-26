@@ -25,14 +25,16 @@ public class ContainerIdentifier {
 				textID = null; // free the space up. thanks java garbage collector! <3
 			}
 		}
-		return Data.getContainer(id);
+		return Data.getContainer(id).orElse(null);
 	}
 
 	public boolean identifies(Container container) {
+		if (container == null) { return false; }
+
 		if (textID != null) {
 			return textID.equals(container.getTextID());
 		}
-		return Data.getContainer(id) == container;
+		return Data.getContainer(id).map(c -> c == container).orElse(false);
 	}
 
 	public String toString() {
