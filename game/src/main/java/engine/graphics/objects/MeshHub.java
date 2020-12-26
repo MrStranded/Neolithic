@@ -58,7 +58,7 @@ public class MeshHub {
 		this.opacity = Math.min(1.0, Math.max(0.0, opacity));
 
 		if (mesh == null) {
-			Logger.error("Mesh not yet loaded. Could not set opacity '" + opacity + "' on mesh with path '" + meshPath + "'");
+//			Logger.error("Mesh not yet loaded. Could not set opacity '" + opacity + "' on mesh with path '" + meshPath + "'");
 			return;
 		}
 

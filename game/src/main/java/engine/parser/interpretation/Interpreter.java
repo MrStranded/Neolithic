@@ -531,7 +531,7 @@ public class Interpreter {
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
 		// does such a container already exist?
-		Container setupContainer = Data.getContainer(Data.getContainerID(textID.getValue()));
+		Container setupContainer = Data.getContainer(Data.getContainerID(textID.getValue())).orElse(null);
 		if (setupContainer != null) {
 			if (setupContainer.getType() != type) {
 				String errorMessage = "Line " + textID.getLine()

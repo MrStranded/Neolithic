@@ -353,14 +353,23 @@ public class Instance {
 		}
 		// render subs
 		if (subInstances != null) {
-			if (Data.getContainer(id) != null && Data.getContainer(id).getType() == DataType.TILE) { // only tiles draw their subs?
-				CopyOnWriteArraySet<Instance> subs = new CopyOnWriteArraySet<>(subInstances);
-				for (Instance subInstance : subs) {
-					if (subInstance != null) {
-						subInstance.render();
-					}
-				}
-			}
+			Optional<Container> container = Data.getContainer(id);
+			container.filter(c -> c.getType() == DataType.TILE)
+					.ifPresent(c -> {
+//						CopyOnWriteArraySet<Instance> subs = new CopyOnWriteArraySet<>(subInstances);
+//						for (Instance subInstance : subs) {
+//							if (subInstance != null) {
+//								subInstance.render();
+//							}
+//						}
+						try {
+							for (Instance subInstance : subInstances) {
+								if (subInstance != null) {
+									subInstance.render();
+								}
+							}
+						} catch (ConcurrentModificationException e) { /* it's okay really */ }
+					});
 		}
 	}
 
@@ -514,7 +523,7 @@ public class Instance {
 	// ###################################################################################
 
 	public Optional<Container> getContainer() {
-		return Optional.ofNullable(Data.getContainer(id));
+		return Data.getContainer(id);
 	}
 
 	public void setMesh(String path) {
@@ -757,7 +766,7 @@ public class Instance {
 	}
 
 	public String toString() {
-		return "Instance (id = " + Data.getContainer(id).getTextID() + (name != null ? " Name: " + name : "") + ")";
+		return "Instance (id = " + getContainer().map(Container::getTextID).orElse("?") + (name != null ? " Name: " + name : "") + ")";
 	}
 
 	public void printVariables() {

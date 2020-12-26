@@ -44,14 +44,14 @@ public class IdentifierNode extends AbstractScriptNode {
 				if (variable == null) { // script scope does not contain variable -> search through containers
 					int containerID = Data.getContainerID(identifier.getValue());
 					if (containerID >= 0) { // fill container into variable
-						return new Variable(Data.getContainer(containerID));
+						return new Variable(Data.getContainer(containerID).orElse(null));
 					} else { // create new variable in scope
 						variable = Variable.withName(identifier.getValue());
 						script.addVariable(variable);
 					}
 				}
 			}
-		} else { // ------------------------------- retrive attribute
+		} else { // ------------------------------- retrieve attribute
 			if (targetInstance != null) { // return attribute from target instance
 				if (retrieveCompleteAttributeValue) {
 					variable = new Variable(attributeIdentifier.retrieveAll(targetInstance));

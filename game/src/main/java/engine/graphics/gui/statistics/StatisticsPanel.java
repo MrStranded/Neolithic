@@ -4,11 +4,13 @@ import constants.GameConstants;
 import engine.data.Data;
 import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
+import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 public class StatisticsPanel extends JPanel {
 
@@ -130,12 +132,12 @@ public class StatisticsPanel extends JPanel {
     }
 
     private void drawTopBar(Graphics g) {
-        engine.data.proto.Container container = Data.getContainer(GameOptions.currentContainerId);
-        if (container != null) {
+        Optional<Container> container = Data.getContainer(GameOptions.currentContainerId);
+        if (container.isPresent()) {
             g.setColor(new Color(200, 200, 200));
             g.drawRect(0,0,width, TOP_BAR_HEIGHT);
             g.setColor(new Color(0,0,0));
-            g.drawString("Current selection: " + container.getName(), 10, 20);
+            g.drawString("Current selection: " + container.get().getName(), 10, 20);
             g.drawString("Count: " + StatisticsData.getCount(GameOptions.currentContainerId), width/2 + 10, 20);
         }
     }
