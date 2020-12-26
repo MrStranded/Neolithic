@@ -140,6 +140,9 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         }
         yPos += 20;
 
+        g.drawString("Mesh: " + container.get().getMeshPath(instance.getStage()), xPos, yPos + 12);
+        yPos += 20;
+
         if (instance.getStage() != null && !ScriptConstants.DEFAULT_STAGE.equals(instance.getStage())) {
             g.drawString("Stage: " + instance.getStage(), xPos + 50, yPos + 12);
             yPos += 20;

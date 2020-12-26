@@ -61,7 +61,18 @@ public class Engine {
 
 		new Parser().load();
 
-		Data.load();
+		Data.loadMeshHubs();
+	}
+
+	public static void reloadScripts() {
+		Data.initializeReload();
+
+		new Parser().load();
+
+		Data.finishReload();
+
+		Data.clearMeshHubs();
+		Data.loadMeshHubs();
 	}
 
 	public static void createWorld() {

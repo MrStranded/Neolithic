@@ -1,6 +1,7 @@
 package engine.threads;
 
 import constants.GameConstants;
+import engine.Engine;
 import engine.data.Data;
 import engine.data.entities.Instance;
 import engine.data.interaction.SelectedInstance;
@@ -29,6 +30,12 @@ public class LogicThread extends Thread {
 			long currentTime = System.currentTimeMillis();
 
 			if (currentTime - t >= GameConstants.TIME_BETWEEN_TICK_LOADS) {
+
+				// reloading scripts
+				if (GameOptions.reloadScripts) {
+					Engine.reloadScripts();
+					GameOptions.reloadScripts = false;
+				}
 
 				// running pending externally called scripts
 				if (! Data.getScriptRuns().isEmpty()) {

@@ -1106,13 +1106,13 @@ public class CommandExecuter {
 				}
 				break;
 
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& variable return (variable)
-			case RETURN:
-				if (parameters.length >= 1) {
-					throw new ReturnException(parameters[0]);
-				}
-
-				throw new ReturnException();
+//			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& variable return (variable)
+//			case RETURN:
+//				if (parameters.length >= 1) {
+//					throw new ReturnException(parameters[0]);
+//				}
+//
+//				throw new ReturnException();
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int require (variable)
 			case REQUIRE:

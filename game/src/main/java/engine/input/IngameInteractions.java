@@ -74,6 +74,9 @@ public class IngameInteractions {
             Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "fit", null));
         }
 
+        if ((keyboard.isPressed(GLFW.GLFW_KEY_LEFT_CONTROL) || keyboard.isPressed(GLFW.GLFW_KEY_LEFT_CONTROL)) && keyboard.isClicked(GLFW.GLFW_KEY_I)) {
+            GameOptions.reloadScripts = true;
+        }
         if (keyboard.isClicked(GLFW.GLFW_KEY_X)) {
             GameOptions.printPerformance = !GameOptions.printPerformance;
         }
