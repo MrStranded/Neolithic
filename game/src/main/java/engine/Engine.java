@@ -9,8 +9,6 @@ import engine.graphics.gui.GuiData;
 import engine.threads.LogicThread;
 import engine.parser.Parser;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -61,7 +59,18 @@ public class Engine {
 
 		new Parser().load();
 
-		Data.load();
+		Data.loadMeshHubs();
+	}
+
+	public static void reloadScripts() {
+		Data.initializeReload();
+
+		new Parser().load();
+
+		Data.finishReload();
+
+		Data.clearMeshHubs();
+		Data.loadMeshHubs();
 	}
 
 	public static void createWorld() {

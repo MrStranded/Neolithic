@@ -1,6 +1,7 @@
 package engine.data;
 
 import constants.GameConstants;
+import constants.ScriptConstants;
 import engine.data.entities.Instance;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
@@ -15,6 +16,7 @@ import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.objects.planet.Sun;
+import engine.parser.constants.TokenConstants;
 import engine.parser.utils.Logger;
 
 import java.util.*;
@@ -40,6 +42,8 @@ public class Data {
 
 	private static HashMap<String, MeshHub> meshHubs;
 
+	private static HashMap<Integer, String> idToTextId;
+
 	private static Queue<Instance> instanceQueue;
 	private static Queue<ScriptRun> scriptRuns;
 	private static boolean updatePlanetMesh = true;
@@ -55,6 +59,36 @@ public class Data {
 	// ###################################################################################
 
 	public static void initialize() {
+		prepareInstances();
+		prepareProto();
+		prepareMainContainer();
+	}
+
+	public static void initializeReload() {
+		idToTextId = new HashMap<>((int) (instanceQueue.size() * 1.5));
+		instanceQueue.forEach(instance -> {
+			Container container = getContainer(instance.getId());
+			idToTextId.put(instance.getId(), container != null ? container.getTextID() : TokenConstants.MAIN.getValue());
+		});
+
+		prepareProto();
+		prepareMainContainer();
+	}
+
+	public static void finishReload() {
+		// set ids of instances to correct new values
+		instanceQueue.forEach(instance -> instance.setId(Data.getContainerID(idToTextId.get(instance.getId()))));
+	}
+
+	private static void prepareInstances() {
+		instanceQueue = new LinkedList<>();//new ConcurrentLinkedQueue<>();
+		scriptRuns = new LinkedList<>();
+	}
+
+	/**
+	 * Proto includes containers, attributes and mesh hubs
+	 */
+	private static void prepareProto() {
 		containerID = 0;
 		containers = new Container[GameConstants.MAX_CONTAINERS];
 
@@ -62,11 +96,12 @@ public class Data {
 		attributes = new ProtoAttribute[GameConstants.MAX_ATTRIBUTES];
 
 		meshHubs = new HashMap<>(GameConstants.MAX_CONTAINERS);
+	}
 
-		instanceQueue = new LinkedList<>();//new ConcurrentLinkedQueue<>();
-		scriptRuns = new LinkedList<>();
-
-		// the mainContainer container contains global scripts
+	/**
+	 * The mainContainer container contains global scripts
+	 */
+	private static void prepareMainContainer() {
 		mainContainer = new Container("mainContainer", DataType.CONTAINER);
 		int mainID = addContainer(mainContainer);
 		mainInstance = new Instance(mainID);
@@ -285,11 +320,7 @@ public class Data {
 		}
 	}
 
-	/**
-	 * Loads the missing data that has been specified by the parser.
-	 * This includes meshes.
-	 */
-	public static void load() {
+	public static void loadMeshHubs() {
 		if (meshHubs != null) {
 			for (MeshHub meshHub : meshHubs.values()) {
 				meshHub.loadMesh();
@@ -329,14 +360,21 @@ public class Data {
 
 	public static void clear() {
 		// we have to clean up the meshHubs though
+		clearMeshHubs();
+
+		// for testing:
+		// just not referencing the old data anymore is enough. Thanks java garbage collector!
+		initialize();
+	}
+
+	public static void clearMeshHubs() {
+    	instanceQueue.forEach(Instance::clearMeshHub);
+
 		if (meshHubs != null) {
 			for (MeshHub meshHub : meshHubs.values()) {
 				meshHub.cleanUp();
 			}
 		}
-
-		// just not referencing the old data anymore is enough. Thanks java garbage collector!
-		initialize();
 	}
 
 	// ###################################################################################

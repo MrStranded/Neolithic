@@ -345,9 +345,8 @@ public class Instance {
 	// ###################################################################################
 
 	public void render() {
-		if (slatedForRemoval) {
-			return;
-		}
+		if (slatedForRemoval || GameOptions.reloadScripts) { return; }
+
 		// render self
 		if (getMeshHub() != null) { // we call getMeshHub() here, because it might have to be loaded from Data first
 			meshHub.registerObject(moveableObject);
@@ -516,6 +515,13 @@ public class Instance {
 		}).orElse(null);
 	}
 
+	public void clearMeshHub() {
+		if (meshHub != null) {
+			meshHub.clear();
+		}
+		meshHub = null;
+	}
+
     public String getName() {
         return name != null ? name : getContainer().map(Container::getName).orElse("Noname");
     }
@@ -665,7 +671,7 @@ public class Instance {
 	public int getId() {
 		return id;
 	}
-	// no setId, use change(id) instead!
+	public void setId(int id) { this.id = id; }
 
 	public Tile getPosition() {
 		if (superInstance != null) {
