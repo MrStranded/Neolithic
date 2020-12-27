@@ -102,20 +102,3 @@ Entity: entCarcass {
 		destroy(self);
 	}
 }
-
-///////////////////////////////////////////////////////////////////////////// Effects
-
-Effect: effCancer {
-    Script:tick(carrier) {
-        if (chance(0.01)) {
-            ..attHealth--;
-            if (..attHealth == -20) {
-                ..attSpeed--;
-            }
-        }
-    }
-
-    Script: removeCondition {
-        return(false);
-    }
-}

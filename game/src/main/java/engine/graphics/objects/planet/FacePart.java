@@ -1,13 +1,9 @@
 package engine.graphics.objects.planet;
 
 import constants.TopologyConstants;
-import engine.data.planetary.Face;
-import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
-import engine.graphics.objects.Scene;
 import engine.graphics.objects.generators.PlanetGenerator;
 import engine.graphics.objects.models.Mesh;
-import engine.graphics.renderer.Renderer;
 import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
@@ -28,7 +24,7 @@ public class FacePart {
 	private FacePart[] quarterFaces;
 
 	private double height = 0;
-	private double waterHeight = TopologyConstants.PLANET_OZEAN_HEIGHT;
+	private double waterHeight = TopologyConstants.PLANET_OCEAN_HEIGHT;
 
 	private double oldHeight = height;
 	private double oldWaterHeight = waterHeight;

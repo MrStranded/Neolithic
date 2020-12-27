@@ -1,6 +1,5 @@
 package engine.logic.topology;
 
-import constants.ScriptConstants;
 import constants.TopologyConstants;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
@@ -9,10 +8,7 @@ import engine.data.proto.Container;
 import engine.data.Data;
 import engine.data.proto.TileContainer;
 import engine.data.variables.DataType;
-import engine.data.variables.Variable;
-import engine.logic.topology.Neighbour;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class TopologyGenerator {
@@ -116,8 +112,8 @@ public class TopologyGenerator {
 
 		int height = tile.getHeight();
 		int waterHeight = height - waterdepth;
-		if (waterHeight < TopologyConstants.PLANET_OZEAN_HEIGHT) {
-			waterHeight = TopologyConstants.PLANET_OZEAN_HEIGHT;
+		if (waterHeight < TopologyConstants.PLANET_OCEAN_HEIGHT) {
+			waterHeight = TopologyConstants.PLANET_OCEAN_HEIGHT;
 		}
 
 		tile.setHeight(height - riverdepth);

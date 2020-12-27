@@ -256,7 +256,7 @@ public class Instance {
 	}
 
 	public boolean canGo(Tile from, Tile to) {
-	    return !run(ScriptConstants.EVENT_CAN_GO, new Variable[] {new Variable(from), new Variable(to)}).isNull();
+	    return ! run(ScriptConstants.EVENT_CAN_GO, new Variable[] {new Variable(from), new Variable(to)}).isNull();
 	}
 
 	public void addOccupation(int duration, Script callBackScript) {

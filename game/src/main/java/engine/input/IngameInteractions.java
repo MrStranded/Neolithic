@@ -56,7 +56,7 @@ public class IngameInteractions {
         if (keyboard.isPressed(GLFW.GLFW_KEY_S)) { // rotate down
             camera.rotatePitch(dist);
         }
-        if (keyboard.isPressed(GLFW.GLFW_KEY_R)) { // go closer
+        if (keyboard.isPressed(GLFW.GLFW_KEY_R) && ! keyboard.ctrlPressed()) { // go closer
             camera.changeRadius(-dist);
         }
         if (keyboard.isPressed(GLFW.GLFW_KEY_F)) { // go farther away
@@ -76,7 +76,7 @@ public class IngameInteractions {
             Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "fit", null));
         }
 
-        if ((keyboard.isPressed(GLFW.GLFW_KEY_LEFT_CONTROL) || keyboard.isPressed(GLFW.GLFW_KEY_LEFT_CONTROL)) && keyboard.isClicked(GLFW.GLFW_KEY_I)) {
+        if (keyboard.ctrlPressed(GLFW.GLFW_KEY_R)) {
             GameOptions.reloadScripts = true;
         }
         if (keyboard.isClicked(GLFW.GLFW_KEY_X)) {

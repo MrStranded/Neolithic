@@ -7,7 +7,7 @@ public class TopologyConstants {
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Planet %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public static final double PLANET_MINIMUM_HEIGHT = 1024d; // this value corresponds to the radius of the planet and tile heights are 'added' to this
 	public static final double PLANET_MAXIMUM_HEIGHT = 512d; // the maximum height value a tile can have
-	public static final int PLANET_OZEAN_HEIGHT = 100; // the default height of water on new topology
+	public static final int PLANET_OCEAN_HEIGHT = 100; // the default height of water on new topology
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Default Colors %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public static final float WATER_ALPHA = 1f; // alpha value of water material
@@ -17,5 +17,5 @@ public class TopologyConstants {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Pathfinding %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public static final double CURRENT_POSITION_HEURISTIC_MULTIPLIER = 1.125;
-	public static final double HEURISTIC_MULTIPLIER = 1000000;
+	public static final double HEURISTIC_MULTIPLIER = 1_000_000;
 }
