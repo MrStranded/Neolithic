@@ -1,3 +1,56 @@
 Creature: cPlant {
+
+	drives {
+		driAsexualPlantReproduction;
+		driGrow;
+	}
+
+	knowledge {
+		proPhotoSynthesis;
+		proGrow;
+	}
+
+	attributes{
+	    attMaxHealth, 100;
+	    attTicks, 2;
+		attSize, 60;
+	    attMatureAge, 420;//2880;
+	    attLightSensitivity, 20;
+	}
+
+    Stage: seed {
+        drives { driGrowIntoTree; }
+        knowledge { proGrowIntoTree; }
+
+        Script: tick() {
+            if (isOnFloor(self) && chance(0.001)) {
+                destroy(self);
+            }
+        }
+    }
 	
+	Script: tick {
+		->plantTick();
+	}
+
+	Script: plantTick {
+	    delayNextTick(self, .attTicks);
+	    ..attAge++;
+
+	    if (getWaterHeight(self) > getHeight(self)) {
+	        ..attHealth--;
+	    }
+
+		if (.attAge > .attMatureAge * 3) { // age death
+		    addEffect(self, effCancer);
+        }
+
+		if (.attHealth < - .attMaxHealth) { // death
+		    destroy(self);
+        }
+	}
+
+    Script: inherit(parent) {
+        mixAttributes(self, parent, parent);
+	}
 }

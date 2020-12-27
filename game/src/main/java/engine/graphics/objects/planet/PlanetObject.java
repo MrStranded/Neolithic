@@ -19,7 +19,7 @@ public class PlanetObject extends MoveableObject {
 	private FacePart[] faceParts;
 	private PlanetGenerator planetGenerator;
 
-	private int depth = 0;
+	private int depth;
 
 	public PlanetObject(Planet planet) {
 		this.planet = planet;
@@ -104,6 +104,21 @@ public class PlanetObject extends MoveableObject {
 		}
 
 		return null;
+	}
+
+	// ###################################################################################
+	// ################################ Picking With Coordinates #########################
+	// ###################################################################################
+
+	public Tile getTile(double east, double north) {
+		Vector3 origin = Vector3.ZERO;
+
+		Vector3 goal = new Vector3(
+				Math.cos(east) * Math.cos(north),
+				Math.sin(east) * Math.cos(north),
+				Math.sin(north));
+
+		return getIntersectedFacePart(origin, goal).getTile();
 	}
 
 	// ###################################################################################

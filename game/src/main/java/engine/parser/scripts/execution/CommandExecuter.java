@@ -752,6 +752,17 @@ public class CommandExecuter {
 				}
 				break;
 
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile getTileFromCoords (double east, double north)
+			case GET_TILE_FROM_COORDINATES:
+				if (requireParameters(commandNode, 2)) {
+					// both assumed to be in degrees
+					double east = parameters[0].getDouble() * Math.PI / 180;
+					double north = parameters[1].getDouble() * Math.PI / 180;
+
+					return new Variable(Data.getPlanet().getPlanetObject().getTile(east, north));
+				}
+				break;
+
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list<tile> getTilesInRange (Tile tile, int radius)
 			case GET_TILES_IN_RANGE:
 				if (requireParameters(commandNode, 2)) {
@@ -762,6 +773,29 @@ public class CommandExecuter {
 
 					TileArea tileArea = new TileArea(center, radius);
 					return new Variable(tileArea.getTilesAsVariableList());
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list<tile> getTilesOfRange (Tile from, Tile to)
+			case GET_TILES_OF_PATH:
+				if (requireParameters(commandNode, 2)) {
+					Tile from = parameters[0].getTile();
+					Tile to   = parameters[1].getTile();
+
+					checkValue(script, commandNode, from, "origin tile");
+					checkValue(script, commandNode, to, "destination tile");
+
+					List<Variable> path = new ArrayList<>();
+					if (from != to) { path.add(new Variable(from)); }
+
+					int counter = 0;
+					while (from != to) {
+						from = Pathfinding.moveTowardsTile(from, to, 1, 4);
+						path.add(new Variable(from));
+						if (counter++ > 42) { break; }
+					}
+
+					return new Variable(path);
 				}
 				break;
 
@@ -1034,7 +1068,7 @@ public class CommandExecuter {
 					checkValue(script, commandNode, tile, "target tile");
 					checkValue(script, commandNode, instance, "target instance");
 
-					Tile newPosition = Pathfinding.moveTowardsTile(instance, tile, steps);
+					Tile newPosition = Pathfinding.moveTowardsTile(instance, tile, steps, steps + 4);
 
 					if (newPosition != instance.getPosition()) {
 						instance.placeInto(newPosition);

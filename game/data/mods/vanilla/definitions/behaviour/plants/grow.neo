@@ -1,0 +1,49 @@
+///////////////////////////////////////////////////////////////////////////// Drives
+
+///////////////////////////////////////////////////////////////////////////// Processes
+
+Process: proPhotoSynthesis {
+	Script: condition {
+		require(getLightLevel(self) + getTile(self).attLightLevel >= .attLightSensitivity);
+		require(getStage(self) != "seed");
+	}
+	Script: process {
+		..attNutrition += 1;
+		getTile(self)..attHumidity--;
+	}
+
+	Script: discovery(actor) { // there is no way for an entity to learn photosynthesis
+		require(0);
+	}
+}
+
+
+Process: proGrowIntoTree {
+    Script: condition {
+        tile = getTile(self);
+
+        require(isOnFloor(self));
+        require(getLightLevel(self) >= .attLightSensitivity);
+        require(getFullAtt(tile, "attSize") < 100);
+        require(getHeight(self) >= getWaterHeight(self));
+
+        //print(tile.attNutrition + " >= " + .attBabySize);
+        //require(tile.attNutrition >= .attBabySize);
+    }
+    Script: process {
+        setStage(self, "sapling");
+        addEffect(self, effSapling);
+    }
+}
+
+Process: proGrow {
+    Script: condition {
+        require(.attHealth < 0);
+        require(.attNutrition > 0);
+    }
+
+    Script: process {
+        ..attHealth++;
+        ..attNutrition--;
+    }
+}

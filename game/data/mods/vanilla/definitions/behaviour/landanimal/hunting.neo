@@ -72,7 +72,7 @@ Process: proKillAnimal {
                     }
                 }
             }
-            if (! ->target && backup && .attNutrition == 0) {
+            if (! ->target && backup && .attNutrition <= 0) {
                 ->target = backup;
             }
         }

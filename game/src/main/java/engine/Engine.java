@@ -6,7 +6,7 @@ import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
 import engine.data.Data;
 import engine.graphics.gui.GuiData;
-import engine.parser.scripts.execution.CommandExecutor;
+import engine.parser.utils.Logger;
 import engine.threads.LogicThread;
 import engine.parser.Parser;
 
@@ -56,19 +56,19 @@ public class Engine {
 	}
 
 	public static void loadData() {
-		Data.initialize();
-		CommandExecutor.initialize();
+		Logger.log("------------------- Loading Data");
 
+		Data.initialize();
 		new Parser().load();
 
 		Data.loadMeshHubs();
 	}
 
 	public static void reloadScripts() {
+		Logger.log("------------------- Reloading Scripts");
+
 		Data.initializeReload();
-
 		new Parser().load();
-
 		Data.finishReload();
 
 		Data.clearMeshHubs();

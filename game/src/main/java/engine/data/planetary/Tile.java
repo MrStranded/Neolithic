@@ -13,7 +13,7 @@ public class Tile extends Instance implements IDInterface {
 
 	private int xPos,yPos;
 	private int height = 0;
-	private int waterHeight = TopologyConstants.PLANET_OZEAN_HEIGHT;
+	private int waterHeight = TopologyConstants.PLANET_OCEAN_HEIGHT;
 
 	private Face face;
 	private FacePart tileMesh;
@@ -84,6 +84,8 @@ public class Tile extends Instance implements IDInterface {
 	public Tile getPosition() {
 		return this;
 	}
+
+	public boolean canGo(Tile from, Tile to) { return true; }
 
 	public Face getFace() {
 		return face;

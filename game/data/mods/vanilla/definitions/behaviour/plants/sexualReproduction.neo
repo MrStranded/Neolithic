@@ -1,0 +1,49 @@
+///////////////////////////////////////////////////////////////////////////// Drives
+
+Drive: driPlantReproduction {
+	solutions {
+		proCreateFruit;
+		proPhotoSynthesis;
+	}
+
+	Script: getWeight {
+	    return(100 * .attNutrition / .attMaxHealth);
+	}
+}
+
+Drive: driGrowIntoTree {
+    solutions { proGrowIntoTree; }
+
+    Script: getWeight { return(getLightLevel(self) - .attLightSensitivity); }
+}
+
+Drive: driGrow {
+    solutions { proGrow; }
+
+    Script: condition { return true; }
+
+    Script: getWeight {
+        return(50 - .attHealth / .attMaxHealth);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////// Processes
+
+Process: proCreateFruit {
+	Script: condition {
+		require(.attNutrition >= .attMaxHealth);
+		require(inDefaultStage(self));
+	}
+
+	Script: process {
+	    setStage(self, "ripe");
+
+		fruit = create(getProperty(self, "fruit"), self);
+		..attNutrition -= .attMaxHealth;
+		fruit..attNutrition += .attMaxHealth;
+
+		seed = create(getType(self), fruit);
+        setStage(seed, "seed");
+		seed->inherit(self);
+	}
+}
