@@ -72,11 +72,11 @@ Effect: effSapling {
     name = "Sapling";
 
     Script: removeCondition(carrier) {
-        require(carrier.size >= carrier.attMaxSize / 2);
+        return (carrier.attSize >= carrier.attMaxSize / 2);
     }
 
     Script: finally(carrier) {
-        setDefaultStage(self);
+        setDefaultStage(carrier);
     }
 }
 

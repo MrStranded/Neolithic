@@ -45,7 +45,7 @@ public class KeyboardInput {
 	}
 
 	public boolean ctrlPressed() {
-		return keyPressed[GLFW.GLFW_KEY_LEFT_CONTROL] || keyPressed[GLFW.GLFW_KEY_RIGHT_CONTROL];
+		return isPressed(GLFW.GLFW_KEY_LEFT_CONTROL) || isPressed(GLFW.GLFW_KEY_RIGHT_CONTROL);
 	}
 	public boolean ctrlPressed(int key) {
 		return ctrlPressed() && isClicked(key);
