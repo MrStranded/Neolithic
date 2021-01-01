@@ -96,6 +96,8 @@ public class Container {
 			if (tree != null) {
 				tree.forEach(script -> {
 					if (script != null) {
+
+						// own script overrides script from ancestor
 						if (getScript(stage, script.getTextId()) == null) {
 							addScript(stage, script);
 						}
@@ -176,11 +178,11 @@ public class Container {
 				.or(() -> getDefaultStage().getIdList(key));
 	}
 	public List<ContainerIdentifier> getOrCreatePropertyList(String stage, String key) {
-		Optional<List<ContainerIdentifier>> list = getStage(stage).getIdList(key)
-				.or(() -> getDefaultStage().getIdList(key));
-
+		// get
+		Optional<List<ContainerIdentifier>> list = getStage(stage).getIdList(key);
 		if (list.isPresent()) { return list.get(); }
 
+		// or create
 		List<ContainerIdentifier> l = new ArrayList<ContainerIdentifier>(4);
 		getStage(stage).set(key, l);
 		return l;
@@ -205,10 +207,15 @@ public class Container {
 		return attribute != null? attribute.getValue() : 0;
 	}
 	public void addAttribute(String stage, Attribute attribute) {
-		BinaryTree<Attribute> attributes = getAttributes(stage);
-		if (attribute != null) {
-			attributes.insert(attribute);
+		if (attribute == null) { return; }
+
+		BinaryTree<Attribute> attributes = getStage(stage).getAttributes();
+		if (attributes == null) {
+			attributes = new BinaryTree<>();
+			getStage(stage).set(ScriptConstants.KEY_ATTRIBUTES, attributes);
 		}
+
+		attributes.insert(attribute);
 	}
 
 	public BinaryTree<Script> getScripts(String stage) {
@@ -227,9 +234,15 @@ public class Container {
 		return result;
 	}
 	public void addScript(String stage, Script script) {
-		if (script != null) {
-			getScripts(stage).insert(script);
+		if (script == null) { return; }
+
+		BinaryTree<Script> scripts = getStage(stage).getScripts();
+		if (scripts == null) {
+			scripts = new BinaryTree<>();
+			getStage(stage).set(ScriptConstants.KEY_SCIPTS, scripts);
 		}
+
+		scripts.insert(script);
 	}
 
 //	public void addInheritance(String textID) {

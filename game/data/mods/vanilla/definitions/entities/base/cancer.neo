@@ -2,14 +2,11 @@ Effect: effCancer {
 
     Script:tick(carrier) {
         if (chance(0.01)) {
-            ..attHealth--;
-            if (..attHealth == -20) {
-                ..attSpeed--;
-            }
+            ..attDamage++;
         }
     }
 
     Script: removeCondition {
-        return(false);
+        return .attDamage < 0;
     }
 }

@@ -118,7 +118,8 @@ public class PlanetObject extends MoveableObject {
 				Math.sin(east) * Math.cos(north),
 				Math.sin(north));
 
-		return getIntersectedFacePart(origin, goal).getTile();
+		FacePart intersected = getIntersectedFacePart(origin, goal);
+		return intersected != null ? intersected.getTile() : null;
 	}
 
 	// ###################################################################################

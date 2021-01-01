@@ -24,6 +24,6 @@ public class ReturnStatementNode extends AbstractScriptNode {
 	@Override
 	public void print(String indentation) {
 		System.out.println(indentation + "Return Statement");
-		subNodes[0].print(indentation + "-");
+		if (subNodes != null && subNodes[0] != null) { subNodes[0].print(indentation + "-"); }
 	}
 }

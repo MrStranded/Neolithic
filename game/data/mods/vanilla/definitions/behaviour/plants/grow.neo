@@ -1,22 +1,39 @@
-///////////////////////////////////////////////////////////////////////////// Drives
+///////////////////////////////////////////////////////////////////////////// Grow
 
-///////////////////////////////////////////////////////////////////////////// Processes
+Drive: driGrow {
+    solutions { proGrow; }
 
-Process: proPhotoSynthesis {
-	Script: condition {
-		require(getLightLevel(self) + getTile(self).attLightLevel >= .attLightSensitivity);
-		require(getStage(self) != "seed");
-	}
-	Script: process {
-		..attNutrition += 1;
-		getTile(self)..attHumidity--;
-	}
+    Script: condition { return .attSize < .attMaxSize; }
 
-	Script: discovery(actor) { // there is no way for an entity to learn photosynthesis
-		require(0);
-	}
+    Script: getWeight {
+        return(100 - 100 * .attSize / .attMaxSize);
+    }
 }
 
+Process: proGrow {
+    Script: condition {
+        require(.attNutrition > 0);
+    }
+
+    Script: process {
+		..attSize++;
+		..attNutrition--;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////// Grow into tree
+
+Drive: driGrowIntoTree {
+    solutions { proGrowIntoTree; }
+
+    Script: condition {
+		return true;
+	}
+
+    Script: getWeight {
+        return 100;
+    }
+}
 
 Process: proGrowIntoTree {
     Script: condition {
@@ -26,9 +43,6 @@ Process: proGrowIntoTree {
         require(getLightLevel(self) >= .attLightSensitivity);
         require(getFullAtt(tile, "attSize") < 100);
         require(getHeight(self) >= getWaterHeight(self));
-
-        //print(tile.attNutrition + " >= " + .attBabySize);
-        //require(tile.attNutrition >= .attBabySize);
     }
     Script: process {
         setStage(self, "sapling");
@@ -36,14 +50,32 @@ Process: proGrowIntoTree {
     }
 }
 
-Process: proGrow {
-    Script: condition {
-        require(.attHealth < 0);
-        require(.attNutrition > 0);
-    }
 
-    Script: process {
-        ..attHealth++;
-        ..attNutrition--;
+///////////////////////////////////////////////////////////////////////////// Photosynthesis
+
+Drive: driGatherEnergy {
+    solutions { proPhotosynthesis; }
+
+    Script: condition { return true; }
+
+    Script: getWeight {
+        return(100 - .attNutrition - .attWater);
     }
+}
+
+Process: proPhotosynthesis {
+	Script: condition {
+		// require(getLightLevel(self) + getTile(self).attLightLevel >= .attLightSensitivity);
+        require(getLightLevel(self) + getFullAtt(getTile(self), "attLightLevel") >= .attLightSensitivity);
+		// require(getStage(self) != "seed");
+		require(.attWater > 0);
+	}
+	Script: process {
+		..attWater--;
+		..attNutrition++;
+	}
+
+	Script: discovery(actor) { // there is no way for an entity to learn photosynthesis
+		require(0);
+	}
 }

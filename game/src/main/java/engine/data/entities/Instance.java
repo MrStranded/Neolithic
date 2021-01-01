@@ -356,19 +356,19 @@ public class Instance {
 			Optional<Container> container = Data.getContainer(id);
 			container.filter(c -> c.getType() == DataType.TILE)
 					.ifPresent(c -> {
-//						CopyOnWriteArraySet<Instance> subs = new CopyOnWriteArraySet<>(subInstances);
-//						for (Instance subInstance : subs) {
-//							if (subInstance != null) {
-//								subInstance.render();
-//							}
-//						}
-						try {
-							for (Instance subInstance : subInstances) {
-								if (subInstance != null) {
-									subInstance.render();
-								}
+						CopyOnWriteArraySet<Instance> subs = new CopyOnWriteArraySet<>(subInstances);
+						for (Instance subInstance : subs) {
+							if (subInstance != null) {
+								subInstance.render();
 							}
-						} catch (ConcurrentModificationException e) { /* it's okay really */ }
+						}
+//						try {
+//							for (Instance subInstance : subInstances) {
+//								if (subInstance != null) {
+//									subInstance.render();
+//								}
+//							}
+//						} catch (ConcurrentModificationException e) { /* it's okay really */ }
 					});
 		}
 	}

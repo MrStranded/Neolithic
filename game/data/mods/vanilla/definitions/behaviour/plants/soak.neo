@@ -1,0 +1,29 @@
+///////////////////////////////////////////////////////////////////////////// Drives
+
+Drive: driSoak {
+    solutions { proSoak; }
+
+    Script: condition {
+		return .attWater < .attSize;
+	}
+
+    Script: getWeight {
+		if (.attSize == 0) { return 0; }
+		return (100 - 100 * .attWater / .attSize);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////// Processes
+
+Process: proSoak {
+	Script: condition {
+		require(getTile(self).attHumidity > 0);
+	}
+	
+	Script: process {
+		if (chance(.attEfficiency) / 100) {
+			getTile(self)..attHumidity--;
+			..attWater++;
+		}
+	}
+}

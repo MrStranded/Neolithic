@@ -30,7 +30,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
 
     private int currentYPosition = 0;
 
-    private List<InstanceButton> buttons;
+    private List<Button> buttons;
 
 
     public InstanceDetailPanel(int width, int height) {
@@ -53,9 +53,14 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         if (buttons != null) { buttons.clear(); }
         buttons = new ArrayList<>(8);
 
-        drawInstance(g, GameOptions.selectedInstance, 10, 10);
-        drawAttributes(g, GameOptions.selectedInstance, 10, height / 2);
+        g.setColor(new Color (65, 167, 215));
+        g.fillRect(10 -3, 10 -3, 15, 20);
+        buttons.add(new BackButton(10 -3, 10 -3, 15, 20));
+
+        drawInstance(g, GameOptions.selectedInstance, 30, 10);
+        drawAttributes(g, GameOptions.selectedInstance, height / 2);
         drawVariables(g, GameOptions.selectedInstance, 310, height / 2);
+        drawEffects(g, GameOptions.selectedInstance, 310, height * 3 / 4);
         drawInstanceSpecificInfo(g, GameOptions.selectedInstance, 710, height / 2);
     }
 
@@ -84,7 +89,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         return yPos;
     }
 
-    private void drawAttributes(Graphics g, Instance instance, int xPos, int yPos) {
+    private void drawAttributes(Graphics g, Instance instance, int yPos) {
         if (instance == null) { return; }
 
         setCurrentYPosition(yPos);
@@ -99,11 +104,11 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
                     if (attributeColor == null) { attributeColor = new Color(0,0,0); }
 
                     g.setColor(getInverted(attributeColor));
-                    g.fillRect(xPos - 3, getCurrentYPosition() - 3, 290, 18);
+                    g.fillRect(10 - 3, getCurrentYPosition() - 3, 290, 18);
 
                     g.setColor(attributeColor);
-                    g.drawString(protoAttribute.getName(), xPos, getCurrentYPosition() + 12);
-                    g.drawString(String.valueOf(instance.getAttributeValue(attribute.getId())), xPos + 200, getCurrentYPosition() + 12);
+                    g.drawString(protoAttribute.getName(), 10, getCurrentYPosition() + 12);
+                    g.drawString(String.valueOf(instance.getAttributeValue(attribute.getId())), 10 + 200, getCurrentYPosition() + 12);
                     
                     setCurrentYPosition(getCurrentYPosition() + 20);
                 }
@@ -124,6 +129,20 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
                 setCurrentYPosition(getCurrentYPosition() + 20);
             });
         }
+    }
+
+    private void drawEffects(Graphics g, Instance instance, int xPos, int yPos) {
+        if (instance == null) { return; }
+
+        g.setColor(new Color(0,0,0));
+        setCurrentYPosition(yPos);
+        instance.getEffects().forEach(effect -> {
+            g.drawString("Effect: " + effect.toString(), xPos, getCurrentYPosition() + 12);
+            setCurrentYPosition(getCurrentYPosition() + 20);
+
+            g.drawString("-> should be removed: " + effect.shouldBeRemoved(instance), xPos, getCurrentYPosition() + 12);
+            setCurrentYPosition(getCurrentYPosition() + 20);
+        });
     }
 
     private void drawInstanceSpecificInfo(Graphics g, Instance instance, int xPos, int yPos) {
@@ -225,12 +244,27 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         this.currentYPosition = currentYPosition;
     }
 
-    static class InstanceButton {
-        private int xPos, yPos, width, height;
+    static class InstanceButton extends Button {
         private Instance instance;
 
         public InstanceButton(Instance instance, int xPos, int yPos, int width, int height) {
             this.instance = instance;
+            this.xPos = xPos;
+            this.yPos = yPos;
+            this.width = width;
+            this.height = height;
+        }
+
+        public void click() {
+            GameOptions.selectedInstance = instance;
+        }
+    }
+
+    static abstract class Button {
+        int xPos, yPos, width, height;
+
+        public Button() {}
+        public Button(int xPos, int yPos, int width, int height) {
             this.xPos = xPos;
             this.yPos = yPos;
             this.width = width;
@@ -242,7 +276,19 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
                     && (y >= yPos && y < yPos + height);
         }
 
-        public Instance getInstance() { return instance; }
+        abstract void click();
+    }
+
+    static class BackButton extends Button {
+        public BackButton(int xPos, int yPos, int width, int height) {
+            super(xPos, yPos, width, height);
+        }
+
+        public void click() {
+            if (GameOptions.selectedInstance != null) {
+                GameOptions.selectedInstance = GameOptions.selectedInstance.getSuperInstance();
+            }
+        }
     }
 
     @Override
@@ -250,7 +296,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         if (buttons != null) {
             buttons.forEach(button -> {
                 if (button.isClicked(e.getX(), e.getY())) {
-                    GameOptions.selectedInstance = button.getInstance();
+                    button.click();
                 }
             });
         }

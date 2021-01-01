@@ -29,7 +29,7 @@ public class Effect extends Instance {
 
     public boolean shouldBeRemoved(Instance carrier) {
         if (remainingTicks == -1) {
-            return !run(ScriptConstants.EVENT_REMOVE_CONDITION, new Variable[]{new Variable(carrier)}).isNull();
+            return ! run(ScriptConstants.EVENT_REMOVE_CONDITION, new Variable[]{new Variable(carrier)}).isNull();
         } else {
             return (remainingTicks == 0);
         }
