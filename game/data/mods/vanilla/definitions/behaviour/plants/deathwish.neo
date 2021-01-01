@@ -1,0 +1,19 @@
+///////////////////////////////////////////////////////////////////////////// Drives
+
+Drive: driDeathwish {
+    solutions { proDie; }
+
+    Script: condition { return .attDamage > 0; }
+
+    Script: getWeight {
+        return(100 * .attDamage / .attMaxHealth);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////// Processes
+
+Process: proDie {
+	Script: process {
+		destroy(self);
+	}
+}

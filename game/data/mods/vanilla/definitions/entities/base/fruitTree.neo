@@ -1,0 +1,99 @@
+Creature: cFruitTree {
+
+	drives {
+		driSoak;
+		driGatherEnergy;
+		driGrow;
+		driDeathwish;
+		driPlantReproduction;
+	}
+
+	knowledge {
+		proSoak;
+		proPhotosynthesis;
+		proGrow;
+		proDie;
+	}
+
+	attributes{
+	    attMaxHealth, 100;
+	    attTicks, 2;
+		attMaxSize, 50;
+		attEfficiency, 50;
+	    attMatureAge, 420;//2880;
+	    attLightSensitivity, 20;
+	}
+	
+	Script: new {
+        for (n : getNeighbors(self)) {
+            effect = addEffect(n, effShadow);
+            effect->cause = self;
+        }
+	}
+	
+	Script: tick {
+	    delayNextTick(self, .attTicks);
+	    ..attAge++;
+
+	    if (getWaterHeight(self) > getHeight(self)) {
+	        ..attDamage++;
+	    }
+
+		if (.attAge > .attMatureAge * 2) { // age death
+		    addEffect(self, effCancer);
+        }
+	}
+	
+	Stage: sapling {
+		attributes{
+			attMaxHealth, 50;
+		}
+	}
+	
+    Stage: seed {
+        drives { driGrowIntoTree; }
+        knowledge { proGrowIntoTree; }
+		
+		attributes {
+			attSize, 1;
+		}
+
+        Script: tick() {
+            if (isOnFloor(self) && chance(0.001)) {
+                destroy(self);
+            }
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////// Sapling effect
+
+Effect: effSapling {
+    name = "Sapling";
+
+    Script: removeCondition(carrier) {
+        require(carrier.size >= carrier.attMaxSize / 2);
+    }
+
+    Script: finally(carrier) {
+        setDefaultStage(self);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////// Shadow
+
+Effect: effShadow {
+    name = "Shadow";
+
+    attributes {
+        attLightLevel, "-10";
+    }
+	
+	Script: tick() {
+		..attLightLevel = - (->cause..attSize);
+	}
+
+    Script: removeCondition() {
+        require(! ->cause);
+    }
+}

@@ -107,6 +107,10 @@ Attribute: attHealth {
     name = "Health";
     color = 100, 100, 100;
 }
+Attribute: attDamage {
+    name = "Damage";
+    color = 200, 100, 100;
+}
 Attribute: attMaxHealth {
     name = "Constitution";
     color = 75, 75, 75;
@@ -145,7 +149,18 @@ Attribute: attHumidity {
     color = 50, 80, 150;
     bounds = 0, 100;
 }
-Attribute: attSize { name = "Size"; }
+Attribute: attSize {
+	name = "Size";
+    color = 200, 140, 30;
+}
+Attribute: attMaxSize {
+    name = "Max Size";
+    color = 100, 70, 15;
+    inherited;
+    mutation = 20, 5;
+    lower = 0;
+	upper = 100;
+}
 Attribute: attLightLevel { name = "Light level"; }
 Attribute: attWater {
     name = "Water";

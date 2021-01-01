@@ -42,6 +42,8 @@ public class Parser {
 		}
 
 		Data.prepareForGame();
+
+		debug();
 	}
 
 	private void loadMod(String mod) {

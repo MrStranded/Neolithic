@@ -1,41 +1,22 @@
-Creature: cAppleTree inherits cPlant {
+///////////////////////////////////////////////////////////////////////////// Tree
+
+Creature: cAppleTree inherits cFruitTree {
 
     name = "Apple tree";
     mesh = "apple_tree_mature.ply";
     fruit = "entApple";
 
-	drives {
-		driPlantReproduction;
-		driGrow;
-	}
-
 	knowledge {
-		proPhotoSynthesis;
-		proCreateFruit;
-		proGrow;
+		// proSoak;
+		// proPhotosynthesis;
+		// proGrow;
+		// proDie;
+		proGrowFruit;
 	}
-
-	attributes{
-	    attMaxHealth, 100;
-	    attTicks, 2;
-		attSize, 60;
-	    attMatureAge, 420;//2880;
-	    attLightSensitivity, 20;
-	    //attBabySize, 100;
-	}
-
+	
     Stage: seed {
         name = "Apple seed";
         mesh = "apple_seed.ply";
-
-        drives { driGrowIntoTree; }
-        knowledge { proGrowIntoTree; }
-
-        Script: tick() {
-            if (isOnFloor(self) && chance(0.001)) {
-                destroy(self);
-            }
-        }
     }
 
     Stage: sapling {
@@ -46,44 +27,7 @@ Creature: cAppleTree inherits cPlant {
         mesh = "apple_tree_mature_ripe.ply";
     }
 
-	Script: new {
-		..attNutrition += 100;
-
-        for (n : getNeighbors(self)) {
-            effect = addEffect(n, effShadow);
-            effect->cause = self;
-        }
-	}
-
-	Script: tick {
-	    delayNextTick(self, .attTicks);
-	    ..attAge++;
-
-        if (chance(0.01)) {
-            create(entBranch, getNeighbor(self, random(3)));
-        }
-
-	    if (getWaterHeight(self) > getHeight(self)) {
-	        ..attHealth--;
-	    }
-
-		if (.attAge > .attMatureAge * 3) { // age death
-		    addEffect(self, effCancer);
-        }
-
-		if (.attHealth < - .attMaxHealth) { // death
-		    destroy(self);
-        }
-	}
-
-    Script: inherit(parent) {
-        mixAttributes(self, parent, parent);
-	}
 }
-
-
-///////////////////////////////////////////////////////////////////////////// Tree
-
 
 ///////////////////////////////////////////////////////////////////////////// Fruit
 
@@ -129,31 +73,3 @@ Entity: entApple {
 		destroy(self);
 	}
 }
-
-///////////////////////////////////////////////////////////////////////////// Effects
-
-Effect: effSapling {
-    name = "Sapling";
-
-    Script: removeCondition(carrier) {
-        require(carrier.attAge >= carrier.attMatureAge);
-    }
-
-    Script: finally(carrier) {
-        setDefaultStage(self);
-    }
-}
-
-
-Effect: effShadow {
-    name = "Shadow";
-
-    attributes {
-        attLightLevel, "-10";
-    }
-
-    Script: removeCondition() {
-        require(! ->cause);
-    }
-}
-

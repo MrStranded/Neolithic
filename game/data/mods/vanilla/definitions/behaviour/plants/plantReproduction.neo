@@ -1,0 +1,31 @@
+Drive: driPlantReproduction {
+	solutions {
+		proPropagate;
+		proGrowFruit;
+	}
+
+	Script: getWeight {
+	    return(50 + 50 * .attNutrition / .attMaxSize);
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////// Grow fruit
+
+Process: proGrowFruit {
+	Script: condition {
+		require(.attNutrition >= .attMaxSize / 2);
+		require(inDefaultStage(self));
+	}
+
+	Script: process {
+	    setStage(self, "ripe");
+
+		fruit = create(getProperty(self, "fruit"), self);
+		..attNutrition -= .attMaxSize / 2;
+		fruit..attNutrition += .attMaxSize / 2;
+
+		seed = create(getType(self), fruit);
+        setStage(seed, "seed");
+        mixAttributes(seed, self, self);
+	}
+}

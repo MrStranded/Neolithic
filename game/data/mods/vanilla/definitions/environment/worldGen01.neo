@@ -65,16 +65,27 @@ Formation: formMountain inherits formLift {
 
 	Script: new(tile) {
 		height = random(200,300);
+		height2 = height - random(5,50);
 		
 		east = random(0, 360);
 		north = random(-90,90);
 		
 		destination = getTileFromCoords(east, north);
-		print("destination: " + destination);
+		// print("destination: " + destination);
 		
-		for (t : getTilesOfPath(self, destination)) {
-			print(t);
-			lift(t, height);
+		path = getTilesOfPath(self, destination);
+		l = length(path);
+		l = min(random(3,10), l);
+		i = 0;
+		for (t : path) {
+			// print(t);
+			lift(t, height + (height2 - height) * i / l + random(-5, 5));
+			i++;
+			if (i >= l) { break; }
+			
+			if (chance(0.1)) {
+				create(formMountain, getNeighbor(t, random(3)));
+			}
 		}
 	}
 
