@@ -7,11 +7,12 @@ Creature: cAppleTree inherits cFruitTree {
     fruit = "entApple";
 
 	knowledge {
-		// proSoak;
-		// proPhotosynthesis;
-		// proGrow;
-		// proDie;
 		proGrowFruit;
+	}
+	
+	attributes{
+		attMaxSize, 100;
+	    attLightSensitivity, 30;
 	}
 	
     Stage: seed {
@@ -38,17 +39,20 @@ Entity: entApple {
 	attributes {
 		attVegetarian, 1;
 		attMatureAge, 100;
-		attNutrition, 100; // default value
+		attNutrition, 1;
 	}
 
 	Script: tick() {
 	    tree = getHolder(self);
 	    if (tree && inStage(tree, "ripe")) {
-	        if (chance(0.07)) {
+	        if (chance(.attNutrition / 100)) {
 	            tile = getNeighbor(getTile(self), random(3));
 	            pickUp(tile, self);
 	            setDefaultStage(tree);
-	        }
+	        } else if (tree.attNutrition > 0) {
+				tree..attNutrition--;
+				self..attNutrition++;
+			}
 	    } else {
             ..attAge++;
 

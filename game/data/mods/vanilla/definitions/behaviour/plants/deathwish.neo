@@ -6,7 +6,8 @@ Drive: driDeathwish {
     Script: condition { return .attDamage > 0; }
 
     Script: getWeight {
-        return(100 * .attDamage / .attMaxHealth);
+		overcrowding = max(0, getFullAtt(getTile(self), "attSize"));
+        return(100 * .attDamage / .attMaxHealth + overcrowding);
     }
 }
 

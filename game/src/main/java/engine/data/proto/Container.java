@@ -84,7 +84,11 @@ public class Container {
 			BinaryTree<Attribute> tree = container.getAttributes(stage);
 			if (tree != null) {
 				tree.forEach(attribute -> {
-					addAttribute(stage, attribute);
+
+					// own attribute overrides attribute from ancestor
+					if (getAttribute(stage, attribute.getId()) == null) {
+						addAttribute(stage, attribute);
+					}
 				});
 			}
 		}
