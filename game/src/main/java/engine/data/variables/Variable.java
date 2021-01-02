@@ -370,12 +370,19 @@ public class Variable implements IDInterface {
 	 * This method is called from Instance.getVariable
 	 */
 	public boolean isInvalid() {
-		if (type == DataType.INSTANCE || type == DataType.EFFECT || type == DataType.TILE) {
-			if (value == null || ((Instance) value).isSlatedForRemoval()) {
-				return true;
-			}
-		}
-		return false;
+
+		return (
+				value == null
+						|| ((type == DataType.INSTANCE || type == DataType.EFFECT || type == DataType.TILE)
+								&& ((Instance) value).isSlatedForRemoval())
+		);
+	}
+
+	/**
+	 * Invalidates the value of the variable such that it may be cleaned from memory.
+	 */
+	public void invalidate() {
+		value = null;
 	}
 
 	@Override

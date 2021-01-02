@@ -39,14 +39,52 @@ Creature: cFruitTree {
 	        ..attDamage++;
 	    }
 
-		if (.attAge > .attMatureAge * 2) { // age death
+		if (.attAge > .attMatureAge * 3 && ! hasEffect(self, effCancer)) { // age death
 		    addEffect(self, effCancer);
+        }
+		
+		if (.attWater <= 0 && ! hasEffect(self, effDry)) {
+		    addEffect(self, effDry);
         }
 	}
 	
-	Stage: sapling {
+	Stage: ripe {
+		drives {
+			driSoak;
+			driGatherEnergy;
+			driGrow;
+			driDeathwish;
+			driPlantReproduction;
+		}
+	}
+	
+	Stage: sapling {	
+		drives {
+			driSoak;
+			driGatherEnergy;
+			driGrow;
+		}
+	
 		attributes{
 			attMaxHealth, 50;
+		}
+		
+		Script: tick {
+			print("sapling tick");
+			delayNextTick(self, .attTicks);
+			..attAge++;
+
+			if (getWaterHeight(self) > getHeight(self)) {
+				..attDamage++;
+			}
+			
+			if (.attWater <= 0 && ! hasEffect(self, effDry)) {
+				addEffect(self, effDry);
+			}
+		
+			if (.attSize >= .attMaxSize / 2) {
+				setDefaultStage(self);
+			}
 		}
 	}
 	
@@ -66,20 +104,6 @@ Creature: cFruitTree {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////// Sapling effect
-
-Effect: effSapling {
-    name = "Sapling";
-
-    Script: removeCondition(carrier) {
-        return (carrier.attSize >= carrier.attMaxSize / 2);
-    }
-
-    Script: finally(carrier) {
-        setDefaultStage(carrier);
-    }
-}
-
 ///////////////////////////////////////////////////////////////////////////// Shadow
 
 Effect: effShadow {
@@ -90,10 +114,31 @@ Effect: effShadow {
     }
 	
 	Script: tick() {
-		..attLightLevel = - (->cause..attSize);
+		..attLightLevel = - (->cause..attSize) / 3;
 	}
 
     Script: removeCondition() {
         require(! ->cause);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////// Drought
+
+Effect: effDry {
+    name = "Dry";
+	
+	Script: tick(carrier) {
+		if (carrier.attWater <= 0) {
+			if (..attDamage < carrier.attSize && chance(0.01)) {
+				..attDamage++;
+			}
+		} else {
+			..attDamage -= 10;
+			carrier..attWater --;
+		}
+	}
+
+    Script: removeCondition() {
+        require(.attDamage <= 0 || carrier.attWater > 0);
     }
 }

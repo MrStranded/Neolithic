@@ -11,17 +11,19 @@ WorldGen: genContinental {
 			}
 		}*/
 
-		islands = random(1, 4);
-		tiles = eachTile();
-		for (i = 0; i < islands; i++) {
-		    destroy(create(formIsland, random(tiles)));
-            print("Created island " + i);
-		}
+		if (false) {
+			islands = random(1, 4);
+			tiles = eachTile();
+			for (i = 0; i < islands; i++) {
+				destroy(create(formIsland, random(tiles)));
+				print("Created island " + i);
+			}
 
-		for (t : tiles) {
-			if (getHeight(t) > 120) {
-				if (chance(0.005)) {
-					create(entDeepSource, t);
+			for (t : tiles) {
+				if (getHeight(t) > 120) {
+					if (chance(0.005)) {
+						create(entDeepSource, t);
+					}
 				}
 			}
 		}

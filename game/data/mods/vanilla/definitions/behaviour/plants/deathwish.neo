@@ -6,8 +6,11 @@ Drive: driDeathwish {
     Script: condition { return .attDamage > 0; }
 
     Script: getWeight {
-		overcrowding = max(0, getFullAtt(getTile(self), "attSize"));
-        return(100 * .attDamage / .attMaxHealth + overcrowding);
+		if (.attSize == 0) { return 0; }
+		
+		overcrowding = max(0, getFullAtt(getTile(self), "attSize") - 100);
+		if (overcrowding > 0) { print("overcrowding = " + overcrowding); }
+        return(100 * .attDamage / .attSize + overcrowding);
     }
 }
 
@@ -15,6 +18,7 @@ Drive: driDeathwish {
 
 Process: proDie {
 	Script: process {
+		getTile(self)..attNutrition += .attSize;
 		destroy(self);
 	}
 }

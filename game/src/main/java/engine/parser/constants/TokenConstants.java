@@ -72,6 +72,7 @@ public enum TokenConstants {
 	MIN				(TokenType.COMMAND, "min"),
 	FLOOR			(TokenType.COMMAND, "floor"),
 	CEIL			(TokenType.COMMAND, "ceil"),
+	PERCENT			(TokenType.COMMAND, "percent"),
 
 	// -------------------------------------------------- Entity Manipulation
 	CHANGE                  (TokenType.COMMAND, "change"),
@@ -143,15 +144,18 @@ public enum TokenConstants {
 	MOVE_TO         (TokenType.COMMAND, "moveTo"),
 	PICK_UP         (TokenType.COMMAND, "pickUp"),
 
+	// -------------------------------------------------- Variable Manipulation
+	FREE_VARIABLE			(TokenType.COMMAND, "forget"),
+
 	// -------------------------------------------------- System
 	GET_MEMORY_ADDRESS		(TokenType.COMMAND, "getMemoryAddress"),
+	BREAKPOINT				(TokenType.COMMAND, "breakpoint"),
 
 	// -------------------------------------------------- GUI
 	PRINT           (TokenType.COMMAND, "print"),
 
 	// -------------------------------------------------- Return Commands
 	REQUIRE         (TokenType.COMMAND, "require"),
-//	RETURN          (TokenType.COMMAND, "return"),
 
     // -------------------------------------------------- Lists
     LENGTH          (TokenType.COMMAND, "length"),

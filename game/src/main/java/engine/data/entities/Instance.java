@@ -9,10 +9,7 @@ import engine.data.identifiers.ContainerIdentifier;
 import engine.data.interaction.SelectedInstance;
 import engine.data.options.GameOptions;
 import engine.data.planetary.Tile;
-import engine.data.proto.Container;
-import engine.data.proto.CreatureContainer;
-import engine.data.proto.DriveContainer;
-import engine.data.proto.ProcessContainer;
+import engine.data.proto.*;
 import engine.data.scripts.Script;
 import engine.data.structures.WeightedList;
 import engine.data.structures.trees.binary.BinaryTree;
@@ -333,11 +330,16 @@ public class Instance {
     private void cleanVariables() {
 		if (variables == null) { return; }
 
-		for (IDInterface variable : variables.toArray()) {
-			if (((Variable) variable).isInvalid()) {
+		variables.forEach(variable -> {
+			if (variable.isInvalid()) {
 				variables.remove(variable.getId());
 			}
-		}
+		});
+//		for (IDInterface variable : variables.toArray()) {
+//			if (((Variable) variable).isInvalid()) {
+//				variables.remove(variable.getId());
+//			}
+//		}
 	}
 
 	// ###################################################################################
@@ -348,8 +350,9 @@ public class Instance {
 		if (slatedForRemoval || GameOptions.reloadScripts) { return; }
 
 		// render self
-		if (getMeshHub() != null) { // we call getMeshHub() here, because it might have to be loaded from Data first
-			meshHub.registerObject(moveableObject);
+		MeshHub hub = getMeshHub();
+		if (hub != null) { // we call getMeshHub() here, because it might have to be loaded from Data first
+			hub.registerObject(moveableObject);
 		}
 		// render subs
 		if (subInstances != null) {
@@ -592,7 +595,15 @@ public class Instance {
 
 		// personal data
 		value += getPersonalAttributeValue(attributeID);
+
 		// effects
+		value += getEffectsAttributeValue(attributeID);
+
+		return value;
+	}
+
+	public int getEffectsAttributeValue(int attributeID) {
+		int value = 0;
 		if (effects != null) {
 			try {
 				for (Effect effect : effects) {
@@ -610,7 +621,18 @@ public class Instance {
 
 		// values from self
 		value += getPersonalAttributeValue(attributeID);
+
+		// effects
+		value += getEffectsAttributeValue(attributeID);
+
 		// sub instances
+		value += getSubInstancesAttributeValue(attributeID);
+
+		return value;
+	}
+
+	public int getSubInstancesAttributeValue(int attributeID) {
+		int value = 0;
 		if (subInstances != null) {
 			for (Instance sub : subInstances) {
 				value += sub.getFullAttributeValue(attributeID);
@@ -725,7 +747,7 @@ public class Instance {
 	public void setStage(String stage) {
 		this.stage = stage;
 		meshHub = null;
-		inheritAttributes();
+//		inheritAttributes();
 	}
 
 	// ###################################################################################

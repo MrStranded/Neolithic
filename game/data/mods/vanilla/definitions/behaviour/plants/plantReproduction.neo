@@ -1,31 +1,55 @@
 Drive: driPlantReproduction {
 	solutions {
 		proPropagate;
-		proGrowFruit;
+		proDropFruit;
 	}
 
 	Script: getWeight {
-	    return(50 + 50 * .attNutrition / .attMaxSize);
+		if (..attMaxSize == 0) {
+			print("no max size!");
+			breakpoint(self, ..attMaxSize);
+		}
+	    return 50 + percent(.attNutrition, .attMaxSize) / 2;
 	}
 }
 
 ///////////////////////////////////////////////////////////////////////////// Grow fruit
 
+Process: proDropFruit {
+	Script: condition {
+		require(->fruit);
+		require(->fruit.attNutrition > .attMaxSize / 2);
+	}
+	
+	Script: process {
+		tile = getNeighbor(getTile(self), random(3));
+		pickUp(tile, ->fruit);
+		forget(->fruit);
+		setDefaultStage(self);
+	}
+
+	solutions {
+		proGrowFruit;
+	}
+}
+
 Process: proGrowFruit {
 	Script: condition {
-		require(.attNutrition >= .attMaxSize / 2);
-		require(inDefaultStage(self));
+		require(.attNutrition > 0);
 	}
 
 	Script: process {
-	    setStage(self, "ripe");
+		if (->fruit) {
+			->fruit..attNutrition++;
+			..attNutrition--;
+		} else {
+			setStage(self, "ripe");
 
-		fruit = create(getProperty(self, "fruit"), self);
-		..attNutrition -= .attMaxSize / 2;
-		fruit..attNutrition += .attMaxSize / 2;
+			->fruit = create(getProperty(self, "fruit"), self);
 
-		seed = create(getType(self), fruit);
-        setStage(seed, "seed");
-        mixAttributes(seed, self, self);
+			seed = create(getType(self), ->fruit);
+			setStage(seed, "seed");
+			mixAttributes(seed, self, self);
+		}
 	}
 }

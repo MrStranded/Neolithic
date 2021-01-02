@@ -43,6 +43,7 @@ public class Attribute implements IDInterface {
 		if (protoAttribute != null) {
 			bounded = protoAttribute.hasLowerBound() || protoAttribute.hasUpperBound();
 		}
+		if (bounded) { checkBounds(); }
 	}
 
 	private void checkBounds() {

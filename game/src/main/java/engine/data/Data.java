@@ -67,8 +67,15 @@ public class Data {
 	public static void initializeReload() {
 		idToTextId = new HashMap<>((int) (instanceQueue.size() * 1.5));
 		instanceQueue.forEach(instance -> {
-			Optional<Container> container = getContainer(instance.getId());
-			idToTextId.put(instance.getId(), container.map(Container::getTextID).orElse(TokenConstants.MAIN.getValue()));
+			if (instance.getId() >= 0) {
+				Optional<Container> container = getContainer(instance.getId());
+				if (container.isPresent()) {
+					idToTextId.put(
+							instance.getId(),
+							container.map(Container::getTextID).orElse(null)
+					);
+				}
+			}
 		});
 
 		prepareProto();
@@ -77,7 +84,18 @@ public class Data {
 
 	public static void finishReload() {
 		// set ids of instances to correct new values
-		instanceQueue.forEach(instance -> instance.setId(Data.getContainerID(idToTextId.get(instance.getId()))));
+		instanceQueue.forEach(instance -> {
+			if (instance.getId() >= 0) {
+				String textId = idToTextId.get(instance.getId());
+				int id = Data.getContainerID(textId);
+
+				if (id >= 0) {
+					instance.setId(id);
+				} else {
+					Logger.error("Could not reassign ID to instance during reload. TextID: " + textId);
+				}
+			}
+		});
 	}
 
 	private static void prepareInstances() {

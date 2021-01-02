@@ -16,6 +16,10 @@ public class Logger {
 		System.out.println(ANSI_GREEN + "LOG " + ANSI_WHITE + System.currentTimeMillis() + ANSI_YELLOW + ": " + message + ANSI_RESET);
 	}
 
+	public static void breakpoint(String message) {
+		System.out.println(ANSI_BLACK + "BREAK " + ANSI_WHITE + System.currentTimeMillis() + ANSI_CYAN + ": " + message + ANSI_RESET);
+	}
+
 	public static void error(String message) {
 		System.out.println(ANSI_PURPLE + "ERROR " + ANSI_WHITE + System.currentTimeMillis() + ANSI_RED + ": " + message + ANSI_RESET);
 	}

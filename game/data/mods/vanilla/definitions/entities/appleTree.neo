@@ -7,7 +7,9 @@ Creature: cAppleTree inherits cFruitTree {
     fruit = "entApple";
 
 	knowledge {
+		proDropFruit;
 		proGrowFruit;
+		proLeechFromHolder;
 	}
 	
 	attributes{
@@ -40,24 +42,18 @@ Entity: entApple {
 		attVegetarian, 1;
 		attMatureAge, 100;
 		attNutrition, 1;
+		attTicks, 2;
 	}
 
 	Script: tick() {
-	    tree = getHolder(self);
-	    if (tree && inStage(tree, "ripe")) {
-	        if (chance(.attNutrition / 100)) {
-	            tile = getNeighbor(getTile(self), random(3));
-	            pickUp(tile, self);
-	            setDefaultStage(tree);
-	        } else if (tree.attNutrition > 0) {
-				tree..attNutrition--;
-				self..attNutrition++;
-			}
-	    } else {
+	    delayNextTick(self, .attTicks);
+		
+		if (isOnFloor(self)) {
             ..attAge++;
 
             if (.attAge >= .attMatureAge) {
-                addEffect(getTile(self), "Fertilized", .attMatureAge, [ "attNutrition", self.attNutrition/2 ]);
+                // addEffect(getTile(self), "Fertilized", .attMatureAge, [ "attNutrition", self.attNutrition ]);
+				getTile(self)..attNutrition += .attNutrition;
 
                 for (seed : getItems(self)) {
                     pickUp(getTile(self), seed);
@@ -70,8 +66,8 @@ Entity: entApple {
 	Script: consume(actor) {
 	    effect = addEffect(actor, effDigest);
         effect..attNutrition = .attNutrition;
-        for (item : getItems(self)) {
-            pickUp(effect, item);
+        for (seed : getItems(self)) {
+            pickUp(effect, seed);
         }
 
 		destroy(self);

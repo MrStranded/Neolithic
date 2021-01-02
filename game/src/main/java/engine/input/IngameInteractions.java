@@ -3,6 +3,7 @@ package engine.input;
 import constants.GameConstants;
 import constants.GraphicalConstants;
 import engine.data.Data;
+import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
@@ -85,6 +86,9 @@ public class IngameInteractions {
         if (keyboard.isClicked(GLFW.GLFW_KEY_P)) {
             GameOptions.plotEntities = !GameOptions.plotEntities;
         }
+        if (keyboard.isClicked(GLFW.GLFW_KEY_I)) {
+            GameOptions.plotOnlySelectedEntity = !GameOptions.plotOnlySelectedEntity;
+        }
         if (keyboard.isClicked(GLFW.GLFW_KEY_SPACE)) {
             GameOptions.runTicks = !GameOptions.runTicks;
         }
@@ -126,14 +130,16 @@ public class IngameInteractions {
         if (mouse.isRightButtonClicked()) {
             Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), renderer, scene);
             if (clickedTile != null) {
-//                if (clickedTile.getSubInstances() == null) {
+
+                // we try to take first sub instance. otherwise take clicked tile
+                if (clickedTile.getSubInstances() == null) {
                     GameOptions.selectedInstance = clickedTile;
-//                } else {
-//                    for (Instance sub : clickedTile.getSubInstances()) {
-//                        GameOptions.selectedInstance = sub;
-//                        break;
-//                    }
-//                }
+                } else {
+                    for (Instance sub : clickedTile.getSubInstances()) {
+                        GameOptions.selectedInstance = sub;
+                        break;
+                    }
+                }
             }
 			/*if (clickedTile != null) {
 				//scene.setFacePartOverlay(clickedTile.getTileMesh());

@@ -28,10 +28,7 @@ import engine.parser.scripts.nodes.CommandExpressionNode;
 import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class CommandExecuter {
 
@@ -155,6 +152,17 @@ public class CommandExecuter {
 
 					target.addOccupation(duration, callBackScript);
 				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void breakpoint ()
+			case BREAKPOINT:
+				if (parameters.length > 0) {
+					Arrays.stream(parameters).forEach(parameter -> {
+						Logger.breakpoint(parameter.toString());
+					});
+				}
+
+				System.out.println("Breakpoint on line " + command.getLine() + " in " + script.getTextId() + " (" + script.getFileName() + ")");
 				break;
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int ceil ()
@@ -341,6 +349,13 @@ public class CommandExecuter {
 				}
 				break;
 
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void forget ()
+			case FREE_VARIABLE:
+				if (requireParameters(commandNode, 1)) {
+					parameters[0].invalidate();
+				}
+				break;
+
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getAttributeValue ([Instance instance,] String attribute)
 			case GET_ATTRIBUTE:
 				if (parameters.length >= 2) {
@@ -487,6 +502,7 @@ public class CommandExecuter {
 					checkAttribute(script, commandNode, attributeID, attributeTextID);
 
 					return new Variable(instance.getFullAttributeValue(attributeID));
+
 				} else if (requireParameters(commandNode, 1)) {
 					String attributeTextID = parameters[0].getString();
 					int attributeID = Data.getProtoAttributeID(attributeTextID);
@@ -1074,6 +1090,18 @@ public class CommandExecuter {
 						instance.placeInto(newPosition);
 					}
 					return new Variable(newPosition);
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& number percent (number part, number whole)
+			case PERCENT:
+				if (requireParameters(commandNode, 2)) {
+					double part = parameters[0].getDouble();
+					double whole = parameters[1].getDouble();
+
+					if (whole == 0) { return new Variable(); }
+
+					return new Variable(100d * part / whole);
 				}
 				break;
 
