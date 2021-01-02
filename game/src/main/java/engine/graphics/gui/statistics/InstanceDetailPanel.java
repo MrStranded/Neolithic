@@ -4,10 +4,12 @@ import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.attributes.Attribute;
 import engine.data.behaviour.Occupation;
+import engine.data.entities.Effect;
 import engine.data.entities.Instance;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.interaction.SelectedInstance;
 import engine.data.options.GameOptions;
+import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.CreatureContainer;
 import engine.data.proto.ProtoAttribute;
@@ -24,6 +26,13 @@ import java.util.*;
 import java.util.List;
 
 public class InstanceDetailPanel extends JPanel implements MouseListener {
+
+    private static final Color COLOR_PRIMARY    = new Color(0, 0, 0);
+    private static final Color COLOR_BACKGROUND = new Color(255, 255, 255);
+
+    private static final Color COLOR_INSTANCE   = new Color(65, 167, 215);
+    private static final Color COLOR_TILE       = new Color(153, 73, 43);
+    private static final Color COLOR_EFFECT     = new Color(41, 213, 55);
 
     private int width, height;
     private BufferedImage img;
@@ -47,31 +56,28 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
     public void update() {
         Graphics g = img.getGraphics();
 
-        g.setColor(new Color (255,255,255));
+        g.setColor(COLOR_BACKGROUND);
         g.fillRect(0, 0, width, height);
 
         if (buttons != null) { buttons.clear(); }
         buttons = new ArrayList<>(8);
 
-        g.setColor(new Color (65, 167, 215));
+        g.setColor(COLOR_INSTANCE);
         g.fillRect(10 -3, 10 -3, 15, 20);
         buttons.add(new BackButton(10 -3, 10 -3, 15, 20));
 
         drawInstance(g, GameOptions.selectedInstance, 30, 10);
         drawAttributes(g, GameOptions.selectedInstance, height / 2);
         drawVariables(g, GameOptions.selectedInstance, 310, height / 2);
-        drawEffects(g, GameOptions.selectedInstance, 310, height * 3 / 4);
+        drawEffects(g, GameOptions.selectedInstance, 310, getCurrentYPosition() + 20);
         drawInstanceSpecificInfo(g, GameOptions.selectedInstance, 710, height / 2);
     }
 
     private int drawInstance(Graphics g, Instance instance, int xPos, int yPos) {
         if (instance != null) {
-            g.setColor(new Color (65, 167, 215));
-            g.fillRect(xPos - 3, yPos - 3, 145, 20);
-            buttons.add(new InstanceButton(instance, xPos -3, yPos -3, 145, 20));
-
-            g.setColor(new Color (0,0,0));
-            g.drawString(instance.getName(), xPos, yPos + 12);
+            Color color = COLOR_INSTANCE;
+            if (instance instanceof Tile) { color = COLOR_TILE; }
+            drawInstanceButton(g, xPos, yPos, instance, color);
 
             List<Instance> subInstances = instance.getSubInstances();
             if (subInstances != null) {
@@ -93,33 +99,34 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         if (instance == null) { return; }
 
         setCurrentYPosition(yPos);
-        BinaryTree<Attribute> tree = instance.getAttributes();
+        for (Integer attributeId : Data.getAllAttributeIDs()) {
+            Attribute attribute = instance.getAttribute(attributeId);
+            if (attribute == null) { continue; }
 
-        if (tree != null) {
-            tree.forEach(attribute -> {
-                ProtoAttribute protoAttribute = Data.getProtoAttribute(attribute.getId());
+            int attributeValue = instance.getAttributeValue(attribute.getId());
+            if (attributeValue == 0) { continue; }
 
-                if (protoAttribute != null) {
-                    Color attributeColor = protoAttribute.getGuiColor();
-                    if (attributeColor == null) { attributeColor = new Color(0,0,0); }
+            ProtoAttribute protoAttribute = Data.getProtoAttribute(attribute.getId());
+            if (protoAttribute == null) { continue; }
 
-                    g.setColor(getInverted(attributeColor));
-                    g.fillRect(10 - 3, getCurrentYPosition() - 3, 290, 18);
+            Color attributeColor = protoAttribute.getGuiColor();
+            if (attributeColor == null) { attributeColor = COLOR_PRIMARY; }
 
-                    g.setColor(attributeColor);
-                    g.drawString(protoAttribute.getName(), 10, getCurrentYPosition() + 12);
-                    g.drawString(String.valueOf(instance.getAttributeValue(attribute.getId())), 10 + 200, getCurrentYPosition() + 12);
-                    
-                    setCurrentYPosition(getCurrentYPosition() + 20);
-                }
-            });
+            g.setColor(getInverted(attributeColor));
+            g.fillRect(10 - 3, getCurrentYPosition() - 3, 290, 18);
+
+            g.setColor(attributeColor);
+            g.drawString(protoAttribute.getName(), 10, getCurrentYPosition() + 12);
+            g.drawString(attributeValue + " (" + attribute.getValue() + ")", 10 + 200, getCurrentYPosition() + 12);
+
+            setCurrentYPosition(getCurrentYPosition() + 20);
         }
     }
 
     private void drawVariables(Graphics g, Instance instance, int xPos, int yPos) {
         if (instance == null) { return; }
 
-        g.setColor(new Color(0,0,0));
+        g.setColor(COLOR_PRIMARY);
         setCurrentYPosition(yPos);
         BinaryTree<Variable> tree = instance.getVariables();
 
@@ -127,6 +134,14 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
             tree.forEach(variable -> {
                 g.drawString(String.valueOf(variable.toString()), xPos, getCurrentYPosition() + 12);
                 setCurrentYPosition(getCurrentYPosition() + 20);
+
+                if (variable.getType() == DataType.INSTANCE) {
+                    drawInstanceButton(g, xPos, getCurrentYPosition(), variable.getInstance(), COLOR_INSTANCE);
+                    setCurrentYPosition(getCurrentYPosition() + 25);
+                } else if (variable.getType() == DataType.TILE) {
+                    drawInstanceButton(g, xPos, getCurrentYPosition(), variable.getTile(), COLOR_TILE);
+                    setCurrentYPosition(getCurrentYPosition() + 25);
+                }
             });
         }
     }
@@ -134,15 +149,27 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
     private void drawEffects(Graphics g, Instance instance, int xPos, int yPos) {
         if (instance == null) { return; }
 
-        g.setColor(new Color(0,0,0));
+        g.setColor(COLOR_PRIMARY);
         setCurrentYPosition(yPos);
-        instance.getEffects().forEach(effect -> {
-            g.drawString("Effect: " + effect.toString(), xPos, getCurrentYPosition() + 12);
-            setCurrentYPosition(getCurrentYPosition() + 20);
 
-            g.drawString("-> should be removed: " + effect.shouldBeRemoved(instance), xPos, getCurrentYPosition() + 12);
-            setCurrentYPosition(getCurrentYPosition() + 20);
+        List<Effect> effects = instance.getEffects();
+        if (effects == null || effects.isEmpty()) { return; }
+
+        effects.forEach(effect -> {
+            drawInstanceButton(g, xPos, getCurrentYPosition(), effect, COLOR_EFFECT);
+            setCurrentYPosition(getCurrentYPosition() + 25);
         });
+    }
+
+    private void drawInstanceButton(Graphics g, int xPos, int yPos, Instance instance, Color color) {
+        if (instance != null) {
+            g.setColor(color);
+            g.fillRect(xPos - 3, yPos - 3, 145, 20);
+            buttons.add(new InstanceButton(instance, xPos - 3, yPos - 3, 145, 20));
+
+            g.setColor(COLOR_PRIMARY);
+            g.drawString(instance.getName(), xPos, yPos + 12);
+        }
     }
 
     private void drawInstanceSpecificInfo(Graphics g, Instance instance, int xPos, int yPos) {
@@ -151,7 +178,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         Optional<engine.data.proto.Container> container = instance.getContainer();
         if (container.isEmpty()) { return; }
 
-        g.setColor(new Color(0,0,0));
+        g.setColor(COLOR_PRIMARY);
 
         g.drawString(container.get().getName() + " - " + container.get().getType(), xPos, yPos + 12);
         if (container.get().isRunTickScripts()) {
@@ -159,15 +186,23 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         }
         yPos += 20;
 
-        g.drawString("Mesh: " + container.get().getMeshPath(instance.getStage()), xPos, yPos + 12);
+        g.drawString("Position: " + instance.getPosition(), xPos, yPos + 12);
         yPos += 20;
+
+        String meshPath = container.get().getMeshPath(instance.getStage());
+        if (meshPath != null) {
+            int lastSlash = meshPath.lastIndexOf('/');
+            meshPath = lastSlash >= 0 ? meshPath.substring(lastSlash + 1) : meshPath;
+            g.drawString("Mesh: " + meshPath, xPos, yPos + 12);
+            yPos += 20;
+        }
 
         if (instance.getStage() != null && !ScriptConstants.DEFAULT_STAGE.equals(instance.getStage())) {
             g.drawString("Stage: " + instance.getStage(), xPos + 50, yPos + 12);
             yPos += 20;
         }
 
-        g.drawString(instance.getMemoryAddress(), xPos + 50, yPos + 12);
+        g.drawString("Memory addr.: " + instance.getMemoryAddress(), xPos, yPos + 12);
         yPos += 20;
 
         if (container.get().getType() == DataType.TILE) {
@@ -214,6 +249,20 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
                             g.drawString(weight.getString(), xPos + 170, yPos + 12);
                         }
 
+                        yPos += 20;
+                    }
+                }
+            }
+
+            if (creatureContainer.getKnowledge(instance.getStage()) != null) {
+                g.drawString("Knowledge:", xPos, yPos + 12);
+                yPos += 20;
+
+                for (ContainerIdentifier identifier : creatureContainer.getKnowledge(instance.getStage())) {
+                    Container process = identifier.retrieve();
+
+                    if (process != null) {
+                        g.drawString(process.getName(), xPos + 10, yPos + 12);
                         yPos += 20;
                     }
                 }

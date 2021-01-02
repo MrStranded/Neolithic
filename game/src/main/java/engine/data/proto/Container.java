@@ -50,9 +50,7 @@ public class Container {
 		for (PreAttribute preAttribute : preAttributeList) {
 			int id = Data.getProtoAttributeID(preAttribute.getTextID());
 			if (id >= 0) {
-				getAttributes(preAttribute.getStage()).insert(
-						new Attribute(id, preAttribute.getValue(), preAttribute.getVariation())
-				);
+				addAttribute(preAttribute.getStage(), new Attribute(id, preAttribute.getValue(), preAttribute.getVariation()));
 			} else {
                 Logger.error("Attribute with textID '" + preAttribute.getTextID() + "' is never declared!");
 			}
@@ -181,6 +179,9 @@ public class Container {
 		return getStage(stage).getIdList(key)
 				.or(() -> getDefaultStage().getIdList(key));
 	}
+	public Optional<List<ContainerIdentifier>> getPropertyListStrict(String stage, String key) {
+		return getStage(stage).getIdList(key);
+	}
 	public List<ContainerIdentifier> getOrCreatePropertyList(String stage, String key) {
 		// get
 		Optional<List<ContainerIdentifier>> list = getStage(stage).getIdList(key);
@@ -190,6 +191,11 @@ public class Container {
 		List<ContainerIdentifier> l = new ArrayList<ContainerIdentifier>(4);
 		getStage(stage).set(key, l);
 		return l;
+	}
+	public void mergePropertyList(String stage, String key, List<ContainerIdentifier> list) {
+		if (list == null || list.size() == 0) { return; }
+
+		getOrCreatePropertyList(stage, key).addAll(list);
 	}
 
 	public BinaryTree<Attribute> getAttributes(String stage) {

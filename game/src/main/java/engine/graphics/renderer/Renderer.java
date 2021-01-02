@@ -390,8 +390,7 @@ public class Renderer {
 					meshHub.render(shaderProgram, viewMatrix, shadowMap);
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (ConcurrentModificationException e) {
 			// this happens when a new mesh hub is added to the hashmap while we iterate over it
 		}
 

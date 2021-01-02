@@ -34,6 +34,8 @@ public class StatisticsPanel extends JPanel {
     }
 
     public void register(Instance instance) {
+        if (GameOptions.plotOnlySelectedEntity && GameOptions.selectedInstance != instance) { return; }
+
         for (int id = 0; id < GameConstants.MAX_ATTRIBUTES; id++) {
             ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
 

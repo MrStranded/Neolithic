@@ -16,8 +16,11 @@ Process: proGrow {
     }
 
     Script: process {
-		..attSize++;
-		..attNutrition--;
+		// too efficient? -> get nerfed!
+		if (! chance(.attEfficiency / 100)) { 
+			..attSize++;
+			..attNutrition--;
+		}
     }
 }
 
@@ -46,7 +49,6 @@ Process: proGrowIntoTree {
     }
     Script: process {
         setStage(self, "sapling");
-        addEffect(self, effSapling);
     }
 }
 
@@ -54,28 +56,46 @@ Process: proGrowIntoTree {
 ///////////////////////////////////////////////////////////////////////////// Photosynthesis
 
 Drive: driGatherEnergy {
-    solutions { proPhotosynthesis; }
+    solutions {
+		proPhotosynthesis;
+		proLeechFromHolder;
+	}
 
-    Script: condition { return true; }
+    Script: condition { return .attNutrition < .attMaxSize; }
 
     Script: getWeight {
-        return(100 - .attNutrition - .attWater);
+		nutWeight = 50 * .attNutrition / .attMaxSize;
+		waterWeight = 50 * .attWater / .attMaxSize;
+        return(100 - nutWeight - waterWeight);
     }
 }
 
 Process: proPhotosynthesis {
 	Script: condition {
-		// require(getLightLevel(self) + getTile(self).attLightLevel >= .attLightSensitivity);
-        require(getLightLevel(self) + getFullAtt(getTile(self), "attLightLevel") >= .attLightSensitivity);
-		// require(getStage(self) != "seed");
+        require(getLightLevel(self) + getTile(self).attLightLevel >= .attLightSensitivity);
+		require(getStage(self) != "seed");
 		require(.attWater > 0);
 	}
 	Script: process {
-		..attWater--;
+		if (! chance(.attEfficiency / 100)) { ..attWater--; }
 		..attNutrition++;
 	}
 
 	Script: discovery(actor) { // there is no way for an entity to learn photosynthesis
 		require(0);
+	}
+}
+
+Process: proLeechFromHolder {
+	Script: condition {
+		require(getHolder(self));
+		require(getHolder(self).attNutrition > 0);
+	}
+	
+	Script: process {
+		getHolder(self)..attNutrition--;
+		if (chance(.attEfficiency / 100)) {
+			self..attNutrition++;
+		}
 	}
 }

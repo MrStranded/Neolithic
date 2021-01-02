@@ -18,6 +18,7 @@ Attribute: attLightSensitivity {
     mutationChance = 50;
     mutationExtent = 20;
     color = 128, 255, 0;
+	bounds = 0, 100;
 }
 Attribute: attHungerSensitivity {
     name = "Hunger sensitivity";
@@ -110,6 +111,7 @@ Attribute: attHealth {
 Attribute: attDamage {
     name = "Damage";
     color = 200, 100, 100;
+	lower = 0;
 }
 Attribute: attMaxHealth {
     name = "Constitution";
@@ -152,13 +154,14 @@ Attribute: attHumidity {
 Attribute: attSize {
 	name = "Size";
     color = 200, 140, 30;
+	bounds = 0, 100;
 }
 Attribute: attMaxSize {
     name = "Max Size";
     color = 100, 70, 15;
     inherited;
     mutation = 20, 5;
-    lower = 0;
+    lower = 1;
 	upper = 100;
 }
 Attribute: attLightLevel { name = "Light level"; }

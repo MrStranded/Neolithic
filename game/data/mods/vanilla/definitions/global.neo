@@ -85,15 +85,7 @@ Script: leftClick(tile, type) {
 	} else {
 		instance = create(type,tile);
 		if (type == cAppleTree) {
-			instance..attNutrition = 50;
-			instance..attAge = 2880;
-			instance->updateMesh();
-		} else if (type == cTiger) {
-		    instance..attNutrition = 100;
-		    instance..attHydrated = 30;
-		} else if (type == cHuman) {
-		    instance..attNutrition = 100;
-		    instance..attHydrated = 30;
+			setStage(instance, "seed");
 		}
 	}
 
