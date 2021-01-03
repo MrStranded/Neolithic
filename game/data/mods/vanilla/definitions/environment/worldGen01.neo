@@ -15,7 +15,7 @@ WorldGen: genContinental {
 			// print("created mountain");
 		// }
 
-		if (true) {
+		if (false) {
 			islands = random(1, 4);
 			tiles = eachTile();
 			for (i = 0; i < islands; i++) {

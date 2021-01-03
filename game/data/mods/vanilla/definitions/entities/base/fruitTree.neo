@@ -16,12 +16,12 @@ Creature: cFruitTree {
 	}
 
 	attributes{
-	    attMaxHealth, 100;
+	    attMaxHealth, 100, 10;
 	    attTicks, 2;
-		attMaxSize, 50;
-		attEfficiency, 50;
-	    attMatureAge, 420;//2880;
-	    attLightSensitivity, 20;
+		attMaxSize, 50, 10;
+		attEfficiency, 50, 5;
+	    attMatureAge, 420, 50;//2880;
+	    attLightSensitivity, 20, 5;
 	}
 	
 	Script: tick {
