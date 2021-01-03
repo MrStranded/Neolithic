@@ -10,8 +10,12 @@ WorldGen: genContinental {
                 destroy(create(formIsland, t));
 			}
 		}*/
+		// for (i = 0; i < 10; i++) {
+			// destroy(create(formMountain, randomTile()));
+			// print("created mountain");
+		// }
 
-		if (false) {
+		if (true) {
 			islands = random(1, 4);
 			tiles = eachTile();
 			for (i = 0; i < islands; i++) {
@@ -46,7 +50,7 @@ Formation: formIsland inherits entTrail {
 
     Script: islandParts(tile, type, count) {
         for (i = 0; i < count; i++) {
-            create(type, trail(tile, 50));
+            destroy(create(type, trail(tile, 50)));
         }
     }
 }
@@ -72,10 +76,12 @@ Formation: formMountain inherits formLift {
 		east = random(0, 360);
 		north = random(-90,90);
 		
+		// tile = getTileFromCoords(east + 180, north);
 		destination = getTileFromCoords(east, north);
-		// print("destination: " + destination);
+		print("origin: " + tile);
+		print("destination: " + destination);
 		
-		path = getTilesOfPath(self, destination);
+		path = getTilesOfPath(tile, destination);
 		l = length(path);
 		l = min(random(3,10), l);
 		i = 0;
@@ -85,9 +91,9 @@ Formation: formMountain inherits formLift {
 			i++;
 			if (i >= l) { break; }
 			
-			if (chance(0.1)) {
-				create(formMountain, getNeighbor(t, random(3)));
-			}
+			// if (chance(0.1)) {
+				// create(formMountain, getNeighbor(t, random(3)));
+			// }
 		}
 	}
 

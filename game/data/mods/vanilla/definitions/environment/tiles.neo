@@ -20,6 +20,7 @@ Tile: tDirt inherits tSoakingHumidity {
 	attributes {
 	    attNutrition, 10;
 	    attSediment, 15;
+		attPorosity, 15;
 	}
 
 	Script: update {
@@ -54,7 +55,7 @@ Tile: tGras inherits tSoakingHumidity {
 
 	attributes {
 		attNutrition, 20;
-		//attHumidity, 50;
+		attPorosity, 15;
 	    attSediment, 10;
 	}
 
@@ -84,6 +85,7 @@ Tile: tSand inherits tSoakingHumidity {
 
 	attributes {
 	    attSediment, 20;
+		attPorosity, 10;
 	    attTicks, 40;
 	}
 
@@ -124,9 +126,9 @@ Tile: tSoakingHumidity {
             ..attHumidity += 100;
         } else {
             for (n : getNeighbors(self)) {
-                if (n.attHumidity >= .attHumidity + 20) {
-                    ..attHumidity += 10;
-                    n..attHumidity -= 10;
+                if (n.attHumidity > .attHumidity + .attPorosity) {
+                    ..attHumidity += .attPorosity;
+                    n..attHumidity -= .attPorosity;
                 }
             }
         }
@@ -142,5 +144,6 @@ Tile: tStone {
 
 	attributes {
 	    attSediment, 5;
+		attPorosity, 3;
 	}
 }

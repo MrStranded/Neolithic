@@ -69,12 +69,13 @@ public class Data {
 		instanceQueue.forEach(instance -> {
 			if (instance.getId() >= 0) {
 				Optional<Container> container = getContainer(instance.getId());
-				if (container.isPresent()) {
-					idToTextId.put(
-							instance.getId(),
-							container.map(Container::getTextID).orElse(null)
-					);
-				}
+
+				container.map(Container::getTextID).ifPresent(textId -> {
+					if (ScriptConstants.MAIN_CONTAINER.equals(textId)) {
+						System.out.println("PRE - MAIN CONTAINER " + instance.getId());
+					}
+					idToTextId.put(instance.getId(), textId);
+				});
 			}
 		});
 
@@ -87,6 +88,11 @@ public class Data {
 		instanceQueue.forEach(instance -> {
 			if (instance.getId() >= 0) {
 				String textId = idToTextId.get(instance.getId());
+
+				if (ScriptConstants.MAIN_CONTAINER.equals(textId)) {
+					System.out.println("POST - MAIN CONTAINER " + instance.getId());
+				}
+
 				int id = Data.getContainerID(textId);
 
 				if (id >= 0) {
@@ -120,7 +126,7 @@ public class Data {
 	 * The mainContainer container contains global scripts
 	 */
 	private static void prepareMainContainer() {
-		mainContainer = new Container("mainContainer", DataType.CONTAINER);
+		mainContainer = new Container(ScriptConstants.MAIN_CONTAINER, DataType.CONTAINER);
 		int mainID = addContainer(mainContainer);
 		mainInstance = new Instance(mainID);
 	}

@@ -37,8 +37,8 @@ Script: repopulate() {
             if ((getType(t) == tGras || getType(t) == tDirt) && getHeight(t) > 100) {
                 if (chance(0.3)){
                     tree = create(cAppleTree, t);
-                    tree..attAge += random(tree.attMatureAge*2);
-                    addEffect(tree, effSapling);
+					tree..attSize = random(tree.attMaxSize);
+					setStage(tree, "sapling");
                 }
             }
 		}

@@ -63,9 +63,7 @@ public class StatisticsWindow {
     public void register(Instance instance) {
         StatisticsData.add(instance.getId());
 
-        if (instance.getId() == GameOptions.currentContainerId) {
-            statistics.register(instance);
-        }
+        statistics.register(instance);
     }
 
 }
