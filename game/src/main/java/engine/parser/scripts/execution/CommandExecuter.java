@@ -1039,36 +1039,21 @@ public class CommandExecuter {
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void mixAttributes (Instance t, Instance p1, Instance p2)
 			case MIX_ATTRIBUTES:
-				System.out.println("MIXING!!!!!!!!! " + parameters[0].getInstance());
-				if (requireParameters(commandNode, 3)) {
+				if (requireParameters(commandNode, 1)) {
 					Instance target = parameters[0].getInstance();
-					Instance parent1 = parameters[1].getInstance();
-					Instance parent2 = parameters[2].getInstance();
-
 					checkValue(script, commandNode, target, "child instance");
-					checkValue(script, commandNode, parent1, "parent 1 instance");
-					checkValue(script, commandNode, parent2, "parent 2 instance");
 
-					List<Integer> attributes = Data.getAllAttributeIDs();
-					for (Integer id : attributes) {
-						ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
+					List<Instance> parents = new ArrayList<>(parameters.length - 1);
+					if (parameters.length > 1) {
+						for (int i = 1; i < parameters.length; i++) {
+							Instance parent = parameters[i].getInstance();
+							checkValue(script, commandNode, parent, "parent " + i + " instance");
 
-						if (protoAttribute != null && protoAttribute.isInherited()) {
-							double v1 = parent1.getPersonalAttributeValue(id);
-							double v2 = parent2.getPersonalAttributeValue(id);
-							if (v1 != 0 || v2 != 0) {
-								double p = Math.random();
-								int value = (int) (v1*p + v2*(1-p));
-
-								if (Math.random() < protoAttribute.getMutationChance() / 100d) {
-									// +1 because (int) rounds the result down. Math.random() is always < 1
-									value += Math.floor(-protoAttribute.getMutationExtent() + Math.random() * (2d*protoAttribute.getMutationExtent() + 1d));
-								}
-
-								target.setAttribute(id, value);
-							}
+							parents.add(parent);
 						}
 					}
+
+					target.inheritAttributes(parents);
 				}
 				break;
 

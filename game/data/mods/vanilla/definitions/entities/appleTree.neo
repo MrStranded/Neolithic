@@ -13,8 +13,8 @@ Creature: cAppleTree inherits cFruitTree {
 	}
 	
 	attributes{
-		attMaxSize, 100;
-	    attLightSensitivity, 30;
+		attMaxSize, 100, 10;
+	    attLightSensitivity, 30, 5;
 	}
 	
     Stage: seed {

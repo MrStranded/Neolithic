@@ -51,7 +51,7 @@ public class Instance {
 		this.id = id;
 
 		initMoveableObject();
-        inheritAttributes();
+        inheritAttributes(Collections.emptyList());
 
 		Data.addInstanceToQueue(this);
 	}
@@ -90,17 +90,46 @@ public class Instance {
 		}
 	}
 
-    public void inheritAttributes() {
+    public void inheritAttributes(final List<Instance> parents) {
+		// weight parents
+		Map<Instance, Double> weights = new HashMap<>();
+		double weightSum = parents.stream()
+				.map(parent -> {
+					weights.put(parent, Math.random());
+					return weights.get(parent);
+				})
+				.reduce(0d, (current, next) -> current + next);
+
+		// sum up attribute values
 	    getContainer().ifPresent(container -> {
 	    	if (attributes != null) { attributes.clear(); }
-			BinaryTree<Attribute> tree = container.getAttributes(stage);
-			if (tree != null) {
-				tree.forEach(attribute -> {
-					int variedValue = attribute.getVariedValue();
-					if (variedValue != 0) {
-						setAttribute(attribute.getId(), variedValue);
+
+			for (Integer id : Data.getAllAttributeIDs()) {
+				ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
+
+				if (protoAttribute != null && protoAttribute.isInherited()) {
+					double inheritedValue = 0;
+
+					// inherent mutation
+					Attribute containerAttribute = container.getAttribute(stage, id);
+					if (containerAttribute != null) {
+						inheritedValue += containerAttribute.getVariedValue();
 					}
-				});
+
+					// parent influences
+					inheritedValue += parents.stream()
+							.map(parent ->
+									weights.get(parent)
+											* ((double) parent.getPersonalAttributeValue(id))
+											/ weightSum
+							)
+							.reduce(0d, (current, next) -> current + next);
+
+					// set attribute
+					if (inheritedValue != 0) {
+						setAttribute(id, (int) inheritedValue);
+					}
+				}
 			}
 		});
     }
@@ -153,7 +182,7 @@ public class Instance {
 		id = containerId;
 		Container newContainer = getContainer().orElse(null);
 
-		inheritAttributes();
+		inheritAttributes(Collections.emptyList());
 		if (newContainer != null && newContainer.getType() == DataType.TILE) {
 			((Tile) this).resetColors();
 			((Tile) this).setChanged(true);
