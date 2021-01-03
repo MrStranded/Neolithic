@@ -61,7 +61,7 @@ public class Data {
 	public static void initialize() {
 		prepareInstances();
 		prepareProto();
-		prepareMainContainer();
+		prepareMainInstance(prepareMainContainer());
 	}
 
 	public static void initializeReload() {
@@ -125,9 +125,11 @@ public class Data {
 	/**
 	 * The mainContainer container contains global scripts
 	 */
-	private static void prepareMainContainer() {
+	private static int prepareMainContainer() {
 		mainContainer = new Container(ScriptConstants.MAIN_CONTAINER, DataType.CONTAINER);
-		int mainID = addContainer(mainContainer);
+		return addContainer(mainContainer);
+	}
+	private static void prepareMainInstance(int mainID) {
 		mainInstance = new Instance(mainID);
 	}
 
