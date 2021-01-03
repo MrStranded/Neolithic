@@ -15,10 +15,7 @@ import engine.data.proto.ProtoAttribute;
 import engine.data.scripts.Script;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
-import engine.logic.topology.Neighbour;
-import engine.logic.topology.Pathfinding;
-import engine.logic.topology.TileArea;
-import engine.logic.topology.TopologyGenerator;
+import engine.logic.topology.*;
 import engine.math.numericalObjects.Vector3;
 import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.exceptions.InvalidValueException;
@@ -775,7 +772,7 @@ public class CommandExecuter {
 					double east = parameters[0].getDouble() * Math.PI / 180;
 					double north = parameters[1].getDouble() * Math.PI / 180;
 
-					return new Variable(Data.getPlanet().getPlanetObject().getTile(east, north));
+					return new Variable(GeographicCoordinates.getTile(Data.getPlanet(), east, north));
 				}
 				break;
 
@@ -1042,6 +1039,7 @@ public class CommandExecuter {
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void mixAttributes (Instance t, Instance p1, Instance p2)
 			case MIX_ATTRIBUTES:
+				System.out.println("MIXING!!!!!!!!! " + parameters[0].getInstance());
 				if (requireParameters(commandNode, 3)) {
 					Instance target = parameters[0].getInstance();
 					Instance parent1 = parameters[1].getInstance();
@@ -1165,14 +1163,6 @@ public class CommandExecuter {
 					return new Variable(tile);
 				}
 				break;
-
-//			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& variable return (variable)
-//			case RETURN:
-//				if (parameters.length >= 1) {
-//					throw new ReturnException(parameters[0]);
-//				}
-//
-//				throw new ReturnException();
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int require (variable)
 			case REQUIRE:

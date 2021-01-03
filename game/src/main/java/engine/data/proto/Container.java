@@ -100,7 +100,7 @@ public class Container {
 					if (script != null) {
 
 						// own script overrides script from ancestor
-						if (getScript(stage, script.getTextId()) == null) {
+						if (getScriptStrict(stage, script.getTextId()) == null) {
 							addScript(stage, script);
 						}
 					}
@@ -197,6 +197,12 @@ public class Container {
 
 		getOrCreatePropertyList(stage, key).addAll(list);
 	}
+	private boolean propertyListIsInclusive(String stage, String key) {
+		return getStage(stage).getBoolean(key + "Inclusivity").orElse(true);
+	}
+	public void setPropertyListInclusivity(String stage, String key, boolean isInclusive) {
+		getStage(stage).set(key + "Inclusivity", isInclusive);
+	}
 
 	public BinaryTree<Attribute> getAttributes(String stage) {
 		BinaryTree<Attribute> result = getStage(stage).getAttributes();
@@ -230,7 +236,7 @@ public class Container {
 
 	public BinaryTree<Script> getScripts(String stage) {
 		BinaryTree<Script> result = getStage(stage).getScripts();
-		if (result == null) { result = getDefaultStage().getScripts(); }
+//		if (result == null) { result = getDefaultStage().getScripts(); }
 		if (result == null) {
 			result = new BinaryTree<>();
 			getStage(stage).set(ScriptConstants.KEY_SCIPTS, result);
@@ -242,6 +248,10 @@ public class Container {
 		Script result = getStage(stage).getScript(id);
 		if (result == null) { result = getDefaultStage().getScript(id); }
 		return result;
+	}
+	public Script getScriptStrict(String stage, String textID) {
+		int id = StringConverter.toID(textID);
+		return getStage(stage).getScript(id);
 	}
 	public void addScript(String stage, Script script) {
 		if (script == null) { return; }

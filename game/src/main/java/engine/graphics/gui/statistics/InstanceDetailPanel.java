@@ -100,13 +100,11 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
 
         setCurrentYPosition(yPos);
         for (Integer attributeId : Data.getAllAttributeIDs()) {
-            Attribute attribute = instance.getAttribute(attributeId);
-            if (attribute == null) { continue; }
-
-            int attributeValue = instance.getAttributeValue(attribute.getId());
+            int personalValue = instance.getPersonalAttributeValue(attributeId);
+            int attributeValue = instance.getAttributeValue(attributeId);
             if (attributeValue == 0) { continue; }
 
-            ProtoAttribute protoAttribute = Data.getProtoAttribute(attribute.getId());
+            ProtoAttribute protoAttribute = Data.getProtoAttribute(attributeId);
             if (protoAttribute == null) { continue; }
 
             Color attributeColor = protoAttribute.getGuiColor();
@@ -117,7 +115,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
 
             g.setColor(attributeColor);
             g.drawString(protoAttribute.getName(), 10, getCurrentYPosition() + 12);
-            g.drawString(attributeValue + " (" + attribute.getValue() + ")", 10 + 200, getCurrentYPosition() + 12);
+            g.drawString(attributeValue + " (" + personalValue + ")", 10 + 200, getCurrentYPosition() + 12);
 
             setCurrentYPosition(getCurrentYPosition() + 20);
         }

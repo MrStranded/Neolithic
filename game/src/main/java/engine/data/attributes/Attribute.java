@@ -71,15 +71,19 @@ public class Attribute implements IDInterface {
 
 	@Override
 	public IDInterface merge(IDInterface other) {
-		value += ((Attribute) other).value;
+		value = ((Attribute) other).value;
 		return this;
 	}
 
 	public int getValue() {
+		return value;
+	}
+	public int getVariedValue() {
 		if (variation == 0) {
-			return value;
+			return 0;
 		}
-		return value - variation + (int) (Math.random() * ((double) (variation) * 2d + 1d));
+		int delta = (int) (Math.random() * ((double) (variation) * 2d + 1d));
+		return - variation + delta;
 	}
 	public void setValue(int value) {
 		this.value = value;

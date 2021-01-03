@@ -107,22 +107,6 @@ public class PlanetObject extends MoveableObject {
 	}
 
 	// ###################################################################################
-	// ################################ Picking With Coordinates #########################
-	// ###################################################################################
-
-	public Tile getTile(double east, double north) {
-		Vector3 origin = Vector3.ZERO;
-
-		Vector3 goal = new Vector3(
-				Math.cos(east) * Math.cos(north),
-				Math.sin(east) * Math.cos(north),
-				Math.sin(north));
-
-		FacePart intersected = getIntersectedFacePart(origin, goal);
-		return intersected != null ? intersected.getTile() : null;
-	}
-
-	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 

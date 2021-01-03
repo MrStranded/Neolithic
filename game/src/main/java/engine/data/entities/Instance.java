@@ -96,7 +96,10 @@ public class Instance {
 			BinaryTree<Attribute> tree = container.getAttributes(stage);
 			if (tree != null) {
 				tree.forEach(attribute -> {
-					addAttribute(attribute.getId(), attribute.getValue());
+					int variedValue = attribute.getVariedValue();
+					if (variedValue != 0) {
+						setAttribute(attribute.getId(), variedValue);
+					}
 				});
 			}
 		});
@@ -335,11 +338,6 @@ public class Instance {
 				variables.remove(variable.getId());
 			}
 		});
-//		for (IDInterface variable : variables.toArray()) {
-//			if (((Variable) variable).isInvalid()) {
-//				variables.remove(variable.getId());
-//			}
-//		}
 	}
 
 	// ###################################################################################
@@ -419,7 +417,7 @@ public class Instance {
 				// assign values to moveable object
 				moveableObject.setPosition(pos);
 				moveableObject.setRotation(pitch + Math.PI / 2d, -yaw + Math.PI / 2d, 0);
-				moveableObject.setPreRotation(0, Math.random() * Math.PI * 2d * 0d, 0);
+				moveableObject.setPreRotation(0, Math.random() * Math.PI * 2d, 0);
 			}
 		}
 
@@ -453,6 +451,8 @@ public class Instance {
 			Logger.error("Cannot delete main instance!");
 			return;
 		}
+
+		run(ScriptConstants.EVENT_DESTROY, new Variable[] {});
 
 		recursiveSlatingForRemoval();
 		if (variables != null) {
@@ -625,8 +625,23 @@ public class Instance {
 		// personal data
 		value += getPersonalAttributeValue(attributeID);
 
+		// container data
+		value += getContainerAttributeValue(attributeID);
+
 		// effects
 		value += getEffectsAttributeValue(attributeID);
+
+		return value;
+	}
+
+	public int getFullAttributeValue(int attributeID) {
+		int value = 0;
+
+		// values from self
+		value += getAttributeValue(attributeID);
+
+		// sub instances
+		value += getSubInstancesAttributeValue(attributeID);
 
 		return value;
 	}
@@ -645,21 +660,6 @@ public class Instance {
 		return value;
 	}
 
-	public int getFullAttributeValue(int attributeID) {
-		int value = 0;
-
-		// values from self
-		value += getPersonalAttributeValue(attributeID);
-
-		// effects
-		value += getEffectsAttributeValue(attributeID);
-
-		// sub instances
-		value += getSubInstancesAttributeValue(attributeID);
-
-		return value;
-	}
-
 	public int getSubInstancesAttributeValue(int attributeID) {
 		int value = 0;
 		if (subInstances != null) {
@@ -672,11 +672,15 @@ public class Instance {
 
 	public int getPersonalAttributeValue(int attributeID) {
 		if (attributes == null) { return 0; }
-		Attribute attribute = attributes.get(attributeID);
 
+		Attribute attribute = attributes.get(attributeID);
 		if (attribute == null) { return 0; }
 
 		return attribute.getValue();
+	}
+
+	public int getContainerAttributeValue(int attributeID) {
+		return getContainer().map(container -> container.getAttributeValue(attributeID)).orElse(0);
 	}
 
 	/**
@@ -696,10 +700,7 @@ public class Instance {
 		}
 	}
 	public void addAttribute(int attributeID, int value) {
-		if (attributeID >= 0) {
-			createAttributesIfNecessary();
-			attributes.insert(new Attribute(attributeID, value));
-		}
+		setAttribute(attributeID, getPersonalAttributeValue(attributeID) + value);
 	}
 
 	public BinaryTree<Variable> getVariables() {

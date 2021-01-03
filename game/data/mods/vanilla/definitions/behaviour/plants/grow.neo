@@ -49,6 +49,11 @@ Process: proGrowIntoTree {
     }
     Script: process {
         setStage(self, "sapling");
+		
+        for (n : getNeighbors(self)) {
+            effect = addEffect(n, effShadow);
+            effect->cause = self;
+        }
     }
 }
 
@@ -72,7 +77,9 @@ Drive: driGatherEnergy {
 
 Process: proPhotosynthesis {
 	Script: condition {
-        require(getLightLevel(self) + getTile(self).attLightLevel >= .attLightSensitivity);
+		ll = getLightLevel(self) + getTile(self).attLightLevel;
+		// print("ll: " + ll);
+        require(ll >= .attLightSensitivity);
 		require(getStage(self) != "seed");
 		require(.attWater > 0);
 	}

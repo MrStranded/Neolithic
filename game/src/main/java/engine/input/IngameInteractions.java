@@ -132,7 +132,7 @@ public class IngameInteractions {
             if (clickedTile != null) {
 
                 // we try to take first sub instance. otherwise take clicked tile
-                if (clickedTile.getSubInstances() == null) {
+                if (clickedTile.getSubInstances() == null || clickedTile.getSubInstances().size() == 0) {
                     GameOptions.selectedInstance = clickedTile;
                 } else {
                     for (Instance sub : clickedTile.getSubInstances()) {

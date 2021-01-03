@@ -19,10 +19,10 @@ public interface GeographicCoordinates {
 		double yaw = Math.toRadians(longitude);
 		double pitch = -Math.toRadians(latitude); // minus because i want positive pitches to go north
 
-		double heighFactor = Math.cos(pitch);
-		double x = Math.cos(yaw) * heighFactor;
+		double heightFactor = Math.cos(pitch);
+		double x = Math.cos(yaw) * heightFactor;
 		double y = Math.sin(pitch);
-		double z = Math.sin(yaw) * heighFactor;
+		double z = Math.sin(yaw) * heightFactor;
 
 		Vector3 search = new Vector3(x, y, z);
 

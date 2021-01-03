@@ -24,14 +24,11 @@ Creature: cFruitTree {
 	    attLightSensitivity, 20;
 	}
 	
-	Script: new {
-        for (n : getNeighbors(self)) {
-            effect = addEffect(n, effShadow);
-            effect->cause = self;
-        }
+	Script: tick {
+		->plantTick();
 	}
 	
-	Script: tick {
+	Script: plantTick {
 	    delayNextTick(self, .attTicks);
 	    ..attAge++;
 
@@ -39,13 +36,17 @@ Creature: cFruitTree {
 	        ..attDamage++;
 	    }
 
-		if (.attAge > .attMatureAge * 3 && ! hasEffect(self, effCancer)) { // age death
+		if (.attAge > .attMatureAge  && ! hasEffect(self, effCancer) && chance((.attAge - .attMatureAge) / .attMatureAge)) { // age death
 		    addEffect(self, effCancer);
         }
 		
-		if (.attWater <= 0 && ! hasEffect(self, effDry)) {
+		if (.attWater <= 0 && ! hasEffect(self, effDry) && chance(0.1)) {
 		    addEffect(self, effDry);
         }
+	}
+	
+	Script: delete {
+		getTile(self)..attNutrition += .attSize;
 	}
 	
 	Stage: ripe {
@@ -63,6 +64,7 @@ Creature: cFruitTree {
 			driSoak;
 			driGatherEnergy;
 			driGrow;
+			driDeathwish;
 		}
 	
 		attributes{
@@ -70,17 +72,7 @@ Creature: cFruitTree {
 		}
 		
 		Script: tick {
-			print("sapling tick");
-			delayNextTick(self, .attTicks);
-			..attAge++;
-
-			if (getWaterHeight(self) > getHeight(self)) {
-				..attDamage++;
-			}
-			
-			if (.attWater <= 0 && ! hasEffect(self, effDry)) {
-				addEffect(self, effDry);
-			}
+			->plantTick();
 		
 			if (.attSize >= .attMaxSize / 2) {
 				setDefaultStage(self);

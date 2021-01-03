@@ -624,7 +624,7 @@ public class Interpreter {
 				addScript(container);
 
 				// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% stage scopes
-			} else if (TokenConstants.STAGE.equals(next)) { // Stage attributes
+			} else if (TokenConstants.STAGE.equals(next)) { // new Stage scope
 				String previousStage = currentStage;
 
 				consume(TokenConstants.COLON);

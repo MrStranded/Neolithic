@@ -74,7 +74,7 @@ public class BaseGUI implements GUIInterface {
 
 		if (GameOptions.selectedInstance != null && ! GameOptions.selectedInstance.isSlatedForRemoval()) {
 			yPos = 0;
-			printInstance(GameOptions.selectedInstance, windowWidth, windowHeight);
+//			printInstance(GameOptions.selectedInstance, windowWidth, windowHeight);
 		}
 	}
 

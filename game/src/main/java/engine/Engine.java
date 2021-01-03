@@ -5,6 +5,7 @@ import constants.ScriptConstants;
 import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
 import engine.data.Data;
+import engine.data.scripts.Script;
 import engine.graphics.gui.GuiData;
 import engine.parser.utils.Logger;
 import engine.threads.LogicThread;
@@ -67,12 +68,26 @@ public class Engine {
 	public static void reloadScripts() {
 		Logger.log("------------------- Reloading Scripts");
 
+		// count main instances
+		long mainInstances = Data.getInstanceQueue().stream()
+				.filter(instance -> Data.getContainer(instance.getId())
+						.map(container -> ScriptConstants.MAIN_CONTAINER.equals(container.getTextID())).orElse(false))
+				.count();
+		System.out.println("prereload main instances: " + mainInstances);
+
 		Data.initializeReload();
 		new Parser().load();
 		Data.finishReload();
 
 		Data.clearMeshHubs();
 		Data.loadMeshHubs();
+
+		// count main instances
+		mainInstances = Data.getInstanceQueue().stream()
+				.filter(instance -> Data.getContainer(instance.getId())
+						.map(container -> ScriptConstants.MAIN_CONTAINER.equals(container.getTextID())).orElse(false))
+				.count();
+		System.out.println("postload main instances: " + mainInstances);
 	}
 
 	public static void createWorld() {

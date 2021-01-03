@@ -61,7 +61,7 @@ Attribute: attLibido {
 Attribute: attBabySize {
     name = "Baby size";
     inherited;
-    mutation = 50, 10;
+    // mutation = 50, 10;
     lower = 1;
 }
 Attribute: attGender {
@@ -176,6 +176,10 @@ Attribute: attSourceStrength {
 Attribute: attSediment {
     name = "Sediment";
     color = 150, 130, 60;
+}
+Attribute: attPorosity {
+    name = "Porosity";
+    color = 50, 50, 120;
 }
 Attribute: attMinDeviation { name = "Minimum deviation"; }
 Attribute: attMaxDeviation { name = "Maximum deviation"; }
