@@ -100,13 +100,9 @@ Creature: cFruitTree {
 
 Effect: effShadow {
     name = "Shadow";
-
-    attributes {
-        attLightLevel, "-10";
-    }
 	
 	Script: tick() {
-		..attLightLevel = - (->cause..attSize) / 3;
+		..attLightLevel = - (->cause..attSize) / 6;
 	}
 
     Script: removeCondition() {

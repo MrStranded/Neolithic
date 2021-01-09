@@ -251,6 +251,25 @@ public class FacePart {
 		this.tile = tile;
 	}
 
+	/**
+	 * If i is from one to three, the corresponding corner is returned.
+	 * For other values of i, null is returned.
+	 * @param i corner that should be returned
+	 * @return corner with given number
+	 */
+	public Vector3 getScaledCorner(int i) {
+		if (i < 1 || i > 3) { return null; }
+
+		Vector3 corner = switch(i) {
+			case 1 -> corner1;
+			case 2 -> corner2;
+			case 3 -> corner3;
+			default -> null; // cannot happen
+		};
+
+		double f = PlanetGenerator.getHeightFactor(height);
+		return corner.times(f);
+	}
 	public Vector3 getCorner1() {
 		return corner1;
 	}

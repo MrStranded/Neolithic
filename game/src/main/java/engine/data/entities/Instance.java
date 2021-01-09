@@ -437,7 +437,14 @@ public class Instance {
 //				double heightFactor = (Math.max(position.getHeight(), position.getWaterHeight()) + TopologyConstants.PLANET_MINIMUM_HEIGHT)
 //						/ (TopologyConstants.PLANET_MINIMUM_HEIGHT + TopologyConstants.PLANET_MAXIMUM_HEIGHT);
 //				pos = position.getTileMesh().getNormal().times(heightFactor);
-				pos = position.getTileMesh().getMid();
+				Vector3 mid = position.getTileMesh().getMid();
+				int slot = position.getOpenSlot(this);
+				if (slot == 0) {
+					pos = mid;
+				} else {
+					Vector3 corner = position.getTileMesh().getScaledCorner(slot);
+					pos = corner != null ? mid.plus(position.getTileMesh().getScaledCorner(slot)).times(0.5) : mid;
+				}
 				// set correct scale
 				if (Data.getPlanet() != null) {
 					double scaleFactor = 1d / (double) Data.getPlanet().getSize();
@@ -590,6 +597,10 @@ public class Instance {
 			meshHub.clear();
 		}
 		meshHub = null;
+	}
+
+	public boolean hasMesh() {
+		return meshHub != null;
 	}
 
     public String getName() {

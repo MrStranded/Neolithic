@@ -80,6 +80,21 @@ public class Tile extends Instance implements IDInterface {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
+	/**
+	 * Slot 0 is in the middle of the tile. Slots 1 to 3 are close to corners 1 to 3.
+	 * @return free slot nr ranging from 0 to 3
+	 */
+	public int getOpenSlot(Instance instance) {
+		if (getSubInstances() == null || getSubInstances().isEmpty()) { return 0; }
+
+		int slot = 0;
+		for (Instance sub : getSubInstances()) {
+			if (sub == instance) { return slot; }
+			if (sub.hasMesh()) { slot++; }
+		}
+		return slot;
+	}
+
 	@Override
 	public Tile getPosition() {
 		return this;
