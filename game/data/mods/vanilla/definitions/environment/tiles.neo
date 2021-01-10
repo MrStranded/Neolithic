@@ -147,3 +147,8 @@ Tile: tStone {
 		attPorosity, 3;
 	}
 }
+
+Tile: tMarker {
+    runTicks = false;
+	name = "Marker"; topColor {255;0;0;}
+}

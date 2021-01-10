@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////// Tree
 
-Creature: cAppleTree inherits cFruitTree {
+Creature: cAppleTree inherits cPlant {
 
     name = "Apple tree";
     mesh = "apple_tree_mature.ply";

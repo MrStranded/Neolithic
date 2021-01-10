@@ -35,10 +35,15 @@ Script: repopulate() {
 				addEffect(human, effInfant);
 			}
             if ((getType(t) == tGras || getType(t) == tDirt) && getHeight(t) > 100) {
-                if (chance(0.3)){
+                if (chance(0.2)){
                     tree = create(cAppleTree, t);
 					tree..attSize = random(tree.attMaxSize);
 					setStage(tree, "sapling");
+                }
+                if (chance(0.2)){
+                    bush = create(cBush, t);
+					bush..attSize = random(bush.attMaxSize);
+					setStage(bush, "sapling");
                 }
             }
 		}

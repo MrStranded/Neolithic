@@ -674,7 +674,7 @@ public class CommandExecuter {
 						}
 						return new Variable(items);
 					}
-					return new Variable(Collections.emptyList());
+					return new Variable(new ArrayList<>(0));
 				}
 				break;
 

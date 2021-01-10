@@ -57,6 +57,12 @@ Entity: entWater {
                     if (lowest > 100 || getHeight(next) - getWaterHeight(next) <= d) {
                         ->createWater(next, d);
                     }
+					
+					for(item : getItems(self)) {
+						if (item.attSize < d) {
+							pickUp(next, item);
+						}
+					}
                 }
             }
 
