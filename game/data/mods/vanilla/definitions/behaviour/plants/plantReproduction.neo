@@ -3,6 +3,11 @@ Drive: driPlantReproduction {
 		proPropagate;
 		proDropFruit;
 	}
+	
+	Script: condition {
+		// require(.attSize >= .attMaxSize / 2);
+		require(.attAge >= .attMatureAge);
+	}
 
 	Script: getWeight {
 		if (..attMaxSize == 0) {
@@ -35,13 +40,14 @@ Process: proDropFruit {
 
 Process: proGrowFruit {
 	Script: condition {
-		require(.attNutrition > 0);
+		require(.attNutrition >= .attGrowthSize);
 	}
 
 	Script: process {
+		..attNutrition -= .attGrowthSize;
+		
 		if (->fruit) {
-			->fruit..attNutrition++;
-			..attNutrition--;
+			->fruit..attNutrition += .attGrowthSize;
 		} else {
 			setStage(self, "ripe");
 

@@ -164,6 +164,10 @@ Attribute: attMaxSize {
     lower = 1;
 	upper = 100;
 }
+Attribute: attGrowthSize {
+	name = "Growth Size";
+    color = 250, 175, 38;
+}
 Attribute: attLightLevel { name = "Light level"; }
 Attribute: attWater {
     name = "Water";
