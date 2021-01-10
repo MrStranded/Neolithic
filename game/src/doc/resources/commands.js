@@ -154,6 +154,32 @@ const commands = [
                          <i>// changes the sapling instance into a tree</i>`
     },
     {
+        name: 'moveTo',
+        type: 'Tile',
+        parameters: [
+            {
+                name: 'target',
+                type: 'Tile'
+            },
+            {
+                name: 'instance',
+                type: 'Instance'
+            },
+            {
+                name: 'steps',
+                type: 'Number'
+            },
+            {
+                name: 'viewingDistance',
+                type: 'Number',
+                optional: true,
+            }
+        ],
+        description:    `The instance takes the specified number of steps towards the target tile. The path that the
+                         instance chooses is informed by the viewingDistance.<br>
+                         Returns the tile where the instance lands.`,
+    },
+    {
         name: 'random',
         type: 'Number',
         parameters: [

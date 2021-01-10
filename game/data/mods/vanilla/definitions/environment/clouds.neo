@@ -1,0 +1,74 @@
+
+Entity: entCloud {
+    name = "Cloud";
+	mesh = "cloud.ply";
+	opacity = 0.25;
+
+	attributes {
+	    attTicks, 10;
+		attSpeed, 1;
+	}
+
+    Script: tick {
+        delayNextTick(self, .attTicks);
+		
+		previousHeight = getHeight(self);
+		
+		if (->goal) {
+			destination = moveTo(->goal, self, .attSpeed);
+			if (destination == ->goal) { forget(->goal); }
+		} else {
+			east = getLongitude(self);
+			north = getLatitude(self);
+			
+			dx = cos(east + north) / 4;
+			dy = sin(east + north) / 4;
+			->goal = getTileFromCoords(east + dx, north + dy);
+		}
+		
+        other = getInstance(entCloud, getTile(self));
+        if (other) {
+            other..attHumidity += self..attHumidity;
+            destroy(self);
+            return;
+        }
+		
+        heightIncrease = getHeight(self) - previousHeight;
+        if (.attHumidity >= 100 || chance((.attHumidity + heightIncrease) / 100)) {
+            (create(entRain, getTile(self)))..attWater += 1;
+            ..attHumidity -= 100;
+        }
+
+        if (getLightLevel(self) >= 70) { ..attHumidity -= 1; }
+
+        if (.attHumidity <= 0) {
+            destroy(self);
+        }
+	}
+}
+
+Entity: entRain {
+    name = "Rain";
+    mesh = "raindrops.ply";
+    opacity = 0.25;
+
+    Script: tick {
+        if (chance(0.5)) {
+            tile = getTile(self);
+            other = getInstance(entWater, tile);
+            if (other) {
+                other..attWater += 1;
+            } else {
+                if (getHeight(tile) >= getWaterHeight(tile)) {
+                    //(create(entWater, tile))..attWater += 1;
+                    tile..attHumidity += 100;
+                }
+            }
+            ..attWater--;
+        }
+
+        if (.attWater <= 0) {
+            destroy(self);
+        }
+    }
+}

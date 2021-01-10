@@ -73,6 +73,12 @@ public enum TokenConstants {
 	FLOOR			(TokenType.COMMAND, "floor"),
 	CEIL			(TokenType.COMMAND, "ceil"),
 	PERCENT			(TokenType.COMMAND, "percent"),
+	COS				(TokenType.COMMAND, "cos"),
+	SIN				(TokenType.COMMAND, "sin"),
+	TAN				(TokenType.COMMAND, "tan"),
+	ACOS			(TokenType.COMMAND, "acos"),
+	ATAN			(TokenType.COMMAND, "atan"),
+	ATAN2			(TokenType.COMMAND, "atan2"),
 
 	// -------------------------------------------------- Entity Manipulation
 	CHANGE                  (TokenType.COMMAND, "change"),
@@ -113,6 +119,8 @@ public enum TokenConstants {
 	GET_HOLDER              	(TokenType.COMMAND, "getHolder"),
 	GET_ITEM_ATTRIBUTE      	(TokenType.COMMAND, "getItemAtt"),
 	GET_ITEMS					(TokenType.COMMAND, "getItems"),
+	GET_LATITUDE    	     	(TokenType.COMMAND, "getLatitude"),
+	GET_LONGITUDE	         	(TokenType.COMMAND, "getLongitude"),
 	GET_LIGHT_LEVEL         	(TokenType.COMMAND, "getLightLevel"),
 	GET_NEIGHBOUR           	(TokenType.COMMAND, "getNeighbor"), // difference between british english in code and american english in scripts
 	GET_NEIGHBOURS          	(TokenType.COMMAND, "getNeighbors"),

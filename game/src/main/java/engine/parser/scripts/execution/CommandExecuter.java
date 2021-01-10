@@ -45,6 +45,14 @@ public class CommandExecuter {
 				}
 				break;
 
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double acos (double cos)
+			case ACOS:
+				if (requireParameters(commandNode, 1)) {
+					double cos = parameters[0].getDouble();
+					return new Variable(Math.acos(cos));
+				}
+				break;
+
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& effect addEffect (Instance target, Container effectContainer)
 			case ADD_EFFECT:
 				if (parameters.length >= 4) {
@@ -151,6 +159,23 @@ public class CommandExecuter {
 				}
 				break;
 
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double atan (double tan)
+			case ATAN:
+				if (requireParameters(commandNode, 1)) {
+					double tan = parameters[0].getDouble();
+					return new Variable(Math.atan(tan));
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double atan2 (double y, double x)
+			case ATAN2:
+				if (requireParameters(commandNode, 1)) {
+					double y = parameters[0].getDouble();
+					double x = parameters[1].getDouble();
+					return new Variable(Math.atan2(y, x));
+				}
+				break;
+
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void breakpoint ()
 			case BREAKPOINT:
 				if (parameters.length > 0) {
@@ -240,6 +265,14 @@ public class CommandExecuter {
 					instance.run(ScriptConstants.EVENT_NEW, new Variable[] {parameters[1]});
 
 					return new Variable(instance);
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double cos (double radian)
+			case COS:
+				if (requireParameters(commandNode, 1)) {
+					double radian = parameters[0].getDouble();
+					return new Variable(Math.cos(radian));
 				}
 				break;
 
@@ -645,6 +678,17 @@ public class CommandExecuter {
 				}
 				break;
 
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double getLatitude (Tile tile)
+			case GET_LATITUDE:
+				if (requireParameters(commandNode, 1)) {
+					Tile tile = parameters[0].getTile();
+
+					checkValue(script, commandNode, tile, "target tile");
+
+					return new Variable(GeographicCoordinates.getLatitude(tile));
+				}
+				break;
+
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double getLightLevel (Tile tile)
 			case GET_LIGHT_LEVEL:
 				if (requireParameters(commandNode, 1)) {
@@ -659,6 +703,17 @@ public class CommandExecuter {
 					dotProduct = Math.signum(dotProduct) * dotProduct*dotProduct / sunPosition.lengthSquared();
 
 					return new Variable(50d * (dotProduct + 1d)); // ranges from 0 to 100
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double getLongitude (Tile tile)
+			case GET_LONGITUDE:
+				if (requireParameters(commandNode, 1)) {
+					Tile tile = parameters[0].getTile();
+
+					checkValue(script, commandNode, tile, "target tile");
+
+					return new Variable(GeographicCoordinates.getLongitude(tile));
 				}
 				break;
 
@@ -1064,10 +1119,13 @@ public class CommandExecuter {
 					Tile tile = parameters[1].getTile();
 					int steps = parameters[2].getInt();
 
+					int viewingDistance = steps * 4;
+					if (parameters.length >= 4) { viewingDistance = parameters[3].getInt(); }
+
 					checkValue(script, commandNode, tile, "target tile");
 					checkValue(script, commandNode, instance, "target instance");
 
-					Tile newPosition = Pathfinding.moveTowardsTile(instance, tile, steps, steps + 4);
+					Tile newPosition = Pathfinding.moveTowardsTile(instance, tile, steps, viewingDistance);
 
 					if (newPosition != instance.getPosition()) {
 						instance.placeInto(newPosition);
@@ -1259,6 +1317,22 @@ public class CommandExecuter {
 
 						return new Variable(level);
 					}
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double sin (double radian)
+			case SIN:
+				if (requireParameters(commandNode, 1)) {
+					double radian = parameters[0].getDouble();
+					return new Variable(Math.sin(radian));
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double tan (double radian)
+			case TAN:
+				if (requireParameters(commandNode, 1)) {
+					double radian = parameters[0].getDouble();
+					return new Variable(Math.tan(radian));
 				}
 				break;
 
