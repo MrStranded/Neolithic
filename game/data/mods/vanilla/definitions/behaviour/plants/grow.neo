@@ -12,6 +12,7 @@ Drive: driGrow {
 
 Process: proGrow {
     Script: condition {
+		require(getFullAtt(getTile(self), "attSize") < 100);
         require(.attNutrition > 0);
     }
 

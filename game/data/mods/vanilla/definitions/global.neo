@@ -63,6 +63,13 @@ Script: armageddon {
     }
 }
 
+Script: mark(target) {
+	change(getTile(target), tMarker);
+	setWaterHeight(getTile(target), 0);
+	setHeight(getTile(target), 200);
+	updatePlanetMesh();
+}
+
 Script: rightClick(tile) {
     /*boulder = getInstanceInRange(entBoulder, tile, 0);
     if (boulder) {

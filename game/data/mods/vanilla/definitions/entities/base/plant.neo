@@ -20,7 +20,7 @@ Creature: cPlant {
 		attMaxSize, 50, 10;
 		attGrowthSize, 5, 1;
 		attEfficiency, 50, 5;
-	    attMatureAge, 420, 50;//2880;
+	    attMatureAge, 250, 50;//2880;
 	    attLightSensitivity, 20, 5;
 	}
 	
@@ -30,13 +30,13 @@ Creature: cPlant {
 	
 	Script: plantTick {
 	    delayNextTick(self, .attTicks);
-	    ..attAge++;
+	    if (chance(.attEfficiency / 100)) { ..attAge++; }
 
 	    if (getWaterHeight(self) > getHeight(self)) {
 	        ..attDamage++;
 	    }
 
-		if (.attAge > .attMatureAge  && ! hasEffect(self, effCancer) && chance((.attAge - .attMatureAge) / .attMatureAge)) { // age death
+		if (.attAge > .attMatureAge * 2  && ! hasEffect(self, effCancer) && chance((.attAge - .attMatureAge) / .attMatureAge)) { // age death
 		    addEffect(self, effCancer);
         }
 		
@@ -74,7 +74,7 @@ Creature: cPlant {
 		Script: tick {
 			->plantTick();
 		
-			if (.attSize >= .attMaxSize / 2) {
+			if (.attSize >= .attMaxSize / 2 && .attAge >= .attMatureAge / 2) {
 				setDefaultStage(self);
 			}
 		}

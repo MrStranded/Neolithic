@@ -28,6 +28,7 @@ public enum TokenConstants {
 	// -------------------------------------------------- Values
 	TRUE        (TokenType.KEYWORD, "true"),
 	FALSE       (TokenType.KEYWORD, "false"),
+	PI	     	(TokenType.KEYWORD, "PI"),
 
 	// -------------------------------------------------- Structure
 	IF          (TokenType.KEYWORD, "if"),
@@ -158,6 +159,7 @@ public enum TokenConstants {
 	// -------------------------------------------------- System
 	GET_MEMORY_ADDRESS		(TokenType.COMMAND, "getMemoryAddress"),
 	BREAKPOINT				(TokenType.COMMAND, "breakpoint"),
+	DEBUG					(TokenType.COMMAND, "debug"),
 
 	// -------------------------------------------------- GUI
 	PRINT           (TokenType.COMMAND, "print"),

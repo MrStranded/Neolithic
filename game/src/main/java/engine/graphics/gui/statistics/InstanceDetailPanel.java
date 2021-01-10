@@ -13,6 +13,7 @@ import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.CreatureContainer;
 import engine.data.proto.ProtoAttribute;
+import engine.data.scripts.ScriptRun;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
@@ -29,6 +30,8 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
 
     private static final Color COLOR_PRIMARY    = new Color(0, 0, 0);
     private static final Color COLOR_BACKGROUND = new Color(255, 255, 255);
+
+    private static final Color COLOR_ALERT      = new Color(220, 60, 50);
 
     private static final Color COLOR_INSTANCE   = new Color(65, 167, 215);
     private static final Color COLOR_TILE       = new Color(153, 73, 43);
@@ -65,6 +68,10 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         g.setColor(COLOR_INSTANCE);
         g.fillRect(10 -3, 10 -3, 15, 20);
         buttons.add(new BackButton(10 -3, 10 -3, 15, 20));
+
+        g.setColor(COLOR_ALERT);
+        g.fillRect(width -18, 10 -3, 15, 20);
+        buttons.add(new MarkButton(width -18, 10 -3, 15, 20));
 
         drawInstance(g, GameOptions.selectedInstance, 30, 10);
         drawAttributes(g, GameOptions.selectedInstance, height / 2);
@@ -307,6 +314,33 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         }
     }
 
+    static class BackButton extends Button {
+        public BackButton(int xPos, int yPos, int width, int height) {
+            super(xPos, yPos, width, height);
+        }
+
+        public void click() {
+            if (GameOptions.selectedInstance != null) {
+                GameOptions.selectedInstance = GameOptions.selectedInstance.getSuperInstance();
+            }
+        }
+    }
+
+    static class MarkButton extends Button {
+        public MarkButton(int xPos, int yPos, int width, int height) {
+            super(xPos, yPos, width, height);
+        }
+
+        public void click() {
+            if (GameOptions.selectedInstance != null) {
+                Data.addScriptRun(new ScriptRun(
+                        Data.getMainInstance(),
+                        "mark",
+                        new Variable[] { new Variable(GameOptions.selectedInstance) }));
+            }
+        }
+    }
+
     static abstract class Button {
         int xPos, yPos, width, height;
 
@@ -324,18 +358,6 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         }
 
         abstract void click();
-    }
-
-    static class BackButton extends Button {
-        public BackButton(int xPos, int yPos, int width, int height) {
-            super(xPos, yPos, width, height);
-        }
-
-        public void click() {
-            if (GameOptions.selectedInstance != null) {
-                GameOptions.selectedInstance = GameOptions.selectedInstance.getSuperInstance();
-            }
-        }
     }
 
     @Override

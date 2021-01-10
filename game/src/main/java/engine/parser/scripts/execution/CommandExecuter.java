@@ -49,7 +49,7 @@ public class CommandExecuter {
 			case ACOS:
 				if (requireParameters(commandNode, 1)) {
 					double cos = parameters[0].getDouble();
-					return new Variable(Math.acos(cos));
+					return new Variable(Math.acos(cos) * 180d / Math.PI);
 				}
 				break;
 
@@ -163,7 +163,7 @@ public class CommandExecuter {
 			case ATAN:
 				if (requireParameters(commandNode, 1)) {
 					double tan = parameters[0].getDouble();
-					return new Variable(Math.atan(tan));
+					return new Variable(Math.atan(tan) * 180d / Math.PI);
 				}
 				break;
 
@@ -172,7 +172,7 @@ public class CommandExecuter {
 				if (requireParameters(commandNode, 1)) {
 					double y = parameters[0].getDouble();
 					double x = parameters[1].getDouble();
-					return new Variable(Math.atan2(y, x));
+					return new Variable(Math.atan2(y, x) * 180d / Math.PI);
 				}
 				break;
 
@@ -271,7 +271,7 @@ public class CommandExecuter {
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double cos (double radian)
 			case COS:
 				if (requireParameters(commandNode, 1)) {
-					double radian = parameters[0].getDouble();
+					double radian = parameters[0].getDouble() * Math.PI / 180d;
 					return new Variable(Math.cos(radian));
 				}
 				break;
@@ -685,7 +685,7 @@ public class CommandExecuter {
 
 					checkValue(script, commandNode, tile, "target tile");
 
-					return new Variable(GeographicCoordinates.getLatitude(tile));
+					return new Variable(GeographicCoordinates.getLatitudeDegrees(tile));
 				}
 				break;
 
@@ -713,7 +713,7 @@ public class CommandExecuter {
 
 					checkValue(script, commandNode, tile, "target tile");
 
-					return new Variable(GeographicCoordinates.getLongitude(tile));
+					return new Variable(GeographicCoordinates.getLongitudeDegrees(tile));
 				}
 				break;
 
@@ -824,10 +824,34 @@ public class CommandExecuter {
 			case GET_TILE_FROM_COORDINATES:
 				if (requireParameters(commandNode, 2)) {
 					// both assumed to be in degrees
-					double east = parameters[0].getDouble() * Math.PI / 180;
-					double north = parameters[1].getDouble() * Math.PI / 180;
+					double east = parameters[0].getDouble();
+					double north = parameters[1].getDouble();
 
 					return new Variable(GeographicCoordinates.getTile(Data.getPlanet(), east, north));
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void debug (Tile debugtile)
+			case DEBUG:
+				if (requireParameters(commandNode, 1)) {
+					Tile tile = parameters[0].getTile();
+
+					checkValue(script, commandNode, tile, "debug value");
+
+					// both assumed to be in degrees
+					double east = GeographicCoordinates.getLongitudeDegrees(tile);
+					double north = GeographicCoordinates.getLatitudeDegrees(tile);
+
+					System.out.println("east: " + east);
+					System.out.println("north: " + north);
+
+					System.out.println("n o: " + tile.getTileMesh().getNormal());
+
+					Tile same = GeographicCoordinates.getTile(Data.getPlanet(), east, north);
+
+					System.out.println("n s: " + same.getTileMesh().getNormal());
+
+					System.out.println("same: " + (same == tile));
 				}
 				break;
 
@@ -1323,7 +1347,7 @@ public class CommandExecuter {
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double sin (double radian)
 			case SIN:
 				if (requireParameters(commandNode, 1)) {
-					double radian = parameters[0].getDouble();
+					double radian = parameters[0].getDouble() * Math.PI / 180d;
 					return new Variable(Math.sin(radian));
 				}
 				break;
@@ -1331,7 +1355,7 @@ public class CommandExecuter {
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double tan (double radian)
 			case TAN:
 				if (requireParameters(commandNode, 1)) {
-					double radian = parameters[0].getDouble();
+					double radian = parameters[0].getDouble() * Math.PI / 180d;
 					return new Variable(Math.tan(radian));
 				}
 				break;
