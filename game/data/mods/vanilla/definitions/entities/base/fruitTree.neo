@@ -16,9 +16,9 @@ Creature: cFruitTree {
 	}
 
 	attributes{
-	    attMaxHealth, 100, 10;
 	    attTicks, 2;
 		attMaxSize, 50, 10;
+		attGrowthSize, 5, 1;
 		attEfficiency, 50, 5;
 	    attMatureAge, 420, 50;//2880;
 	    attLightSensitivity, 20, 5;
@@ -69,10 +69,6 @@ Creature: cFruitTree {
 			driGatherEnergy;
 			driGrow;
 			driDeathwish;
-		}
-	
-		attributes{
-			attMaxHealth, 50;
 		}
 		
 		Script: tick {

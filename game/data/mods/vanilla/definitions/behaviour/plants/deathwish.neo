@@ -3,14 +3,16 @@
 Drive: driDeathwish {
     solutions { proDie; }
 
-    Script: condition { return .attDamage > .attSize/2; }
+    Script: condition {
+		->overcrowding = max(0, getFullAtt(getTile(self), "attSize") - 100);
+		
+		return .attDamage > .attSize/2 || ->overcrowding > 0;
+	}
 
     Script: getWeight {
 		if (.attSize == 0) { return 0; }
 		
-		overcrowding = max(0, getFullAtt(getTile(self), "attSize") - 100);
-		if (overcrowding > 0) { print("overcrowding = " + overcrowding); }
-        return(percent(.attDamage, .attSize) + overcrowding);
+        return(percent(.attDamage, .attSize) + ->overcrowding * 2);
     }
 }
 

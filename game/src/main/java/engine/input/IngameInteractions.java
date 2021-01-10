@@ -158,6 +158,7 @@ public class IngameInteractions {
             window.close();
         }
 
+        keyboard.flush();
         mouse.flush();
     }
 

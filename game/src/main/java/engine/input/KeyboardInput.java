@@ -3,6 +3,8 @@ package engine.input;
 import engine.graphics.gui.window.Window;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.Arrays;
+
 public class KeyboardInput {
 
 	private static final int KEY_LIMIT = 512;
@@ -38,7 +40,6 @@ public class KeyboardInput {
 	public boolean isClicked(int key) {
 		if (key >= 0 && key < KEY_LIMIT) {
 			boolean clicked = keyClicked[key];
-			keyClicked[key] = false;
 			return clicked;
 		}
 		return false;
@@ -49,6 +50,10 @@ public class KeyboardInput {
 	}
 	public boolean ctrlPressed(int key) {
 		return ctrlPressed() && isClicked(key);
+	}
+
+	public void flush() {
+		Arrays.fill(keyClicked, false);
 	}
 
 }

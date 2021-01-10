@@ -123,7 +123,7 @@ public class PLYLoader {
 					} else {
 						String errorMessage = "Error while parsing .ply file '" + fileName + "': Any other number of points per face other that 3 or 4 are not permitted!";
 						Logger.error(errorMessage);
-						throw new Exception(errorMessage);
+//						throw new Exception(errorMessage);
 					}
 
 					numberOfFaces--;
