@@ -82,10 +82,10 @@ Formation: formMountain inherits formLift {
 		print("destination: " + destination);
 		
 		path = getTilesOfPath(tile, destination);
-		l = length(path);
-		l = min(random(3,10), l);
+		l = random(3,10); //min(random(4,10), length(path));
 		i = 0;
 		for (t : path) {
+			// change(t, tMarker);
 			// print(t);
 			lift(t, height + (height2 - height) * i / l + random(-5, 5));
 			i++;

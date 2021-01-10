@@ -59,3 +59,22 @@ Process: proGrowFruit {
 		}
 	}
 }
+
+///////////////////////////////////////////////////////////////////////////// Propagate
+
+Process: proPropagate {
+	Script: condition {
+		require(.attNutrition > .attMaxSize);
+		
+		->neighbor = getNeighbor(getTile(self), random(3));
+		require(getFullAtt(->neighbor, "attSize") < 100);
+	}
+	
+	Script: process {
+		..attNutrition -= .attMaxSize;
+	
+		seed = create(cBush, ->neighbor);
+		setStage(seed, "seed");
+		mixAttributes(seed, self);
+	}
+}

@@ -101,12 +101,13 @@ public class Instance {
 				if (protoAttribute != null && protoAttribute.isInherited()) {
 					// weight parents and sum it up
 					Map<Instance, Double> weights = new HashMap<>();
-					double weightSum = parents.stream()
+					double weightSumTmp = parents.stream()
 							.map(parent -> {
 								weights.put(parent, Math.random());
 								return weights.get(parent);
 							})
 							.reduce(0d, (current, next) -> current + next);
+					final double weightSum = weightSumTmp != 0 ? weightSumTmp : 1;
 
 					// initial value
 					double inheritedValue = 0;

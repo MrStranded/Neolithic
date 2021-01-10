@@ -1,0 +1,30 @@
+///////////////////////////////////////////////////////////////////////////// Tree
+
+Creature: cBush inherits cPlant {
+
+    name = "Bush";
+    mesh = "bush_mature.ply";
+
+	knowledge {
+		proLeechFromHolder;
+		proPropagate;
+	}
+	
+	attributes{
+		attMaxSize, 50, 5;
+	    attLightSensitivity, 25, 3;
+		attGrowthSize, 3, 1;
+		attEfficiency, 60, 3;
+	    attMatureAge, 100, 50;
+	}
+	
+    Stage: seed {
+        name = "Bush seed";
+        mesh = "apple_seed.ply";
+    }
+
+    Stage: sapling {
+        mesh = "bush_young.ply";
+    }
+
+}

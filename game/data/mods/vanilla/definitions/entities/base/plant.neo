@@ -1,4 +1,4 @@
-Creature: cFruitTree {
+Creature: cPlant {
 
 	drives {
 		driSoak;
@@ -81,8 +81,8 @@ Creature: cFruitTree {
 	}
 	
     Stage: seed {
-        drives { driGrowIntoTree; }
-        knowledge { proGrowIntoTree; }
+        drives { driGrowIntoTree; driGatherEnergy; }
+        knowledge { proGrowIntoTree; proLeechFromHolder; }
 		
 		attributes {
 			attSize, 1;

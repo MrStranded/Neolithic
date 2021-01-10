@@ -1,4 +1,3 @@
-
 Entity: entCloud {
     name = "Cloud";
 	mesh = "cloud.ply";
