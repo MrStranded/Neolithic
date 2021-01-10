@@ -91,15 +91,6 @@ public class Instance {
 	}
 
     public void inheritAttributes(final List<Instance> parents) {
-		// weight parents
-		Map<Instance, Double> weights = new HashMap<>();
-		double weightSum = parents.stream()
-				.map(parent -> {
-					weights.put(parent, Math.random());
-					return weights.get(parent);
-				})
-				.reduce(0d, (current, next) -> current + next);
-
 		// sum up attribute values
 	    getContainer().ifPresent(container -> {
 	    	if (attributes != null) { attributes.clear(); }
@@ -108,6 +99,16 @@ public class Instance {
 				ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
 
 				if (protoAttribute != null && protoAttribute.isInherited()) {
+					// weight parents and sum it up
+					Map<Instance, Double> weights = new HashMap<>();
+					double weightSum = parents.stream()
+							.map(parent -> {
+								weights.put(parent, Math.random());
+								return weights.get(parent);
+							})
+							.reduce(0d, (current, next) -> current + next);
+
+					// initial value
 					double inheritedValue = 0;
 
 					// inherent mutation

@@ -43,6 +43,10 @@ Creature: cFruitTree {
 		if (.attWater <= 0 && ! hasEffect(self, effDry) && chance(0.1)) {
 		    addEffect(self, effDry);
         }
+		
+		if (.attDamage > .attSize) {
+			destroy(self);
+		}
 	}
 	
 	Script: delete {

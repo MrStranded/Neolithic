@@ -47,9 +47,6 @@ public class Attribute implements IDInterface {
 	}
 
 	private void checkBounds() {
-		Optional<Container> container = Data.getContainer(id);
-		if (container.isEmpty()) { return; }
-
 		ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
 		if (protoAttribute == null) { return; }
 
