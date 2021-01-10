@@ -14,27 +14,37 @@ Entity: entCloud {
 		previousHeight = getHeight(self);
 		
 		if (->goal) {
-			destination = moveTo(->goal, self, .attSpeed);
+			destination = moveTo(self, ->goal, .attSpeed, 4);
 			if (destination == ->goal) { forget(->goal); }
+			
+			instances = getInstancesInRange(entCloud, getTile(self), 0);
+			for (i : instances) {
+				if (i != self) {
+					self..attHumidity += i.attHumidity;
+					destroy(i);
+				}
+			}
 		} else {
 			east = getLongitude(self);
 			north = getLatitude(self);
 			
-			dx = cos(east + north) / 4;
-			dy = sin(east + north) / 4;
+			dx = cos(east) * 5;
+			dy = sin(east) * 5;
 			->goal = getTileFromCoords(east + dx, north + dy);
+			// if (->goal != getTile(self)) { print("goal: " + ->goal); }
 		}
 		
-        other = getInstance(entCloud, getTile(self));
-        if (other) {
-            other..attHumidity += self..attHumidity;
-            destroy(self);
-            return;
-        }
+        // other = getInstance(entCloud, getTile(self));
+        // if (other) {
+            // other..attHumidity += self..attHumidity;
+			// print("destroy cloud merge");
+            // destroy(self);
+            // return;
+        // }
 		
         heightIncrease = getHeight(self) - previousHeight;
-        if (.attHumidity >= 100 || chance((.attHumidity + heightIncrease) / 100)) {
-            (create(entRain, getTile(self)))..attWater += 1;
+        if (.attHumidity + heightIncrease >= 100) {
+            (getOrCreate(entRain, getTile(self)))..attWater += 1;
             ..attHumidity -= 100;
         }
 

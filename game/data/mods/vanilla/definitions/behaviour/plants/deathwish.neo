@@ -12,7 +12,7 @@ Drive: driDeathwish {
     Script: getWeight {
 		if (.attSize == 0) { return 0; }
 		
-        return(percent(.attDamage, .attSize) + ->overcrowding * 2);
+        return(percent(.attDamage, .attSize) + ->overcrowding);
     }
 }
 

@@ -16,8 +16,8 @@ public interface GeographicCoordinates {
 	 * @return Tile with given coordinates
 	 */
 	static Tile getTile(Planet planet, double longitude, double latitude) {
-		double yaw = Math.toRadians(longitude);
-		double pitch = -Math.toRadians(latitude); // minus because i want positive pitches to go north
+		double yaw = longitude * Math.PI / 180;
+		double pitch = -latitude * Math.PI / 180;
 
 		double heightFactor = Math.cos(pitch);
 		double x = Math.cos(yaw) * heightFactor;

@@ -167,6 +167,8 @@ Attribute: attMaxSize {
 Attribute: attGrowthSize {
 	name = "Growth Size";
     color = 250, 175, 38;
+	inherited;
+	mutation = 100, 1;
 }
 Attribute: attLightLevel { name = "Light level"; }
 Attribute: attWater {

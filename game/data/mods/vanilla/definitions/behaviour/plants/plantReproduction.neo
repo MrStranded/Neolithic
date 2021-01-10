@@ -74,7 +74,8 @@ Process: proPropagate {
 		..attNutrition -= .attMaxSize;
 	
 		seed = create(cBush, ->neighbor);
-		setStage(seed, "seed");
 		mixAttributes(seed, self);
+		setStage(seed, "seed");
+		seed..attNutrition += .attMaxSize;
 	}
 }
