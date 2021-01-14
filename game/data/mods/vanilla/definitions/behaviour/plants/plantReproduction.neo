@@ -64,7 +64,7 @@ Process: proGrowFruit {
 
 Process: proPropagate {
 	Script: condition {
-		require(.attNutrition > .attMaxSize);
+		require(.attNutrition >= .attMaxSize);
 		
 		->neighbor = getNeighbor(getTile(self), random(3));
 		require(getFullAtt(->neighbor, "attSize") < 100);

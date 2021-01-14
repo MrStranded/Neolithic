@@ -15,7 +15,8 @@ Entity: entCloud {
 		previousHeight = getHeight(self);
 		
 		if (->goal) {
-		print("speed: " + .attSpeed);
+			if (.attSpeed > 1) { print("speed: " + .attSpeed); }
+			
 			destination = moveTo(self, ->goal, .attSpeed, .attViewingDistance);
 			if (destination == ->goal) { forget(->goal); }
 			
@@ -30,7 +31,7 @@ Entity: entCloud {
 			east = getLongitude(self);
 			north = getLatitude(self);
 			
-			direction = east * 4 + north * 3;
+			direction = east * 4 + north * 3 + main->angle;
 			dx = cos(direction) * 10;
 			dy = sin(direction) * 10;
 			->goal = getTileFromCoords(east + dx, north + dy);
@@ -123,9 +124,13 @@ Effect: effWindy {
 		attSpeed, 1;
 	}
 	
-	Script: tick(carrier) {
-		print(.attSpeed + " c: " + carrier.attSpeed);
-	}
+	// Script: new(carrier) {
+		// print("hi " + carrier.attSpeed);
+		// print(self.attSpeed);
+	// }
+	// Script: tick(carrier) {
+		// print(.attSpeed + " c: " + carrier);
+	// }
 }
 Effect: effVeryWindy {
 	name = "Very Windy";

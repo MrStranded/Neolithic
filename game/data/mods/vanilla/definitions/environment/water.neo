@@ -14,12 +14,13 @@ Entity: entSource {
 Entity: entDeepSource {
     name = "Deep water source";
 
-    attributes { attTicks, 10; }
+    attributes { attTicks, 5; }
 
     Script: tick {
         delayNextTick(self, .attTicks);
 
         getTile(self)..attHumidity += 40;
+		for(n : getNeighbors(self)) { getTile(n)..attHumidity += 10; }
     }
 }
 
@@ -58,8 +59,8 @@ Entity: entWater {
                         ->createWater(next, d);
                     }
 					
-					for(item : getItems(self)) {
-						if (item.attSize < d) {
+					for(item : getItems(getTile(self))) {
+						if (item.attSize > 0 && item.attSize < d) {
 							pickUp(next, item);
 						}
 					}
