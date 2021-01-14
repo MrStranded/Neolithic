@@ -27,12 +27,12 @@ Entity: entWater {
     name = "Sweet water";
 
     Script: tick {
-        if (chance(0.01)) {
+		ll = getLightLevel(self) / 100;
+        if (chance(ll / 8)) {
             ..attWater--;
-
-            if (chance(0.5)) {
-                ->createCloud(self, 5 + 20 * getLightLevel(self) / 100);
-            }
+			if (->c++ % 10 == 0) {
+				->createCloud(self, 25 + 75 * ll);
+			}
         }
 
         h = getHeight(self) + .attWater;
@@ -40,7 +40,7 @@ Entity: entWater {
         if (.attWater > 0) {
             lowest = h;
             for (n : getNeighbors(self)) {
-                oh = getHeight(n) + getFullAtt(n, "attWater");
+                oh = getHeight(n) + getInstance(entWater, n).attWater;
                 if (oh < lowest) {
                     lowest = oh;
                     next = n;
