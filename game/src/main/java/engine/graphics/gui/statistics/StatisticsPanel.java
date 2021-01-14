@@ -140,7 +140,8 @@ public class StatisticsPanel extends JPanel {
             g.setColor(new Color(200, 200, 200));
             g.drawRect(0,0,width, TOP_BAR_HEIGHT);
             g.setColor(new Color(0,0,0));
-            g.drawString("Current selection: " + container.get().getName(), 10, 20);
+            String selectedInstance = GameOptions.selectedInstance != null ? " [ " + GameOptions.selectedInstance.getName() + "]" : "";
+            g.drawString("Current selection: " + container.get().getName() + selectedInstance, 10, 20);
             g.drawString("Count: " + StatisticsData.getCount(GameOptions.currentContainerId), width/2 + 10, 20);
         }
     }

@@ -89,14 +89,14 @@ Entity: entWater {
     Script: erode(from, to) {
         if (chance(0.125)) {
             n = getNeighbor(from, random(3));
-            if (n != from) { from = n; }
+            if (n != to) { from = n; }
         }
 
         if (getTile(from).attSediment > 0) {
             h1 = getHeight(from);
             h2 = getHeight(to);
 
-            if (h1 > h2 + 1 && chance(getTile(from).attSediment / 100)) {
+            if (h1 > h2 && chance(getTile(from).attSediment / 100)) {
                 getTile(from)..attSediment--;
                 getTile(to)..attSediment++;
 
