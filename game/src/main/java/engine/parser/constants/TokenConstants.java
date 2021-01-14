@@ -100,6 +100,7 @@ public enum TokenConstants {
 	CREATE_FORMATION    (TokenType.COMMAND, "createFormation"),
 	FIT_TILES           (TokenType.COMMAND, "fitTiles"),
 	SET_HEIGHT          (TokenType.COMMAND, "setHeight"),
+	SET_LEVEL     		(TokenType.COMMAND, "setLevel"),
 	SET_WATER_HEIGHT    (TokenType.COMMAND, "setWaterHeight"),
 	SET_WATER_LEVEL     (TokenType.COMMAND, "setWaterLevel"),
     SET_SUN_ANGLE       (TokenType.COMMAND, "setSunAngle"),

@@ -569,11 +569,10 @@ public class CommandExecuter {
 			case GET_INSTANCE:
 				if (requireParameters(commandNode, 2)) {
 					Container type = parameters[0].getContainer();
-					int containerID = -1;
-					Instance instance = parameters[1].getInstance();
+					int containerID = checkType(script, commandNode, type, parameters[0].getString());
 
+					Instance instance = parameters[1].getInstance();
 					checkValue(script, commandNode, instance, "target instance");
-					containerID = checkType(script, commandNode, type, parameters[0].getString());
 
 					return new Variable(instance.getThisOrSubInstanceWithID(containerID));
 				}
@@ -868,11 +867,14 @@ public class CommandExecuter {
 				}
 				break;
 
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list<tile> getTilesOfRange (Tile from, Tile to)
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list<tile> getTilesOfRange (Tile from, Tile to[, int viewingDistance])
 			case GET_TILES_OF_PATH:
 				if (requireParameters(commandNode, 2)) {
 					Tile from = parameters[0].getTile();
 					Tile to   = parameters[1].getTile();
+
+					int viewingDistance = 7;
+					if (parameters.length > 2) { viewingDistance = parameters[2].getInt(); }
 
 					checkValue(script, commandNode, from, "origin tile");
 					checkValue(script, commandNode, to, "destination tile");
@@ -882,7 +884,7 @@ public class CommandExecuter {
 
 					int counter = 0;
 					while (from != to) {
-						from = Pathfinding.moveTowardsTile(from, to, 1, 4);
+						from = Pathfinding.moveTowardsTile(from, to, 1, viewingDistance);
 						path.add(new Variable(from));
 						if (counter++ > 42) { break; }
 					}
@@ -1144,7 +1146,7 @@ public class CommandExecuter {
 					int steps = parameters[2].getInt();
 
 					int viewingDistance = steps * 4;
-					if (parameters.length >= 4) { viewingDistance = parameters[3].getInt(); }
+					if (parameters.length > 3) { viewingDistance = parameters[3].getInt(); }
 
 					checkValue(script, commandNode, tile, "target tile");
 					checkValue(script, commandNode, instance, "target instance");
@@ -1267,6 +1269,22 @@ public class CommandExecuter {
 						tile.setHeight(height);
 
 						return new Variable(height);
+					}
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int setLevel (int level)
+			case SET_LEVEL:
+				if (requireParameters(commandNode, 1)) {
+					if (Data.getPlanet() != null) {
+						int level = (int) (parameters[0].getDouble());
+						for (Face face : Data.getPlanet().getFaces()) {
+							for (Tile tile : face.getTiles()) {
+								tile.setHeight(level);
+							}
+						}
+
+						return new Variable(level);
 					}
 				}
 				break;

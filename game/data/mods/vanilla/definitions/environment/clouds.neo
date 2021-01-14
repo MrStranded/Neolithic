@@ -6,6 +6,7 @@ Entity: entCloud {
 	attributes {
 	    attTicks, 10;
 		attSpeed, 1;
+		attViewingDistance, 3;
 	}
 
     Script: tick {
@@ -14,7 +15,8 @@ Entity: entCloud {
 		previousHeight = getHeight(self);
 		
 		if (->goal) {
-			destination = moveTo(self, ->goal, .attSpeed, 4);
+		print("speed: " + .attSpeed);
+			destination = moveTo(self, ->goal, .attSpeed, .attViewingDistance);
 			if (destination == ->goal) { forget(->goal); }
 			
 			instances = getInstancesInRange(entCloud, getTile(self), 0);
@@ -28,9 +30,17 @@ Entity: entCloud {
 			east = getLongitude(self);
 			north = getLatitude(self);
 			
-			dx = cos(east) * 5;
-			dy = sin(east) * 5;
+			direction = east * 4 + north * 3;
+			dx = cos(direction) * 10;
+			dy = sin(direction) * 10;
 			->goal = getTileFromCoords(east + dx, north + dy);
+			
+			// for(t : getTilesOfPath(getTile(self), ->goal, .attViewingDistance)) {
+				// create(entMarker, t);
+			// }
+			
+			if (chance(0.25)) { addEffect(self, effWindy); }
+			if (chance(0.01)) { addEffect(self, effVeryWindy); }
 			// if (->goal != getTile(self)) { print("goal: " + ->goal); }
 		}
 		
@@ -48,11 +58,35 @@ Entity: entCloud {
             ..attHumidity -= 100;
         }
 
-        if (getLightLevel(self) >= 70) { ..attHumidity -= 1; }
+		ll = getLightLevel(self);
+        if (ll >= 70) { ..attHumidity -= (ll - 70) / 5; }
 
         if (.attHumidity <= 0) {
             destroy(self);
         }
+	}
+}
+
+Entity: entMarker {
+	name = "Marker";
+	mesh = "marker.ply";
+	opacity = 0.5;
+	
+	Script: tick {
+		if (->ticks++ > 10) { destroy(self); }
+	}
+}
+
+Entity: entCloudSpawner {
+	name = "Cloud spawner";
+	
+	attributes {
+		attTicks, 11;
+	}
+	
+	Script: tick {
+        delayNextTick(self, .attTicks);
+		create(entCloud, getTile(self))..attHumidity = random(100);
 	}
 }
 
@@ -80,4 +114,23 @@ Entity: entRain {
             destroy(self);
         }
     }
+}
+
+Effect: effWindy {
+	name = "Windy";
+	
+	attributes {
+		attSpeed, 1;
+	}
+	
+	Script: tick(carrier) {
+		print(.attSpeed + " c: " + carrier.attSpeed);
+	}
+}
+Effect: effVeryWindy {
+	name = "Very Windy";
+	
+	attributes {
+		attSpeed, 2;
+	}
 }

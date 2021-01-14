@@ -106,14 +106,12 @@ public class FacePart {
 		factor = factor * factor / viewVector.lengthSquared();
 		
 		// distance detail falloff
-		double distanceQuotient = distanceVector.lengthSquared();
+		double distanceQuotient = distanceVector.lengthSquared() / 4;
 		if (distanceQuotient < 1d) {
 			distanceQuotient = 1d;
 		}
 
-		factor /= distanceQuotient;
-
-		int detailLevel = (int) ((double) depth*factor);
+		int detailLevel = (int) ((double) depth * factor / distanceQuotient);
 		// on camera facing side, go at least one level deep if close enough
 		if (factor > 0 && detailLevel < 1 && distanceQuotient < 10) {
 			detailLevel = 1;

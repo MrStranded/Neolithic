@@ -31,7 +31,7 @@ public class Pathfinding {
         public int compareTo(TileHeuristic o) {
 //            System.out.println("this = " + heuristic + " , " + steps + "   " + tile);
 //            System.out.println("other = " + o.heuristic + " , " + o.steps + "   " + o.tile);
-            return (int) Math.signum((heuristic + steps*FACTOR) - (o.heuristic + o.steps*FACTOR));
+            return (int) Math.signum((o.heuristic + o.steps*FACTOR) - (heuristic + steps*FACTOR));
         }
     }
 
@@ -64,7 +64,7 @@ public class Pathfinding {
                 break;
             }
 
-            if (currentTile.steps < viewingDistance) {
+            if (currentTile.steps <= viewingDistance) {
                 for (Tile neighbour : Neighbour.getNeighbours(currentTile.tile)) {
                     if (! closedList.contains(neighbour) && instance.canGo(currentTile.tile, neighbour)) {
                         double heuristic = getHeuristic(neighbour, to);
@@ -78,9 +78,8 @@ public class Pathfinding {
     }
 
     public static double getHeuristic(Tile from, Tile to) {
-        if (from == null || to == null) { return 0; }
-
-        return getSquaredDistance(from, to) * Data.getPlanet().getSize() * TopologyConstants.HEURISTIC_MULTIPLIER; // this brings the distance to a range of about 0.25 to 25
+        double squaredDistance = getSquaredDistance(from, to);
+        return Math.sqrt(squaredDistance) * Data.getPlanet().getSize() * TopologyConstants.HEURISTIC_MULTIPLIER;
     }
 
     public static double getSquaredDistance(Tile from, Tile to) {
