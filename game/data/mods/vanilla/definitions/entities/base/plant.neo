@@ -22,6 +22,7 @@ Creature: cPlant {
 		attEfficiency, 50, 5;
 	    attMatureAge, 250, 50;//2880;
 	    attLightSensitivity, 20, 5;
+		attCancerResistance, 2;
 	}
 	
 	Script: tick {
@@ -36,7 +37,7 @@ Creature: cPlant {
 	        ..attDamage++;
 	    }
 
-		if (.attAge > .attMatureAge * 2  && ! hasEffect(self, effCancer) && chance((.attAge - .attMatureAge) / .attMatureAge)) { // age death
+		if (.attAge > .attMatureAge * .attCancerResistance && ! hasEffect(self, effCancer) && chance((.attAge - .attMatureAge) / .attMatureAge)) { // age death
 		    addEffect(self, effCancer);
         }
 		

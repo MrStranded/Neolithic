@@ -113,6 +113,14 @@ Attribute: attDamage {
     color = 200, 100, 100;
 	lower = 0;
 }
+Attribute: attCancerResistance {
+    name = "Cancer Resistance";
+    color = 10, 20, 80;
+    inherited;
+    mutation = 10, 1;
+    lower = 0;
+	upper = 100;
+}
 Attribute: attMaxHealth {
     name = "Constitution";
     color = 75, 75, 75;

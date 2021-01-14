@@ -16,6 +16,7 @@ Creature: cBush inherits cPlant {
 		attGrowthSize, 5, 1;
 		attEfficiency, 70, 3;
 	    attMatureAge, 200, 50;
+		attCancerResistance, 4;
 	}
 	
     Stage: seed {
