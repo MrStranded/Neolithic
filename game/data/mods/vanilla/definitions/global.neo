@@ -4,6 +4,7 @@ Script: tick {
     // one minute
     ->minute += 1;
     changeSunAngle(0.25); // 0.25 * 60 * 24 = 360
+	->angle += 0.25;
 
     if (->minute >= 60) {
         ->minute = 0;
@@ -22,8 +23,8 @@ Script: setTime (hour, minute) {
     ->hour = hour;
     ->minute = minute;
 
-    angle = 360 * (minute + hour*60) / (24*60);
-    setSunAngle(angle);
+    ->angle = 360 * (minute + hour*60) / (24*60);
+    setSunAngle(->angle);
 }
 
 Script: repopulate() {
