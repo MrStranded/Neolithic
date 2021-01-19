@@ -8,45 +8,37 @@ Attribute: attTicks {
 Attribute: attMatureAge {
     name = "Age of maturity";
     inherited;
-    mutation = 100, 500;
     color = 0, 64, 128;
     lower = 1;
 }
 Attribute: attLightSensitivity {
     name = "Light sensitivity";
     inherited;
-    mutationChance = 50;
-    mutationExtent = 20;
     color = 128, 255, 0;
 	bounds = 0, 100;
 }
 Attribute: attHungerSensitivity {
     name = "Hunger sensitivity";
     inherited;
-    mutation = 50, 20;
     color = 128,0,0;
 }
 Attribute: attThirstSensitivity {
     name = "Thirst sensitivity";
     inherited;
-    mutation = 30, 5;
     color = 0,128,128;
 }
 Attribute: attFatigueSensitivity {
     name = "Fatigue sensitivity";
     inherited;
-    mutation = 50, 200;
     color = 0, 128, 0;
 }
 Attribute: attBiteSize {
     name = "Bite size";
     inherited;
-    mutation = 50, 10;
 }
 Attribute: attEfficiency {
     name = "Digestive efficiency";
     inherited;
-    mutation = 50, 3;
     bounds = 0,100;
     color = 255, 255, 0;
 }
@@ -55,7 +47,6 @@ Attribute: attEfficiency {
 Attribute: attLibido {
     name = "Libido";
     inherited;
-    mutation = 100, 20;
     color = 255, 0, 255;
 }
 Attribute: attBabySize {
@@ -73,34 +64,28 @@ Attribute: attGender {
 Attribute: attViewingDistance {
     name = "Viewing distance";
     inherited;
-    mutation = 10, 2;
 }
 Attribute: attStepHeight {
     name = "Step height";
-    mutation = 50 , 10;
     inherited;
 }
 Attribute: attSpeed {
     name = "Speed";
     inherited;
-    mutation = 5, 2;
 }
 
 // behaviour
 Attribute: attCuriosity {
     name = "Curiosity";
     inherited;
-    mutation = 50, 100;
 }
 Attribute: attGreed {
 	name = "Greed";
 	inherited;
-	mutation = 100, 5;
 }
 Attribute: attPride {
 	name = "Pride";
 	inherited;
-	mutation = 100, 5;
 }
 
 // life
@@ -117,7 +102,6 @@ Attribute: attCancerResistance {
     name = "Cancer Resistance";
     color = 10, 20, 80;
     inherited;
-    mutation = 10, 1;
     lower = 0;
 	upper = 100;
 }
@@ -125,7 +109,6 @@ Attribute: attMaxHealth {
     name = "Constitution";
     color = 75, 75, 75;
     inherited;
-    mutation = 50, 10;
     lower = 1;
 }
 Attribute: attNutrition {
@@ -168,7 +151,6 @@ Attribute: attMaxSize {
     name = "Max Size";
     color = 100, 70, 15;
     inherited;
-    mutation = 20, 5;
     lower = 1;
 	upper = 100;
 }
@@ -176,7 +158,6 @@ Attribute: attGrowthSize {
 	name = "Growth Size";
     color = 250, 175, 38;
 	inherited;
-	mutation = 100, 1;
 }
 Attribute: attLightLevel { name = "Light level"; }
 Attribute: attWater {

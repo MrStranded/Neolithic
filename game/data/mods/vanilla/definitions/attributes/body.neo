@@ -1,0 +1,51 @@
+// Matrix
+Attribute: bodyHealth {
+    name = "Health";
+    color = 240, 60, 40;
+}
+
+// Potentiator
+Attribute: bodyExtent {
+    name = "Extent";
+    color = 200, 190, 0;
+    bounds = 0, 100;
+}
+
+// Catalyst - Wheel of Fortune
+Attribute: bodyResiliance {
+    name = "Resiliance";
+    inherited;
+    color = 30, 60, 40;
+    bounds = 0, 100;
+}
+
+// Experience - Enchantress
+Attribute: bodyAge {
+    name = "Age";
+    inherited;
+    color = 0, 30, 100;
+    lower = 0;
+}
+
+// Significator
+Attribute: bodyPreference {
+    name = "Preference";
+    inherited;
+    color = 100, 230, 40;
+    bounds = 0, 100;
+}
+
+// Transformation - Death
+Attribute: bodyRestoration {
+    name = "Restoration";
+    inherited;
+    color = 0, 190, 40;
+}
+
+// Great Way - Alchemist
+Attribute: bodyEfficiency {
+    name = "Efficiency";
+    inherited;
+    color = 30, 60, 190;
+    bounds = 0, 100;
+}

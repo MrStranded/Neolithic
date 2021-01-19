@@ -12,7 +12,6 @@ public class Attribute implements IDInterface {
 
 	private int id;
 	private int value = 0;
-	private int variation = 0;
 	private boolean bounded = false;
 
 	public Attribute(int id) {
@@ -22,14 +21,6 @@ public class Attribute implements IDInterface {
 	public Attribute(int id, int value) {
 		this.id = id;
 		this.value = value;
-
-		establishBoundedness();
-	}
-
-	public Attribute(int id, int value, int variation) {
-		this.id = id;
-		this.value = value;
-		this.variation = variation;
 
 		establishBoundedness();
 	}
@@ -72,15 +63,11 @@ public class Attribute implements IDInterface {
 		return this;
 	}
 
+	public int getVariedValue() { return 0; }
+	public double getVariationProbability() { return 0; }
+
 	public int getValue() {
 		return value;
-	}
-	public int getVariedValue() {
-		if (variation == 0) {
-			return 0;
-		}
-		int delta = (int) (Math.random() * ((double) (variation) * 2d + 1d));
-		return - variation + delta;
 	}
 	public void setValue(int value) {
 		this.value = value;
