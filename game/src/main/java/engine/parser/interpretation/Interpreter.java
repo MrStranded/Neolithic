@@ -137,15 +137,30 @@ public class Interpreter {
 		Token next;
 		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(next = consume())) {
 			consume(TokenConstants.COMMA);
-			Token value = consume();//consumeNumber();
+			int value = TokenNumerifier.getInt(consume());
 			int variation = 0;
+			double variationProbability = 0;
+
 			if (TokenConstants.COMMA.equals(peek())) {
 				consume(TokenConstants.COMMA);
 				variation = TokenNumerifier.getInt(consume());
+				variationProbability = 1d;
 			}
+
+			if (TokenConstants.COMMA.equals(peek())) {
+				consume(TokenConstants.COMMA);
+				variationProbability = TokenNumerifier.getDouble(consume());
+
+				if (TokenConstants.MODULO.equals(peek())) {
+					variationProbability /= 100d;
+					consume(TokenConstants.MODULO);
+				}
+			}
+
             consume(TokenConstants.SEMICOLON);
 
-            PreAttribute preAttribute = new PreAttribute(next.getValue(), currentStage, TokenNumerifier.getInt(value), variation);
+            PreAttribute preAttribute = new PreAttribute(next.getValue(), currentStage,
+					value, variation, variationProbability);
             container.addPreAttribute(preAttribute);
 		}
 	}
@@ -289,38 +304,6 @@ public class Interpreter {
 
     private void addInherited(ProtoAttribute protoAttribute) throws Exception {
         protoAttribute.setInherited(true);
-
-        consume(TokenConstants.SEMICOLON);
-    }
-
-    private void addMutationChance(ProtoAttribute protoAttribute) throws Exception {
-        consume(TokenConstants.ASSIGNMENT);
-
-        Token chance = consume();
-        protoAttribute.setMutationChance(TokenNumerifier.getDouble(chance));
-
-        consume(TokenConstants.SEMICOLON);
-    }
-
-    private void addMutationExtent(ProtoAttribute protoAttribute) throws Exception {
-        consume(TokenConstants.ASSIGNMENT);
-
-        Token extent = consume();
-        protoAttribute.setMutationExtent(TokenNumerifier.getDouble(extent));
-
-        consume(TokenConstants.SEMICOLON);
-    }
-
-    private void addMutation(ProtoAttribute protoAttribute) throws Exception {
-        consume(TokenConstants.ASSIGNMENT);
-
-        Token chance = consume();
-        protoAttribute.setMutationChance(TokenNumerifier.getDouble(chance));
-
-        consume(TokenConstants.COMMA);
-
-        Token extent = consume();
-        protoAttribute.setMutationExtent(TokenNumerifier.getDouble(extent));
 
         consume(TokenConstants.SEMICOLON);
     }
@@ -487,13 +470,7 @@ public class Interpreter {
 
             } else if (TokenConstants.VALUE_INHERITED.equals(next)) { // attribute is inherited
                 addInherited(protoAttribute);
-            } else if (TokenConstants.VALUE_MUTATION_CHANCE.equals(next)) { // chance of attribute to mutate
-                addMutationChance(protoAttribute);
-            } else if (TokenConstants.VALUE_MUTATION_EXTEND.equals(next)) { // extent of mutation
-                addMutationExtent(protoAttribute);
-            } else if (TokenConstants.VALUE_MUTATION.equals(next)) { // mutation chance, mutation extent
-                addMutation(protoAttribute);
-
+                
 			} else if (TokenConstants.VALUE_LOWER_BOUND.equals(next)) { // lower bound
 				addLowerBound(protoAttribute);
 			} else if (TokenConstants.VALUE_UPPER_BOUND.equals(next)) { // upper bound

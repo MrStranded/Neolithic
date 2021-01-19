@@ -4,6 +4,7 @@ import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
+import engine.data.attributes.InheritedAttribute;
 import engine.data.attributes.PreAttribute;
 import engine.data.scripts.Script;
 import engine.data.identifiers.ContainerIdentifier;
@@ -50,7 +51,10 @@ public class Container {
 		for (PreAttribute preAttribute : preAttributeList) {
 			int id = Data.getProtoAttributeID(preAttribute.getTextID());
 			if (id >= 0) {
-				addAttribute(preAttribute.getStage(), new Attribute(id, preAttribute.getValue(), preAttribute.getVariation()));
+				addAttribute(preAttribute.getStage(), new InheritedAttribute(id,
+						preAttribute.getValue(),
+						preAttribute.getVariation(),
+						preAttribute.getVariationProbability()));
 			} else {
                 Logger.error("Attribute with textID '" + preAttribute.getTextID() + "' is never declared!");
 			}

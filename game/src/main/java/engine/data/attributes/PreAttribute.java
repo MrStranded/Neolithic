@@ -9,13 +9,15 @@ public class PreAttribute {
 	private String textID;
 	private String stage;
 	private int value;
-	private int variation;
+	private double variation;
+	private double variationProbability;
 
-	public PreAttribute(String textID, String stage, int value, int variation) {
+	public PreAttribute(String textID, String stage, int value, double variation, double variationProbability) {
 		this.textID = textID;
 		this.stage = stage;
 		this.value = value;
 		this.variation = variation;
+		this.variationProbability = variationProbability;
 	}
 
 	public String getTextID() {
@@ -25,8 +27,9 @@ public class PreAttribute {
 	public int getValue() {
 		return value;
 	}
-	public int getVariation() {
+	public double getVariation() {
 		return variation;
 	}
+	public double getVariationProbability() { return variationProbability; }
 
 }

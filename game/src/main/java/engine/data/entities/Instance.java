@@ -4,6 +4,7 @@ import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
+import engine.data.attributes.InheritedAttribute;
 import engine.data.behaviour.Occupation;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.interaction.SelectedInstance;
@@ -106,7 +107,7 @@ public class Instance {
 								weights.put(parent, Math.random());
 								return weights.get(parent);
 							})
-							.reduce(0d, (current, next) -> current + next);
+							.reduce(0d, Double::sum);
 					final double weightSum = weightSumTmp != 0 ? weightSumTmp : 1;
 
 					// initial value
@@ -114,7 +115,7 @@ public class Instance {
 
 					// inherent mutation
 					Attribute containerAttribute = container.getAttribute(stage, id);
-					if (containerAttribute != null) {
+					if (containerAttribute != null && containerAttribute.getVariationProbability() > Math.random()) {
 						inheritedValue += containerAttribute.getVariedValue();
 					}
 

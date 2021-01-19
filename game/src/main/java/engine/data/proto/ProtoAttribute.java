@@ -8,8 +8,6 @@ public class ProtoAttribute {
 	private String name = "Unnamed attribute";
 
 	private boolean inherited = false;
-	private double mutationChance = 0;
-	private double mutationExtent = 0;
 
 	private boolean hasLowerBound = false;
 	private int lowerBound = 0;
@@ -42,20 +40,6 @@ public class ProtoAttribute {
 	}
 	public void setInherited(boolean inherited) {
 		this.inherited = inherited;
-	}
-
-	public double getMutationChance() {
-		return mutationChance;
-	}
-	public void setMutationChance(double mutationChance) {
-		this.mutationChance = mutationChance;
-	}
-
-	public double getMutationExtent() {
-		return mutationExtent;
-	}
-	public void setMutationExtent(double mutationExtent) {
-		this.mutationExtent = mutationExtent;
 	}
 
 	public boolean hasLowerBound() {
