@@ -5,17 +5,22 @@ Script: tick {
     ->minute += 1;
     changeSunAngle(0.25); // 0.25 * 60 * 24 = 360
 	->angle += 0.25;
+	
+	if (->angle >= 180 && ->angle <= 360) print("between: " + ->angle)
+	else if (->angle < 50) print("under 50!!!")
+	else print("not between: " + ->angle)
 
     if (->minute >= 60) {
         ->minute = 0;
         ->hour++;
 		
 		if (->hour >= 24) {
-			->hour = 0;
-			->day++;
+			main->hour = 0
+			main->day++
+			main->angle = 0
 		}
 	
-        print("Day: " + ->day + " | Hour: " + ->hour);
+        print("Day: " + ->day + " | Hour: " + ->hour)
     }
 }
 
@@ -65,10 +70,7 @@ Script: armageddon {
 }
 
 Script: mark(target) {
-	change(getTile(target), tMarker);
-	setWaterHeight(getTile(target), 0);
-	setHeight(getTile(target), 200);
-	updatePlanetMesh();
+	create(entMarker, getTile(target));
 }
 
 Script: rightClick(tile) {

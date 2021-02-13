@@ -212,7 +212,7 @@ public class Instance {
 				Variable weight = null;
 				if (condition.notNull()) { // condition is fulfilled
 					weight = run(container, ScriptConstants.EVENT_GET_WEIGHT, null);
-					weightedDrives.add(container, weight.getDouble());
+					if (weight.getDouble() > 0) { weightedDrives.add(container, weight.getDouble()); }
 				}
 
 				if (this == GameOptions.selectedInstance) {

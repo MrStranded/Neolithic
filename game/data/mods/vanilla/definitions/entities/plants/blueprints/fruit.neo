@@ -1,0 +1,37 @@
+///////////////////////////////////////////////////////////////////////////// Fruit
+
+Entity: entFruit {
+
+	attributes {
+		attVegetarian, 1;
+		attTicks, 2;
+		bodyResiliance, 100;
+	}
+
+	Script: tick() {
+	    delayNextTick(self, .attTicks);
+
+		if (isOnFloor(self)) {
+            ..bodyExperience++;
+
+            if (.bodyExperience >= .bodyResiliance) {
+				getTile(self)..attNutrition += .bodyHealth;
+
+                for (seed : getItems(self)) {
+                    pickUp(getTile(self), seed);
+                }
+                destroy(self);
+            }
+		}
+	}
+
+	Script: consume(actor) {
+	    effect = addEffect(actor, effDigest);
+        effect..attNutrition = .bodyHealth;
+        for (seed : getItems(self)) {
+            pickUp(effect, seed);
+        }
+
+		destroy(self);
+	}
+}

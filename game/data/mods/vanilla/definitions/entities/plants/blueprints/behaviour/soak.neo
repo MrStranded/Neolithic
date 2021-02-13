@@ -4,12 +4,12 @@ Drive: driSoak {
     solutions { proSoak; }
 
     Script: condition {
-		return .attWater < .attSize;
+		return .attWater < .bodySize;
 	}
 
     Script: getWeight {
-		if (.attSize == 0) { return 0; }
-		return (100 - 100 * .attWater / .attSize);
+		if (.bodySize == 0) { return 0; }
+		return (100 - percent(.attWater, .bodySize));
     }
 }
 
@@ -21,7 +21,7 @@ Process: proSoak {
 	}
 	
 	Script: process {
-		if (chance(.attEfficiency) / 100) {
+		if (chance(.bodyEfficiency) / 100) {
 			getTile(self)..attHumidity--;
 			..attWater++;
 		}
