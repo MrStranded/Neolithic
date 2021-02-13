@@ -5,8 +5,8 @@ Attribute: bodyHealth {
 }
 
 // Potentiator
-Attribute: bodyExtent {
-    name = "Extent";
+Attribute: bodySize {
+    name = "Size";
     color = 200, 190, 0;
     bounds = 0, 100;
 }
@@ -16,13 +16,12 @@ Attribute: bodyResiliance {
     name = "Resiliance";
     inherited;
     color = 30, 60, 40;
-    bounds = 0, 100;
+    bounds = 1, 100;
 }
 
 // Experience - Enchantress
-Attribute: bodyAge {
-    name = "Age";
-    inherited;
+Attribute: bodyExperience {
+    name = "Experience";
     color = 0, 30, 100;
     lower = 0;
 }
@@ -32,7 +31,7 @@ Attribute: bodyPreference {
     name = "Preference";
     inherited;
     color = 100, 230, 40;
-    bounds = 0, 100;
+    bounds = 1, 100;
 }
 
 // Transformation - Death
@@ -40,6 +39,7 @@ Attribute: bodyRestoration {
     name = "Restoration";
     inherited;
     color = 0, 190, 40;
+	lower = 1;
 }
 
 // Great Way - Alchemist
@@ -47,5 +47,5 @@ Attribute: bodyEfficiency {
     name = "Efficiency";
     inherited;
     color = 30, 60, 190;
-    bounds = 0, 100;
+    bounds = 1, 100;
 }

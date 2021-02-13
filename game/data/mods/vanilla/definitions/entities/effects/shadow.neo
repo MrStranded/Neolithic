@@ -1,0 +1,13 @@
+///////////////////////////////////////////////////////////////////////////// Shadow
+
+Effect: effShadow {
+    name = "Shadow";
+	
+	Script: tick() {
+		..attLightLevel = - (.bodyEfficiency / 100) * ((->cause..bodySize) / 3);
+	}
+
+    Script: removeCondition() {
+        require(! ->cause);
+    }
+}

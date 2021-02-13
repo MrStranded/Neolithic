@@ -60,8 +60,10 @@ Entity: entWater {
                     }
 					
 					for(item : getItems(getTile(self))) {
-						if (item.attSize > 0 && item.attSize < d) {
+						if (item.attSize > 0 && item.attSize <= d) {
 							pickUp(next, item);
+						} else {
+							item..bodyHealth -= d;
 						}
 					}
                 }

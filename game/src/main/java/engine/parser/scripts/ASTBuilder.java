@@ -74,17 +74,17 @@ public class ASTBuilder {
 
 				} else { // expression (induced by eg. 'self')
 					nodeList.add(readExpression());
-					interpreter.consume(TokenConstants.SEMICOLON);
+					interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
 
 				}
 
 			} else if (next.getType() == TokenType.COMMAND) { // a command -> expression
 				nodeList.add(readExpression());
-				interpreter.consume(TokenConstants.SEMICOLON);
+				interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
 
 			} else if (next.getType() == TokenType.IDENTIFIER || next.getType() == TokenType.OPERATOR || TokenConstants.ROUND_BRACKETS_OPEN.equals(next)) { // also expression
 				nodeList.add(readExpression());
-				interpreter.consume(TokenConstants.SEMICOLON);
+				interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
 
 			} else {
 				Logger.error("Illegal Script command '" + next.getValue() + "' on line " + next.getLine());
@@ -109,22 +109,32 @@ public class ASTBuilder {
 
 		interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
 
-		MultiStatementNode body = readMultiStatement();
+		AbstractScriptNode body = null;
+
+		if (TokenConstants.CURLY_BRACKETS_OPEN.equals(interpreter.peek())) {
+			body = readMultiStatement();
+
+		} else {
+			body = readExpression();
+			interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
+		}
+
 		AbstractScriptNode elseBody = null;
 
 		Token next = interpreter.peek();
 		if (TokenConstants.ELSE.equals(next)) {
 			interpreter.consume();
 			Token nextNext = interpreter.peek();
+
 			if (TokenConstants.IF.equals(nextNext)) {
 				elseBody = readIfStatement();
+
 			} else if (TokenConstants.CURLY_BRACKETS_OPEN.equals(nextNext)) {
 				elseBody = readMultiStatement();
+
 			} else {
-				String errorMessage = "After 'else' on line " + next.getLine() + " has to come either another 'if' statement or the body of the else statement. "
-						+ "'" + nextNext.getValue() + "' is not allowed here.";
-				Logger.error(errorMessage);
-				throw new Exception(errorMessage);
+				elseBody = readExpression();
+				interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
 			}
 		}
 
@@ -190,7 +200,7 @@ public class ASTBuilder {
 
 	private BreakStatementNode readBreakStatement() throws Exception {
 		interpreter.consume(TokenConstants.BREAK);
-		interpreter.consume(TokenConstants.SEMICOLON);
+		interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
 
 		return new BreakStatementNode();
 	}
@@ -203,8 +213,11 @@ public class ASTBuilder {
 		interpreter.consume(TokenConstants.RETURN);
 
 		Token next = interpreter.peek();
-		if (TokenConstants.SEMICOLON.equals(next)) { // no return value
-			interpreter.consume(TokenConstants.SEMICOLON);
+
+		// this is possibly a bit sloppy. i want return statements without semicolon, but we still need to find out
+		// whether a return value should be read or not. if the next token is ';' or '}', no return value is expected
+		if (TokenConstants.SEMICOLON.equals(next) || TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // no return value
+			interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
 			return new ReturnStatementNode();
 		}
 
@@ -223,7 +236,7 @@ public class ASTBuilder {
 		}
 
 		AbstractScriptNode value = readExpression();
-		interpreter.consume(TokenConstants.SEMICOLON);
+		interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
 		return new ReturnStatementNode(value);
 	}
 
@@ -238,7 +251,7 @@ public class ASTBuilder {
 
 		if (command != null) { // we have a command!
 			List<AbstractScriptNode> parameters = readParameters();
-			left = new CommandExpressionNode(expression/*command.getToken()*/, parameters);
+			left = new CommandExpressionNode(expression, parameters);
 
 		} else if (TokenConstants.SELF.equals(expression)) { // a self expression
 			left = new SelfNode();

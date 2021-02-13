@@ -1,0 +1,24 @@
+///////////////////////////////////////////////////////////////////////////// Drought
+
+Effect: effDry {
+    name = "Dry";
+	
+	Script: tick(carrier) {
+		if (carrier.attWater <= 0) {
+			divisor = .bodyPreference * .bodyResiliance;
+			if (divisor == 0) { divisor = 1; }
+			
+			c = carrier.bodyExperience / divisor;
+			if (chance(c)) {
+				..bodyHealth--;
+			}
+		} else {
+			..bodyHealth += .bodyRestoration;
+			carrier..attWater --;
+		}
+	}
+
+    Script: removeCondition() {
+        require(.bodyHealth >= 0 && carrier.attWater > 0);
+    }
+}

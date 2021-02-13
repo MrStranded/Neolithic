@@ -3,32 +3,32 @@
 Drive: driGrow {
     solutions { proGrow; }
 
-    Script: condition { return .attSize < .attMaxSize; }
+    Script: condition { return .bodySize < .bodyPreference; }
 
     Script: getWeight {
-        return(100 - 100 * .attSize / .attMaxSize);
+        return(100 - percent(.bodySize, .bodyPreference));
     }
 }
 
 Process: proGrow {
     Script: condition {
-		require(getFullAtt(getTile(self), "attSize") < 100);
-        require(.attNutrition > 0);
+		require(getFullAtt(getTile(self), "bodySize") < 100);
+        require(.bodyHealth > 0);
     }
 
     Script: process {
-		..attSize += .attGrowthSize;
-		..attNutrition -= .attGrowthSize * (100 - .attEfficieny) / 100;
+		..bodySize += .bodyRestoration;
+		..bodyHealth -= .bodyRestoration * (1 - .attEfficieny / 100);
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////// Grow into tree
 
-Drive: driGrowIntoTree {
-    solutions { proGrowIntoTree; }
+Drive: driGrowIntoPlant {
+    solutions { proGrowIntoPlant; }
 
     Script: condition {
-		return true;
+		return length(getItems(getTile(self))) < 4;
 	}
 
     Script: getWeight {
@@ -36,13 +36,13 @@ Drive: driGrowIntoTree {
     }
 }
 
-Process: proGrowIntoTree {
+Process: proGrowIntoPlant {
     Script: condition {
         tile = getTile(self);
 
         require(isOnFloor(self));
-        require(getLightLevel(self) + getTile(self).attLightLevel >= .attLightSensitivity);
-        require(getFullAtt(tile, "attSize") < 100);
+        require(getLightLevel(self) + getTile(self).attLightLevel >= 100 - .bodyEfficiency);
+        require(getFullAtt(tile, "bodySize") < 100);
         require(getHeight(self) >= getWaterHeight(self));
     }
     Script: process {
@@ -63,12 +63,16 @@ Drive: driGatherEnergy {
 		proLeechFromHolder;
 	}
 
-    Script: condition { return .attNutrition < .attMaxSize; }
+    Script: condition {
+		// require(.bodySize > 0);
+		// require(.bodyHealth < .bodyPreference * .bodyResiliance);
+	}
 
     Script: getWeight {
-		nutWeight = 50 * .attNutrition / .attMaxSize;
-		waterWeight = 50 * .attWater / .attMaxSize;
-        return(100 - nutWeight - waterWeight);
+		nutWeight = 50 - .bodyHealth / (.bodyRestoration);
+		if (.bodySize > 0) { waterWeight = 50 * .attWater / .bodySize; }
+		else { waterWeight = 50; }
+        return(nutWeight + waterWeight);
     }
 }
 
@@ -76,15 +80,15 @@ Process: proPhotosynthesis {
 	Script: condition {
 		->ll = getLightLevel(self) + getTile(self).attLightLevel;
 		// print("ll: " + ll);
-        require(->ll > .attLightSensitivity);
+        require(->ll > 100 - .bodyEfficiency);
 		require(getStage(self) != "seed");
 		require(.attWater > 0);
 	}
 	Script: process {
-		if (! chance(.attEfficiency / 100)) { ..attWater--; }
+		if (! chance(.bodyEfficiency / 100)) { ..attWater--; }
 		
-		surplus = ->ll - .attLightSensitivity;
-		..attNutrition += min(surplus, .attGrowthSize);
+		surplus = ->ll + .bodyEfficiency - 100 - .bodyExperience / .bodyPreference;
+		..bodyHealth += min(surplus, ..bodyRestoration);
 	}
 
 	Script: discovery(actor) { // there is no way for an entity to learn photosynthesis
@@ -102,8 +106,8 @@ Process: proLeechFromHolder {
 	
 	Script: process {
 		getHolder(self)..attNutrition--;
-		if (chance(.attEfficiency / 100)) {
-			self..attNutrition++;
+		if (chance(.bodyEfficiency / 100)) {
+			self..bodyHealth += .bodyRestoration;
 		}
 	}
 }

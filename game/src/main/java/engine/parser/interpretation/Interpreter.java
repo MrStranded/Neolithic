@@ -39,6 +39,25 @@ public class Interpreter {
 	// ################################ Token Consumption ################################
 	// ###################################################################################
 
+	/**
+	 * If the next token equals the given target, it is consumed and true is returned.
+	 * Otherwise, it is not consumed and false is returned.
+	 * @param tokenConstant target
+	 * @return true, if target was consumed
+	 */
+	public boolean voluntaryConsume(TokenConstants tokenConstant) {
+		try {
+			if (tokenConstant != null && tokenConstant.equals(peek())) {
+				consume(tokenConstant);
+				return true;
+			}
+
+		} catch (Exception e) {
+			// it's okay. we don't worry because the consume was voluntary to begin with
+		}
+		return false;
+	}
+
 	public Token consume(TokenConstants tokenConstant) throws Exception {
 		if (!tokenIterator.hasNext()) { // error reporting
 			throw new Exception("Reached unexpected end of file!");
@@ -157,7 +176,7 @@ public class Interpreter {
 				}
 			}
 
-            consume(TokenConstants.SEMICOLON);
+			voluntaryConsume(TokenConstants.SEMICOLON);
 
             PreAttribute preAttribute = new PreAttribute(next.getValue(), currentStage,
 					value, variation, variationProbability);
@@ -172,7 +191,7 @@ public class Interpreter {
 
 		Token next;
 		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(next = consume())) {
-			consume(TokenConstants.SEMICOLON);
+			voluntaryConsume(TokenConstants.SEMICOLON);
 
 			if (next.getValue() != null && next.getValue().length() > 0) {
 				result.add(new ContainerIdentifier(next.getValue()));
@@ -182,33 +201,17 @@ public class Interpreter {
 		return result;
 	}
 
-	private void feedTextIDList(List<ContainerIdentifier> identifiers) throws Exception {
-		consume(TokenConstants.CURLY_BRACKETS_OPEN);
-
-		Token next;
-		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(next = consume())) {
-			consume(TokenConstants.SEMICOLON);
-
-			if (next.getValue() != null && next.getValue().length() > 0) {
-				identifiers.add(new ContainerIdentifier(next.getValue()));
-			}
-		}
-	}
-
 	private void feedPrecursors(List<ContainerIdentifier> identifiers) throws Exception {
 		consume(TokenConstants.INHERITS);
 
-		boolean first = true;
 		Token next;
 		while (!TokenConstants.CURLY_BRACKETS_OPEN.equals(peek())) {
-			if (!first) { consume(TokenConstants.COMMA); }
+			voluntaryConsume(TokenConstants.COMMA);
 
 			next = consume();
 			if (next.getValue() != null && next.getValue().length() > 0) {
 				identifiers.add(new ContainerIdentifier(next.getValue()));
 			}
-
-			first = false;
 		}
 	}
 
@@ -225,7 +228,7 @@ public class Interpreter {
 		String path = ResourcePathConstants.MOD_FOLDER + currentMod + "/" + ResourcePathConstants.MESH_FOLDER + pathToken.getValue();
 		container.setProperty(currentStage, ScriptConstants.KEY_MESH, path);
 
-		consume(TokenConstants.SEMICOLON);
+		voluntaryConsume(TokenConstants.SEMICOLON);
 	}
 
 	private Object readProperty() throws Exception {
@@ -250,7 +253,7 @@ public class Interpreter {
 			result = value.getValue();
 		}
 
-		consume(TokenConstants.SEMICOLON);
+		voluntaryConsume(TokenConstants.SEMICOLON);
 		return result;
 	}
 
@@ -260,7 +263,7 @@ public class Interpreter {
 		Token value = consume();
 		valueSetter.accept(value.getValue());
 
-		consume(TokenConstants.SEMICOLON);
+		voluntaryConsume(TokenConstants.SEMICOLON);
 	}
 
 	private void readNumberValue(Consumer<Double> valueSetter) throws Exception {
@@ -269,7 +272,7 @@ public class Interpreter {
 		Token value = consume();
 		valueSetter.accept(TokenNumerifier.getDouble(value));
 
-		consume(TokenConstants.SEMICOLON);
+		voluntaryConsume(TokenConstants.SEMICOLON);
 	}
 
 	private void readBooleanValue(Consumer<Boolean> valueSetter) throws Exception {
@@ -288,7 +291,7 @@ public class Interpreter {
 
 		valueSetter.accept(value);
 
-		consume(TokenConstants.SEMICOLON);
+		voluntaryConsume(TokenConstants.SEMICOLON);
 	}
 
 	// ################################################################################### Attribute
@@ -299,13 +302,13 @@ public class Interpreter {
         Token name = consume();
         protoAttribute.setName(name.getValue());
 
-        consume(TokenConstants.SEMICOLON);
+		voluntaryConsume(TokenConstants.SEMICOLON);
     }
 
     private void addInherited(ProtoAttribute protoAttribute) throws Exception {
         protoAttribute.setInherited(true);
 
-        consume(TokenConstants.SEMICOLON);
+		voluntaryConsume(TokenConstants.SEMICOLON);
     }
 
 	private void addLowerBound(ProtoAttribute protoAttribute) throws Exception {
@@ -314,7 +317,7 @@ public class Interpreter {
 		Token value = consume();
 		protoAttribute.setLowerBound(TokenNumerifier.getInt(value));
 
-		consume(TokenConstants.SEMICOLON);
+		voluntaryConsume(TokenConstants.SEMICOLON);
 	}
 
 	private void addUpperBound(ProtoAttribute protoAttribute) throws Exception {
@@ -323,7 +326,7 @@ public class Interpreter {
 		Token value = consume();
 		protoAttribute.setUpperBound(TokenNumerifier.getInt(value));
 
-		consume(TokenConstants.SEMICOLON);
+		voluntaryConsume(TokenConstants.SEMICOLON);
 	}
 
 	private void addBounds(ProtoAttribute protoAttribute) throws Exception {
@@ -337,7 +340,7 @@ public class Interpreter {
 		Token upper = consume();
 		protoAttribute.setUpperBound(TokenNumerifier.getInt(upper));
 
-		consume(TokenConstants.SEMICOLON);
+		voluntaryConsume(TokenConstants.SEMICOLON);
 	}
 
 	private void addGuiColor(ProtoAttribute protoAttribute) throws Exception {
@@ -350,7 +353,7 @@ public class Interpreter {
 
 		protoAttribute.setGuiColor(new Color(TokenNumerifier.getInt(r),TokenNumerifier.getInt(g),TokenNumerifier.getInt(b)));
 
-		consume(TokenConstants.SEMICOLON);
+		voluntaryConsume(TokenConstants.SEMICOLON);
 	}
 
 	// ################################################################################### Tile
@@ -361,18 +364,13 @@ public class Interpreter {
 		Token height = consume();
 		container.setPreferredHeight(TokenNumerifier.getInt(height));
 
-		Token nextSub = consume();
-		if (TokenConstants.COMMA.equals(nextSub)) {
+		if (TokenConstants.COMMA.equals(peek())) {
+			consume(TokenConstants.COMMA);
 			Token blur = consume();
 			container.setPreferredHeightBlur(TokenNumerifier.getInt(blur));
-
-			consume(TokenConstants.SEMICOLON);
-
-		} else if (TokenConstants.SEMICOLON.equals(nextSub)) {
-			return;
-		} else {
-			Logger.error("Expected '" + TokenConstants.SEMICOLON.getValue() + "' but got '" + nextSub + "' on line " + nextSub.getLine());
 		}
+
+		voluntaryConsume(TokenConstants.SEMICOLON);
 	}
 
 	private void readPreferredHeightBlur(TileContainer container) throws Exception {
@@ -381,27 +379,23 @@ public class Interpreter {
 		Token blur = consume();
 		container.setPreferredHeightBlur(TokenNumerifier.getInt(blur));
 
-		consume(TokenConstants.SEMICOLON);
+		voluntaryConsume(TokenConstants.SEMICOLON);
 	}
 
 	private void readColor(TileContainer container, boolean side) throws Exception {
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
-		Token seperator;
 		Token[][] values = new Token[3][2]; // x axis: r,g,b | y axis: color value, deviation
 
 		for (int i=0; i<3; i++) {
 			values[i][0] = consume();
-			seperator = consume();
-			if (TokenConstants.COMMA.equals(seperator)) {
+
+			if (TokenConstants.COMMA.equals(peek())) {
+				consume(TokenConstants.COMMA);
 				values[i][1] = consume();
-				consume(TokenConstants.SEMICOLON);
-			} else if (!TokenConstants.SEMICOLON.equals(seperator)) {
-				String errorMessage = "Color values have to be followed by a '" + TokenConstants.SEMICOLON.getValue()
-						+ "' or by a comma and a deviation value, which in turn have to be followed by a semicolon. Line: " + seperator.getLine();
-				Logger.error(errorMessage);
-				throw new Exception(errorMessage);
 			}
+
+			voluntaryConsume(TokenConstants.SEMICOLON);
 		}
 
 		if (!side) {
@@ -470,7 +464,7 @@ public class Interpreter {
 
             } else if (TokenConstants.VALUE_INHERITED.equals(next)) { // attribute is inherited
                 addInherited(protoAttribute);
-                
+
 			} else if (TokenConstants.VALUE_LOWER_BOUND.equals(next)) { // lower bound
 				addLowerBound(protoAttribute);
 			} else if (TokenConstants.VALUE_UPPER_BOUND.equals(next)) { // upper bound

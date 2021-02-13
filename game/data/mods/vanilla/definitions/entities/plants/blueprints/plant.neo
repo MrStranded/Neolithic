@@ -1,0 +1,111 @@
+Creature: cPlant {
+
+	drives {
+		driSoak;
+		driGatherEnergy;
+		driGrow;
+		driDeathwish;
+		driPlantReproduction;
+	}
+
+	knowledge {
+		proSoak;
+		proPhotosynthesis;
+		proGrow;
+		proDie;
+	}
+
+	attributes{
+	    attTicks, 2
+		// attMaxSize, 50, 10;
+		// attGrowthSize, 5, 1;
+		// attEfficiency, 50, 5;
+	    // attMatureAge, 250, 50;//2880;
+	    // attLightSensitivity, 20, 5;
+		// attCancerResistance, 2;
+		bodyPreference, 50, 10, 50%;
+		bodyRestoration, 3, 1
+		bodyEfficiency, 50, 10, 50%
+		bodyResiliance, 3, 1, 0.25;
+	}
+	
+	Script: tick {
+		->plantTick();
+	}
+	
+	Script: plantTick {
+	    delayNextTick(self, .attTicks);
+		
+		// aging
+	    if (chance(.bodyEfficiency / 100)) { ..bodyExperience++; }
+
+		// age death
+		effectiveRestistance = (.bodyPreference * .bodyResiliance) + .bodyHealth;
+		if (.bodyExperience > effectiveRestistance
+				&& ! hasEffect(self, effCancer)) {
+				
+			if (chance((.bodyExperience - effectiveRestistance) / effectiveRestistance)) {
+				addEffect(self, effCancer);
+			}
+        }
+		
+		if (.attWater <= 0 && ! hasEffect(self, effDry)) {
+			if (.bodyResiliance = 0 || chance(1 / .bodyResiliance)) {
+				addEffect(self, effDry);
+			}
+        }
+		
+		if (.bodyHealth < - (.bodySize * .bodyResiliance)) {
+			destroy(self);
+		}
+	}
+	
+	Script: delete {
+		getTile(self)..attNutrition += .bodySize;
+	}
+	
+	Stage: ripe {
+		drives {
+			driSoak;
+			driGatherEnergy;
+			driGrow;
+			driDeathwish;
+			driPlantReproduction;
+		}
+	}
+	
+	Stage: sapling {	
+		drives {
+			driSoak;
+			driGatherEnergy;
+			driGrow;
+			driDeathwish;
+		}
+		
+		Script: tick {
+			->plantTick();
+		
+			if (.bodySize >= .bodyPreference) {
+				setDefaultStage(self);
+			}
+		}
+	}
+	
+    Stage: seed {
+        drives { driGrowIntoPlant; driGatherEnergy; }
+        knowledge { proGrowIntoPlant; proLeechFromHolder; }
+		
+		attributes {
+			bodySize, 1;
+		}
+
+        Script: tick() {
+            if (isOnFloor(self)) {
+				if (length(getItems(getTile(self))) > 4
+						|| chance(.bodySize / 100)) {
+					destroy(self);
+				}
+            }
+        }
+    }
+}

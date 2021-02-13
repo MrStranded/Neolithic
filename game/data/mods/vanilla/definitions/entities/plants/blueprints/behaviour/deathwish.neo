@@ -4,15 +4,17 @@ Drive: driDeathwish {
     solutions { proDie; }
 
     Script: condition {
-		->overcrowding = max(0, getFullAtt(getTile(self), "attSize") - 100);
+		->overcrowding = max(0, getFullAtt(getTile(self), "bodySize") - 100);
 		
-		return .attDamage > .attSize/2 || ->overcrowding > 0;
+		->pro = (.bodySize * ->overcrowding + .bodyExperience / .bodyRestoration);
+		->con = (.bodyPreference + .bodyHealth * .bodyResiliance);
+		return ->pro > ->con;
 	}
 
     Script: getWeight {
-		if (.attSize == 0) { return 0; }
+		if (.bodySize == 0) { return 0; }
 		
-        return(percent(.attDamage, .attSize) + ->overcrowding);
+        return(max(0, percent(- .bodyHealth, .bodySize)) + ->pro - ->con);
     }
 }
 
