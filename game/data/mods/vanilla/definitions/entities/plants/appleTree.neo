@@ -35,42 +35,7 @@ Creature: cAppleTree inherits cPlant {
 
 ///////////////////////////////////////////////////////////////////////////// Fruit
 
-Entity: entApple {
+Entity: entApple inherits entFruit {
 	name = "Apple";
 	mesh = "apple_6x_loose.ply";
-
-	attributes {
-		attVegetarian, 1;
-		attMatureAge, 100;
-		attNutrition, 1;
-		attTicks, 2;
-	}
-
-	Script: tick() {
-	    delayNextTick(self, .attTicks);
-		
-		if (isOnFloor(self)) {
-            ..attAge++;
-
-            if (.attAge >= .attMatureAge) {
-                // addEffect(getTile(self), "Fertilized", .attMatureAge, [ "attNutrition", self.attNutrition ]);
-				getTile(self)..attNutrition += .attNutrition;
-
-                for (seed : getItems(self)) {
-                    pickUp(getTile(self), seed);
-                }
-                destroy(self);
-            }
-		}
-	}
-
-	Script: consume(actor) {
-	    effect = addEffect(actor, effDigest);
-        effect..attNutrition = .attNutrition;
-        for (seed : getItems(self)) {
-            pickUp(effect, seed);
-        }
-
-		destroy(self);
-	}
 }
