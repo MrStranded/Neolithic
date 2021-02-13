@@ -43,7 +43,7 @@ Process: proGrowFruit {
 		..bodyHealth -= 1;
 		
 		if (->fruit) {
-			->fruit..bodyHealth += .bodyRestoration;
+			->fruit..bodyHealth += .bodyRestoration * .bodyEfficiency / 100;
 		} else {
 			setStage(self, "ripe");
 
@@ -67,9 +67,9 @@ Process: proPropagate {
 	}
 	
 	Script: process {
-		..bodyHealth -= .bodyPreference;
+		..bodyHealth -= .bodyPreference * (100 - .bodyEfficiency) / 100;
 	
-		seed = create(cBush, ->neighbor);
+		seed = create(getType(self), ->neighbor);
 		mixAttributes(seed, self);
 		setStage(seed, "seed");
 		seed..bodyHealth += .bodyPreference * .bodyEfficiency / 100 + .bodyRestoration;

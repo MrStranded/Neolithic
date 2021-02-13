@@ -1,0 +1,29 @@
+///////////////////////////////////////////////////////////////////////////// Tree
+
+Creature: cFirTree inherits cPlant {
+
+    name = "Fir Tree";
+    mesh = "fir_tree_mature.ply";
+
+	knowledge {
+		proLeechFromHolder;
+		proPropagate;
+	}
+	
+	attributes{
+		bodyPreference, 100, 10, 50%
+		bodyRestoration, 1, 1
+		bodyEfficiency, 70, 10, 50%
+		bodyResiliance, 5, 1, 0.25
+	}
+	
+    Stage: seed {
+        name = "Fir tree seed";
+        mesh = "apple_seed.ply";
+    }
+
+    Stage: sapling {
+        mesh = "fir_tree_young.ply";
+    }
+
+}

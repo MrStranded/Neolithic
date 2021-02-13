@@ -5,10 +5,6 @@ Script: tick {
     ->minute += 1;
     changeSunAngle(0.25); // 0.25 * 60 * 24 = 360
 	->angle += 0.25;
-	
-	if (->angle >= 180 && ->angle <= 360) print("between: " + ->angle)
-	else if (->angle < 50) print("under 50!!!")
-	else print("not between: " + ->angle)
 
     if (->minute >= 60) {
         ->minute = 0;
@@ -43,13 +39,15 @@ Script: repopulate() {
             if ((getType(t) == tGras || getType(t) == tDirt) && getHeight(t) > 100) {
                 if (chance(0.2)){
                     tree = create(cAppleTree, t);
-					tree..attSize = random(tree.attMaxSize);
 					setStage(tree, "sapling");
                 }
                 if (chance(0.2)){
                     bush = create(cBush, t);
-					bush..attSize = random(bush.attMaxSize);
 					setStage(bush, "sapling");
+                }
+                if (chance(0.2)){
+                    fir = create(cFirTree, t);
+					setStage(fir, "sapling");
                 }
             }
 		}
@@ -99,7 +97,7 @@ Script: leftClick(tile, type) {
 		destroy(instance);
 	} else {
 		instance = create(type,tile);
-		if (type == cAppleTree) {
+		if (type == cAppleTree || type == cBush || type == cFirTree) {
 			setStage(instance, "seed");
 		}
 	}

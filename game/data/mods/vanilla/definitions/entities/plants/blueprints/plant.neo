@@ -17,12 +17,6 @@ Creature: cPlant {
 
 	attributes{
 	    attTicks, 2
-		// attMaxSize, 50, 10;
-		// attGrowthSize, 5, 1;
-		// attEfficiency, 50, 5;
-	    // attMatureAge, 250, 50;//2880;
-	    // attLightSensitivity, 20, 5;
-		// attCancerResistance, 2;
 		bodyPreference, 50, 10, 50%;
 		bodyRestoration, 3, 1
 		bodyEfficiency, 50, 10, 50%

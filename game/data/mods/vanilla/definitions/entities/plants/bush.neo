@@ -10,18 +10,7 @@ Creature: cBush inherits cPlant {
 		proPropagate;
 	}
 	
-	attributes{
-		// attMaxSize, 50, 5;
-	    // attLightSensitivity, 25, 3;
-		// attGrowthSize, 4, 1;
-		// attEfficiency, 60, 3;
-	    // attMatureAge, 200, 50;
-		// attCancerResistance, 1;
-		
-		// bodyPreference, 50, 10, 10%;
-		// bodyEfficiency, 25, 3;
-		// bodyRestoration, 4, 1, 25%;
-	}
+	attributes {}
 	
     Stage: seed {
         name = "Bush seed";
