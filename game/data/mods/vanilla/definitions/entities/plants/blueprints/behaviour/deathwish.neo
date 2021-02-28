@@ -4,9 +4,10 @@ Drive: driDeathwish {
     solutions { proDie; }
 
     Script: condition {
+		return false;
 		->overcrowding = max(0, getFullAtt(getTile(self), "bodySize") - 100);
 		
-		->pro = (.bodySize * ->overcrowding + .bodyExperience / .bodyRestoration);
+		->pro = (.bodySize * ->overcrowding);// + .bodyExperience / .bodyRestoration);
 		->con = (.bodyPreference + .bodyHealth * .bodyResiliance);
 		return ->pro > ->con;
 	}
@@ -22,6 +23,7 @@ Drive: driDeathwish {
 
 Process: proDie {
 	Script: process {
+		print("deathwish: " + .bodyHealth);
 		destroy(self);
 	}
 }

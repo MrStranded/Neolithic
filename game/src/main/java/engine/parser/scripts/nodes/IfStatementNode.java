@@ -26,7 +26,7 @@ public class IfStatementNode extends AbstractScriptNode {
 			}
 		}
 
-		return new Variable(1);
+		return new Variable(0);
 	}
 
 	@Override

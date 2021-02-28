@@ -37,18 +37,24 @@ Script: repopulate() {
 				addEffect(human, effInfant);
 			}
             if ((getType(t) == tGras || getType(t) == tDirt) && getHeight(t) > 100) {
+				plants = [];
                 if (chance(0.2)){
-                    tree = create(cAppleTree, t);
-					setStage(tree, "sapling");
+                    plants += create(cAppleTree, t);
                 }
                 if (chance(0.2)){
-                    bush = create(cBush, t);
-					setStage(bush, "sapling");
+                    plants += create(cBush, t);
                 }
                 if (chance(0.2)){
-                    fir = create(cFirTree, t);
-					setStage(fir, "sapling");
+                    plants += create(cBerryBush, t);
                 }
+                if (chance(0.2)){
+                    plants += create(cFirTree, t);
+                }
+				
+				for (p : plants) {
+					p..attNutrition += p.bodyRestoration * p.bodyResiliance + p.bodyEfficiency;
+					setStage(p, "sapling");
+				}
             }
 		}
 	}

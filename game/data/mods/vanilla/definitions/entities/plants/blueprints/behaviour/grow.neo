@@ -6,19 +6,21 @@ Drive: driGrow {
     Script: condition { return .bodySize < .bodyPreference; }
 
     Script: getWeight {
-        return(100 - percent(.bodySize, .bodyPreference));
+		if (.bodySize >= .bodyPreference) { return .bodyHealth + .bodyRestoration; }
+		
+        return(min(100, 100 + .bodyRestoration - percent(.bodySize, 100)));
     }
 }
 
 Process: proGrow {
     Script: condition {
 		require(getFullAtt(getTile(self), "bodySize") < 100);
-        require(.bodyHealth > 0);
+        require(.attNutrition >= .bodyRestoration);
     }
 
     Script: process {
 		..bodySize += .bodyRestoration;
-		..bodyHealth -= .bodyRestoration * (1 - .attEfficieny / 100);
+		..attNutrition -= .bodyRestoration * (1 - .attEfficieny / 100);
     }
 }
 
@@ -28,7 +30,7 @@ Drive: driGrowIntoPlant {
     solutions { proGrowIntoPlant; }
 
     Script: condition {
-		return length(getItems(getTile(self))) < 4;
+		return length(getItems(getTile(self), getType(self))) < 100 / max(1, .bodyPreference);
 	}
 
     Script: getWeight {
@@ -52,6 +54,8 @@ Process: proGrowIntoPlant {
             effect = addEffect(n, effShadow);
             effect->cause = self;
         }
+		
+		forget(->age);
     }
 }
 
@@ -63,13 +67,8 @@ Drive: driGatherEnergy {
 		proLeechFromHolder;
 	}
 
-    Script: condition {
-		// require(.bodySize > 0);
-		// require(.bodyHealth < .bodyPreference * .bodyResiliance);
-	}
-
     Script: getWeight {
-		nutWeight = 50 - .bodyHealth / (.bodyRestoration);
+		nutWeight = 50 - .attNutrition / .bodyRestoration;
 		if (.bodySize > 0) { waterWeight = 50 * .attWater / .bodySize; }
 		else { waterWeight = 50; }
         return(nutWeight + waterWeight);
@@ -88,7 +87,7 @@ Process: proPhotosynthesis {
 		if (! chance(.bodyEfficiency / 100)) { ..attWater--; }
 		
 		surplus = ->ll + .bodyEfficiency - 100 - .bodyExperience / .bodyPreference;
-		..bodyHealth += min(surplus, ..bodyRestoration);
+		..attNutrition += min(surplus, ..bodyRestoration);
 	}
 
 	Script: discovery(actor) { // there is no way for an entity to learn photosynthesis
@@ -107,7 +106,7 @@ Process: proLeechFromHolder {
 	Script: process {
 		getHolder(self)..attNutrition--;
 		if (chance(.bodyEfficiency / 100)) {
-			self..bodyHealth += .bodyRestoration;
+			self..attNutrition += .bodyRestoration;
 		}
 	}
 }

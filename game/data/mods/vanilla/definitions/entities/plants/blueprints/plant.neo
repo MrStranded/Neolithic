@@ -4,14 +4,16 @@ Creature: cPlant {
 		driSoak;
 		driGatherEnergy;
 		driGrow;
+		driHeal;
 		driDeathwish;
 		driPlantReproduction;
 	}
 
 	knowledge {
-		proSoak;
+		proSoak; proSoakFromAir;
 		proPhotosynthesis;
 		proGrow;
+		proHeal;
 		proDie;
 	}
 
@@ -19,7 +21,7 @@ Creature: cPlant {
 	    attTicks, 2
 		bodyPreference, 50, 10, 50%;
 		bodyRestoration, 3, 1
-		bodyEfficiency, 50, 10, 50%
+		bodyEfficiency, 60, 10, 50%
 		bodyResiliance, 3, 1, 0.25;
 	}
 	
@@ -32,9 +34,16 @@ Creature: cPlant {
 		
 		// aging
 	    if (chance(.bodyEfficiency / 100)) { ..bodyExperience++; }
+		
+		// oversugared
+		surplus = .attNutrition - (.bodySize * .bodyRestoration + .bodyResiliance);
+		if (surplus > 0) {
+			..attNutrition -= .bodyResiliance;
+			addEffect(self, "Oversugared", .attTicks * surplus, ["bodyEfficiency", -1]);
+		}
 
 		// age death
-		effectiveRestistance = (.bodyPreference * .bodyResiliance) + .bodyHealth;
+		effectiveRestistance = max(1, (.bodyPreference * .bodyResiliance) + .bodyHealth);
 		if (.bodyExperience > effectiveRestistance
 				&& ! hasEffect(self, effCancer)) {
 				
@@ -49,7 +58,7 @@ Creature: cPlant {
 			}
         }
 		
-		if (.bodyHealth < - (.bodySize * .bodyResiliance)) {
+		if (.bodyHealth < - (.bodySize * .bodyResiliance) - .bodyRestoration) {
 			destroy(self);
 		}
 	}
@@ -63,6 +72,7 @@ Creature: cPlant {
 			driSoak;
 			driGatherEnergy;
 			driGrow;
+			driHeal;
 			driDeathwish;
 			driPlantReproduction;
 		}
@@ -73,6 +83,7 @@ Creature: cPlant {
 			driSoak;
 			driGatherEnergy;
 			driGrow;
+			driHeal;
 			driDeathwish;
 		}
 		
@@ -95,10 +106,11 @@ Creature: cPlant {
 
         Script: tick() {
             if (isOnFloor(self)) {
-				if (length(getItems(getTile(self))) > 4
-						|| chance(.bodySize / 100)) {
-					destroy(self);
-				}
+				if (->age++ > .bodyPreference * .bodyResiliance + .bodyRestoration * .bodyEfficiency) { destroy(self); }
+				// if (length(getItems(getTile(self))) > 4
+						// || chance(.bodySize / 100)) {
+					// destroy(self);
+				// }
             }
         }
     }

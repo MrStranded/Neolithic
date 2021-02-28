@@ -63,19 +63,19 @@ public class BaseGUI implements GUIInterface {
 	public void tick(int windowWidth, int windowHeight) {
 		clear();
 
-		Container currentSelection = Data.getContainer(GameOptions.currentContainerId).orElse(null);
-		GUIObject selection = new TextObject(currentSelection != null ? currentSelection.getName() : String.valueOf(GameOptions.currentContainerId), fontTexture);
-		selection.setSize(windowWidth * 0.25, windowHeight * 0.125);
-		selection.setLocation(windowWidth * 0.75, windowHeight * 0.875);
-		selection.setRelativeScreenPosition(RelativeScreenPosition.LEFT, RelativeScreenPosition.TOP);
-//		selection.setLocation(windowWidth * 3.0/4.0, windowHeight * 7.0/8.0);
-		selection.recalculateScale(windowWidth, windowHeight);
-		addHUDObject(selection);
+//		Container currentSelection = Data.getContainer(GameOptions.currentContainerId).orElse(null);
+//		GUIObject selection = new TextObject(currentSelection != null ? currentSelection.getName() : String.valueOf(GameOptions.currentContainerId), fontTexture);
+//		selection.setSize(windowWidth * 0.25, windowHeight * 0.125);
+//		selection.setLocation(windowWidth * 0.75, windowHeight * 0.875);
+//		selection.setRelativeScreenPosition(RelativeScreenPosition.LEFT, RelativeScreenPosition.TOP);
+////		selection.setLocation(windowWidth * 3.0/4.0, windowHeight * 7.0/8.0);
+//		selection.recalculateScale(windowWidth, windowHeight);
+//		addHUDObject(selection);
 
-		if (GameOptions.selectedInstance != null && ! GameOptions.selectedInstance.isSlatedForRemoval()) {
-			yPos = 0;
+//		if (GameOptions.selectedInstance != null && ! GameOptions.selectedInstance.isSlatedForRemoval()) {
+//			yPos = 0;
 //			printInstance(GameOptions.selectedInstance, windowWidth, windowHeight);
-		}
+//		}
 	}
 
 	private void printInstance(Instance instance, int windowWidth, int windowHeight) {

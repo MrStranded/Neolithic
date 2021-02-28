@@ -18,7 +18,7 @@ public class StatisticsPanel extends JPanel {
     private int width, height;
     private double verticalPointRange;
     private static final int TOP_BAR_HEIGHT = 30;
-    private static final int VERTICAL_MARGIN = 3;
+    private static final int VERTICAL_MARGIN = 6;
     private BufferedImage img;
 
     public StatisticsPanel(int width, int height) {
@@ -34,6 +34,8 @@ public class StatisticsPanel extends JPanel {
     public void register(Instance instance) {
         if (! GameOptions.plotOnlySelectedEntity && instance.getId() != GameOptions.currentContainerId) { return; }
         if (GameOptions.plotOnlySelectedEntity && GameOptions.selectedInstance != instance) { return; }
+
+        StatisticsData.registerStage(instance.getStage());
 
         for (int id = 0; id < GameConstants.MAX_ATTRIBUTES; id++) {
             ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
@@ -79,28 +81,55 @@ public class StatisticsPanel extends JPanel {
         if (protoAttribute != null && protoAttribute.getGuiColor() != null) {
             StatisticsData.registerAttributeValue(id, (int) value);
             int lower, upper;
+
             if (protoAttribute.hasLowerBound()) {
                 lower = protoAttribute.getLowerBound();
             } else {
                 lower = StatisticsData.getLowest(id);
             }
+
             if (protoAttribute.hasUpperBound()) {
                 upper = protoAttribute.getUpperBound();
             } else {
                 upper = StatisticsData.getHighest(id);
             }
+
             double d = upper - lower;
-            return value / d;
+            return (value - lower) / d;
         }
 
         return -1;
     }
+
+    private Color[] stageColors = {
+            new Color (255,255,255),
+            new Color (255,230,230),
+            new Color (230,255,230),
+            new Color (230,230,255)
+    };
 
     public void tick() {
         Graphics g = img.getGraphics();
 
         g.setColor(new Color (255,255,255));
         g.fillRect(currentPosition + 3, 0, 150, height - TOP_BAR_HEIGHT);
+
+        double all = StatisticsData.getStagesCountsSum();
+        if (all > 0) {
+            int index = 0;
+            double behind = 0;
+            double h = height - TOP_BAR_HEIGHT;
+
+            for (String stage : StatisticsData.getStages()) {
+                double count = StatisticsData.getStageCount(stage);
+
+                g.setColor(stageColors[index++ % stageColors.length]);
+                g.fillRect(currentPosition + 3, (int) (h * behind / all), 150, (int) (h * count / all));
+                g.setColor(new Color(200,200,200));
+                g.drawString(stage + " (" + ((int) count) + ")", currentPosition + 12,  (int) (h * behind / all) + 15);
+                behind += count;
+            }
+        }
 
         for (int id = 0; id < GameConstants.MAX_ATTRIBUTES; id++) {
             ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
