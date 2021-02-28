@@ -34,13 +34,10 @@
   top: 50%;
   transform: translate(-50%, -50%);
 
-  /*max-width: 90%;*/
-
   padding: 1rem;
   border-radius: 1rem;
   background-color: var(--neo-color-main-80pct);
 
-  font-size: 3rem;
   font-weight: bold;
   text-align: center;
 }

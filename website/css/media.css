@@ -23,8 +23,18 @@
     max-width: 100%;
   }
 }
+@media only screen and (min-width: 1600px) {
+  .media .item {
+    max-width: calc(33% - 2rem);
+  }
+}
 .media .item.selected {
   max-width: 100%;
+}
+@media only screen and (min-width: 769px) {
+  .media .item.selected {
+    order: 0;
+  }
 }
 .media .item img {
   display: block;
