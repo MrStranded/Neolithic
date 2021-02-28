@@ -1,0 +1,28 @@
+html {
+  --neo-color-main: #3b352f;
+  --neo-color-main-80pct: rgba(59, 53, 47, 0.8);
+  --neo-color-main-50pct: rgba(59, 53, 47, 0.5);
+  --neo-color-main-20pct: rgba(59, 53, 47, 0.2);
+  --neo-color-main-10pct: rgba(59, 53, 47, 0.1);
+
+  --neo-color-secondary: #322e2d;
+  --neo-color-tertiary: #443e3a;
+  --neo-color-attention: #581a1a;
+
+  --neo-color-background: #181717;
+  --neo-color-background-80pct: rgba(24, 23, 23, 0.8);
+  --neo-color-background-50pct: rgba(24, 23, 23, 0.5);
+  --neo-color-background-20pct: rgba(24, 23, 23, 0.2);
+  --neo-color-background-10pct: rgba(24, 23, 23, 0.1);
+
+  --neo-text: #e8c6b5;
+  /*--neo-text: #d55a0c;*/
+  --neo-text-hover: #e89d6c;
+
+  --neo-text-link: #805408;
+
+  --neo-text-type: #0e0501;
+  --neo-text-command: #f5680f;
+  --neo-text-parameter: #c27018;
+  --neo-text-example: #d4793d;
+}

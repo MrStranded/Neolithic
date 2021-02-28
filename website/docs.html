@@ -1,13 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Neo Script - Commands</title>
+  <meta charset="utf-8">
+  <title>Neolithic - Docs</title>
+  <meta name="description" content="A website for the game Neolithic">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="cssReset.css">
-    <link rel="stylesheet" href="variables.css">
-    <link rel="stylesheet" href="commands.css">
-    <script src="commands.js"></script>
+  <!-- ------------------------------------------------------------------------------ SOM Tags -->
+  <meta property="og:title" content="Neolithic">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="neolithicgame.com">
+  <meta property="og:image" content="img/screen02.png">
+
+  <!-- ------------------------------------------------------------------------------ Styles -->
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/cssReset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/commands.css">
+
+  <meta name="theme-color" content="#d55a0c">
+
+  <!-- ------------------------------------------------------------------------------ Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,500;0,700;1,300;1,500;1,700&display=swap" rel="stylesheet">
+
+  <!-- ------------------------------------------------------------------------------ Scripts -->
+  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
+
+  <script src="doc/commands.js"></script>
 </head>
 <body>
     <script>
@@ -88,7 +115,7 @@
 
             document.write(`<div class="commandContainer closed" id="${command.name}${command.parameters.length}">
                             <button class="button toggleCommand" onclick="toggleCommand('${command.name}${command.parameters.length}')">Toggle</button>
-                            <h2><span class="type">${command.type}</span>:
+                            <h2 onclick="toggleCommand('${command.name}${command.parameters.length}')"><span class="type">${command.type}</span>:
                                 <span class="name">${command.name}</span> (
                                 <span class="parameter">${parameters}</span>)</h2>`);
 

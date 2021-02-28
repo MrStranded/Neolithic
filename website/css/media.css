@@ -1,0 +1,32 @@
+.media {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  margin-bottom: -2rem;
+}
+
+.media .item {
+  max-width: calc(50% - 1rem);
+  order: 1;
+  margin-bottom: 2rem;
+
+  box-shadow: var(--neo-color-main) 0 0 1rem;
+
+  cursor: pointer;
+}
+.media .item:hover {
+  box-shadow: var(--neo-color-main) 0 0 3rem;
+}
+@media only screen and (max-width: 768px) {
+  .media .item {
+    max-width: 100%;
+  }
+}
+.media .item.selected {
+  max-width: 100%;
+}
+.media .item img {
+  display: block;
+  width: 100%;
+}

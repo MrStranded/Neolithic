@@ -1,0 +1,51 @@
+.dashboard {
+  background-color: var(--neo-color-background);
+}
+
+.dashboard .dashboardButton {
+  display: block;
+  position: relative;
+
+  width: 100%;
+  margin-bottom: 3rem;
+
+  box-shadow: var(--neo-color-main) 0 0 1rem;
+
+  text-decoration: none;
+}
+.dashboard .dashboardButton:last-child {
+  margin-bottom: 0;
+}
+
+.dashboardButton img {
+  display: block;
+  width: 100%;
+
+  opacity: 0.8;
+}
+
+.dashboardButton:hover img {
+  opacity: 1;
+}
+
+.dashboardButton .title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  /*max-width: 90%;*/
+
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: var(--neo-color-main-80pct);
+
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.dashboardButton:hover .title {
+  background-color: var(--neo-color-background);
+}
+

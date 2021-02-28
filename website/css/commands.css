@@ -215,6 +215,8 @@ a.toCommand:hover {
 /* -------------------------------------------------------------- */
 
 h2 {
+  font-size: 1.25rem;
+  line-height: 1.5rem;
   padding: 20px 50px;
   margin-bottom: 0;
   font-weight: bold;
