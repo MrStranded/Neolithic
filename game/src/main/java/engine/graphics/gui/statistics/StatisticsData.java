@@ -2,6 +2,11 @@ package engine.graphics.gui.statistics;
 
 import constants.GameConstants;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 public class StatisticsData {
 
     private static int[] internalCounts = new int[GameConstants.MAX_CONTAINERS];
@@ -12,13 +17,18 @@ public class StatisticsData {
     private static int[] lowest = new int[GameConstants.MAX_ATTRIBUTES];
     private static int[] highest = new int[GameConstants.MAX_ATTRIBUTES];
 
+    private static Map<String, Integer> stageCounts = new HashMap<>();
+
     public static void clear() {
         counts = internalCounts;
         internalCounts = new int[GameConstants.MAX_CONTAINERS];
+
         for (int i = 0; i < GameConstants.MAX_ATTRIBUTES; i++) {
             countAttributes[i] = 0;
             sums[i] = 0;
         }
+
+        stageCounts.clear();
     }
 
     public static void add(int id) {
@@ -67,6 +77,22 @@ public class StatisticsData {
             }
         }
         return 0;
+    }
+
+    public static void registerStage(String stage) {
+        Integer count = stageCounts.get(stage) != null ? stageCounts.get(stage) + 1 : 1;
+        stageCounts.put(stage, count);
+    }
+
+    public static Set<String> getStages() {
+        return stageCounts.keySet();
+    }
+    public static int getStageCount(String stage) {
+        return stageCounts.getOrDefault(stage, 0);
+    }
+    public static int getStagesCountsSum() {
+        return stageCounts.values().stream()
+                .reduce(0, Integer::sum);
     }
 
 }

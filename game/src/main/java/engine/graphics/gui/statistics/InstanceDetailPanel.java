@@ -17,6 +17,7 @@ import engine.data.scripts.ScriptRun;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
+import engine.parser.utils.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -102,6 +103,8 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         return yPos;
     }
 
+    private static final int[] ATTRIBUTE_CHANGE_STEPS = {-5, -1, 1, 5};
+
     private void drawAttributes(Graphics g, Instance instance, int yPos) {
         if (instance == null) { return; }
 
@@ -123,6 +126,17 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
             g.setColor(attributeColor);
             g.drawString(protoAttribute.getName(), 10, getCurrentYPosition() + 12);
             g.drawString(attributeValue + " (" + personalValue + ")", 10 + 200, getCurrentYPosition() + 12);
+
+            for (int i = 0; i < ATTRIBUTE_CHANGE_STEPS.length; i++) {
+                int xPos = 10 + 200 - 18*(i+1);
+
+                g.drawRect(xPos, getCurrentYPosition(), 18, 18);
+                g.drawString((ATTRIBUTE_CHANGE_STEPS[i] < 0 ? "-" : "+") + ATTRIBUTE_CHANGE_STEPS[i]
+                        , xPos + 2, getCurrentYPosition() + 12);
+
+                buttons.add(new AttributeButton(instance.getAttribute(attributeId),
+                        xPos - 3, yPos - 3, 145, 20, ATTRIBUTE_CHANGE_STEPS[i]));
+            }
 
             setCurrentYPosition(getCurrentYPosition() + 20);
         }
@@ -311,6 +325,28 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
 
         public void click() {
             GameOptions.selectedInstance = instance;
+        }
+    }
+
+    static class AttributeButton extends Button {
+        private Attribute attribute;
+        private int change;
+
+        public AttributeButton(Attribute attribute, int xPos, int yPos, int width, int height, int change) {
+            this.attribute = attribute;
+            this.xPos = xPos;
+            this.yPos = yPos;
+            this.width = width;
+            this.height = height;
+            this.change = change;
+        }
+
+        public void click() {
+            if (attribute != null) {
+                attribute.setValue(attribute.getValue() + change);
+            } else {
+                Logger.error("Attribute is null!");
+            }
         }
     }
 

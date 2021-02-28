@@ -14,8 +14,7 @@ Creature: cAppleTree inherits cPlant {
 	
 	attributes{
 		attTicks, 3;
-		// attMaxSize, 100, 10;
-	    // attLightSensitivity, 30, 5;
+		bodyEfficiency, 65, 10, 50%
 	}
 	
     Stage: seed {

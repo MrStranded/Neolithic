@@ -114,6 +114,7 @@ Attribute: attMaxHealth {
 Attribute: attNutrition {
     name = "Nutrition";
     color = 255, 0, 0;
+	lower = 0;
 }
 Attribute: attHydrated {
     name = "Hydrated";

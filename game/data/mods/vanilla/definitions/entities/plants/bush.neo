@@ -22,3 +22,42 @@ Creature: cBush inherits cPlant {
     }
 
 }
+
+Creature: cBerryBush inherits cPlant {
+
+    name = "Berry Bush";
+    mesh = "berry_bush_mature.ply";
+    fruit = "entBerry";
+
+	knowledge {
+		proDropFruit;
+		proGrowFruit;
+		proLeechFromHolder;
+		proPropagate;
+	}
+	
+	attributes{
+		bodyPreference, 40, 10, 50%;
+	}
+	
+    Stage: seed {
+        name = "Bush seed";
+        mesh = "apple_seed.ply";
+    }
+
+    Stage: sapling {
+        mesh = "berry_bush_young.ply";
+    }
+
+    Stage: ripe {
+        mesh = "berry_bush_mature_ripe.ply";
+    }
+
+}
+
+///////////////////////////////////////////////////////////////////////////// Fruit
+
+Entity: entBerry inherits entFruit {
+	name = "Berry";
+	mesh = "berry01.ply";
+}

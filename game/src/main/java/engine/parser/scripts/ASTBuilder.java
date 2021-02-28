@@ -56,45 +56,57 @@ public class ASTBuilder {
 
 		Token next;
 		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(next = interpreter.peek())) { // look at the next token (just look!)
-			if (next.getType() == TokenType.KEYWORD) { // keyword
-				if (TokenConstants.IF.equals(next)) { // if statement
-					nodeList.add(readIfStatement());
-
-				} else if (TokenConstants.WHILE.equals(next)) { // while statement
-					nodeList.add(readWhileStatement());
-
-				} else if (TokenConstants.FOR.equals(next)) { // for statement
-					nodeList.add(readForStatement());
-
-				} else if (TokenConstants.BREAK.equals(next)) { // break statement
-					nodeList.add(readBreakStatement());
-
-				} else if (TokenConstants.RETURN.equals(next)) { // break statement
-					nodeList.add(readReturnStatement());
-
-				} else { // expression (induced by eg. 'self')
-					nodeList.add(readExpression());
-					interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
-
-				}
-
-			} else if (next.getType() == TokenType.COMMAND) { // a command -> expression
-				nodeList.add(readExpression());
-				interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
-
-			} else if (next.getType() == TokenType.IDENTIFIER || next.getType() == TokenType.OPERATOR || TokenConstants.ROUND_BRACKETS_OPEN.equals(next)) { // also expression
-				nodeList.add(readExpression());
-				interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
-
-			} else {
-				Logger.error("Illegal Script command '" + next.getValue() + "' on line " + next.getLine());
-				interpreter.consume();
-
-			}
+			nodeList.add(readStatement());
 		}
 		interpreter.consume(TokenConstants.CURLY_BRACKETS_CLOSE);
 
 		return new MultiStatementNode(nodeList);
+	}
+
+	private AbstractScriptNode readStatement() throws Exception {
+		Token next = interpreter.peek();
+		AbstractScriptNode result;
+
+		if (next.getType() == TokenType.KEYWORD) { // keyword
+			if (TokenConstants.IF.equals(next)) { // if statement
+				return readIfStatement();
+
+			} else if (TokenConstants.WHILE.equals(next)) { // while statement
+				return readWhileStatement();
+
+			} else if (TokenConstants.FOR.equals(next)) { // for statement
+				return readForStatement();
+
+			} else if (TokenConstants.BREAK.equals(next)) { // break statement
+				return readBreakStatement();
+
+			} else if (TokenConstants.RETURN.equals(next)) { // break statement
+				return readReturnStatement();
+
+			} else { // expression (induced by eg. 'self')
+				result = readExpression();
+				interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
+				return result;
+
+			}
+
+		} else if (next.getType() == TokenType.COMMAND) { // a command -> expression
+			result = readExpression();
+			interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
+			return result;
+
+		} else if (next.getType() == TokenType.IDENTIFIER || next.getType() == TokenType.OPERATOR || TokenConstants.ROUND_BRACKETS_OPEN.equals(next)) { // also expression
+			result = readExpression();
+			interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
+			return result;
+
+		} else {
+			Logger.parsingError("Illegal script command '", next, interpreter);
+			interpreter.consume();
+
+		}
+
+		return new NoOperatorNode();
 	}
 
 	// ###################################################################################
@@ -105,11 +117,11 @@ public class ASTBuilder {
 		interpreter.consume(TokenConstants.IF);
 		interpreter.consume(TokenConstants.ROUND_BRACKETS_OPEN);
 
-		AbstractScriptNode expressionNode = readExpression();
+		AbstractScriptNode condition = readExpression();
 
 		interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
 
-		AbstractScriptNode body = null;
+		AbstractScriptNode body;
 
 		if (TokenConstants.CURLY_BRACKETS_OPEN.equals(interpreter.peek())) {
 			body = readMultiStatement();
@@ -138,7 +150,7 @@ public class ASTBuilder {
 			}
 		}
 
-		return new IfStatementNode(expressionNode, body, elseBody);
+		return new IfStatementNode(condition, body, elseBody);
 	}
 
 	// ###################################################################################
@@ -170,27 +182,44 @@ public class ASTBuilder {
 
 		initial = readExpression();
 		Token next = interpreter.peek();
-		if (TokenConstants.SEMICOLON.equals(next)) { // normal for loop
-			interpreter.consume(TokenConstants.SEMICOLON);
-			condition = readExpression();
-			interpreter.consume(TokenConstants.SEMICOLON);
-			step = readExpression();
-			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
-			MultiStatementNode body = readMultiStatement();
 
-			return new ForStatementNode(initial, condition, step, body);
-		} else if (TokenConstants.COLON.equals(next)) { // special iterator (topology, entities ...)
+		if (TokenConstants.COLON.equals(next)) { // special iterator (topology, entities ...)
 			interpreter.consume(TokenConstants.COLON);
 			AbstractScriptNode iterator = readExpression();
 			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
-			MultiStatementNode body = readMultiStatement();
+
+			AbstractScriptNode body;
+
+			if (TokenConstants.CURLY_BRACKETS_OPEN.equals(interpreter.peek())) {
+				body = readMultiStatement();
+
+			} else {
+				body = readExpression();
+				interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
+			}
 
 			return new ForStatementNode(initial, iterator, body);
-		} else {
-			String errorMessage = "Unexpected '" + next.getValue() + "' on line " + next.getLine()
-					+ ". For statements have to be of the format 'for (initial; condition; step) {...}' OR 'for (initial : iterator) {...}'!";
-			Logger.error(errorMessage);
-			throw new Exception(errorMessage);
+
+		} else { // normal for loop
+			interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
+			condition = readExpression();
+			interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
+			step = readExpression();
+			interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
+
+			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
+
+			AbstractScriptNode body;
+
+			if (TokenConstants.CURLY_BRACKETS_OPEN.equals(interpreter.peek())) {
+				body = readMultiStatement();
+
+			} else {
+				body = readExpression();
+				interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
+			}
+
+			return new ForStatementNode(initial, condition, step, body);
 		}
 	}
 
@@ -221,23 +250,17 @@ public class ASTBuilder {
 			return new ReturnStatementNode();
 		}
 
-		if (TokenConstants.ROUND_BRACKETS_OPEN.equals(next)){
-			interpreter.consume(TokenConstants.ROUND_BRACKETS_OPEN);
+		boolean brackets = interpreter.voluntaryConsume(TokenConstants.ROUND_BRACKETS_OPEN);
 
-			AbstractScriptNode value = null;
-
-			if (! TokenConstants.ROUND_BRACKETS_CLOSE.equals(interpreter.peek())) {
-				value = readExpression();
-			}
-
-			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
-			interpreter.consume(TokenConstants.SEMICOLON);
-			return value != null ? new ReturnStatementNode(value) : new ReturnStatementNode();
+		AbstractScriptNode value = null;
+		if (! TokenConstants.ROUND_BRACKETS_CLOSE.equals(interpreter.peek())) {
+			value = readExpression();
 		}
 
-		AbstractScriptNode value = readExpression();
+		if (brackets) { interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE); }
 		interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
-		return new ReturnStatementNode(value);
+
+		return value != null ? new ReturnStatementNode(value) : new ReturnStatementNode();
 	}
 
 	// ###################################################################################
@@ -276,6 +299,7 @@ public class ASTBuilder {
 			}
 
 			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
+			interpreter.voluntaryConsume(TokenConstants.SEMICOLON);
 
 		} else if (TokenConstants.SQUARE_BRACKETS_OPEN.equals(expression)) { // a list expression
 			List<AbstractScriptNode> nodeList = new ArrayList<>();
@@ -309,7 +333,7 @@ public class ASTBuilder {
 			}
 
 		} else {
-			Logger.error("Unknown script command '" + expression.getValue() + "' on line " + expression.getLine());
+			Logger.parsingError("Unknown script command '",expression, interpreter);
 
 		}
 
@@ -318,13 +342,17 @@ public class ASTBuilder {
 			Token next = interpreter.peek();
 			if (next.getType() == TokenType.OPERATOR) {
 				return readArithmeticExpression(left);
-			} else {
-				return left;
 			}
+		} else {
+
+			Logger.parsingError("Empty expression '",expression, interpreter);
+			left = new NoOperatorNode();
 		}
 
-		Logger.error("Unable to parse '" + expression.getValue() + "' on line " + expression.getLine());
-		return null;
+		Logger.log("Parsed '" + expression.getValue() + "' on line " + expression.getLine());
+		left.print("   ");
+
+		return left;
 	}
 
 	// ###################################################################################

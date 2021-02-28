@@ -1,7 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////// Drives
 
 Drive: driSoak {
-    solutions { proSoak; }
+    solutions {
+		proSoak;
+		proSoakFromAir;
+	}
 
     Script: condition {
 		return .attWater < .bodySize;
@@ -23,6 +26,18 @@ Process: proSoak {
 	Script: process {
 		if (chance(.bodyEfficiency) / 100) {
 			getTile(self)..attHumidity--;
+			..attWater++;
+		}
+	}
+}
+
+Process: proSoakFromAir {
+	Script: condition {
+		require(getTile(self).attHumidity <= 0);
+	}
+	
+	Script: process {
+		if (chance(100 - .bodyEfficiency) / 100) {
 			..attWater++;
 		}
 	}

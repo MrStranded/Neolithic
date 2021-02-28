@@ -10,7 +10,7 @@ Drive: driPlantReproduction {
 	}
 
 	Script: getWeight {
-	    return 50 + percent(.bodyHealth, .bodyPreference) / 2;
+	    return 50 + percent(.attNutrition, .bodyPreference) / 2;
 	}
 }
 
@@ -19,7 +19,7 @@ Drive: driPlantReproduction {
 Process: proDropFruit {
 	Script: condition {
 		require(->fruit);
-		require(->fruit.bodyHealth > .bodyPreference / 2);
+		require(->fruit.attNutrition > .bodyPreference / 2);
 	}
 	
 	Script: process {
@@ -36,14 +36,14 @@ Process: proDropFruit {
 
 Process: proGrowFruit {
 	Script: condition {
-		require(.bodyHealth >= .bodyResiliance);
+		require(.attNutrition >= 1);
 	}
 
 	Script: process {
-		..bodyHealth -= 1;
+		..attNutrition -= 1;
 		
 		if (->fruit) {
-			->fruit..bodyHealth += .bodyRestoration * .bodyEfficiency / 100;
+			->fruit..attNutrition += .bodyRestoration * .bodyEfficiency / 100;
 		} else {
 			setStage(self, "ripe");
 
@@ -60,18 +60,18 @@ Process: proGrowFruit {
 
 Process: proPropagate {
 	Script: condition {
-		require(.bodyHealth >= .bodyPreference);
+		require(.attNutrition >= .bodyPreference);
 		
 		->neighbor = getNeighbor(getTile(self), random(3));
 		require(getFullAtt(->neighbor, "bodySize") < 100);
 	}
 	
 	Script: process {
-		..bodyHealth -= .bodyPreference * (100 - .bodyEfficiency) / 100;
+		..attNutrition -= .bodyPreference * (100 - .bodyEfficiency) / 100;
 	
 		seed = create(getType(self), ->neighbor);
 		mixAttributes(seed, self);
 		setStage(seed, "seed");
-		seed..bodyHealth += .bodyPreference * .bodyEfficiency / 100 + .bodyRestoration;
+		seed..attNutrition += .bodyPreference * .bodyEfficiency / 100 + .bodyRestoration;
 	}
 }

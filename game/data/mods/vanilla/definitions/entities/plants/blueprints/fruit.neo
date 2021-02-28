@@ -5,7 +5,7 @@ Entity: entFruit {
 	attributes {
 		attVegetarian, 1;
 		attTicks, 2;
-		bodyResiliance, 100;
+		bodyResiliance, 42;
 	}
 
 	Script: tick() {
@@ -15,7 +15,7 @@ Entity: entFruit {
             ..bodyExperience++;
 
             if (.bodyExperience >= .bodyResiliance) {
-				getTile(self)..attNutrition += .bodyHealth;
+				getTile(self)..attNutrition += .attNutrition;
 
                 for (seed : getItems(self)) {
                     pickUp(getTile(self), seed);
@@ -27,7 +27,7 @@ Entity: entFruit {
 
 	Script: consume(actor) {
 	    effect = addEffect(actor, effDigest);
-        effect..attNutrition = .bodyHealth;
+        effect..attNutrition = .attNutrition;
         for (seed : getItems(self)) {
             pickUp(effect, seed);
         }
