@@ -37,9 +37,9 @@ Creature: cPlant {
 		
 		// oversugared
 		surplus = .attNutrition - (.bodySize * .bodyRestoration + .bodyResiliance);
-		if (surplus > 0) {
+		if (surplus > 0 && ! ->oversugared) {
 			..attNutrition -= .bodyResiliance;
-			addEffect(self, "Oversugared", .attTicks * surplus, ["bodyEfficiency", -1]);
+			->oversugared = addEffect(self, "Oversugared", .attTicks * surplus, ["bodyEfficiency", -1]);
 		}
 
 		// age death
@@ -53,7 +53,7 @@ Creature: cPlant {
         }
 		
 		if (.attWater <= 0 && ! hasEffect(self, effDry)) {
-			if (.bodyResiliance = 0 || chance(1 / .bodyResiliance)) {
+			if (.bodyResiliance == 0 || chance(1 / .bodyResiliance)) {
 				addEffect(self, effDry);
 			}
         }
@@ -65,6 +65,7 @@ Creature: cPlant {
 	
 	Script: delete {
 		getTile(self)..attNutrition += .bodySize;
+		getTile(self)..attHumidity += .attWater;
 	}
 	
 	Stage: ripe {

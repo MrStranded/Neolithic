@@ -4,6 +4,7 @@ Effect: effDry {
     name = "Dry";
 	
 	Script: tick(carrier) {
+		delayNextTick(self, carrier.attTicks);
 		if (carrier.attWater <= 0) {
 			divisor = .bodyPreference * .bodyResiliance;
 			if (divisor == 0) { divisor = 1; }

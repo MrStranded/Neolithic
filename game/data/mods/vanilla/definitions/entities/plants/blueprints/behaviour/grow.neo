@@ -68,9 +68,9 @@ Drive: driGatherEnergy {
 	}
 
     Script: getWeight {
-		nutWeight = 50 - .attNutrition / .bodyRestoration;
-		if (.bodySize > 0) { waterWeight = 50 * .attWater / .bodySize; }
-		else { waterWeight = 50; }
+		nutWeight = -100 * .attNutrition / .bodyPreference;
+		if (.bodySize > 0) { waterWeight = 100 * .attWater / .bodySize; }
+		else { waterWeight = 100; }
         return(nutWeight + waterWeight);
     }
 }

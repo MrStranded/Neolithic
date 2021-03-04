@@ -29,7 +29,7 @@ Entity: entWater {
 
     Script: tick {
 		ll = getLightLevel(self) / 100;
-        if (chance(ll / 8)) {
+        if (chance(ll / 16)) {
             ..attWater--;
 			if (->c++ % 10 == 0) {
 				->createCloud(self, 25 + 75 * ll);

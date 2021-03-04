@@ -11,9 +11,9 @@ Creature: cFirTree inherits cPlant {
 	}
 	
 	attributes{
-		attTicks, 5;
-		bodyPreference, 80, 10, 50%
-		bodyRestoration, 1, 1
+		attTicks, 4;
+		bodyPreference, 60, 10, 50%
+		bodyRestoration, 2, 1
 		bodyResiliance, 4, 1, 0.25
 	}
 	
