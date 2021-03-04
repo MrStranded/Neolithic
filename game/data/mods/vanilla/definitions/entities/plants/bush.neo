@@ -10,7 +10,11 @@ Creature: cBush inherits cPlant {
 		proPropagate;
 	}
 	
-	attributes {}
+	attributes {
+		bodyPreference, 40, 10, 50%;
+		bodyRestoration, 4, 1
+		bodyResiliance, 1, 1, 0.25;
+	}
 	
     Stage: seed {
         name = "Bush seed";
@@ -38,6 +42,8 @@ Creature: cBerryBush inherits cPlant {
 	
 	attributes{
 		bodyPreference, 40, 10, 50%;
+		bodyRestoration, 4, 1
+		bodyResiliance, 1, 1, 0.25;
 	}
 	
     Stage: seed {

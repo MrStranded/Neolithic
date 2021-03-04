@@ -121,21 +121,21 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
             if (attributeColor == null) { attributeColor = COLOR_PRIMARY; }
 
             g.setColor(getInverted(attributeColor));
-            g.fillRect(10 - 3, getCurrentYPosition() - 3, 290, 18);
+            g.fillRect(10, getCurrentYPosition(), 290, 18);
 
             g.setColor(attributeColor);
-            g.drawString(protoAttribute.getName(), 10, getCurrentYPosition() + 12);
+            g.drawString(protoAttribute.getName(), 12, getCurrentYPosition() + 12);
             g.drawString(attributeValue + " (" + personalValue + ")", 10 + 200, getCurrentYPosition() + 12);
 
             for (int i = 0; i < ATTRIBUTE_CHANGE_STEPS.length; i++) {
-                int xPos = 10 + 200 - 18*(i+1);
+                int xPos = 200 - 18*(i+1);
 
                 g.drawRect(xPos, getCurrentYPosition(), 18, 18);
                 g.drawString((ATTRIBUTE_CHANGE_STEPS[i] < 0 ? "-" : "+") + ATTRIBUTE_CHANGE_STEPS[i]
                         , xPos + 2, getCurrentYPosition() + 12);
 
                 buttons.add(new AttributeButton(instance.getAttribute(attributeId),
-                        xPos - 3, yPos - 3, 145, 20, ATTRIBUTE_CHANGE_STEPS[i]));
+                        xPos, getCurrentYPosition(), 18, 18, ATTRIBUTE_CHANGE_STEPS[i]));
             }
 
             setCurrentYPosition(getCurrentYPosition() + 20);
@@ -206,6 +206,9 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
         yPos += 20;
 
         g.drawString("Position: " + instance.getPosition(), xPos, yPos + 12);
+        yPos += 20;
+
+        if (instance.isSlatedForRemoval()) { g.drawString("<slated for removal>", xPos, yPos + 12); }
         yPos += 20;
 
         String meshPath = container.get().getMeshPath(instance.getStage());

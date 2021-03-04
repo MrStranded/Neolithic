@@ -53,6 +53,7 @@ Script: repopulate() {
 				
 				for (p : plants) {
 					p..attNutrition += p.bodyRestoration * p.bodyResiliance + p.bodyEfficiency;
+					p..bodySize = 1;
 					setStage(p, "sapling");
 				}
             }
