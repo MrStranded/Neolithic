@@ -6,7 +6,7 @@ Drive: driPlantReproduction {
 	
 	Script: condition {
 		// require(.attSize >= .attMaxSize / 2);
-		require(.bodyExperience >= .bodyPreference && .bodySize >= .bodyPreference);
+		require(.bodySize >= .bodyPreference);
 	}
 
 	Script: getWeight {
