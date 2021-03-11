@@ -4,6 +4,7 @@ Creature: cBush inherits cPlant {
 
     name = "Bush";
     mesh = "bush_mature.ply";
+	prefers = { tDirt, tGras }
 
 	knowledge {
 		proLeechFromHolder;
@@ -11,12 +12,15 @@ Creature: cBush inherits cPlant {
 	}
 	
 	attributes {
-		bodyPreference, 40, 10, 50%;
+		bodyPreference, 30
 		bodyRestoration, 4, 1
-		bodyResiliance, 1, 1, 0.25;
+		bodyResiliance, 2, 1, 0.25;
+		bodyEfficiency, 50
 	}
 	
     Stage: seed {
+		plot = false;
+		
         name = "Bush seed";
         mesh = "apple_seed.ply";
     }
@@ -32,6 +36,7 @@ Creature: cBerryBush inherits cPlant {
     name = "Berry Bush";
     mesh = "berry_bush_mature.ply";
     fruit = "entBerry";
+	prefers = { tDirt, tGras }
 
 	knowledge {
 		proDropFruit;
@@ -41,12 +46,14 @@ Creature: cBerryBush inherits cPlant {
 	}
 	
 	attributes{
-		bodyPreference, 40, 10, 50%;
+		bodyPreference, 30
 		bodyRestoration, 4, 1
-		bodyResiliance, 1, 1, 0.25;
+		bodyResiliance, 3, 1, 0.25;
 	}
 	
     Stage: seed {
+		plot = false;
+		
         name = "Bush seed";
         mesh = "apple_seed.ply";
     }

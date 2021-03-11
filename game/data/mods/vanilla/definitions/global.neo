@@ -94,7 +94,7 @@ Script: rightClick(tile) {
     eva->updateMesh();*/
 
     for (n : getNeighbors(tile)) {
-        create(entBoulder, n);
+        create(entMarker, n);
     }
 }
 
@@ -104,8 +104,10 @@ Script: leftClick(tile, type) {
 		destroy(instance);
 	} else {
 		instance = create(type,tile);
-		if (type == cAppleTree || type == cBush || type == cFirTree) {
-			setStage(instance, "seed");
+		if (type == cAppleTree || type == cBush || type == cBerryBush || type == cFirTree) {
+			instance..attNutrition += instance.bodyRestoration * instance.bodyResiliance + instance.bodyEfficiency;
+			instance..bodySize = 1;
+			setStage(instance, "sapling");
 		}
 	}
 

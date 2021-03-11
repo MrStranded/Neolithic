@@ -1,11 +1,13 @@
 package engine.graphics.gui.statistics;
 
 import constants.GameConstants;
+import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
 import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
+import engine.parser.utils.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,6 +39,14 @@ public class StatisticsPanel extends JPanel {
 
         StatisticsData.registerStage(instance.getStage());
 
+        // if plot is false, we do not plot the attributes
+        boolean plot = instance.getContainer().map(
+                c -> c.getPropertyBoolean(instance.getStage(), ScriptConstants.KEY_PLOT).orElse(true)
+        ).orElse(Boolean.TRUE);
+
+        if (! plot) { return; }
+
+        // plot attributes
         for (int id = 0; id < GameConstants.MAX_ATTRIBUTES; id++) {
             ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
 

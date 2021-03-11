@@ -33,5 +33,7 @@ public class ScriptConstants {
 	public static final String KEY_RUN_TICK_SCRIPT = "runTicks";
 	public static final String KEY_MESH = "mesh";
 	public static final String KEY_OPACITY = "opacity";
+	public static final String KEY_PLOT = "plot";
+	public static final String KEY_PREFERS = "prefers";
 
 }

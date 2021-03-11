@@ -349,8 +349,8 @@ public class ASTBuilder {
 			left = new NoOperatorNode();
 		}
 
-		Logger.log("Parsed '" + expression.getValue() + "' on line " + expression.getLine());
-		left.print("   ");
+//		Logger.log("Parsed '" + expression.getValue() + "' on line " + expression.getLine());
+//		left.print("   ");
 
 		return left;
 	}

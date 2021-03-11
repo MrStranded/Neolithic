@@ -38,14 +38,15 @@ public class Attribute implements IDInterface {
 	}
 
 	private void checkBounds() {
-		ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
-		if (protoAttribute == null) { return; }
-
-		if (protoAttribute.hasLowerBound() && value < protoAttribute.getLowerBound()) {
-			value = protoAttribute.getLowerBound();
-		} else if (protoAttribute.hasUpperBound() && value > protoAttribute.getUpperBound()) {
-			value = protoAttribute.getUpperBound();
-		}
+		// we don't do that here
+//		ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
+//		if (protoAttribute == null) { return; }
+//
+//		if (protoAttribute.hasLowerBound() && value < protoAttribute.getLowerBound()) {
+//			value = protoAttribute.getLowerBound();
+//		} else if (protoAttribute.hasUpperBound() && value > protoAttribute.getUpperBound()) {
+//			value = protoAttribute.getUpperBound();
+//		}
 	}
 
 	// ###################################################################################

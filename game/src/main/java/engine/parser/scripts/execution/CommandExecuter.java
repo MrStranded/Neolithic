@@ -6,6 +6,7 @@ import constants.TopologyConstants;
 import engine.data.Data;
 import engine.data.entities.Effect;
 import engine.data.entities.Instance;
+import engine.data.identifiers.ContainerIdentifier;
 import engine.data.options.GameOptions;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
@@ -26,6 +27,7 @@ import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CommandExecuter {
 
@@ -771,6 +773,28 @@ public class CommandExecuter {
 							.orElse(null);
 
 					return new Variable(value);
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& List getPropertyList (Instance target, String key)
+			case GET_PROPERTY_List:
+				if (requireParameters(commandNode, 2)) {
+					Instance target = parameters[0].getInstance();
+					String key = parameters[1].getString();
+
+					checkValue(script, commandNode, target, "target instance");
+
+					List<ContainerIdentifier> value = target.getContainer()
+							.flatMap(c -> c.getPropertyList(target.getStage(), key))
+							.orElse(Collections.emptyList());
+
+					List<Variable> containers = value.stream()
+							.map(id -> id.retrieve())
+							.filter(container -> container != null)
+							.map(container -> new Variable(container))
+							.collect(Collectors.toList());
+
+					return new Variable(containers);
 				}
 				break;
 

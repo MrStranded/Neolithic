@@ -645,6 +645,9 @@ public class Instance {
 		// effects
 		value += getEffectsAttributeValue(attributeID);
 
+		// bounds
+		value = getBoundedAttributeValue(attributeID, value);
+
 		return value;
 	}
 
@@ -695,6 +698,21 @@ public class Instance {
 
 	public int getContainerAttributeValue(int attributeID) {
 		return getContainer().map(container -> container.getAttributeValue(attributeID)).orElse(0);
+	}
+
+	private int getBoundedAttributeValue(int attributeID, int value) {
+		if (this instanceof Effect) { return value; }
+
+		ProtoAttribute protoAttribute = Data.getProtoAttribute(attributeID);
+		if (protoAttribute == null) { return value; }
+
+		if (protoAttribute.hasLowerBound() && value < protoAttribute.getLowerBound()) {
+			return protoAttribute.getLowerBound();
+		} else if (protoAttribute.hasUpperBound() && value > protoAttribute.getUpperBound()) {
+			return protoAttribute.getUpperBound();
+		}
+
+		return value;
 	}
 
 	/**
