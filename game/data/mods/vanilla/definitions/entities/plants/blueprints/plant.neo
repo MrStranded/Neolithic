@@ -53,7 +53,7 @@ Creature: cPlant {
         }
 		
 		// drougth
-		if (.attWater <= 0 && ! hasEffect(self, effDry)) {
+		if (.bodyExperience > .bodyResiliance * .bodyPreference && .attWater <= 0 && ! hasEffect(self, effDry)) {
 			if (.bodyResiliance == 0 || chance(1 / .bodyResiliance)) {
 				addEffect(self, effDry);
 			}

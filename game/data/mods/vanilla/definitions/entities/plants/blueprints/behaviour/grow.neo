@@ -82,15 +82,16 @@ Process: proPhotosynthesis {
 		require(getStage(self) != "seed");
 		require(.attWater > 0);
 	}
+	
 	Script: process {
 		divisor = 100;
-		if ( ! contains( getPropertyList(self, "prefers"), getType(getTile(self)) ) ) {
-			divisor = 200;
+		if (contains( getPropertyList(self, "prefers") , getType(getTile(self)) ) ) {
+			divisor = 50;
 		}
 	
 		if (! chance(.bodyEfficiency / divisor)) { ..attWater--; }
 		
-		surplus = ->ll + .bodyEfficiency - 100 - .bodyExperience / .bodyPreference;
+		surplus = ->ll + .bodyEfficiency - 100;
 		..attNutrition += min(surplus, ..bodyRestoration);
 	}
 
