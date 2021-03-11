@@ -3,25 +3,24 @@
 Drive: driHeal {
     solutions { proHeal; }
 
-    Script: condition { return .bodyHealth < .bodyPreference; }
+    Script: condition { return .bodyHealth < 0; }
 
     Script: getWeight {
-		if (.bodyHealth < 0) {
+		if (.bodyHealth < .bodyPreference) {
 			return 100;
-			// return 50 + 0.5 * percent(- .bodyHealth, .bodySize);
 		} else {
-			return percent(.bodyPreference - .bodyHealth, .bodyPreference);
+			return percent(- .bodyHealth, .bodyPreference);
 		}
     }
 }
 
 Process: proHeal {
     Script: condition {
-        require(.attNutrition >= .bodyRestoration);
+        require(.attNutrition >= 1);
     }
 
     Script: process {
 		..bodyHealth += .bodyRestoration;
-		..attNutrition -= .bodyRestoration * (1 - .attEfficieny / 100);
+		..attNutrition--;
     }
 }

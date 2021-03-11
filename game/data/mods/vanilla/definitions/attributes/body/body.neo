@@ -16,6 +16,7 @@ Attribute: bodyResiliance {
     name = "Resiliance";
     inherited;
     color = 30, 60, 40;
+	lower = 0;
 }
 
 // Experience - Enchantress
@@ -30,6 +31,7 @@ Attribute: bodyPreference {
     name = "Preference";
     inherited;
     color = 100, 230, 40;
+	lower = 1;
 }
 
 // Transformation - Death
@@ -37,6 +39,7 @@ Attribute: bodyRestoration {
     name = "Restoration";
     inherited;
     color = 0, 190, 40;
+	lower = 0;
 }
 
 // Great Way - Alchemist
@@ -44,4 +47,5 @@ Attribute: bodyEfficiency {
     name = "Efficiency";
     inherited;
     color = 30, 60, 190;
+	bounds = 0, 100;
 }

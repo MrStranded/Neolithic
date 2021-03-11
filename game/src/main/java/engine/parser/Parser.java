@@ -37,7 +37,7 @@ public class Parser {
 		mods = ModOrderLoader.loadMods();
 
 		for (String mod : mods) {
-			System.out.println("load mod: " + mod);
+			Logger.log("load mod: " + mod);
 			loadMod(mod);
 		}
 
@@ -60,7 +60,7 @@ public class Parser {
 			File file = new File(folder.getAbsolutePath() + "/" + fileName);
 
 			if (file.isFile() && file.getName().endsWith(ScriptConstants.SCRIPT_FILE_SUFFIX)) {
-				System.out.println("load file: " + file.getName());
+				Logger.log("load file: " + file.getName());
 				loadFile(file, mod);
 			} else if (file.isDirectory()) {
 				loadFolder(file, mod);

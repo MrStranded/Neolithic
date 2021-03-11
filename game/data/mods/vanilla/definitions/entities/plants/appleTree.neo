@@ -5,6 +5,8 @@ Creature: cAppleTree inherits cPlant {
     name = "Apple tree";
     mesh = "apple_tree_mature.ply";
     fruit = "entApple";
+	
+	prefers = { tDirt, tGras }
 
 	knowledge {
 		proDropFruit;
@@ -15,9 +17,12 @@ Creature: cAppleTree inherits cPlant {
 	attributes{
 		attTicks, 3;
 		bodyEfficiency, 65, 10, 50%
+		bodyResiliance, 4;
 	}
 	
     Stage: seed {
+		plot = false;
+		
         name = "Apple seed";
         mesh = "apple_seed.ply";
     }

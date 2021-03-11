@@ -37,7 +37,7 @@ Process: proSoakFromAir {
 	}
 	
 	Script: process {
-		if (chance(.bodyEfficiency / 100 / .bodyRestoration)) {
+		if (chance(.bodyEfficiency * .bodyResiliance / 200 / .bodyRestoration)) {
 			..attWater++;
 		}
 	}

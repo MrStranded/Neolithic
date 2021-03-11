@@ -234,23 +234,28 @@ public class Interpreter {
 	private Object readProperty() throws Exception {
 		consume(TokenConstants.ASSIGNMENT);
 
-		Token value = consume();
+		Token value = peek();
 		Object result;
 
-		if (TokenNumerifier.isNumber(value, true)) {
-			result = TokenNumerifier.getDouble(value);
+		if (TokenConstants.CURLY_BRACKETS_OPEN.equals(value)) {
+			result = readTextIDList();
+
+		} else if (TokenNumerifier.isNumber(value, true)) {
+			result = TokenNumerifier.getDouble(consume());
 
 		} else if (TokenNumerifier.isNumber(value, false)) {
-			result = TokenNumerifier.getInt(value);
+			result = TokenNumerifier.getInt(consume());
 
 		} else if (TokenConstants.TRUE.equals(value)) {
+			consume();
 			result = true;
 
 		} else if (TokenConstants.FALSE.equals(value)) {
+			consume();
 			result = false;
 
 		} else {
-			result = value.getValue();
+			result = consume().getValue();
 		}
 
 		voluntaryConsume(TokenConstants.SEMICOLON);

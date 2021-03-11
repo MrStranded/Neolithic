@@ -4,6 +4,8 @@ Creature: cFirTree inherits cPlant {
 
     name = "Fir Tree";
     mesh = "fir_tree_mature.ply";
+	
+	prefers = { tDirt, tStone }
 
 	knowledge {
 		proLeechFromHolder;
@@ -12,12 +14,14 @@ Creature: cFirTree inherits cPlant {
 	
 	attributes{
 		attTicks, 4;
-		bodyPreference, 60, 10, 50%
+		bodyPreference, 60
 		bodyRestoration, 2, 1
 		bodyResiliance, 4, 1, 0.25
 	}
 	
     Stage: seed {
+		plot = false;
+		
         name = "Fir tree seed";
         mesh = "apple_seed.ply";
     }

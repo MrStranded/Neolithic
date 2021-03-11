@@ -68,10 +68,9 @@ Drive: driGatherEnergy {
 	}
 
     Script: getWeight {
-		nutWeight = -100 * .attNutrition / .bodyPreference;
-		if (.bodySize > 0) { waterWeight = 100 * .attWater / .bodySize; }
-		else { waterWeight = 100; }
-        return(nutWeight + waterWeight);
+		if (.bodyPreference > 0) { nutWeight = 90 * .attNutrition / .bodyPreference; }
+		if (.attWater > 0) { waterWeight = 90; }
+        return(waterWeight - nutWeight);
     }
 }
 
@@ -84,7 +83,12 @@ Process: proPhotosynthesis {
 		require(.attWater > 0);
 	}
 	Script: process {
-		if (! chance(.bodyEfficiency / 100)) { ..attWater--; }
+		divisor = 100;
+		if ( ! contains( getPropertyList(self, "prefers"), getType(getTile(self)) ) ) {
+			divisor = 200;
+		}
+	
+		if (! chance(.bodyEfficiency / divisor)) { ..attWater--; }
 		
 		surplus = ->ll + .bodyEfficiency - 100 - .bodyExperience / .bodyPreference;
 		..attNutrition += min(surplus, ..bodyRestoration);

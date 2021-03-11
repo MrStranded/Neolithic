@@ -19,9 +19,9 @@ Creature: cPlant {
 
 	attributes{
 	    attTicks, 2
-		bodyPreference, 50, 10, 50%;
+		bodyPreference, 50, 5, 25%;
 		bodyRestoration, 3, 1
-		bodyEfficiency, 60, 10, 50%
+		bodyEfficiency, 60, 5, 50%
 		bodyResiliance, 3, 1, 0.25;
 	}
 	
@@ -52,12 +52,19 @@ Creature: cPlant {
 			}
         }
 		
+		// drougth
 		if (.attWater <= 0 && ! hasEffect(self, effDry)) {
 			if (.bodyResiliance == 0 || chance(1 / .bodyResiliance)) {
 				addEffect(self, effDry);
 			}
         }
 		
+		// too many bushes
+		if (.bodyExperience > .bodyPreference * .bodyResiliance) {
+			..bodyHealth--;
+		}
+		
+		// death
 		if (.bodyHealth < - (.bodySize * .bodyResiliance) - .bodyRestoration) {
 			destroy(self);
 		}
@@ -107,7 +114,7 @@ Creature: cPlant {
 
         Script: tick() {
             if (isOnFloor(self)) {
-				if (->age++ > .bodyPreference * .bodyResiliance + .bodyRestoration * .bodyEfficiency) { destroy(self); }
+				if (->age++ > .bodyPreference * .bodyResiliance * .bodyResiliance) { destroy(self); }
 				// if (length(getItems(getTile(self))) > 4
 						// || chance(.bodySize / 100)) {
 					// destroy(self);
