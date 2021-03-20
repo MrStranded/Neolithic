@@ -100,7 +100,7 @@ void setupColors(Material material, vec2 textureCoordinates) {
 // ----------------------------------------------------------------------------------------------- Calculate Shadow
 
 float calculateShadow(vec4 position) {
-    float shadowFactor = 1.0; // light
+    float lightFactor = 1.0; // light
     vec2 increment = 1.0 / textureSize(shadowSampler, 0);
 
     if (shadowStrength > 0.05) {
@@ -120,10 +120,10 @@ float calculateShadow(vec4 position) {
             }
         }
         shadow /= (blurSize*2 + 1) * (blurSize*2 + 1);
-        shadowFactor = 1.0 - (shadow * shadowStrength);
+        lightFactor = 1.0 - (shadow * shadowStrength);
         */
 
-        // ---------------------------------------------- sampling the minimum value from a few points in proximity
+        // ---------------------------------------------- sampling the summed distance from a few points in proximity
         //float minDistance = projectionCoordinates.z;
         float sumDistance = 0.0;
         int sampleDistance = 2;
@@ -136,11 +136,11 @@ float calculateShadow(vec4 position) {
         }
         //if (projectionCoordinates.z > minDistance + shadowEpsilon) {
         if (projectionCoordinates.z > sumDistance/9.0 + shadowEpsilon) {
-            shadowFactor = 1.0 - shadowStrength;
+            lightFactor = 1.0 - shadowStrength;
         }
     }
 
-    return shadowFactor;
+    return lightFactor;
 }
 
 // ----------------------------------------------------------------------------------------------- Calculate Light
@@ -228,9 +228,9 @@ void main() {
         vec4 spotLightColor = vec4(0, 0, 0, 0);
         vec4 directionalLightColor = vec4(0, 0, 0, 0);
 
-        float shadowFactor = calculateShadow(lightPosition);
+        float lightFactor = calculateShadow(lightPosition);
 
-        if (shadowFactor > 0.0) {
+        if (lightFactor > 0.0) {
             directionalLightColor = calculateDirectionalLight(directionalLight, outNormal);
         }
 
@@ -246,7 +246,7 @@ void main() {
             }
         }
 
-        fragmentColor = outColor * (ambientC * ambientLight + pointLightColor + spotLightColor + shadowFactor * directionalLightColor);
+        fragmentColor = outColor * (ambientC * ambientLight + pointLightColor + spotLightColor + lightFactor * directionalLightColor);
     } else {
 
         fragmentColor = outColor * ambientC;

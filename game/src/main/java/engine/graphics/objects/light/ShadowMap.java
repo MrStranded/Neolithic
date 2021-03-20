@@ -100,27 +100,28 @@ public class ShadowMap {
 			epsilon = (float) epsilonD;
 
 			// ---------------------------------------- shadow strength
-			double poleShadow = Math.abs(Math.sin(camera.getPitch())); // 1 at poles, 0 at equator
-
-			double brightSpot = GraphicalConstants.SHADOWMAP_BRIGHT_SPOT_SIZE;
-			double angle = -lightAngle + camera.getYaw();
-			if (angle < 0) {
-				angle += TAU;
-			}
-			if (angle >= TAU) {
-				angle -= TAU;
-			}
-			double equatorShadow = (Math.cos(angle) + 1d) / 2d;
-			//equatorShadow *= equatorShadow; // square dat fucker yo (in order to weaken shadows in shadow part of planet)
-			if (angle < Math.PI/brightSpot || angle > TAU - Math.PI/brightSpot) {
-				equatorShadow = equatorShadow - (Math.cos(angle*brightSpot) + 1d) / 2d;
-			}
-			double distanceShadowWeakening = 0d;
-			if (camera.getRadius() > distance + radiusScope) {
-				distanceShadowWeakening = camera.getRadius() - (distance + radiusScope);
-			}
-
-			shadowStrength = (float) Math.max((1d - poleShadow) * equatorShadow + poleShadow - distanceShadowWeakening, 0d);
+//			double poleShadow = Math.abs(Math.sin(camera.getPitch())); // 1 at poles, 0 at equator
+//
+//			double brightSpot = GraphicalConstants.SHADOWMAP_BRIGHT_SPOT_SIZE;
+//			double angle = -lightAngle + camera.getYaw();
+//			if (angle < 0) {
+//				angle += TAU;
+//			}
+//			if (angle >= TAU) {
+//				angle -= TAU;
+//			}
+//			double equatorShadow = (Math.cos(angle) + 1d) / 2d;
+//			//equatorShadow *= equatorShadow; // square dat fucker yo (in order to weaken shadows in shadow part of planet)
+//			if (angle < Math.PI/brightSpot || angle > TAU - Math.PI/brightSpot) {
+//				equatorShadow = equatorShadow - (Math.cos(angle*brightSpot) + 1d) / 2d;
+//			}
+//			double distanceShadowWeakening = 0d;
+//			if (camera.getRadius() > distance + radiusScope) {
+//				distanceShadowWeakening = camera.getRadius() - (distance + radiusScope);
+//			}
+//
+//			shadowStrength = (float) Math.max((1d - poleShadow) * equatorShadow + poleShadow - distanceShadowWeakening, 0d);
+			shadowStrength = 1f;
 
 			// ---------------------------------------- scaling factor
 			double max = GraphicalConstants.SHADOWMAP_MAX_SCALING;

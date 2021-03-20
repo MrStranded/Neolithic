@@ -3,6 +3,9 @@ package engine.graphics.objects.generators;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.FacePart;
 import engine.math.numericalObjects.Vector3;
+import engine.parser.utils.Logger;
+
+import java.util.Arrays;
 
 public class MeshGenerator {
 
@@ -223,6 +226,44 @@ public class MeshGenerator {
 		for (int i=0; i<colors.length; i++) {
 			colors[i] = 1f;
 		}
+
+		return new Mesh(indices, vertices, textureCoordinates, colors, normals);
+	}
+
+	// ###################################################################################
+	// ################################ Circle ###########################################
+	// ###################################################################################
+
+	public static Mesh createCircle(int corners, float radius) {
+		float[] vertices = new float[(corners + 1) * 3];
+
+		for (int i=1; i<=corners; i++) {
+			double angle = Math.PI * 2 * (double) i / (double) corners;
+			vertices[i*3 + 0] = (float) Math.cos(angle) * radius;
+			vertices[i*3 + 1] = (float) Math.sin(angle) * radius;
+		}
+
+		float[] normals = new float[(corners + 1) * 3];
+		for (int i=0; i<=corners; i++) {
+			normals[i*3 + 2] = 1;
+		}
+
+		int[] indices = new int[corners * 3];
+		for (int i=0; i<corners; i++) {
+			indices[i*3 + 1] = (i + 1);
+			indices[i*3 + 2] = (i + 2);
+			if (indices[i*3 + 2] > corners) { indices[i*3 + 2] = 1; }
+		}
+
+		float[] textureCoordinates = new float[(corners + 1) * 2];
+		for (int i=1; i<=corners; i++) {
+			double angle = Math.PI * 2 * i / corners;
+			textureCoordinates[i*2 + 0] = (float) Math.cos(angle);
+			textureCoordinates[i*2 + 1] = (float) Math.sin(angle);
+		}
+
+		float[] colors = new float[(corners + 1) * 4];
+		Arrays.fill(colors, 1f);
 
 		return new Mesh(indices, vertices, textureCoordinates, colors, normals);
 	}
