@@ -16,12 +16,14 @@ public class Sun {
     DirectionalLight directionalLight;
     PointLight pointLight;
     ShadowMap shadowMap;
+    GraphicalObject shadowPlane;
 
-    public Sun(GraphicalObject sunObject, DirectionalLight directionalLight, PointLight pointLight, ShadowMap shadowMap) {
+    public Sun(GraphicalObject sunObject, DirectionalLight directionalLight, PointLight pointLight, ShadowMap shadowMap, GraphicalObject shadowPlane) {
         this.sunObject = sunObject;
         this.directionalLight = directionalLight;
         this.pointLight = pointLight;
         this.shadowMap = shadowMap;
+        this.shadowPlane = shadowPlane;
     }
 
     /**
@@ -44,6 +46,7 @@ public class Sun {
         sunObject.rotateYAroundOrigin(-angleStep);
         directionalLight.rotateY(-angleStep);
         pointLight.rotateYAroundOrigin(-angleStep);
+        shadowPlane.rotateYAroundOrigin(-angleStep);
 
         shadowMap.setLightAngle(-angle);
         shadowMap.cameraChangedPosition();
@@ -55,6 +58,7 @@ public class Sun {
         sunObject.setPosition(0,0, GraphicalConstants.SUN_DISTANCE);
         pointLight.setPosition(0,0, GraphicalConstants.SUN_DISTANCE);
         directionalLight.setDirection(new Vector3(0,0,-1));
+        shadowPlane.setRotation(0, 0, 0);
 
         shadowMap.setLightAngle(0);
         shadowMap.cameraChangedPosition();

@@ -32,6 +32,17 @@ public class BaseGUI implements GUIInterface {
 	}
 
 	private void initializeTestObjects() {
+		GUIObject shadowMap = new GUIObject(MeshGenerator.createQuad());
+		shadowMap.getMesh().getMaterial().setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png"));
+		shadowMap.setSize(200,200);
+		shadowMap.setLocation(0,100);
+////		objects[0].placeInto(0,0,-0.5d);
+//		//objects[0].getMesh().setTopColor(0.5f, 0.5f, 0.5f, 0.5f);
+//		//objects[0].setLocation(200, 400);
+//		//objects[0].setRelativeScreenPosition(RelativeScreenPosition.RIGHT, RelativeScreenPosition.BOTTOM);
+//		objects[0].setRelativeScreenPosition(RelativeScreenPosition.LEFT, RelativeScreenPosition.TOP);
+		addHUDObject(shadowMap);
+
 		try {
 			fontTexture = new FontTexture(new Font("Arial", Font.PLAIN, 50), "US-ASCII"); // UTF-8 , UTF-16 , US-ASCII , ISO-8859-1 (the utf charsets don't work)
 		} catch (Exception e) {
@@ -44,16 +55,6 @@ public class BaseGUI implements GUIInterface {
 		banner.setLocation(0,0);
 		banner.setRelativeScreenPositionX(RelativeScreenPosition.CENTER);
 		addHUDObject(banner);
-
-//		objects[0] = new GUIObject(MeshGenerator.createQuad());
-//		objects[0].getMesh().getMaterial().setTexture(TextureLoader.loadTexture("data/mods/vanilla/assets/textures/trollface.png"));
-//		objects[0].setSize(200,200);
-//		objects[0].setLocation(0,100);
-////		objects[0].placeInto(0,0,-0.5d);
-//		//objects[0].getMesh().setTopColor(0.5f, 0.5f, 0.5f, 0.5f);
-//		//objects[0].setLocation(200, 400);
-//		//objects[0].setRelativeScreenPosition(RelativeScreenPosition.RIGHT, RelativeScreenPosition.BOTTOM);
-//		objects[0].setRelativeScreenPosition(RelativeScreenPosition.LEFT, RelativeScreenPosition.TOP);
 	}
 
 	// ###################################################################################
@@ -61,7 +62,7 @@ public class BaseGUI implements GUIInterface {
 	// ###################################################################################
 
 	public void tick(int windowWidth, int windowHeight) {
-		clear();
+//		clear();
 
 //		Container currentSelection = Data.getContainer(GameOptions.currentContainerId).orElse(null);
 //		GUIObject selection = new TextObject(currentSelection != null ? currentSelection.getName() : String.valueOf(GameOptions.currentContainerId), fontTexture);

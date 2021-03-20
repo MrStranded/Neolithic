@@ -28,6 +28,8 @@ import engine.graphics.gui.window.Window;
 import engine.logic.topology.TopologyGenerator;
 import engine.math.MatrixCalculations;
 import engine.math.MousePicking;
+import engine.math.numericalObjects.Vector3;
+import engine.math.numericalObjects.Vector4;
 import engine.parser.utils.Logger;
 import load.StringLoader;
 import engine.math.numericalObjects.Matrix4;
@@ -281,17 +283,18 @@ public class Renderer {
 		}
 
 		if (planetObject != null) {
-			depthShaderProgram.setUniform("modelLightViewMatrix", viewMatrix.times(planetObject.getWorldMatrix()));
+			Matrix4 modelLightViewMatrix = viewMatrix.times(planetObject.getWorldMatrix());
+			depthShaderProgram.setUniform("modelLightViewMatrix", modelLightViewMatrix);
 
-			// here we pass the shaderProgram because in FacePart.render() we need set some uniforms
-			planetObject.render(depthShaderProgram, scene.getCamera().getPlanetaryLODMatrix(), false, false);
+			// here we pass the shaderProgram because in FacePart.render() we need to set some uniforms
+			planetObject.render(depthShaderProgram, scene.getCamera().getPlanetaryLODMatrix(), false, true);
 		}
 
 		depthShaderProgram.unbind();
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 
 		// shadow map into hud object 0
-//		hud.getHUDObjects()[0].getMesh().getMaterial().setTexture(shadowMap.getDepthMap());
+		hud.getHUDObjects()[0].getMesh().getMaterial().setTexture(shadowMap.getDepthMap());
 	}
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Scene

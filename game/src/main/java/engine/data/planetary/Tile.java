@@ -92,7 +92,7 @@ public class Tile extends Instance implements IDInterface {
 			if (sub == instance) { return slot; }
 			if (sub.hasMesh()) { slot++; }
 		}
-		return slot;
+		return slot % 4;
 	}
 
 	@Override

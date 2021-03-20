@@ -4,7 +4,6 @@ import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
-import engine.data.attributes.InheritedAttribute;
 import engine.data.behaviour.Occupation;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.interaction.SelectedInstance;
@@ -16,7 +15,6 @@ import engine.data.structures.WeightedList;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
-import engine.graphics.gui.statistics.InstanceDetailPanel;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.objects.movement.MoveableObject;
 import engine.logic.topology.GeographicCoordinates;
@@ -39,10 +37,9 @@ public class Instance {
 
 	private List<Instance> subInstances = null;
 	private Instance superInstance = null;
+	private boolean slatedForRemoval = false;
 
 	private Queue<Occupation> occupations = null;
-
-	private boolean slatedForRemoval = false;
 	private int delayUntilNextTick = 0;
 
 	private MoveableObject moveableObject;
@@ -108,7 +105,7 @@ public class Instance {
 								return weights.get(parent);
 							})
 							.reduce(0d, Double::sum);
-					final double weightSum = weightSumTmp != 0 ? weightSumTmp : 1;
+					final double weightSum = weightSumTmp == 0 ? 1 : weightSumTmp;
 
 					// initial value
 					double inheritedValue = 0;
@@ -312,9 +309,8 @@ public class Instance {
 
 			if (occupations == null || occupations.isEmpty()) {
 				// ----------- calculate drives
-				if (container.isPresent() && container.get().getType() == DataType.CREATURE) {
-					searchDrive(((CreatureContainer) container.get()).getDrives(stage));
-				}
+				container.filter(c -> c.getType() == DataType.CREATURE)
+						.ifPresent(c -> searchDrive( ((CreatureContainer) c).getDrives(stage)) );
 			} else {
 				// ----------- calculate occupations
 				Occupation currentOccupation = occupations.peek();

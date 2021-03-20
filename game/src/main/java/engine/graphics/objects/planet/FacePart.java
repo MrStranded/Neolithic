@@ -57,29 +57,18 @@ public class FacePart {
 	private void renderSelf(ShaderProgram shaderProgram, boolean putDataIntoShader, boolean drawWater) {
 		rendersSelf = true;
 
-		if (drawWater) {
-			if (waterMesh != null) {
-				if (putDataIntoShader) {
-					if (waterMesh.getMaterial() != null) {
-						shaderProgram.setUniform("material", waterMesh.getMaterial());
-					}
-					waterMesh.render(true);
-				} else {
-					waterMesh.renderForShadowMap();
+		Mesh m = drawWater ? waterMesh : mesh;
+		if (m != null) {
+			if (putDataIntoShader) {
+				if (m.getMaterial() != null) {
+					shaderProgram.setUniform("material", m.getMaterial());
 				}
-			}
-		} else {
-			if (waterMesh == null) {
-				if (putDataIntoShader) {
-					if (mesh.getMaterial() != null) {
-						shaderProgram.setUniform("material", mesh.getMaterial());
-					}
-					mesh.render(true);
-				} else {
-					mesh.renderForShadowMap();
-				}
+				m.render(true);
+			} else {
+				m.renderForShadowMap();
 			}
 		}
+
 		// render all objects on the current tile, but only if we're in the real draw situation (not shadow map drawing)
 		if (quarterFaces == null && tile != null && putDataIntoShader) {
 			tile.render();

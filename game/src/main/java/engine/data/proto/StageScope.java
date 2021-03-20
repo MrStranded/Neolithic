@@ -12,7 +12,11 @@ import java.util.function.Function;
 
 public class StageScope {
 
+    // --------------------------------------------------------- Data
+
     private Map<String, Object> valueMap = new HashMap<>();
+
+    // --------------------------------------------------------- Generic
 
     public void set(String key, Object value) {
         valueMap.put(key, value);
@@ -21,6 +25,8 @@ public class StageScope {
     private Object get(String key) {
         return valueMap.get(key);
     }
+
+    // --------------------------------------------------------- Specific
 
     public Optional<Boolean> getBoolean(String key) {
         Object value = get(key);
@@ -42,9 +48,9 @@ public class StageScope {
         return value instanceof String ? Optional.of((String) value) : Optional.empty();
     }
 
-    public RGBA getRGBA(String key) {
+    public Optional<RGBA> getRGBA(String key) {
         Object value = get(key);
-        return value instanceof RGBA ? (RGBA) value : new RGBA();
+        return value instanceof RGBA ? Optional.of((RGBA) value) : Optional.empty();
     }
 
     public Optional<List<ContainerIdentifier>> getIdList(String key) {

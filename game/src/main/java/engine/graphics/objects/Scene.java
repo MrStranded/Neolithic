@@ -61,16 +61,21 @@ public class Scene {
 		objects[3].setPosition(0,0,50);
 		objects[3].setRotation(0,0,Math.PI/8);
 
+		// inner shadow plane
+		objects[4] = new GraphicalObject(MeshGenerator.createCircle(36, 1));
+
 		// sun lights
-		pointLights[1] = new PointLight(0.75,0.5,0.5);
+		pointLights[1] = new PointLight(0,0,0);
+//		pointLights[1] = new PointLight(0.75,0.5,0.5);
 		pointLights[1].setAttenuation(Attenuation.CONSTANT());
 		pointLights[1].setPosition(0,0,sunDistance);
 
-		directionalLight = new DirectionalLight(0.5,0.5,0.5);
+		double directional = 0.9; // 0.5
+		directionalLight = new DirectionalLight(directional, directional, directional);
 		directionalLight.setDirection(new Vector3(0,0,-1));
 
-		ambientLight = new AmbientLight(0.25,0.25,0.25);
-		//ambientLight = new AmbientLight(0.75,0.75,0.75);
+		double ambient = 0.125;
+		ambientLight = new AmbientLight(ambient, ambient, ambient);
 
 		// camera
 		camera = new Camera();
@@ -85,7 +90,7 @@ public class Scene {
 			e.printStackTrace();
 		}
 
-        Data.setSun(new Sun(objects[2], directionalLight, pointLights[1], shadowMap));
+        Data.setSun(new Sun(objects[2], directionalLight, pointLights[1], shadowMap, objects[4]));
 		Data.setMoon(objects[3]);
 	}
 
