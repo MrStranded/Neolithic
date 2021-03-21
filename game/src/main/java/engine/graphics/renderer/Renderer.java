@@ -292,6 +292,17 @@ public class Renderer {
 			planetObject.render(depthShaderProgram, scene.getCamera().getPlanetaryLODMatrix(), false, false);
 		}
 
+		// planetary objects
+		try {
+			for (MeshHub meshHub : Data.getMeshHubs()) {
+				if (meshHub.isOpaque()) {
+					meshHub.renderForShadowMap(depthShaderProgram, viewMatrix, shadowMap);
+				}
+			}
+		} catch (ConcurrentModificationException e) {
+			// this happens when a new mesh hub is added to the hashmap while we iterate over it
+		}
+
 		depthShaderProgram.unbind();
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 
