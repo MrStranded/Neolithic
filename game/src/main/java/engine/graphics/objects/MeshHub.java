@@ -101,6 +101,18 @@ public class MeshHub {
 		mesh.postRender();
 	}
 
+	public void renderForShadowMap(ShaderProgram shaderProgram, Matrix4 viewMatrix, ShadowMap shadowMap) {
+		if (!meshIsLoaded) { return; }
+
+		for (MoveableObject object : objects) {
+			if (shadowMap != null) {
+				shaderProgram.setUniform("modelLightViewMatrix", shadowMap.getViewMatrix().times(object.getWorldMatrix()));
+			}
+
+			mesh.renderForShadowMap();
+		}
+	}
+
 	/**
 	 * This method cleans up the mesh data that is held by the meshHub.
 	 */
