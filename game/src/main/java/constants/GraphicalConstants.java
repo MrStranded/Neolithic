@@ -16,8 +16,8 @@ public class GraphicalConstants {
 	public static final double SHADOWMAP_MIN_SCALING = 1d; // how much the shadowmap gets scaled at least when zooming out
 	public static final double SHADOWMAP_MAX_SCALING = 12d; // the maximal scaling of the shadowmap when zooming in
 	public static final double SHADOWMAP_BRIGHT_SPOT_SIZE = 8d; // the inverse multiplied with PI is the size in radian
-	public static final double SHADOWMAP_MIN_EPSILON = 0.001d; // the minimum epsilon (bias) value for distance checks when close
-	public static final double SHADOWMAP_MAX_EPSILON = 0.01d; // the maximum epsilon (bias) value for distance checks when far away
+	public static final double SHADOWMAP_MIN_EPSILON = 0.0001d; // the minimum epsilon (bias) value for distance checks when close
+	public static final double SHADOWMAP_MAX_EPSILON = 0.005d; // the maximum epsilon (bias) value for distance checks when far away
 	public static final double SHADOWMAP_RADIUS_SCOPE = 0.5d; // from distance to distance + scope, various values change based on camera radius
 	public static final double SHADOWMAP_MIN_ZVALUE = 0.25d; // the minimal zNear and zFar values when close
 	public static final double SHADOWMAP_MAX_ZVALUE = 1.0d; // the maximal zNear and zFar values when far away

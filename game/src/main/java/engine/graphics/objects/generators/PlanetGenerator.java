@@ -154,17 +154,17 @@ public class PlanetGenerator {
 
 		for (int i=0; i<3; i++) {
 			double otherHeight = 0;
-			if (smallest) {
-				FacePart otherPart = neighbours[i].getTileMesh();
-				if (otherPart == null) {
-					otherHeight = 0;
-				} else {
-					otherHeight = water
-							? Math.max(otherPart.getHeight(), otherPart.getWaterHeight())
-							: otherPart.getHeight();
-					otherHeight--;
-				}
-			}
+//			if (smallest) {
+//				FacePart otherPart = neighbours[i].getTileMesh();
+//				if (otherPart == null) {
+//					otherHeight = 0;
+//				} else {
+//					otherHeight = water
+//							? Math.max(otherPart.getHeight(), otherPart.getWaterHeight())
+//							: otherPart.getHeight();
+//					otherHeight--;
+//				}
+//			}
 
 			if (otherHeight < height) {
 				double lowerFactor = PlanetGenerator.getHeightFactor(otherHeight);

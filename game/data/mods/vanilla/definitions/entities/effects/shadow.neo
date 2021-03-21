@@ -4,7 +4,7 @@ Effect: effShadow {
     name = "Shadow";
 	
 	Script: tick() {
-		..attLightLevel = - (.bodyEfficiency / 100) * ((->cause..bodySize) / 3);
+		..attLightLevel = - (->cause.bodyEfficiency / 100) * ((->cause.bodySize + 2) / 3);
 	}
 
     Script: removeCondition() {
