@@ -11,7 +11,7 @@ public class GraphicalConstants {
 	public static final double GUI_ZFAR = 10d; // far viewing distance of camera for gui
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Shadow Map %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	public static final int SHADOWMAP_SIZE = 2048; // width and height of shadow map in pixels
+	public static final int SHADOWMAP_SIZE = 4096; // width and height of shadow map in pixels
 	public static final double SHADOWMAP_SCALE_FACTOR = 1.25; // scale factor of shadowMap for orthographic projection
 	public static final double SHADOWMAP_MIN_SCALING = 1d; // how much the shadowmap gets scaled at least when zooming out
 	public static final double SHADOWMAP_MAX_SCALING = 12d; // the maximal scaling of the shadowmap when zooming in

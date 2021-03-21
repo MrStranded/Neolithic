@@ -155,6 +155,8 @@ public class Renderer {
 
 			//shaderProgram.createUniform("color");
 			shaderProgram.createUniform("affectedByLight");
+			shaderProgram.createUniform("affectedByShadow");
+			shaderProgram.createUniform("flipLightDirection");
 			shaderProgram.createUniform("dynamic");
 			shaderProgram.createMaterialUniform("material");
 
@@ -294,7 +296,7 @@ public class Renderer {
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 
 		// shadow map into hud object 0
-		hud.getHUDObjects()[0].getMesh().getMaterial().setTexture(shadowMap.getDepthMap());
+//		hud.getHUDObjects()[0].getMesh().getMaterial().setTexture(shadowMap.getDepthMap());
 	}
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Scene
@@ -346,7 +348,7 @@ public class Renderer {
 
 		// space scenery
 		for (GraphicalObject object : scene.getObjects()) {
-			if (object != null) {
+			if (object != null && object.isRenderInScene()) {
 				renderObject(object, viewMatrix, shadowMap);
 			}
 		}
@@ -371,6 +373,8 @@ public class Renderer {
 		if (planetObject != null) {
 			shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(planetObject.getWorldMatrix()));
 			shaderProgram.setUniform("affectedByLight", 1);
+			shaderProgram.setUniform("affectedByShadow", 1);
+			shaderProgram.setUniform("flipLightDirection", 1);
 			shaderProgram.setUniform("dynamic", 1);
 
 			if (shadowMap != null) {
@@ -403,6 +407,8 @@ public class Renderer {
 	private void renderObject(GraphicalObject object, Matrix4 viewMatrix, ShadowMap shadowMap) {
 		shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(object.getWorldMatrix()));
 		shaderProgram.setUniform("affectedByLight", object.isAffectedByLight() ? 1 : 0);
+		shaderProgram.setUniform("affectedByShadow", object.isAffectedByShadow() ? 1 : 0);
+		shaderProgram.setUniform("flipLightDirection", object.isLightDirectionFlipped() ? -1 : 1);
 		shaderProgram.setUniform("dynamic", object.isStatic() ? 0 : 1);
 		//shaderProgram.setUniform("color", object.getMesh().getTopColor());
 		shaderProgram.setUniform("material", object.getMesh().getMaterial());

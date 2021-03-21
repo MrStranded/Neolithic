@@ -1,5 +1,6 @@
 package engine.graphics.objects.movement;
 
+import constants.GraphicalConstants;
 import engine.graphics.objects.models.Material;
 import engine.math.MatrixCalculations;
 import engine.math.numericalObjects.Matrix4;
@@ -7,7 +8,7 @@ import engine.math.numericalObjects.Vector3;
 import engine.math.numericalObjects.Vector4;
 import engine.math.Transformations;
 
-public class MoveableObject {
+public class MoveableObject implements SunDependantObject {
 
 	protected Vector3 preRotation = null;
 	protected Vector3 position = new Vector3(0,0,0);
@@ -78,6 +79,9 @@ public class MoveableObject {
 	// ################################ Scale ############################################
 	// ###################################################################################
 
+	public void scale(double s) {
+		scale(s, s, s);
+	}
 	public void scale(double x, double y, double z) {
 		Vector3 v = new Vector3(x,y,z);
 		scale.timesElementwiseInplace(v);
@@ -210,6 +214,20 @@ public class MoveableObject {
 	public void setRotation(double x, double y, double z) {
 		rotation = new Vector3(x,y,z);
 		changed = true;
+	}
+
+	// ###################################################################################
+	// ################################ Sun Companion ####################################
+	// ###################################################################################
+
+	@Override
+	public void sunAngleIncrement(double angleStep) {
+		rotateYAroundOrigin(angleStep);
+	}
+	@Override
+	public void sunAngleReset() {
+		setPosition(0,0, GraphicalConstants.SUN_DISTANCE);
+		setRotation(0, 0, 0);
 	}
 
 	// ###################################################################################

@@ -62,6 +62,8 @@ out vec4 fragmentColor;
 uniform sampler2D textureSampler;
 //uniform vec4 color;
 uniform int affectedByLight;
+uniform int affectedByShadow;
+uniform int flipLightDirection;
 
 uniform sampler2D shadowSampler;
 uniform float shadowStrength;
@@ -101,6 +103,8 @@ void setupColors(Material material, vec2 textureCoordinates) {
 
 float calculateShadow(vec4 position) {
     float lightFactor = 1.0; // light
+    if (affectedByShadow == 0) { return lightFactor; }
+
     vec2 increment = 1.0 / textureSize(shadowSampler, 0);
 
     if (shadowStrength > 0.05) {
@@ -168,7 +172,8 @@ vec4 calculateLight(vec3 lightPosition, vec4 lightColor, vec3 fromLightSource, v
 
 vec4 calculatePointLight(PointLight light, vec3 position, vec3 normal) {
     vec3 lightDirection = position - light.position;
-    vec4 calculatedColor = calculateLight(light.position, light.color * light.intensity, normalize(lightDirection), position, normal);
+    vec3 fromLightSource = normalize(lightDirection) * flipLightDirection;
+    vec4 calculatedColor = calculateLight(light.position, light.color * light.intensity, fromLightSource, position, normal);
 
     // Attenuation
     float distance = length(lightDirection);
@@ -186,7 +191,7 @@ vec4 calculateSpotLight(SpotLight light, vec3 position, vec3 normal) {
     vec4 calculatedColor = vec4(0, 0, 0, 0);
 
     vec3 lightDirection = position - light.position;
-    vec3 fromLightSource = normalize(lightDirection);
+    vec3 fromLightSource = normalize(lightDirection) * flipLightDirection;
     float angleCosine = dot(fromLightSource, light.direction);
 
     if (angleCosine > light.coneCosine) {
@@ -212,7 +217,7 @@ vec4 calculateSpotLight(SpotLight light, vec3 position, vec3 normal) {
 
 vec4 calculateDirectionalLight(DirectionalLight light, vec3 normal) {
     // Diffuse Light
-    float diffuseFactor = max(dot(normal, -light.direction), 0.0);
+    float diffuseFactor = max(dot(normal, -light.direction * flipLightDirection), 0.0);
     vec4 diffuseColor = diffuseC * light.color * light.intensity * diffuseFactor;
 
     return diffuseColor;

@@ -1289,7 +1289,7 @@ public class CommandExecuter {
 
 					if (tile != null) {
 						if (height < 0) { height = 0; }
-						if (height > TopologyConstants.PLANET_MAXIMUM_HEIGHT) { height = (int) TopologyConstants.PLANET_MAXIMUM_HEIGHT; }
+						if (height > TopologyConstants.PLANET_HEIGHT_RANGE) { height = (int) TopologyConstants.PLANET_HEIGHT_RANGE; }
 						tile.setHeight(height);
 
 						return new Variable(height);
@@ -1361,7 +1361,7 @@ public class CommandExecuter {
 
 					if (tile != null) {
 						if (height < 0) { height = 0; }
-						if (height > TopologyConstants.PLANET_MAXIMUM_HEIGHT) { height = (int) TopologyConstants.PLANET_MAXIMUM_HEIGHT; }
+						if (height > TopologyConstants.PLANET_HEIGHT_RANGE) { height = (int) TopologyConstants.PLANET_HEIGHT_RANGE; }
 						tile.setWaterHeight(height);
 
 						return new Variable(height);

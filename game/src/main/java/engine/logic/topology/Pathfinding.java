@@ -85,8 +85,8 @@ public class Pathfinding {
     public static double getSquaredDistance(Tile from, Tile to) {
         if (from == null || to == null) { return 0; }
 
-        double fromHeight = TopologyConstants.PLANET_MINIMUM_HEIGHT + from.getHeight() / TopologyConstants.PLANET_MAXIMUM_HEIGHT;
-        double   toHeight = TopologyConstants.PLANET_MINIMUM_HEIGHT +   to.getHeight() / TopologyConstants.PLANET_MAXIMUM_HEIGHT;
+        double fromHeight = TopologyConstants.PLANET_MINIMUM_HEIGHT + from.getHeight() / TopologyConstants.PLANET_HEIGHT_RANGE;
+        double   toHeight = TopologyConstants.PLANET_MINIMUM_HEIGHT +   to.getHeight() / TopologyConstants.PLANET_HEIGHT_RANGE;
 
         Vector3 normalizedMidFrom = new Vector3(from.getTileMesh().getMid()).times(1d / fromHeight);
         Vector3   normalizedMidTo = new Vector3(  to.getTileMesh().getMid()).times(1d /   toHeight);

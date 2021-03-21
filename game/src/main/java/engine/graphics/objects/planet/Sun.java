@@ -1,29 +1,20 @@
 package engine.graphics.objects.planet;
 
 
-import constants.GraphicalConstants;
 import engine.graphics.objects.GraphicalObject;
-import engine.graphics.objects.light.DirectionalLight;
-import engine.graphics.objects.light.PointLight;
-import engine.graphics.objects.light.ShadowMap;
-import engine.math.numericalObjects.Vector3;
+import engine.graphics.objects.movement.SunDependantObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Sun {
 
-    double angle = 0;
+    GraphicalObject sun;
+    List<Companion> companions = new ArrayList<>();
 
-    GraphicalObject sunObject;
-    DirectionalLight directionalLight;
-    PointLight pointLight;
-    ShadowMap shadowMap;
-    GraphicalObject shadowPlane;
-
-    public Sun(GraphicalObject sunObject, DirectionalLight directionalLight, PointLight pointLight, ShadowMap shadowMap, GraphicalObject shadowPlane) {
-        this.sunObject = sunObject;
-        this.directionalLight = directionalLight;
-        this.pointLight = pointLight;
-        this.shadowMap = shadowMap;
-        this.shadowPlane = shadowPlane;
+    public Sun(GraphicalObject sun) {
+        this.sun = sun;
+        addCompanion(sun, 1);
     }
 
     /**
@@ -37,35 +28,42 @@ public class Sun {
 
     /**
      * Changes the angle of the sun by the given value in degrees.
-     * @param angleStep
+     * @param leAngleStep
      */
-    public void changeAngle(double angleStep) {
-        angleStep = angleStep*Math.PI/180d;
-        angle += angleStep;
+    public void changeAngle(double leAngleStep) {
+        final double angleStep = leAngleStep*Math.PI/180d;
 
-        sunObject.rotateYAroundOrigin(-angleStep);
-        directionalLight.rotateY(-angleStep);
-        pointLight.rotateYAroundOrigin(-angleStep);
-        shadowPlane.rotateYAroundOrigin(-angleStep);
-
-        shadowMap.setLightAngle(-angle);
-        shadowMap.cameraChangedPosition();
+        companions.forEach(c -> c.changeAngle(-angleStep));
     }
 
     private void resetPositions() {
-        angle = 0;
+        companions.forEach(Companion::reset);
+    }
 
-        sunObject.setPosition(0,0, GraphicalConstants.SUN_DISTANCE);
-        pointLight.setPosition(0,0, GraphicalConstants.SUN_DISTANCE);
-        directionalLight.setDirection(new Vector3(0,0,-1));
-        shadowPlane.setRotation(0, 0, 0);
+    public void addCompanion(SunDependantObject companion, double rotationFactor) {
+        companions.add(new Companion(companion, rotationFactor));
+    }
 
-        shadowMap.setLightAngle(0);
-        shadowMap.cameraChangedPosition();
+    private class Companion {
+        SunDependantObject companion;
+        double factor;
+
+        Companion(SunDependantObject companion, double factor) {
+            this.companion = companion;
+            this.factor = factor;
+        }
+
+        void changeAngle(double angleStep) {
+            companion.sunAngleIncrement(angleStep * factor);
+        }
+
+        void reset() {
+            companion.sunAngleReset();
+        }
     }
 
     public GraphicalObject getGraphicalObject() {
-        return sunObject;
+        return sun;
     }
 
 }
