@@ -26,10 +26,8 @@ public class GuiData {
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         renderWindow = new Window((int) screenSize.getWidth()/2,(int) screenSize.getHeight()*3/4,"Neolithic");
-        //renderWindow.initialize();
 
         renderer = new Renderer(renderWindow);
-        //renderer.initialize();
 
         statisticsWindow = new StatisticsWindow((int) screenSize.getWidth()/2,(int) screenSize.getHeight()*3/4, "Statistics");
 

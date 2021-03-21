@@ -211,15 +211,7 @@ public class MeshGenerator {
 		};
 
 		if (foldedInside) {
-			for (int i=0; i<indices.length/3; i++) {
-				int tmp = indices[i*3 + 1];
-				indices[i*3 + 1] = indices[i*3 + 2];
-				indices[i*3 + 2] = tmp;
-			}
-
-			for (int i=0; i<normals.length; i++) {
-				normals[i] = -normals[i];
-			}
+			foldInside(indices, normals);
 		}
 
 		float[] colors = new float[14*4];
@@ -271,7 +263,7 @@ public class MeshGenerator {
 	// ################################ Icosahedron ######################################
 	// ###################################################################################
 
-	public static Mesh createIcosahedron() {
+	public static Mesh createIcosahedron(boolean foldedInside) {
 		// ------------------------------------- vertices
 		float[] vertices = new float[22*3];
 
@@ -354,6 +346,11 @@ public class MeshGenerator {
 			colors[i] = 1f;
 		}
 
+		// ------------------------------------- folded inside
+		if (foldedInside) {
+			foldInside(indices, normals);
+		}
+
 		return new Mesh(indices, vertices, textureCoordniates, colors, normals);
 	}
 
@@ -374,5 +371,17 @@ public class MeshGenerator {
 		}
 
 		return normals;
+	}
+
+	private static void foldInside(int[] indices, float[] normals) {
+		for (int i=0; i<indices.length/3; i++) {
+			int tmp = indices[i*3 + 1];
+			indices[i*3 + 1] = indices[i*3 + 2];
+			indices[i*3 + 2] = tmp;
+		}
+
+		for (int i=0; i<normals.length; i++) {
+			normals[i] = -normals[i];
+		}
 	}
 }

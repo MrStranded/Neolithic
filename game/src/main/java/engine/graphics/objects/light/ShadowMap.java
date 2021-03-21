@@ -3,6 +3,7 @@ package engine.graphics.objects.light;
 import constants.GraphicalConstants;
 import constants.TopologyConstants;
 import engine.graphics.objects.Camera;
+import engine.graphics.objects.movement.SunDependantObject;
 import engine.graphics.objects.textures.Texture;
 import engine.graphics.renderer.projection.Projection;
 import engine.math.Transformations;
@@ -12,9 +13,10 @@ import engine.parser.utils.Logger;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
-public class ShadowMap {
+public class ShadowMap implements SunDependantObject {
 
 	private final double TAU = Math.PI*2d;
+	private double sunAngle = 0;
 
 	private final int depthMapFBO;
 	private final Texture depthMap;
@@ -64,6 +66,25 @@ public class ShadowMap {
 
 	public void cameraChangedPosition() {
 		modified = true;
+	}
+
+	// ###################################################################################
+	// ################################ Sun Movement #####################################
+	// ###################################################################################
+
+	@Override
+	public void sunAngleIncrement(double angleStep) {
+		sunAngle = (sunAngle + angleStep) % TAU;
+
+		setLightAngle(sunAngle);
+		cameraChangedPosition();
+	}
+	@Override
+	public void sunAngleReset() {
+		sunAngle = 0;
+
+		setLightAngle(0);
+		cameraChangedPosition();
 	}
 
 	// ###################################################################################
@@ -131,7 +152,7 @@ public class ShadowMap {
 			viewMatrix = new Matrix4();
 		}
 
-		final double size = distance * (TopologyConstants.PLANET_MINIMUM_HEIGHT + TopologyConstants.PLANET_MAXIMUM_HEIGHT) / TopologyConstants.PLANET_MINIMUM_HEIGHT;
+		final double size = distance * TopologyConstants.PLANET_MAXIMUM_HEIGHT / TopologyConstants.PLANET_MINIMUM_HEIGHT * 1.5;
 		orthographicProjection =    Projection.createOrthographicProjectionMatrix(
 									-size, size, size, -size, zNear*distance, zFar*distance
 		);
