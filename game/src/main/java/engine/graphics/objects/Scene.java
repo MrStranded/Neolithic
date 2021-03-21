@@ -65,7 +65,7 @@ public class Scene {
 		objects[4] = new GraphicalObject(MeshGenerator.createCircle(36, 1));
 
 		// sun lights
-		pointLights[1] = new PointLight(0,0,0);
+		pointLights[1] = new PointLight(0.2,0.1,0.1);
 //		pointLights[1] = new PointLight(0.75,0.5,0.5);
 		pointLights[1].setAttenuation(Attenuation.CONSTANT());
 		pointLights[1].setPosition(0,0,sunDistance);

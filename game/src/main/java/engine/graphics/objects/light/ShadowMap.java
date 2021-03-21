@@ -8,6 +8,7 @@ import engine.graphics.renderer.projection.Projection;
 import engine.math.Transformations;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
+import engine.parser.utils.Logger;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
@@ -77,65 +78,48 @@ public class ShadowMap {
 		if (camera != null) {
 			// ---------------------------------------- radius factor
 			double radiusFactor = 0d;
-			double radiusScope = GraphicalConstants.SHADOWMAP_RADIUS_SCOPE;
+			final double radiusScope = GraphicalConstants.SHADOWMAP_RADIUS_SCOPE;
 			double radius = Math.min(camera.getRadius(), distance + radiusScope); // to ensure that radiusFactor is between 0 and 1
 			if (radius > distance) {
 				radiusFactor = Math.sqrt(Math.sqrt((radius - distance) / radiusScope));
 			}
 
 			// ---------------------------------------- znear / zfar
-			double zValue = Math.min(
+			final double zValue = Math.min(
 					GraphicalConstants.SHADOWMAP_MIN_ZVALUE +
 					(GraphicalConstants.SHADOWMAP_MAX_ZVALUE - GraphicalConstants.SHADOWMAP_MIN_ZVALUE) * radiusFactor,
 					0.5d);
-			zNear = -zValue;
+			zNear = Math.min( -zValue, -distance * 1.001); // prevent clipping of inner shadow plane
 			zFar = zValue;
 
 			// ---------------------------------------- epsilon (depth bias)
-			double maxEpsilon = GraphicalConstants.SHADOWMAP_MAX_EPSILON;
-			double minEpsilon = GraphicalConstants.SHADOWMAP_MIN_EPSILON;
+			final double maxEpsilon = GraphicalConstants.SHADOWMAP_MAX_EPSILON;
+			final double minEpsilon = GraphicalConstants.SHADOWMAP_MIN_EPSILON;
 
 			double epsilonD = minEpsilon + radiusFactor*radiusFactor * (maxEpsilon - minEpsilon);
 			epsilonD = Math.min(maxEpsilon, Math.max(minEpsilon, epsilonD));
 			epsilon = (float) epsilonD;
 
 			// ---------------------------------------- shadow strength
-//			double poleShadow = Math.abs(Math.sin(camera.getPitch())); // 1 at poles, 0 at equator
-//
-//			double brightSpot = GraphicalConstants.SHADOWMAP_BRIGHT_SPOT_SIZE;
-//			double angle = -lightAngle + camera.getYaw();
-//			if (angle < 0) {
-//				angle += TAU;
-//			}
-//			if (angle >= TAU) {
-//				angle -= TAU;
-//			}
-//			double equatorShadow = (Math.cos(angle) + 1d) / 2d;
-//			//equatorShadow *= equatorShadow; // square dat fucker yo (in order to weaken shadows in shadow part of planet)
-//			if (angle < Math.PI/brightSpot || angle > TAU - Math.PI/brightSpot) {
-//				equatorShadow = equatorShadow - (Math.cos(angle*brightSpot) + 1d) / 2d;
-//			}
-//			double distanceShadowWeakening = 0d;
-//			if (camera.getRadius() > distance + radiusScope) {
-//				distanceShadowWeakening = camera.getRadius() - (distance + radiusScope);
-//			}
-//
-//			shadowStrength = (float) Math.max((1d - poleShadow) * equatorShadow + poleShadow - distanceShadowWeakening, 0d);
 			shadowStrength = 1f;
 
 			// ---------------------------------------- scaling factor
-			double max = GraphicalConstants.SHADOWMAP_MAX_SCALING;
-			double min = GraphicalConstants.SHADOWMAP_MIN_SCALING;
+			final double max = GraphicalConstants.SHADOWMAP_MAX_SCALING;
+			final double min = GraphicalConstants.SHADOWMAP_MIN_SCALING;
 
 			double scaleFactor = max - radiusFactor * (max - min);
 			scaleFactor = Math.min(max, Math.max(min, scaleFactor));
 			Vector3 shadowScale = new Vector3(scaleFactor, scaleFactor, 1d);
 
 			// ---------------------------------------- position
-			double yaw = camera.getYaw();
-			double pitch = -camera.getPitch() + camera.getTilt() * GraphicalConstants.PLANETARY_LOD_MATRIX_TILT_FACTOR * 0.5d;
-			double heightFactor = Math.cos(pitch);
-			Vector3 position = new Vector3(Math.sin(yaw) * heightFactor, Math.sin(pitch), Math.cos(yaw) * heightFactor).times(-distance);
+			final double yaw = camera.getYaw();
+			final double pitch = -camera.getPitch() + camera.getTilt() * GraphicalConstants.PLANETARY_LOD_MATRIX_TILT_FACTOR * 0.5d;
+			final double heightFactor = Math.cos(pitch);
+			Vector3 position = new Vector3(
+					Math.sin(yaw) * heightFactor,
+					Math.sin(pitch),
+					Math.cos(yaw) * heightFactor
+			).times(-distance);
 
 			viewMatrix =    Transformations.scale(shadowScale).times(
 							Transformations.rotateY(-lightAngle).times(
@@ -147,7 +131,7 @@ public class ShadowMap {
 			viewMatrix = new Matrix4();
 		}
 
-		double size = distance * (TopologyConstants.PLANET_MINIMUM_HEIGHT + (double) TopologyConstants.PLANET_MAXIMUM_HEIGHT) / TopologyConstants.PLANET_MINIMUM_HEIGHT;//GraphicalConstants.SHADOWMAP_SCALE_FACTOR;
+		final double size = distance * (TopologyConstants.PLANET_MINIMUM_HEIGHT + TopologyConstants.PLANET_MAXIMUM_HEIGHT) / TopologyConstants.PLANET_MINIMUM_HEIGHT;
 		orthographicProjection =    Projection.createOrthographicProjectionMatrix(
 									-size, size, size, -size, zNear*distance, zFar*distance
 		);

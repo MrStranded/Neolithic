@@ -236,7 +236,6 @@ public class MeshGenerator {
 
 	public static Mesh createCircle(int corners, float radius) {
 		float[] vertices = new float[(corners + 1) * 3];
-
 		for (int i=1; i<=corners; i++) {
 			double angle = Math.PI * 2 * (double) i / (double) corners;
 			vertices[i*3 + 0] = (float) Math.cos(angle) * radius;
