@@ -111,7 +111,7 @@ float calculateShadow(vec4 position) {
         // Transform from screen coordinates to texture coordinates
         vec3 projectionCoordinates = position.xyz * vec3(0.5, 0.5, 0.5) + vec3(0.5, 0.5, 0.5);
 
-        /* // ---------------------------------------------- calculating average shadow value for pixel with blur
+        // ---------------------------------------------- calculating average shadow value for pixel with blur
         // checkin whether in shadow (>=) or ligth (<) with small epsilon to prevent shadow acne
         float shadow = 0.0;
         int blurSize = 1;
@@ -125,23 +125,6 @@ float calculateShadow(vec4 position) {
         }
         shadow /= (blurSize*2 + 1) * (blurSize*2 + 1);
         lightFactor = 1.0 - (shadow * shadowStrength);
-        */
-
-        // ---------------------------------------------- sampling the summed distance from a few points in proximity
-        //float minDistance = projectionCoordinates.z;
-        float sumDistance = 0.0;
-        int sampleDistance = 2;
-        for (int x=-sampleDistance; x<=sampleDistance; x+=sampleDistance) {
-            for (int y=-sampleDistance; y<=sampleDistance; y+=sampleDistance) {
-                float distance = texture(shadowSampler, projectionCoordinates.xy + vec2(x,y)*increment).r;
-                //minDistance = min(minDistance, distance);
-                sumDistance += distance;
-            }
-        }
-        //if (projectionCoordinates.z > minDistance + shadowEpsilon) {
-        if (projectionCoordinates.z > sumDistance/9.0 + shadowEpsilon) {
-            lightFactor = 1.0 - shadowStrength;
-        }
     }
 
     return lightFactor;
@@ -251,7 +234,7 @@ void main() {
             }
         }
 
-        fragmentColor = outColor * (ambientC * ambientLight + pointLightColor + spotLightColor + lightFactor * directionalLightColor);
+        fragmentColor = outColor * (ambientC * ambientLight + lightFactor * directionalLightColor + pointLightColor + spotLightColor );
     } else {
 
         fragmentColor = outColor * ambientC;
