@@ -36,7 +36,7 @@ public class Scene {
 		camera.setRadius(2);
 
 		// ------------------------------------------------------------------------------------------- ambient light
-		double ambient = 0.125;
+		double ambient = 0.2;
 		ambientLight = new AmbientLight(ambient, ambient, ambient);
 
 		// ------------------------------------------------------------------------------------------- universe
@@ -98,12 +98,12 @@ public class Scene {
 		Data.setMoon(moon);
 
 		// ------------------------------------------------------------------------------------------- atmosphere
-		double atmosphereScale = (TopologyConstants.PLANET_MAXIMUM_HEIGHT + TopologyConstants.PLANET_HEIGHT_RANGE / 2) / TopologyConstants.PLANET_MINIMUM_HEIGHT;
+		double atmosphereScale = (TopologyConstants.PLANET_MAXIMUM_HEIGHT + TopologyConstants.PLANET_HEIGHT_RANGE) / TopologyConstants.PLANET_MINIMUM_HEIGHT;
 
 		for (int i=0; i<3; i++) {
 			GraphicalObject layer = new Builder(MeshGenerator.createIcosahedron(true))
 					.scale(atmosphereScale, atmosphereScale, atmosphereScale)
-					.color(0.75f - 0.1f * i, 0.85f - 0.1f * i, 1f - 0.1f * i, 0.5f - 0.2f * i)
+					.color(0.65f - 0.1f * i, 0.75f - 0.1f * i, 1f - 0.1f * i, 0.5f - 0.2f * i)
 					.useDepthTest(false)
 					.affectedByLight(true)
 					.affectedByShadow(false)
