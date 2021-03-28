@@ -1,0 +1,7 @@
+// Great Way - Alchemist
+Attribute: sensitivity {
+    name = "Sensitivity";
+    inherited;
+    color = 130, 200, 150;
+	bounds = 0, 100;
+}

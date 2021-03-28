@@ -1,0 +1,19 @@
+Attribute: temperature {
+    name = "Temperature";
+	color = 220, 210, 110;
+	lower = 0;
+}
+
+Attribute: heatConductivity {
+    name = "Heat Conductivity";
+	color = 110, 105, 55;
+	bounds = 0, 100;
+}
+
+Attribute: albedo {
+	name = "Albedo";
+	color = 100, 220, 220;
+	bounds = 0, 100;
+}
+
+
