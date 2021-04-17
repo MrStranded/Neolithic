@@ -22,18 +22,6 @@ public class ScriptConstants {
 	public static final String DEFAULT_STAGE = "default";
 
 	public static final String KEY_ATTRIBUTES = "attributes";
-	public static final String KEY_SCIPTS = "scripts";
-
-	public static final String KEY_INHERITED_CONATINERS = "inherited";
-	public static final String KEY_SOLUTIONS = "solutions";
-	public static final String KEY_KNOWLEDGE = "knowledge";
-	public static final String KEY_DRIVES = "drives";
-
-	public static final String KEY_NAME = "name";
-	public static final String KEY_RUN_TICK_SCRIPT = "runTicks";
-	public static final String KEY_MESH = "mesh";
-	public static final String KEY_OPACITY = "opacity";
-	public static final String KEY_PLOT = "plot";
-	public static final String KEY_PREFERS = "prefers";
+	public static final String KEY_SCRIPTS = "scripts";
 
 }

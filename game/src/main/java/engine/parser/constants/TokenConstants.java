@@ -38,17 +38,8 @@ public enum TokenConstants {
     BREAK       (TokenType.KEYWORD, "break"),
     RETURN      (TokenType.KEYWORD, "return"),
 
-	// -------------------------------------------------- Engine Values
-	VALUE_NAME                  (TokenType.KEYWORD, "name"),
-	VALUE_MESH                  (TokenType.KEYWORD, "mesh"),
-	VALUE_OPACITY				(TokenType.KEYWORD, "opacity"),
-	VALUE_RUN_TICKS				(TokenType.KEYWORD, "runTicks"),
-	// -------------------------------------------------- Tiles
-	VALUE_TOP_COLOR             (TokenType.KEYWORD, "topColor"),
-	VALUE_SIDE_COLOR            (TokenType.KEYWORD, "sideColor"),
-	VALUE_PREFERRED_HEIGHT		(TokenType.KEYWORD, "preferredHeight"),
-	VALUE_PREFERRED_HEIGHT_BLUR	(TokenType.KEYWORD, "preferredHeightBlur"),
 	// -------------------------------------------------- Attributes
+	VALUE_NAME             		(TokenType.KEYWORD, "name"),
 	VALUE_INHERITED             (TokenType.KEYWORD, "inherited"),
 	VALUE_MUTATION_CHANCE       (TokenType.KEYWORD, "mutationChance"),
 	VALUE_MUTATION_EXTEND       (TokenType.KEYWORD, "mutationExtent"),
@@ -127,7 +118,7 @@ public enum TokenConstants {
 	GET_NEIGHBOUR           	(TokenType.COMMAND, "getNeighbor"), // difference between british english in code and american english in scripts
 	GET_NEIGHBOURS          	(TokenType.COMMAND, "getNeighbors"),
 	GET_PROPERTY        		(TokenType.COMMAND, "getProperty"),
-	GET_PROPERTY_List        	(TokenType.COMMAND, "getPropertyList"),
+	GET_PROPERTY_LIST			(TokenType.COMMAND, "getPropertyList"),
 	GET_TILE                	(TokenType.COMMAND, "getTile"),
 	GET_TILE_FROM_COORDINATES	(TokenType.COMMAND, "getTileFromCoords"),
 	GET_TILES_IN_RANGE      	(TokenType.COMMAND, "getTilesInRange"),
@@ -254,6 +245,13 @@ public enum TokenConstants {
 	COMMENT         (TokenType.COMMENT, "//"),
 	COMMENT_OPEN    (TokenType.COMMENT, "/*"),
 	COMMENT_CLOSE   (TokenType.COMMENT, "*/"),
+
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Comments
+	RGB        		(TokenType.PROPERTY_TYPE, "rgb"),
+	RGBA        	(TokenType.PROPERTY_TYPE, "rgba"),
+	COLOR        	(TokenType.PROPERTY_TYPE, "color"),
+	MESH_PATH       (TokenType.PROPERTY_TYPE, "mesh"),
 
 	;
 

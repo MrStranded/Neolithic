@@ -29,7 +29,7 @@ Drive: driMate {
         //require(self.attGender <= 0); // only males want to fock
     }
 
-    solutions {
+    solutions = {
         proMate;
     }
 
@@ -59,7 +59,7 @@ Process: proMate {
         child..attNutrition += .attBabySize;
     }
 
-    solutions {
+    solutions = {
         proSearchMate;
     }
 }

@@ -256,9 +256,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
                 g.drawString("Drives:", xPos, yPos + 12);
                 yPos += 20;
 
-                for (ContainerIdentifier identifier : creatureContainer.getDrives(instance.getStage())) {
-                    Container drive = identifier.retrieve();
-
+                for (Container drive : creatureContainer.getDrives(instance.getStage())) {
                     if (drive != null) {
                         g.drawString(drive.getName(), xPos + 10, yPos + 12);
 
@@ -280,9 +278,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
                 g.drawString("Knowledge:", xPos, yPos + 12);
                 yPos += 20;
 
-                for (ContainerIdentifier identifier : creatureContainer.getKnowledge(instance.getStage())) {
-                    Container process = identifier.retrieve();
-
+                for (Container process : creatureContainer.getKnowledge(instance.getStage())) {
                     if (process != null) {
                         g.drawString(process.getName(), xPos + 10, yPos + 12);
                         yPos += 20;

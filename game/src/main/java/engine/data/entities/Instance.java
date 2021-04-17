@@ -23,6 +23,7 @@ import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Instance {
@@ -84,7 +85,7 @@ public class Instance {
 	}
 	private void createSubInstancesIfNecessary() {
 		if (subInstances == null) {
-			subInstances = new ArrayList<>();
+			subInstances = new CopyOnWriteArrayList<>();
 		}
 	}
 
@@ -196,13 +197,12 @@ public class Instance {
 	 * Then the method tries to execute a process of one of the drives, starting with the most important one.
 	 * @param drives to look through
 	 */
-	private void searchDrive(List<ContainerIdentifier> drives) {
+	private void searchDrive(List<Container> drives) {
 		if (drives == null) { return; }
 
 		WeightedList<Container> weightedDrives = new WeightedList<>();
 
-		for (ContainerIdentifier drive : drives) {
-			Container container = drive.retrieve();
+		for (Container container : drives) {
 			if (container != null) {
 
 				Variable condition = run(container, ScriptConstants.EVENT_CONDITION, null);
@@ -240,10 +240,9 @@ public class Instance {
 	 * @param processes to look through
 	 * @return process with fulfilled condition or null
 	 */
-	private Container searchProcesses(List<ContainerIdentifier> processes) {
+	private Container searchProcesses(List<Container> processes) {
 		if (processes != null) {
-			for (ContainerIdentifier process : processes) {
-				Container container = process.retrieve();
+			for (Container container : processes) {
 				if (container != null && knowsProcess(container)) {
 					if (!run(container, ScriptConstants.EVENT_CONDITION, null).isNull()) { // condition is fulfilled
 
@@ -274,8 +273,8 @@ public class Instance {
 		return getContainer()
 				.filter(c -> c.getType() == DataType.CREATURE)
 				.map(c -> {
-					for (ContainerIdentifier knowledge : ((CreatureContainer) c).getKnowledge(stage)) {
-						if (knowledge.identifies(container)) {
+					for (Container knowledge : ((CreatureContainer) c).getKnowledge(stage)) {
+						if (knowledge != null && knowledge.getTextID().equals(container.getTextID())) {
 							return true;
 						}
 					}
@@ -385,19 +384,9 @@ public class Instance {
 			Optional<Container> container = Data.getContainer(id);
 			container.filter(c -> c.getType() == DataType.TILE)
 					.ifPresent(c -> {
-						CopyOnWriteArraySet<Instance> subs = new CopyOnWriteArraySet<>(subInstances);
-						for (Instance subInstance : subs) {
-							if (subInstance != null) {
-								subInstance.render();
-							}
-						}
-//						try {
-//							for (Instance subInstance : subInstances) {
-//								if (subInstance != null) {
-//									subInstance.render();
-//								}
-//							}
-//						} catch (ConcurrentModificationException e) { /* it's okay really */ }
+						try {
+							subInstances.forEach(Instance::render);
+						} catch (ConcurrentModificationException e) { /* it's okay really */ }
 					});
 		}
 	}
@@ -722,7 +711,7 @@ public class Instance {
 	}
 
 	public int getContainerAttributeValue(int attributeID) {
-		return getContainer().map(container -> container.getAttributeValue(attributeID)).orElse(0);
+		return getContainer().map(container -> container.getAttributeValue(stage, attributeID)).orElse(0);
 	}
 
 	private int getBoundedAttributeValue(int attributeID, int value) {

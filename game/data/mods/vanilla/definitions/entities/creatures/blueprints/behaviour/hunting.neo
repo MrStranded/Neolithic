@@ -38,7 +38,7 @@ Process: proEatMeat {
 		->carcass->consume(self);
 	}
 
-	solutions {
+	solutions = {
 	    proLookForCarcass;
 	    proKillAnimal;
 	}

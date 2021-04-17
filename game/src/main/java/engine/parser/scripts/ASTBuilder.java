@@ -41,7 +41,14 @@ public class ASTBuilder {
 			interpreter.consume(TokenConstants.ROUND_BRACKETS_CLOSE);
 		}
 
-		MultiStatementNode root = readMultiStatement();
+		next = interpreter.peek();
+		AbstractScriptNode root;
+		if (TokenConstants.CURLY_BRACKETS_OPEN.equals(next)) {
+			root = readMultiStatement();
+		} else {
+			root = readStatement();
+		}
+
 		return new Script(textID, interpreter.getCurrentFile(), root, parameters);
 	}
 
@@ -54,8 +61,7 @@ public class ASTBuilder {
 
 		List<AbstractScriptNode> nodeList = new ArrayList<>(1);
 
-		Token next;
-		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(next = interpreter.peek())) { // look at the next token (just look!)
+		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(interpreter.peek())) {
 			nodeList.add(readStatement());
 		}
 		interpreter.consume(TokenConstants.CURLY_BRACKETS_CLOSE);

@@ -1,6 +1,6 @@
 Entity: entCloud {
     name = "Cloud";
-	mesh = "cloud.ply";
+	mesh = mesh "cloud.ply";
 	opacity = 0.25;
 
 	attributes {
@@ -70,7 +70,7 @@ Entity: entCloud {
 
 Entity: entMarker {
 	name = "Marker";
-	mesh = "marker.ply";
+	mesh = mesh "marker.ply";
 	opacity = 0.5;
 	
 	Script: tick {
@@ -93,7 +93,7 @@ Entity: entCloudSpawner {
 
 Entity: entRain {
     name = "Rain";
-    mesh = "raindrops.ply";
+    mesh = mesh "raindrops.ply";
     opacity = 0.25;
 
     Script: tick {

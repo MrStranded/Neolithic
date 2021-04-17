@@ -1,7 +1,9 @@
 package engine.parser.interpretation;
 
+import constants.PropertyKeys;
 import constants.ResourcePathConstants;
 import constants.ScriptConstants;
+import constants.TopologyConstants;
 import engine.data.Data;
 import engine.data.proto.Container;
 import engine.data.scripts.Script;
@@ -9,6 +11,7 @@ import engine.data.attributes.PreAttribute;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.proto.*;
 import engine.data.variables.DataType;
+import engine.data.variables.Variable;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.renderer.color.RGBA;
 import engine.parser.constants.TokenConstants;
@@ -19,8 +22,10 @@ import engine.parser.utils.TokenNumerifier;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class Interpreter {
 
@@ -77,19 +82,6 @@ public class Interpreter {
 
 		}
 	}
-
-	/*public Token consumeNumber() throws Exception {
-		if (!tokenIterator.hasNext()) { // error reporting
-			throw new Exception("Reached unexpected end of file!");
-		}
-
-		if (TokenConstants.MINUS.equals(peek())) {
-			consume();
-			return consume().flipValue();
-		} else {
-			return consume();
-		}
-	}*/
 
 	public Token consume() throws Exception {
 		if (!tokenIterator.hasNext()) { // error reporting
@@ -150,7 +142,6 @@ public class Interpreter {
 	 * @throws Exception
 	 */
 	private void feedAttributes(Container container) throws Exception {
-		// attributes { attOne, 10; attTwo, 7; }
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
 
 		Token next;
@@ -221,82 +212,68 @@ public class Interpreter {
 
 	// ################################################################################### General
 
-	private void readMeshPath(Container container) throws Exception {
-		consume(TokenConstants.ASSIGNMENT);
-
-		Token pathToken = consume();
-		String path = ResourcePathConstants.MOD_FOLDER + currentMod + "/" + ResourcePathConstants.MESH_FOLDER + pathToken.getValue();
-		container.setProperty(currentStage, ScriptConstants.KEY_MESH, path);
-
-		voluntaryConsume(TokenConstants.SEMICOLON);
-	}
-
-	private Object readProperty() throws Exception {
+	private Variable readProperty() throws Exception {
 		consume(TokenConstants.ASSIGNMENT);
 
 		Token value = peek();
-		Object result;
+		Variable result;
 
 		if (TokenConstants.CURLY_BRACKETS_OPEN.equals(value)) {
-			result = readTextIDList();
+			result = new Variable(readTextIDList().stream().map(Variable::new).collect(Collectors.toList()));
+
+		} else if (TokenConstants.RGB.equals(value) || TokenConstants.RGBA.equals(value)) {
+			consume();
+			double r = TokenNumerifier.getDouble(consume());
+			consume(TokenConstants.COMMA);
+			double g = TokenNumerifier.getDouble(consume());
+			consume(TokenConstants.COMMA);
+			double b = TokenNumerifier.getDouble(consume());
+
+			double a = 1;
+			if (TokenConstants.RGBA.equals(value)) {
+				consume(TokenConstants.COMMA);
+				a = TokenNumerifier.getDouble(consume());
+			}
+
+			result = new Variable(new RGBA(r, g, b, a));
+
+		} else if (TokenConstants.COLOR.equals(value)) {
+			consume();
+			double r = TokenNumerifier.getDouble(consume());
+			consume(TokenConstants.COMMA);
+			double g = TokenNumerifier.getDouble(consume());
+			consume(TokenConstants.COMMA);
+			double b = TokenNumerifier.getDouble(consume());
+
+			result = new Variable(new RGBA(r / 255d, g / 255d, b / 255d));
+
+		} else if (TokenConstants.MESH_PATH.equals(value)) {
+			consume();
+			Token pathToken = consume();
+			result = new Variable(
+					ResourcePathConstants.MOD_FOLDER + currentMod + "/" + ResourcePathConstants.MESH_FOLDER + pathToken.getValue()
+			);
 
 		} else if (TokenNumerifier.isNumber(value, true)) {
-			result = TokenNumerifier.getDouble(consume());
+			result = new Variable(TokenNumerifier.getDouble(consume()));
 
 		} else if (TokenNumerifier.isNumber(value, false)) {
-			result = TokenNumerifier.getInt(consume());
+			result = new Variable(TokenNumerifier.getInt(consume()));
 
 		} else if (TokenConstants.TRUE.equals(value)) {
 			consume();
-			result = true;
+			result = new Variable(true);
 
 		} else if (TokenConstants.FALSE.equals(value)) {
 			consume();
-			result = false;
+			result = new Variable(false);
 
 		} else {
-			result = consume().getValue();
+			result = new Variable(consume().getValue());
 		}
 
 		voluntaryConsume(TokenConstants.SEMICOLON);
 		return result;
-	}
-
-	private void readStringValue(Consumer<String> valueSetter) throws Exception {
-		consume(TokenConstants.ASSIGNMENT);
-
-		Token value = consume();
-		valueSetter.accept(value.getValue());
-
-		voluntaryConsume(TokenConstants.SEMICOLON);
-	}
-
-	private void readNumberValue(Consumer<Double> valueSetter) throws Exception {
-		consume(TokenConstants.ASSIGNMENT);
-
-		Token value = consume();
-		valueSetter.accept(TokenNumerifier.getDouble(value));
-
-		voluntaryConsume(TokenConstants.SEMICOLON);
-	}
-
-	private void readBooleanValue(Consumer<Boolean> valueSetter) throws Exception {
-		consume(TokenConstants.ASSIGNMENT);
-
-		Token token = consume();
-		boolean value;
-
-		if (TokenConstants.TRUE.equals(token)) {
-			value = true;
-		} else if (TokenConstants.FALSE.equals(token)) {
-			value = false;
-		} else {
-			value = TokenNumerifier.getDouble(token) != 0;
-		}
-
-		valueSetter.accept(value);
-
-		voluntaryConsume(TokenConstants.SEMICOLON);
 	}
 
 	// ################################################################################### Attribute
@@ -310,7 +287,7 @@ public class Interpreter {
 		voluntaryConsume(TokenConstants.SEMICOLON);
     }
 
-    private void addInherited(ProtoAttribute protoAttribute) throws Exception {
+    private void addInherited(ProtoAttribute protoAttribute) {
         protoAttribute.setInherited(true);
 
 		voluntaryConsume(TokenConstants.SEMICOLON);
@@ -361,75 +338,6 @@ public class Interpreter {
 		voluntaryConsume(TokenConstants.SEMICOLON);
 	}
 
-	// ################################################################################### Tile
-
-	private void readPreferredHeight(TileContainer container) throws Exception {
-		consume(TokenConstants.ASSIGNMENT);
-
-		Token height = consume();
-		container.setPreferredHeight(TokenNumerifier.getInt(height));
-
-		if (TokenConstants.COMMA.equals(peek())) {
-			consume(TokenConstants.COMMA);
-			Token blur = consume();
-			container.setPreferredHeightBlur(TokenNumerifier.getInt(blur));
-		}
-
-		voluntaryConsume(TokenConstants.SEMICOLON);
-	}
-
-	private void readPreferredHeightBlur(TileContainer container) throws Exception {
-		consume(TokenConstants.ASSIGNMENT);
-
-		Token blur = consume();
-		container.setPreferredHeightBlur(TokenNumerifier.getInt(blur));
-
-		voluntaryConsume(TokenConstants.SEMICOLON);
-	}
-
-	private void readColor(TileContainer container, boolean side) throws Exception {
-		consume(TokenConstants.CURLY_BRACKETS_OPEN);
-
-		Token[][] values = new Token[3][2]; // x axis: r,g,b | y axis: color value, deviation
-
-		for (int i=0; i<3; i++) {
-			values[i][0] = consume();
-
-			if (TokenConstants.COMMA.equals(peek())) {
-				consume(TokenConstants.COMMA);
-				values[i][1] = consume();
-			}
-
-			voluntaryConsume(TokenConstants.SEMICOLON);
-		}
-
-		if (!side) {
-			container.setTopColor(new RGBA(
-					TokenNumerifier.getDouble(values[0][0]) / 255d,
-					TokenNumerifier.getDouble(values[1][0]) / 255d,
-					TokenNumerifier.getDouble(values[2][0]) / 255d
-			));
-			container.setTopColorDeviation(new RGBA(
-					TokenNumerifier.getDouble(values[0][1]) / 255d,
-					TokenNumerifier.getDouble(values[1][1]) / 255d,
-					TokenNumerifier.getDouble(values[2][1]) / 255d
-			));
-		} else {
-			container.setSideColor(new RGBA(
-					TokenNumerifier.getDouble(values[0][0]) / 255d,
-					TokenNumerifier.getDouble(values[1][0]) / 255d,
-					TokenNumerifier.getDouble(values[2][0]) / 255d
-			));
-			container.setSideColorDeviation(new RGBA(
-					TokenNumerifier.getDouble(values[0][1]) / 255d,
-					TokenNumerifier.getDouble(values[1][1]) / 255d,
-					TokenNumerifier.getDouble(values[2][1]) / 255d
-			));
-		}
-
-		consume(TokenConstants.CURLY_BRACKETS_CLOSE);
-	}
-
 	// ###################################################################################
 	// ################################ Script ###########################################
 	// ###################################################################################
@@ -454,7 +362,6 @@ public class Interpreter {
 	// ###################################################################################
 
 	private void createAttribute() throws Exception {
-		// Attribute : attTextId { ... }
 		consume(TokenConstants.COLON);
 		Token textId = consume();
 		consume(TokenConstants.CURLY_BRACKETS_OPEN);
@@ -467,8 +374,8 @@ public class Interpreter {
 			if (TokenConstants.VALUE_NAME.equals(next)) { // name definition
 				readName(protoAttribute);
 
-            } else if (TokenConstants.VALUE_INHERITED.equals(next)) { // attribute is inherited
-                addInherited(protoAttribute);
+			} else if (TokenConstants.VALUE_INHERITED.equals(next)) { // attribute is inherited
+				addInherited(protoAttribute);
 
 			} else if (TokenConstants.VALUE_LOWER_BOUND.equals(next)) { // lower bound
 				addLowerBound(protoAttribute);
@@ -559,40 +466,15 @@ public class Interpreter {
 
 		// container filling
 		readStage(setupContainer, type);
+//		setupContainer.printProperties();
 	}
 
 	private void readStage(Container container, DataType type) throws Exception {
 		while (true) {
 			Token next = consume();
 
-				// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% type specific values
-			if (TokenConstants.VALUE_PREFERRED_HEIGHT.equals(next)) { // preferred height definition
-				if (type == DataType.TILE) {
-					readPreferredHeight((TileContainer) container);
-				} else { issueTypeError(next, type); }
-
-			} else if (TokenConstants.VALUE_PREFERRED_HEIGHT_BLUR.equals(next)) { // preferred height blur definition
-				if (type == DataType.TILE) {
-					readPreferredHeightBlur((TileContainer) container);
-				} else { issueTypeError(next, type); }
-
-			} else if (TokenConstants.VALUE_TOP_COLOR.equals(next)) { // top color definition
-				if (type == DataType.TILE) {
-					readColor((TileContainer) container, false);
-				} else { issueTypeError(next, type); }
-
-			} else if (TokenConstants.VALUE_SIDE_COLOR.equals(next)) { // side color definition
-				if (type == DataType.TILE) {
-					readColor((TileContainer) container, true);
-				} else { issueTypeError(next, type); }
-
-			} else if (TokenConstants.VALUE_MESH.equals(next)) { // mesh path definition
-				if (type == DataType.ENTITY || type == DataType.CREATURE) {
-					readMeshPath(container);
-				} else { issueTypeError(next, type); }
-
 				// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% attribute lists
-			} else if (TokenConstants.VALUES_ATTRIBUTES.equals(next)) { // list of attributes
+			if (TokenConstants.VALUES_ATTRIBUTES.equals(next)) { // list of attributes
 				feedAttributes(container);
 
 				// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% scripts
@@ -614,15 +496,19 @@ public class Interpreter {
 			} else if (TokenConstants.CURLY_BRACKETS_CLOSE.equals(next)) { // end of definition || stage scope
 				return;
 
-				// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% properties & id lists
+				// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% properties
 			} else {
 				Token operator = peek();
 
 				if (TokenConstants.ASSIGNMENT.equals(operator)) {
-					container.setProperty(currentStage, next.getValue(), readProperty());
+					String property = next.getValue();
+					container.setProperty(currentStage, property, readProperty());
 
-				} else if (TokenConstants.CURLY_BRACKETS_OPEN.equals(operator)) {
-					container.setProperty(currentStage, next.getValue(), readTextIDList());
+					if (Arrays.stream(PropertyKeys.values())
+							.noneMatch(propertyKey -> propertyKey.key().equals(property))
+					) {
+						Logger.log("Property that does not exist in PropertyKeys was set on " + container.getTextID() + ": " + property);
+					}
 
 				} else {
 					Logger.error("Unknown Entity definition command '" + next.getValue() + "' on line " + next.getLine());

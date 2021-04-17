@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////// Drives
 
 Drive: driDeathwish {
-    solutions { proDie; }
+    solutions = { proDie; }
 
     Script: condition {
 		return false;

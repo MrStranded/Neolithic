@@ -4,14 +4,14 @@
 Creature: cLandAnimal {
 	name = "Land animal";
 
-	knowledge {
+	knowledge = {
 	    proDrink; proSearchWater;
 		proMate; proSearchMate;
 		proSleep;
 		proStroll;
 	}
 
-	drives {
+	drives = {
 	    driThirst;
 		driHunger;
 		driMate;
@@ -75,7 +75,7 @@ Creature: cLandAnimal {
 
 Entity: entCarcass {
     name = "Carcass";
-    mesh = "carcass_medium.ply";
+    mesh = mesh "carcass_medium.ply";
 
     attributes {
         attMeat, 1;

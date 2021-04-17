@@ -15,7 +15,8 @@ Attribute: attLightSensitivity {
     name = "Light sensitivity";
     inherited;
     color = 128, 255, 0;
-	bounds = 0, 100;
+	lower = 0;
+	upper = 100;
 }
 Attribute: attHungerSensitivity {
     name = "Hunger sensitivity";

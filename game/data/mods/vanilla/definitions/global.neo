@@ -62,7 +62,7 @@ Script: repopulate() {
 }
 
 Script: fit {
-    fitTiles(tSand, tDirt, tStone);
+    fitTiles(tSand, tDirt, tStone, tOceanFloor);
 	updatePlanetMesh();
 }
 

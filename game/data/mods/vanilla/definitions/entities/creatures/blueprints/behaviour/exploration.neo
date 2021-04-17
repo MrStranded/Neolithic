@@ -7,7 +7,7 @@ Drive: driExplore {
 		require(.attCuriosity > .attLibido + hunger);
 	}
 
-	solutions {
+	solutions = {
 		proGoFarAway;
 		proChooseDestination;
 	}

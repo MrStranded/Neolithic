@@ -52,7 +52,7 @@ Drive: driThirst {
 		require(.attHydrated <= .attThirstSensitivity);
 	}
 
-	solutions {
+	solutions = {
 	    proDrink;
 	}
 
@@ -75,7 +75,7 @@ Process: proDrink {
         ->source = false;
     }
 
-    solutions {
+    solutions = {
         proSearchWater;
     }
 }

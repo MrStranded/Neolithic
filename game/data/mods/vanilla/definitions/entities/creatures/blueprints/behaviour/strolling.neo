@@ -29,7 +29,7 @@ Drive: driMove {
 		require(.attNutrition > 30);
 	}
 
-	solutions {
+	solutions = {
 		proStroll;
 	}
 

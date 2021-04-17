@@ -3,7 +3,7 @@
 
 Entity: entShit {
     name = "Shit";
-    mesh = "shit01.ply";
+    mesh = mesh "shit01.ply";
 
     Script: tick {
         //if (isOnFloor(self)) {
@@ -93,7 +93,7 @@ Drive: driHunger {
 		require(.attNutrition <= .attHungerSensitivity);
 	}
 
-	solutions {
+	solutions = {
 		proEatVegetarian;
 		proEatMeat;
 	}

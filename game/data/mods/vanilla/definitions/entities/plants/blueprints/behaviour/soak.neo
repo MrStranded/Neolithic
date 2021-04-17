@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////// Drives
 
 Drive: driSoak {
-    solutions {
+    solutions = {
 		proSoak;
 		proSoakFromAir;
 	}
@@ -37,7 +37,7 @@ Process: proSoakFromAir {
 	}
 	
 	Script: process {
-		if (chance(.bodyEfficiency * .bodyResiliance / 200 / .bodyRestoration)) {
+		if (chance(.bodyEfficiency / 300)) {
 			..attWater++;
 		}
 	}

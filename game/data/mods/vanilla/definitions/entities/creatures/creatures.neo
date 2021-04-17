@@ -3,7 +3,7 @@
 
 Creature: cHuman inherits cLandAnimal, bHerbivore {
 	name = "Human";
-	mesh = "human_female_mature.ply";
+	mesh = mesh "human_female_mature.ply";
 
 	attributes {
 		attSize, 10;
@@ -29,13 +29,13 @@ Creature: cHuman inherits cLandAnimal, bHerbivore {
 		attStepHeight, 24;
 	}
 
-	drives {
+	drives = {
 		driHording;
 		driExplore;
 		driBuildCamp;
 	}
 
-	knowledge {
+	knowledge = {
 		proBeg; proSearchPatron;
 		proChooseDestination; proGoFarAway;
 		proSearchHut; proBuildHut; proCollectBranch;
@@ -63,7 +63,7 @@ Creature: cHuman inherits cLandAnimal, bHerbivore {
 
 Creature: cTiger inherits cLandAnimal, bCarnivore {
 	name = "Tiger";
-	mesh = "tiger.ply";
+	mesh = mesh "tiger.ply";
 
 	attributes {
 		attSize, 20;

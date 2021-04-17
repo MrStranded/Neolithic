@@ -1,27 +1,24 @@
 
 ///////////////////////////////////////////////////////////////////////////// Tiles
 
-Tile: tDirt inherits tSoakingHumidity {
+Tile: tDirt inherits tSoakingHumidity, tTemperature {
 	name = "Dirt";
 
-	preferredHeight = 120,20;
+	preferredHeight = 120;
+	preferredHeightBlur = 20;
 
-	topColor {
-		150,10;
-		100;
-		20,10;
-	}
-	sideColor {
-		90,10;
-		70,10;
-		60;
-	}
-
+	topColor = rgb 0.6, 0.4, 0.1;
+	topColorVariance = rgb 0.05, 0, 0.05;
+	
+	sideColor = rgb 0.35, 0.25, 0.2;
+	sideColorVariance = rgb 0.05, 0.05, 0;
+	
 	attributes {
 		attTicks, 10;
 	    attNutrition, 10;
 	    attSediment, 15;
 		attPorosity, 15;
+		emitHeat, 30;
 	}
 
 	Script: update {
@@ -38,27 +35,24 @@ Tile: tDirt inherits tSoakingHumidity {
 	}
 }
 
-Tile: tGras inherits tSoakingHumidity {
+Tile: tGras inherits tSoakingHumidity, tTemperature {
 	name = "Gras";
 	preferredHeight = 150;
 	preferredHeightBlur = 50;
 
-	topColor {
-		120,10;
-		200,15;
-		50;
-	}
-	sideColor {
-		100,10;
-		90,10;
-		80;
-	}
+	topColor = color 120, 200, 50;
+	topColorVariance = color 10, 15, 0;
+	
+	sideColor = color 100, 90, 80;
+	sideColorVariance = color 10, 10, 0;
 
 	attributes {
 		attTicks, 5;
 		attNutrition, 20;
 		attPorosity, 15;
 	    attSediment, 10;
+		absorbHeat, 60;
+		emitHeat, 20;
 	}
 
 	Script: update {
@@ -70,24 +64,23 @@ Tile: tGras inherits tSoakingHumidity {
 	}
 }
 
-Tile: tSand inherits tSoakingHumidity {
+Tile: tSand inherits tSoakingHumidity, tTemperature {
 	name = "Sand";
-	preferredHeight = 100,5;
+	preferredHeight = 100;
+	preferredHeightBlur = 5;
 
-	topColor {
-		200,10;
-		150;
-		30,10;
-	}
-	sideColor {
-		120,10;
-		110,10;
-		90;
-	}
+	topColor = color 200, 150, 30;
+	topColorVariance = color 10, 0, 10;
+	
+	sideColor = color 120, 110, 90;
+	sideColorVariance = color 10, 10, 0;
 
 	attributes {
 	    attSediment, 20;
 		attPorosity, 10;
+		heatConductivity, 3;
+		absorbHeat, 100;
+		emitHeat, 70;
 	}
 
 	Script: update {
@@ -100,15 +93,44 @@ Tile: tSand inherits tSoakingHumidity {
 	}
 }
 
+Tile: tOceanFloor {
+	name = "Ocean Floor";
+	preferredHeight = 0;
+	preferredHeightBlur = 100;
+	runTicks = false;
+	
+	topColor = color 150, 120, 100;
+	topColorVariance = color 10, 0, 10;
+	
+	sideColor = color 120, 90, 70;
+	sideColorVariance = color 10, 0, 10;
+}
+
+Tile: tStone inherits tSoakingHumidity, tTemperature {
+    // runTicks = false;
+	preferredHeight = 200;
+	preferredHeightBlur = 10;
+	name = "Stone";
+	
+	topColor = color 150, 150, 120;
+	topColorVariance = color 10, 0, 0;
+
+	attributes {
+        attTicks, 30;
+	    attSediment, 5;
+		attPorosity, 3;
+		heatConductivity, 5;
+		absorbHeat, 30;
+		emitHeat, 30;
+	}
+}
+
 Tile: tSoakingHumidity {
 	preferredHeight = 250;
 
-	topColor {
-		0; 0; 255;
-	}
-	sideColor {
-	    255; 0; 0;
-	}
+	topColor = color 0, 0, 255;
+	sideColor = color 255, 0, 0;
+	ticks = 20;
 
     attributes {
         attTicks, 20;
@@ -134,23 +156,43 @@ Tile: tSoakingHumidity {
             }
         }
 
+		->updateTemperature();
         ->update();
     }
 }
 
-Tile: tStone inherits tSoakingHumidity {
-    runTicks = false;
-	preferredHeight = 255;preferredHeightBlur = 10;
-	name = "Stone"; topColor {150,10;150;120;}
+Tile: tTemperature {
 
 	attributes {
-        attTicks, 30;
-	    attSediment, 5;
-		attPorosity, 3;
+		heatConductivity, 1;
+		absorbHeat, 50;
+		emitHeat, 50;
 	}
-}
 
-Tile: tMarker {
-    runTicks = false;
-	name = "Marker"; topColor {255;0;0;}
+	Script: updateTemperature() {
+		ll = getLightLevel(self) + .attLightLevel;
+		
+		if (chance(.absorbHeat / 100)) {
+			if (ll > .temperature) {
+				..temperature += .heatConductivity;
+			} else {
+				n = getNeighbor(self, random(3));
+				if (n.emitHeat > 0 && .temperature < n.temperature) {
+					n..temperature -= .heatConductivity;
+					..temperature += .heatConductivity;
+				}
+			}
+		}
+		if (chance(.emitHeat / 100)) {
+			if (ll < .temperature) {
+				..temperature -= .heatConductivity;
+			} else {
+				n = getNeighbor(self, random(3));
+				if (n.absorbHeat > 0 && .temperature > n.temperature) {
+					n..temperature += .heatConductivity;
+					..temperature -= .heatConductivity;
+				}
+			}
+		}
+	}
 }

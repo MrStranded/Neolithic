@@ -8,6 +8,7 @@ public enum TokenType {
 	SEPARATOR,
 	OPERATOR,
 	LITERAL,
-	COMMENT; // only used in tokenizer to specifiy comment starts and ends
+	COMMENT, // only used in tokenizer to specifiy comment starts and ends
+	PROPERTY_TYPE,
 
 }

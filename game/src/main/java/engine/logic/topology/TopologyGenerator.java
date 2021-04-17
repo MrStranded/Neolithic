@@ -24,7 +24,11 @@ public class TopologyGenerator {
 
 		for (Face face : planet.getFaces()) {
 			for (Tile tile : face.getTiles()) {
-				int bestFit = calculateBestTile(tile.getHeight(), tileList);
+				int height = tile.getHeight();
+				if (height != 0) {
+					System.out.println("Not null: " + tile + " (" + height + ")");
+				}
+				int bestFit = calculateBestTile(height, tileList);
 
 				if (bestFit >= 0) {
 					tile.change(bestFit);
@@ -45,7 +49,12 @@ public class TopologyGenerator {
 
 		for (Container container : tileList) {
 			TileContainer protoTile = (TileContainer) container;
-			int distance = Math.abs(height - protoTile.getPreferredHeight()) + (int) ((double) protoTile.getPreferredHeightBlur() * (Math.random()*2d - 1d));
+			int preferredHeight = protoTile.getPreferredHeight();// + (int) ((double) protoTile.getPreferredHeightBlur() * (Math.random()*2d - 1d));
+			int distance = Math.abs(height - preferredHeight);
+			if (height != 0) {
+				System.out.println("height = " + height + " , dist = " + distance + " , pref = " + preferredHeight);
+			}
+
 			if (closest == null || distance < closestDistance) {
 				closest = protoTile;
 				closestDistance = distance;

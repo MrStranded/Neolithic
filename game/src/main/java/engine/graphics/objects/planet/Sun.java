@@ -3,14 +3,16 @@ package engine.graphics.objects.planet;
 
 import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.movement.SunDependantObject;
+import engine.math.numericalObjects.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Sun {
 
-    GraphicalObject sun;
-    List<Companion> companions = new ArrayList<>();
+    private GraphicalObject sun;
+    private List<Companion> companions = new ArrayList<>();
+    private Vector3 normalizedSunPosition = Vector3.ZERO;
 
     public Sun(GraphicalObject sun) {
         this.sun = sun;
@@ -32,12 +34,20 @@ public class Sun {
      */
     public void changeAngle(double leAngleStep) {
         final double angleStep = leAngleStep*Math.PI/180d;
-
         companions.forEach(c -> c.changeAngle(-angleStep));
+
+        updateSunPosition();
     }
 
     private void resetPositions() {
         companions.forEach(Companion::reset);
+    }
+
+    private void updateSunPosition() {
+        normalizedSunPosition = sun.getPosition().normalize();
+    }
+    public Vector3 getNormalizedSunPosition() {
+        return normalizedSunPosition;
     }
 
     public void addCompanion(SunDependantObject companion, double rotationFactor) {
@@ -62,7 +72,7 @@ public class Sun {
         }
     }
 
-    public GraphicalObject getGraphicalObject() {
+    public GraphicalObject getSunObject() {
         return sun;
     }
 

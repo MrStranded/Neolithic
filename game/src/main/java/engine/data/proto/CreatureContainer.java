@@ -1,13 +1,14 @@
 package engine.data.proto;
 
+import constants.PropertyKeys;
 import constants.ScriptConstants;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.variables.DataType;
-import org.w3c.dom.ls.LSOutput;
+import engine.data.variables.Variable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CreatureContainer extends Container {
 
@@ -33,8 +34,8 @@ public class CreatureContainer extends Container {
 			CreatureContainer creatureContainer = (CreatureContainer) container;
 
 			for (String stage : creatureContainer.getStages()) {
-				mergePropertyList(stage, ScriptConstants.KEY_DRIVES, creatureContainer.getDrivesStrict(stage));
-				mergePropertyList(stage, ScriptConstants.KEY_KNOWLEDGE, creatureContainer.getKnowledgeStrict(stage));
+				mergePropertyList(stage, PropertyKeys.DRIVES.key(), creatureContainer);
+				mergePropertyList(stage, PropertyKeys.KNOWLEDGE.key(), creatureContainer);
 			}
 		}
 	}
@@ -43,17 +44,17 @@ public class CreatureContainer extends Container {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public List<ContainerIdentifier> getKnowledge(String stage) {
-		return getPropertyList(stage, ScriptConstants.KEY_KNOWLEDGE).orElse(Collections.emptyList());
+	public List<Container> getKnowledge(String stage) {
+		return getProperty(stage, PropertyKeys.KNOWLEDGE.key()).map(Variable::getContainerList).orElse(Collections.emptyList());
 	}
-	private List<ContainerIdentifier> getKnowledgeStrict(String stage) {
-		return getPropertyListStrict(stage, ScriptConstants.KEY_KNOWLEDGE).orElse(Collections.emptyList());
+	private List<Container> getKnowledgeStrict(String stage) {
+		return getPropertyStrict(stage, PropertyKeys.KNOWLEDGE.key()).map(Variable::getContainerList).orElse(Collections.emptyList());
 	}
 
-	public List<ContainerIdentifier> getDrives(String stage) {
-		return getPropertyList(stage, ScriptConstants.KEY_DRIVES).orElse(Collections.emptyList());
+	public List<Container> getDrives(String stage) {
+		return getProperty(stage, PropertyKeys.DRIVES.key()).map(Variable::getContainerList).orElse(Collections.emptyList());
 	}
-	private List<ContainerIdentifier> getDrivesStrict(String stage) {
-		return getPropertyListStrict(stage, ScriptConstants.KEY_DRIVES).orElse(Collections.emptyList());
+	private List<Container> getDrivesStrict(String stage) {
+		return getPropertyStrict(stage, PropertyKeys.DRIVES.key()).map(Variable::getContainerList).orElse(Collections.emptyList());
 	}
 }

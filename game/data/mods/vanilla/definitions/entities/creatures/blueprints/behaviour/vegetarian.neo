@@ -10,7 +10,7 @@ Process: proEatVegetarian {
 		item->consume(self);
 	}
 
-	solutions {
+	solutions = {
 		proPickUpFood;
 		proBeg;
 	}
@@ -25,7 +25,7 @@ Process: proPickUpFood {
 		pickUp(self, getAttInRange("attVegetarian",self,1));
 	}
 
-	solutions {
+	solutions = {
 		proGatherFood;
 	}
 }
