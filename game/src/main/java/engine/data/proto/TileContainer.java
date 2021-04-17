@@ -1,19 +1,22 @@
 package engine.data.proto;
 
+import constants.PropertyKeys;
+import constants.ScriptConstants;
 import constants.TopologyConstants;
 import engine.data.variables.DataType;
+import engine.data.variables.Variable;
 import engine.graphics.renderer.color.RGBA;
 
 public class TileContainer extends Container {
 
 	// tile specific
-	private int preferredHeight = 0;
-	private int preferredHeightBlur = 0;
-
-	private RGBA topColor = TopologyConstants.TILE_DEFAULT_COLOR;
-	private RGBA topColorDeviation = new RGBA(0,0,0);
-	private RGBA sideColor = TopologyConstants.TILE_DEFAULT_COLOR.times(TopologyConstants.TILE_SIDE_COLOR_FACTOR);
-	private RGBA sideColorDeviation = new RGBA(0,0,0);
+//	private int preferredHeight = 0;
+//	private int preferredHeightBlur = 0;
+//
+//	private RGBA topColor = TopologyConstants.TILE_DEFAULT_COLOR;
+//	private RGBA topColorDeviation = new RGBA(0,0,0);
+//	private RGBA sideColor = TopologyConstants.TILE_DEFAULT_COLOR.times(TopologyConstants.TILE_SIDE_COLOR_FACTOR);
+//	private RGBA sideColorDeviation = new RGBA(0,0,0);
 
 	public TileContainer(String textID) {
 		super(textID, DataType.TILE);
@@ -24,44 +27,26 @@ public class TileContainer extends Container {
 	// ###################################################################################
 
 	public RGBA getTopColor() {
-		return topColor;
-	}
-	public void setTopColor(RGBA topColor) {
-		this.topColor = topColor;
+		return getProperty(null, PropertyKeys.TOP_COLOR.key()).map(Variable::getRGBA).orElse(new RGBA());
 	}
 
 	public RGBA getTopColorDeviation() {
-		return topColorDeviation;
-	}
-	public void setTopColorDeviation(RGBA topColorDeviation) {
-		this.topColorDeviation = topColorDeviation;
+		return getProperty(null, PropertyKeys.TOP_COLOR_DEVIATION.key()).map(Variable::getRGBA).orElse(new RGBA());
 	}
 
 	public RGBA getSideColor() {
-		return sideColor;
-	}
-	public void setSideColor(RGBA sideColor) {
-		this.sideColor = sideColor;
+		return getProperty(null, PropertyKeys.SIDE_COLOR.key()).map(Variable::getRGBA).orElse(new RGBA());
 	}
 
 	public RGBA getSideColorDeviation() {
-		return sideColorDeviation;
-	}
-	public void setSideColorDeviation(RGBA sideColorDeviation) {
-		this.sideColorDeviation = sideColorDeviation;
+		return getProperty(null, PropertyKeys.SIDE_COLOR_DEVIATION.key()).map(Variable::getRGBA).orElse(new RGBA());
 	}
 
 	public int getPreferredHeight() {
-		return preferredHeight;
-	}
-	public void setPreferredHeight(int preferredHeight) {
-		this.preferredHeight = preferredHeight;
+		return getProperty(ScriptConstants.DEFAULT_STAGE, PropertyKeys.PREFERRED_HEIGHT.key()).map(Variable::getInt).orElse(0);
 	}
 
 	public int getPreferredHeightBlur() {
-		return preferredHeightBlur;
-	}
-	public void setPreferredHeightBlur(int preferredHeightBlur) {
-		this.preferredHeightBlur = preferredHeightBlur;
+		return getProperty(ScriptConstants.DEFAULT_STAGE, PropertyKeys.PREFERRED_HEIGHT_BLUR.key()).map(Variable::getInt).orElse(0);
 	}
 }

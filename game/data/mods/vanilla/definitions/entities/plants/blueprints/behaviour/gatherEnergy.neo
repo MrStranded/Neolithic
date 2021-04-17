@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////// Photosynthesis
 
 Drive: driGatherEnergy {
-    solutions {
+    solutions = {
 		proPhotosynthesis;
 		proLeechFromHolder;
 	}
@@ -16,8 +16,7 @@ Drive: driGatherEnergy {
 Process: proPhotosynthesis {
 	Script: condition {
 		->ll = getLightLevel(self) + getTile(self).attLightLevel;
-		// print("ll: " + ll);
-        require(->ll > .sensitivity);
+        require(->ll > .lightSensitivity);
 		require(getStage(self) != "seed");
 		require(.attWater > 0);
 	}
@@ -30,7 +29,7 @@ Process: proPhotosynthesis {
 	
 		if (! chance(.bodyEfficiency / divisor)) { ..attWater--; }
 		
-		surplus = ->ll - .sensitivity;
+		surplus = ->ll - .lightSensitivity;
 		..attNutrition += min(surplus, ..bodyRestoration);
 	}
 

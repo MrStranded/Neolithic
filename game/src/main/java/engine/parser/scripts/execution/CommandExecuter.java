@@ -12,7 +12,6 @@ import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
-import engine.data.proto.ProtoAttribute;
 import engine.data.scripts.Script;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
@@ -329,25 +328,19 @@ public class CommandExecuter {
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list eachEntity ()
 			case EACH_ENTITY:
-				List<Variable> entities = new ArrayList<>(Data.getPublicInstanceList().size()/2);
-				for (Instance instance : Data.getInstanceQueue()) {
-					entities.add(new Variable(instance));
-				}
-				return new Variable(entities);
+				return new Variable(Data.getInstanceQueue().stream()
+						.map(Variable::new)
+						.collect(Collectors.toList()));
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list eachCreature ()
 			case EACH_CREATURE:
-				if (Data.getPublicInstanceList() == null) {
-					return new Variable(new ArrayList<Variable>(0));
-				}
-
-				List<Variable> creatures = new ArrayList<>(Data.getPublicInstanceList().size()/2);
-				for (Instance instance : Data.getInstanceQueue()) {
-					if (Data.getContainer(instance.getId()).filter(c -> c.getType() == DataType.CREATURE).isPresent()) {
-						creatures.add(new Variable(instance));
-					}
-				}
-				return new Variable(creatures);
+				return new Variable(Data.getInstanceQueue().stream()
+						.filter(instance ->
+								instance.getContainer()
+										.map(c -> c.getType() == DataType.CREATURE)
+										.orElse(false))
+						.map(Variable::new)
+						.collect(Collectors.toList()));
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int fitTiles ()
 			case FIT_TILES:
@@ -697,13 +690,14 @@ public class CommandExecuter {
 
 					checkValue(script, commandNode, tile, "target tile");
 
-					Vector3 sunPosition = Data.getSun().getGraphicalObject().getPosition();//.normalize();
-					Vector3 tilePosition = tile.getTileMesh().getNormal();
+					Vector3 sunPosition = Data.getSun().getNormalizedSunPosition();
+					// nudging it just a little bit in direction of sun to have more sunlight
+					Vector3 tilePosition = tile.getTileMesh().getNormal().plus(sunPosition.times(0.05));
 
-					double dotProduct = sunPosition.dot(tilePosition); // ranges from -sunPosition.length^2 to sunPosition.length^2
-					dotProduct = Math.signum(dotProduct) * dotProduct*dotProduct / sunPosition.lengthSquared();
+					double dotProduct = sunPosition.dot(tilePosition);
+					dotProduct = Math.max(0, dotProduct);
 
-					return new Variable(50d * (dotProduct + 1d)); // ranges from 0 to 100
+					return new Variable(100d * dotProduct); // ranges from 0 to 100
 				}
 				break;
 
@@ -769,7 +763,7 @@ public class CommandExecuter {
 					checkValue(script, commandNode, target, "target instance");
 
 					String value = target.getContainer()
-							.flatMap(c -> c.getPropertyString(target.getStage(), key))
+							.flatMap(c -> c.getProperty(target.getStage(), key).map(Variable::getString))
 							.orElse(null);
 
 					return new Variable(value);
@@ -777,24 +771,19 @@ public class CommandExecuter {
 				break;
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& List getPropertyList (Instance target, String key)
-			case GET_PROPERTY_List:
+			case GET_PROPERTY_LIST:
 				if (requireParameters(commandNode, 2)) {
 					Instance target = parameters[0].getInstance();
 					String key = parameters[1].getString();
 
 					checkValue(script, commandNode, target, "target instance");
 
-					List<ContainerIdentifier> value = target.getContainer()
-							.flatMap(c -> c.getPropertyList(target.getStage(), key))
-							.orElse(Collections.emptyList());
+					List<Variable> value = target.getContainer()
+							.map(c ->
+									c.getProperty(target.getStage(), key).map(Variable::getList).orElse(Collections.emptyList()) // property does not exist
+							).orElse(Collections.emptyList()); // container does not exist
 
-					List<Variable> containers = value.stream()
-							.map(id -> id.retrieve())
-							.filter(container -> container != null)
-							.map(container -> new Variable(container))
-							.collect(Collectors.toList());
-
-					return new Variable(containers);
+					return new Variable(value);
 				}
 				break;
 

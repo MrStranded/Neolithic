@@ -1,5 +1,5 @@
 Drive: driPlantReproduction {
-	solutions {
+	solutions = {
 		proPropagate;
 		proDropFruit;
 	}
@@ -29,7 +29,7 @@ Process: proDropFruit {
 		setDefaultStage(self);
 	}
 
-	solutions {
+	solutions = {
 		proGrowFruit;
 	}
 }

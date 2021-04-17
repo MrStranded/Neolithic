@@ -21,11 +21,8 @@ public class LogicThread extends Thread {
 
 	@Override
 	public void run() {
-		int lastSize = 100;
-		// each round (mainInstance to mainInstance) we construct the current public instance list from anew
-		List<Instance> instanceList = new ArrayList<>(lastSize);
-
 		long t = System.currentTimeMillis();
+
 		while (! GuiData.getRenderWindow().isClosed()) {
 			long currentTime = System.currentTimeMillis();
 
@@ -49,10 +46,6 @@ public class LogicThread extends Thread {
 
 						// special handling the main instance -> updating current public instance list
 						if (instance == Data.getMainInstance()) {
-							Data.setPublicInstanceList(instanceList);
-							instanceList = new ArrayList<>(lastSize * 5 / 4);
-							lastSize = 0;
-
 							if (GameOptions.plotEntities) { GuiData.getStatisticsWindow().tick(); }
 
 							if (GameOptions.stopAtNextTick) {
@@ -69,8 +62,6 @@ public class LogicThread extends Thread {
 								if (GameOptions.plotEntities) { GuiData.getStatisticsWindow().register(instance); }
 
 								Data.addInstanceToQueue(instance);
-								instanceList.add(instance);
-								lastSize++;
 							}
 						}
 					}

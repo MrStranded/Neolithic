@@ -1,6 +1,6 @@
 Entity: entSource {
     name = "Sweet water source";
-    mesh = "source.ply";
+    mesh = mesh "source.ply";
 
     attributes { attSourceStrength, 2, 1; }
 
@@ -26,9 +26,17 @@ Entity: entDeepSource {
 
 Entity: entWater {
     name = "Sweet water";
+	
+	attributes {
+		absorbHeat, 50;
+		emitHeat, 50;
+		heatConductivity, 1;
+	}
 
     Script: tick {
+        tile = getTile(self);
 		ll = getLightLevel(self) / 100;
+		
         if (chance(ll / 16)) {
             ..attWater--;
 			if (->c++ % 10 == 0) {
@@ -68,15 +76,19 @@ Entity: entWater {
 					}
                 }
             }
-
-            /*if (..attWater <= 0 && getInstance(entSource, getTile(self))) {
-                print("After calcing " + self + ", " + getTile(self) + " (" + getMemoryAddress(self) + ")");
-            }*/
         }
+		
+		if (tile.absorbHeat > 0 && .temperature > tile.temperature && chance(.emitHeat / 100)) {
+			tile..temperature += .heatConductivity;
+			..temperature -= .heatConductivity;
+		}
+		if (tile.emitHeat > 0 && .temperature < tile.temperature && chance(.absorbHeat / 100)) {
+			tile..temperature -= .heatConductivity;
+			..temperature += .heatConductivity;
+		}
 
         isInOcean = getHeight(self) + .attWater < 100;
         if (isInOcean) {
-            tile = getTile(self);
             if (chance(0.75)) { tile = getNeighbor(self, random(3)); }
 
             ->createCloud(tile, 5 + 20 * getLightLevel(self) / 100);
@@ -124,6 +136,7 @@ Entity: entWater {
     Script: createWater(target, water) {
         other = getOrCreate(entWater, getTile(target));
 
+		other..temperature = (other.attWater * other.temperature + water * .temperature) / (other.attWater + water);
         other..attWater += water;
         other->updateWaterHeight();
     }

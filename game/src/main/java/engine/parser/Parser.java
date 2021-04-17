@@ -130,18 +130,18 @@ public class Parser {
 				}
 
 				if (container.getType() == DataType.CREATURE) {
-					for (ContainerIdentifier process : ((CreatureContainer) container).getKnowledge(stage)) {
+					for (Container process : ((CreatureContainer) container).getKnowledge(stage)) {
 						System.out.println("   -> Pro: " + process);
 					}
-					for (ContainerIdentifier drive : ((CreatureContainer) container).getDrives(stage)) {
+					for (Container drive : ((CreatureContainer) container).getDrives(stage)) {
 						System.out.println("   -> Dri: " + drive);
 					}
 				} else if (container.getType() == DataType.DRIVE) {
-					for (ContainerIdentifier solution : ((DriveContainer) container).getSolutions(stage)) {
+					for (Container solution : ((DriveContainer) container).getSolutions(stage)) {
 						System.out.println("   -> Sol: " + solution);
 					}
 				} else if (container.getType() == DataType.PROCESS) {
-					for (ContainerIdentifier alternative : ((ProcessContainer) container).getSolutions(stage)) {
+					for (Container alternative : ((ProcessContainer) container).getSolutions(stage)) {
 						System.out.println("   -> Sol: " + alternative);
 					}
 				}

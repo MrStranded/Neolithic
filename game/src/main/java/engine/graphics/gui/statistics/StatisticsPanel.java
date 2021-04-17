@@ -1,12 +1,14 @@
 package engine.graphics.gui.statistics;
 
 import constants.GameConstants;
+import constants.PropertyKeys;
 import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
 import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
+import engine.data.variables.Variable;
 import engine.parser.utils.Logger;
 
 import javax.swing.*;
@@ -41,7 +43,7 @@ public class StatisticsPanel extends JPanel {
 
         // if plot is false, we do not plot the attributes
         boolean plot = instance.getContainer().map(
-                c -> c.getPropertyBoolean(instance.getStage(), ScriptConstants.KEY_PLOT).orElse(true)
+                c -> c.getProperty(instance.getStage(), PropertyKeys.PLOT.key()).map(Variable::getBoolean).orElse(true)
         ).orElse(Boolean.TRUE);
 
         if (! plot) { return; }
@@ -108,7 +110,7 @@ public class StatisticsPanel extends JPanel {
             return (value - lower) / d;
         }
 
-        return -1;
+        return 0;
     }
 
     private Color[] stageColors = {

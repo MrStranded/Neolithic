@@ -32,6 +32,8 @@ public enum DataType {
 
 	// composite types
 	LIST,
+	RGBA,
+	TREE,
 
 	// silly little small tailing semicolon - look how cute it is
 	;

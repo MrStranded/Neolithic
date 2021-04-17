@@ -7,7 +7,7 @@ Drive: driHording {
 		require(getFullAtt(self, "attNutrition") < .attGreed);
 	}
 
-	solutions {
+	solutions = {
 		proPickUpFruit;
 	}
 
@@ -37,7 +37,7 @@ Process: proBeg {
 		->patron = false;
 	}
 
-	solutions {
+	solutions = {
 		proSearchPatron;
 	}
 }

@@ -9,7 +9,7 @@ Drive: driNotSitOnShit {
 		require(getInstancesInRange(entShit, self, 0));
 	}
 
-	solutions {
+	solutions = {
 		proStroll;
 	}
 

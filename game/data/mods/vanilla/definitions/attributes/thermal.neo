@@ -1,19 +1,28 @@
 Attribute: temperature {
     name = "Temperature";
 	color = 220, 210, 110;
-	lower = 0;
+	lower = "-273";
 }
 
 Attribute: heatConductivity {
     name = "Heat Conductivity";
 	color = 110, 105, 55;
+}
+
+Attribute: absorbHeat {
+	name = "Absorb Heat";
+	color = 170, 100, 100;
+	bounds = 0, 100;
+}
+Attribute: emitHeat {
+	name = "Emit Heat";
+	color = 100, 100, 170;
 	bounds = 0, 100;
 }
 
-Attribute: albedo {
-	name = "Albedo";
-	color = 100, 220, 220;
+Attribute: heatSensitivity {
+    name = "Heat Sensitivity";
+    inherited;
+    color = 200, 150, 130;
 	bounds = 0, 100;
 }
-
-

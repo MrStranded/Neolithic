@@ -1,14 +1,15 @@
 // Matrix
 Attribute: bodyHealth {
     name = "Health";
-    color = 240, 60, 40;
+    color = 120, 30, 20;
 }
 
 // Potentiator
 Attribute: bodySize {
     name = "Size";
     color = 200, 190, 0;
-    bounds = 0, 100;
+    lower = 0;
+	upper = 100;
 }
 
 // Catalyst - Wheel of Fortune
@@ -47,5 +48,6 @@ Attribute: bodyEfficiency {
     name = "Efficiency";
     inherited;
     color = 30, 60, 190;
-	bounds = 0, 100;
+	lower = 0;
+	upper = 100;
 }

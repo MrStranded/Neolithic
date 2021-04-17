@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////// Grow
 
 Drive: driGrow {
-    solutions { proGrow; }
+    solutions = { proGrow; }
 
     Script: condition { return .bodySize < .bodyPreference; }
 
@@ -27,7 +27,7 @@ Process: proGrow {
 ///////////////////////////////////////////////////////////////////////////// Grow into tree
 
 Drive: driGrowIntoPlant {
-    solutions { proGrowIntoPlant; }
+    solutions = { proGrowIntoPlant; }
 
     Script: condition {
 		return length(getItems(getTile(self), getType(self))) < 100 / max(1, .bodyPreference);
@@ -57,61 +57,4 @@ Process: proGrowIntoPlant {
 		
 		forget(->age);
     }
-}
-
-///////////////////////////////////////////////////////////////////////////// Photosynthesis
-
-Drive: driGatherEnergy {
-    solutions {
-		proPhotosynthesis;
-		proLeechFromHolder;
-	}
-
-    Script: getWeight {
-		if (.bodyPreference > 0) { nutWeight = 90 * .attNutrition / .bodyPreference; }
-		if (.attWater > 0) { waterWeight = 90; }
-        return(waterWeight - nutWeight);
-    }
-}
-
-Process: proPhotosynthesis {
-	Script: condition {
-		->ll = getLightLevel(self) + getTile(self).attLightLevel;
-		// print("ll: " + ll);
-        require(->ll > 100 - .bodyEfficiency);
-		require(getStage(self) != "seed");
-		require(.attWater > 0);
-	}
-	
-	Script: process {
-		divisor = 100;
-		if (contains( getPropertyList(self, "prefers") , getType(getTile(self)) ) ) {
-			divisor = 50;
-		}
-	
-		if (! chance(.bodyEfficiency / divisor)) { ..attWater--; }
-		
-		surplus = ->ll + .bodyEfficiency - 100;
-		..attNutrition += min(surplus, ..bodyRestoration);
-	}
-
-	Script: discovery(actor) { // there is no way for an entity to learn photosynthesis
-		require(0);
-	}
-}
-
-///////////////////////////////////////////////////////////////////////////// Leeching
-
-Process: proLeechFromHolder {
-	Script: condition {
-		require(getHolder(self));
-		require(getHolder(self).attNutrition > 0);
-	}
-	
-	Script: process {
-		getHolder(self)..attNutrition--;
-		if (chance(.bodyEfficiency / 100)) {
-			self..attNutrition += .bodyRestoration;
-		}
-	}
 }

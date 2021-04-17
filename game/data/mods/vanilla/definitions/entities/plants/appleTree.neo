@@ -3,12 +3,12 @@
 Creature: cAppleTree inherits cPlant {
 
     name = "Apple tree";
-    mesh = "apple_tree_mature.ply";
+    mesh = mesh "apple_tree_mature.ply";
     fruit = "entApple";
 	
 	prefers = { tDirt, tGras }
 
-	knowledge {
+	knowledge = {
 		proDropFruit;
 		proGrowFruit;
 		proLeechFromHolder;
@@ -18,21 +18,22 @@ Creature: cAppleTree inherits cPlant {
 		attTicks, 3;
 		bodyEfficiency, 65, 10, 50%
 		bodyResiliance, 4;
+		heatSensitivity, 30, 10, 100%
 	}
 	
     Stage: seed {
 		plot = false;
 		
         name = "Apple seed";
-        mesh = "apple_seed.ply";
+        mesh = mesh "apple_seed.ply";
     }
 
     Stage: sapling {
-        mesh = "apple_tree_young.ply";
+        mesh = mesh "apple_tree_young.ply";
     }
 
     Stage: ripe {
-        mesh = "apple_tree_mature_ripe.ply";
+        mesh = mesh "apple_tree_mature_ripe.ply";
     }
 
 }
@@ -41,5 +42,5 @@ Creature: cAppleTree inherits cPlant {
 
 Entity: entApple inherits entFruit {
 	name = "Apple";
-	mesh = "apple_6x_loose.ply";
+	mesh = mesh "apple_6x_loose.ply";
 }

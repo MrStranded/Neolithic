@@ -10,7 +10,7 @@ Drive: driBuildCamp {
         return(200);
     }
 
-    solutions {
+    solutions = {
         proSearchHut;
         proBuildHut;
     }
@@ -46,7 +46,7 @@ Process: proBuildHut {
         ->camp->owner = self;
     }
 
-    solutions {
+    solutions = {
         proCollectBranch;
     }
 }

@@ -1,8 +1,10 @@
 package engine.data.proto;
 
+import constants.PropertyKeys;
 import constants.ScriptConstants;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.variables.DataType;
+import engine.data.variables.Variable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +20,7 @@ public class DriveContainer extends Container {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public List<ContainerIdentifier> getSolutions(String stage) {
-		return getPropertyList(stage, ScriptConstants.KEY_SOLUTIONS).orElse(Collections.emptyList());
+	public List<Container> getSolutions(String stage) {
+		return getProperty(stage, PropertyKeys.SOLUTIONS.key()).map(Variable::getContainerList).orElse(Collections.emptyList());
 	}
 }

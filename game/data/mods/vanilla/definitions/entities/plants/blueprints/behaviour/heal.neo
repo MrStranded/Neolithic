@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////// Heal
 
 Drive: driHeal {
-    solutions { proHeal; }
+    solutions = { proHeal; }
 
     Script: condition { return .bodyHealth < 0; }
 

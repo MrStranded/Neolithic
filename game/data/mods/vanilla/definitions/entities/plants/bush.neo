@@ -3,30 +3,31 @@
 Creature: cBush inherits cPlant {
 
     name = "Bush";
-    mesh = "bush_mature.ply";
+    mesh = mesh "bush_mature.ply";
 	prefers = { tDirt, tGras }
 
-	knowledge {
+	knowledge = {
 		proLeechFromHolder;
 		proPropagate;
 	}
 	
 	attributes {
 		bodyPreference, 35
-		bodyRestoration, 4, 1
+		bodyRestoration, 4
 		bodyResiliance, 2, 1, 0.25;
 		bodyEfficiency, 40
+		heatSensitivity, 40, 5, 50%
 	}
 	
     Stage: seed {
 		plot = false;
 		
         name = "Bush seed";
-        mesh = "apple_seed.ply";
+        mesh = mesh "apple_seed.ply";
     }
 
     Stage: sapling {
-        mesh = "bush_young.ply";
+        mesh = mesh "bush_young.ply";
     }
 
 }
@@ -34,11 +35,11 @@ Creature: cBush inherits cPlant {
 Creature: cBerryBush inherits cPlant {
 
     name = "Berry Bush";
-    mesh = "berry_bush_mature.ply";
+    mesh = mesh "berry_bush_mature.ply";
     fruit = "entBerry";
 	prefers = { tDirt, tGras }
 
-	knowledge {
+	knowledge = {
 		proDropFruit;
 		proGrowFruit;
 		proLeechFromHolder;
@@ -49,21 +50,23 @@ Creature: cBerryBush inherits cPlant {
 		bodyPreference, 30
 		bodyRestoration, 4, 1
 		bodyResiliance, 3, 1, 0.25;
+		lightSensitivity, 35, 10, 100%
+		heatSensitivity, 15, 10, 100%
 	}
 	
     Stage: seed {
 		plot = false;
 		
         name = "Bush seed";
-        mesh = "apple_seed.ply";
+        mesh = mesh "apple_seed.ply";
     }
 
     Stage: sapling {
-        mesh = "berry_bush_young.ply";
+        mesh = mesh "berry_bush_young.ply";
     }
 
     Stage: ripe {
-        mesh = "berry_bush_mature_ripe.ply";
+        mesh = mesh "berry_bush_mature_ripe.ply";
     }
 
 }
@@ -72,5 +75,5 @@ Creature: cBerryBush inherits cPlant {
 
 Entity: entBerry inherits entFruit {
 	name = "Berry";
-	mesh = "berry01.ply";
+	mesh = mesh "berry01.ply";
 }

@@ -2,16 +2,20 @@ package engine.data.variables;
 
 import engine.data.Data;
 import engine.data.IDInterface;
+import engine.data.identifiers.ContainerIdentifier;
 import engine.data.scripts.Script;
 import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
 import engine.data.planetary.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
+import engine.data.structures.trees.binary.BinaryTree;
+import engine.graphics.renderer.color.RGBA;
 import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Variable implements IDInterface {
 
@@ -73,6 +77,10 @@ public class Variable implements IDInterface {
 		this.type = DataType.CONTAINER;
 		this.value = value;
 	}
+	public Variable(ContainerIdentifier value) {
+		this.type = DataType.CONTAINER;
+		this.value = value;
+	}
 
 	public Variable(Attribute value) {
 		this.type = DataType.ATTRIBUTE;
@@ -86,6 +94,16 @@ public class Variable implements IDInterface {
 
 	public Variable(List<Variable> value) {
 		this.type = DataType.LIST;
+		this.value = value;
+	}
+
+	public Variable(RGBA value) {
+		this.type = DataType.RGBA;
+		this.value = value;
+	}
+
+	public Variable(BinaryTree value) {
+		this.type = DataType.TREE;
 		this.value = value;
 	}
 
@@ -184,6 +202,22 @@ public class Variable implements IDInterface {
 		return type;
 	}
 
+	// ----------------------------------------------- boolean
+	public boolean getBoolean() {
+		if (type == DataType.NUMBER) {
+			return (Double) value != 0;
+		} else if (type == DataType.ATTRIBUTE) {
+			return ((Attribute) value).getValue() != 0;
+		} else if (type == DataType.LIST) {
+			return ! ((List<Variable>) value).isEmpty();
+		}
+		return false;
+	}
+	public void setBoolean(boolean v) {
+		type = DataType.NUMBER;
+		value = v;
+	}
+
 	// ----------------------------------------------- double
 	public double getDouble() {
 		if (type == DataType.NUMBER) {
@@ -220,7 +254,11 @@ public class Variable implements IDInterface {
 
 	public int getContainerId() {
 		if (type == DataType.CONTAINER) {
-			return Data.getContainerID(((Container) value).getTextID());
+			if (value instanceof ContainerIdentifier) {
+				return Data.getContainerID(((ContainerIdentifier) value).retrieve().getTextID());
+			} else {
+				return Data.getContainerID(((Container) value).getTextID());
+			}
 		} else if (type == DataType.STRING) {
 			return Data.getContainerID((String) value);
 		} else if (type == DataType.NUMBER){
@@ -325,7 +363,11 @@ public class Variable implements IDInterface {
 	// ----------------------------------------------- container
 	public Container getContainer() {
 		if (type == DataType.CONTAINER) {
-			return (Container) value;
+			if (value instanceof ContainerIdentifier) {
+				return ((ContainerIdentifier) value).retrieve();
+			} else {
+				return (Container) value;
+			}
 		} else if (type == DataType.STRING) {
 			return Data.getContainer((String) value).orElse(null);
 		}
@@ -357,6 +399,37 @@ public class Variable implements IDInterface {
 	}
 	public void setList(List<Variable> v) {
 		type = DataType.LIST;
+		value = v;
+	}
+
+	public List<Container> getContainerList() {
+		if (type == DataType.LIST) {
+			return ((List<Variable>) value).stream().map(Variable::getContainer).collect(Collectors.toList());
+		}
+		return null;
+	}
+
+	// ----------------------------------------------- rgba
+	public RGBA getRGBA() {
+		if (type == DataType.RGBA) {
+			return (RGBA) value;
+		}
+		return null;
+	}
+	public void setRGBA(RGBA v) {
+		type = DataType.RGBA;
+		value = v;
+	}
+
+	// ----------------------------------------------- tree
+	public BinaryTree getBinaryTree() {
+		if (type == DataType.TREE) {
+			return (BinaryTree) value;
+		}
+		return null;
+	}
+	public void setBinaryTree(BinaryTree v) {
+		type = DataType.TREE;
 		value = v;
 	}
 

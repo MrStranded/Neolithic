@@ -1,5 +1,6 @@
 package engine.data.proto;
 
+import constants.PropertyKeys;
 import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.IDInterface;
@@ -10,11 +11,15 @@ import engine.data.scripts.Script;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
+import engine.data.variables.Variable;
 import engine.graphics.objects.MeshHub;
+import engine.graphics.renderer.color.RGBA;
+import engine.parser.constants.TokenConstants;
 import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The container class holds values that apply to several instances of a certain type (defined by their id).
@@ -66,9 +71,8 @@ public class Container {
 	public void finalizeInheritance() {
 		if (hasInherited) { return; }
 
-		for (ContainerIdentifier containerIdentifier
-				: getPropertyList(null, ScriptConstants.KEY_INHERITED_CONATINERS).orElse(Collections.emptyList())) {
-			Container container = containerIdentifier.retrieve();
+		for (Container container
+				: getProperty(null, PropertyKeys.INHERITED_CONTAINERS.key()).map(Variable::getContainerList).orElse(Collections.emptyList())) {
 			if (container != null) {
 				container.finalizeInheritance();
 
@@ -159,124 +163,89 @@ public class Container {
 		return stages.computeIfAbsent(stage, key -> new StageScope());
 	}
 
-	public void setProperty(String stage, String key, Object value) {
+	public void setProperty(String stage, String key, Variable value) {
 		getStage(stage).set(key, value);
 	}
 
-	public Optional<String> getPropertyString(String stage, String key) {
-		return getStage(stage).getString(key)
-				.or(() -> getDefaultStage().getString(key));
+	public Optional<Variable> getProperty(String stage, String key) {
+		return getStage(stage).get(key)
+				.or(() -> getDefaultStage().get(key));
 	}
-	public Optional<Boolean> getPropertyBoolean(String stage, String key) {
-		return getStage(stage).getBoolean(key)
-				.or(() -> getDefaultStage().getBoolean(key));
+	public Optional<Variable> getPropertyStrict(String stage, String key) {
+		return getStage(stage).get(key);
 	}
-	public Optional<Integer> getPropertyInt(String stage, String key) {
-		return getStage(stage).getInt(key)
-				.or(() -> getDefaultStage().getInt(key));
-	}
-	public Optional<Double> getPropertyDouble(String stage, String key) {
-		return getStage(stage).getDouble(key)
-				.or(() -> getDefaultStage().getDouble(key));
-	}
-	public Optional<List<ContainerIdentifier>> getPropertyList(String stage, String key) {
-		return getStage(stage).getIdList(key)
-				.or(() -> getDefaultStage().getIdList(key));
-	}
-	public Optional<List<ContainerIdentifier>> getPropertyListStrict(String stage, String key) {
-		return getStage(stage).getIdList(key);
-	}
-	public List<ContainerIdentifier> getOrCreatePropertyList(String stage, String key) {
+
+	public List<Variable> getOrCreatePropertyList(String stage, String key) {
 		// get
-		Optional<List<ContainerIdentifier>> list = getStage(stage).getIdList(key);
-		if (list.isPresent()) { return list.get(); }
+		Optional<Variable> list = getStage(stage).get(key);
+		if (list.isPresent() && list.get().getType() == DataType.LIST) { return list.get().getList(); }
 
 		// or create
-		List<ContainerIdentifier> l = new ArrayList<ContainerIdentifier>(4);
-		getStage(stage).set(key, l);
-		return l;
+		List<Variable> newList = new ArrayList<>();
+		getStage(stage).set(key, new Variable(newList));
+		return newList;
 	}
-	public void mergePropertyList(String stage, String key, List<ContainerIdentifier> list) {
-		if (list == null || list.size() == 0) { return; }
+	public void mergePropertyList(String stage, String key, Container source) {
+		if (source == null) { return; }
 
-		getOrCreatePropertyList(stage, key).addAll(list);
-	}
-	private boolean propertyListIsInclusive(String stage, String key) {
-		return getStage(stage).getBoolean(key + "Inclusivity").orElse(true);
-	}
-	public void setPropertyListInclusivity(String stage, String key, boolean isInclusive) {
-		getStage(stage).set(key + "Inclusivity", isInclusive);
+		source.getPropertyStrict(stage, key)
+				.filter(variable -> variable.getType() == DataType.LIST)
+				.ifPresent(variable -> getOrCreatePropertyList(stage, key).addAll(variable.getList())
+		);
 	}
 
 	public BinaryTree<Attribute> getAttributes(String stage) {
-		BinaryTree<Attribute> result = getStage(stage).getAttributes();
-		if (result == null) { result = getDefaultStage().getAttributes(); }
+		BinaryTree<Attribute> result = getPropertyStrict(stage, ScriptConstants.KEY_ATTRIBUTES).map(Variable::getBinaryTree).orElse(null);
 		if (result == null) {
 			result = new BinaryTree<>();
-			getStage(null).set(ScriptConstants.KEY_ATTRIBUTES, result);
+			getStage(null).set(ScriptConstants.KEY_ATTRIBUTES, new Variable(result));
 		}
 		return result;
 	}
 	public Attribute getAttribute(String stage, int attributeID) {
-		Attribute result = getStage(stage).getAttribute(attributeID);
-		if (result == null) { result = getDefaultStage().getAttribute(attributeID); }
+		Attribute result = getAttributes(stage).get(attributeID);
+		if (result == null) { result = getAttributes(null).get(attributeID); }
 		return result;
 	}
-	public int getAttributeValue(int attributeID) {
-		Attribute attribute = getAttribute(null, attributeID);
+	public int getAttributeValue(String stage, int attributeID) {
+		Attribute attribute = getAttribute(stage, attributeID);
 		return attribute != null? attribute.getValue() : 0;
 	}
 	public void addAttribute(String stage, Attribute attribute) {
 		if (attribute == null) { return; }
-
-		BinaryTree<Attribute> attributes = getStage(stage).getAttributes();
-		if (attributes == null) {
-			attributes = new BinaryTree<>();
-			getStage(stage).set(ScriptConstants.KEY_ATTRIBUTES, attributes);
-		}
-
+		BinaryTree<Attribute> attributes = getAttributes(stage);
 		attributes.insert(attribute);
 	}
 
 	public BinaryTree<Script> getScripts(String stage) {
-		BinaryTree<Script> result = getStage(stage).getScripts();
-//		if (result == null) { result = getDefaultStage().getScripts(); }
+		BinaryTree<Script> result = getPropertyStrict(stage, ScriptConstants.KEY_SCRIPTS).map(Variable::getBinaryTree).orElse(null);
 		if (result == null) {
 			result = new BinaryTree<>();
-			getStage(stage).set(ScriptConstants.KEY_SCIPTS, result);
+			getStage(stage).set(ScriptConstants.KEY_SCRIPTS, new Variable(result));
 		}
 		return result;
 	}
 	public Script getScript(String stage, String textID) {
 		int id = StringConverter.toID(textID);
-		Script result = getStage(stage).getScript(id);
-		if (result == null) { result = getDefaultStage().getScript(id); }
+		Script result = getScripts(stage).get(id);
+		if (result == null) { result = getScripts(null).get(id); }
 		return result;
 	}
 	public Script getScriptStrict(String stage, String textID) {
 		int id = StringConverter.toID(textID);
-		return getStage(stage).getScript(id);
+		return getScripts(stage).get(id);
 	}
 	public void addScript(String stage, Script script) {
 		if (script == null) { return; }
-
-		BinaryTree<Script> scripts = getStage(stage).getScripts();
-		if (scripts == null) {
-			scripts = new BinaryTree<>();
-			getStage(stage).set(ScriptConstants.KEY_SCIPTS, scripts);
-		}
-
+		BinaryTree<Script> scripts = getScripts(stage);
 		scripts.insert(script);
 	}
 
-//	public void addInheritance(String textID) {
-//		getDefaultStage().getIdList(ScriptConstants.KEY_INHERITED_CONATINERS).add(new ContainerIdentifier(textID));
-//	}
-	public List<ContainerIdentifier> getInheritedContainers() {
-		return getDefaultStage().getIdList(ScriptConstants.KEY_INHERITED_CONATINERS).orElse(Collections.emptyList());
-	}
 	public void setInheritedContainers(List<ContainerIdentifier> inheritedContainers) {
-		getDefaultStage().set(ScriptConstants.KEY_INHERITED_CONATINERS, inheritedContainers);
+		getDefaultStage().set(
+				PropertyKeys.INHERITED_CONTAINERS.key(),
+				new Variable(inheritedContainers.stream().map(Variable::new).collect(Collectors.toList()))
+		);
 	}
 
 	// ###################################################################################
@@ -284,22 +253,31 @@ public class Container {
 	// ###################################################################################
 
 	public String getName() {
-		return getPropertyString(null, ScriptConstants.KEY_NAME).orElse(textID);
+		return getProperty(null, PropertyKeys.NAME.key()).map(Variable::getString).orElse(textID);
 	}
 
 	public String getMeshPath(String stage) {
-		return getPropertyString(stage, ScriptConstants.KEY_MESH).orElse(null);
+		return getProperty(null, PropertyKeys.MESH.key()).map(Variable::getString).orElse(null);
 	}
 
 	public double getOpacity() {
-		return getPropertyDouble(null, ScriptConstants.KEY_OPACITY).orElse(1d);
+		return getProperty(null, PropertyKeys.OPACITY.key()).map(Variable::getDouble).orElse(1d);
 	}
 
 	public boolean isRunTickScripts() {
-		return getPropertyBoolean(null, ScriptConstants.KEY_RUN_TICK_SCRIPT).orElse(true);
+		return getProperty(null, PropertyKeys.RUN_TICK_SCRIPT.key()).map(Variable::getBoolean).orElse(true);
 	}
-	public void setRunTickScripts(boolean runTickScripts) {
-		setProperty(null, ScriptConstants.KEY_RUN_TICK_SCRIPT, runTickScripts);
+
+	// ###################################################################################
+	// ################################ Debugging ########################################
+	// ###################################################################################
+
+	public void printProperties() {
+		System.out.println("Container: " + getName());
+		stages.keySet().forEach(stage -> {
+			System.out.println("   Stage: " + stage);
+			getStage(stage).printProperties("      ");
+		});
 	}
 
 }

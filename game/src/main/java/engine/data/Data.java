@@ -22,6 +22,7 @@ import engine.parser.utils.Logger;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 public class Data {
 
@@ -44,7 +45,7 @@ public class Data {
 
 	private static HashMap<Integer, String> idToTextId;
 
-	private static Queue<Instance> instanceQueue;
+	private static ConcurrentLinkedQueue<Instance> instanceQueue;
 	private static Queue<ScriptRun> scriptRuns;
 	private static boolean updatePlanetMesh = true;
 
@@ -52,7 +53,7 @@ public class Data {
 	 * The publicInstanceList is used to access the instances in list form without causing a ConcurrentModificationException.
 	 * The list is regularly set by the logic thread.
 	 */
-	private static List<Instance> publicInstanceList;
+//	private static List<Instance> publicInstanceList;
 
 	// ###################################################################################
 	// ################################ Initialization ###################################
@@ -105,7 +106,7 @@ public class Data {
 	}
 
 	private static void prepareInstances() {
-		instanceQueue = new LinkedList<>();//new ConcurrentLinkedQueue<>();
+		instanceQueue = new ConcurrentLinkedQueue<>();
 		scriptRuns = new LinkedList<>();
 	}
 
@@ -213,11 +214,11 @@ public class Data {
 		List<Instance> list = new ArrayList<>();
 
 		try {
-			for (Instance instance : publicInstanceList) {
-				if (instance.getId() == id) {
-					list.add(instance);
-				}
-			}
+			list.addAll(
+					instanceQueue.stream()
+							.filter(i -> i.getId() == id)
+							.collect(Collectors.toList())
+			);
 		} catch (Exception e) {
 			Logger.error("Concurrent modification during 'Data.getAllInstancesWithID()'");
 		}
@@ -358,17 +359,15 @@ public class Data {
 	 * This method actualizes the positions of all the instances on the planet with the (possibly) new facePart.getMid()s.
 	 */
 	public static void updateInstancePositions() {
-		if (publicInstanceList != null) {
-			for (Instance instance : publicInstanceList) {
-				Tile tile = instance.getPosition();
-				if (tile != null && tile.getTileMesh().hasChanged()) {
+		instanceQueue.forEach(instance -> {
+			Tile tile = instance.getPosition();
+			if (tile != null && tile.getTileMesh().hasChanged()) {
 
-					Optional<Container> container = Data.getContainer(instance.getId());
-					container.filter(c -> c.getType() != DataType.TILE)
-							.ifPresent(c -> instance.actualizeObjectPosition());
-				}
+				Optional<Container> container = Data.getContainer(instance.getId());
+				container.filter(c -> c.getType() != DataType.TILE)
+						.ifPresent(c -> instance.actualizeObjectPosition());
 			}
-		}
+		});
 	}
 
     /**
@@ -408,17 +407,6 @@ public class Data {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public static List<Instance> getPublicInstanceList() {
-		return publicInstanceList;
-	}
-	public static void setPublicInstanceList(List<Instance> publicInstanceList) {
-    	Data.publicInstanceList = publicInstanceList;
-	}
-
-	/**
-	 * Should only be accessed in logic thread!
-	 * @return internal instance queue
-	 */
 	public static Queue<Instance> getInstanceQueue() { return instanceQueue; }
 
 	public static boolean shouldUpdatePlanetMesh() {

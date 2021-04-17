@@ -1,6 +1,6 @@
 Entity: entHut {
     name = "Hut";
-    mesh = "hut01.ply";
+    mesh = mesh "hut01.ply";
 
     attributes {
         attSize, 60;
@@ -29,7 +29,7 @@ Entity: entHut {
 
 Entity: entBranch {
     name = "Branch";
-    mesh = "branch01.ply";
+    mesh = mesh "branch01.ply";
 
     attributes {
         attMatureAge, 100;

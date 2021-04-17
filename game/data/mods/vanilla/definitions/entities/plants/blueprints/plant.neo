@@ -1,6 +1,6 @@
 Creature: cPlant {
 
-	drives {
+	drives = {
 		driSoak;
 		driGatherEnergy;
 		driGrow;
@@ -9,7 +9,7 @@ Creature: cPlant {
 		driPlantReproduction;
 	}
 
-	knowledge {
+	knowledge = {
 		proSoak; proSoakFromAir;
 		proPhotosynthesis;
 		proGrow;
@@ -22,6 +22,8 @@ Creature: cPlant {
 		bodyPreference, 50, 5, 25%;
 		bodyRestoration, 3, 1
 		bodyEfficiency, 60, 5, 50%
+		lightSensitivity, 42, 20, 100%
+		heatSensitivity, 25, 10, 100%
 		bodyResiliance, 3, 1, 0.25;
 	}
 	
@@ -34,13 +36,6 @@ Creature: cPlant {
 		
 		// aging
 	    if (chance(.bodyEfficiency / 100)) { ..bodyExperience++; }
-		
-		// oversugared
-		surplus = .attNutrition - (.bodySize * .bodyRestoration + .bodyResiliance);
-		if (surplus > 0 && ! ->oversugared) {
-			..attNutrition -= .bodyResiliance;
-			->oversugared = addEffect(self, "Oversugared", .attTicks * surplus, ["bodyEfficiency", -1]);
-		}
 
 		// age death
 		effectiveRestistance = max(1, (.bodyPreference * .bodyResiliance) + .bodyHealth);
@@ -59,6 +54,12 @@ Creature: cPlant {
 			}
         }
 		
+		// too cold or too hot
+		t = getTile(self).temperature;
+		if (t < .heatSensitivity) {
+			..bodyHealth--;
+		}
+		
 		// too many bushes
 		if (.bodyExperience > .bodyPreference * .bodyResiliance) {
 			..bodyHealth--;
@@ -76,7 +77,7 @@ Creature: cPlant {
 	}
 	
 	Stage: ripe {
-		drives {
+		drives = {
 			driSoak;
 			driGatherEnergy;
 			driGrow;
@@ -87,7 +88,7 @@ Creature: cPlant {
 	}
 	
 	Stage: sapling {	
-		drives {
+		drives = {
 			driSoak;
 			driGatherEnergy;
 			driGrow;
@@ -105,8 +106,8 @@ Creature: cPlant {
 	}
 	
     Stage: seed {
-        drives { driGrowIntoPlant; driGatherEnergy; }
-        knowledge { proGrowIntoPlant; proLeechFromHolder; }
+        drives = { driGrowIntoPlant; driGatherEnergy; }
+        knowledge = { proGrowIntoPlant; proLeechFromHolder; }
 		
 		attributes {
 			bodySize, 1;

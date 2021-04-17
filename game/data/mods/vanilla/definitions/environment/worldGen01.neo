@@ -17,7 +17,7 @@ WorldGen: genContinental {
 		// }
 
 		if (true) {
-			islands = random(1, 4);
+			islands = 1;//random(1, 4);
 			tiles = eachTile();
 			for (i = 0; i < islands; i++) {
 				destroy(create(formIsland, random(tiles)));
@@ -33,7 +33,7 @@ WorldGen: genContinental {
 			}
 		}
 
-		fitTiles(tSand, tDirt, tStone);
+		fitTiles(tSand, tDirt, tStone, tOceanFloor);
 	    updatePlanetMesh();
 	}
 }

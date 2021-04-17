@@ -112,7 +112,7 @@ float calculateShadow(vec4 position) {
         vec3 projectionCoordinates = position.xyz * vec3(0.5, 0.5, 0.5) + vec3(0.5, 0.5, 0.5);
 
         // ---------------------------------------------- calculating average shadow value for pixel with blur
-        // checkin whether in shadow (>=) or ligth (<) with small epsilon to prevent shadow acne
+        // checkin whether in shadow or ligth with small epsilon to prevent shadow acne
         float shadow = 0.0;
         int blurSize = 1;
         for (int x=-blurSize; x<=blurSize; x++) {

@@ -28,7 +28,7 @@ Drive: driSleep {
 		require(.attHealth > 0);
 	}
 
-	solutions {
+	solutions = {
 		proSleep;
 	}
 
@@ -57,7 +57,7 @@ Process: proSleep {
 	    ..attSleeping = 0;
 	}
 
-	solutions {
+	solutions = {
 	    proGoToCamp;
 	}
 }

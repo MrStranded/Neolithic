@@ -1,6 +1,6 @@
 // Great Way - Alchemist
-Attribute: sensitivity {
-    name = "Sensitivity";
+Attribute: lightSensitivity {
+    name = "Light Sensitivity";
     inherited;
     color = 130, 200, 150;
 	bounds = 0, 100;

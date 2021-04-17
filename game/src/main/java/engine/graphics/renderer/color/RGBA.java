@@ -149,7 +149,7 @@ public class RGBA {
 	 * @return color in the java.awt.Color format
 	 */
 	public Color toColor() throws IllegalArgumentException {
-		return new Color((int) (255*r),(int) (255*g),(int) (255*b),(int) (255*a));
+		return new Color((int) (255d*r),(int) (255d*g),(int) (255d*b),(int) (255d*a));
 	}
 
 	// ###################################################################################
