@@ -199,8 +199,8 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
 
         g.setColor(COLOR_PRIMARY);
 
-        g.drawString(container.get().getName() + " - " + container.get().getType(), xPos, yPos + 12);
-        if (container.get().isRunTickScripts()) {
+        g.drawString(instance.getName() + " - " + container.get().getType(), xPos, yPos + 12);
+        if (container.get().isRunTickScripts(instance.getStage())) {
             g.drawString("(" + instance.getDelayUntilNextTick() + ")", xPos + 200, yPos + 12);
         }
         yPos += 20;
@@ -258,7 +258,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
 
                 for (Container drive : creatureContainer.getDrives(instance.getStage())) {
                     if (drive != null) {
-                        g.drawString(drive.getName(), xPos + 10, yPos + 12);
+                        g.drawString(drive.getName(null), xPos + 10, yPos + 12);
 
                         Variable condition = SelectedInstance.instance().getDriveCondition(drive.getTextID());
 
@@ -280,7 +280,7 @@ public class InstanceDetailPanel extends JPanel implements MouseListener {
 
                 for (Container process : creatureContainer.getKnowledge(instance.getStage())) {
                     if (process != null) {
-                        g.drawString(process.getName(), xPos + 10, yPos + 12);
+                        g.drawString(process.getName(null), xPos + 10, yPos + 12);
                         yPos += 20;
                     }
                 }

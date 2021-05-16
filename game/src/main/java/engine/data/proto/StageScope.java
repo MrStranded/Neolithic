@@ -27,61 +27,13 @@ public class StageScope {
         return Optional.ofNullable(valueMap.get(key));
     }
 
-//    // --------------------------------------------------------- Specific
-//
-//    public Optional<Boolean> getBoolean(String key) {
-//        Object value = get(key);
-//        return value instanceof Boolean ? Optional.of((Boolean) value) : Optional.empty();
-//    }
-//
-//    public Optional<Integer> getInt(String key) {
-//        Object value = get(key);
-//        return value instanceof Integer ? Optional.of((Integer) value) : Optional.empty();
-//    }
-//
-//    public Optional<Double> getDouble(String key) {
-//        Object value = get(key);
-//        return value instanceof Double ? Optional.of((Double) value) : Optional.empty();
-//    }
-//
-//    public Optional<String> getString(String key) {
-//        Object value = get(key);
-//        return value instanceof String ? Optional.of((String) value) : Optional.empty();
-//    }
-//
-//    public Optional<RGBA> getRGBA(String key) {
-//        Object value = get(key);
-//        return value instanceof RGBA ? Optional.of((RGBA) value) : Optional.empty();
-//    }
-//
-//    public Optional<List<ContainerIdentifier>> getIdList(String key) {
-//        Object value = get(key);
-//        return value instanceof List ? Optional.of((List) value) : Optional.empty();
-//    }
-//
-//
-//    public Attribute getAttribute(int id) {
-//        BinaryTree<Attribute> attributes = getAttributes();
-//        return attributes != null ? attributes.get(id) :null;
-//    }
-//
-//    public BinaryTree<Script> getScripts() {
-//        Object value = get(ScriptConstants.KEY_SCRIPTS);
-//        return value instanceof BinaryTree ? (BinaryTree) value : null;
-//    }
-//
-//    public Script getScript(int id) {
-//        BinaryTree<Script> scripts = getScripts();
-//        return scripts != null ? scripts.get(id) : null;
-//    }
-
     // ###################################################################################
     // ################################ Debugging ########################################
     // ###################################################################################
 
     public void printProperties(String prefix) {
         valueMap.keySet().forEach(key -> {
-            System.out.println(prefix + key + ": " + get(key));
+            System.out.println(prefix + key + ": " + get(key).map(Variable::toString).orElse("EMPTY"));
         });
     }
 

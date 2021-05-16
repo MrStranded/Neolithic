@@ -22,12 +22,7 @@ import java.util.List;
 
 public class Parser {
 
-	private double progress = 0; // ranging from 0 to 1
-
 	private List<String> mods;
-
-	public Parser() {
-	}
 
 	// ###################################################################################
 	// ################################ Load Mods ########################################
@@ -42,13 +37,14 @@ public class Parser {
 		}
 
 		Data.prepareForGame();
+		debug();
 	}
 
 	private void loadMod(String mod) {
 		File definitionsFolder = new File(ResourcePathConstants.MOD_FOLDER + mod + "/" + ResourcePathConstants.DEFINITIONS_FOLDER);
 
 		if (!definitionsFolder.exists() || !definitionsFolder.isDirectory()) {
-			Logger.error("Mod '" + mod + "' does not have a 'definitions' folder!");
+			Logger.error("Mod '" + mod + "' does not have a '" + ResourcePathConstants.DEFINITIONS_FOLDER + "' folder!");
 			return;
 		}
 
@@ -76,30 +72,18 @@ public class Parser {
 		try {
 			List<Token> tokens = Tokenizer.tokenize(new FileReader(file));
 
-			try {
-				Interpreter interpreter = new Interpreter(tokens, currentMod, file.getName());
-				interpreter.interpret();
-			} catch (Exception e) {
-				Logger.error("Parsing error in file: " + file.getName());
-				e.printStackTrace();
-			}
+			Interpreter interpreter = new Interpreter(tokens, currentMod, file.getName());
+			interpreter.interpret();
 
 		} catch (FileNotFoundException e) {
+			Logger.error("Could not find file: " + file.getPath());
+			e.printStackTrace();
+
+		} catch (Exception e) {
+			Logger.error("Parsing error in file: " + file.getName());
 			e.printStackTrace();
 		}
 	}
-
-	// ###################################################################################
-	// ################################ Parse ############################################
-	// ###################################################################################
-
-	public void parse() {
-
-	}
-
-	// ###################################################################################
-	// ################################ Getters and Setters ##############################
-	// ###################################################################################
 
 	// ###################################################################################
 	// ################################ Debugging ########################################
@@ -116,8 +100,13 @@ public class Parser {
 		i = 0;
 		Container container;
 		while ((container = Data.getContainer(i++).orElse(null)) != null) {
-			System.out.println(container.getType() + ": " + container.getTextID() + ", " + container.getName());
+			System.out.println("______________________________________________________________________");
+			System.out.println(">>>>>>>>> " + container.getType() + ": " + container.getTextID() + ", " + container.getName(null));
 
+			System.out.println(">>> Properties:");
+			container.printProperties();
+
+			System.out.println(">>> Stages:");
 			for (String stage : container.getStages()) {
 				System.out.println("Stage: " + stage);
 

@@ -6,7 +6,7 @@ Creature: cAppleTree inherits cPlant {
     mesh = mesh "apple_tree_mature.ply";
     fruit = "entApple";
 	
-	prefers = { tDirt, tGras }
+	prefers = { tDirt; tGras }
 
 	knowledge = {
 		proDropFruit;
