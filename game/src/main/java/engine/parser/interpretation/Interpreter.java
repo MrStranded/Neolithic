@@ -15,6 +15,7 @@ import engine.data.variables.Variable;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.renderer.color.RGBA;
 import engine.parser.constants.TokenConstants;
+import engine.parser.constants.TokenType;
 import engine.parser.scripts.ASTBuilder;
 import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
@@ -183,6 +184,11 @@ public class Interpreter {
 		Token next;
 		while (!TokenConstants.CURLY_BRACKETS_CLOSE.equals(next = consume())) {
 			voluntaryConsume(TokenConstants.SEMICOLON);
+
+			if (next.getType() != TokenType.LITERAL && next.getType() != TokenType.IDENTIFIER) {
+				Logger.parsingError("Disallowed token type", next, this);
+				continue;
+			}
 
 			if (next.getValue() != null && next.getValue().length() > 0) {
 				result.add(new ContainerIdentifier(next.getValue()));

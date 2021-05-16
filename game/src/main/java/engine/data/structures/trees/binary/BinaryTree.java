@@ -428,10 +428,10 @@ public class BinaryTree<T extends IDInterface> {
 
 	private String subString(BinaryTreeNode node) {
 		if (node == null) {
-			return ".";
+			return "";
 		} else {
 			if (node.getLeft() != null || node.getRight() != null) {
-				return node.getValue().getId() + ": (" + subString(node.getLeft()) + " , " + subString(node.getRight()) + ")";
+				return  "(" + subString(node.getLeft()) + "> " + node.getValue().getId() + " <" + subString(node.getRight()) + ")";
 			} else {
 				return String.valueOf(node.getValue().getId());
 			}

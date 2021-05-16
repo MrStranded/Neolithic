@@ -282,7 +282,14 @@ public class Variable implements IDInterface {
 			case STRING:
 				return (String) value;
 			case CONTAINER:
-				return value != null ? ((Container) value).getName() : "(NULL CONTAINER)";
+				if (value == null) { return "(NULL CONTAINER)"; }
+				if (value instanceof ContainerIdentifier) {
+					Container container = ((ContainerIdentifier) value).retrieve();
+					if (container == null) { return "(CONTAINER IDENTIFIER IS NOT VALID: " + value + ")"; }
+					return container.getName(null);
+				}
+				if (value instanceof Container) { return ((Container) value).getName(null); }
+				return "(UNEXPECTED CLASS: " + value.getClass() + ")";
 			case INSTANCE:
 				return ((Instance) value).getName();
 			case ATTRIBUTE:
@@ -317,7 +324,6 @@ public class Variable implements IDInterface {
 				return values.toString();
 			default:
 				return toString();
-				//return "(CANNOT CAST TO STRING: " + toString() + ")";
 		}
 	}
 	public void setString(String v) {
@@ -479,10 +485,10 @@ public class Variable implements IDInterface {
 	// ###################################################################################
 
 	public String toString() {
-		String pre = (name != null? name : "") + " (" + type + "): ";
+		String pre = (name != null ? name : "anonymous") + " (" + type + "): ";
 		switch (type) {
 			case NUMBER:
-				return pre+ (Double) value;
+				return pre + (Double) value;
 			case STRING:
 				return pre + (String) value;
 			case TILE:
@@ -493,6 +499,8 @@ public class Variable implements IDInterface {
 				return pre + (Container) value;
 			case ATTRIBUTE:
 				return pre + (Attribute) value;
+			case RGBA:
+				return pre + (RGBA) value;
 			case SCRIPT:
 				return pre + ((Script) value).getTextId();
 			case LIST:
@@ -512,6 +520,8 @@ public class Variable implements IDInterface {
 					return pre + values;
 				}
 				return pre + "EMPTY";
+			case TREE:
+				return pre + (BinaryTree) value;
 			default:
 				return "UNKNOWN VARIABLE TYPE";
 		}

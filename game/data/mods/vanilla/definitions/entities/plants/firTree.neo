@@ -5,7 +5,7 @@ Creature: cFirTree inherits cPlant {
     name = "Fir Tree";
     mesh = mesh "fir_tree_mature.ply";
 	
-	prefers = { tDirt, tStone }
+	prefers = { tDirt; tStone }
 
 	knowledge = {
 		proLeechFromHolder;

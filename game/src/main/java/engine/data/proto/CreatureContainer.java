@@ -12,16 +12,8 @@ import java.util.stream.Collectors;
 
 public class CreatureContainer extends Container {
 
-	//private BinaryTree<Process> knownProcesses;
-
-//	private List<ContainerIdentifier> knowledge;
-//	private List<ContainerIdentifier> drives;
-
 	public CreatureContainer(String textID) {
 		super(textID, DataType.CREATURE);
-
-//		knowledge = new ArrayList<>(4);
-//		drives = new ArrayList<>(2);
 	}
 
 	// ###################################################################################
@@ -47,14 +39,8 @@ public class CreatureContainer extends Container {
 	public List<Container> getKnowledge(String stage) {
 		return getProperty(stage, PropertyKeys.KNOWLEDGE.key()).map(Variable::getContainerList).orElse(Collections.emptyList());
 	}
-	private List<Container> getKnowledgeStrict(String stage) {
-		return getPropertyStrict(stage, PropertyKeys.KNOWLEDGE.key()).map(Variable::getContainerList).orElse(Collections.emptyList());
-	}
 
 	public List<Container> getDrives(String stage) {
 		return getProperty(stage, PropertyKeys.DRIVES.key()).map(Variable::getContainerList).orElse(Collections.emptyList());
-	}
-	private List<Container> getDrivesStrict(String stage) {
-		return getPropertyStrict(stage, PropertyKeys.DRIVES.key()).map(Variable::getContainerList).orElse(Collections.emptyList());
 	}
 }

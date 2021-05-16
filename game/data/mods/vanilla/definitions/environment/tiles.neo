@@ -114,6 +114,9 @@ Tile: tStone inherits tSoakingHumidity, tTemperature {
 	
 	topColor = color 150, 150, 120;
 	topColorVariance = color 10, 0, 0;
+	
+	sideColor = color 100, 100, 80;
+	sideColorVariance = color 10, 0, 0;
 
 	attributes {
         attTicks, 30;

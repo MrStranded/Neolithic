@@ -4,7 +4,7 @@ Creature: cBush inherits cPlant {
 
     name = "Bush";
     mesh = mesh "bush_mature.ply";
-	prefers = { tDirt, tGras }
+	prefers = { tDirt; tGras }
 
 	knowledge = {
 		proLeechFromHolder;
@@ -37,7 +37,7 @@ Creature: cBerryBush inherits cPlant {
     name = "Berry Bush";
     mesh = mesh "berry_bush_mature.ply";
     fruit = "entBerry";
-	prefers = { tDirt, tGras }
+	prefers = { tDirt; tGras }
 
 	knowledge = {
 		proDropFruit;

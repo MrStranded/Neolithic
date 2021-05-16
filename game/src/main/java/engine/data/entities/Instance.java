@@ -225,7 +225,7 @@ public class Instance {
 				Variable result = run(process, ScriptConstants.EVENT_PROCESS, null);
 
 				if (this == GameOptions.selectedInstance) {
-					SelectedInstance.instance().putCurrentTask(process.getName(), result);
+					SelectedInstance.instance().putCurrentTask(process.getName(stage), result);
 				}
 
 				break; // only one process per tick
@@ -301,7 +301,7 @@ public class Instance {
 	    tickEffects();
 
 	    Optional<Container> container = getContainer();
-	    boolean runTickScripts = container.map(Container::isRunTickScripts).orElse(true);
+	    boolean runTickScripts = container.map(c -> c.isRunTickScripts(stage)).orElse(true);
 
 	    if (runTickScripts && delayUntilNextTick <= 0) {
 			if (this == GameOptions.selectedInstance) { SelectedInstance.instance().clear(); }
@@ -574,7 +574,7 @@ public class Instance {
 			MeshHub meshHub = null;
 			if (path != null) {
 				meshHub = Data.addMeshHub(path);
-				meshHub.setMeshOpacity(container.getOpacity());
+				meshHub.setMeshOpacity(container.getOpacity(null));
 			}
 			return meshHub;
 		}).orElse(null);
@@ -592,7 +592,7 @@ public class Instance {
 	}
 
     public String getName() {
-        return name != null ? name : getContainer().map(Container::getName).orElse("Noname");
+        return name != null ? name : getContainer().map(c -> c.getName(stage)).orElse("Noname");
     }
 
     public void setName(String name) {

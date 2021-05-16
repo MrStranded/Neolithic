@@ -762,11 +762,9 @@ public class CommandExecuter {
 
 					checkValue(script, commandNode, target, "target instance");
 
-					String value = target.getContainer()
-							.flatMap(c -> c.getProperty(target.getStage(), key).map(Variable::getString))
-							.orElse(null);
-
-					return new Variable(value);
+					return target.getContainer()
+							.flatMap(c -> c.getProperty(target.getStage(), key))
+							.orElseGet(Variable::new);
 				}
 				break;
 
@@ -778,12 +776,10 @@ public class CommandExecuter {
 
 					checkValue(script, commandNode, target, "target instance");
 
-					List<Variable> value = target.getContainer()
-							.map(c ->
-									c.getProperty(target.getStage(), key).map(Variable::getList).orElse(Collections.emptyList()) // property does not exist
-							).orElse(Collections.emptyList()); // container does not exist
-
-					return new Variable(value);
+					return target.getContainer()
+							.flatMap(c -> c.getProperty(target.getStage(), key))
+							.filter(variable -> variable.getType() == DataType.LIST)
+							.orElseGet(() -> new Variable(Collections.emptyList()));
 				}
 				break;
 

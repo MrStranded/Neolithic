@@ -44,9 +44,10 @@ public class StatisticsPanel extends JPanel {
         StatisticsData.registerStage(instance.getStage());
 
         // if plot is false, we do not plot the attributes
-        boolean plot = instance.getContainer().map(
-                c -> c.getProperty(instance.getStage(), PropertyKeys.PLOT.key()).map(Variable::getBoolean).orElse(true)
-        ).orElse(Boolean.TRUE);
+        boolean plot = instance.getContainer()
+                .flatMap(c -> c.getProperty(instance.getStage(), PropertyKeys.PLOT.key()))
+                .map(Variable::getBoolean)
+                .orElse(Boolean.TRUE);
 
         if (! plot) { return; }
 
@@ -182,7 +183,7 @@ public class StatisticsPanel extends JPanel {
             g.drawRect(0,0,width, TOP_BAR_HEIGHT);
             g.setColor(new Color(0,0,0));
             String selectedInstance = GameOptions.selectedInstance != null ? " [ " + GameOptions.selectedInstance.getName() + "]" : "";
-            g.drawString("Current selection: " + container.get().getName() + selectedInstance, 10, 20);
+            g.drawString("Current selection: " + container.get().getName(null) + selectedInstance, 10, 20);
             g.drawString("Count: " + StatisticsData.getCount(GameOptions.currentContainerId), width/2 + 10, 20);
         }
     }

@@ -71,8 +71,11 @@ public class Container {
 	public void finalizeInheritance() {
 		if (hasInherited) { return; }
 
-		for (Container container
-				: getProperty(null, PropertyKeys.INHERITED_CONTAINERS.key()).map(Variable::getContainerList).orElse(Collections.emptyList())) {
+		List<Container> ancestors = getProperty(null, PropertyKeys.INHERITED_CONTAINERS.key())
+				.map(Variable::getContainerList)
+				.orElse(Collections.emptyList());
+
+		for (Container container : ancestors) {
 			if (container != null) {
 				container.finalizeInheritance();
 
@@ -198,7 +201,7 @@ public class Container {
 		BinaryTree<Attribute> result = getPropertyStrict(stage, ScriptConstants.KEY_ATTRIBUTES).map(Variable::getBinaryTree).orElse(null);
 		if (result == null) {
 			result = new BinaryTree<>();
-			getStage(null).set(ScriptConstants.KEY_ATTRIBUTES, new Variable(result));
+			getStage(stage).set(ScriptConstants.KEY_ATTRIBUTES, new Variable(result));
 		}
 		return result;
 	}
@@ -209,7 +212,7 @@ public class Container {
 	}
 	public int getAttributeValue(String stage, int attributeID) {
 		Attribute attribute = getAttribute(stage, attributeID);
-		return attribute != null? attribute.getValue() : 0;
+		return attribute != null ? attribute.getValue() : 0;
 	}
 	public void addAttribute(String stage, Attribute attribute) {
 		if (attribute == null) { return; }
@@ -252,28 +255,32 @@ public class Container {
 	// ################################ Accessor Wrappers ################################
 	// ###################################################################################
 
-	public String getName() {
-		return getProperty(null, PropertyKeys.NAME.key()).map(Variable::getString).orElse(textID);
+	public String getName(String stage) {
+		return getProperty(stage, PropertyKeys.NAME.key()).map(Variable::getString).orElse(textID);
 	}
 
 	public String getMeshPath(String stage) {
-		return getProperty(null, PropertyKeys.MESH.key()).map(Variable::getString).orElse(null);
+		return getProperty(stage, PropertyKeys.MESH.key()).map(Variable::getString).orElse(null);
 	}
 
-	public double getOpacity() {
-		return getProperty(null, PropertyKeys.OPACITY.key()).map(Variable::getDouble).orElse(1d);
+	public double getOpacity(String stage) {
+		return getProperty(stage, PropertyKeys.OPACITY.key()).map(Variable::getDouble).orElse(1d);
 	}
 
-	public boolean isRunTickScripts() {
-		return getProperty(null, PropertyKeys.RUN_TICK_SCRIPT.key()).map(Variable::getBoolean).orElse(true);
+	public boolean isRunTickScripts(String stage) {
+		return getProperty(stage, PropertyKeys.RUN_TICK_SCRIPT.key()).map(Variable::getBoolean).orElse(true);
 	}
 
 	// ###################################################################################
 	// ################################ Debugging ########################################
 	// ###################################################################################
 
+	@Override
+	public String toString() {
+		return getName(null);
+	}
+
 	public void printProperties() {
-		System.out.println("Container: " + getName());
 		stages.keySet().forEach(stage -> {
 			System.out.println("   Stage: " + stage);
 			getStage(stage).printProperties("      ");
