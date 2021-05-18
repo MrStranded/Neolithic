@@ -14,7 +14,6 @@ import engine.graphics.renderer.color.RGBA;
 import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,10 +42,6 @@ public class Variable implements IDInterface {
 		Variable variable = new Variable();
 		variable.setName(name);
 		return variable;
-	}
-
-	public static Variable emptyList() {
-		return new Variable(new ArrayList<Variable>(0));
 	}
 
 	// ###################################################################################

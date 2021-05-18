@@ -24,7 +24,6 @@ public class StatisticsPanel extends JPanel {
     private static final int TOP_BAR_HEIGHT = 30;
     private static final int VERTICAL_MARGIN = 6;
     private BufferedImage img;
-    private Graphics g;
 
     public StatisticsPanel(int width, int height) {
         super();
@@ -34,7 +33,6 @@ public class StatisticsPanel extends JPanel {
         verticalPointRange = (height - TOP_BAR_HEIGHT - VERTICAL_MARGIN*2 - 1.0);
         img = new BufferedImage(width, height - TOP_BAR_HEIGHT, BufferedImage.TYPE_INT_RGB);
         setPreferredSize(new Dimension(width, height));
-        g = img.getGraphics();
     }
 
     public void register(Instance instance) {
@@ -75,13 +73,13 @@ public class StatisticsPanel extends JPanel {
     }
 
     public void mark(int y, Color color, int alpha) {
+        Graphics g = img.getGraphics();
         g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
-//        g.drawRect(currentPosition, y, 1, 1);
-        // drawRect() seems to cause a quite aggressive memory leak where tons of PhantomReferences are created
-        // whyyyy?
+        g.drawRect(currentPosition, y, 1, 1);
     }
 
     public void fatMark(int y, Color color, int alpha) {
+        Graphics g = img.getGraphics();
         g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
         g.drawRect(currentPosition, y-1, 1, 3);
     }
@@ -124,6 +122,8 @@ public class StatisticsPanel extends JPanel {
     };
 
     public void tick() {
+        Graphics g = img.getGraphics();
+
         g.setColor(new Color (255,255,255));
         g.fillRect(currentPosition + 3, 0, 150, height - TOP_BAR_HEIGHT);
 

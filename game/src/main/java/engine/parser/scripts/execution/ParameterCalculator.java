@@ -10,18 +10,21 @@ import engine.parser.scripts.nodes.AbstractScriptNode;
 public class ParameterCalculator {
 
 	public static Variable[] calculateParameters(Instance self, Script script, AbstractScriptNode node) {
-		if (node.getSubNodes() == null) { return new Variable[0]; }
-
-		AbstractScriptNode[] subNodes = node.getSubNodes();
-		Variable[] parameters = new Variable[subNodes.length];
-		for (int i=0; i<subNodes.length; i++) {
-			try {
-				parameters[i] = subNodes[i].execute(self, script);
-			} catch (ReturnException returnException) {
-				parameters[i] = returnException.getReturnValue();
-			} catch (ScriptInterruptedException e) {
-				parameters[i] = new Variable();
-				e.printStackTrace();
+		Variable[] parameters;
+		if (node.getSubNodes() == null) {
+			parameters = new Variable[0];
+		} else {
+			AbstractScriptNode[] subNodes = node.getSubNodes();
+			parameters = new Variable[subNodes.length];
+			for (int i=0; i<subNodes.length; i++) {
+				try {
+					parameters[i] = subNodes[i].execute(self, script);
+				} catch (ReturnException returnException) {
+					parameters[i] = returnException.getReturnValue();
+				} catch (ScriptInterruptedException e) {
+					parameters[i] = new Variable();
+					e.printStackTrace();
+				}
 			}
 		}
 		return parameters;

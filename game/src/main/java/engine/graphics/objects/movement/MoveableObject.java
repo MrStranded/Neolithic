@@ -23,7 +23,8 @@ public class MoveableObject implements SunDependantObject {
 	// TAU constant
 	private static final double TAU = Math.PI*2d;
 
-	public MoveableObject() {}
+	public MoveableObject() {
+	}
 
 	// ###################################################################################
 	// ################################ Material #########################################

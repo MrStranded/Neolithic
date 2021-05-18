@@ -4,7 +4,7 @@
 Drive: driHording {
 	Script: condition {
 		require(! .attSleeping);
-		require(getFullAtt("attNutrition", self) < .attGreed);
+		require(getFullAtt(self, "attNutrition") < .attGreed);
 	}
 
 	solutions = {
@@ -12,7 +12,7 @@ Drive: driHording {
 	}
 
 	Script: getWeight() {
-		return(.attGreed - getFullAtt("attNutrition", self));
+		return(.attGreed - getFullAtt(self, "attNutrition"));
 	}
 }
 

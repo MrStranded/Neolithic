@@ -43,7 +43,7 @@ public class Instance {
 	private Queue<Occupation> occupations = null;
 	private int delayUntilNextTick = 0;
 
-	private MoveableObject moveableObject = null;
+	private MoveableObject moveableObject;
 	private MeshHub meshHub = null;
 
 	public Instance(int id) {
@@ -444,30 +444,6 @@ public class Instance {
 				moveableObject.setPreRotation(0, Math.random() * Math.PI * 2d, 0);
 			}
 		}
-
-		Tile position = superInstance.getPosition();
-		if (position == null) { return; }
-
-		// get rotation angles
-		double pitch = GeographicCoordinates.getLatitude(position);
-		double yaw = GeographicCoordinates.getLongitude(position);
-		Vector3 pos;
-		// set position
-		/*if (position.getHeight() > position.getWaterHeight()) {
-			pos = position.getTileMesh().getMid();
-		} else {
-			pos = position.getTileMesh().getWaterMid();
-		}*/
-		pos = position.getTileMesh().getMid();
-		// set correct scale
-		if (Data.getPlanet() != null) {
-			double scaleFactor = 1d / (double) Data.getPlanet().getSize();
-			moveableObject.setScale(scaleFactor, scaleFactor, scaleFactor);
-		}
-		// assign values to moveable object
-		moveableObject.setPosition(pos);
-		moveableObject.setRotation(pitch + Math.PI / 2d, -yaw + Math.PI / 2d, 0);
-		moveableObject.setPreRotation(0, Math.random() * Math.PI * 2d * 0d, 0);
 	}
 
 	public void destroy() {
@@ -534,12 +510,7 @@ public class Instance {
 	    effects.add(effect);
     }
 
-	/**
-	 * Deletes all effects with the given id from the instance.
-	 * If the given id is -1, then all effects are deleted.
-	 * @param containerID effect id
-	 */
-	public void deleteEffects(int containerID) {
+    public void deleteEffects(int containerID) {
 		if (effects != null) {
 			effects.removeIf(effect -> ((containerID == -1) || (effect.getId() == containerID)));
 		}

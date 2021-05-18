@@ -65,7 +65,7 @@ Creature: cLandAnimal {
         h1 = getHeight(from);
         h2 = getHeight(to);
         hw = getWaterHeight(to);
-		freeSpace = 100 - getFullAtt("attSize", to);
+		freeSpace = 100 - getFullAtt(to, "attSize");
         return ((h2 >= hw - .attStepHeight) && (abs(h1-h2) <= .attStepHeight) && freeSpace >= .attSize);
 	}
 
