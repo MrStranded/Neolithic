@@ -10,7 +10,7 @@ public class Logger {
 	public static final int LOG_INFO  = 2;
 	public static final int LOG_ERROR = 3;
 
-	public static int logLevel = LOG_DEBUG;
+	public static int logLevel = LOG_TRACE;
 
 	public static final String ANSI_RESET = "\u001B[0m";
 	public static final String ANSI_BLACK = "\u001B[30m";

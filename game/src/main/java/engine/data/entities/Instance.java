@@ -149,7 +149,7 @@ public class Instance {
 		return getContainer().map(container -> {
 			Script script = container.getScript(stage, textID);
 
-			if (script == null) { Logger.trace(getName() + " tried to run non-existing script '" + textID + "'"); }
+			if (script == null && this == GameOptions.selectedInstance) { Logger.trace(getName() + " tried to run non-existing script '" + textID + "'"); }
 			return runScript(script, parameters);
 		}).orElse(new Variable());
 	}
@@ -158,7 +158,7 @@ public class Instance {
 		if (scriptContainer != null) {
 			Script script = scriptContainer.getScript(stage, textID);
 
-			if (script == null) { Logger.trace(getName() + " tried to run non-existing script '" + textID + "' on " + scriptContainer.getName(null)); }
+			if (script == null && this == GameOptions.selectedInstance) { Logger.trace(getName() + " tried to run non-existing script '" + textID + "' on " + scriptContainer.getName(null)); }
 			return runScript(script, parameters);
 		}
 		return new Variable();
@@ -166,7 +166,7 @@ public class Instance {
 
 	public Variable run(Script script, Variable[] parameters) {
 
-		if (script == null) { Logger.trace(getName() + " tried to run non-existing script with parameters: " + Arrays.toString(parameters)); }
+		if (script == null && this == GameOptions.selectedInstance) { Logger.trace(getName() + " tried to run non-existing script with parameters: " + Arrays.toString(parameters)); }
 		return runScript(script, parameters);
 	}
 
@@ -256,7 +256,7 @@ public class Instance {
 
 				break; // only one process per tick
 			}
-			else if (Logger.hasLogLevel(Logger.LOG_TRACE)) {
+			else if (Logger.hasLogLevel(Logger.LOG_TRACE) && this == GameOptions.selectedInstance) {
 				Logger.trace("Instance " + getName() + " (" + stage + ") did not find process for " + drive.getName(null));
 
 				Logger.trace("Acceptable solutions:");
@@ -283,7 +283,9 @@ public class Instance {
 
 				} else { // condition not fulfilled -> if process, look through alternatives
 
-					Logger.trace("Instance " + getName() + " could not fulfill condition of process " + process.getName(null));
+					if (this == GameOptions.selectedInstance) {
+						Logger.trace("Instance " + getName() + " could not fulfill condition of process " + process.getName(null));
+					}
 
 					if (process.getType() == DataType.PROCESS) {
 						Container solution = searchProcesses(((ProcessContainer) process).getSolutions(stage));
@@ -730,6 +732,9 @@ public class Instance {
 
 	private int getBoundedAttributeValue(int attributeID, int value) {
 		if (this instanceof Effect) { return value; }
+
+		// values that are zero and do not exist are returned as is (zero)
+		if (value == 0 && attributes != null && attributes.get(attributeID) == null) { return value; }
 
 		ProtoAttribute protoAttribute = Data.getProtoAttribute(attributeID);
 		if (protoAttribute == null) { return value; }

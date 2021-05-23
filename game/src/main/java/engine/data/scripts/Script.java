@@ -2,6 +2,7 @@ package engine.data.scripts;
 
 import engine.data.IDInterface;
 import engine.data.entities.Instance;
+import engine.data.options.GameOptions;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.Variable;
 import engine.parser.scripts.exceptions.ReturnException;
@@ -56,8 +57,8 @@ public class Script implements IDInterface {
 		}
 
 		// debugging
-		if (Logger.hasLogLevel(Logger.LOG_TRACE)) {
-			Logger.trace("--- Running script '" + textId + "' on " + self.getName());
+		if (Logger.hasLogLevel(Logger.LOG_TRACE) && self == GameOptions.selectedInstance) {
+			Logger.trace("--- Running script '" + textId + "' in file '" + fileName + "' on instance " + self.getName());
 			if (! variableStack.empty() && ! variables.isEmpty()) {
 				Logger.trace("    Script Variables:");
 				for (IDInterface variable : variables.toArray()) {
