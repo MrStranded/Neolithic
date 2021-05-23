@@ -31,11 +31,11 @@ Script: setTime (hour, minute) {
 Script: repopulate() {
 	for (t : eachTile()) {
 		if (getHeight(t) > getWaterHeight(t)) {
-			if (chance(0.01)) {
+			/*if (chance(0.01)) {
 				human = create(cHuman, t);
 				human..attAge += random(human.attMatureAge);
 				addEffect(human, effInfant);
-			}
+			}*/
             if ((getType(t) == tGras || getType(t) == tDirt) && getHeight(t) > 100) {
 				plants = [];
                 if (chance(0.2)){

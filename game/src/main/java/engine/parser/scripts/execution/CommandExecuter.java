@@ -6,7 +6,6 @@ import constants.TopologyConstants;
 import engine.data.Data;
 import engine.data.entities.Effect;
 import engine.data.entities.Instance;
-import engine.data.identifiers.ContainerIdentifier;
 import engine.data.options.GameOptions;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
@@ -185,7 +184,7 @@ public class CommandExecuter {
 					});
 				}
 
-				System.out.println("Breakpoint on line " + command.getLine() + " in " + script.getTextId() + " (" + script.getFileName() + ")");
+				Logger.breakpoint("Breakpoint on line " + command.getLine() + " in " + script.getTextId() + " (" + script.getFileName() + ")");
 				break;
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int ceil ()
@@ -850,16 +849,16 @@ public class CommandExecuter {
 					double east = GeographicCoordinates.getLongitudeDegrees(tile);
 					double north = GeographicCoordinates.getLatitudeDegrees(tile);
 
-					System.out.println("east: " + east);
-					System.out.println("north: " + north);
+					Logger.debug("east: " + east);
+					Logger.debug("north: " + north);
 
-					System.out.println("n o: " + tile.getTileMesh().getNormal());
+					Logger.debug("n o: " + tile.getTileMesh().getNormal());
 
 					Tile same = GeographicCoordinates.getTile(Data.getPlanet(), east, north);
 
-					System.out.println("n s: " + same.getTileMesh().getNormal());
+					Logger.debug("n s: " + same.getTileMesh().getNormal());
 
-					System.out.println("same: " + (same == tile));
+					Logger.debug("same: " + (same == tile));
 				}
 				break;
 
@@ -1201,7 +1200,7 @@ public class CommandExecuter {
 			case PRINT:
 				if (requireParameters(commandNode, 1)) {
 					String text = parameters[0].getString();
-					Logger.log("PRINT: " + text);
+					Logger.info("PRINT: " + text);
 					return new Variable(text);
 				}
 				break;

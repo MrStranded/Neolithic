@@ -6,9 +6,9 @@ Drive: driGrow {
     Script: condition { return .bodySize < .bodyPreference; }
 
     Script: getWeight {
-		if (.bodySize >= .bodyPreference) { return .bodyHealth + .bodyRestoration; }
+		if (.bodySize >= .bodyPreference) { return  .bodyRestoration - .bodyHealth; }
 		
-        return(min(100, 100 + .bodyRestoration - percent(.bodySize, 100)));
+        return(min(100, 100 + .bodyRestoration - percent(.bodySize, .bodyPreference)));
     }
 }
 

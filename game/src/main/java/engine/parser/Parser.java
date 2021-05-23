@@ -2,7 +2,6 @@ package engine.parser;
 
 import constants.ResourcePathConstants;
 import constants.ScriptConstants;
-import engine.data.identifiers.ContainerIdentifier;
 import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
@@ -32,12 +31,12 @@ public class Parser {
 		mods = ModOrderLoader.loadMods();
 
 		for (String mod : mods) {
-			Logger.log("load mod: " + mod);
+			Logger.info("load mod: " + mod);
 			loadMod(mod);
 		}
 
 		Data.prepareForGame();
-		debug();
+		if (Logger.hasLogLevel(Logger.LOG_DEBUG)) { debug(); }
 	}
 
 	private void loadMod(String mod) {
@@ -56,7 +55,7 @@ public class Parser {
 			File file = new File(folder.getAbsolutePath() + "/" + fileName);
 
 			if (file.isFile() && file.getName().endsWith(ScriptConstants.SCRIPT_FILE_SUFFIX)) {
-				Logger.log("load file: " + file.getName());
+				Logger.info("load file: " + file.getName());
 				loadFile(file, mod);
 			} else if (file.isDirectory()) {
 				loadFolder(file, mod);

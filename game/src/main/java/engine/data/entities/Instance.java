@@ -5,7 +5,6 @@ import engine.data.Data;
 import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.behaviour.Occupation;
-import engine.data.identifiers.ContainerIdentifier;
 import engine.data.interaction.SelectedInstance;
 import engine.data.options.GameOptions;
 import engine.data.planetary.Tile;
@@ -24,7 +23,6 @@ import engine.utils.converters.StringConverter;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Instance {
 
@@ -97,7 +95,7 @@ public class Instance {
 			for (Integer id : Data.getAllAttributeIDs()) {
 				ProtoAttribute protoAttribute = Data.getProtoAttribute(id);
 
-				if (protoAttribute != null && protoAttribute.isInherited()) {
+				if (isAttributeInherited(protoAttribute, id)) {
 					// weight parents and sum it up
 					Map<Instance, Double> weights = new HashMap<>();
 					double weightSumTmp = parents.stream()
@@ -135,6 +133,14 @@ public class Instance {
 		});
     }
 
+    public boolean isAttributeInherited(ProtoAttribute protoAttribute, int id) {
+		if (protoAttribute == null) { return false; }
+		if (! protoAttribute.isInherited()) { return false; }
+		if (getPersonalAttributeValue(id) == 0) { return false; }
+
+		return true;
+	}
+
 	// ###################################################################################
 	// ################################ Running Scripts ##################################
 	// ###################################################################################
@@ -142,6 +148,8 @@ public class Instance {
 	public Variable run(String textID, Variable[] parameters) {
 		return getContainer().map(container -> {
 			Script script = container.getScript(stage, textID);
+
+			if (script == null) { Logger.trace(getName() + " tried to run non-existing script '" + textID + "'"); }
 			return runScript(script, parameters);
 		}).orElse(new Variable());
 	}
@@ -149,12 +157,16 @@ public class Instance {
 	public Variable run(Container scriptContainer, String textID, Variable[] parameters) {
 		if (scriptContainer != null) {
 			Script script = scriptContainer.getScript(stage, textID);
+
+			if (script == null) { Logger.trace(getName() + " tried to run non-existing script '" + textID + "' on " + scriptContainer.getName(null)); }
 			return runScript(script, parameters);
 		}
 		return new Variable();
 	}
 
 	public Variable run(Script script, Variable[] parameters) {
+
+		if (script == null) { Logger.trace(getName() + " tried to run non-existing script with parameters: " + Arrays.toString(parameters)); }
 		return runScript(script, parameters);
 	}
 
@@ -194,32 +206,46 @@ public class Instance {
 
 	/**
 	 * Goes through all drives of the creature and sorts the triggered drives by their weight.
-	 * Then the method tries to execute a process of one of the drives, starting with the most important one.
-	 * @param drives to look through
+	 * @param drives to select needs from
 	 */
-	private void searchDrive(List<Container> drives) {
-		if (drives == null) { return; }
+	private WeightedList<Container> searchDrive(List<Container> drives) {
 
 		WeightedList<Container> weightedDrives = new WeightedList<>();
 
-		for (Container container : drives) {
-			if (container != null) {
+		if (drives == null) { return weightedDrives; }
 
-				Variable condition = run(container, ScriptConstants.EVENT_CONDITION, null);
+		for (Container drive : drives) {
+			if (drive != null) {
+
+				Variable condition = run(drive, ScriptConstants.EVENT_CONDITION, null);
 				Variable weight = null;
 				if (condition.notNull()) { // condition is fulfilled
-					weight = run(container, ScriptConstants.EVENT_GET_WEIGHT, null);
-					if (weight.getDouble() > 0) { weightedDrives.add(container, weight.getDouble()); }
+					weight = run(drive, ScriptConstants.EVENT_GET_WEIGHT, null);
+					if (weight.getDouble() > 0) {
+						weightedDrives.add(drive, weight.getDouble());
+					}
 				}
 
 				if (this == GameOptions.selectedInstance) {
-					SelectedInstance.instance().putDrive(container.getTextID(), condition, weight);
+					SelectedInstance.instance().putDrive(drive.getTextID(), condition, weight);
 				}
 			}
 		}
 
+		return weightedDrives;
+	}
+
+	/**
+	 * The method tries to execute a process for one of the drives, starting with the most urgent one.
+	 * @param weightedDrives weighted needs that need to be fulfilled
+	 */
+	private void actOnDrives(WeightedList<Container> weightedDrives) {
+
 		for (Container drive : weightedDrives.list()) {
-			Container process = searchProcesses(((DriveContainer) drive).getSolutions(stage));
+
+			List<Container> solutions = ((DriveContainer) drive).getSolutions(null);
+			Container process = searchProcesses(solutions);
+
 			if (process != null) {
 
 				Variable result = run(process, ScriptConstants.EVENT_PROCESS, null);
@@ -229,6 +255,12 @@ public class Instance {
 				}
 
 				break; // only one process per tick
+			}
+			else if (Logger.hasLogLevel(Logger.LOG_TRACE)) {
+				Logger.trace("Instance " + getName() + " (" + stage + ") did not find process for " + drive.getName(null));
+
+				Logger.trace("Acceptable solutions:");
+				solutions.forEach(solution -> Logger.trace("   " + solution.getName(null) + " (known: " + knowsProcess(solution) + ")"));
 			}
 		}
 
@@ -241,40 +273,43 @@ public class Instance {
 	 * @return process with fulfilled condition or null
 	 */
 	private Container searchProcesses(List<Container> processes) {
-		if (processes != null) {
-			for (Container container : processes) {
-				if (container != null && knowsProcess(container)) {
-					if (!run(container, ScriptConstants.EVENT_CONDITION, null).isNull()) { // condition is fulfilled
+		if (processes == null) { return null; }
 
-						return container;
+		for (Container process : processes) {
+			if (process != null && knowsProcess(process)) {
+				if (run(process, ScriptConstants.EVENT_CONDITION, null).notNull()) { // condition is fulfilled
 
-					} else { // condition not fulfilled -> if process, look through alternatives
+					return process;
 
-						if (container.getType() == DataType.PROCESS) {
-							Container solution = searchProcesses(((ProcessContainer) container).getSolutions(stage));
-							if (solution != null) {
-								return solution;
-							}
+				} else { // condition not fulfilled -> if process, look through alternatives
+
+					Logger.trace("Instance " + getName() + " could not fulfill condition of process " + process.getName(null));
+
+					if (process.getType() == DataType.PROCESS) {
+						Container solution = searchProcesses(((ProcessContainer) process).getSolutions(stage));
+						if (solution != null) {
+							return solution;
 						}
-
 					}
+
 				}
 			}
 		}
+
 		return null;
 	}
 
 	/**
-	 * Returns true if the given entity knows the requested process.
-	 * @param container
-	 * @return
+	 * Returns true if this instance knows the given process container.
+	 * @param process of which we want to know whether we know it
+	 * @return true if we know the process
 	 */
-	private boolean knowsProcess(Container container) {
+	private boolean knowsProcess(Container process) {
 		return getContainer()
 				.filter(c -> c.getType() == DataType.CREATURE)
 				.map(c -> {
 					for (Container knowledge : ((CreatureContainer) c).getKnowledge(stage)) {
-						if (knowledge != null && knowledge.getTextID().equals(container.getTextID())) {
+						if (knowledge.getTextID().equals(process.getTextID())) {
 							return true;
 						}
 					}
@@ -304,12 +339,16 @@ public class Instance {
 	    boolean runTickScripts = container.map(c -> c.isRunTickScripts(stage)).orElse(true);
 
 	    if (runTickScripts && delayUntilNextTick <= 0) {
-			if (this == GameOptions.selectedInstance) { SelectedInstance.instance().clear(); }
+			if (this == GameOptions.selectedInstance) {
+				SelectedInstance.instance().clear();
+			}
 
 			if (occupations == null || occupations.isEmpty()) {
 				// ----------- calculate drives
 				container.filter(c -> c.getType() == DataType.CREATURE)
-						.ifPresent(c -> searchDrive( ((CreatureContainer) c).getDrives(stage)) );
+						.map(c -> ((CreatureContainer) c).getDrives(stage))
+						.map(this::searchDrive)
+						.ifPresent(this::actOnDrives);
 			} else {
 				// ----------- calculate occupations
 				Occupation currentOccupation = occupations.peek();
@@ -409,6 +448,10 @@ public class Instance {
 	}
 
 	public void actualizeObjectPosition() {
+		if (this == GameOptions.selectedInstance) {
+			Logger.debug("Actualizing position of " + this);
+		}
+
 		if (superInstance != null && moveableObject != null) {
 			Tile position = superInstance.getPosition();
 			if (position != null) {
@@ -431,7 +474,7 @@ public class Instance {
 					pos = mid;
 				} else {
 					Vector3 corner = position.getTileMesh().getScaledCorner(slot);
-					pos = corner != null ? mid.plus(position.getTileMesh().getScaledCorner(slot)).times(0.5) : mid;
+					pos = corner != null ? mid.plus(corner).times(0.5) : mid;
 				}
 				// set correct scale
 				if (Data.getPlanet() != null) {
@@ -809,17 +852,4 @@ public class Instance {
 		return "Instance (id = " + getContainer().map(Container::getTextID).orElse("?") + (name != null ? " Name: " + name : "") + ")";
 	}
 
-	public void printVariables() {
-		IDInterface[] vars = variables.toArray();
-		for (IDInterface idInterface : vars) {
-			System.out.println((Variable) idInterface);
-		}
-	}
-
-	public void printAttributes() {
-        IDInterface[] atts = attributes.toArray();
-        for (IDInterface idInterface : atts) {
-            System.out.println((Attribute) idInterface);
-        }
-    }
 }

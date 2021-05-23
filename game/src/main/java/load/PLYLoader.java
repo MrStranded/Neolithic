@@ -15,7 +15,7 @@ import java.util.List;
 public class PLYLoader {
 
 	public static Mesh loadMesh(String fileName) throws Exception {
-		System.out.println("loading mesh " + fileName);
+		Logger.debug("loading mesh " + fileName);
 
 		List<String> lines = StringLoader.readAllLines(fileName);
 

@@ -1,6 +1,7 @@
 package engine.graphics.objects.textures;
 
 import constants.ResourcePathConstants;
+import engine.parser.utils.Logger;
 import load.TextureLoader;
 
 import javax.imageio.ImageIO;
@@ -69,7 +70,7 @@ public class FontTexture {
 			graphics.dispose();
 
 			boolean success = ImageIO.write(image, "png", new File(filePath));
-			System.out.println("saved image " + filePath + " " + success);
+			Logger.trace("saved image " + filePath + " " + success);
 		}
 
 		return TextureLoader.loadTexture(filePath);

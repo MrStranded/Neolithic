@@ -16,11 +16,17 @@ Drive: driHeal {
 
 Process: proHeal {
     Script: condition {
-        require(.attNutrition >= 1);
+        require(.attNutrition >= 1 || .attWater >= 1);
     }
 
     Script: process {
-		..bodyHealth += .bodyRestoration;
-		..attNutrition--;
+		if (.attNutrition >= 1) {
+			..bodyHealth += .bodyRestoration;
+			..attNutrition--;
+		} else {
+			..bodyHealth++;
+			..attWater--;
+			..bodyExperience++;
+		}
     }
 }

@@ -105,18 +105,12 @@ public class Container {
 
 	private void inheritScripts(Container container) {
 		for (String stage : container.getStages()) {
-			BinaryTree<Script> tree = container.getScripts(stage);
-			if (tree != null) {
-				tree.forEach(script -> {
-					if (script != null) {
-
-						// own script overrides script from ancestor
-						if (getScriptStrict(stage, script.getTextId()) == null) {
-							addScript(stage, script);
-						}
-					}
-				});
-			}
+			container.getScripts(stage).forEach(script -> {
+				// own script overrides script from ancestor
+				if (getScriptStrict(stage, script.getTextId()) == null) {
+					addScript(stage, script);
+				}
+			});
 		}
 	}
 
@@ -170,7 +164,7 @@ public class Container {
 		getStage(stage).set(key, value);
 	}
 
-	public Optional<Variable> getProperty(String stage, String key) {
+	public Optional<Variable> getProperty(String stage, final String key) {
 		return getStage(stage).get(key)
 				.or(() -> getDefaultStage().get(key));
 	}

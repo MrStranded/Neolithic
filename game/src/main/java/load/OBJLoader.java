@@ -3,6 +3,7 @@ package load;
 import engine.graphics.objects.models.IndexGroup;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.models.MeshFace;
+import engine.parser.utils.Logger;
 import engine.utils.converters.IntegerConverter;
 import engine.utils.converters.VectorConverter;
 import engine.math.numericalObjects.Vector2;
@@ -14,7 +15,7 @@ import java.util.List;
 public class OBJLoader {
 
 	public static Mesh loadMesh(String fileName) throws Exception {
-		System.out.println("loading mesh " + fileName);
+		Logger.debug("loading mesh " + fileName);
 
 		List<String> lines = StringLoader.readAllLines(fileName);
 

@@ -56,18 +56,14 @@ public class Script implements IDInterface {
 		}
 
 		// debugging
-		if (false) {
-			System.out.println("---------------------------- S");
-			System.out.println("Running script " + textId);
-			System.out.println("Instance Variables:");
-			self.printVariables();
-			System.out.println("Script Variables:");
-			if (!variableStack.empty()) {
+		if (Logger.hasLogLevel(Logger.LOG_TRACE)) {
+			Logger.trace("--- Running script '" + textId + "' on " + self.getName());
+			if (! variableStack.empty() && ! variables.isEmpty()) {
+				Logger.trace("    Script Variables:");
 				for (IDInterface variable : variables.toArray()) {
-					System.out.println(((Variable) variable));
+					Logger.trace("      " + variable.toString());
 				}
 			}
-			System.out.println("---------------------------- E");
 		}
 
 		// execute

@@ -119,6 +119,7 @@ Entity: entRain {
 
 Effect: effWindy {
 	name = "Windy";
+	runTicks = false;
 	
 	attributes {
 		attSpeed, 1;
@@ -134,6 +135,7 @@ Effect: effWindy {
 }
 Effect: effVeryWindy {
 	name = "Very Windy";
+	runTicks = false;
 	
 	attributes {
 		attSpeed, 2;

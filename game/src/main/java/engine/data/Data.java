@@ -73,7 +73,7 @@ public class Data {
 
 				container.map(Container::getTextID).ifPresent(textId -> {
 					if (ScriptConstants.MAIN_CONTAINER.equals(textId)) {
-						System.out.println("PRE - MAIN CONTAINER " + instance.getId());
+						Logger.trace("PRE - MAIN CONTAINER " + instance.getId());
 					}
 					idToTextId.put(instance.getId(), textId);
 				});
@@ -91,7 +91,7 @@ public class Data {
 				String textId = idToTextId.get(instance.getId());
 
 				if (ScriptConstants.MAIN_CONTAINER.equals(textId)) {
-					System.out.println("POST - MAIN CONTAINER " + instance.getId());
+					Logger.trace("POST - MAIN CONTAINER " + instance.getId());
 				}
 
 				int id = Data.getContainerID(textId);

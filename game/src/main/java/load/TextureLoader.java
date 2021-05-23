@@ -2,6 +2,7 @@ package load;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 import engine.graphics.objects.textures.Texture;
+import engine.parser.utils.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,7 +13,7 @@ public class TextureLoader {
 	public static Texture loadTexture(String fileName) {
 
 		ByteBuffer buffer = null;
-		System.out.println("loading texture " + fileName);
+		Logger.debug("loading texture " + fileName);
 
 		try {
 			PNGDecoder decoder = new PNGDecoder(new FileInputStream(fileName));

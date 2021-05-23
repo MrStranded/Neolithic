@@ -11,6 +11,7 @@ import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
+import engine.parser.utils.Logger;
 
 public class PlanetObject extends MoveableObject {
 
@@ -100,7 +101,7 @@ public class PlanetObject extends MoveableObject {
 		if (closest != null) {
 			return closest;
 		} else {
-			System.out.println("planet not clicked");
+			Logger.debug("planet not clicked");
 		}
 
 		return null;

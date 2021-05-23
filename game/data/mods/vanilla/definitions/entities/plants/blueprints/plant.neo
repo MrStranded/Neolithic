@@ -55,15 +55,15 @@ Creature: cPlant {
         }
 		
 		// too cold or too hot
-		t = getTile(self).temperature;
-		if (t < .heatSensitivity) {
+		temperature = getTile(self).temperature;
+		if (temperature + .bodyResiliance < .heatSensitivity) {
 			..bodyHealth--;
 		}
 		
 		// too many bushes
-		if (.bodyExperience > .bodyPreference * .bodyResiliance) {
-			..bodyHealth--;
-		}
+		// if (.bodyExperience > .bodyPreference * .bodyResiliance) {
+			// ..bodyHealth--;
+		// }
 		
 		// death
 		if (.bodyHealth < - (.bodySize * .bodyResiliance) - .bodyRestoration) {

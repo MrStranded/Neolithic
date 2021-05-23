@@ -29,8 +29,6 @@ public class Pathfinding {
 
         @Override
         public int compareTo(TileHeuristic o) {
-//            System.out.println("this = " + heuristic + " , " + steps + "   " + tile);
-//            System.out.println("other = " + o.heuristic + " , " + o.steps + "   " + o.tile);
             return (int) Math.signum((o.heuristic + o.steps*FACTOR) - (heuristic + steps*FACTOR));
         }
     }

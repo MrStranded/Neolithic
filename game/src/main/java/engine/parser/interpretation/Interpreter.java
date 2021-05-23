@@ -3,7 +3,6 @@ package engine.parser.interpretation;
 import constants.PropertyKeys;
 import constants.ResourcePathConstants;
 import constants.ScriptConstants;
-import constants.TopologyConstants;
 import engine.data.Data;
 import engine.data.proto.Container;
 import engine.data.scripts.Script;
@@ -12,7 +11,6 @@ import engine.data.identifiers.ContainerIdentifier;
 import engine.data.proto.*;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
-import engine.graphics.objects.MeshHub;
 import engine.graphics.renderer.color.RGBA;
 import engine.parser.constants.TokenConstants;
 import engine.parser.constants.TokenType;
@@ -25,7 +23,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Interpreter {
@@ -513,7 +510,7 @@ public class Interpreter {
 					if (Arrays.stream(PropertyKeys.values())
 							.noneMatch(propertyKey -> propertyKey.key().equals(property))
 					) {
-						Logger.log("Property that does not exist in PropertyKeys was set on " + container.getTextID() + ": " + property);
+						Logger.debug("Property that does not exist in PropertyKeys was set on " + container.getTextID() + ": " + property);
 					}
 
 				} else {

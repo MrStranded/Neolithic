@@ -1,6 +1,7 @@
 package engine;
 
 import engine.data.options.GameOptions;
+import engine.parser.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +37,7 @@ public class TimedTask {
         if (GameOptions.printPerformance) {
             long dt = (System.currentTimeMillis() - start);
             if (dt >= minTimeForOutput) {
-                System.out.println(description + " took: " + dt);
+                Logger.debug(description + " took: " + dt);
             }
         }
     }

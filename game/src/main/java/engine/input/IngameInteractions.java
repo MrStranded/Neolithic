@@ -15,6 +15,7 @@ import engine.graphics.objects.Camera;
 import engine.graphics.objects.Scene;
 import engine.graphics.renderer.Renderer;
 import engine.math.MousePicking;
+import engine.parser.utils.Logger;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Optional;
@@ -77,6 +78,9 @@ public class IngameInteractions {
             Data.addScriptRun(new ScriptRun(Data.getMainInstance(), "fit", null));
         }
 
+        if (keyboard.isClicked(GLFW.GLFW_KEY_L)) {
+            Logger.nextLogLevel();
+        }
         if (keyboard.ctrlPressed(GLFW.GLFW_KEY_R)) {
             GameOptions.reloadScripts = true;
         }
