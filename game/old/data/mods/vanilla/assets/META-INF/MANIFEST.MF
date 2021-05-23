@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: jMonkeyEngine
-Implementation-Version: 3.2-v3.2-prealpha-sdk1-29
-
