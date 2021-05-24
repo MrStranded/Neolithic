@@ -5,7 +5,7 @@ import constants.GraphicalConstants;
 import engine.data.Data;
 import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
-import engine.data.planetary.Tile;
+import engine.data.entities.Tile;
 import engine.data.proto.Container;
 import engine.data.scripts.ScriptRun;
 import engine.data.variables.DataType;
@@ -133,27 +133,27 @@ public class IngameInteractions {
         }
         if (mouse.isRightButtonClicked()) {
             Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), renderer, scene);
-            if (clickedTile != null) {
-
-                // we try to take first sub instance. otherwise take clicked tile
-                if (clickedTile.getSubInstances() == null || clickedTile.getSubInstances().size() == 0) {
-                    GameOptions.selectedInstance = clickedTile;
-                } else {
-                    for (Instance sub : clickedTile.getSubInstances()) {
-                        GameOptions.selectedInstance = sub;
-                        break;
-                    }
-                }
-            }
-			/*if (clickedTile != null) {
-				//scene.setFacePartOverlay(clickedTile.getTileMesh());
+//            if (clickedTile != null) {
+//
+//                // we try to take first sub instance. otherwise take clicked tile
+//                if (clickedTile.getSubInstances() == null || clickedTile.getSubInstances().size() == 0) {
+//                    GameOptions.selectedInstance = clickedTile;
+//                } else {
+//                    for (Instance sub : clickedTile.getSubInstances()) {
+//                        GameOptions.selectedInstance = sub;
+//                        break;
+//                    }
+//                }
+//            }
+			if (clickedTile != null) {
 				Data.addScriptRun(new ScriptRun(
 						Data.getMainInstance(),
 						"rightClick",
-						new Variable[]{
-								new Variable(clickedTile),
-								new Variable(Data.getContainer(GameOptions.currentContainerId))}));
-			}*/
+						new Variable[] {
+                                new Variable(clickedTile),
+                                new Variable(Data.getContainer(GameOptions.currentContainerId).orElse(null))
+                        }));
+			}
         }
 
         // closing window

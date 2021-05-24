@@ -45,7 +45,7 @@ public class Engine {
 				}, 100),
 
 				new TimedTask("Calculating HUD", () -> {
-					GuiData.getHud().tick(GuiData.getRenderWindow().getWidth(), GuiData.getRenderWindow().getHeight());
+					GuiData.getHud().tick();
 					GuiData.getStatisticsWindow().refresh();
 				}, 100),
 
@@ -67,26 +67,12 @@ public class Engine {
 	public static void reloadScripts() {
 		Logger.info("------------------- Reloading Scripts");
 
-		// count main instances
-		long mainInstances = Data.getInstanceQueue().stream()
-				.filter(instance -> Data.getContainer(instance.getId())
-						.map(container -> ScriptConstants.MAIN_CONTAINER.equals(container.getTextID())).orElse(false))
-				.count();
-		Logger.debug("prereload main instances: " + mainInstances);
-
 		Data.initializeReload();
 		new Parser().load();
 		Data.finishReload();
 
 		Data.clearMeshHubs();
 		Data.loadMeshHubs();
-
-		// count main instances
-		mainInstances = Data.getInstanceQueue().stream()
-				.filter(instance -> Data.getContainer(instance.getId())
-						.map(container -> ScriptConstants.MAIN_CONTAINER.equals(container.getTextID())).orElse(false))
-				.count();
-		Logger.debug("postload main instances: " + mainInstances);
 	}
 
 	public static void createWorld() {

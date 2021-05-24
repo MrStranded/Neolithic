@@ -23,8 +23,14 @@ Process: proHeal {
 		if (.attNutrition >= 1) {
 			..bodyHealth += .bodyRestoration;
 			..attNutrition--;
+			..fatigue--;
 		} else {
-			..bodyHealth++;
+			if (chance(.bodyEfficienvy / 100)) {
+				..bodyHealth++;
+			} else {
+				..fatigue--;
+			}
+			
 			..attWater--;
 			..bodyExperience++;
 		}

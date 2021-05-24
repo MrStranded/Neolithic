@@ -37,6 +37,7 @@ Process: proDropFruit {
 Process: proGrowFruit {
 	Script: condition {
 		require(.attNutrition >= 1);
+		require(.fatigue <= .bodyRestoration);
 	}
 
 	Script: process {
@@ -44,6 +45,7 @@ Process: proGrowFruit {
 		
 		if (->fruit) {
 			->fruit..attNutrition += .bodyRestoration * .bodyEfficiency / 100;
+			..fatigue += .bodyRestoration;
 		} else {
 			setStage(self, "ripe");
 
@@ -53,6 +55,10 @@ Process: proGrowFruit {
 			setStage(seed, "seed");
 			mixAttributes(seed, self, self);
 		}
+	}
+	
+	solutions = {
+		proRest;
 	}
 }
 

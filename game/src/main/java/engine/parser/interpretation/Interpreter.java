@@ -124,6 +124,8 @@ public class Interpreter {
 				createEntity(DataType.FORMATION);
 			} else if (TokenConstants.WORLDGEN.equals(next)) {  // WorldGen
                 createEntity(DataType.WORLDGEN);
+			} else if (TokenConstants.GUI.equals(next)) {  // Gui
+				createEntity(DataType.GUI);
             } else if (TokenConstants.SCRIPT.equals(next)) { // Script
 			    addScript(Data.getMainContainer());
 			}
@@ -455,6 +457,9 @@ public class Interpreter {
 					break;
 				case WORLDGEN:
 					setupContainer = new Container(textID.getValue(), DataType.WORLDGEN);
+					break;
+				case GUI:
+					setupContainer = new GuiContainer(textID.getValue());
 					break;
 				default:
 					Logger.error("Unknown entity constructor type '" + type + "' for '" + textID.getValue() + "' on line " + textID.getLine());

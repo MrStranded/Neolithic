@@ -16,7 +16,7 @@ Creature: cBush inherits cPlant {
 		bodyRestoration, 4
 		bodyResiliance, 2, 1, 0.25;
 		bodyEfficiency, 40
-		heatSensitivity, 40, 5, 50%
+		heatSensitivity, 20, 5, 50%
 	}
 	
     Stage: seed {
@@ -48,10 +48,10 @@ Creature: cBerryBush inherits cPlant {
 	
 	attributes{
 		bodyPreference, 30
-		bodyRestoration, 4, 1
+		bodyRestoration, 3, 1
 		bodyResiliance, 3, 1, 0.25;
 		lightSensitivity, 35, 10, 100%
-		heatSensitivity, 15, 10, 100%
+		heatSensitivity, 30, 10, 100%
 	}
 	
     Stage: seed {

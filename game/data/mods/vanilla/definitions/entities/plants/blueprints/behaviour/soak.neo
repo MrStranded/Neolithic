@@ -7,11 +7,11 @@ Drive: driSoak {
 	}
 
     Script: condition {
-		return .attWater < .bodySize;
+		return .attWater < max(.bodySize, 1);
 	}
 
     Script: getWeight {
-		if (.bodySize == 0) { return 0; }
+		if (.bodySize == 0) { return 50; }
 		return (100 - percent(.attWater, .bodySize));
     }
 }

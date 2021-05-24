@@ -16,6 +16,7 @@ public enum TokenConstants {
 	DRIVE       (TokenType.KEYWORD, "Drive"),
 	FORMATION   (TokenType.KEYWORD, "Formation"),
 	WORLDGEN    (TokenType.KEYWORD, "WorldGen"),
+	GUI		    (TokenType.KEYWORD, "Gui"),
 	STAGE	    (TokenType.KEYWORD, "Stage"),
 
 	// -------------------------------------------------- Inheritance
@@ -29,6 +30,7 @@ public enum TokenConstants {
 	TRUE        (TokenType.KEYWORD, "true"),
 	FALSE       (TokenType.KEYWORD, "false"),
 	PI	     	(TokenType.KEYWORD, "PI"),
+	TAU	     	(TokenType.KEYWORD, "TAU"),
 
 	// -------------------------------------------------- Structure
 	IF          (TokenType.KEYWORD, "if"),
@@ -85,6 +87,7 @@ public enum TokenConstants {
 	MIX_ATTRIBUTES          (TokenType.COMMAND, "mixAttributes"),
 	SET_MESH				(TokenType.COMMAND, "setMesh"),
 	DELAY_NEXT_TICK			(TokenType.COMMAND, "delayNextTick"),
+	SELECT					(TokenType.COMMAND, "select"),
 
 	// -------------------------------------------------- Planet Manipulation
     CHANGE_SUN_ANGLE    (TokenType.COMMAND, "changeSunAngle"),
@@ -156,6 +159,8 @@ public enum TokenConstants {
 
 	// -------------------------------------------------- GUI
 	PRINT           (TokenType.COMMAND, "print"),
+	CREATE_GUI      (TokenType.COMMAND, "createGui"),
+	SET_TEXT		(TokenType.COMMAND, "setText"),
 
 	// -------------------------------------------------- Return Commands
 	REQUIRE         (TokenType.COMMAND, "require"),

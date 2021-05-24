@@ -296,6 +296,8 @@ public class ASTBuilder {
 
 		} else if (TokenConstants.PI.equals(expression)) { // PI
 			left = new LiteralNode(new Token(TokenType.LITERAL, String.valueOf(Math.PI), expression.getLine()));
+		} else if (TokenConstants.TAU.equals(expression)) { // TAU
+			left = new LiteralNode(new Token(TokenType.LITERAL, String.valueOf(Math.PI * 2), expression.getLine()));
 
 		} else if (TokenConstants.ROUND_BRACKETS_OPEN.equals(expression)) { // an expression in brackets
 			left = readExpression();

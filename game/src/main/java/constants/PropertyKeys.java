@@ -17,6 +17,9 @@ public enum PropertyKeys {
     OPACITY                 ("opacity"),
     PREFERS                 ("plot"),
 
+    TEMPLATE                ("template"),
+    LAYOUT                  ("layout"),
+
     TOP_COLOR               ("topColor"),
     TOP_COLOR_DEVIATION     ("topColorVariance"),
     SIDE_COLOR              ("sideColor"),

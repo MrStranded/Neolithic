@@ -1,6 +1,6 @@
 package engine.logic.topology;
 
-import engine.data.planetary.Tile;
+import engine.data.entities.Tile;
 import engine.data.variables.Variable;
 
 import java.util.ArrayList;

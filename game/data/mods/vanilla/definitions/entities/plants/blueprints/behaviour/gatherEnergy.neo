@@ -7,8 +7,8 @@ Drive: driGatherEnergy {
 	}
 
     Script: getWeight {
-		if (.bodyPreference > 0) { nutWeight = 90 * .attNutrition / .bodyPreference; }
-		if (.attWater > 0) { waterWeight = 90; }
+		if (.bodyPreference > 0) { nutWeight = 100 * .attNutrition / .bodyPreference; }
+		if (.attWater > 0) { waterWeight = 100; }
         return(waterWeight - nutWeight);
     }
 }

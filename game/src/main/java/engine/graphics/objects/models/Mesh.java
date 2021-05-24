@@ -249,7 +249,7 @@ public class Mesh {
 	public void normalize() {
 		float leftMost=0f, rightMost=0f, topMost=0f, bottomMost=0f;
 
-		// find out the dimenstions of the mesh
+		// find out the dimensions of the mesh
 		int dimension = 0;
 		for (float vertex : vertices) {
 			if (dimension == 0) { // X dimension

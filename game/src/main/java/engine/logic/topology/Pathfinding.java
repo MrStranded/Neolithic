@@ -3,7 +3,7 @@ package engine.logic.topology;
 import constants.TopologyConstants;
 import engine.data.Data;
 import engine.data.entities.Instance;
-import engine.data.planetary.Tile;
+import engine.data.entities.Tile;
 import engine.math.numericalObjects.Vector3;
 
 import java.util.HashSet;

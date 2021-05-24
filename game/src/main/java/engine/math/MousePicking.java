@@ -1,9 +1,7 @@
 package engine.math;
 
 import engine.data.Data;
-import engine.data.planetary.Tile;
-import engine.graphics.gui.window.Window;
-import engine.graphics.objects.Camera;
+import engine.data.entities.Tile;
 import engine.graphics.objects.Scene;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.renderer.Renderer;

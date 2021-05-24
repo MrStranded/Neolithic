@@ -81,12 +81,17 @@ public class IdentifierNode extends AbstractScriptNode {
 		this.retrieveCompleteAttributeValue = retrieveCompleteAttributeValue;
 	}
 
+	public void setTarget(Variable target) {
+		this.target = target;
+	}
+
 	public Instance getTargetInstance() {
 		if (target != null) {
 			return target.getInstance();
 		}
 		return null;
 	}
+
 	public Container getTargetContainer() {
 		if (target != null) {
 			return target.getContainer();
@@ -97,9 +102,5 @@ public class IdentifierNode extends AbstractScriptNode {
 	@Override
 	public void print(String indentation) {
 		System.out.println(indentation + "Identifier: " + identifier);
-	}
-
-	public void setTarget(Variable target) {
-		this.target = target;
 	}
 }

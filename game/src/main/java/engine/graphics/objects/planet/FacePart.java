@@ -1,7 +1,7 @@
 package engine.graphics.objects.planet;
 
 import constants.TopologyConstants;
-import engine.data.planetary.Tile;
+import engine.data.entities.Tile;
 import engine.graphics.objects.generators.PlanetGenerator;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.renderer.color.RGBA;

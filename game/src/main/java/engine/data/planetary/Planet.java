@@ -1,10 +1,8 @@
 package engine.data.planetary;
 
+import engine.data.entities.Tile;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.objects.planet.PlanetObject;
-import engine.math.numericalObjects.Vector3;
-
-import java.util.Arrays;
 
 public class Planet {
 

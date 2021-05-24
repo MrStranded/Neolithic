@@ -5,15 +5,17 @@ import constants.ScriptConstants;
 import constants.TopologyConstants;
 import engine.data.Data;
 import engine.data.entities.Effect;
+import engine.data.entities.GuiElement;
 import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
-import engine.data.planetary.Tile;
+import engine.data.entities.Tile;
 import engine.data.proto.Container;
 import engine.data.scripts.Script;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
+import engine.graphics.gui.GuiData;
 import engine.logic.topology.*;
 import engine.math.numericalObjects.Vector3;
 import engine.parser.constants.TokenConstants;
@@ -96,7 +98,7 @@ public class CommandExecuter {
 						}
 					}
 
-					effect.run(ScriptConstants.EVENT_NEW, new Variable[] {new Variable(target)});
+					effect.run(ScriptConstants.EVENT_NEW, new Variable[] { new Variable(target) });
 
 					target.addEffect(effect);
 					return new Variable(effect);
@@ -112,7 +114,7 @@ public class CommandExecuter {
 					Effect effect = new Effect(containerId);
 					effect.setSuperInstance(target);
 
-					effect.run(ScriptConstants.EVENT_NEW, new Variable[] {new Variable(target)});
+					effect.run(ScriptConstants.EVENT_NEW, new Variable[] { new Variable(target) });
 
 					target.addEffect(effect);
 
@@ -254,17 +256,36 @@ public class CommandExecuter {
 				if (requireParameters(commandNode, 2)) {
 					Container container = parameters[0].getContainer();
 					Instance holder = parameters[1].getInstance();
-					int containerId = -1;
 
-					containerId = checkType(script, commandNode, container, parameters[0].getString());
+					int containerId = checkType(script, commandNode, container, parameters[0].getString());
 					checkValue(script, commandNode, holder, "holder instance");
 
-					Instance instance = new Instance(containerId);
+					Instance instance = Data.addInstanceToQueue(new Instance(containerId));
 					instance.placeInto(holder);
 
-					instance.run(ScriptConstants.EVENT_NEW, new Variable[] {parameters[1]});
+					instance.run(ScriptConstants.EVENT_NEW, new Variable[] { parameters[1] });
 
 					return new Variable(instance);
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& guiElement createGui (Container container [, parameters ... ])
+			case CREATE_GUI:
+				if (requireParameters(commandNode, 1)) {
+					Container container = parameters[0].getContainer();
+
+					int containerId = checkType(script, commandNode, container, parameters[0].getString());
+
+					GuiElement element = new GuiElement(containerId);
+					GuiData.getHud().addElement(element);
+
+					if (parameters.length > 1) {
+						element.run(ScriptConstants.EVENT_NEW, Arrays.copyOfRange(parameters, 1, parameters.length));
+					} else {
+						element.run(ScriptConstants.EVENT_NEW, new Variable[] {});
+					}
+
+					return new Variable(element);
 				}
 				break;
 
@@ -794,9 +815,9 @@ public class CommandExecuter {
 
 					Instance instance = holder.getThisOrSubInstanceWithID(containerId);
 					if (instance == null) {
-						instance = new Instance(containerId);
+						instance = Data.addInstanceToQueue(new Instance(containerId));
 
-						instance.run(ScriptConstants.EVENT_NEW, new Variable[] {parameters[1]});
+						instance.run(ScriptConstants.EVENT_NEW, new Variable[] { parameters[1] });
 //						Data.addInstanceToQueue(instance);
 					}
 					instance.placeInto(holder);
@@ -1252,6 +1273,17 @@ public class CommandExecuter {
 				}
 				break;
 
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void select (Instance target)
+			case SELECT:
+				if (requireParameters(commandNode, 1)) {
+					Instance target = parameters[0].getInstance();
+
+					GameOptions.selectedInstance = target;
+
+					return new Variable("Semira <3");
+				}
+				break;
+
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void setDefaultStage (Instance target)
 			case SET_DEFAULT_STAGE:
 				if (requireParameters(commandNode, 1)) {
@@ -1334,6 +1366,20 @@ public class CommandExecuter {
 					Data.getSun().setAngle(angle);
 
 					return new Variable("Semira <3");
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string setText (string text)
+			case SET_TEXT:
+				if (requireParameters(commandNode, 2)) {
+					GuiElement target = parameters[0].getGuiElement();
+					String text = parameters[1].getString();
+
+					checkValue(script, commandNode, target, "target element");
+
+					target.setText(text);
+
+					return new Variable(text);
 				}
 				break;
 

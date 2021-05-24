@@ -52,6 +52,6 @@ public class Effect extends Instance {
     // ###################################################################################
 
     public String toString() {
-        return "Effect (id = " + id + (getName() != null ? " Name: " + getName() : "") + ")";
+        return "Effect (id = " + id + (getName() != null ? " ,name = " + getName() : "") + ")";
     }
 }

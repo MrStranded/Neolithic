@@ -3,6 +3,7 @@ package engine.graphics.gui;
 import engine.graphics.gui.statistics.StatisticsWindow;
 import engine.graphics.gui.window.Window;
 import engine.graphics.objects.Scene;
+import engine.graphics.objects.textures.FontTexture;
 import engine.graphics.renderer.Renderer;
 
 import java.awt.*;
@@ -17,6 +18,7 @@ public class GuiData {
 
     private static Scene scene;
     private static GUIInterface hud;
+    private static FontTexture fontTexture;
 
     // ###################################################################################
     // ################################ Initialization ###################################
@@ -33,6 +35,12 @@ public class GuiData {
 
         scene = new Scene();
         hud = new BaseGUI();
+
+        try {
+            fontTexture = new FontTexture(new Font("Arial", Font.PLAIN, 50), "US-ASCII"); // UTF-8 , UTF-16 , US-ASCII , ISO-8859-1 (the utf charsets don't work)
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // ###################################################################################
@@ -70,5 +78,9 @@ public class GuiData {
 
     public static GUIInterface getHud() {
         return hud;
+    }
+
+    public static FontTexture getFontTexture() {
+        return fontTexture;
     }
 }

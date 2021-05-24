@@ -2,12 +2,10 @@ package engine.data.entities;
 
 import constants.ScriptConstants;
 import engine.data.Data;
-import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.behaviour.Occupation;
 import engine.data.interaction.SelectedInstance;
 import engine.data.options.GameOptions;
-import engine.data.planetary.Tile;
 import engine.data.proto.*;
 import engine.data.scripts.Script;
 import engine.data.structures.WeightedList;
@@ -49,8 +47,6 @@ public class Instance {
 
 		initMoveableObject();
         inheritAttributes(Collections.emptyList());
-
-		Data.addInstanceToQueue(this);
 	}
 
     // ###################################################################################
@@ -149,7 +145,9 @@ public class Instance {
 		return getContainer().map(container -> {
 			Script script = container.getScript(stage, textID);
 
-			if (script == null && this == GameOptions.selectedInstance) { Logger.trace(getName() + " tried to run non-existing script '" + textID + "'"); }
+			if (script == null && this == GameOptions.selectedInstance) {
+				Logger.trace(getName() + " tried to run non-existing script '" + textID + "'");
+			}
 			return runScript(script, parameters);
 		}).orElse(new Variable());
 	}
@@ -158,7 +156,9 @@ public class Instance {
 		if (scriptContainer != null) {
 			Script script = scriptContainer.getScript(stage, textID);
 
-			if (script == null && this == GameOptions.selectedInstance) { Logger.trace(getName() + " tried to run non-existing script '" + textID + "' on " + scriptContainer.getName(null)); }
+			if (script == null && this == GameOptions.selectedInstance) {
+				Logger.trace(getName() + " tried to run non-existing script '" + textID + "' on " + scriptContainer.getName(null));
+			}
 			return runScript(script, parameters);
 		}
 		return new Variable();
@@ -166,7 +166,9 @@ public class Instance {
 
 	public Variable run(Script script, Variable[] parameters) {
 
-		if (script == null && this == GameOptions.selectedInstance) { Logger.trace(getName() + " tried to run non-existing script with parameters: " + Arrays.toString(parameters)); }
+		if (script == null && this == GameOptions.selectedInstance) {
+			Logger.trace(getName() + " tried to run non-existing script with parameters: " + Arrays.toString(parameters));
+		}
 		return runScript(script, parameters);
 	}
 
@@ -343,6 +345,7 @@ public class Instance {
 	    if (runTickScripts && delayUntilNextTick <= 0) {
 			if (this == GameOptions.selectedInstance) {
 				SelectedInstance.instance().clear();
+				Logger.trace("=== === Ticking " + getName());
 			}
 
 			if (occupations == null || occupations.isEmpty()) {
@@ -451,7 +454,7 @@ public class Instance {
 
 	public void actualizeObjectPosition() {
 		if (this == GameOptions.selectedInstance) {
-			Logger.debug("Actualizing position of " + this);
+			Logger.trace("Actualizing position of " + this);
 		}
 
 		if (superInstance != null && moveableObject != null) {
@@ -508,7 +511,7 @@ public class Instance {
 		}
 	}
 
-	private void recursiveSlatingForRemoval() {
+	protected void recursiveSlatingForRemoval() {
 		if (this == GameOptions.selectedInstance) {
 			GameOptions.selectedInstance = null;
 		}
@@ -821,9 +824,6 @@ public class Instance {
 	public boolean isSlatedForRemoval() {
 		return slatedForRemoval;
 	}
-	private void setSlatedForRemoval(boolean slatedForRemoval) {
-		this.slatedForRemoval = slatedForRemoval;
-	}
 
 	public Queue<Occupation> getOccupations() {
 		return occupations;
@@ -842,7 +842,6 @@ public class Instance {
 	public void setStage(String stage) {
 		this.stage = stage;
 		meshHub = null;
-//		inheritAttributes();
 	}
 
 	// ###################################################################################

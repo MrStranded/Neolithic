@@ -1,9 +1,9 @@
-package engine.data.planetary;
+package engine.data.entities;
 
 import constants.TopologyConstants;
 import engine.data.IDInterface;
-import engine.data.entities.Instance;
 import engine.data.Data;
+import engine.data.planetary.Face;
 import engine.data.proto.TileContainer;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.renderer.color.RGBA;
@@ -23,6 +23,8 @@ public class Tile extends Instance implements IDInterface {
 
 	public Tile(int id, int xPos, int yPos, Face face) {
 		super(id);
+		Data.addInstanceToQueue(this);
+
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.face = face;
@@ -30,6 +32,8 @@ public class Tile extends Instance implements IDInterface {
 
 	public Tile(int id, Tile old) {
 		super(id);
+		Data.addInstanceToQueue(this);
+
 		this.xPos = old.getX();
 		this.yPos = old.getY();
 		this.height = old.getHeight();

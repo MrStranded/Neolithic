@@ -2,7 +2,7 @@ package engine.graphics.objects.generators;
 
 import constants.TopologyConstants;
 import engine.data.planetary.Planet;
-import engine.data.planetary.Tile;
+import engine.data.entities.Tile;
 import engine.graphics.objects.models.Material;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.FacePart;

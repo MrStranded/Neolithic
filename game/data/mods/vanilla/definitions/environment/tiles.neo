@@ -61,6 +61,7 @@ Tile: tGras inherits tSoakingHumidity, tTemperature {
 		        change(self, tDirt);
 		    }
 		}
+		if (.attNutrition > 100) { ..attNutrition--; }
 	}
 }
 

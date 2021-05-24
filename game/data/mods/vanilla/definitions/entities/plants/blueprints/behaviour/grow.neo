@@ -1,7 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////// Grow
 
 Drive: driGrow {
-    solutions = { proGrow; }
+    solutions = {
+		proGrow;
+		proRest;
+	}
 
     Script: condition { return .bodySize < .bodyPreference; }
 
@@ -14,13 +17,21 @@ Drive: driGrow {
 
 Process: proGrow {
     Script: condition {
-		require(getFullAtt(getTile(self), "bodySize") < 100);
+		require(getFullAtt(getTile(self), "bodySize") < 100 + .bodyPreference);
         require(.attNutrition >= .bodyRestoration);
+		require(.fatigue <= .bodyRestoration);
     }
 
     Script: process {
 		..bodySize += .bodyRestoration;
 		..attNutrition -= .bodyRestoration * (1 - .attEfficieny / 100);
+		..fatigue++;
+    }
+}
+
+Process: proRest {
+    Script: process {
+		..fatigue -= .bodyRestoration;
     }
 }
 

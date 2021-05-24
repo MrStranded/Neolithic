@@ -1,0 +1,37 @@
+Gui: gInstanceDetail {
+	
+	template = Box;
+	layout = vertical;
+	
+	Script: new(instance) {
+		->instance = instance;
+		
+		setText(self, ->instance);
+		// addGui(self, gText, ->instance);
+		// addGui(self, gText, "Nutrition: " + ->instance.attNutrition);
+		// addGui(self, gStatText, ->instance);
+	}
+	
+}
+
+// Gui: gText {
+
+	// template = Text;
+	
+	// Script: new(text) {
+		// setText(self, text);
+	// }
+// }
+
+// Gui: gStatText {
+
+	// template = Text;
+	
+	// Script: new(instance) {
+		// ->instance = instance;
+	// }
+	
+	// Script: tick() {
+		// setText(self, "Health: " + ->instance.bodyHealth);
+	// }
+// }

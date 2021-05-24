@@ -1,39 +1,23 @@
 package engine.graphics.renderer;
 
-import constants.GameConstants;
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
 import engine.TimedTask;
-import engine.data.entities.Instance;
-import engine.data.options.GameOptions;
 import engine.data.planetary.Planet;
 import engine.data.Data;
-import engine.data.planetary.Tile;
-import engine.data.proto.Container;
-import engine.data.scripts.ScriptRun;
-import engine.data.variables.DataType;
-import engine.data.variables.Variable;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.*;
-import engine.graphics.objects.generators.PlanetGenerator;
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.light.*;
 import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.input.IngameInteractions;
-import engine.input.KeyboardInput;
-import engine.input.MouseInput;
 import engine.graphics.gui.window.Window;
-import engine.logic.topology.TopologyGenerator;
 import engine.math.MatrixCalculations;
-import engine.math.MousePicking;
-import engine.math.numericalObjects.Vector3;
-import engine.math.numericalObjects.Vector4;
 import engine.parser.utils.Logger;
 import load.StringLoader;
 import engine.math.numericalObjects.Matrix4;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
@@ -441,17 +425,19 @@ public class Renderer {
 		// set used texture (id = 0)
 		hudShaderProgram.setUniform("textureSampler", 0);
 
-		for (GUIObject object : hud.getHUDObjects()) {
-			if (object != null) {
-				if (aspectRatioHasChanged) {
-					object.recalculateScale(window.getWidth(), window.getHeight());
-				}
+		hud.render(hudShaderProgram, orthographicMatrix);
 
-				hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
-				//hudShaderProgram.setUniform("color", object.getMesh().getTopColor());
-				object.renderForGUI();
-			}
-		}
+//		for (GUIObject object : hud.getElements()) {
+//			if (object != null) {
+//				if (aspectRatioHasChanged) {
+//					object.recalculateScale(window.getWidth(), window.getHeight());
+//				}
+//
+//				hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
+//				//hudShaderProgram.setUniform("color", object.getMesh().getTopColor());
+//				object.renderForGUI();
+//			}
+//		}
 
 		hudShaderProgram.unbind();
 

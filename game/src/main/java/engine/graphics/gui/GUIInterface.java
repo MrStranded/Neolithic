@@ -1,20 +1,17 @@
 package engine.graphics.gui;
 
-import engine.graphics.objects.gui.GUIObject;
+import engine.data.entities.GuiElement;
+import engine.graphics.renderer.shaders.ShaderProgram;
+import engine.math.numericalObjects.Matrix4;
 
 public interface GUIInterface {
 
-	void tick(int windowWidth, int windowHeight);
+	void tick();
 
-	void addHUDObject(GUIObject guiObject);
+	void render(ShaderProgram hudShaderProgram, Matrix4 orthographicMatrix);
 
-	GUIObject[] getHUDObjects();
+	void addElement(GuiElement guiElement);
 
-	default void cleanUp() {
-		GUIObject[] objects = getHUDObjects();
-		for (GUIObject object : objects) {
-			object.cleanUp();
-		}
-	}
+	void cleanUp();
 
 }

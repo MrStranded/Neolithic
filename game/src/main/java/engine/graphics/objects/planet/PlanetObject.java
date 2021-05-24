@@ -1,12 +1,10 @@
 package engine.graphics.objects.planet;
 
 import engine.data.planetary.Planet;
-import engine.data.planetary.Tile;
-import engine.graphics.objects.Scene;
+import engine.data.entities.Tile;
 import engine.graphics.objects.generators.PlanetGenerator;
 import engine.graphics.objects.models.Material;
 import engine.graphics.objects.movement.MoveableObject;
-import engine.graphics.renderer.Renderer;
 import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;

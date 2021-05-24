@@ -3,25 +3,20 @@ package engine.data;
 import constants.GameConstants;
 import constants.ScriptConstants;
 import engine.data.entities.Instance;
-import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
-import engine.data.planetary.Tile;
+import engine.data.entities.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
-import engine.data.scripts.Script;
 import engine.data.scripts.ScriptRun;
 import engine.data.variables.DataType;
-import engine.graphics.gui.BaseGUI;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.objects.planet.Sun;
-import engine.parser.constants.TokenConstants;
 import engine.parser.utils.Logger;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class Data {
@@ -131,7 +126,7 @@ public class Data {
 		return addContainer(mainContainer);
 	}
 	private static void prepareMainInstance(int mainID) {
-		mainInstance = new Instance(mainID);
+		mainInstance = Data.addInstanceToQueue(new Instance(mainID));
 	}
 
 	// ###################################################################################
@@ -317,13 +312,15 @@ public class Data {
 	}
 
 	/**
-	 * Adds the given creature to the end of the creature queue. Does nothing if the given creature is null.
+	 * Adds the given instance to the end of the instance queue. Does nothing if the given instance is null.
 	 * @param instance to add to queue
+	 * @return given instance
 	 */
-	public static void addInstanceToQueue(Instance instance) {
+	public static Instance addInstanceToQueue(Instance instance) {
 		if (instance != null) {
 			instanceQueue.add(instance);
 		}
+		return instance;
 	}
 
 	public static void addScriptRun(ScriptRun scriptRun) {

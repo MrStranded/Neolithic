@@ -35,6 +35,9 @@ public enum DataType {
 	RGBA,
 	TREE,
 
+	// gui
+	GUI
+
 	// silly little small tailing semicolon - look how cute it is
 	;
 	// UwU

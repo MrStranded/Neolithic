@@ -79,23 +79,8 @@ Script: mark(target) {
 }
 
 Script: rightClick(tile) {
-    /*boulder = getInstanceInRange(entBoulder, tile, 0);
-    if (boulder) {
-        destroy(boulder);
-    } else {
-        create(entBoulder, tile);
-    }*/
-
-    /*adam = create(cHuman, tile);
-    adam..attGender = -1;
-    adam->updateMesh();
-    eva = create(cHuman, tile);
-    eva..attGender = 1;
-    eva->updateMesh();*/
-
-    for (n : getNeighbors(tile)) {
-        create(entMarker, n);
-    }
+	select(tile);
+	createGui(gInstanceDetail, tile);
 }
 
 Script: leftClick(tile, type) {

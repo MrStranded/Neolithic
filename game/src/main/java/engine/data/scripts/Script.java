@@ -81,6 +81,11 @@ public class Script implements IDInterface {
 		// pop variable stack
 		variableStack.pop();
 
+		// debugging 2
+		if (self == GameOptions.selectedInstance) {
+			Logger.trace("    '" + textId + "' returned: " + result);
+		}
+
 		return result;
 	}
 

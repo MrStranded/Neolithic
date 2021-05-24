@@ -2,11 +2,12 @@ package engine.data.variables;
 
 import engine.data.Data;
 import engine.data.IDInterface;
+import engine.data.entities.GuiElement;
 import engine.data.identifiers.ContainerIdentifier;
 import engine.data.scripts.Script;
 import engine.data.attributes.Attribute;
 import engine.data.entities.Instance;
-import engine.data.planetary.Tile;
+import engine.data.entities.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
 import engine.data.structures.trees.binary.BinaryTree;
@@ -63,13 +64,16 @@ public class Variable implements IDInterface {
 		this.value = value;
 	}
 
+	public Variable(Instance value) {
+		this.type = DataType.INSTANCE;
+		this.value = value;
+	}
 	public Variable(Tile value) {
 		this.type = DataType.TILE;
 		this.value = value;
 	}
-
-	public Variable(Instance value) {
-		this.type = DataType.INSTANCE;
+	public Variable(GuiElement value) {
+		this.type = DataType.GUI;
 		this.value = value;
 	}
 
@@ -358,11 +362,27 @@ public class Variable implements IDInterface {
 			return (Instance) value;
 		} else if (type == DataType.TILE) {
 			return ((Instance) value);
+		} else if (type == DataType.GUI) {
+			return ((Instance) value);
 		}
 		return null;
 	}
 	public void setInstance(Instance v) {
 		type = DataType.INSTANCE;
+		value = v;
+	}
+
+	// ----------------------------------------------- gui element
+	public GuiElement getGuiElement() {
+		if (type == DataType.GUI) {
+			return ((GuiElement) value);
+		} else if (type == DataType.INSTANCE && value instanceof GuiElement) {
+			return ((GuiElement) value);
+		}
+		return null;
+	}
+	public void setGuiElement(GuiElement v) {
+		type = DataType.GUI;
 		value = v;
 	}
 

@@ -1,7 +1,7 @@
 package engine.logic.topology;
 
 import engine.data.planetary.Planet;
-import engine.data.planetary.Tile;
+import engine.data.entities.Tile;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.objects.planet.PlanetObject;
 import engine.math.numericalObjects.Vector3;
