@@ -1,5 +1,6 @@
 package engine.data.entities;
 
+import constants.PropertyKeys;
 import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.options.GameOptions;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class GuiElement extends Instance {
 
     private GUIObject guiObject;
+    private boolean update = false;
 
     public GuiElement(int id) {
         super(id);
@@ -42,13 +44,9 @@ public class GuiElement extends Instance {
     public void render(ShaderProgram hudShaderProgram, Matrix4 orthographicMatrix) {
         if (isSlatedForRemoval() || GameOptions.reloadScripts) { return; }
 
-        if (guiObject == null && text != null) {
-            Logger.trace("Creating guiObject with text '" + text + "'");
-
-            guiObject = new TextObject(text, GuiData.getFontTexture());
-            guiObject.setSize(600,30);
-            guiObject.setLocation(0,0);
-            guiObject.setRelativeScreenPositionX(RelativeScreenPosition.CENTER);
+        if (update) {
+            updateObject();
+            update = false;
         }
 
         // render self
@@ -60,16 +58,40 @@ public class GuiElement extends Instance {
         // render subs
         if (getSubInstances() != null) {
             try {
-                getSubInstances().forEach(Instance::render);
+                getSubInstances().stream()
+                        .filter(instance -> instance instanceof GuiElement)
+                        .map(instance -> (GuiElement) instance)
+                        .forEach(element -> element.render(hudShaderProgram, orthographicMatrix));
             } catch (ConcurrentModificationException e) { /* it's okay really */ }
         }
     }
 
-    protected void recursiveSlatingForRemoval() {
-        super.recursiveSlatingForRemoval();
+    // ###################################################################################
+    // ################################ Create Gui #######################################
+    // ###################################################################################
 
-        if (guiObject != null) {
-            guiObject.cleanUp();
+    private void updateObject() {
+        // we should clean up the old mesh
+//        if (guiObject != null) {
+//            guiObject.cleanUp();
+//            guiObject = null;
+//        }
+
+        Variable template = getProperty(PropertyKeys.TEMPLATE);
+
+        if (template.notNull()) { createGuiForTemplate(template.getString().toLowerCase()); }
+    }
+
+    private void createGuiForTemplate(String template) {
+        Logger.trace("Creating gui object for template '" + template + "'");
+
+        if ("text".equals(template)) {
+            String text = getProperty(PropertyKeys.TEXT).getString();
+
+            guiObject = new TextObject(text, GuiData.getFontTexture());
+            guiObject.setSize(text.length() * 10, 20);
+            guiObject.setLocation(-400, 0);
+            guiObject.setRelativeScreenPositionX(RelativeScreenPosition.CENTER);
         }
     }
 
@@ -77,15 +99,14 @@ public class GuiElement extends Instance {
     // ################################ Getters and Setters ##############################
     // ###################################################################################
 
-    private String text;
+    public void setText(Variable text) {
+        getContainer().ifPresent(container -> container.setProperty(
+                getStage(),
+                PropertyKeys.TEXT.key(),
+                text
+        ));
 
-    public void setText(String text) {
-        this.text = text;
-
-        if (guiObject != null) {
-            guiObject.cleanUp();
-            guiObject = null;
-        }
+        update = true;
     }
 
     // ###################################################################################

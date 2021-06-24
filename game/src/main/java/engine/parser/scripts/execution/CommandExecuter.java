@@ -743,6 +743,22 @@ public class CommandExecuter {
 				}
 				break;
 
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string getName (Instance | Container target)
+			case GET_NAME:
+				if (requireParameters(commandNode, 1)) {
+					Instance instance = parameters[0].getInstance();
+
+					if (instance != null) {
+						return new Variable(instance.getName());
+					}
+
+					Container container = parameters[0].getContainer();
+					checkValue(script, commandNode, container, "target container or instance");
+
+					return new Variable(container.getName(null));
+				}
+				break;
+
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tile getNeighbor (Tile tile, int position)
 			case GET_NEIGHBOUR:
 				if (requireParameters(commandNode, 2)) {
@@ -782,24 +798,7 @@ public class CommandExecuter {
 
 					checkValue(script, commandNode, target, "target instance");
 
-					return target.getContainer()
-							.flatMap(c -> c.getProperty(target.getStage(), key))
-							.orElseGet(Variable::new);
-				}
-				break;
-
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& List getPropertyList (Instance target, String key)
-			case GET_PROPERTY_LIST:
-				if (requireParameters(commandNode, 2)) {
-					Instance target = parameters[0].getInstance();
-					String key = parameters[1].getString();
-
-					checkValue(script, commandNode, target, "target instance");
-
-					return target.getContainer()
-							.flatMap(c -> c.getProperty(target.getStage(), key))
-							.filter(variable -> variable.getType() == DataType.LIST)
-							.orElseGet(() -> new Variable(Collections.emptyList()));
+					return target.getProperty(key);
 				}
 				break;
 
@@ -1373,13 +1372,12 @@ public class CommandExecuter {
 			case SET_TEXT:
 				if (requireParameters(commandNode, 2)) {
 					GuiElement target = parameters[0].getGuiElement();
-					String text = parameters[1].getString();
 
 					checkValue(script, commandNode, target, "target element");
 
-					target.setText(text);
+					target.setText(parameters[1]);
 
-					return new Variable(text);
+					return parameters[1];
 				}
 				break;
 

@@ -118,10 +118,10 @@ public enum TokenConstants {
 	GET_LATITUDE    	     	(TokenType.COMMAND, "getLatitude"),
 	GET_LONGITUDE	         	(TokenType.COMMAND, "getLongitude"),
 	GET_LIGHT_LEVEL         	(TokenType.COMMAND, "getLightLevel"),
+	GET_NAME         			(TokenType.COMMAND, "getName"),
 	GET_NEIGHBOUR           	(TokenType.COMMAND, "getNeighbor"), // difference between british english in code and american english in scripts
 	GET_NEIGHBOURS          	(TokenType.COMMAND, "getNeighbors"),
 	GET_PROPERTY        		(TokenType.COMMAND, "getProperty"),
-	GET_PROPERTY_LIST			(TokenType.COMMAND, "getPropertyList"),
 	GET_TILE                	(TokenType.COMMAND, "getTile"),
 	GET_TILE_FROM_COORDINATES	(TokenType.COMMAND, "getTileFromCoords"),
 	GET_TILES_IN_RANGE      	(TokenType.COMMAND, "getTilesInRange"),

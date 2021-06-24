@@ -1,6 +1,7 @@
 package engine.graphics.gui;
 
 import engine.data.entities.GuiElement;
+import engine.data.entities.Instance;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
 
@@ -38,6 +39,8 @@ public class BaseGUI implements GUIInterface {
 	// ###################################################################################
 
 	public void addElement(GuiElement element) {
+		elements.forEach(Instance::destroy);
+		elements.clear();
 		elements.add(element);
 	}
 
@@ -50,6 +53,7 @@ public class BaseGUI implements GUIInterface {
 			element.destroy();
 		}
 	}
+
 
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################

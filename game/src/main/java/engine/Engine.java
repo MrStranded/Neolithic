@@ -94,7 +94,7 @@ public class Engine {
 	// ###################################################################################
 
 	public static void startLogic() {
-		if (! Engine.logicThread.isAlive()) {
+		if (! logicThread.isAlive()) {
 			new Engine().start();
 		}
 	}

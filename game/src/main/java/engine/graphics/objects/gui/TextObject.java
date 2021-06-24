@@ -34,47 +34,47 @@ public class TextObject extends GUIObject {
 		// please do not confuse with charInfo.xPos
 		// this xPos here refers to the current position in the text mesh
 		// the charInfo.xPos refers to the position of the char in the font texture
-		float xPos = 0f;
+		double xPos = 0f;
 
-		float fontWidth = fontTexture.getTexture().getWidth();
+		double fontWidth = fontTexture.getTexture().getWidth();
 		float fontHeight = fontTexture.getTexture().getHeight();
 
 		for (int i=0; i<numberOfCharacters; i++) {
 			CharInfo charInfo = fontTexture.getCharInfo(characters[i]);
-			float charWidth = charInfo.getWidth();
-			float charXPos = charInfo.getxPos();
+			double charWidth = charInfo.getWidth();
+			double charXPos = charInfo.getxPos();
 
 			// small tile / quad for current character
 
 			// top left vertex
-			positions.add(xPos);
+			positions.add((float) xPos);
 			positions.add(0f);
 			positions.add(0f);
-			textureCoordinates.add(charXPos / fontWidth);
+			textureCoordinates.add((float) (charXPos / fontWidth));
 			textureCoordinates.add(0f);
 			for (int c=0; c<4; c++) { colors.add(1f); }
 
 			// bottom left vertex
-			positions.add(xPos);
+			positions.add((float) xPos);
 			positions.add(-fontHeight);
 			positions.add(0f);
-			textureCoordinates.add(charXPos / fontWidth);
+			textureCoordinates.add((float) (charXPos / fontWidth));
 			textureCoordinates.add(1f);
 			for (int c=0; c<4; c++) { colors.add(1f); }
 
 			// top right vertex
-			positions.add(xPos + charWidth);
+			positions.add((float) (xPos + charWidth));
 			positions.add(0f);
 			positions.add(0f);
-			textureCoordinates.add((charXPos + charWidth) / fontWidth);
+			textureCoordinates.add((float) ((charXPos + charWidth) / fontWidth));
 			textureCoordinates.add(0f);
 			for (int c=0; c<4; c++) { colors.add(1f); }
 
 			// bottom right vertex
-			positions.add(xPos + charWidth);
+			positions.add((float) (xPos + charWidth));
 			positions.add(-fontHeight);
 			positions.add(0f);
-			textureCoordinates.add((charXPos + charWidth) / fontWidth);
+			textureCoordinates.add((float) ((charXPos + charWidth) / fontWidth));
 			textureCoordinates.add(1f);
 			for (int c=0; c<4; c++) { colors.add(1f); }
 
@@ -92,12 +92,12 @@ public class TextObject extends GUIObject {
 		// normalizing mesh
 		for (int i = 0; i < positions.size(); i++) {
 			if (i % 3 == 0) {
-				positions.set(i, positions.get(i) / xPos);
+				positions.set(i, (float) (positions.get(i) / xPos));
 			} else if (i % 3 == 1) {
 				positions.set(i, positions.get(i) / fontHeight + 1f);
 			}
 		}
-
+//MICHASCHLEGDPIPIBTMELONNICE
 		Mesh mesh = new Mesh(
                 IntegerConverter.IntegerListToIntArray(indices),
 				FloatConverter.FloatListToFloatArray(positions),

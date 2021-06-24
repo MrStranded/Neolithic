@@ -54,10 +54,7 @@ public class Renderer {
 
 	private Scene scene = null;
 	private GUIInterface hud = null;
-	private Planet planet = null;
 	private PlanetObject planetObject = null;
-
-	private double angle = 0;
 
 	public Renderer(Window window) {
 		this.window = window;
@@ -232,7 +229,6 @@ public class Renderer {
 	public void render(Scene scene, GUIInterface hud, Planet planet) {
 		this.scene = scene;
 		this.hud = hud;
-		this.planet = planet;
 		this.planetObject = planet != null ? planet.getPlanetObject() : null;
 
 		ingameInteractions.processInput(scene);
@@ -353,7 +349,7 @@ public class Renderer {
 			for (MeshHub meshHub : meshHubs) {
 				meshHub.clear();
 
-				if (!meshHub.isMeshLoaded()) {
+				if (! meshHub.isMeshLoaded()) {
 					meshHub.loadMesh();
 				}
 			}

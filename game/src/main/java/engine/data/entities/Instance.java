@@ -1,5 +1,6 @@
 package engine.data.entities;
 
+import constants.PropertyKeys;
 import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.attributes.Attribute;
@@ -149,7 +150,7 @@ public class Instance {
 				Logger.trace(getName() + " tried to run non-existing script '" + textID + "'");
 			}
 			return runScript(script, parameters);
-		}).orElse(new Variable());
+		}).orElseGet(Variable::new);
 	}
 
 	public Variable run(Container scriptContainer, String textID, Variable[] parameters) {
@@ -570,6 +571,15 @@ public class Instance {
 
 	public Optional<Container> getContainer() {
 		return Data.getContainer(id);
+	}
+
+	public Variable getProperty(PropertyKeys key) {
+		return getProperty(key.key());
+	}
+	public Variable getProperty(String key) {
+		return getContainer()
+				.flatMap(c -> c.getProperty(stage, key))
+				.orElseGet(Variable::new);
 	}
 
 	public void setMesh(String path) {

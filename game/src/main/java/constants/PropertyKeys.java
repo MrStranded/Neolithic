@@ -19,6 +19,7 @@ public enum PropertyKeys {
 
     TEMPLATE                ("template"),
     LAYOUT                  ("layout"),
+    TEXT                    ("text"),
 
     TOP_COLOR               ("topColor"),
     TOP_COLOR_DEVIATION     ("topColorVariance"),

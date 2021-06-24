@@ -23,7 +23,7 @@ Process: proPhotosynthesis {
 	
 	Script: process {
 		divisor = 100;
-		if (contains( getPropertyList(self, "prefers") , getType(getTile(self)) ) ) {
+		if (contains( getProperty(self, "prefers") , getType(getTile(self)) ) ) {
 			divisor = 50;
 		}
 	

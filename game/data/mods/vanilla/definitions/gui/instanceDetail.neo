@@ -1,12 +1,12 @@
 Gui: gInstanceDetail {
 	
-	template = Box;
+	template = Text;
 	layout = vertical;
 	
 	Script: new(instance) {
 		->instance = instance;
 		
-		setText(self, ->instance);
+		setText(self, getName(->instance));
 		// addGui(self, gText, ->instance);
 		// addGui(self, gText, "Nutrition: " + ->instance.attNutrition);
 		// addGui(self, gStatText, ->instance);
