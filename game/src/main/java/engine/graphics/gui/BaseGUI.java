@@ -20,6 +20,7 @@ public class BaseGUI implements GUIInterface {
 	// ################################ Functionality ####################################
 	// ###################################################################################
 
+	@Override
 	public void tick() {
 
 	}
@@ -28,19 +29,22 @@ public class BaseGUI implements GUIInterface {
 	// ################################ Graphical ########################################
 	// ###################################################################################
 
+	@Override
 	public void render(ShaderProgram hudShaderProgram, Matrix4 orthographicMatrix) {
-		for (GuiElement element : elements) {
-			element.render(hudShaderProgram, orthographicMatrix);
-		}
+		elements.forEach(e -> e.render(hudShaderProgram, orthographicMatrix));
+	}
+
+	@Override
+	public void resize() {
+		elements.forEach(GuiElement::resize);
 	}
 
 	// ###################################################################################
 	// ################################ Accessing ########################################
 	// ###################################################################################
 
+	@Override
 	public void addElement(GuiElement element) {
-		elements.forEach(Instance::destroy);
-		elements.clear();
 		elements.add(element);
 	}
 
@@ -48,10 +52,10 @@ public class BaseGUI implements GUIInterface {
 	// ################################ Clean Up #########################################
 	// ###################################################################################
 
-	public void cleanUp() {
-		for (GuiElement element : elements) {
-			element.destroy();
-		}
+	@Override
+	public void clear() {
+		elements.forEach(Instance::destroy);
+		elements.clear();
 	}
 
 

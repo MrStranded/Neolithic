@@ -38,4 +38,7 @@ public class GraphicalConstants {
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Sun Properties %%%%%%%%%%%%%%%%%%%%%%%%
 	public static final double SUN_DISTANCE = 1000d;
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Font Properties %%%%%%%%%%%%%%%%%%%%%%%%
+	public static final int FONT_WIDTH_PADDING = 4;
 }

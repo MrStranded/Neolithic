@@ -37,7 +37,7 @@ public class GuiData {
         hud = new BaseGUI();
 
         try {
-            fontTexture = new FontTexture(new Font("Arial", Font.PLAIN, 50), "US-ASCII"); // UTF-8 , UTF-16 , US-ASCII , ISO-8859-1 (the utf charsets don't work)
+            fontTexture = new FontTexture(new Font("Arial", Font.PLAIN, 100), "US-ASCII"); // UTF-8 , UTF-16 , US-ASCII , ISO-8859-1 (the utf charsets don't work)
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,7 +50,7 @@ public class GuiData {
     public static void clear() {
         if (renderer != null) { renderer.cleanUp(); }
         if (scene != null) { scene.cleanUp(); }
-        if (hud != null) { hud.cleanUp(); }
+        if (hud != null) { hud.clear(); }
 
         if (renderWindow != null) { renderWindow.destroy(); }
         if (statisticsWindow != null) { statisticsWindow.close(); }

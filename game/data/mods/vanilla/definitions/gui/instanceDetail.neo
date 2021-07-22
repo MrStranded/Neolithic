@@ -6,7 +6,7 @@ Gui: gInstanceDetail {
 	Script: new(instance) {
 		->instance = instance;
 		
-		setText(self, getName(->instance));
+		->text = getName(->instance);
 		// addGui(self, gText, ->instance);
 		// addGui(self, gText, "Nutrition: " + ->instance.attNutrition);
 		// addGui(self, gStatText, ->instance);

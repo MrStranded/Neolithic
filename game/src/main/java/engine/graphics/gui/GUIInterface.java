@@ -10,8 +10,10 @@ public interface GUIInterface {
 
 	void render(ShaderProgram hudShaderProgram, Matrix4 orthographicMatrix);
 
+	void resize();
+
 	void addElement(GuiElement guiElement);
 
-	void cleanUp();
+	void clear();
 
 }

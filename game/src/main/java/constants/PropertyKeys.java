@@ -4,6 +4,9 @@ import engine.parser.tokenization.Token;
 
 public enum PropertyKeys {
 
+    ATTRIBUTES              ("attributes"),
+    SCRIPTS                 ("scripts"),
+
     INHERITED_CONTAINERS    ("inherited"),
     SOLUTIONS               ("solutions"),
     KNOWLEDGE               ("knowledge"),

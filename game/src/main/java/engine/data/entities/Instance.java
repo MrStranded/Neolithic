@@ -785,6 +785,9 @@ public class Instance {
 		return variables;
 	}
 
+	public Optional<Variable> getVariableSafe(String name) {
+		return Optional.ofNullable(getVariable(name));
+	}
 	public Variable getVariable(String name) {
 		if (variables == null) { return null; }
 
@@ -798,6 +801,7 @@ public class Instance {
 		return variable;
 	}
 	public void addVariable(Variable variable) {
+		if (variable == null) { return; }
 		createVariablesIfNecessary();
 		variables.insert(variable);
 	}

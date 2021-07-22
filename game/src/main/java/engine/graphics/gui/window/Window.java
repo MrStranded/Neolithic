@@ -90,7 +90,7 @@ public class Window {
 		if (!resizable) { return; }
 
 		// Setup a resize callback. It will be called every time the window is resized.
-		Window self = this;
+		final Window self = this;
 		GLFW.glfwSetWindowSizeCallback(window, new GLFWWindowSizeCallback(){
 			@Override
 			public void invoke(long window, int width, int height){

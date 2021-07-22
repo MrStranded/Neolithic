@@ -133,18 +133,6 @@ public class IngameInteractions {
         }
         if (mouse.isRightButtonClicked()) {
             Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), renderer, scene);
-//            if (clickedTile != null) {
-//
-//                // we try to take first sub instance. otherwise take clicked tile
-//                if (clickedTile.getSubInstances() == null || clickedTile.getSubInstances().size() == 0) {
-//                    GameOptions.selectedInstance = clickedTile;
-//                } else {
-//                    for (Instance sub : clickedTile.getSubInstances()) {
-//                        GameOptions.selectedInstance = sub;
-//                        break;
-//                    }
-//                }
-//            }
 			if (clickedTile != null) {
 				Data.addScriptRun(new ScriptRun(
 						Data.getMainInstance(),

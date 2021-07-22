@@ -6,6 +6,7 @@ import engine.TimedTask;
 import engine.data.planetary.Planet;
 import engine.data.Data;
 import engine.graphics.gui.GUIInterface;
+import engine.graphics.gui.GuiData;
 import engine.graphics.objects.*;
 import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.light.*;
@@ -153,6 +154,8 @@ public class Renderer {
 			// ---------------------------------------------------------- hud
 			hudShaderProgram.createUniform("projectionViewMatrix");
 			hudShaderProgram.createUniform("textureSampler");
+			hudShaderProgram.createUniform("horizontalStep");
+			hudShaderProgram.createUniform("verticalStep");
 			//hudShaderProgram.createUniform("color");
 
 			// ---------------------------------------------------------- shadow maps
@@ -420,20 +423,11 @@ public class Renderer {
 
 		// set used texture (id = 0)
 		hudShaderProgram.setUniform("textureSampler", 0);
+		hudShaderProgram.setUniform("horizontalStep", 1f / GuiData.getFontTexture().getWidth());
+		hudShaderProgram.setUniform("verticalStep", 1f / GuiData.getFontTexture().getHeight());
 
 		hud.render(hudShaderProgram, orthographicMatrix);
-
-//		for (GUIObject object : hud.getElements()) {
-//			if (object != null) {
-//				if (aspectRatioHasChanged) {
-//					object.recalculateScale(window.getWidth(), window.getHeight());
-//				}
-//
-//				hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
-//				//hudShaderProgram.setUniform("color", object.getMesh().getTopColor());
-//				object.renderForGUI();
-//			}
-//		}
+		hud.resize();
 
 		hudShaderProgram.unbind();
 

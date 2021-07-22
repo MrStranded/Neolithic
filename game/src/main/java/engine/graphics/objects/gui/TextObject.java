@@ -1,22 +1,31 @@
 package engine.graphics.objects.gui;
 
+import constants.GraphicalConstants;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.textures.CharInfo;
 import engine.graphics.objects.textures.FontTexture;
+import engine.graphics.renderer.color.RGBA;
 import engine.utils.converters.FloatConverter;
 import engine.utils.converters.IntegerConverter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class TextObject extends GUIObject {
 
 	private String text;
 	private FontTexture fontTexture;
+	private RGBA color;
+	private double textWidth = 0;
 
 	public TextObject(String text, FontTexture fontTexture) {
+		this(text, fontTexture, RGBA.WHITE);
+	}
+	public TextObject(String text, FontTexture fontTexture, RGBA textColor) {
 		this.text = text;
 		this.fontTexture = fontTexture;
+		this.color = textColor;
 
 		setMesh(buildMesh());
 	}
@@ -38,45 +47,46 @@ public class TextObject extends GUIObject {
 
 		double fontWidth = fontTexture.getTexture().getWidth();
 		float fontHeight = fontTexture.getTexture().getHeight();
+		if (fontHeight == 0) { fontHeight = 1; }
 
 		for (int i=0; i<numberOfCharacters; i++) {
 			CharInfo charInfo = fontTexture.getCharInfo(characters[i]);
 			double charWidth = charInfo.getWidth();
-			double charXPos = charInfo.getxPos();
+			double charXPos = charInfo.getXPos();
 
 			// small tile / quad for current character
 
 			// top left vertex
 			positions.add((float) xPos);
-			positions.add(0f);
+			positions.add(1f);
 			positions.add(0f);
 			textureCoordinates.add((float) (charXPos / fontWidth));
 			textureCoordinates.add(0f);
-			for (int c=0; c<4; c++) { colors.add(1f); }
+			addColor(colors);
 
 			// bottom left vertex
 			positions.add((float) xPos);
-			positions.add(-fontHeight);
+			positions.add(0f);
 			positions.add(0f);
 			textureCoordinates.add((float) (charXPos / fontWidth));
 			textureCoordinates.add(1f);
-			for (int c=0; c<4; c++) { colors.add(1f); }
+			addColor(colors);
 
 			// top right vertex
 			positions.add((float) (xPos + charWidth));
+			positions.add(1f);
 			positions.add(0f);
-			positions.add(0f);
-			textureCoordinates.add((float) ((charXPos + charWidth) / fontWidth));
+			textureCoordinates.add((float) ((charXPos + charWidth - GraphicalConstants.FONT_WIDTH_PADDING) / fontWidth));
 			textureCoordinates.add(0f);
-			for (int c=0; c<4; c++) { colors.add(1f); }
+			addColor(colors);
 
 			// bottom right vertex
 			positions.add((float) (xPos + charWidth));
-			positions.add(-fontHeight);
 			positions.add(0f);
-			textureCoordinates.add((float) ((charXPos + charWidth) / fontWidth));
+			positions.add(0f);
+			textureCoordinates.add((float) ((charXPos + charWidth - GraphicalConstants.FONT_WIDTH_PADDING) / fontWidth));
 			textureCoordinates.add(1f);
-			for (int c=0; c<4; c++) { colors.add(1f); }
+			addColor(colors);
 
 			// indices
 			indices.add(i*4 + 0);
@@ -88,16 +98,14 @@ public class TextObject extends GUIObject {
 
 			xPos += charWidth;
 		}
+		textWidth = xPos / fontHeight;
 
-		// normalizing mesh
-		for (int i = 0; i < positions.size(); i++) {
-			if (i % 3 == 0) {
-				positions.set(i, (float) (positions.get(i) / xPos));
-			} else if (i % 3 == 1) {
-				positions.set(i, positions.get(i) / fontHeight + 1f);
-			}
+		// normalizing mesh (only x axis necessary, y axis already normal)
+		for (int i = 0; i < positions.size(); i += 3) {
+			positions.set(i, (float) (positions.get(i) / xPos));
 		}
-//MICHASCHLEGDPIPIBTMELONNICE
+
+		// MICHASCHLEGDPIPIBTMELONNICE
 		Mesh mesh = new Mesh(
                 IntegerConverter.IntegerListToIntArray(indices),
 				FloatConverter.FloatListToFloatArray(positions),
@@ -108,6 +116,13 @@ public class TextObject extends GUIObject {
 
 		mesh.getMaterial().setTexture(fontTexture.getTexture());
 		return mesh;
+	}
+
+	private void addColor(List<Float> colors) {
+		colors.add((float) color.getR());
+		colors.add((float) color.getG());
+		colors.add((float) color.getB());
+		colors.add((float) color.getA());
 	}
 
 	// ###################################################################################
@@ -122,6 +137,14 @@ public class TextObject extends GUIObject {
 		this.text = text;
 		mesh.cleanUp();
 		setMesh(buildMesh());
+	}
+
+	/**
+	 * When we define the height of the text mesh as 1, then the textWidth is the width of the mesh in relation to its height.
+	 * @return width of text mesh
+	 */
+	public double getTextWidth() {
+		return textWidth;
 	}
 
 	public FontTexture getFontTexture() {

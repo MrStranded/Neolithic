@@ -9,6 +9,5 @@ public enum TokenType {
 	OPERATOR,
 	LITERAL,
 	COMMENT, // only used in tokenizer to specifiy comment starts and ends
-	PROPERTY_TYPE,
 
 }

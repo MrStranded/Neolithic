@@ -1,5 +1,6 @@
 package engine.graphics.objects.textures;
 
+import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
 import engine.parser.utils.Logger;
 import load.TextureLoader;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.HashMap;
+import java.util.Map;
 
 public class FontTexture {
 
@@ -47,7 +49,7 @@ public class FontTexture {
 		this.height = 0;
 		for (char c : allChars.toCharArray()) {
 			// Get the size for each character and update global image size
-			CharInfo charInfo = new CharInfo(width, fontMetrics.charWidth(c));
+			CharInfo charInfo = new CharInfo(width, fontMetrics.charWidth(c) + GraphicalConstants.FONT_WIDTH_PADDING);
 			charMap.put(c, charInfo);
 			width += charInfo.getWidth();
 			height = Math.max(height, fontMetrics.getHeight());
@@ -57,7 +59,7 @@ public class FontTexture {
 		// Check whether there already is a corresponding font texture file and create it if necessary
 		String filePath = ResourcePathConstants.FONT_FOLDER + getFontFileName();
 
-		if (!(new File(filePath).exists())) {
+		if (! new File(filePath).exists()) {
 			// Create the image associated to the charset
 			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 			graphics = image.createGraphics();
@@ -66,11 +68,13 @@ public class FontTexture {
 			fontMetrics = graphics.getFontMetrics();
 
 			graphics.setColor(Color.WHITE);
-			graphics.drawString(allChars, 0, fontMetrics.getAscent());
+			for (var entry : charMap.entrySet()) {
+				graphics.drawString(String.valueOf(entry.getKey()), entry.getValue().getXPos(), fontMetrics.getAscent());
+			}
 			graphics.dispose();
 
 			boolean success = ImageIO.write(image, "png", new File(filePath));
-			Logger.trace("saved image " + filePath + " " + success);
+			Logger.trace("Saved image " + filePath + " " + success);
 		}
 
 		return TextureLoader.loadTexture(filePath);
@@ -108,5 +112,13 @@ public class FontTexture {
 
 	public CharInfo getCharInfo(char c) {
 		return charMap.get(c);
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
 	}
 }

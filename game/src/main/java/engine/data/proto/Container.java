@@ -192,10 +192,10 @@ public class Container {
 	}
 
 	public BinaryTree<Attribute> getAttributes(String stage) {
-		BinaryTree<Attribute> result = getPropertyStrict(stage, ScriptConstants.KEY_ATTRIBUTES).map(Variable::getBinaryTree).orElse(null);
+		BinaryTree<Attribute> result = getPropertyStrict(stage, PropertyKeys.ATTRIBUTES.key()).map(Variable::getBinaryTree).orElse(null);
 		if (result == null) {
 			result = new BinaryTree<>();
-			getStage(stage).set(ScriptConstants.KEY_ATTRIBUTES, new Variable(result));
+			getStage(stage).set(PropertyKeys.ATTRIBUTES.key(), new Variable(result));
 		}
 		return result;
 	}
@@ -215,10 +215,10 @@ public class Container {
 	}
 
 	public BinaryTree<Script> getScripts(String stage) {
-		BinaryTree<Script> result = getPropertyStrict(stage, ScriptConstants.KEY_SCRIPTS).map(Variable::getBinaryTree).orElse(null);
+		BinaryTree<Script> result = getPropertyStrict(stage, PropertyKeys.SCRIPTS.key()).map(Variable::getBinaryTree).orElse(null);
 		if (result == null) {
 			result = new BinaryTree<>();
-			getStage(stage).set(ScriptConstants.KEY_SCRIPTS, new Variable(result));
+			getStage(stage).set(PropertyKeys.SCRIPTS.key(), new Variable(result));
 		}
 		return result;
 	}

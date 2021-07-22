@@ -21,7 +21,12 @@ public class ScriptConstants {
 
 	public static final String DEFAULT_STAGE = "default";
 
-	public static final String KEY_ATTRIBUTES = "attributes";
-	public static final String KEY_SCRIPTS = "scripts";
+	public static final String GUI_TEXT						= "text";
+	public static final String GUI_TEXT_SIZE				= "textSize";
+	public static final String GUI_TEXT_COLOR 				= "textColor";
+	public static final String GUI_RELATIVE_X 				= "relX";
+	public static final String GUI_RELATIVE_Y 				= "relY";
+	public static final String GUI_RELATIVE_BOUNDING_WIDTH	= "relMaxWidth";
+	public static final String GUI_RELATIVE_BOUNDING_HEIGHT = "relMaxHeight";
 
 }

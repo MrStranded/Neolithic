@@ -16,6 +16,7 @@ import engine.data.scripts.Script;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.graphics.gui.GuiData;
+import engine.graphics.renderer.color.RGBA;
 import engine.logic.topology.*;
 import engine.math.numericalObjects.Vector3;
 import engine.parser.constants.TokenConstants;
@@ -230,6 +231,11 @@ public class CommandExecuter {
 
 					return new Variable(0);
 				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void clearGui ()
+			case CLEAR_GUI:
+				GuiData.getHud().clear();
 				break;
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& boolean contains (List list, Variable element)
@@ -1272,6 +1278,18 @@ public class CommandExecuter {
 				}
 				break;
 
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& rgba rgba (r, g, b, a)
+			case RGBA:
+				if (requireParameters(commandNode, 4)) {
+					double r = parameters[0].getDouble();
+					double g = parameters[1].getDouble();
+					double b = parameters[2].getDouble();
+					double a = parameters[3].getDouble();
+
+					return new Variable(new RGBA(r, g, b, a));
+				}
+				break;
+
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void select (Instance target)
 			case SELECT:
 				if (requireParameters(commandNode, 1)) {
@@ -1365,19 +1383,6 @@ public class CommandExecuter {
 					Data.getSun().setAngle(angle);
 
 					return new Variable("Semira <3");
-				}
-				break;
-
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& string setText (string text)
-			case SET_TEXT:
-				if (requireParameters(commandNode, 2)) {
-					GuiElement target = parameters[0].getGuiElement();
-
-					checkValue(script, commandNode, target, "target element");
-
-					target.setText(parameters[1]);
-
-					return parameters[1];
 				}
 				break;
 

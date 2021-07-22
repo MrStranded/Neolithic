@@ -158,9 +158,9 @@ public enum TokenConstants {
 	DEBUG					(TokenType.COMMAND, "debug"),
 
 	// -------------------------------------------------- GUI
-	PRINT           (TokenType.COMMAND, "print"),
+	CLEAR_GUI		(TokenType.COMMAND, "clearGui"),
 	CREATE_GUI      (TokenType.COMMAND, "createGui"),
-	SET_TEXT		(TokenType.COMMAND, "setText"),
+	PRINT           (TokenType.COMMAND, "print"),
 
 	// -------------------------------------------------- Return Commands
 	REQUIRE         (TokenType.COMMAND, "require"),
@@ -173,6 +173,12 @@ public enum TokenConstants {
 	EACH_TILE       (TokenType.COMMAND, "eachTile"),
 	EACH_ENTITY     (TokenType.COMMAND, "eachEntity"),
 	EACH_CREATURE   (TokenType.COMMAND, "eachCreature"),
+
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Comments
+	RGB        		(TokenType.COMMAND, "rgb"),
+	RGBA        	(TokenType.COMMAND, "rgba"),
+	COLOR        	(TokenType.COMMAND, "color"),
+	MESH_PATH       (TokenType.COMMAND, "mesh"),
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Separators
 	// -------------------------------------------------- Brackets
@@ -250,13 +256,6 @@ public enum TokenConstants {
 	COMMENT         (TokenType.COMMENT, "//"),
 	COMMENT_OPEN    (TokenType.COMMENT, "/*"),
 	COMMENT_CLOSE   (TokenType.COMMENT, "*/"),
-
-
-	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Comments
-	RGB        		(TokenType.PROPERTY_TYPE, "rgb"),
-	RGBA        	(TokenType.PROPERTY_TYPE, "rgba"),
-	COLOR        	(TokenType.PROPERTY_TYPE, "color"),
-	MESH_PATH       (TokenType.PROPERTY_TYPE, "mesh"),
 
 	;
 

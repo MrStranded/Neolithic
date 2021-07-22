@@ -14,7 +14,7 @@ public class CharInfo {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public int getxPos() {
+	public int getXPos() {
 		return xPos;
 	}
 
