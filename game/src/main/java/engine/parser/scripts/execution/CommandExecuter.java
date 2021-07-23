@@ -123,6 +123,29 @@ public class CommandExecuter {
 				}
 				break;
 
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& guiElement addGui (GuiElement parent, Container container [, parameters ... ])
+			case ADD_GUI:
+				if (requireParameters(commandNode, 2)) {
+					GuiElement parent = parameters[0].getGuiElement();
+					Container container = parameters[1].getContainer();
+
+					checkValue(script, commandNode, parent, "gui parent element");
+
+					int containerId = checkType(script, commandNode, container, parameters[1].getString());
+
+					GuiElement element = new GuiElement(containerId);
+					element.setGuiParent(parent);
+
+					if (parameters.length > 2) {
+						element.run(ScriptConstants.EVENT_NEW, Arrays.copyOfRange(parameters, 2, parameters.length));
+					} else {
+						element.run(ScriptConstants.EVENT_NEW, new Variable[] {});
+					}
+
+					return new Variable(element);
+				}
+				break;
+
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int addPersonalAtt (Instance target, String attributeTextID, int amount)
 			case ADD_PERSONAL_ATTRIBUTE:
 				if (requireParameters(commandNode, 3)) {

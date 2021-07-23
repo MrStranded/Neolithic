@@ -510,6 +510,8 @@ public class Variable implements IDInterface {
 				return pre + (Tile) value;
 			case INSTANCE:
 				return pre + (Instance) value;
+			case GUI:
+				return pre + (GuiElement) value;
 			case CONTAINER:
 				return pre + (Container) value;
 			case ATTRIBUTE:

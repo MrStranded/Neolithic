@@ -22,7 +22,7 @@ public class BaseGUI implements GUIInterface {
 
 	@Override
 	public void tick() {
-
+		elements.forEach(GuiElement::tick);
 	}
 
 	// ###################################################################################

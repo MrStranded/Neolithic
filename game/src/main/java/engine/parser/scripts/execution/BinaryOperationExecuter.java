@@ -1,5 +1,6 @@
 package engine.parser.scripts.execution;
 
+import engine.data.entities.GuiElement;
 import engine.data.entities.Instance;
 import engine.data.scripts.Script;
 import engine.data.variables.DataType;
@@ -29,6 +30,9 @@ public class BinaryOperationExecuter {
 			if (left.getType() == DataType.ATTRIBUTE) { // attribute assignment
 				return left.quickSetAttributeValue(right.getDouble());
 			}
+
+			// when a variable is set on a gui element, it might have to be updated
+			if (self instanceof GuiElement) { ((GuiElement) self).shouldUpdate(); }
 
 			left.copyValue(right);
 			return left;

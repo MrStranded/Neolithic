@@ -40,5 +40,9 @@ public class GraphicalConstants {
 	public static final double SUN_DISTANCE = 1000d;
 
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Font Properties %%%%%%%%%%%%%%%%%%%%%%%%
+	public static final String DEFAULT_FONT = "/fonts/Stonism/D3Stonism-GOdm.ttf";
+	public static final String FALLBACK_FONT = "Arial";
 	public static final int FONT_WIDTH_PADDING = 4;
+	public static final int FONT_SIZE_FOR_TEXTURE = 100;
+	public static final double DEFAULT_FONT_SIZE = 30.0;
 }

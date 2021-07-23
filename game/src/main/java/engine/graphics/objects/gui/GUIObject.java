@@ -10,7 +10,8 @@ public class GUIObject extends GraphicalObject {
 	private int relativeScreenPositionX = RelativeParentPosition.LEFT;
 	private int relativeScreenPositionY = RelativeParentPosition.TOP;
 
-	private double xRelPos = 0, yRelPos = 0;
+	private double xRelOffset = 0, yRelOffset = 0;
+	private double xAbsOffset = 0, yAbsOffset = 0;
 	private double absWidth = 0, absHeight = 0;
 
 	public GUIObject(Mesh mesh) {
@@ -27,8 +28,12 @@ public class GUIObject extends GraphicalObject {
 
 		setScale(scaleX, scaleY, 1d);
 
-		double objectAbsX = xRelPos * parentAbsWidth + RelativeParentPosition.getAbsOriginX(parentAbsWidth, absWidth, relativeScreenPositionX);
-		double objectAbsY = yRelPos * parentAbsHeight + RelativeParentPosition.getAbsOriginY(parentAbsHeight, absHeight, relativeScreenPositionY);
+		double objectAbsX = xAbsOffset
+				+ xRelOffset * parentAbsWidth
+				+ RelativeParentPosition.getAbsOriginX(parentAbsWidth, absWidth, relativeScreenPositionX);
+		double objectAbsY = yAbsOffset
+				+ yRelOffset * parentAbsHeight
+				+ RelativeParentPosition.getAbsOriginY(parentAbsHeight, absHeight, relativeScreenPositionY);
 
 		objectAbsY += absHeight; // since meshes are drawn from the lower left corner, and not like here from the top left
 
@@ -47,9 +52,13 @@ public class GUIObject extends GraphicalObject {
 		this.absHeight = height;
 	}
 
-	public void setRelativeLocation(double xPos, double yPos) {
-		this.xRelPos = xPos;
-		this.yRelPos = yPos;
+	public void setRelativeOffset(double xPos, double yPos) {
+		this.xRelOffset = xPos;
+		this.yRelOffset = yPos;
+	}
+	public void setAbsoluteOffset(double xPos, double yPos) {
+		this.xAbsOffset = xPos;
+		this.yAbsOffset = yPos;
 	}
 
 	public int getRelativeScreenPositionX() {
@@ -71,18 +80,18 @@ public class GUIObject extends GraphicalObject {
 		relativeScreenPositionY = vertical;
 	}
 
-	public double getxRelPos() {
-		return xRelPos;
+	public double getxRelOffset() {
+		return xRelOffset;
 	}
-	public void setxRelPos(double xRelPos) {
-		this.xRelPos = xRelPos;
+	public void setxRelOffset(double xRelOffset) {
+		this.xRelOffset = xRelOffset;
 	}
 
-	public double getyRelPos() {
-		return yRelPos;
+	public double getyRelOffset() {
+		return yRelOffset;
 	}
-	public void setyRelPos(double yRelPos) {
-		this.yRelPos = yRelPos;
+	public void setyRelOffset(double yRelOffset) {
+		this.yRelOffset = yRelOffset;
 	}
 
 	public double getAbsWidth() {

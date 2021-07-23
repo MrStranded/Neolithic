@@ -1,12 +1,16 @@
 package engine.graphics.gui;
 
+import constants.GraphicalConstants;
 import engine.graphics.gui.statistics.StatisticsWindow;
 import engine.graphics.gui.window.Window;
 import engine.graphics.objects.Scene;
 import engine.graphics.objects.textures.FontTexture;
 import engine.graphics.renderer.Renderer;
+import engine.parser.utils.Logger;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class GuiData {
 
@@ -37,8 +41,20 @@ public class GuiData {
         hud = new BaseGUI();
 
         try {
-            fontTexture = new FontTexture(new Font("Arial", Font.PLAIN, 100), "US-ASCII"); // UTF-8 , UTF-16 , US-ASCII , ISO-8859-1 (the utf charsets don't work)
+            InputStream fontStream = FontTexture.class.getResourceAsStream(GraphicalConstants.DEFAULT_FONT);
+
+            Font font;
+            if (fontStream != null) {
+                font = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(Font.PLAIN, GraphicalConstants.FONT_SIZE_FOR_TEXTURE);
+            } else {
+                Logger.error("Could not load custom font! Using fallback font instead.");
+                font = new Font(GraphicalConstants.FALLBACK_FONT, Font.PLAIN, GraphicalConstants.FONT_SIZE_FOR_TEXTURE);
+            }
+
+            fontTexture = new FontTexture(font, "US-ASCII"); // UTF-8 , UTF-16 , US-ASCII , ISO-8859-1 (the utf charsets don't work)
+
         } catch (Exception e) {
+            Logger.error("Font texture could not be created");
             e.printStackTrace();
         }
     }

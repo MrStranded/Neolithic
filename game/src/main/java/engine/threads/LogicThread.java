@@ -47,6 +47,7 @@ public class LogicThread extends Thread {
 						// special handling the main instance -> updating current public instance list
 						if (instance == Data.getMainInstance()) {
 							if (GameOptions.plotEntities) { GuiData.getStatisticsWindow().tick(); }
+							GuiData.getHud().tick();
 
 							if (GameOptions.stopAtNextTick) {
 								GameOptions.stopAtNextTick = false;

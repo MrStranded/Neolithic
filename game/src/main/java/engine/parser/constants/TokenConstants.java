@@ -158,6 +158,7 @@ public enum TokenConstants {
 	DEBUG					(TokenType.COMMAND, "debug"),
 
 	// -------------------------------------------------- GUI
+	ADD_GUI      	(TokenType.COMMAND, "addGui"),
 	CLEAR_GUI		(TokenType.COMMAND, "clearGui"),
 	CREATE_GUI      (TokenType.COMMAND, "createGui"),
 	PRINT           (TokenType.COMMAND, "print"),
@@ -174,7 +175,7 @@ public enum TokenConstants {
 	EACH_ENTITY     (TokenType.COMMAND, "eachEntity"),
 	EACH_CREATURE   (TokenType.COMMAND, "eachCreature"),
 
-	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Comments
+	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Property Type Modifiers
 	RGB        		(TokenType.COMMAND, "rgb"),
 	RGBA        	(TokenType.COMMAND, "rgba"),
 	COLOR        	(TokenType.COMMAND, "color"),

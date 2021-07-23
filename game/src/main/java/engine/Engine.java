@@ -45,7 +45,6 @@ public class Engine {
 				}, 100),
 
 				new TimedTask("Calculating HUD", () -> {
-					GuiData.getHud().tick();
 					GuiData.getStatisticsWindow().refresh();
 				}, 100),
 

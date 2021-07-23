@@ -7,21 +7,26 @@ Gui: gInstanceDetail {
 		->instance = instance;
 		
 		->text = getName(->instance);
-		// addGui(self, gText, ->instance);
-		// addGui(self, gText, "Nutrition: " + ->instance.attNutrition);
+		->nut = addGui(self, gText, "Nutrition: " + ->instance.attNutrition);
+		->hum = addGui(self, gText, "Humidity: " + ->instance.attHumidity);
 		// addGui(self, gStatText, ->instance);
+	}
+	
+	Script: tick() {
+		->nut->text = "Nutrition: " + ->instance.attNutrition;
+		->hum->text = "Humidity: " + ->instance.attHumidity;
 	}
 	
 }
 
-// Gui: gText {
+Gui: gText {
 
-	// template = Text;
+	template = Text;
 	
-	// Script: new(text) {
-		// setText(self, text);
-	// }
-// }
+	Script: new(text) {
+		->text = text;
+	}
+}
 
 // Gui: gStatText {
 

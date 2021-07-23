@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.HashMap;
@@ -24,7 +25,7 @@ public class FontTexture {
 
 	private HashMap<Character, CharInfo> charMap;
 
-	public FontTexture(Font font, String charSetName) throws Exception {
+	public FontTexture(Font font, String charSetName) throws IOException {
 		this.font = font;
 		this.charSetName = charSetName;
 
@@ -37,7 +38,7 @@ public class FontTexture {
 	// ################################ Generation #######################################
 	// ###################################################################################
 
-	private Texture buildTexture() throws Exception {
+	private Texture buildTexture() throws IOException {
 		// Get the font metrics for each character for the selected font by using an image
 		BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics = image.createGraphics();
