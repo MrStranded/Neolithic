@@ -46,6 +46,7 @@ public class Engine {
 
 				new TimedTask("Calculating HUD", () -> {
 					GuiData.getStatisticsWindow().refresh();
+					GuiData.clearGraphicalObjects();
 				}, 100),
 
 				new TimedTask("Rendering", () -> {

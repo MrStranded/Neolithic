@@ -171,6 +171,7 @@ public enum TokenConstants {
 	CONTAINS		(TokenType.COMMAND, "contains"),
 
 	// -------------------------------------------------- Iterators
+	EACH_ATTRIBUTE  (TokenType.COMMAND, "eachAttribute"),
 	EACH_TILE       (TokenType.COMMAND, "eachTile"),
 	EACH_ENTITY     (TokenType.COMMAND, "eachEntity"),
 	EACH_CREATURE   (TokenType.COMMAND, "eachCreature"),

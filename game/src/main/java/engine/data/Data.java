@@ -44,12 +44,6 @@ public class Data {
 	private static Queue<ScriptRun> scriptRuns;
 	private static boolean updatePlanetMesh = true;
 
-	/**
-	 * The publicInstanceList is used to access the instances in list form without causing a ConcurrentModificationException.
-	 * The list is regularly set by the logic thread.
-	 */
-//	private static List<Instance> publicInstanceList;
-
 	// ###################################################################################
 	// ################################ Initialization ###################################
 	// ###################################################################################

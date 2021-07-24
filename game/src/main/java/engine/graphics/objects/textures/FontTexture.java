@@ -47,13 +47,12 @@ public class FontTexture {
 
 		String allChars = getAllAvailableChars(charSetName);
 		this.width = 0;
-		this.height = 0;
+		this.height = fontMetrics.getHeight();
 		for (char c : allChars.toCharArray()) {
 			// Get the size for each character and update global image size
 			CharInfo charInfo = new CharInfo(width, fontMetrics.charWidth(c) + GraphicalConstants.FONT_WIDTH_PADDING);
 			charMap.put(c, charInfo);
 			width += charInfo.getWidth();
-			height = Math.max(height, fontMetrics.getHeight());
 		}
 		graphics.dispose();
 

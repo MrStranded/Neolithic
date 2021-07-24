@@ -79,6 +79,9 @@ public class Tokenizer {
 						}
 						if (c == 10) { // common denominator for windows / unix
 							textLine++;
+							if (inString) {
+								addChar(token, c);
+							}
 						}
 						break;
 

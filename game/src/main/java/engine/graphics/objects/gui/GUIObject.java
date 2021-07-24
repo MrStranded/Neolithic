@@ -21,10 +21,12 @@ public class GUIObject extends GraphicalObject {
 	public GUIObject() {}
 
 	public void recalculateScale(double parentAbsWidth, double parentAbsHeight) {
-		double aspectRatio = (double) GuiData.getRenderWindow().getWidth() / (double) GuiData.getRenderWindow().getHeight();
+		double windowWidth = GuiData.getRenderWindow().getWidth();
+		double windowHeight = GuiData.getRenderWindow().getHeight();
+		double aspectRatio = windowWidth / windowHeight;
 
-		double scaleX = 2d * aspectRatio * absWidth / parentAbsWidth;
-		double scaleY = 2d * absHeight / parentAbsHeight;
+		double scaleX = 2d * aspectRatio * absWidth / windowWidth;
+		double scaleY = 2d * absHeight / windowHeight;
 
 		setScale(scaleX, scaleY, 1d);
 

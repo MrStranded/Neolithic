@@ -5,6 +5,7 @@ import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.textures.CharInfo;
 import engine.graphics.objects.textures.FontTexture;
 import engine.graphics.renderer.color.RGBA;
+import engine.math.numericalObjects.Vector2;
 import engine.utils.converters.FloatConverter;
 import engine.utils.converters.IntegerConverter;
 
@@ -17,15 +18,20 @@ public class TextObject extends GUIObject {
 	private String text;
 	private FontTexture fontTexture;
 	private RGBA color;
-	private double textWidth = 0;
+	private double textWidth = 0d, textHeight = 1d;
+	private double maxTextWidth;
 
 	public TextObject(String text, FontTexture fontTexture) {
 		this(text, fontTexture, RGBA.WHITE);
 	}
 	public TextObject(String text, FontTexture fontTexture, RGBA textColor) {
+		this(text, fontTexture, textColor, 0);
+	}
+	public TextObject(String text, FontTexture fontTexture, RGBA textColor, double maxTextWidth) {
 		this.text = text;
 		this.fontTexture = fontTexture;
 		this.color = textColor;
+		this.maxTextWidth = maxTextWidth;
 
 		setMesh(buildMesh());
 	}
@@ -40,49 +46,57 @@ public class TextObject extends GUIObject {
 		List<Float> colors = new ArrayList<>();
 		float[] normals = new float[0];
 
-		// please do not confuse with charInfo.xPos
-		// this xPos here refers to the current position in the text mesh
-		// the charInfo.xPos refers to the position of the char in the font texture
-		double xPos = 0f;
+		double largestWidth = 0d;
 
 		double fontWidth = fontTexture.getTexture().getWidth();
 		float fontHeight = fontTexture.getTexture().getHeight();
 		if (fontHeight == 0) { fontHeight = 1; }
+
+		// position of the mesh quad cursor
+		Vector2 pos = new Vector2(0, 0);
 
 		for (int i=0; i<numberOfCharacters; i++) {
 			CharInfo charInfo = fontTexture.getCharInfo(characters[i]);
 			double charWidth = charInfo.getWidth();
 			double charXPos = charInfo.getXPos();
 
+			// line break
+			if (characters[i] == 10) {
+				setCursorToNewLine(pos, fontHeight);
+				continue;
+			} else if (maxTextWidth > 0 && pos.getX() > 0 && pos.getX() + charWidth > maxTextWidth) {
+				setCursorToNewLine(pos, fontHeight);
+			}
+
 			// small tile / quad for current character
 
 			// top left vertex
-			positions.add((float) xPos);
-			positions.add(1f);
+			positions.add((float) pos.getX());
+			positions.add((float) pos.getY());
 			positions.add(0f);
 			textureCoordinates.add((float) (charXPos / fontWidth));
 			textureCoordinates.add(0f);
 			addColor(colors);
 
 			// bottom left vertex
-			positions.add((float) xPos);
-			positions.add(0f);
+			positions.add((float) pos.getX());
+			positions.add((float) pos.getY() - fontHeight);
 			positions.add(0f);
 			textureCoordinates.add((float) (charXPos / fontWidth));
 			textureCoordinates.add(1f);
 			addColor(colors);
 
 			// top right vertex
-			positions.add((float) (xPos + charWidth));
-			positions.add(1f);
+			positions.add((float) (pos.getX() + charWidth));
+			positions.add((float) pos.getY());
 			positions.add(0f);
 			textureCoordinates.add((float) ((charXPos + charWidth - GraphicalConstants.FONT_WIDTH_PADDING) / fontWidth));
 			textureCoordinates.add(0f);
 			addColor(colors);
 
 			// bottom right vertex
-			positions.add((float) (xPos + charWidth));
-			positions.add(0f);
+			positions.add((float) (pos.getX() + charWidth));
+			positions.add((float) pos.getY() - fontHeight);
 			positions.add(0f);
 			textureCoordinates.add((float) ((charXPos + charWidth - GraphicalConstants.FONT_WIDTH_PADDING) / fontWidth));
 			textureCoordinates.add(1f);
@@ -96,13 +110,19 @@ public class TextObject extends GUIObject {
 			indices.add(i*4 + 1);
 			indices.add(i*4 + 3);
 
-			xPos += charWidth;
+			pos.setX(pos.getX() + charWidth);
+			largestWidth = Math.max(largestWidth, pos.getX());
 		}
-		textWidth = xPos / fontHeight;
 
-		// normalizing mesh (only x axis necessary, y axis already normal)
-		for (int i = 0; i < positions.size(); i += 3) {
-			positions.set(i, (float) (positions.get(i) / xPos));
+		textWidth = largestWidth / fontHeight;
+
+		// normalizing mesh
+		if (largestWidth > 0) {
+			double fullHeight = fontHeight * textHeight;
+			for (int i = 0; i < positions.size(); i ++) {
+				if (i % 3 == 0) { positions.set(i, (float) (positions.get(i) / largestWidth)); }
+				if (i % 3 == 1) { positions.set(i, (float) ((positions.get(i) + fullHeight) / fullHeight)); }
+			}
 		}
 
 		// MICHASCHLEGDPIPIBTMELONNICE
@@ -125,6 +145,12 @@ public class TextObject extends GUIObject {
 		colors.add((float) color.getA());
 	}
 
+	private void setCursorToNewLine(Vector2 cursor, double lineHeight) {
+		cursor.setX(0d);
+		cursor.setY(cursor.getY() - lineHeight);
+		textHeight++;
+	}
+
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
@@ -140,11 +166,18 @@ public class TextObject extends GUIObject {
 	}
 
 	/**
-	 * When we define the height of the text mesh as 1, then the textWidth is the width of the mesh in relation to its height.
+	 * When we define the height of one line of the text mesh as 1, then the textWidth is the width of the mesh in relation to one line.
 	 * @return width of text mesh
 	 */
 	public double getTextWidth() {
 		return textWidth;
+	}
+	/**
+	 * Returns the number of lines of the text
+	 * @return height of text mesh
+	 */
+	public double getTextHeight() {
+		return textHeight;
 	}
 
 	public FontTexture getFontTexture() {

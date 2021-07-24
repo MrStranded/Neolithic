@@ -258,7 +258,17 @@ public class CommandExecuter {
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void clearGui ()
 			case CLEAR_GUI:
-				GuiData.getHud().clear();
+				if (parameters.length > 0) {
+					GuiElement element = parameters[0].getGuiElement();
+
+					checkValue(script, commandNode, element, "gui element");
+
+					element.destroy();
+
+				} else {
+
+					GuiData.getHud().clear();
+				}
 				break;
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& boolean contains (List list, Variable element)
@@ -358,6 +368,21 @@ public class CommandExecuter {
 					checkValue(script, commandNode, instance, "target instance");
 
 					instance.destroy();
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list eachAttribute (Instance instance)
+			case EACH_ATTRIBUTE:
+				if (requireParameters(commandNode, 1)) {
+					Instance instance = parameters[0].getInstance();
+
+					checkValue(script, commandNode, instance, "target instance");
+
+					return new Variable(Data.getAllAttributeIDs().stream()
+							.map(instance::getPersonalAttributeValue)
+							.filter(value -> value != 0)
+							.map(Variable::new)
+							.collect(Collectors.toList()));
 				}
 				break;
 

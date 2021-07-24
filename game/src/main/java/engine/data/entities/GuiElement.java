@@ -92,7 +92,7 @@ public class GuiElement extends Instance {
     }
 
     private void buildGuiObject(GuiTemplates template) {
-        Logger.debug("Creating gui object for template '" + template + "'");
+        Logger.trace("Creating gui object " + getName() + " for template '" + template + "'");
 
         switch (template) {
             case TEXT:
@@ -102,11 +102,11 @@ public class GuiElement extends Instance {
                 double textSize = getVariableSafe(ScriptConstants.GUI_TEXT_SIZE).map(Variable::getDouble).orElse(GraphicalConstants.DEFAULT_FONT_SIZE);
                 RGBA color = getVariableSafe(ScriptConstants.GUI_TEXT_COLOR).map(Variable::getRGBA).orElse(RGBA.WHITE);
 
-                Logger.trace("Text : '" + text + "'");
+                double maxAbsTextObjectWidth = (double) getAbsoluteMaxSelfWidth() / textSize * (double) GuiData.getFontTexture().getHeight();
 
-                TextObject textObject = new TextObject(text, GuiData.getFontTexture(), color);
+                TextObject textObject = new TextObject(text, GuiData.getFontTexture(), color, maxAbsTextObjectWidth);
                 guiObject = textObject;
-                guiObject.setAbsoluteSize(textObject.getTextWidth() * textSize, textSize);
+                guiObject.setAbsoluteSize(textObject.getTextWidth() * textSize, textObject.getTextHeight() * textSize);
                 guiObject.setRelativeOffset(xRelPos, yRelPos);
 
                 break;
@@ -127,9 +127,11 @@ public class GuiElement extends Instance {
     }
 
     public void resize() {
+        getSubElements().forEach(GuiElement::resize);
+
         if (guiObject == null) { return; }
 
-        guiObject.recalculateScale(getAbsoluteBoundingWidth(), getAbsoluteBoundingHeight());
+        guiObject.recalculateScale(getAbsoluteParentWidth(), getAbsoluteParentHeight());
     }
 
     // ###################################################################################
@@ -139,6 +141,10 @@ public class GuiElement extends Instance {
     public void setGuiParent(GuiElement parent) {
         placeInto(parent);
         applyLayouting = true;
+    }
+
+    public double getWidth() {
+        return guiObject != null ? guiObject.getAbsWidth() : 0;
     }
 
     public double getHeight() {
@@ -161,6 +167,19 @@ public class GuiElement extends Instance {
     }
 
     // ###################################################################################
+    // ################################ Clean Up #########################################
+    // ###################################################################################
+
+    @Override
+    public void recursiveSlatingForRemoval() {
+        super.recursiveSlatingForRemoval();
+        if (guiObject != null) {
+            GuiData.rememberToCleanGraphicalObject(guiObject);
+            guiObject = null;
+        }
+    }
+
+    // ###################################################################################
     // ################################ Getters and Setters ##############################
     // ###################################################################################
 
@@ -178,21 +197,50 @@ public class GuiElement extends Instance {
         getSubElements().forEach(GuiElement::shouldUpdate);
     }
 
-    public int getAbsoluteBoundingWidth() {
-        Variable relMaxWidth = getVariable(ScriptConstants.GUI_RELATIVE_BOUNDING_WIDTH);
-
+    public int getAbsoluteParentWidth() {
         GuiElement parent = (GuiElement) getSuperInstance();
-        int parentWidth = parent != null ? parent.getAbsoluteBoundingWidth() : GuiData.getRenderWindow().getWidth();
-
-        return relMaxWidth == null ? parentWidth : (int) (parentWidth * relMaxWidth.getDouble());
+        return parent != null
+                ? parent.getAbsoluteMaxChildWidth()
+                : GuiData.getRenderWindow().getWidth();
     }
-    public int getAbsoluteBoundingHeight() {
-        Variable relMaxHeight = getVariable(ScriptConstants.GUI_RELATIVE_BOUNDING_HEIGHT);
+    public int getAbsoluteMaxChildWidth() {
+        int maxWidth = getAbsoluteMaxSelfWidth();
 
+        boolean limitsWidth = getVariableSafe(ScriptConstants.GUI_LIMITS_WIDTH).map(Variable::getBoolean).orElse(false);
+        if (limitsWidth) { maxWidth = (int) Math.min(maxWidth, getWidth()); }
+
+        return maxWidth;
+    }
+    public int getAbsoluteMaxSelfWidth() {
+        int boundedWidth = getAbsoluteParentWidth();
+
+        Variable relMaxWidth = getVariable(ScriptConstants.GUI_RELATIVE_BOUNDING_WIDTH);
+        if (relMaxWidth != null) { boundedWidth *= relMaxWidth.getDouble(); }
+
+        return boundedWidth;
+    }
+
+    public int getAbsoluteParentHeight() {
         GuiElement parent = (GuiElement) getSuperInstance();
-        int parentHeight = parent != null ? parent.getAbsoluteBoundingHeight() : GuiData.getRenderWindow().getHeight();
+        return parent != null
+                ? parent.getAbsoluteMaxChildHeight()
+                : GuiData.getRenderWindow().getHeight();
+    }
+    public int getAbsoluteMaxChildHeight() {
+        int maxHeight = getAbsoluteMaxSelfHeight();
 
-        return relMaxHeight == null ? parentHeight : (int) (parentHeight * relMaxHeight.getDouble());
+        boolean limitsHeigth = getVariableSafe(ScriptConstants.GUI_LIMITS_HEIGHT).map(Variable::getBoolean).orElse(false);
+        if (limitsHeigth) { maxHeight = (int) Math.min(maxHeight, getHeight()); }
+
+        return maxHeight;
+    }
+    public int getAbsoluteMaxSelfHeight() {
+        int boundedHeight = getAbsoluteParentHeight();
+
+        Variable relMaxHeight = getVariable(ScriptConstants.GUI_RELATIVE_BOUNDING_HEIGHT);
+        if (relMaxHeight != null) { boundedHeight *= relMaxHeight.getDouble(); }
+
+        return boundedHeight;
     }
 
     public List<GuiElement> getSubElements() {

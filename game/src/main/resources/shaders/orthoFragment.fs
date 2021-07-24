@@ -11,17 +11,18 @@ uniform float verticalStep;
 //uniform vec4 color;
 
 void main() {
-    vec4 textureColor = texture(textureSampler, outTextureCoordinates);
+    vec4 blur = texture(textureSampler, outTextureCoordinates) * 2.0;
+    for (int x=-1; x<=1; x=x+2) {
+        for (int y=-1; y<=1; y=y+2) {
+            blur = blur + texture(textureSampler, outTextureCoordinates + vec2(x * horizontalStep, y * verticalStep));
+        }
+    }
+    blur = blur / 6.0;
 
-    vec4 top = texture(textureSampler, outTextureCoordinates + vec2(0.0, -verticalStep));
-    vec4 right = texture(textureSampler, outTextureCoordinates + vec2(horizontalStep, 0.0));
-    vec4 bottom = texture(textureSampler, outTextureCoordinates + vec2(0.0, verticalStep));
-    vec4 left = texture(textureSampler, outTextureCoordinates + vec2(-horizontalStep, 0.0));
-
-    // textureColor.w is the alpha value of the texture
-    if (textureColor.w == 0.0) {
+    // w is the alpha value of the texture
+    if (blur.w == 0.0) {
         discard;
     } else {
-        fragmentColor = outColor * (textureColor + top + right + bottom + left) / 5.0;
+        fragmentColor = outColor * blur;
     }
 }

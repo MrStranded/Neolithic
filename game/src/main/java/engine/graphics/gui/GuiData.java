@@ -3,6 +3,7 @@ package engine.graphics.gui;
 import constants.GraphicalConstants;
 import engine.graphics.gui.statistics.StatisticsWindow;
 import engine.graphics.gui.window.Window;
+import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.Scene;
 import engine.graphics.objects.textures.FontTexture;
 import engine.graphics.renderer.Renderer;
@@ -11,6 +12,7 @@ import engine.parser.utils.Logger;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GuiData {
 
@@ -23,6 +25,8 @@ public class GuiData {
     private static Scene scene;
     private static GUIInterface hud;
     private static FontTexture fontTexture;
+
+    private static ConcurrentLinkedQueue<GraphicalObject> graphicalObjectCleanUpQueue;
 
     // ###################################################################################
     // ################################ Initialization ###################################
@@ -40,6 +44,12 @@ public class GuiData {
         scene = new Scene();
         hud = new BaseGUI();
 
+        graphicalObjectCleanUpQueue = new ConcurrentLinkedQueue<>();
+
+        initializeFonts();
+    }
+
+    private static void initializeFonts() {
         try {
             InputStream fontStream = FontTexture.class.getResourceAsStream(GraphicalConstants.DEFAULT_FONT);
 
@@ -70,6 +80,17 @@ public class GuiData {
 
         if (renderWindow != null) { renderWindow.destroy(); }
         if (statisticsWindow != null) { statisticsWindow.close(); }
+
+        clearGraphicalObjects();
+    }
+
+    public static void clearGraphicalObjects() {
+        while (! graphicalObjectCleanUpQueue.isEmpty()) {
+            graphicalObjectCleanUpQueue.poll().cleanUp();
+        }
+    }
+    public static void rememberToCleanGraphicalObject(GraphicalObject graphicalObject) {
+        graphicalObjectCleanUpQueue.add(graphicalObject);
     }
 
     // ###################################################################################

@@ -28,5 +28,7 @@ public class ScriptConstants {
 	public static final String GUI_RELATIVE_Y 				= "relY";
 	public static final String GUI_RELATIVE_BOUNDING_WIDTH	= "relMaxWidth";
 	public static final String GUI_RELATIVE_BOUNDING_HEIGHT = "relMaxHeight";
+	public static final String GUI_LIMITS_WIDTH				= "limitsWidth";
+	public static final String GUI_LIMITS_HEIGHT			= "limitsHeight";
 
 }
