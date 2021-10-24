@@ -11,9 +11,8 @@ import engine.utils.converters.IntegerConverter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public class TextObject extends GUIObject {
+public class TextObject extends GuiObject {
 
 	private String text;
 	private FontTexture fontTexture;

@@ -102,6 +102,8 @@ public enum TokenConstants {
 
 	// -------------------------------------------------- Retrieval
 	GET_ATTRIBUTE           	(TokenType.COMMAND, "getAtt"),
+	GET_ATTRIBUTE_VALUE      	(TokenType.COMMAND, "getAttValue"),
+	GET_ATTRIBUTE_ID           	(TokenType.COMMAND, "getAttId"),
 	GET_ATTRIBUTE_IN_RANGE  	(TokenType.COMMAND, "getAttInRange"),
 	GET_ATTRIBUTES_IN_RANGE 	(TokenType.COMMAND, "getAttsInRange"),
 	GET_INSTANCE				(TokenType.COMMAND, "getInstance"),
@@ -172,6 +174,7 @@ public enum TokenConstants {
 
 	// -------------------------------------------------- Iterators
 	EACH_ATTRIBUTE  (TokenType.COMMAND, "eachAttribute"),
+	EACH_VARIABLE  	(TokenType.COMMAND, "eachVariable"),
 	EACH_TILE       (TokenType.COMMAND, "eachTile"),
 	EACH_ENTITY     (TokenType.COMMAND, "eachEntity"),
 	EACH_CREATURE   (TokenType.COMMAND, "eachCreature"),

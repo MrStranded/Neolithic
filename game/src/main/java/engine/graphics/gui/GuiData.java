@@ -1,16 +1,15 @@
 package engine.graphics.gui;
 
 import constants.GraphicalConstants;
+import engine.data.entities.GuiElement;
 import engine.graphics.gui.statistics.StatisticsWindow;
 import engine.graphics.gui.window.Window;
-import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.Scene;
 import engine.graphics.objects.textures.FontTexture;
 import engine.graphics.renderer.Renderer;
 import engine.parser.utils.Logger;
 
 import java.awt.*;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -26,7 +25,7 @@ public class GuiData {
     private static GUIInterface hud;
     private static FontTexture fontTexture;
 
-    private static ConcurrentLinkedQueue<GraphicalObject> graphicalObjectCleanUpQueue;
+    private static ConcurrentLinkedQueue<GuiElement> guiElementsToClean;
 
     // ###################################################################################
     // ################################ Initialization ###################################
@@ -44,7 +43,7 @@ public class GuiData {
         scene = new Scene();
         hud = new BaseGUI();
 
-        graphicalObjectCleanUpQueue = new ConcurrentLinkedQueue<>();
+        guiElementsToClean = new ConcurrentLinkedQueue<>();
 
         initializeFonts();
     }
@@ -81,16 +80,19 @@ public class GuiData {
         if (renderWindow != null) { renderWindow.destroy(); }
         if (statisticsWindow != null) { statisticsWindow.close(); }
 
-        clearGraphicalObjects();
+        clearGuiElements();
     }
 
-    public static void clearGraphicalObjects() {
-        while (! graphicalObjectCleanUpQueue.isEmpty()) {
-            graphicalObjectCleanUpQueue.poll().cleanUp();
+    public static void clearGuiElements() {
+        GuiElement next;
+        while ((next = guiElementsToClean.peek()) != null) {
+            if (next.isRendering()) { return; }
+
+            guiElementsToClean.poll().clearGuiObject();
         }
     }
-    public static void rememberToCleanGraphicalObject(GraphicalObject graphicalObject) {
-        graphicalObjectCleanUpQueue.add(graphicalObject);
+    public static void rememberToCleanGuiElement(GuiElement element) {
+        guiElementsToClean.add(element);
     }
 
     // ###################################################################################

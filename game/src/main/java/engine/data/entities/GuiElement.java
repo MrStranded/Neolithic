@@ -1,29 +1,30 @@
 package engine.data.entities;
 
-import constants.GraphicalConstants;
 import constants.PropertyKeys;
 import constants.ScriptConstants;
 import engine.data.options.GameOptions;
 import engine.data.variables.Variable;
 import engine.graphics.gui.GuiData;
 import engine.graphics.gui.GuiTemplates;
-import engine.graphics.objects.gui.GUIObject;
-import engine.graphics.objects.gui.TextObject;
-import engine.graphics.renderer.color.RGBA;
+import engine.graphics.objects.GraphicalObject;
+import engine.graphics.objects.gui.GuiObject;
+import engine.graphics.objects.gui.TemplateProcessor;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
 import engine.parser.utils.Logger;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class GuiElement extends Instance {
 
-    private GUIObject guiObject;
+    private List<GuiObject> guiObjects = new ArrayList<>(1);
     private boolean update = false;
     private boolean applyLayouting = false;
+    private boolean rendering = false;
 
     public GuiElement(int id) {
         super(id);
@@ -44,28 +45,28 @@ public class GuiElement extends Instance {
     // ###################################################################################
 
     public void render(ShaderProgram hudShaderProgram, Matrix4 orthographicMatrix) {
-        if (isSlatedForRemoval() || GameOptions.reloadScripts) { return; }
+        if (isSlatedForRemoval() || GameOptions.reloadScripts) {
+            return;
+        }
 
+        rendering = true;
+
+        // there were updates
         if (update) {
             updateObject();
             update = false;
         }
 
         // render self
-        if (guiObject != null) {
-            hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(guiObject.getWorldMatrix()));
-            guiObject.renderForGUI();
-        }
+        guiObjects.forEach(object -> {
+            hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
+            object.renderForGUI();
+        });
 
         // render subs
-        if (getSubInstances() != null) {
-            try {
-                getSubInstances().stream()
-                        .filter(instance -> instance instanceof GuiElement)
-                        .map(GuiElement.class::cast)
-                        .forEach(element -> element.render(hudShaderProgram, orthographicMatrix));
-            } catch (ConcurrentModificationException e) { /* it's okay really */ }
-        }
+        getSubElements().forEach(element -> element.render(hudShaderProgram, orthographicMatrix));
+
+        rendering = false;
     }
 
     // ###################################################################################
@@ -73,12 +74,6 @@ public class GuiElement extends Instance {
     // ###################################################################################
 
     private void updateObject() {
-        // we should clean up the old mesh
-        if (guiObject != null) {
-            guiObject.cleanUp();
-            guiObject = null;
-        }
-
         Variable templateString = getProperty(PropertyKeys.TEMPLATE);
         if (templateString.notNull()) {
             try {
@@ -92,25 +87,9 @@ public class GuiElement extends Instance {
     }
 
     private void buildGuiObject(GuiTemplates template) {
-        Logger.trace("Creating gui object " + getName() + " for template '" + template + "'");
-
-        switch (template) {
-            case TEXT:
-                String text = getVariableSafe(ScriptConstants.GUI_TEXT).map(Variable::getString).orElse("");
-                double xRelPos = getVariableSafe(ScriptConstants.GUI_RELATIVE_X).map(Variable::getDouble).orElse(0d);
-                double yRelPos = getVariableSafe(ScriptConstants.GUI_RELATIVE_Y).map(Variable::getDouble).orElse(0d);
-                double textSize = getVariableSafe(ScriptConstants.GUI_TEXT_SIZE).map(Variable::getDouble).orElse(GraphicalConstants.DEFAULT_FONT_SIZE);
-                RGBA color = getVariableSafe(ScriptConstants.GUI_TEXT_COLOR).map(Variable::getRGBA).orElse(RGBA.WHITE);
-
-                double maxAbsTextObjectWidth = (double) getAbsoluteMaxSelfWidth() / textSize * (double) GuiData.getFontTexture().getHeight();
-
-                TextObject textObject = new TextObject(text, GuiData.getFontTexture(), color, maxAbsTextObjectWidth);
-                guiObject = textObject;
-                guiObject.setAbsoluteSize(textObject.getTextWidth() * textSize, textObject.getTextHeight() * textSize);
-                guiObject.setRelativeOffset(xRelPos, yRelPos);
-
-                break;
-        }
+        setGuiObjects(
+                TemplateProcessor.create(this, template)
+        );
 
         applyLayout();
 
@@ -118,20 +97,23 @@ public class GuiElement extends Instance {
     }
 
     private void applyLayout() {
-        if (guiObject == null || !applyLayouting) { return; }
+        if (!applyLayouting) {
+            return;
+        }
 
         GuiElement parent = (GuiElement) getSuperInstance();
-        if (parent == null) { return; }
+        if (parent == null) {
+            return;
+        }
 
-        guiObject.setAbsoluteOffset(0, parent.getPositionOfSubElement(this));
+        guiObjects.forEach(object -> object.setAbsoluteOffset(0, parent.getPositionOfSubElement(this)));
     }
 
     public void resize() {
         getSubElements().forEach(GuiElement::resize);
 
-        if (guiObject == null) { return; }
-
-        guiObject.recalculateScale(getAbsoluteParentWidth(), getAbsoluteParentHeight());
+        guiObjects.forEach(object -> object.resize(this));
+        guiObjects.forEach(object -> object.recalculateScale(getAbsoluteParentWidth(), getAbsoluteParentHeight()));
     }
 
     // ###################################################################################
@@ -143,22 +125,44 @@ public class GuiElement extends Instance {
         applyLayouting = true;
     }
 
+    public double getAbsWidth() {
+        return guiObjects.stream()
+                .filter(GuiObject::isInfluenceSizeCalculations)
+                .max((a, b) -> (int) Math.signum(a.getAbsWidth() - b.getAbsWidth()))
+                .map(GuiObject::getAbsWidth)
+                .orElse(0d);
+    }
+
+    public double getAbsHeight() {
+        return guiObjects.stream()
+                .filter(GuiObject::isInfluenceSizeCalculations)
+                .max((a, b) -> (int) Math.signum(a.getAbsHeight() - b.getAbsHeight()))
+                .map(GuiObject::getAbsHeight)
+                .orElse(0d);
+    }
+
     public double getWidth() {
-        return guiObject != null ? guiObject.getAbsWidth() : 0;
+        double maxWidth = getAbsWidth();
+
+        for (GuiElement sub : getSubElements()) {
+            double width = sub.getWidth();
+            if (width > maxWidth) { maxWidth = width; }
+        }
+
+        return maxWidth;
     }
 
     public double getHeight() {
         return getPositionOfSubElement(null);
     }
-    private double getPositionOfSubElement(GuiElement element) {
-        double height = 0;
 
-        if (guiObject != null) {
-            height += guiObject.getAbsHeight();
-        }
+    private double getPositionOfSubElement(GuiElement element) {
+        double height = getAbsHeight();
 
         for (GuiElement sub : getSubElements()) {
-            if (sub == element) { break; }
+            if (sub == element) {
+                break;
+            }
 
             height += sub.getPositionOfSubElement(element);
         }
@@ -173,10 +177,12 @@ public class GuiElement extends Instance {
     @Override
     public void recursiveSlatingForRemoval() {
         super.recursiveSlatingForRemoval();
-        if (guiObject != null) {
-            GuiData.rememberToCleanGraphicalObject(guiObject);
-            guiObject = null;
-        }
+        GuiData.rememberToCleanGuiElement(this);
+    }
+
+    public void clearGuiObject() {
+        guiObjects.forEach(GraphicalObject::cleanUp);
+        guiObjects.clear();
     }
 
     // ###################################################################################
@@ -189,6 +195,12 @@ public class GuiElement extends Instance {
         update = true;
     }
 
+    private void setGuiObjects(GuiObject... newObjects) {
+        guiObjects.forEach(GraphicalObject::cleanUp);
+        guiObjects.clear();
+        guiObjects.addAll(Arrays.asList(newObjects));
+    }
+
     /**
      * This will trigger an update of the guiObject of this element and all its children on the next render pass.
      */
@@ -197,25 +209,35 @@ public class GuiElement extends Instance {
         getSubElements().forEach(GuiElement::shouldUpdate);
     }
 
+    public boolean isRendering() {
+        return rendering;
+    }
+
     public int getAbsoluteParentWidth() {
         GuiElement parent = (GuiElement) getSuperInstance();
         return parent != null
                 ? parent.getAbsoluteMaxChildWidth()
                 : GuiData.getRenderWindow().getWidth();
     }
+
     public int getAbsoluteMaxChildWidth() {
         int maxWidth = getAbsoluteMaxSelfWidth();
 
         boolean limitsWidth = getVariableSafe(ScriptConstants.GUI_LIMITS_WIDTH).map(Variable::getBoolean).orElse(false);
-        if (limitsWidth) { maxWidth = (int) Math.min(maxWidth, getWidth()); }
+        if (limitsWidth) {
+            maxWidth = (int) Math.min(maxWidth, getAbsWidth());
+        }
 
         return maxWidth;
     }
+
     public int getAbsoluteMaxSelfWidth() {
         int boundedWidth = getAbsoluteParentWidth();
 
         Variable relMaxWidth = getVariable(ScriptConstants.GUI_RELATIVE_BOUNDING_WIDTH);
-        if (relMaxWidth != null) { boundedWidth *= relMaxWidth.getDouble(); }
+        if (relMaxWidth != null) {
+            boundedWidth *= relMaxWidth.getDouble();
+        }
 
         return boundedWidth;
     }
@@ -226,25 +248,33 @@ public class GuiElement extends Instance {
                 ? parent.getAbsoluteMaxChildHeight()
                 : GuiData.getRenderWindow().getHeight();
     }
+
     public int getAbsoluteMaxChildHeight() {
         int maxHeight = getAbsoluteMaxSelfHeight();
 
         boolean limitsHeigth = getVariableSafe(ScriptConstants.GUI_LIMITS_HEIGHT).map(Variable::getBoolean).orElse(false);
-        if (limitsHeigth) { maxHeight = (int) Math.min(maxHeight, getHeight()); }
+        if (limitsHeigth) {
+            maxHeight = (int) Math.min(maxHeight, getHeight());
+        }
 
         return maxHeight;
     }
+
     public int getAbsoluteMaxSelfHeight() {
         int boundedHeight = getAbsoluteParentHeight();
 
         Variable relMaxHeight = getVariable(ScriptConstants.GUI_RELATIVE_BOUNDING_HEIGHT);
-        if (relMaxHeight != null) { boundedHeight *= relMaxHeight.getDouble(); }
+        if (relMaxHeight != null) {
+            boundedHeight *= relMaxHeight.getDouble();
+        }
 
         return boundedHeight;
     }
 
     public List<GuiElement> getSubElements() {
-        if (getSubInstances() == null) { return Collections.emptyList(); }
+        if (getSubInstances() == null) {
+            return Collections.emptyList();
+        }
 
         return getSubInstances().stream()
                 .filter(instance -> instance instanceof GuiElement)

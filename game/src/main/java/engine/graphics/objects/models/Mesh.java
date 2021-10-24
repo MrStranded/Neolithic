@@ -18,7 +18,6 @@ public class Mesh {
 	private final int colorsVboId;
 
 	private Material material; // the Material, containing also the texture
-	//private RGBA color; // color of the mesh
 
 	private final int vertexCount;
 
@@ -38,7 +37,6 @@ public class Mesh {
 		vertexCount = indices.length;
 
 		material = new Material();
-		//color = new RGBA(1,1,1,1);
 
 		// set up static data
 

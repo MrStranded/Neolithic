@@ -3,30 +3,51 @@ package load;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import engine.graphics.objects.textures.Texture;
 import engine.parser.utils.Logger;
+import org.w3c.dom.Text;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TextureLoader {
 
-	public static Texture loadTexture(String fileName) {
+	private static Map<String, Texture> cache = new HashMap<>();
 
-		ByteBuffer buffer = null;
-		Logger.debug("loading texture " + fileName);
+	public static Texture loadTexture(String partialPath) {
+		String filePath = AssetResolver.getTexturePath(partialPath);
 
-		try {
-			PNGDecoder decoder = new PNGDecoder(new FileInputStream(fileName));
+		return getOrLoadTexture(filePath);
+	}
 
-			buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
-			decoder.decode(buffer, 4 * decoder.getWidth(), PNGDecoder.Format.RGBA);
-			buffer.flip();
+	private static Texture getOrLoadTexture(String path) {
+		Texture texture = cache.get(path);
 
-			return new Texture(decoder.getWidth(), decoder.getHeight(), buffer);
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (texture == null) {
+			try {
+				ByteBuffer buffer = null;
+				Logger.debug("loading texture " + path);
+
+				PNGDecoder decoder = new PNGDecoder(new FileInputStream(path));
+
+				buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
+				decoder.decode(buffer, 4 * decoder.getWidth(), PNGDecoder.Format.RGBA);
+				buffer.flip();
+
+				texture = new Texture(decoder.getWidth(), decoder.getHeight(), buffer);
+				cache.put(path, texture);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
-		return null;
+		return texture;
+	}
+
+	public static void clear() {
+		cache.clear();
 	}
 }

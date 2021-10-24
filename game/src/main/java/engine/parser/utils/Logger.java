@@ -73,7 +73,7 @@ public class Logger {
 	}
 
 	private static String getTimestamp() {
-		long millis = System.currentTimeMillis() - startMillis;
+		long millis = System.currentTimeMillis();// - startMillis;
 
 		long seconds = millis / 1000;
 		millis -= seconds * 1000;

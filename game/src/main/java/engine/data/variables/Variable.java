@@ -317,6 +317,8 @@ public class Variable implements IDInterface {
 						}
 						values.append(variable.getString());
 						first = false;
+					} else {
+						Logger.error("Tried to build string of list variable that contains itself! (" + name + ")");
 					}
 				}
 				values.append("]");

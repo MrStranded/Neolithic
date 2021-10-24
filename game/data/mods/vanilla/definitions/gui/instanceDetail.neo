@@ -5,12 +5,14 @@ Gui: gInstanceDetail {
 	
 	Script: new(instance) {
 		->instance = instance;
-		->nut = addGui(self, gText);
-		->hum = addGui(self, gText);
-		addGui(self, gText, "Very long text 
-		that goes on for 
-		multiple lines.")->relMaxWidth = 0.5;
-		->limitsWidth = true;
+	    ->background = "gui/background.png";
+		
+		// addGui(self, gVariables, self);
+		
+		->list = [];
+		for(attribute : eachAttribute(->instance)) {
+			->list += addGui(self, gAttribute, attribute, ->instance);
+		}
 		
 		update();
 	}
@@ -21,8 +23,21 @@ Gui: gInstanceDetail {
 	
 	Script: update() {
 		->text = getName(->instance);
-		->nut->text = "Nutrition: " + ->instance.attNutrition;
-		->hum->text = "Humidity: " + ->instance.attHumidity;
+		
+		if (->c++ % 100 == 0) {
+			for(attribute : eachAttribute(->instance)) {
+				found = false;
+				for (a : ->list) {
+					if (getAttId(a->attribute) == getAttId(attribute)) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					->list += addGui(self, gAttribute, attribute, ->instance);
+				}
+			}
+		}
 	}
 }
 
@@ -33,4 +48,40 @@ Gui: gText {
 	Script: new(text) {
 		->text = text;
 	}
+}
+
+Gui: gAttribute {
+
+	template = Text;
+	
+	Script: new(attribute, instance) {
+		->attribute = attribute;
+		->instance = instance;
+	    //->background = "gui/background.png";
+		
+		->text = attribute;
+	}
+	
+	Script: tick() {
+		value = getAttValue(->instance, getAttId(->attribute));
+		->text = value;
+		if (value == 0) { destroy(self); }
+	}
+}
+
+Gui: gVariables {
+
+	template = Text;
+	
+	Script: new(target) {
+		->target = target;
+	}
+	
+	Script: tick() {
+		clearGui(self);
+		for (var : eachVariable(->target)) {
+			addGui(self, gText, var);
+		}
+	}
+
 }

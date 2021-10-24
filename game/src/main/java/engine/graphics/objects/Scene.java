@@ -41,7 +41,7 @@ public class Scene {
 
 		// ------------------------------------------------------------------------------------------- universe
 		new Builder(MeshGenerator.createCube(true))
-				.texture("data/mods/vanilla/assets/textures/space_cube4.png")
+				.texture("space_cube4.png")
 				.scale(GraphicalConstants.SUN_DISTANCE * 2)
 				.affectedByLight(false)
 				.setStatic(true)
@@ -90,7 +90,7 @@ public class Scene {
 
 		// ------------------------------------------------------------------------------------------- moon
 		GraphicalObject moon = new Builder(MeshGenerator.createIcosahedron(false))
-				.texture("data/mods/vanilla/assets/textures/moon.png")
+				.texture("moon.png")
 				.scale(0.5, 0.5, 0.5)
 				.position(0,0,50)
 				.rotation(0,0,Math.PI/8)

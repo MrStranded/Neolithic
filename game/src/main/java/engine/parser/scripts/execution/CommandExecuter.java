@@ -4,6 +4,7 @@ import constants.ResourcePathConstants;
 import constants.ScriptConstants;
 import constants.TopologyConstants;
 import engine.data.Data;
+import engine.data.attributes.Attribute;
 import engine.data.entities.Effect;
 import engine.data.entities.GuiElement;
 import engine.data.entities.Instance;
@@ -13,6 +14,7 @@ import engine.data.planetary.Planet;
 import engine.data.entities.Tile;
 import engine.data.proto.Container;
 import engine.data.scripts.Script;
+import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.graphics.gui.GuiData;
@@ -263,7 +265,7 @@ public class CommandExecuter {
 
 					checkValue(script, commandNode, element, "gui element");
 
-					element.destroy();
+					element.getSubElements().forEach(GuiElement::destroy);
 
 				} else {
 
@@ -379,10 +381,27 @@ public class CommandExecuter {
 					checkValue(script, commandNode, instance, "target instance");
 
 					return new Variable(Data.getAllAttributeIDs().stream()
-							.map(instance::getPersonalAttributeValue)
-							.filter(value -> value != 0)
+							.map(id -> new int[] {id, instance.getAttributeValue(id)})
+							.filter(idValueTuple -> idValueTuple[1] != 0)
+							.map(idValueTuple -> new Attribute(idValueTuple[0], idValueTuple[1]))
 							.map(Variable::new)
 							.collect(Collectors.toList()));
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& list eachVariable (Instance instance)
+			case EACH_VARIABLE:
+				if (requireParameters(commandNode, 1)) {
+					Instance instance = parameters[0].getInstance();
+
+					checkValue(script, commandNode, instance, "target instance");
+
+					BinaryTree<Variable> variables = instance.getVariables();
+					if (variables == null) { return new Variable(Collections.emptyList()); }
+
+					List<Variable> list = new ArrayList<>(variables.size());
+					variables.forEach(list::add);
+					return new Variable(list);
 				}
 				break;
 
@@ -455,25 +474,89 @@ public class CommandExecuter {
 				}
 				break;
 
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getAttributeValue ([Instance instance,] String attribute)
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getAtt ([Instance instance,] String | int attribute)
 			case GET_ATTRIBUTE:
 				if (parameters.length >= 2) {
 					Instance instance = parameters[0].getInstance();
-
-					String attributeTextID = parameters[1].getString();
-					int attributeID = Data.getProtoAttributeID(attributeTextID);
-
 					checkValue(script, commandNode, instance, "target instance");
-					checkAttribute(script, commandNode, attributeID, attributeTextID);
+
+					int attributeID;
+					if (parameters[1].getType() == DataType.NUMBER) {
+						attributeID = parameters[1].getInt();
+
+					} else {
+						String attributeTextID = parameters[1].getString();
+						attributeID = Data.getProtoAttributeID(attributeTextID);
+
+						checkAttribute(script, commandNode, attributeID, attributeTextID);
+					}
 
 					return new Variable(instance.getAttribute(attributeID));
 				} else if (requireParameters(commandNode, 1)) {
+					int attributeID;
+					if (parameters[0].getType() == DataType.NUMBER) {
+						attributeID = parameters[0].getInt();
+
+					} else {
+						String attributeTextID = parameters[0].getString();
+						attributeID = Data.getProtoAttributeID(attributeTextID);
+
+						checkAttribute(script, commandNode, attributeID, attributeTextID);
+					}
+
+					return new Variable(self.getAttribute(attributeID));
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getAttValue ([Instance instance,] String | int attribute)
+			case GET_ATTRIBUTE_VALUE:
+				if (parameters.length >= 2) {
+					Instance instance = parameters[0].getInstance();
+					checkValue(script, commandNode, instance, "target instance");
+
+					int attributeID;
+					if (parameters[1].getType() == DataType.NUMBER) {
+						attributeID = parameters[1].getInt();
+
+					} else {
+						String attributeTextID = parameters[1].getString();
+						attributeID = Data.getProtoAttributeID(attributeTextID);
+
+						checkAttribute(script, commandNode, attributeID, attributeTextID);
+					}
+
+					return new Variable(instance.getAttributeValue(attributeID));
+				} else if (requireParameters(commandNode, 1)) {
+					int attributeID;
+					if (parameters[0].getType() == DataType.NUMBER) {
+						attributeID = parameters[0].getInt();
+
+					} else {
+						String attributeTextID = parameters[0].getString();
+						attributeID = Data.getProtoAttributeID(attributeTextID);
+
+						checkAttribute(script, commandNode, attributeID, attributeTextID);
+					}
+
+					return new Variable(self.getAttributeValue(attributeID));
+				}
+				break;
+
+			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int getAttId (String | Attribute attribute)
+			case GET_ATTRIBUTE_ID:
+				if (requireParameters(commandNode, 1)) {
+					if (parameters[0].getType() == DataType.ATTRIBUTE) {
+						Attribute attribute = parameters[0].getAttribute();
+
+						checkValue(script, commandNode, attribute, "target attribute");
+
+						return new Variable(attribute.getId());
+					}
+
 					String attributeTextID = parameters[0].getString();
 					int attributeID = Data.getProtoAttributeID(attributeTextID);
 
-					checkAttribute(script, commandNode, attributeID, attributeTextID);
-
-					return new Variable(self.getAttribute(attributeID));
+					return new Variable(attributeID);
 				}
 				break;
 

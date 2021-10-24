@@ -61,7 +61,9 @@ public class MoveableObject implements SunDependantObject {
 	 */
 	public void move(double x, double y, double z) {
 		Vector3[] internalAxes = Transformations.getInternalAxes(rotation);
-		position.plusInplace(internalAxes[0].times(x)).plusInplace(internalAxes[0].times(y)).plusInplace(internalAxes[0].times(z));
+		position.plusInplace(internalAxes[0].times(x))
+				.plusInplace(internalAxes[1].times(y))
+				.plusInplace(internalAxes[2].times(z));
 		changed = true;
 	}
 

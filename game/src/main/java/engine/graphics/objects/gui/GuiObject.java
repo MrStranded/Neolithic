@@ -1,11 +1,14 @@
 package engine.graphics.objects.gui;
 
+import engine.data.entities.GuiElement;
 import engine.graphics.gui.GuiData;
 import engine.graphics.gui.RelativeParentPosition;
 import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.models.Mesh;
 
-public class GUIObject extends GraphicalObject {
+import java.util.function.BiConsumer;
+
+public class GuiObject extends GraphicalObject {
 
 	private int relativeScreenPositionX = RelativeParentPosition.LEFT;
 	private int relativeScreenPositionY = RelativeParentPosition.TOP;
@@ -14,11 +17,21 @@ public class GUIObject extends GraphicalObject {
 	private double xAbsOffset = 0, yAbsOffset = 0;
 	private double absWidth = 0, absHeight = 0;
 
-	public GUIObject(Mesh mesh) {
+	private BiConsumer<GuiObject, GuiElement> resizeCallback = null;
+
+	private boolean influenceSizeCalculations = true;
+
+	public GuiObject(Mesh mesh) {
 		super(mesh);
 		mesh.normalize();
 	}
-	public GUIObject() {}
+	public GuiObject() {}
+
+	public void resize(GuiElement element) {
+		if (resizeCallback == null) { return; }
+
+		resizeCallback.accept(this, element);
+	}
 
 	public void recalculateScale(double parentAbsWidth, double parentAbsHeight) {
 		double windowWidth = GuiData.getRenderWindow().getWidth();
@@ -48,6 +61,18 @@ public class GUIObject extends GraphicalObject {
 	// ###################################################################################
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
+
+	public void setResizeCallback(BiConsumer<GuiObject, GuiElement> resizeCallback) {
+		this.resizeCallback = resizeCallback;
+	}
+
+	public void setInfluenceSizeCalculations(boolean influenceSizeCalculations) {
+		this.influenceSizeCalculations = influenceSizeCalculations;
+	}
+
+	public boolean isInfluenceSizeCalculations() {
+		return influenceSizeCalculations;
+	}
 
 	public void setAbsoluteSize(double width, double height) {
 		this.absWidth = width;

@@ -51,8 +51,8 @@ Tile: tGras inherits tSoakingHumidity, tTemperature {
 		attNutrition, 20;
 		attPorosity, 15;
 	    attSediment, 10;
-		absorbHeat, 60;
-		emitHeat, 20;
+		absorbHeat, 30;
+		emitHeat, 30;
 	}
 
 	Script: update {
@@ -124,8 +124,8 @@ Tile: tStone inherits tSoakingHumidity, tTemperature {
 	    attSediment, 5;
 		attPorosity, 3;
 		heatConductivity, 5;
-		absorbHeat, 30;
-		emitHeat, 30;
+		absorbHeat, 60;
+		emitHeat, 20;
 	}
 }
 

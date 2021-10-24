@@ -14,6 +14,8 @@ import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.MeshHub;
 import engine.graphics.objects.planet.Sun;
 import engine.parser.utils.Logger;
+import load.ModOrderLoader;
+import load.TextureLoader;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -378,6 +380,10 @@ public class Data {
 	public static void clear() {
 		// we have to clean up the meshHubs though
 		clearMeshHubs();
+
+		// emptying caches
+		TextureLoader.clear();
+		ModOrderLoader.clear();
 
 		// for testing:
 		// just not referencing the old data anymore is enough. Thanks java garbage collector!

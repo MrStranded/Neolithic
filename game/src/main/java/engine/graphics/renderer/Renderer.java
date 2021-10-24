@@ -8,7 +8,6 @@ import engine.data.Data;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.gui.GuiData;
 import engine.graphics.objects.*;
-import engine.graphics.objects.gui.GUIObject;
 import engine.graphics.objects.light.*;
 import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.projection.Projection;

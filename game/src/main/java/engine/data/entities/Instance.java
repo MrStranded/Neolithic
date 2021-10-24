@@ -747,7 +747,11 @@ public class Instance {
 		if (this instanceof Effect) { return value; }
 
 		// values that are zero and do not exist are returned as is (zero)
-		if (value == 0 && attributes != null && attributes.get(attributeID) == null) { return value; }
+		if (value == 0) {
+			if (attributes == null || attributes.get(attributeID) == null) {
+				return value;
+			}
+		}
 
 		ProtoAttribute protoAttribute = Data.getProtoAttribute(attributeID);
 		if (protoAttribute == null) { return value; }

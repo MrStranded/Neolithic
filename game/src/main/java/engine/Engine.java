@@ -44,13 +44,16 @@ public class Engine {
 					}
 				}, 100),
 
-				new TimedTask("Calculating HUD", () -> {
+				new TimedTask("Updating Statistics", () -> {
 					GuiData.getStatisticsWindow().refresh();
-					GuiData.clearGraphicalObjects();
 				}, 100),
 
 				new TimedTask("Rendering", () -> {
 					GuiData.getRenderer().render(GuiData.getScene(), GuiData.getHud(), gaia);
+				}, 100),
+
+				new TimedTask("Clearing GUI", () -> {
+					GuiData.clearGuiElements();
 				}, 100)
 		);
 	}
@@ -104,7 +107,7 @@ public class Engine {
 	 * This method cannot be static, because we need the sleep() method from the Thread class.
 	 */
 	private void start() {
-		Engine.logicThread.start();
+		logicThread.start();
 
 		while (GuiData.getRenderer().displayExists()) {
 			long t = System.currentTimeMillis();
