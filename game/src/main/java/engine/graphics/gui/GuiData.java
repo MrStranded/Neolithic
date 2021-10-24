@@ -88,7 +88,7 @@ public class GuiData {
         while ((next = guiElementsToClean.peek()) != null) {
             if (next.isRendering()) { return; }
 
-            guiElementsToClean.poll().clearGuiObject();
+            guiElementsToClean.poll().clearGuiObjects();
         }
     }
     public static void rememberToCleanGuiElement(GuiElement element) {

@@ -160,10 +160,10 @@ public enum TokenConstants {
 	DEBUG					(TokenType.COMMAND, "debug"),
 
 	// -------------------------------------------------- GUI
-	ADD_GUI      	(TokenType.COMMAND, "addGui"),
-	CLEAR_GUI		(TokenType.COMMAND, "clearGui"),
-	CREATE_GUI      (TokenType.COMMAND, "createGui"),
-	PRINT           (TokenType.COMMAND, "print"),
+	ADD_GUI      		(TokenType.COMMAND, "addGui"),
+	CLEAR_GUI			(TokenType.COMMAND, "clearGui"),
+	CREATE_GUI      	(TokenType.COMMAND, "createGui"),
+	PRINT           	(TokenType.COMMAND, "print"),
 
 	// -------------------------------------------------- Return Commands
 	REQUIRE         (TokenType.COMMAND, "require"),

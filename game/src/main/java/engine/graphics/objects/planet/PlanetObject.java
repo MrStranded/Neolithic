@@ -96,13 +96,7 @@ public class PlanetObject extends MoveableObject {
 			}
 		}
 
-		if (closest != null) {
-			return closest;
-		} else {
-			Logger.debug("planet not clicked");
-		}
-
-		return null;
+		return closest;
 	}
 
 	// ###################################################################################

@@ -7,6 +7,8 @@ import engine.math.numericalObjects.Matrix4;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 public class BaseGUI implements GUIInterface {
 
@@ -23,6 +25,14 @@ public class BaseGUI implements GUIInterface {
 	@Override
 	public void tick() {
 		elements.forEach(GuiElement::tick);
+	}
+
+	@Override
+	public GuiElement getElementUnderMouse(double mouseX, double mouseY) {
+		return elements.stream()
+				.map(element -> element.getElementUnderMouse(mouseX, mouseY))
+				.filter(Objects::nonNull)
+				.findFirst().orElse(null);
 	}
 
 	// ###################################################################################
@@ -60,7 +70,12 @@ public class BaseGUI implements GUIInterface {
 
 
 	// ###################################################################################
-	// ################################ Getters and Setters ##############################
+	// ################################ Debug ############################################
 	// ###################################################################################
+
+	@Override
+	public void debug() {
+		elements.forEach(element -> element.debug("-   "));
+	}
 
 }

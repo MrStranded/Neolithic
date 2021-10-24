@@ -5,7 +5,7 @@ Gui: gInstanceDetail {
 	
 	Script: new(instance) {
 		->instance = instance;
-	    ->background = "gui/background.png";
+	    ->background = "gui/back_stone01.png";
 		
 		// addGui(self, gVariables, self);
 		
@@ -57,7 +57,7 @@ Gui: gAttribute {
 	Script: new(attribute, instance) {
 		->attribute = attribute;
 		->instance = instance;
-	    //->background = "gui/background.png";
+	    ->background = "gui/back_wood01.png";
 		
 		->text = attribute;
 	}
@@ -66,6 +66,14 @@ Gui: gAttribute {
 		value = getAttValue(->instance, getAttId(->attribute));
 		->text = value;
 		if (value == 0) { destroy(self); }
+	}
+
+	Script: click() {
+		if (->flip = ! ->flip) {
+			->background = "gui/back_wood01_pressed.png";
+		} else {
+			->background = "gui/back_wood01.png";
+		}
 	}
 }
 

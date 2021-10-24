@@ -5,6 +5,7 @@ import engine.graphics.gui.GuiData;
 import engine.graphics.gui.RelativeParentPosition;
 import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.models.Mesh;
+import engine.parser.utils.Logger;
 
 import java.util.function.BiConsumer;
 
@@ -26,6 +27,10 @@ public class GuiObject extends GraphicalObject {
 		mesh.normalize();
 	}
 	public GuiObject() {}
+
+	// ###################################################################################
+	// ################################ Recalculations ###################################
+	// ###################################################################################
 
 	public void resize(GuiElement element) {
 		if (resizeCallback == null) { return; }
@@ -56,6 +61,20 @@ public class GuiObject extends GraphicalObject {
 		double positionY = 2d * (parentAbsHeight - objectAbsY) / parentAbsHeight - 1d;
 
 		setPosition(positionX, positionY, getPosition().getZ());
+	}
+
+	// ###################################################################################
+	// ################################ Functionality ####################################
+	// ###################################################################################
+
+	public boolean isUnderMouse(double mouseX, double mouseY, double parentAbsWidth, double parentAbsHeight) {
+		double x = (xAbsOffset + xRelOffset * parentAbsWidth);
+		double y = (yAbsOffset + yRelOffset * parentAbsHeight);
+
+		return mouseX >= x
+				&& mouseX < x + absWidth
+				&& mouseY >= y
+				&& mouseY < y + absHeight;
 	}
 
 	// ###################################################################################
@@ -110,15 +129,9 @@ public class GuiObject extends GraphicalObject {
 	public double getxRelOffset() {
 		return xRelOffset;
 	}
-	public void setxRelOffset(double xRelOffset) {
-		this.xRelOffset = xRelOffset;
-	}
 
 	public double getyRelOffset() {
 		return yRelOffset;
-	}
-	public void setyRelOffset(double yRelOffset) {
-		this.yRelOffset = yRelOffset;
 	}
 
 	public double getAbsWidth() {
@@ -133,5 +146,16 @@ public class GuiObject extends GraphicalObject {
 	}
 	public void setAbsHeight(double absHeight) {
 		this.absHeight = absHeight;
+	}
+
+	// ###################################################################################
+	// ################################ Debug ############################################
+	// ###################################################################################
+
+	public void debug(String prefix) {
+		Logger.debug(prefix + "> " + toString());
+		Logger.debug(prefix + "  position: " +  xAbsOffset + " + " + xRelOffset + ", " + yAbsOffset + " + " + yRelOffset);
+		Logger.debug(prefix + "  width: " + getAbsWidth());
+		Logger.debug(prefix + "  height: " + getAbsHeight());
 	}
 }

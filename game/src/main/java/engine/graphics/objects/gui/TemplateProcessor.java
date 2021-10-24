@@ -12,8 +12,12 @@ import org.lwjglx.debug.joptsimple.internal.Strings;
 
 public class TemplateProcessor {
 
+    private static final double Z_STEP = 1d / 256d;
+
     public static GuiObject[] create(GuiElement element, GuiTemplates template) {
         Logger.trace("Creating gui object " + element.getName() + " for template '" + template + "'");
+
+        int depth = element.getDepth() + 1;
 
         switch (template) {
             case TEXT:
@@ -29,6 +33,7 @@ public class TemplateProcessor {
                 TextObject textObject = (TextObject) GuiBuilder.Text(text, color, maxAbsTextObjectWidth)
                         .withSize(textSize)
                         .withPosition(xRelPos, yRelPos)
+                        .withZIndex(-1d + depth * Z_STEP)
                         .build();
 
                 GuiObject background = null;
@@ -38,7 +43,7 @@ public class TemplateProcessor {
                             .withPosition(xRelPos, yRelPos)
                             .withResize((o, e) -> o.setAbsoluteSize(e.getWidth(), e.getHeight()))
                             .influenceSizeCalculations(false)
-                            .withZIndex(-0.1d)
+                            .withZIndex(-1d + (depth - 0.5d) * Z_STEP)
                             .build();
                 }
 

@@ -112,8 +112,10 @@ public class GuiElement extends Instance {
     public void resize() {
         getSubElements().forEach(GuiElement::resize);
 
-        guiObjects.forEach(object -> object.resize(this));
-        guiObjects.forEach(object -> object.recalculateScale(getAbsoluteParentWidth(), getAbsoluteParentHeight()));
+        guiObjects.forEach(object -> {
+            object.resize(this);
+            object.recalculateScale(getAbsoluteParentWidth(), getAbsoluteParentHeight());
+        });
     }
 
     // ###################################################################################
@@ -123,6 +125,13 @@ public class GuiElement extends Instance {
     public void setGuiParent(GuiElement parent) {
         placeInto(parent);
         applyLayouting = true;
+    }
+
+    public int getDepth() {
+        GuiElement parent = (GuiElement) getSuperInstance();
+        if (parent == null) { return 0; }
+
+        return parent.getDepth() + 1;
     }
 
     public double getAbsWidth() {
@@ -171,6 +180,30 @@ public class GuiElement extends Instance {
     }
 
     // ###################################################################################
+    // ################################ Mouse ############################################
+    // ###################################################################################
+
+    public GuiElement getElementUnderMouse(double mouseX, double mouseY) {
+        double width = getWidth();
+        double height = getHeight();
+
+        if (guiObjects.stream()
+                .noneMatch(object -> object.isUnderMouse(mouseX, mouseY, width, height))
+        ) {
+            return null;
+        }
+
+        for (GuiElement element : getSubElements()) {
+            GuiElement underMouse = element.getElementUnderMouse(mouseX, mouseY);
+            if (underMouse != null) {
+                return underMouse;
+            }
+        }
+
+        return this;
+    }
+
+    // ###################################################################################
     // ################################ Clean Up #########################################
     // ###################################################################################
 
@@ -180,7 +213,7 @@ public class GuiElement extends Instance {
         GuiData.rememberToCleanGuiElement(this);
     }
 
-    public void clearGuiObject() {
+    public void clearGuiObjects() {
         guiObjects.forEach(GraphicalObject::cleanUp);
         guiObjects.clear();
     }
@@ -196,8 +229,7 @@ public class GuiElement extends Instance {
     }
 
     private void setGuiObjects(GuiObject... newObjects) {
-        guiObjects.forEach(GraphicalObject::cleanUp);
-        guiObjects.clear();
+        clearGuiObjects();
         guiObjects.addAll(Arrays.asList(newObjects));
     }
 
@@ -285,6 +317,14 @@ public class GuiElement extends Instance {
     // ###################################################################################
     // ################################ Debugging ########################################
     // ###################################################################################
+
+    public void debug(String prefix) {
+        Logger.debug(prefix + toString());
+
+        guiObjects.forEach(object -> object.debug(prefix));
+
+        getSubElements().forEach(element -> element.debug(prefix + "    "));
+    }
 
     public String toString() {
         return "Gui Element (id = " + id + (getName() != null ? " ,name = " + getName() : "") + ")";

@@ -81,15 +81,26 @@ Script: mark(target) {
 Script: rightClick(tile) {
 	select(tile);
 	clearGui();
-	createGui(gInstanceDetail, tile);
-	/*gui = createGui(gInstanceDetail, tile);
-	gui->text = "Hemlo brudi"
-	gui->relX = 0.5;
-	gui->relY = 0.5;
-	gui->textColor = rgba(1, 0, 0, 0.5);*/
+	if (tile) {
+		createGui(gInstanceDetail, tile);
+		/*gui = createGui(gInstanceDetail, tile);
+		gui->text = "Hemlo brudi"
+		gui->relX = 0.5;
+		gui->relY = 0.5;
+		gui->textColor = rgba(1, 0, 0, 0.5);*/
+	}
 }
 
-Script: leftClick(tile, type) {
+Script: leftClick(tile, gui, type) {
+    if (gui) {
+        gui->click();
+        return;
+    }
+
+	if (! tile) {
+		return;
+	}
+
 	instance = getInstanceInRange(type, tile, 0);
 	if (instance) {
 		destroy(instance);

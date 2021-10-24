@@ -3,6 +3,7 @@ package engine.input;
 import constants.GameConstants;
 import constants.GraphicalConstants;
 import engine.data.Data;
+import engine.data.entities.GuiElement;
 import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
 import engine.data.entities.Tile;
@@ -120,16 +121,17 @@ public class IngameInteractions {
 
         if (mouse.isLeftButtonClicked()) {
             Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), renderer, scene);
-            if (clickedTile != null) {
-                //scene.setFacePartOverlay(clickedTile.getTileMesh());
-                Data.addScriptRun(new ScriptRun(
-                        Data.getMainInstance(),
-                        "leftClick",
-                        new Variable[] {
-                                new Variable(clickedTile),
-                                new Variable(Data.getContainer(GameOptions.currentContainerId).orElse(null))
-                        }));
-            }
+            GuiElement clickedGui = MousePicking.getGuiUnderMouse(mouse.getXPos(), mouse.getYPos());
+
+            //scene.setFacePartOverlay(clickedTile.getTileMesh());
+            Data.addScriptRun(new ScriptRun(
+                    Data.getMainInstance(),
+                    "leftClick",
+                    new Variable[] {
+                            new Variable(clickedTile),
+                            new Variable(clickedGui),
+                            new Variable(Data.getContainer(GameOptions.currentContainerId).orElse(null))
+                    }));
         }
         if (mouse.isRightButtonClicked()) {
             Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), renderer, scene);

@@ -1,7 +1,9 @@
 package engine.math;
 
 import engine.data.Data;
+import engine.data.entities.GuiElement;
 import engine.data.entities.Tile;
+import engine.graphics.gui.GuiData;
 import engine.graphics.objects.Scene;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.renderer.Renderer;
@@ -41,6 +43,10 @@ public class MousePicking {
         //scene.setArrow(rayOrigin, rayDestination);
 
         return Data.getPlanet().getPlanetObject().getIntersectedFacePart(rayOrigin, rayDirection);
+    }
+
+    public static GuiElement getGuiUnderMouse(double mouseX, double mouseY) {
+        return GuiData.getHud().getElementUnderMouse(mouseX, mouseY);
     }
 
 }
