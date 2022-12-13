@@ -3,11 +3,8 @@ package load;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import engine.graphics.objects.textures.Texture;
 import engine.parser.utils.Logger;
-import org.w3c.dom.Text;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;

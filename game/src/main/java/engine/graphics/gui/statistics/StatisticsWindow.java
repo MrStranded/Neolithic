@@ -1,14 +1,8 @@
 package engine.graphics.gui.statistics;
 
-import constants.GameConstants;
-import engine.data.Data;
 import engine.data.entities.Instance;
-import engine.data.options.GameOptions;
-import engine.data.proto.ProtoAttribute;
-import engine.parser.utils.Logger;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowEvent;
 
 public class StatisticsWindow {

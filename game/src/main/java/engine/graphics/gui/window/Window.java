@@ -1,10 +1,10 @@
 package engine.graphics.gui.window;
 
+import engine.graphics.renderer.Renderer;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
-import engine.graphics.renderer.Renderer;
 
 import java.nio.IntBuffer;
 

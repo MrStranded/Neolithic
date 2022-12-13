@@ -1,6 +1,5 @@
 package engine.graphics.objects;
 
-import engine.graphics.objects.generators.MeshGenerator;
 import engine.graphics.objects.light.ShadowMap;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.movement.MoveableObject;

@@ -7,6 +7,7 @@ import engine.parser.scripts.exceptions.InvalidValueException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.execution.CommandExecuter;
 import engine.parser.tokenization.Token;
+import engine.parser.utils.Logger;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class CommandExpressionNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "Command: " + command);
+		Logger.raw(indentation + "Command: " + command);
 		for (AbstractScriptNode node : subNodes) {
 			node.print(indentation + " ");
 		}

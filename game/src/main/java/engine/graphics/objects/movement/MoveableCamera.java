@@ -2,9 +2,9 @@ package engine.graphics.objects.movement;
 
 import constants.GraphicalConstants;
 import engine.math.MatrixCalculations;
+import engine.math.Transformations;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
-import engine.math.Transformations;
 
 public class MoveableCamera {
 

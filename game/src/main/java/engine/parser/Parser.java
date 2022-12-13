@@ -36,7 +36,7 @@ public class Parser {
 		}
 
 		Data.prepareForGame();
-		if (Logger.hasLogLevel(Logger.LOG_DEBUG)) { debug(); }
+		debug();
 	}
 
 	private void loadMod(String mod) {
@@ -89,48 +89,55 @@ public class Parser {
 	// ###################################################################################
 
 	public void debug() {
-		System.out.println("/////////////////////////////////////////////////////////////");
+		if (! Logger.hasLogLevel(Logger.LOG_DEBUG)) {
+			Logger.info("Parser::debug not executed because log level is not at least DEBUG");
+			return;
+		}
+		
+		Logger.raw("///////////////// Parser debugging ////////////////////");
+		
+		Logger.raw("_________________________ List of recognized attributes _________________________________");
 		int i = 0;
 		ProtoAttribute protoAttribute;
 		while ((protoAttribute = Data.getProtoAttribute(i++)) != null) {
-			System.out.println("ProtoAttribute: " + protoAttribute.getTextID() + ", " + protoAttribute.getName());
+			Logger.raw("ProtoAttribute: " + protoAttribute.getTextID() + ", " + protoAttribute.getName());
 		}
 
 		i = 0;
 		Container container;
 		while ((container = Data.getContainer(i++).orElse(null)) != null) {
-			System.out.println("______________________________________________________________________");
-			System.out.println(">>>>>>>>> " + container.getType() + ": " + container.getTextID() + ", " + container.getName(null));
+			Logger.raw("_________________________ Container _________________________________");
+			Logger.raw(">>>>>>>>> " + container.getType() + ": " + container.getTextID() + ", " + container.getName(null));
 
-			System.out.println(">>> Properties:");
+			Logger.raw(">>> Properties:");
 			container.printProperties();
 
-			System.out.println(">>> Stages:");
+			Logger.raw(">>> Stages:");
 			for (String stage : container.getStages()) {
-				System.out.println("Stage: " + stage);
+				Logger.raw("Stage: " + stage);
 
 				IDInterface[] attributes = container.getAttributes(stage).toArray();
 				if (attributes != null) {
 					for (IDInterface idInterface : attributes) {
 						Attribute attribute = (Attribute) idInterface;
-						System.out.println("   -> Att: " + attribute.getId() + " (" + Data.getProtoAttribute(attribute.getId()).getTextID() + ") " + ", " + attribute.getValue());
+						Logger.raw("   -> Att: " + attribute.getId() + " (" + Data.getProtoAttribute(attribute.getId()).getTextID() + ") " + ", " + attribute.getValue());
 					}
 				}
 
 				if (container.getType() == DataType.CREATURE) {
 					for (Container process : ((CreatureContainer) container).getKnowledge(stage)) {
-						System.out.println("   -> Pro: " + process);
+						Logger.raw("   -> Pro: " + process);
 					}
 					for (Container drive : ((CreatureContainer) container).getDrives(stage)) {
-						System.out.println("   -> Dri: " + drive);
+						Logger.raw("   -> Dri: " + drive);
 					}
 				} else if (container.getType() == DataType.DRIVE) {
 					for (Container solution : ((DriveContainer) container).getSolutions(stage)) {
-						System.out.println("   -> Sol: " + solution);
+						Logger.raw("   -> Sol: " + solution);
 					}
 				} else if (container.getType() == DataType.PROCESS) {
 					for (Container alternative : ((ProcessContainer) container).getSolutions(stage)) {
-						System.out.println("   -> Sol: " + alternative);
+						Logger.raw("   -> Sol: " + alternative);
 					}
 				}
 

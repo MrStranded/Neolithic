@@ -4,14 +4,9 @@ import constants.GameConstants;
 import engine.Engine;
 import engine.data.Data;
 import engine.data.entities.Instance;
-import engine.data.interaction.SelectedInstance;
 import engine.data.options.GameOptions;
 import engine.graphics.gui.GuiData;
-import engine.graphics.gui.statistics.InstanceDetailPanel;
-import engine.graphics.gui.window.Window;
-
-import java.util.ArrayList;
-import java.util.List;
+import engine.parser.utils.Logger;
 
 public class LogicThread extends Thread {
 
@@ -71,7 +66,7 @@ public class LogicThread extends Thread {
 				if (GameOptions.printPerformance) {
 					long dt = (System.currentTimeMillis() - t);
 					if (dt > 100) {
-						System.out.println("Logic Loop took: " + dt);
+						Logger.raw("Logic Loop took: " + dt);
 					}
 				}
 				t = System.currentTimeMillis();

@@ -3,21 +3,26 @@ package engine.graphics.renderer;
 import constants.GraphicalConstants;
 import constants.ResourcePathConstants;
 import engine.TimedTask;
-import engine.data.planetary.Planet;
 import engine.data.Data;
+import engine.data.planetary.Planet;
 import engine.graphics.gui.GUIInterface;
 import engine.graphics.gui.GuiData;
-import engine.graphics.objects.*;
-import engine.graphics.objects.light.*;
+import engine.graphics.gui.window.Window;
+import engine.graphics.objects.Camera;
+import engine.graphics.objects.GraphicalObject;
+import engine.graphics.objects.MeshHub;
+import engine.graphics.objects.Scene;
+import engine.graphics.objects.light.PointLight;
+import engine.graphics.objects.light.ShadowMap;
+import engine.graphics.objects.light.SpotLight;
 import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.input.IngameInteractions;
-import engine.graphics.gui.window.Window;
 import engine.math.MatrixCalculations;
+import engine.math.numericalObjects.Matrix4;
 import engine.parser.utils.Logger;
 import load.StringLoader;
-import engine.math.numericalObjects.Matrix4;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
@@ -426,7 +431,6 @@ public class Renderer {
 		hudShaderProgram.setUniform("verticalStep", 1f / GuiData.getFontTexture().getHeight());
 
 		hud.render(hudShaderProgram, orthographicMatrix);
-		hud.resize();
 
 		hudShaderProgram.unbind();
 

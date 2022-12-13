@@ -4,6 +4,7 @@ import engine.data.entities.Instance;
 import engine.data.scripts.Script;
 import engine.data.variables.Variable;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
+import engine.parser.utils.Logger;
 
 public class IfStatementNode extends AbstractScriptNode {
 
@@ -31,7 +32,7 @@ public class IfStatementNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "If Statement");
+		Logger.raw(indentation + "If Statement");
 		subNodes[0].print(indentation + "-");
 		subNodes[1].print(indentation + ".");
 		if (subNodes[2] != null) {

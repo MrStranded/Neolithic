@@ -1,6 +1,7 @@
 package tests.math;
 
 import engine.math.numericalObjects.Vector3;
+import engine.parser.utils.Logger;
 
 public class VectorPerformanceTest {
 
@@ -12,7 +13,7 @@ public class VectorPerformanceTest {
 		int n = 1000000;
 		long t, tn=0, ti=0;
 
-		System.out.println("performing " + m + "x"+ n + " multiplications on a vector3");
+		Logger.raw("performing " + m + "x"+ n + " multiplications on a vector3");
 
 		for (int j=0; j<m; j++) {
 
@@ -32,9 +33,9 @@ public class VectorPerformanceTest {
 			ti += System.nanoTime() - t;
 		}
 
-		System.out.println("normal took " + tn + " nanoseconds");
-		System.out.println("inplace took "+ti+" nanoseconds");
-		System.out.println("inplace is "+((double) tn/(double) ti)+" times faster");
+		Logger.raw("normal took " + tn + " nanoseconds");
+		Logger.raw("inplace took "+ti+" nanoseconds");
+		Logger.raw("inplace is "+((double) tn/(double) ti)+" times faster");
 	}
 
 }

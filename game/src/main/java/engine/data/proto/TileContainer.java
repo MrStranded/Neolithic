@@ -2,7 +2,6 @@ package engine.data.proto;
 
 import constants.PropertyKeys;
 import constants.ScriptConstants;
-import constants.TopologyConstants;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.graphics.renderer.color.RGBA;

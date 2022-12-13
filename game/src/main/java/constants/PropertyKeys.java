@@ -21,7 +21,6 @@ public enum PropertyKeys {
     PREFERS                 ("plot"),
 
     TEMPLATE                ("template"),
-    LAYOUT                  ("layout"),
     TEXT                    ("text"),
 
     TOP_COLOR               ("topColor"),

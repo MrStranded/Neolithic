@@ -6,6 +6,7 @@ import engine.data.variables.Variable;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.execution.BinaryOperationExecuter;
 import engine.parser.tokenization.Token;
+import engine.parser.utils.Logger;
 
 public class BinaryExpressionNode extends AbstractScriptNode {
 
@@ -26,7 +27,7 @@ public class BinaryExpressionNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "Binary Expression " + operator + " (" + operator.getPrecedence() + ")");
+		Logger.raw(indentation + "Binary Expression " + operator + " (" + operator.getPrecedence() + ")");
 		subNodes[0].print(indentation + " ");
 		subNodes[1].print(indentation + " ");
 	}

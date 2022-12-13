@@ -497,7 +497,7 @@ public class Instance {
 
 	public void destroy() {
 		if (id == Data.getMainInstance().getId()) {
-			Logger.error("Cannot delete main instance!");
+			Logger.error("Cannot destroy main instance!");
 			return;
 		}
 
@@ -789,6 +789,12 @@ public class Instance {
 		return variables;
 	}
 
+	public boolean variableHasValue(String name, Variable value) {
+		return getVariableSafe(name)
+				.map(variable -> variable.equals(value))
+				.orElse(false);
+	}
+
 	public Optional<Variable> getVariableSafe(String name) {
 		return Optional.ofNullable(getVariable(name));
 	}
@@ -798,6 +804,9 @@ public class Instance {
 		Variable variable = variables.get(StringConverter.toID(name));
 
 		if (variable != null && variable.isInvalid()) {
+			if (variable.isTracked()) {
+				Logger.trace("Invalid Variable " + variable + " during getVariable(" + name + ")");
+			}
 			variables.remove(StringConverter.toID(name));
 			return null;
 		}

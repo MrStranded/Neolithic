@@ -4,6 +4,7 @@ import engine.data.entities.Instance;
 import engine.data.scripts.Script;
 import engine.data.variables.Variable;
 import engine.parser.tokenization.Token;
+import engine.parser.utils.Logger;
 import engine.parser.utils.TokenNumerifier;
 
 public class LiteralNode extends AbstractScriptNode {
@@ -25,6 +26,6 @@ public class LiteralNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "Literal: " + literal);
+		Logger.raw(indentation + "Literal: " + literal);
 	}
 }

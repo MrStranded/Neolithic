@@ -2,14 +2,12 @@ package engine.graphics.gui.statistics;
 
 import constants.GameConstants;
 import constants.PropertyKeys;
-import constants.ScriptConstants;
 import engine.data.Data;
 import engine.data.entities.Instance;
 import engine.data.options.GameOptions;
 import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
 import engine.data.variables.Variable;
-import engine.parser.utils.Logger;
 
 import javax.swing.*;
 import java.awt.*;

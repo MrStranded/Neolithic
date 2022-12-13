@@ -1,9 +1,10 @@
 package engine.parser.scripts.nodes;
 
-import engine.data.scripts.Script;
 import engine.data.entities.Instance;
+import engine.data.scripts.Script;
 import engine.data.variables.Variable;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
+import engine.parser.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class ListExpressionNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "List:");
+		Logger.raw(indentation + "List:");
 		for (AbstractScriptNode element : subNodes) {
 			element.print(indentation + " ");
 		}

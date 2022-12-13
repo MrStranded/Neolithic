@@ -4,11 +4,11 @@ import constants.PropertyKeys;
 import constants.ResourcePathConstants;
 import constants.ScriptConstants;
 import engine.data.Data;
-import engine.data.proto.Container;
-import engine.data.scripts.Script;
 import engine.data.attributes.PreAttribute;
 import engine.data.identifiers.ContainerIdentifier;
+import engine.data.proto.Container;
 import engine.data.proto.*;
+import engine.data.scripts.Script;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.graphics.renderer.color.RGBA;
@@ -515,7 +515,7 @@ public class Interpreter {
 					if (Arrays.stream(PropertyKeys.values())
 							.noneMatch(propertyKey -> propertyKey.key().equals(property))
 					) {
-						Logger.debug("Property that does not exist in PropertyKeys was set on " + container.getTextID() + ": " + property);
+						Logger.debug("Property '" + property + "' that does not exist in PropertyKeys might be set on '" + container.getTextID() + "'");
 					}
 
 				} else {
@@ -551,7 +551,7 @@ public class Interpreter {
 	 */
 	public void printRemainder() {
 		while (tokenIterator.hasNext()) {
-			System.out.println("--->   " + tokenIterator.next());
+			Logger.raw("--->   " + tokenIterator.next());
 		}
 	}
 

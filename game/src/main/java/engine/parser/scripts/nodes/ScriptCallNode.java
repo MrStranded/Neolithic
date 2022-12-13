@@ -5,6 +5,7 @@ import engine.data.scripts.Script;
 import engine.data.variables.Variable;
 import engine.parser.scripts.execution.ParameterCalculator;
 import engine.parser.tokenization.Token;
+import engine.parser.utils.Logger;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class ScriptCallNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "ScriptCall: " + identifier);
+		Logger.raw(indentation + "ScriptCall: " + identifier);
 		for (AbstractScriptNode node : subNodes) {
 			node.print(indentation + " ");
 		}

@@ -3,7 +3,6 @@ package engine.graphics.objects.generators;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.planet.FacePart;
 import engine.math.numericalObjects.Vector3;
-import engine.parser.utils.Logger;
 
 import java.util.Arrays;
 

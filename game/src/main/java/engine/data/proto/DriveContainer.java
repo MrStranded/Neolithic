@@ -1,12 +1,9 @@
 package engine.data.proto;
 
 import constants.PropertyKeys;
-import constants.ScriptConstants;
-import engine.data.identifiers.ContainerIdentifier;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

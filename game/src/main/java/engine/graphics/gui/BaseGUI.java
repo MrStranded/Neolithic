@@ -4,11 +4,12 @@ import engine.data.entities.GuiElement;
 import engine.data.entities.Instance;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
+import engine.parser.utils.Logger;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class BaseGUI implements GUIInterface {
 
@@ -24,7 +25,12 @@ public class BaseGUI implements GUIInterface {
 
 	@Override
 	public void tick() {
-		elements.forEach(GuiElement::tick);
+		try {
+			elements.forEach(GuiElement::tick);
+		} catch (ConcurrentModificationException e) {
+			Logger.error("ConcurrentModificationException during tick of sub gui elements. " +
+					"\nProbable cause is that a sub element cleared gui elements during tick script.");
+		}
 	}
 
 	@Override
@@ -46,7 +52,7 @@ public class BaseGUI implements GUIInterface {
 
 	@Override
 	public void resize() {
-		elements.forEach(GuiElement::resize);
+		elements.forEach(GuiElement::consolidate);
 	}
 
 	// ###################################################################################

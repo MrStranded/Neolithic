@@ -3,11 +3,11 @@ package load;
 import engine.graphics.objects.models.IndexGroup;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.models.MeshFace;
+import engine.math.numericalObjects.Vector2;
+import engine.math.numericalObjects.Vector3;
 import engine.parser.utils.Logger;
 import engine.utils.converters.IntegerConverter;
 import engine.utils.converters.VectorConverter;
-import engine.math.numericalObjects.Vector2;
-import engine.math.numericalObjects.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;

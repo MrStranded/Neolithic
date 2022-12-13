@@ -5,6 +5,7 @@ import engine.data.scripts.Script;
 import engine.data.variables.Variable;
 import engine.parser.scripts.exceptions.BreakException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
+import engine.parser.utils.Logger;
 
 public class WhileStatementNode extends AbstractScriptNode {
 
@@ -29,7 +30,7 @@ public class WhileStatementNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "While Statement");
+		Logger.raw(indentation + "While Statement");
 		subNodes[0].print(indentation + "-");
 		subNodes[1].print(indentation + ".");
 	}

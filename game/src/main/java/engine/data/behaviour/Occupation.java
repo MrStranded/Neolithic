@@ -1,7 +1,7 @@
 package engine.data.behaviour;
 
-import engine.data.scripts.Script;
 import engine.data.entities.Instance;
+import engine.data.scripts.Script;
 
 public class Occupation {
 

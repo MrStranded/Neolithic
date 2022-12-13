@@ -1,12 +1,12 @@
 package engine.parser.scripts;
 
 import engine.data.scripts.Script;
-import engine.parser.utils.Logger;
 import engine.parser.constants.TokenConstants;
 import engine.parser.constants.TokenType;
 import engine.parser.interpretation.Interpreter;
 import engine.parser.scripts.nodes.*;
 import engine.parser.tokenization.Token;
+import engine.parser.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;

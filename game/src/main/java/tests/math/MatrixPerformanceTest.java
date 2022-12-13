@@ -1,6 +1,7 @@
 package tests.math;
 
 import engine.math.numericalObjects.Matrix3;
+import engine.parser.utils.Logger;
 
 public class MatrixPerformanceTest {
 
@@ -13,7 +14,7 @@ public class MatrixPerformanceTest {
 		int k = 100;
 		long t,tn=0,ti=0;
 
-		System.out.println("performing " + k + "x"+ n + " multiplications on a matrix3");
+		Logger.raw("performing " + k + "x"+ n + " multiplications on a matrix3");
 
 		for (int i=0; i<k; i++) {
 
@@ -35,9 +36,9 @@ public class MatrixPerformanceTest {
 			ti += System.nanoTime() - t;
 		}
 
-		System.out.println("normal took " + tn + " nanoseconds");
-		System.out.println("inplace took "+ti+" nanoseconds");
-		System.out.println("inplace is "+((double) tn/(double) ti)+" times faster");
+		Logger.raw("normal took " + tn + " nanoseconds");
+		Logger.raw("inplace took "+ti+" nanoseconds");
+		Logger.raw("inplace is "+((double) tn/(double) ti)+" times faster");
 
 	}
 }

@@ -1,6 +1,5 @@
 package engine.graphics.objects.gui;
 
-import engine.data.entities.GuiElement;
 import engine.graphics.gui.GuiData;
 import engine.graphics.objects.generators.MeshGenerator;
 import engine.graphics.renderer.color.RGBA;
@@ -8,11 +7,14 @@ import engine.parser.utils.Logger;
 
 import java.util.function.BiConsumer;
 
-public class GuiBuilder {
+public class GuiBuilder<T extends GuiObject> {
 
-    private final GuiObject object;
+    private final T object;
 
-    private GuiBuilder(GuiObject object) {
+    private double relPosX, relPosY;
+    private double absPosX, absPosY;
+
+    private GuiBuilder(T object) {
         this.object = object;
     }
 
@@ -20,21 +22,21 @@ public class GuiBuilder {
     // ################################ TextObject #######################################
     // ###################################################################################
 
-    public static GuiBuilder Text(String text) {
-        return new GuiBuilder(
+    public static GuiBuilder<TextObject> Text(String text) {
+        return new GuiBuilder<>(
                 new TextObject(text, GuiData.getFontTexture())
         );
     }
-    public static GuiBuilder Text(String text, RGBA color, double maxAbsTextObjectWidth) {
-        return new GuiBuilder(
+    public static GuiBuilder<TextObject> Text(String text, RGBA color, double maxAbsTextObjectWidth) {
+        return new GuiBuilder<>(
                 new TextObject(text, GuiData.getFontTexture(), color, maxAbsTextObjectWidth)
         );
     }
 
-    public GuiBuilder withSize(double size) {
+    public GuiBuilder<T> withSize(double size) {
         if (object instanceof TextObject) {
             TextObject textObject = (TextObject) object;
-            textObject.setAbsoluteSize(textObject.getTextWidth() * size, textObject.getTextHeight() * size);
+            object.setAbsoluteSize(textObject.getTextWidth() * size, textObject.getTextHeight() * size);
 
         } else {
             Logger.error("GuiObject was not of type TextObject: " + object);
@@ -46,8 +48,8 @@ public class GuiBuilder {
     // ################################ Sprite ###########################################
     // ###################################################################################
 
-    public static GuiBuilder Sprite() {
-        return new GuiBuilder(
+    public static GuiBuilder<GuiObject> Sprite() {
+        return new GuiBuilder<>(
                 new GuiObject(MeshGenerator.createQuad())
         );
     }
@@ -56,32 +58,39 @@ public class GuiBuilder {
     // ################################ General ##########################################
     // ###################################################################################
 
-    public GuiBuilder withPosition(double xRelPos, double yRelPos) {
-        object.setRelativeOffset(xRelPos, yRelPos);
+    public GuiBuilder<T> withRelativePosition(double relPosX, double relPosY) {
+        this.relPosX = relPosX;
+        this.relPosY = relPosY;
         return this;
     }
 
-    public GuiBuilder withTexture(String texturePath) {
+    public GuiBuilder<T> withAbsolutePosition(double absPosX, double absPosY) {
+        this.absPosX = absPosX;
+        this.absPosY = absPosY;
+        return this;
+    }
+
+    public GuiBuilder<T> withTexture(String texturePath) {
         object.setTexture(texturePath);
         return this;
     }
 
-    public GuiBuilder withSize(double width, double height) {
+    public GuiBuilder<T> withSize(double width, double height) {
         object.setAbsoluteSize(width, height);
         return this;
     }
 
-    public GuiBuilder withResize(BiConsumer<GuiObject, GuiElement> callback) {
+    public GuiBuilder<T> withResize(BiConsumer<GuiObject, RenderSpace> callback) {
         object.setResizeCallback(callback);
         return this;
     }
 
-    public GuiBuilder influenceSizeCalculations(boolean influence) {
+    public GuiBuilder<T> influenceSizeCalculations(boolean influence) {
         object.setInfluenceSizeCalculations(influence);
         return this;
     }
 
-    public GuiBuilder withZIndex(double zIndex) {
+    public GuiBuilder<T> withZIndex(double zIndex) {
         object.move(0, 0, zIndex);
         return this;
     }
@@ -90,7 +99,10 @@ public class GuiBuilder {
     // ################################ Build ############################################
     // ###################################################################################
 
-    public GuiObject build() {
+    public T build() {
+        object.setRelativeOffset(relPosX, relPosY);
+        object.setAbsoluteOffset(absPosX, absPosY);
+
         return object;
     }
 }

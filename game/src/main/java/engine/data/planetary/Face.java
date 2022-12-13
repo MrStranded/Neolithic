@@ -1,6 +1,5 @@
 package engine.data.planetary;
 
-import engine.data.Data;
 import engine.data.entities.Tile;
 
 public class Face {

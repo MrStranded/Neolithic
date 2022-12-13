@@ -1,6 +1,5 @@
 package engine.graphics.objects.gui;
 
-import engine.data.entities.GuiElement;
 import engine.graphics.gui.GuiData;
 import engine.graphics.gui.RelativeParentPosition;
 import engine.graphics.objects.GraphicalObject;
@@ -18,7 +17,7 @@ public class GuiObject extends GraphicalObject {
 	private double xAbsOffset = 0, yAbsOffset = 0;
 	private double absWidth = 0, absHeight = 0;
 
-	private BiConsumer<GuiObject, GuiElement> resizeCallback = null;
+	private BiConsumer<GuiObject, RenderSpace> resizeCallback = null;
 
 	private boolean influenceSizeCalculations = true;
 
@@ -32,30 +31,36 @@ public class GuiObject extends GraphicalObject {
 	// ################################ Recalculations ###################################
 	// ###################################################################################
 
-	public void resize(GuiElement element) {
-		if (resizeCallback == null) { return; }
+	public void consolidateSize(RenderSpace renderSpace) {
+		recalculateScale(renderSpace.getMaxChildWidth(), renderSpace.getMaxChildHeight());
 
-		resizeCallback.accept(this, element);
+		if (resizeCallback != null) {
+			resizeCallback.accept(this, renderSpace);
+		}
 	}
 
-	public void recalculateScale(double parentAbsWidth, double parentAbsHeight) {
+	private void recalculateScale(double parentAbsWidth, double parentAbsHeight) {
 		double windowWidth = GuiData.getRenderWindow().getWidth();
 		double windowHeight = GuiData.getRenderWindow().getHeight();
 		double aspectRatio = windowWidth / windowHeight;
+
+		// scale update
 
 		double scaleX = 2d * aspectRatio * absWidth / windowWidth;
 		double scaleY = 2d * absHeight / windowHeight;
 
 		setScale(scaleX, scaleY, 1d);
 
+		// position update
+
 		double objectAbsX = xAbsOffset
 				+ xRelOffset * parentAbsWidth
 				+ RelativeParentPosition.getAbsOriginX(parentAbsWidth, absWidth, relativeScreenPositionX);
+
 		double objectAbsY = yAbsOffset
 				+ yRelOffset * parentAbsHeight
-				+ RelativeParentPosition.getAbsOriginY(parentAbsHeight, absHeight, relativeScreenPositionY);
-
-		objectAbsY += absHeight; // since meshes are drawn from the lower left corner, and not like here from the top left
+				+ RelativeParentPosition.getAbsOriginY(parentAbsHeight, absHeight, relativeScreenPositionY)
+				+ absHeight; // since meshes are drawn from the lower left corner, and not like here from the top left
 
 		double positionX = 2d * aspectRatio * objectAbsX / parentAbsWidth - aspectRatio;
 		double positionY = 2d * (parentAbsHeight - objectAbsY) / parentAbsHeight - 1d;
@@ -81,7 +86,7 @@ public class GuiObject extends GraphicalObject {
 	// ################################ Getters and Setters ##############################
 	// ###################################################################################
 
-	public void setResizeCallback(BiConsumer<GuiObject, GuiElement> resizeCallback) {
+	public void setResizeCallback(BiConsumer<GuiObject, RenderSpace> resizeCallback) {
 		this.resizeCallback = resizeCallback;
 	}
 
@@ -89,7 +94,7 @@ public class GuiObject extends GraphicalObject {
 		this.influenceSizeCalculations = influenceSizeCalculations;
 	}
 
-	public boolean isInfluenceSizeCalculations() {
+	public boolean influencesSizeCalculations() {
 		return influenceSizeCalculations;
 	}
 
@@ -103,6 +108,7 @@ public class GuiObject extends GraphicalObject {
 		this.yRelOffset = yPos;
 	}
 	public void setAbsoluteOffset(double xPos, double yPos) {
+		Logger.debug("Set absolute position on " + this + " to " + xPos + ", " + yPos);
 		this.xAbsOffset = xPos;
 		this.yAbsOffset = yPos;
 	}
@@ -129,9 +135,15 @@ public class GuiObject extends GraphicalObject {
 	public double getxRelOffset() {
 		return xRelOffset;
 	}
-
 	public double getyRelOffset() {
 		return yRelOffset;
+	}
+
+	public double getxAbsOffset() {
+		return xAbsOffset;
+	}
+	public double getyAbsOffset() {
+		return yAbsOffset;
 	}
 
 	public double getAbsWidth() {
@@ -158,4 +170,11 @@ public class GuiObject extends GraphicalObject {
 		Logger.debug(prefix + "  width: " + getAbsWidth());
 		Logger.debug(prefix + "  height: " + getAbsHeight());
 	}
+
+	public String toString() {
+		return "GuiObject (influenceSizeCalc = " + influenceSizeCalculations + " " +
+				"| xRel = " + xRelOffset + ",xAbs = " + xAbsOffset + ",width = " + absWidth + " " +
+				"| yRel = " + yRelOffset + ",yAbs = " + yAbsOffset + ",height = " + absHeight + ")";
+	}
+
 }

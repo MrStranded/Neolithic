@@ -1,14 +1,11 @@
 package engine.data.proto;
 
 import constants.PropertyKeys;
-import constants.ScriptConstants;
-import engine.data.identifiers.ContainerIdentifier;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CreatureContainer extends Container {
 

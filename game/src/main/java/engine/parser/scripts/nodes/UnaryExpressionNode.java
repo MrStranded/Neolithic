@@ -6,6 +6,7 @@ import engine.data.variables.Variable;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.execution.UnaryOperationExecuter;
 import engine.parser.tokenization.Token;
+import engine.parser.utils.Logger;
 
 public class UnaryExpressionNode extends AbstractScriptNode {
 
@@ -24,7 +25,7 @@ public class UnaryExpressionNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "Unary Expression " + operator + " (" + operator.getPrecedence() + ")");
+		Logger.raw(indentation + "Unary Expression " + operator + " (" + operator.getPrecedence() + ")");
 		subNodes[0].print(indentation + " ");
 	}
 

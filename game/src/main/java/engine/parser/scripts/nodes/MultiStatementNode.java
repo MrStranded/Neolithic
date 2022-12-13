@@ -4,8 +4,8 @@ import engine.data.entities.Instance;
 import engine.data.scripts.Script;
 import engine.data.variables.Variable;
 import engine.parser.constants.TokenConstants;
-import engine.parser.scripts.exceptions.ReturnException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
+import engine.parser.utils.Logger;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class MultiStatementNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "MultiStatement");
+		Logger.raw(indentation + "MultiStatement");
 		for (AbstractScriptNode node : subNodes) {
 			node.print(indentation + ">");
 		}

@@ -3,18 +3,14 @@ package engine.data.proto;
 import constants.PropertyKeys;
 import constants.ScriptConstants;
 import engine.data.Data;
-import engine.data.IDInterface;
 import engine.data.attributes.Attribute;
 import engine.data.attributes.InheritedAttribute;
 import engine.data.attributes.PreAttribute;
-import engine.data.scripts.Script;
 import engine.data.identifiers.ContainerIdentifier;
+import engine.data.scripts.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
 import engine.data.variables.Variable;
-import engine.graphics.objects.MeshHub;
-import engine.graphics.renderer.color.RGBA;
-import engine.parser.constants.TokenConstants;
 import engine.parser.utils.Logger;
 import engine.utils.converters.StringConverter;
 
@@ -276,7 +272,7 @@ public class Container {
 
 	public void printProperties() {
 		stages.keySet().forEach(stage -> {
-			System.out.println("   Stage: " + stage);
+			Logger.raw("   Stage: " + stage);
 			getStage(stage).printProperties("      ");
 		});
 	}

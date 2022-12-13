@@ -5,6 +5,7 @@ import engine.data.scripts.Script;
 import engine.data.variables.Variable;
 import engine.parser.scripts.exceptions.ReturnException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
+import engine.parser.utils.Logger;
 
 public class ReturnStatementNode extends AbstractScriptNode {
 
@@ -23,7 +24,7 @@ public class ReturnStatementNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "Return Statement");
+		Logger.raw(indentation + "Return Statement");
 		if (subNodes != null && subNodes[0] != null) { subNodes[0].print(indentation + "-"); }
 	}
 }

@@ -1,15 +1,11 @@
 package engine.data.proto;
 
-import constants.ScriptConstants;
-import engine.data.attributes.Attribute;
-import engine.data.identifiers.ContainerIdentifier;
-import engine.data.scripts.Script;
-import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.Variable;
-import engine.graphics.renderer.color.RGBA;
+import engine.parser.utils.Logger;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class StageScope {
 
@@ -33,7 +29,7 @@ public class StageScope {
 
     public void printProperties(String prefix) {
         valueMap.keySet().forEach(key -> {
-            System.out.println(prefix + key + ": " + get(key).map(Variable::toString).orElse("EMPTY"));
+            Logger.raw(prefix + key + ": " + get(key).map(Variable::toString).orElse("EMPTY"));
         });
     }
 

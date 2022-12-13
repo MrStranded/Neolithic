@@ -1,7 +1,7 @@
 package engine.logic.topology;
 
-import engine.data.planetary.Planet;
 import engine.data.entities.Tile;
+import engine.data.planetary.Planet;
 import engine.graphics.objects.planet.FacePart;
 import engine.graphics.objects.planet.PlanetObject;
 import engine.math.numericalObjects.Vector3;
@@ -39,7 +39,7 @@ public interface GeographicCoordinates {
 			}
 		}
 
-		while (closest.getQuarterFaces() != null && closest.getQuarterFaces().length > 0) {
+		while (closest != null && closest.getQuarterFaces() != null && closest.getQuarterFaces().length > 0) {
 			closestValue = 0d;
 
 			for (FacePart facePart : closest.getQuarterFaces()) {

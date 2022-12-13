@@ -1,10 +1,11 @@
 package engine.parser.scripts.nodes;
 
-import engine.data.scripts.Script;
 import engine.data.entities.Instance;
+import engine.data.scripts.Script;
 import engine.data.variables.Variable;
 import engine.parser.scripts.exceptions.BreakException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
+import engine.parser.utils.Logger;
 
 public class BreakStatementNode extends AbstractScriptNode {
 
@@ -17,6 +18,6 @@ public class BreakStatementNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "Break");
+		Logger.raw(indentation + "Break");
 	}
 }

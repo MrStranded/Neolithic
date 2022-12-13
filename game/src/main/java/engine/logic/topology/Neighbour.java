@@ -1,8 +1,8 @@
 package engine.logic.topology;
 
+import engine.data.entities.Tile;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
-import engine.data.entities.Tile;
 import engine.parser.utils.Logger;
 
 public class Neighbour {

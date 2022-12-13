@@ -182,4 +182,13 @@ public class TextObject extends GuiObject {
 	public FontTexture getFontTexture() {
 		return fontTexture;
 	}
+
+	// ###################################################################################
+	// ################################ Debug ############################################
+	// ###################################################################################
+
+	public String toString() {
+		return "TextObject (text = '" + text + "')";
+	}
+
 }

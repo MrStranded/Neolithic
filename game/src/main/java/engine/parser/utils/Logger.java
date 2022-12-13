@@ -1,7 +1,10 @@
 package engine.parser.utils;
 
+import engine.data.scripts.Script;
 import engine.parser.interpretation.Interpreter;
 import engine.parser.tokenization.Token;
+
+import static engine.parser.utils.LoggerFormatting.*;
 
 public class Logger {
 
@@ -12,64 +15,94 @@ public class Logger {
 	public static final int LOG_INFO  = 2;
 	public static final int LOG_ERROR = 3;
 
-	public static int logLevel = LOG_DEBUG;
+	public static int logLevel;
 
-	public static final String ANSI_RESET = "\u001B[0m";
-	public static final String ANSI_BLACK = "\u001B[30m";
-	public static final String ANSI_RED = "\u001B[31m";
-	public static final String ANSI_GREEN = "\u001B[32m";
-	public static final String ANSI_YELLOW = "\u001B[33m";
-	public static final String ANSI_BLUE = "\u001B[34m";
-	public static final String ANSI_PURPLE = "\u001B[35m";
-	public static final String ANSI_CYAN = "\u001B[36m";
-	public static final String ANSI_WHITE = "\u001B[37m";
-
-	public static final String FORMAT_TRACE = "\u001B[38;2;70;60;40;6;11m";
-	public static final String FORMAT_DEBUG = "\u001B[38;2;200;180;140;5;1m";
+	public static void setLogLevel(int level) {
+		logLevel = Math.max(LOG_TRACE, Math.min(LOG_ERROR, level));
+	}
 
 	public static void nextLogLevel() {
-		logLevel = (logLevel + 1) % (LOG_ERROR + 1);
-		System.out.println(ANSI_CYAN + "LOG LEVEL SET TO " + ANSI_GREEN + logLevel + ANSI_RESET);
+		logLevel = logLevel > 0 ? logLevel - 1 : LOG_ERROR;
+		System.out.println(CYAN + "LOG LEVEL SET TO " + GREEN + getLogLevelName() + RESET);
+	}
+
+	public static String getLogLevelName() {
+		switch (logLevel) {
+			case LOG_TRACE: return "Trace";
+			case LOG_DEBUG: return "Debug";
+			case LOG_INFO:  return "Info";
+			case LOG_ERROR: return "Error";
+			default: return "Invalid Log Level: " + logLevel;
+		}
 	}
 
 	public static boolean hasLogLevel(int level) {
 		return logLevel <= level;
 	}
 
+	public static void raw(Object text) {
+		System.out.println(text);
+	}
+
 	public static void trace(String message) {
 		if (hasLogLevel(LOG_TRACE)) {
-			System.out.println(FORMAT_TRACE + "Trace " + ANSI_WHITE + getTimestamp() + ANSI_PURPLE + ": " + message + ANSI_RESET);
+			System.out.println(PURPLE_BOLD + "Trace " + WHITE_BOLD + getTimestamp() + PURPLE + ": " + message + RESET);
 		}
 	}
 
 	public static void debug(String message) {
 		if (hasLogLevel(LOG_DEBUG)) {
-			System.out.println(FORMAT_DEBUG + "DEBUG " + ANSI_WHITE + getTimestamp() + ANSI_YELLOW + ": " + message + ANSI_RESET);
+			System.out.println(YELLOW_BOLD + "DEBUG " + WHITE_BOLD + getTimestamp() + YELLOW + ": " + message + RESET);
 		}
 	}
 
 	public static void info(String message) {
 		if (hasLogLevel(LOG_INFO)) {
-			System.out.println(ANSI_GREEN + "LOG " + ANSI_WHITE + getTimestamp() + ANSI_GREEN + ": " + message + ANSI_RESET);
+			System.out.println(GREEN_BOLD + "LOG " + WHITE_BOLD + getTimestamp() + GREEN + ": " + message + RESET);
 		}
 	}
 
 	public static void error(String message) {
 		if (hasLogLevel(LOG_ERROR)) {
-			System.out.println(ANSI_PURPLE + "ERROR " + ANSI_WHITE + getTimestamp() + ANSI_RED + ": " + message + ANSI_RESET);
+			System.out.println(RED_BOLD + "ERROR " + WHITE_BOLD + getTimestamp() + RED_BOLD + ": " + message + RESET);
+		}
+	}
+
+	public static void error(Throwable throwable) {
+		if (hasLogLevel(LOG_ERROR)) {
+			throwable.printStackTrace();
 		}
 	}
 
 	public static void parsingError(String message, Token token, Interpreter interpreter) {
-		System.out.println(ANSI_BLUE + "PARSING ERROR " + ANSI_WHITE + getTimestamp() + ANSI_YELLOW + ": " + message + ANSI_RESET);
-		System.out.println(ANSI_CYAN + "   token: " + ANSI_YELLOW + ": " + token.getValue() + " ( " + token.getType().toString() + " )" + ANSI_RESET);
-		System.out.println(ANSI_CYAN + "   line: " + ANSI_YELLOW + ": " + token.getLine() + ANSI_RESET);
-		System.out.println(ANSI_CYAN + "   file: " + ANSI_YELLOW + ": " + interpreter.getCurrentFile() + ANSI_RESET);
-		System.out.println(ANSI_CYAN + "   mod: " + ANSI_YELLOW + ": " + interpreter.getCurrentMod() + ANSI_RESET);
+		if (hasLogLevel(LOG_ERROR)) {
+			System.out.println(BLUE_BOLD + "PARSING ERROR " + WHITE_BOLD + getTimestamp() + YELLOW_BOLD + ": " + message + RESET);
+			System.out.println(CYAN + "   file:  " + YELLOW + ": " + interpreter.getCurrentFile() + RESET);
+			System.out.println(CYAN + "   line:  " + YELLOW + ": " + token.getLine() + RESET);
+			System.out.println(CYAN + "   token: " + YELLOW + ": " + token.getValue() + " ( " + token.getType().toString() + " )" + RESET);
+			System.out.println(CYAN + "   mod:   " + YELLOW + ": " + interpreter.getCurrentMod() + RESET);
+		}
+	}
+
+	public static void executionError(String message, Token token, Script script) {
+		if (hasLogLevel(LOG_ERROR)) {
+			System.out.println(BLUE_BOLD + "EXECUTION ERROR " + WHITE_BOLD + getTimestamp() + YELLOW_BOLD + ": " + message + RESET);
+			System.out.println(CYAN + "   file:   " + YELLOW + ": " + script.getFileName() + RESET);
+			System.out.println(CYAN + "   script: " + YELLOW + ": " + script.getTextId() + RESET);
+			System.out.println(CYAN + "   line:   " + YELLOW + ": " + token.getLine() + RESET);
+			System.out.println(CYAN + "   token:  " + YELLOW + ": " + token.getValue() + " ( " + token.getType().toString() + " )" + RESET);
+		}
+	}
+	public static void executionError(String message, Token token) {
+		if (hasLogLevel(LOG_ERROR)) {
+			System.out.println(BLUE_BOLD + "EXECUTION ERROR " + WHITE_BOLD + getTimestamp() + YELLOW_BOLD + ": " + message + RESET);
+			System.out.println(CYAN + "   line:  " + YELLOW + ": " + token.getLine() + RESET);
+			System.out.println(CYAN + "   token: " + YELLOW + ": " + token.getValue() + " ( " + token.getType().toString() + " )" + RESET);
+		}
 	}
 
 	public static void breakpoint(String message) {
-		System.out.println(ANSI_BLACK + "BREAK " + ANSI_WHITE + getTimestamp() + ANSI_CYAN + ": " + message + ANSI_RESET);
+		System.out.println(BLACK_BOLD + "BREAK " + WHITE_BOLD + getTimestamp() + CYAN + ": " + message + RESET);
 	}
 
 	private static String getTimestamp() {

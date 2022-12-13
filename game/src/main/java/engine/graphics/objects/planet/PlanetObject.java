@@ -1,7 +1,7 @@
 package engine.graphics.objects.planet;
 
-import engine.data.planetary.Planet;
 import engine.data.entities.Tile;
+import engine.data.planetary.Planet;
 import engine.graphics.objects.generators.PlanetGenerator;
 import engine.graphics.objects.models.Material;
 import engine.graphics.objects.movement.MoveableObject;
@@ -9,7 +9,6 @@ import engine.graphics.renderer.color.RGBA;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
-import engine.parser.utils.Logger;
 
 public class PlanetObject extends MoveableObject {
 

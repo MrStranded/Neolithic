@@ -9,7 +9,6 @@ import engine.graphics.renderer.projection.Projection;
 import engine.math.Transformations;
 import engine.math.numericalObjects.Matrix4;
 import engine.math.numericalObjects.Vector3;
-import engine.parser.utils.Logger;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 

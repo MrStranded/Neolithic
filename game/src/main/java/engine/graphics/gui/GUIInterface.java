@@ -4,8 +4,6 @@ import engine.data.entities.GuiElement;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
 
-import java.util.Optional;
-
 public interface GUIInterface {
 
 	void tick();

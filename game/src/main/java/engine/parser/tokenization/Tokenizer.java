@@ -1,9 +1,9 @@
 package engine.parser.tokenization;
 
-import engine.parser.utils.Logger;
 import engine.parser.constants.CharacterClass;
 import engine.parser.constants.TokenConstants;
 import engine.parser.constants.TokenType;
+import engine.parser.utils.Logger;
 
 import java.io.FileReader;
 import java.io.IOException;

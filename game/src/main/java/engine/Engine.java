@@ -2,13 +2,13 @@ package engine;
 
 import constants.GameConstants;
 import constants.ScriptConstants;
+import engine.data.Data;
 import engine.data.entities.Instance;
 import engine.data.planetary.Planet;
-import engine.data.Data;
 import engine.graphics.gui.GuiData;
+import engine.parser.Parser;
 import engine.parser.utils.Logger;
 import engine.threads.LogicThread;
-import engine.parser.Parser;
 
 import java.util.List;
 

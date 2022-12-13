@@ -43,23 +43,23 @@ public class ForStatementNode extends AbstractScriptNode {
 			Variable listVariable = null; // iterator
 			try {
 				listVariable = subNodes[1].execute(instance, script);
-			} catch (ScriptInterruptedException e) {
-				e.printStackTrace();
-			}
-			if (listVariable.getType() == DataType.LIST) {
-				List<Variable> variableList = listVariable.getList();
-				if (variableList != null) {
-					for (Variable variable : variableList) {
-						iterationVariable.copyValue(variable);
-						try {
-							body = subNodes[2].execute(instance, script); // body
-						} catch (BreakException breakException) {
-							break;
+				if (listVariable.getType() == DataType.LIST) {
+					List<Variable> variableList = listVariable.getList();
+					if (variableList != null) {
+						for (Variable variable : variableList) {
+							iterationVariable.copyValue(variable);
+							try {
+								body = subNodes[2].execute(instance, script); // body
+							} catch (BreakException breakException) {
+								break;
+							}
 						}
 					}
+				} else {
+					Logger.error("Iterator variable has to be of type LIST! Encountered type '" + listVariable.getType() + "'!");
 				}
-			} else {
-				Logger.error("Iterator variable has to be of type LIST! Encountered type '" + listVariable.getType() + "'!");
+			} catch (ScriptInterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 
@@ -68,7 +68,7 @@ public class ForStatementNode extends AbstractScriptNode {
 
 	@Override
 	public void print(String indentation) {
-		System.out.println(indentation + "For Statement");
+		Logger.raw(indentation + "For Statement");
 		for (int i=0; i<subNodes.length; i++) {
 			subNodes[i].print(indentation + "-");
 		}

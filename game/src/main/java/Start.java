@@ -1,4 +1,5 @@
 import engine.Engine;
+import engine.parser.utils.Logger;
 
 /**
  * Use this class to start the game.
@@ -34,9 +35,13 @@ public class Start {
 		// necessary for AWT and GLFW to run together under OSX
 		//System.setProperty("java.awt.headless", "true");
 
+		Logger.setLogLevel(Logger.LOG_TRACE);
+
 		Engine.initialize();
 		Engine.loadData();
 		Engine.createWorld();
+
+		Logger.setLogLevel(Logger.LOG_DEBUG);
 
 		Engine.startLogic();
 

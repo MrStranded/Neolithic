@@ -122,9 +122,9 @@ public class Script implements IDInterface {
 	}
 
 	public void print() {
-		System.out.println("Script: " + textId + " (id = " + getId() + ") ---------------------");
+		Logger.raw("Script: " + textId + " (id = " + getId() + ") ---------------------");
 		for (String parameter : parameterNames) {
-			System.out.println("-> " + parameter);
+			Logger.raw("-> " + parameter);
 		}
 		root.print("    ");
 	}

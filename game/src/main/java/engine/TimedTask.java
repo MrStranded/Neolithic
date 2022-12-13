@@ -3,7 +3,6 @@ package engine;
 import engine.data.options.GameOptions;
 import engine.parser.utils.Logger;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;

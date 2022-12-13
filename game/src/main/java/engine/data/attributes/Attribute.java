@@ -2,11 +2,7 @@ package engine.data.attributes;
 
 import engine.data.Data;
 import engine.data.IDInterface;
-import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
-import engine.data.variables.DataType;
-
-import java.util.Optional;
 
 public class Attribute implements IDInterface {
 

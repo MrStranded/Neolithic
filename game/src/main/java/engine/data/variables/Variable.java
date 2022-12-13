@@ -2,14 +2,14 @@ package engine.data.variables;
 
 import engine.data.Data;
 import engine.data.IDInterface;
-import engine.data.entities.GuiElement;
-import engine.data.identifiers.ContainerIdentifier;
-import engine.data.scripts.Script;
 import engine.data.attributes.Attribute;
+import engine.data.entities.GuiElement;
 import engine.data.entities.Instance;
 import engine.data.entities.Tile;
+import engine.data.identifiers.ContainerIdentifier;
 import engine.data.proto.Container;
 import engine.data.proto.ProtoAttribute;
+import engine.data.scripts.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.graphics.renderer.color.RGBA;
 import engine.parser.utils.Logger;
@@ -22,6 +22,7 @@ public class Variable implements IDInterface {
 
 	private int id;
 	private String name = null;
+	private boolean tracked = false;
 
 	private DataType type = DataType.NUMBER;
 	private Object value = 0d;
@@ -441,6 +442,18 @@ public class Variable implements IDInterface {
 	public RGBA getRGBA() {
 		if (type == DataType.RGBA) {
 			return (RGBA) value;
+
+		} else if (type == DataType.LIST) {
+			List<Variable> list = getList();
+			int size = list.size();
+			RGBA color = new RGBA();
+
+			if (size > 0) { color.setR(list.get(0).getDouble() / 256d); }
+			if (size > 1) { color.setG(list.get(1).getDouble() / 256d); }
+			if (size > 2) { color.setB(list.get(2).getDouble() / 256d); }
+			if (size > 3) { color.setA(list.get(3).getDouble()); }
+
+			return color;
 		}
 		return null;
 	}
@@ -468,21 +481,32 @@ public class Variable implements IDInterface {
 	/**
 	 * This method checks whether the linked instance still exists. Otherwise it denotes to remove the reference, so the garbage
 	 * collector can do his thing.
-	 * This method is called from Instance.getVariable
 	 */
 	public boolean isInvalid() {
+		boolean invalid = value == null;
 
-		return (
-				value == null
-						|| ((type == DataType.INSTANCE || type == DataType.EFFECT || type == DataType.TILE)
-								&& ((Instance) value).isSlatedForRemoval())
-		);
+		if (tracked) {
+			Logger.trace("Tracked Variable (value == null): " + invalid);
+		}
+
+		invalid = invalid || ((type == DataType.INSTANCE || type == DataType.EFFECT || type == DataType.TILE)
+								&& ((Instance) value).isSlatedForRemoval());
+
+		if (tracked) {
+			Logger.trace("Tracked Variable " + toString() + " invalid and should be deleted: " + invalid);
+		}
+
+		return invalid;
 	}
 
 	/**
 	 * Invalidates the value of the variable such that it may be cleaned from memory.
 	 */
 	public void invalidate() {
+		if (tracked) {
+			Logger.trace("Tracked Variable is being invalidated: " + toString());
+		}
+
 		value = null;
 	}
 
@@ -495,6 +519,15 @@ public class Variable implements IDInterface {
 	public IDInterface merge(IDInterface other) {
 		Logger.error("Variable insertion collision! hash from " + toString() + " : " + getId() + " | hash from " + other.toString() + " : " + other.getId() + "");
 		return other; // replace old value with new one
+	}
+
+	public void track() { setTracked(true); }
+	public void setTracked(boolean tracked) {
+		this.tracked = tracked;
+	}
+
+	public boolean isTracked() {
+		return tracked;
 	}
 
 	// ###################################################################################

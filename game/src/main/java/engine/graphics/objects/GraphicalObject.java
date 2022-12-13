@@ -1,9 +1,9 @@
 package engine.graphics.objects;
 
+import engine.graphics.objects.models.Mesh;
 import engine.graphics.objects.movement.MoveableObject;
 import engine.graphics.objects.textures.Texture;
 import engine.math.numericalObjects.Vector3;
-import engine.graphics.objects.models.Mesh;
 import engine.parser.utils.Logger;
 import load.TextureLoader;
 

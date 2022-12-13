@@ -1,30 +1,30 @@
 package engine.data.entities;
 
-import constants.PropertyKeys;
 import constants.ScriptConstants;
 import engine.data.options.GameOptions;
 import engine.data.variables.Variable;
 import engine.graphics.gui.GuiData;
-import engine.graphics.gui.GuiTemplates;
 import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.gui.GuiObject;
+import engine.graphics.objects.gui.Padding;
+import engine.graphics.objects.gui.RenderSpace;
 import engine.graphics.objects.gui.TemplateProcessor;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.math.numericalObjects.Matrix4;
 import engine.parser.utils.Logger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class GuiElement extends Instance {
 
     private List<GuiObject> guiObjects = new ArrayList<>(1);
-    private boolean update = false;
-    private boolean applyLayouting = false;
+    private boolean shouldUpdate = true;
     private boolean rendering = false;
+    private RenderSpace renderSpace = null;
 
     public GuiElement(int id) {
         super(id);
@@ -52,9 +52,8 @@ public class GuiElement extends Instance {
         rendering = true;
 
         // there were updates
-        if (update) {
-            updateObject();
-            update = false;
+        if (shouldUpdate) {
+            update();
         }
 
         // render self
@@ -73,58 +72,63 @@ public class GuiElement extends Instance {
     // ################################ Create Gui #######################################
     // ###################################################################################
 
-    private void updateObject() {
-        Variable templateString = getProperty(PropertyKeys.TEMPLATE);
-        if (templateString.notNull()) {
-            try {
-                GuiTemplates template = GuiTemplates.valueOf(templateString.getString().toUpperCase());
-                buildGuiObject(template);
-
-            } catch (IllegalArgumentException e) {
-                Logger.error("Could not update Gui mesh. Gui template with name '" + templateString.getString() + "' does not exist!");
-            }
-        }
+    private void update() {
+        layout(null);
+        consolidate();
     }
 
-    private void buildGuiObject(GuiTemplates template) {
-        setGuiObjects(
-                TemplateProcessor.create(this, template)
-        );
+    private void layout(RenderSpace parentSpace) {
+        // determine available space
+        renderSpace = new RenderSpace(this, parentSpace);
 
-        applyLayout();
+        // create gui objects
+        setGuiObjects(TemplateProcessor.create(this, renderSpace));
 
-        resize();
-    }
-
-    private void applyLayout() {
-        if (!applyLayouting) {
-            return;
+        // layout subs
+        for (GuiElement sub : getSubElements()) {
+            sub.layout(renderSpace);
         }
 
-        GuiElement parent = (GuiElement) getSuperInstance();
-        if (parent == null) {
-            return;
-        }
-
-        guiObjects.forEach(object -> object.setAbsoluteOffset(0, parent.getPositionOfSubElement(this)));
+        if (parentSpace != null) { parentSpace.useSpace(renderSpace); }
     }
 
-    public void resize() {
-        getSubElements().forEach(GuiElement::resize);
-
+    public void consolidate() {
         guiObjects.forEach(object -> {
-            object.resize(this);
-            object.recalculateScale(getAbsoluteParentWidth(), getAbsoluteParentHeight());
+            object.consolidateSize(renderSpace);
         });
+
+        for (GuiElement sub : getSubElements()) {
+            sub.consolidate();
+        }
+
+        shouldUpdate = false;
     }
 
     // ###################################################################################
     // ################################ Layouting ########################################
     // ###################################################################################
 
+    public Optional<RenderSpace> getRenderSpace() {
+        return Optional.ofNullable(renderSpace);
+    }
+
     public void setGuiParent(GuiElement parent) {
         placeInto(parent);
-        applyLayouting = true;
+    }
+
+    public double[] getVariableAsDoubleArray(String variableName, int size) {
+        double[] array = new double[size];
+
+        List<Variable> list = getVariableSafe(variableName)
+                .map(Variable::getList)
+                .orElse(Collections.emptyList());
+        int listSize = list.size();
+
+        for (int i = 0; i < size && i < listSize; i++) {
+            array[i] = list.get(i).getDouble();
+        }
+
+        return array;
     }
 
     public int getDepth() {
@@ -136,7 +140,7 @@ public class GuiElement extends Instance {
 
     public double getAbsWidth() {
         return guiObjects.stream()
-                .filter(GuiObject::isInfluenceSizeCalculations)
+                .filter(GuiObject::influencesSizeCalculations)
                 .max((a, b) -> (int) Math.signum(a.getAbsWidth() - b.getAbsWidth()))
                 .map(GuiObject::getAbsWidth)
                 .orElse(0d);
@@ -144,7 +148,7 @@ public class GuiElement extends Instance {
 
     public double getAbsHeight() {
         return guiObjects.stream()
-                .filter(GuiObject::isInfluenceSizeCalculations)
+                .filter(GuiObject::influencesSizeCalculations)
                 .max((a, b) -> (int) Math.signum(a.getAbsHeight() - b.getAbsHeight()))
                 .map(GuiObject::getAbsHeight)
                 .orElse(0d);
@@ -153,19 +157,25 @@ public class GuiElement extends Instance {
     public double getWidth() {
         double maxWidth = getAbsWidth();
 
+        for (GuiObject object : guiObjects) {
+            double width = object.getAbsWidth();
+            if (width > maxWidth) { maxWidth = width; }
+        }
         for (GuiElement sub : getSubElements()) {
             double width = sub.getWidth();
             if (width > maxWidth) { maxWidth = width; }
         }
 
-        return maxWidth;
+        double[] padding = getVariableAsDoubleArray(ScriptConstants.GUI_PADDING, 4);
+
+        return maxWidth + padding[Padding.LEFT] + padding[Padding.RIGHT];
     }
 
     public double getHeight() {
         return getPositionOfSubElement(null);
     }
 
-    private double getPositionOfSubElement(GuiElement element) {
+    public double getPositionOfSubElement(GuiElement element) {
         double height = getAbsHeight();
 
         for (GuiElement sub : getSubElements()) {
@@ -176,7 +186,51 @@ public class GuiElement extends Instance {
             height += sub.getPositionOfSubElement(element);
         }
 
-        return height;
+        double[] padding = getVariableAsDoubleArray(ScriptConstants.GUI_PADDING, 4);
+
+        return height + padding[Padding.TOP] + padding[Padding.BOTTOM];
+    }
+
+    public double getChildOffsetX() {
+        double offset = 0;
+        double parentWidth = GuiData.getRenderWindow().getWidth();
+
+        Instance parent = getSuperInstance();
+        if (parent instanceof GuiElement) {
+            GuiElement p = ((GuiElement) parent);
+
+            offset += p.getChildOffsetX();
+            parentWidth = p.getWidth();
+        }
+
+        offset += parentWidth * getVariableSafe(ScriptConstants.GUI_RELATIVE_X).map(Variable::getDouble).orElse(0d);
+
+        offset += getVariableSafe(ScriptConstants.GUI_ABSOLUTE_X).map(Variable::getDouble).orElse(0d);
+
+        Logger.trace(toString() + " parent offset X: " + offset);
+
+        return offset;
+    }
+
+    public double getChildOffsetY() {
+        double offset = 0;
+        double parentHeight = GuiData.getRenderWindow().getHeight();
+
+        Instance parent = getSuperInstance();
+        if (parent instanceof GuiElement) {
+            GuiElement p = ((GuiElement) parent);
+
+            offset += p.getChildOffsetY();
+            parentHeight = p.getHeight();
+        }
+
+        offset += parentHeight * getVariableSafe(ScriptConstants.GUI_RELATIVE_Y).map(Variable::getDouble).orElse(0d);
+
+        offset += getVariableSafe(ScriptConstants.GUI_ABSOLUTE_Y).map(Variable::getDouble).orElse(0d);
+
+        Logger.trace(toString() + " parent offset Y: " + offset);
+
+        return offset;
     }
 
     // ###################################################################################
@@ -225,19 +279,23 @@ public class GuiElement extends Instance {
     @Override
     public void addVariable(Variable variable) {
         super.addVariable(variable);
-        update = true;
+        shouldUpdate = true;
     }
 
-    private void setGuiObjects(GuiObject... newObjects) {
+    public void setGuiObjects(List<GuiObject> newObjects) {
         clearGuiObjects();
-        guiObjects.addAll(Arrays.asList(newObjects));
+        guiObjects.addAll(newObjects);
+    }
+
+    public List<GuiObject> getGuiObjects() {
+        return guiObjects;
     }
 
     /**
      * This will trigger an update of the guiObject of this element and all its children on the next render pass.
      */
     public void shouldUpdate() {
-        update = true;
+        shouldUpdate = true;
         getSubElements().forEach(GuiElement::shouldUpdate);
     }
 

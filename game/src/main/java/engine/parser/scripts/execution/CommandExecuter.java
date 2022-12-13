@@ -8,10 +8,10 @@ import engine.data.attributes.Attribute;
 import engine.data.entities.Effect;
 import engine.data.entities.GuiElement;
 import engine.data.entities.Instance;
+import engine.data.entities.Tile;
 import engine.data.options.GameOptions;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
-import engine.data.entities.Tile;
 import engine.data.proto.Container;
 import engine.data.scripts.Script;
 import engine.data.structures.trees.binary.BinaryTree;
@@ -19,9 +19,7 @@ import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.graphics.gui.GuiData;
 import engine.graphics.renderer.color.RGBA;
-import engine.input.MouseInput;
 import engine.logic.topology.*;
-import engine.math.MousePicking;
 import engine.math.numericalObjects.Vector3;
 import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.exceptions.InvalidValueException;
@@ -87,18 +85,14 @@ public class CommandExecuter {
 							}
 						} else {
 							int id = Data.getProtoAttributeID(attributeTextID);
-							if (id >= 0) {
+							try {
+								checkAttribute(script, commandNode, id, attributeTextID);
 								effect.setAttribute(id, variable.getInt());
-							} else {
-								Logger.error("Attribute with textID '" + attributeTextID + "' does not exist!" + System.lineSeparator() +
-										" Error on line " + command.getLine() + System.lineSeparator() +
-										" in command '" + command.getValue() + "'" + System.lineSeparator() +
-										" during execution of script '" + script.getTextId() + "'" + System.lineSeparator() +
-										" in file '" + script.getFileName() + "'."
-								);
-								// no strong exception handling here!
-								// the reason being, that we still try to extract the remaining attributes
+
+							} catch (InvalidValueException e) {
+								Logger.error(e);
 							}
+
 							getID = true;
 						}
 					}
@@ -807,27 +801,31 @@ public class CommandExecuter {
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& List<instance> getItems (Instance holder [, Container type])
 			case GET_ITEMS:
 				if (requireParameters(commandNode, 1)) {
-					Instance holder = parameters[0].getInstance();
+					Instance target = parameters[0].getInstance();
 
-					checkValue(script, commandNode, holder, "holder instance");
+					checkValue(script, commandNode, target, "holder instance");
 
-					int containerID = -1;
-
-					if (parameters.length >= 2) {
-						Container type = parameters[1].getContainer();
-						containerID = checkType(script, commandNode, type, parameters[1].getString());
+					List<Instance> subInstances = target.getSubInstances();
+					if (subInstances == null || subInstances.isEmpty()) {
+						return new Variable(Collections.emptyList());
 					}
 
-					if (holder.getSubInstances() != null) {
-						List<Variable> items = new ArrayList<>(holder.getSubInstances().size());
-						for (Instance sub : holder.getSubInstances()) {
-							if (sub != null && (containerID == -1 || containerID == sub.getId())) {
-								items.add(new Variable(sub));
-							}
-						}
-						return new Variable(items);
+					if (parameters.length < 2) {
+						return new Variable(subInstances.stream()
+								.map(Variable::new)
+								.collect(Collectors.toList())
+						);
 					}
-					return new Variable(new ArrayList<>(0));
+
+					Container filter = parameters[1].getContainer();
+					return new Variable(subInstances.stream()
+							.filter(sub -> sub
+									.getContainer()
+									.map(container -> container.equals(filter))
+									.orElse(true))
+							.map(Variable::new)
+							.collect(Collectors.toList())
+					);
 				}
 				break;
 
@@ -1590,24 +1588,18 @@ public class CommandExecuter {
 
 	private static void checkValue(Script script, CommandExpressionNode commandNode, Object value, String objectName) throws InvalidValueException {
         if (value == null) {
-            Logger.error(
-                    "Value '" + objectName + "' is empty!" + System.lineSeparator() +
-                    " Error on line " + commandNode.getCommand().getLine() + System.lineSeparator() +
-                    " in command '" + commandNode.getCommand().getValue() + "'" + System.lineSeparator() +
-					" during execution of script '" + script.getTextId() + "' in file '" + script.getFileName() + "'."
-            );
+        	Logger.executionError(
+        			"Value '" + objectName + "' is empty!",
+					commandNode.getCommand(), script);
             throw new InvalidValueException("Value '" + objectName + "' is invalid!");
         }
     }
 
     private static void checkAttribute(Script script, CommandExpressionNode commandNode, int attributeID, String attributeTextID) throws InvalidValueException {
         if (attributeID == -1) {
-            Logger.error(
-                    "Attribute '" + attributeTextID + "' does not exist!" + System.lineSeparator() +
-                    " Error on line " + commandNode.getCommand().getLine() + System.lineSeparator() +
-                    " in command '" + commandNode.getCommand().getValue() + "'" + System.lineSeparator() +
-					" during execution of script '" + script.getTextId() + "' in file '" + script.getFileName() + "'."
-            );
+        	Logger.executionError(
+        			"Attribute '" + attributeTextID + "' does not exist!",
+					commandNode.getCommand(), script);
             throw new InvalidValueException("Attribute '" + attributeTextID + "' does not exist!");
         }
     }
@@ -1616,12 +1608,9 @@ public class CommandExecuter {
 	    int containerID = -1;
 
         if ((type == null) || ((containerID = Data.getContainerID(type.getTextID())) < 0)) {
-            Logger.error(
-                    "Type with name '" + typeName + "' does not exist!" + System.lineSeparator() +
-                    " Error on line " + commandNode.getCommand().getLine() + System.lineSeparator() +
-                    " in command '" + commandNode.getCommand().getValue() + "'" + System.lineSeparator() +
-					" during execution of script '" + script.getTextId() + "' in file '" + script.getFileName() + "'."
-            );
+        	Logger.executionError(
+        			"Type with name '" + typeName + "' does not exist!",
+					commandNode.getCommand(), script);
             throw new InvalidValueException("Type with name '" + typeName + "' does not exist!");
         }
 
@@ -1630,9 +1619,10 @@ public class CommandExecuter {
 
 	private static boolean requireParameters(CommandExpressionNode commandNode, int amount) {
 		if (amount > 0 && (commandNode.getSubNodes() == null || amount > commandNode.getSubNodes().length)) {
-			Logger.error("The command '" + commandNode.getCommand().getValue() + "'" + System.lineSeparator() +
-					" needs at least " + amount + System.lineSeparator() +
-					" parameters on line " + commandNode.getCommand().getLine());
+
+			Logger.executionError(
+					"The command '" + commandNode.getCommand().getValue() + "' needs at least " + amount + " parameters!",
+					commandNode.getCommand());
 			return false;
 		}
 		return true;

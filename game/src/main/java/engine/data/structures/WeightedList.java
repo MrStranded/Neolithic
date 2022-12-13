@@ -1,7 +1,5 @@
 package engine.data.structures;
 
-import constants.GameConstants;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

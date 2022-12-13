@@ -1,11 +1,7 @@
 package engine.data.entities;
 
 import constants.ScriptConstants;
-import engine.data.Data;
 import engine.data.variables.Variable;
-
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Effect extends Instance {
 

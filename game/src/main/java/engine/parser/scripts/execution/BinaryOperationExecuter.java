@@ -7,7 +7,6 @@ import engine.data.variables.DataType;
 import engine.data.variables.Variable;
 import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
-import engine.parser.scripts.nodes.AbstractScriptNode;
 import engine.parser.scripts.nodes.BinaryExpressionNode;
 import engine.parser.scripts.nodes.IdentifierNode;
 import engine.parser.scripts.nodes.ScriptCallNode;
@@ -31,10 +30,13 @@ public class BinaryOperationExecuter {
 				return left.quickSetAttributeValue(right.getDouble());
 			}
 
-			// when a variable is set on a gui element, it might have to be updated
-			if (self instanceof GuiElement) { ((GuiElement) self).shouldUpdate(); }
-
 			left.copyValue(right);
+
+			// when a variable is set on a gui element, it might have to be updated
+			if (self instanceof GuiElement) {
+				((GuiElement) self).shouldUpdate();
+			}
+
 			return left;
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ->

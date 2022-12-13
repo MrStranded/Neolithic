@@ -6,9 +6,9 @@ import engine.data.attributes.Attribute;
 import engine.data.behaviour.Occupation;
 import engine.data.entities.Effect;
 import engine.data.entities.Instance;
+import engine.data.entities.Tile;
 import engine.data.interaction.SelectedInstance;
 import engine.data.options.GameOptions;
-import engine.data.entities.Tile;
 import engine.data.proto.Container;
 import engine.data.proto.CreatureContainer;
 import engine.data.proto.ProtoAttribute;
@@ -23,8 +23,9 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class InstanceDetailPanel extends JPanel implements MouseListener {
 
