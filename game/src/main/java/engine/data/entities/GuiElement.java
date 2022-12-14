@@ -76,7 +76,11 @@ public class GuiElement extends Instance {
     // ###################################################################################
 
     private void update() {
-        update(null);
+        if (getSuperInstance() != null) {
+            ((GuiElement) getSuperInstance()).update();
+        } else {
+            update(null);
+        }
     }
 
     private void update(RenderSpace parentSpace) {
@@ -141,12 +145,6 @@ public class GuiElement extends Instance {
     // ###################################################################################
 
     public GuiElement getElementUnderMouse(double mouseX, double mouseY) {
-        if (guiObjects.stream()
-                .noneMatch(object -> object.isUnderMouse(mouseX, mouseY))
-        ) {
-            return null;
-        }
-
         for (GuiElement element : getSubElements()) {
             GuiElement underMouse = element.getElementUnderMouse(mouseX, mouseY);
             if (underMouse != null) {
@@ -154,7 +152,11 @@ public class GuiElement extends Instance {
             }
         }
 
-        return this;
+        if (guiObjects.stream().anyMatch(object -> object.isUnderMouse(mouseX, mouseY))) {
+            return this;
+        }
+
+        return null;
     }
 
     public void updateBackgrounds(MouseInput mouse) {

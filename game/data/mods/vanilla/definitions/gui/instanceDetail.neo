@@ -5,7 +5,6 @@ Gui: gInstanceDetail {
 	Script: new(instance) {
 		->instance = instance;
 	    ->background = "gui/back_stone01.png";
-	    ->backgroundPressed = "gui/back_stone01_pressed.png";
 		->textColor = [250, 200, 180];
 		//->margin = [10, 10, 10, 10];
 		->padding = [20, 30, 40, 50];
@@ -108,14 +107,17 @@ Gui: gSubInstance {
 
 Gui: gAttribute {
 
-	template = Vertical;
+	template = Horizontal;
 	
 	Script: new(attribute, instance) {
 		->attribute = attribute;
 		->instance = instance;
-		->textColor = [200, 240, 180];
 		
-		->text = attribute;
+		addGui(self, gAttributeChangeButton, attribute, instance, -10, self);
+		addGui(self, gAttributeChangeButton, attribute, instance, -1, self);
+		addGui(self, gAttributeChangeButton, attribute, instance, 1, self);
+		addGui(self, gAttributeChangeButton, attribute, instance, 10, self);
+		->textField = addGui(self, gAttributeText, attribute, instance);
 	}
 	
 	Script: tick() {
@@ -125,8 +127,56 @@ Gui: gAttribute {
 		}
 	
 		value = getAttValue(->instance, getAttId(->attribute));
-		->text = value;
 		if (value == 0) { destroy(self); }
+	}
+	
+	Script: update() {
+		->textField->updateText();
+	}
+}
+
+Gui: gAttributeText {
+	Script: new(attribute, instance) {
+		->attribute = attribute;
+		->instance = instance;
+		
+		->textColor = [200, 240, 180];
+		
+		updateText();
+	}
+	
+	Script: tick() {
+		updateText();
+	}
+	
+	Script: updateText() {
+		value = getAttValue(->instance, getAttId(->attribute));
+		->text = getName(->attribute) + ": " + value;
+	}
+}
+
+Gui: gAttributeChangeButton {
+	Script: new(attribute, instance, difference, parent) {
+		->attribute = attribute;
+		->instance = instance;
+		->difference = difference;
+		->parent = parent;
+	
+		if (difference > 0) {
+			->text = "+" + difference;
+		} else {
+			->text = difference;
+		}
+		->background = "gui/back_wood01.png";
+		->backgroundHover = "gui/back_wood01_hover.png";
+		->backgroundPressed = "gui/back_wood01_pressed.png";
+		
+		->padding = [0, 5, 0, 5];
+	}
+	
+	Script: click() {
+		getAtt(->instance, getAttId(->attribute)) += ->difference;
+		->parent->update();
 	}
 }
 

@@ -13,6 +13,7 @@ import engine.data.options.GameOptions;
 import engine.data.planetary.Face;
 import engine.data.planetary.Planet;
 import engine.data.proto.Container;
+import engine.data.proto.ProtoAttribute;
 import engine.data.scripts.Script;
 import engine.data.structures.trees.binary.BinaryTree;
 import engine.data.variables.DataType;
@@ -889,8 +890,16 @@ public class CommandExecuter {
 						return new Variable(instance.getName());
 					}
 
+					Attribute attribute = parameters[0].getAttribute();
+					if (attribute != null) {
+						ProtoAttribute protoAttribute = Data.getProtoAttribute(attribute.getId());
+						if (protoAttribute != null) {
+							return new Variable(protoAttribute.getName());
+						}
+					}
+
 					Container container = parameters[0].getContainer();
-					checkValue(script, commandNode, container, "target container or instance");
+					checkValue(script, commandNode, container, "target instance, attribute or container");
 
 					return new Variable(container.getName(null));
 				}
