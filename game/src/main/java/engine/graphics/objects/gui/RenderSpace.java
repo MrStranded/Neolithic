@@ -5,7 +5,6 @@ import engine.data.entities.GuiElement;
 import engine.graphics.gui.GuiData;
 import engine.graphics.gui.GuiTemplate;
 import engine.math.numericalObjects.Vector2;
-import engine.parser.utils.Logger;
 
 public class RenderSpace {
 
@@ -43,10 +42,10 @@ public class RenderSpace {
             availableSpace = new Vector2(GuiData.getRenderWindow().getWidth(), GuiData.getRenderWindow().getHeight());
         }
 
-        element.getVariableSafe(ScriptConstants.GUI_LEFT)
-                .ifPresent(value -> positionOnScreen.setX(positionOnScreen.getX() + value.getDouble()));
-        element.getVariableSafe(ScriptConstants.GUI_TOP)
-                .ifPresent(value -> positionOnScreen.setY(positionOnScreen.getY() + value.getDouble()));
+        element.getVariableSafe(ScriptConstants.GUI_ABSOLUTE_X)
+                .ifPresent(value -> positionOnScreen.plusInplace(value.getDouble(), 0));
+        element.getVariableSafe(ScriptConstants.GUI_ABSOLUTE_Y)
+                .ifPresent(value -> positionOnScreen.plusInplace(0, value.getDouble()));
     }
 
     public void placeObject(GuiObject object) {
@@ -60,32 +59,30 @@ public class RenderSpace {
             position = getBoxOrigin();
         }
 
-        object.setAbsoluteOffset(position.getX(), position.getY());
+        object.setPositionOnScreen(position.getX(), position.getY());
     }
 
     private void useSpace(GuiObject object) {
-        Logger.debug("Use space for object: " + object);
+        Vector2 size = object.getSizeOnScreen();
 
-        useSpace(object.getAbsWidth(), object.getAbsHeight());
+        useSpace(size.getX(), size.getY());
     }
 
     public void useSpace(RenderSpace sub) {
-        Logger.debug("Use space for renderSpace: " + sub);
+        Vector2 size = sub.getFullSize();
 
-        Vector2 fullSize = sub.getFullSize();
-
-        useSpace(fullSize.getX(), fullSize.getY());
+        useSpace(size.getX(), size.getY());
     }
 
     private void useSpace(double width, double height) {
         switch (template) {
             case HORIZONTAL -> {
-                usedSpace.setX(usedSpace.getX() + width);
+                usedSpace.plusInplace(width, 0);
                 usedSpace.setY(Math.max(usedSpace.getY(), height));
             }
             case VERTICAL -> {
                 usedSpace.setX(Math.max(usedSpace.getX(), width));
-                usedSpace.setY(usedSpace.getY() + height);
+                usedSpace.plusInplace(0, height);
             }
         }
     }
@@ -93,8 +90,7 @@ public class RenderSpace {
     public Vector2 getFullSize() {
         Vector2 fullSize = getBoxSize();
 
-        fullSize.setX(fullSize.getX() + margin.getLeft() + margin.getRight());
-        fullSize.setY(fullSize.getY() + margin.getTop() + margin.getBottom());
+        fullSize.plusInplace(margin.getLeft() + margin.getRight(), margin.getTop() + margin.getBottom());
 
         return fullSize;
     }
@@ -102,8 +98,7 @@ public class RenderSpace {
     public Vector2 getBoxSize() {
         Vector2 boxSize = getContentSize();
 
-        boxSize.setX(boxSize.getX() + padding.getLeft() + padding.getRight());
-        boxSize.setY(boxSize.getY() + padding.getTop() + padding.getBottom());
+        boxSize.plusInplace(padding.getLeft() + padding.getRight(), padding.getTop() + padding.getBottom());
 
         return boxSize;
     }
@@ -124,16 +119,15 @@ public class RenderSpace {
     private Vector2 getNextChildPosition() {
         Vector2 childPosition = getBoxOrigin();
 
-        childPosition.setX(childPosition.getX() + padding.getLeft());
-        childPosition.setY(childPosition.getY() + padding.getTop());
+        childPosition.plusInplace(padding.getLeft(), padding.getTop());
 
         switch (template) {
-            case HORIZONTAL:
-                childPosition.setX(childPosition.getX() + usedSpace.getX());
-                break;
-            case VERTICAL:
-                childPosition.setY(childPosition.getY() + usedSpace.getY());
-                break;
+            case HORIZONTAL -> {
+                childPosition.plusInplace(usedSpace.getX(), 0);
+            }
+            case VERTICAL -> {
+                childPosition.plusInplace(0, usedSpace.getY());
+            }
         }
 
         return childPosition;

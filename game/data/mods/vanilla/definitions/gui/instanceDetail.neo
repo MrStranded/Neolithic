@@ -6,7 +6,7 @@ Gui: gInstanceDetail {
 		->instance = instance;
 	    ->background = "gui/back_stone01.png";
 		->textColor = [250, 200, 180];
-		->margin = [10, 10, 10, 10];
+		//->margin = [10, 10, 10, 10];
 		->padding = [20, 30, 40, 50];
 		//->absX = 100;
 		//->absY = 60;
@@ -82,9 +82,8 @@ Gui: gSubInstance {
 			destroy(self);
 			return;
 		}
-		
-		->margin = [10, 10, 10, 10];
-		->padding = [20, 30, 40, 50];
+	
+		->padding = [0, 30, 0, 30];
 		
 		->parent = getHolder(->instance);
 		->background = "gui/back_wood01.png";

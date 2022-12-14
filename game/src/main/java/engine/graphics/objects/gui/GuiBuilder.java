@@ -11,9 +11,6 @@ public class GuiBuilder<T extends GuiObject> {
 
     private final T object;
 
-    private double relPosX, relPosY;
-    private double absPosX, absPosY;
-
     private GuiBuilder(T object) {
         this.object = object;
     }
@@ -36,7 +33,7 @@ public class GuiBuilder<T extends GuiObject> {
     public GuiBuilder<T> withTextSize(double textSize) {
         if (object instanceof TextObject) {
             TextObject textObject = (TextObject) object;
-            object.setAbsoluteSize(textObject.getTextWidth() * textSize, textObject.getTextHeight() * textSize);
+            object.setSizeOnScreen(textObject.getTextWidth() * textSize, textObject.getTextHeight() * textSize);
 
         } else {
             Logger.error("GuiObject was not of type TextObject: " + object);
@@ -64,7 +61,7 @@ public class GuiBuilder<T extends GuiObject> {
     }
 
     public GuiBuilder<T> withSize(double width, double height) {
-        object.setAbsoluteSize(width, height);
+        object.setSizeOnScreen(width, height);
         return this;
     }
 

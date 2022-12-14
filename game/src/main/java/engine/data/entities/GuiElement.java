@@ -51,7 +51,6 @@ public class GuiElement extends Instance {
 
         // there were updates
         if (shouldUpdate) {
-            Logger.info("updating " + this);
             update();
         }
 
@@ -76,7 +75,6 @@ public class GuiElement extends Instance {
     }
 
     private void update(RenderSpace parentSpace) {
-        Logger.info("layout " + this + " parentSpace: " + parentSpace);
         // determine available space
         renderSpace = new RenderSpace(this, parentSpace);
 

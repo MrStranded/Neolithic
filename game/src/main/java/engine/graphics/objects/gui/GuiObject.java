@@ -54,19 +54,14 @@ public class GuiObject extends GraphicalObject {
 		// position update
 
 		double objectAbsX = positionOnScreen.getX();
-//				+ xRelOffset * parentAbsWidth
 //				+ RelativeParentPosition.getAbsOriginX(parentAbsWidth, absWidth, relativeScreenPositionX);
 
 		double objectAbsY = positionOnScreen.getY()
-//				+ yRelOffset * parentAbsHeight
 //				+ RelativeParentPosition.getAbsOriginY(parentAbsHeight, absHeight, relativeScreenPositionY)
 				+ sizeOnScreen.getY(); // since meshes are drawn from the lower left corner, and not like here from the top left
 
 		double positionX = 2d * aspectRatio * objectAbsX / windowWidth - aspectRatio;
 		double positionY = 2d * (windowHeight - objectAbsY) / windowHeight - 1d;
-
-		Logger.debug("recalculated scale on " + this + " to posX = " + positionX + " ,posY = " + positionY
-				+ " for windowWidth = " + windowWidth + " ,windowHeight = " + windowHeight);
 
 		setPosition(positionX, positionY, getPosition().getZ());
 	}
@@ -98,23 +93,18 @@ public class GuiObject extends GraphicalObject {
 		return influenceSizeCalculations;
 	}
 
-	public void setAbsoluteSize(double width, double height) {
+	public void setSizeOnScreen(double width, double height) {
 		sizeOnScreen.setX(width);
 		sizeOnScreen.setY(height);
 	}
 
-	public void setAbsoluteOffset(double xPos, double yPos) {
-		Logger.debug("Set absolute position on " + this + " to " + xPos + ", " + yPos);
-		positionOnScreen.setX(xPos);
-		positionOnScreen.setY(yPos);
+	public void setPositionOnScreen(double x, double y) {
+		positionOnScreen.setX(x);
+		positionOnScreen.setY(y);
 	}
 
-	public double getAbsWidth() {
-		return sizeOnScreen.getX();
-	}
-
-	public double getAbsHeight() {
-		return sizeOnScreen.getY();
+	public Vector2 getSizeOnScreen() {
+		return sizeOnScreen;
 	}
 
 	// ###################################################################################

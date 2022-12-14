@@ -17,6 +17,8 @@ public class TemplateProcessor {
 
     private static final double Z_STEP = 1d / 256d;
 
+    private TemplateProcessor() {}
+
     public static List<GuiObject> create(GuiElement element, RenderSpace renderSpace) {
         Logger.trace("Creating gui object " + element.getName());
 
@@ -52,9 +54,7 @@ public class TemplateProcessor {
                     .withTexture(backgroundPath)
                     .withResize((object, rs) -> {
                         Vector2 boxSize = rs.getBoxSize();
-                        object.setAbsoluteSize(boxSize.getX(), boxSize.getY());
-
-                        Logger.debug("Resized background " + object);
+                        object.setSizeOnScreen(boxSize.getX(), boxSize.getY());
                     })
                     .influenceSizeCalculations(false)
                     .withZIndex(-1d + (depth - 0.5d) * Z_STEP)
