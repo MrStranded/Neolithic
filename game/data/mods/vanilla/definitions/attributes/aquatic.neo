@@ -1,0 +1,5 @@
+Attribute: affectedByWaterDamage {
+    name = "Affected by water damage";
+    color = 0, 0, 200;
+	bounds = 0, 1;
+}

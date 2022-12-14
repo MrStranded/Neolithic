@@ -6,6 +6,7 @@ Entity: entFruit {
 		attVegetarian, 1;
 		attTicks, 2;
 		bodyResiliance, 42;
+		affectedByWaterDamage, 1;
 	}
 
 	Script: tick() {

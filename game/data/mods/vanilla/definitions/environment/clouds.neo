@@ -42,16 +42,8 @@ Entity: entCloud {
 			
 			if (chance(0.25)) { addEffect(self, effWindy); }
 			if (chance(0.01)) { addEffect(self, effVeryWindy); }
-			// if (->goal != getTile(self)) { print("goal: " + ->goal); }
 		}
 		
-        // other = getInstance(entCloud, getTile(self));
-        // if (other) {
-            // other..attHumidity += self..attHumidity;
-			// print("destroy cloud merge");
-            // destroy(self);
-            // return;
-        // }
 		
         heightIncrease = getHeight(self) - previousHeight;
         if (.attHumidity + heightIncrease >= 100) {
@@ -66,6 +58,7 @@ Entity: entCloud {
             destroy(self);
         }
 	}
+	
 }
 
 Entity: entMarker {

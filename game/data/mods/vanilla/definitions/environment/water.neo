@@ -68,9 +68,12 @@ Entity: entWater {
                     }
 					
 					for(item : getItems(getTile(self))) {
+						if (item == self) { break; }
+						
 						if (item.attSize > 0 && item.attSize <= d) {
 							pickUp(next, item);
-						} else {
+						} else if (item.affectedByWaterDamage) {
+							print("Water hurting: " + item + " by " + d);
 							item..bodyHealth -= d;
 						}
 					}

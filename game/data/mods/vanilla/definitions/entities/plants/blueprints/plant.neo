@@ -25,6 +25,7 @@ Creature: cPlant {
 		lightSensitivity, 42, 20, 100%
 		heatSensitivity, 25, 10, 100%
 		bodyResiliance, 3, 1, 0.25;
+		affectedByWaterDamage, 1
 	}
 	
 	Script: tick {

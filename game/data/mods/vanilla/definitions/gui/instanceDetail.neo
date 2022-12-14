@@ -1,85 +1,130 @@
 Gui: gInstanceDetail {
 	
-	template = Text;
-	layout = vertical;
+	template = Vertical;
 	
 	Script: new(instance) {
 		->instance = instance;
 	    ->background = "gui/back_stone01.png";
+		->textColor = [250, 200, 180];
+		->padding = [20, 30, 40, 50];
+		//->absX = 100;
+		//->absY = 60;
 		
-		// addGui(self, gVariables, self);
-		
-		->list = [];
-		for(attribute : eachAttribute(->instance)) {
-			->list += addGui(self, gAttribute, attribute, ->instance);
-		}
+		->instanceList = [];
+		->attributeList = [];
+		->c = -1;
 		
 		update();
 	}
 	
 	Script: tick() {
+		if (! ->instance) {
+			clearGui();
+			return;
+		}
+	
 		update();
 	}
 	
 	Script: update() {
 		->text = getName(->instance);
 		
+		// Adding guis for new instances
 		if (->c++ % 100 == 0) {
+	
 			for(attribute : eachAttribute(->instance)) {
 				found = false;
-				for (a : ->list) {
+				for (a : ->attributeList) {
 					if (getAttId(a->attribute) == getAttId(attribute)) {
 						found = true;
 						break;
 					}
 				}
 				if (!found) {
-					->list += addGui(self, gAttribute, attribute, ->instance);
+					->attributeList += addGui(self, gAttribute, attribute, ->instance);
 				}
 			}
+			
+			for(subInstance : getItems(->instance)) {
+				found = false;
+				for (i : ->instanceList) {
+					if (subInstance == i->instance) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					->instanceList += addGui(self, gSubInstance, subInstance);
+				}
+			}
+			
 		}
 	}
 }
 
 Gui: gText {
 
-	template = Text;
+	template = Vertical;
 	
 	Script: new(text) {
 		->text = text;
 	}
 }
 
+Gui: gSubInstance {
+	template = Vertical;
+	
+	Script: new(i) {
+		->instance = i;
+		if (! ->instance) {
+			destroy(self);
+			return;
+		}
+		
+		->parent = getHolder(->instance);
+		->background = "gui/back_wood01.png";
+		->text = getName(->instance);
+	}
+	
+	Script: tick() {
+		if (! ->instance || getHolder(->instance) != ->parent) {
+			destroy(self);
+		}
+	}
+	
+	Script: click() {
+		clearGui();
+		createGui(gInstanceDetail, ->instance);
+	}
+}
+
 Gui: gAttribute {
 
-	template = Text;
+	template = Vertical;
 	
 	Script: new(attribute, instance) {
 		->attribute = attribute;
 		->instance = instance;
-	    ->background = "gui/back_wood01.png";
+		->textColor = [200, 240, 180];
 		
 		->text = attribute;
 	}
 	
 	Script: tick() {
+		if (! ->instance) {
+			destroy(self);
+			return;
+		}
+	
 		value = getAttValue(->instance, getAttId(->attribute));
 		->text = value;
 		if (value == 0) { destroy(self); }
-	}
-
-	Script: click() {
-		if (->flip = ! ->flip) {
-			->background = "gui/back_wood01_pressed.png";
-		} else {
-			->background = "gui/back_wood01.png";
-		}
 	}
 }
 
 Gui: gVariables {
 
-	template = Text;
+	template = Vertical;
 	
 	Script: new(target) {
 		->target = target;
