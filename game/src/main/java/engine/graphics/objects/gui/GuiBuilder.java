@@ -70,8 +70,8 @@ public class GuiBuilder<T extends GuiObject> {
         return this;
     }
 
-    public GuiBuilder<T> influenceSizeCalculations(boolean influence) {
-        object.setInfluenceSizeCalculations(influence);
+    public GuiBuilder<T> withRole(GuiObjectRole role) {
+        object.setRole(role);
         return this;
     }
 

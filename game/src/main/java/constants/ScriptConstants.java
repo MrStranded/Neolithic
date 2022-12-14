@@ -2,6 +2,8 @@ package constants;
 
 public class ScriptConstants {
 
+	private ScriptConstants() {}
+
 	public static final String SCRIPT_FILE_SUFFIX   = ".neo";
 
 	public static final String EVENT_GENERATE_WORLD     = "generate";
@@ -46,6 +48,8 @@ public class ScriptConstants {
 	public static final String GUI_LIMITS_HEIGHT			= "limitsHeight";
 
 	public static final String GUI_BACKGROUND				= "background";
+	public static final String GUI_BACKGROUND_HOVER			= "backgroundHover";
+	public static final String GUI_BACKGROUND_PRESSED		= "backgroundPressed";
 
 	public static final String VALUE_RELATIVE	= "relative";
 	public static final String VALUE_ABSOLUTE	= "absolute";

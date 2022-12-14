@@ -19,6 +19,7 @@ import engine.graphics.objects.planet.PlanetObject;
 import engine.graphics.renderer.projection.Projection;
 import engine.graphics.renderer.shaders.ShaderProgram;
 import engine.input.IngameInteractions;
+import engine.input.MouseInput;
 import engine.math.MatrixCalculations;
 import engine.math.numericalObjects.Matrix4;
 import engine.parser.utils.Logger;
@@ -46,12 +47,6 @@ public class Renderer {
 	private Matrix4 projectionMatrix;
 	private Matrix4 invertedProjectionMatrix;
 	private Matrix4 orthographicMatrix;
-
-	/**
-	 * Whenever the aspect ratio has changed, we might need to update the scale of the hud objects.
-	 * This is done in renderGUI().
-	 */
-	private boolean aspectRatioHasChanged = true;
 
 	private IngameInteractions ingameInteractions;
 
@@ -195,8 +190,6 @@ public class Renderer {
 	public void recalculateAspectRatio() {
 		calculateProjectionMatrizes();
 		calculateOrthographicMatrix();
-
-		aspectRatioHasChanged = true;
 
 		if (hud != null) {
 			hud.resize();
@@ -437,8 +430,12 @@ public class Renderer {
 		hud.render(hudShaderProgram, orthographicMatrix);
 
 		hudShaderProgram.unbind();
+	}
 
-		aspectRatioHasChanged = false;
+	public void updateGui(MouseInput mouse) {
+		if (hud != null) {
+			hud.updateGui(mouse);
+		}
 	}
 
 	// ###################################################################################

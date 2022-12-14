@@ -118,6 +118,10 @@ public class IngameInteractions {
             }
         }
 
+        if (mouse.hasStateChanged()) {
+            renderer.updateGui(mouse);
+        }
+
         if (mouse.isLeftButtonClicked()) {
             Tile clickedTile = MousePicking.getClickedTile(mouse.getXPos(), mouse.getYPos(), renderer, scene);
             GuiElement clickedGui = MousePicking.getGuiUnderMouse(mouse.getXPos(), mouse.getYPos());

@@ -6,15 +6,18 @@ import engine.data.variables.Variable;
 import engine.graphics.gui.GuiData;
 import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.gui.GuiObject;
+import engine.graphics.objects.gui.GuiObjectRole;
 import engine.graphics.objects.gui.RenderSpace;
 import engine.graphics.objects.gui.TemplateProcessor;
 import engine.graphics.renderer.shaders.ShaderProgram;
+import engine.input.MouseInput;
 import engine.math.numericalObjects.Matrix4;
 import engine.parser.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class GuiElement extends Instance {
@@ -55,10 +58,12 @@ public class GuiElement extends Instance {
         }
 
         // render self
-        guiObjects.forEach(object -> {
-            hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
-            object.renderForGUI();
-        });
+        guiObjects.stream()
+                .filter(GuiObject::isVisible)
+                .forEach(object -> {
+                    hudShaderProgram.setUniform("projectionViewMatrix", orthographicMatrix.times(object.getWorldMatrix()));
+                    object.renderForGUI();
+                });
 
         // render subs
         getSubElements().forEach(element -> element.render(hudShaderProgram, orthographicMatrix));
@@ -150,6 +155,37 @@ public class GuiElement extends Instance {
         }
 
         return this;
+    }
+
+    public void updateBackgrounds(MouseInput mouse) {
+        getSubElements().forEach(sub -> sub.updateBackgrounds(mouse));
+
+        guiObjects.stream()
+                .filter(object -> object.getRole().isBackground())
+                .forEach(object -> object.setVisible(false));
+
+        if (mouse.isLeftButtonPressed()) {
+            Optional<GuiObject> backgroundPressed = getObject(GuiObjectRole.BACKGROUND_PRESSED);
+            if (backgroundPressed.isPresent() && backgroundPressed.get().isUnderMouse(mouse.getXPos(), mouse.getYPos())) {
+                backgroundPressed.get().setVisible(true);
+                return;
+            }
+        }
+
+        Optional<GuiObject> backgroundHover = getObject(GuiObjectRole.BACKGROUND_HOVER);
+        if (backgroundHover.isPresent() && backgroundHover.get().isUnderMouse(mouse.getXPos(), mouse.getYPos())) {
+            backgroundHover.get().setVisible(true);
+            return;
+        }
+
+        getObject(GuiObjectRole.BACKGROUND)
+                .ifPresent(background -> background.setVisible(true));
+    }
+
+    private Optional<GuiObject> getObject(GuiObjectRole role) {
+        return guiObjects.stream()
+                .filter(object -> role == object.getRole())
+                .findFirst();
     }
 
     // ###################################################################################

@@ -51,12 +51,12 @@ public class RenderSpace {
     public void placeObject(GuiObject object) {
         Vector2 position;
 
-        if (object.influencesSizeCalculations()) {
+        if (object.getRole().isBackground()) {
+            position = getBoxOrigin();
+        } else {
             position = getNextChildPosition();
 
             useSpace(object);
-        } else {
-            position = getBoxOrigin();
         }
 
         object.setPositionOnScreen(position.getX(), position.getY());

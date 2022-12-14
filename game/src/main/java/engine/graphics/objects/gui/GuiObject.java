@@ -14,12 +14,14 @@ public class GuiObject extends GraphicalObject {
 //	private int relativeScreenPositionX = RelativeParentPosition.LEFT;
 //	private int relativeScreenPositionY = RelativeParentPosition.TOP;
 
+	private boolean visible = true;
+
+	private GuiObjectRole role = GuiObjectRole.TEXT;
+
 	private Vector2 positionOnScreen = new Vector2(0, 0);
 	private Vector2 sizeOnScreen = new Vector2(0, 0);
 
 	private BiConsumer<GuiObject, RenderSpace> resizeCallback = null;
-
-	private boolean influenceSizeCalculations = true;
 
 	public GuiObject(Mesh mesh) {
 		super(mesh);
@@ -85,12 +87,20 @@ public class GuiObject extends GraphicalObject {
 		this.resizeCallback = resizeCallback;
 	}
 
-	public void setInfluenceSizeCalculations(boolean influenceSizeCalculations) {
-		this.influenceSizeCalculations = influenceSizeCalculations;
+	public boolean isVisible() {
+		return visible;
 	}
 
-	public boolean influencesSizeCalculations() {
-		return influenceSizeCalculations;
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public GuiObjectRole getRole() {
+		return role;
+	}
+
+	public void setRole(GuiObjectRole role) {
+		this.role = role;
 	}
 
 	public void setSizeOnScreen(double width, double height) {
@@ -118,7 +128,7 @@ public class GuiObject extends GraphicalObject {
 	}
 
 	public String toString() {
-		return "GuiObject (influenceSizeCalc = " + influenceSizeCalculations + " " +
+		return "GuiObject (role = " + role + " " +
 				"| position = " + positionOnScreen + " " +
 				"| size = " + sizeOnScreen + ")";
 	}

@@ -5,11 +5,13 @@ Gui: gInstanceDetail {
 	Script: new(instance) {
 		->instance = instance;
 	    ->background = "gui/back_stone01.png";
+	    ->backgroundPressed = "gui/back_stone01_pressed.png";
 		->textColor = [250, 200, 180];
 		//->margin = [10, 10, 10, 10];
 		->padding = [20, 30, 40, 50];
 		//->absX = 100;
 		//->absY = 60;
+		->maxHeight = 200;
 		
 		->instanceList = [];
 		->attributeList = [];
@@ -87,6 +89,8 @@ Gui: gSubInstance {
 		
 		->parent = getHolder(->instance);
 		->background = "gui/back_wood01.png";
+		->backgroundHover = "gui/back_wood01_hover.png";
+		->backgroundPressed = "gui/back_wood01_pressed.png";
 		->text = getName(->instance);
 	}
 	

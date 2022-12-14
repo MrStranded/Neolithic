@@ -3,6 +3,7 @@ package engine.graphics.gui;
 import engine.data.entities.GuiElement;
 import engine.data.entities.Instance;
 import engine.graphics.renderer.shaders.ShaderProgram;
+import engine.input.MouseInput;
 import engine.math.numericalObjects.Matrix4;
 import engine.parser.utils.Logger;
 
@@ -54,6 +55,10 @@ public class BaseGUI implements GUIInterface {
 	public void resize() {
 		Logger.info("Screen has been resized");
 		elements.forEach(GuiElement::consolidate);
+	}
+
+	public void updateGui(MouseInput mouse) {
+		elements.forEach(element -> element.updateBackgrounds(mouse));
 	}
 
 	// ###################################################################################
