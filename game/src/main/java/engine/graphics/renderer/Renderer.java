@@ -197,6 +197,10 @@ public class Renderer {
 		calculateOrthographicMatrix();
 
 		aspectRatioHasChanged = true;
+
+		if (hud != null) {
+			hud.resize();
+		}
 	}
 
 	private void calculateProjectionMatrizes() {

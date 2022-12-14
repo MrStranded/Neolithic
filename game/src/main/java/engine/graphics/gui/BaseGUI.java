@@ -52,6 +52,7 @@ public class BaseGUI implements GUIInterface {
 
 	@Override
 	public void resize() {
+		Logger.info("Screen has been resized");
 		elements.forEach(GuiElement::consolidate);
 	}
 

@@ -6,7 +6,6 @@ import engine.data.variables.Variable;
 import engine.graphics.gui.GuiData;
 import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.gui.GuiObject;
-import engine.graphics.objects.gui.Padding;
 import engine.graphics.objects.gui.RenderSpace;
 import engine.graphics.objects.gui.TemplateProcessor;
 import engine.graphics.renderer.shaders.ShaderProgram;
@@ -16,13 +15,12 @@ import engine.parser.utils.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class GuiElement extends Instance {
 
     private List<GuiObject> guiObjects = new ArrayList<>(1);
-    private boolean shouldUpdate = true;
+    private boolean shouldUpdate = false;
     private boolean rendering = false;
     private RenderSpace renderSpace = null;
 
@@ -53,6 +51,7 @@ public class GuiElement extends Instance {
 
         // there were updates
         if (shouldUpdate) {
+            Logger.info("updating " + this);
             update();
         }
 
@@ -73,11 +72,11 @@ public class GuiElement extends Instance {
     // ###################################################################################
 
     private void update() {
-        layout(null);
-        consolidate();
+        update(null);
     }
 
-    private void layout(RenderSpace parentSpace) {
+    private void update(RenderSpace parentSpace) {
+        Logger.info("layout " + this + " parentSpace: " + parentSpace);
         // determine available space
         renderSpace = new RenderSpace(this, parentSpace);
 
@@ -86,31 +85,27 @@ public class GuiElement extends Instance {
 
         // layout subs
         for (GuiElement sub : getSubElements()) {
-            sub.layout(renderSpace);
+            sub.update(renderSpace);
         }
 
         if (parentSpace != null) { parentSpace.useSpace(renderSpace); }
+
+        consolidate();
+
+        shouldUpdate = false;
     }
 
     public void consolidate() {
         guiObjects.forEach(object -> {
-            object.consolidateSize(renderSpace);
+            object.recalculate(renderSpace);
         });
 
-        for (GuiElement sub : getSubElements()) {
-            sub.consolidate();
-        }
-
-        shouldUpdate = false;
+        getSubElements().forEach(GuiElement::consolidate);
     }
 
     // ###################################################################################
     // ################################ Layouting ########################################
     // ###################################################################################
-
-    public Optional<RenderSpace> getRenderSpace() {
-        return Optional.ofNullable(renderSpace);
-    }
 
     public void setGuiParent(GuiElement parent) {
         placeInto(parent);
@@ -138,111 +133,13 @@ public class GuiElement extends Instance {
         return parent.getDepth() + 1;
     }
 
-    public double getAbsWidth() {
-        return guiObjects.stream()
-                .filter(GuiObject::influencesSizeCalculations)
-                .max((a, b) -> (int) Math.signum(a.getAbsWidth() - b.getAbsWidth()))
-                .map(GuiObject::getAbsWidth)
-                .orElse(0d);
-    }
-
-    public double getAbsHeight() {
-        return guiObjects.stream()
-                .filter(GuiObject::influencesSizeCalculations)
-                .max((a, b) -> (int) Math.signum(a.getAbsHeight() - b.getAbsHeight()))
-                .map(GuiObject::getAbsHeight)
-                .orElse(0d);
-    }
-
-    public double getWidth() {
-        double maxWidth = getAbsWidth();
-
-        for (GuiObject object : guiObjects) {
-            double width = object.getAbsWidth();
-            if (width > maxWidth) { maxWidth = width; }
-        }
-        for (GuiElement sub : getSubElements()) {
-            double width = sub.getWidth();
-            if (width > maxWidth) { maxWidth = width; }
-        }
-
-        double[] padding = getVariableAsDoubleArray(ScriptConstants.GUI_PADDING, 4);
-
-        return maxWidth + padding[Padding.LEFT] + padding[Padding.RIGHT];
-    }
-
-    public double getHeight() {
-        return getPositionOfSubElement(null);
-    }
-
-    public double getPositionOfSubElement(GuiElement element) {
-        double height = getAbsHeight();
-
-        for (GuiElement sub : getSubElements()) {
-            if (sub == element) {
-                break;
-            }
-
-            height += sub.getPositionOfSubElement(element);
-        }
-
-        double[] padding = getVariableAsDoubleArray(ScriptConstants.GUI_PADDING, 4);
-
-        return height + padding[Padding.TOP] + padding[Padding.BOTTOM];
-    }
-
-    public double getChildOffsetX() {
-        double offset = 0;
-        double parentWidth = GuiData.getRenderWindow().getWidth();
-
-        Instance parent = getSuperInstance();
-        if (parent instanceof GuiElement) {
-            GuiElement p = ((GuiElement) parent);
-
-            offset += p.getChildOffsetX();
-            parentWidth = p.getWidth();
-        }
-
-        offset += parentWidth * getVariableSafe(ScriptConstants.GUI_RELATIVE_X).map(Variable::getDouble).orElse(0d);
-
-        offset += getVariableSafe(ScriptConstants.GUI_ABSOLUTE_X).map(Variable::getDouble).orElse(0d);
-
-        Logger.trace(toString() + " parent offset X: " + offset);
-
-        return offset;
-    }
-
-    public double getChildOffsetY() {
-        double offset = 0;
-        double parentHeight = GuiData.getRenderWindow().getHeight();
-
-        Instance parent = getSuperInstance();
-        if (parent instanceof GuiElement) {
-            GuiElement p = ((GuiElement) parent);
-
-            offset += p.getChildOffsetY();
-            parentHeight = p.getHeight();
-        }
-
-        offset += parentHeight * getVariableSafe(ScriptConstants.GUI_RELATIVE_Y).map(Variable::getDouble).orElse(0d);
-
-        offset += getVariableSafe(ScriptConstants.GUI_ABSOLUTE_Y).map(Variable::getDouble).orElse(0d);
-
-        Logger.trace(toString() + " parent offset Y: " + offset);
-
-        return offset;
-    }
-
     // ###################################################################################
     // ################################ Mouse ############################################
     // ###################################################################################
 
     public GuiElement getElementUnderMouse(double mouseX, double mouseY) {
-        double width = getWidth();
-        double height = getHeight();
-
         if (guiObjects.stream()
-                .noneMatch(object -> object.isUnderMouse(mouseX, mouseY, width, height))
+                .noneMatch(object -> object.isUnderMouse(mouseX, mouseY))
         ) {
             return null;
         }
@@ -279,7 +176,7 @@ public class GuiElement extends Instance {
     @Override
     public void addVariable(Variable variable) {
         super.addVariable(variable);
-        shouldUpdate = true;
+        shouldUpdate();
     }
 
     public void setGuiObjects(List<GuiObject> newObjects) {
@@ -296,69 +193,10 @@ public class GuiElement extends Instance {
      */
     public void shouldUpdate() {
         shouldUpdate = true;
-        getSubElements().forEach(GuiElement::shouldUpdate);
     }
 
     public boolean isRendering() {
         return rendering;
-    }
-
-    public int getAbsoluteParentWidth() {
-        GuiElement parent = (GuiElement) getSuperInstance();
-        return parent != null
-                ? parent.getAbsoluteMaxChildWidth()
-                : GuiData.getRenderWindow().getWidth();
-    }
-
-    public int getAbsoluteMaxChildWidth() {
-        int maxWidth = getAbsoluteMaxSelfWidth();
-
-        boolean limitsWidth = getVariableSafe(ScriptConstants.GUI_LIMITS_WIDTH).map(Variable::getBoolean).orElse(false);
-        if (limitsWidth) {
-            maxWidth = (int) Math.min(maxWidth, getAbsWidth());
-        }
-
-        return maxWidth;
-    }
-
-    public int getAbsoluteMaxSelfWidth() {
-        int boundedWidth = getAbsoluteParentWidth();
-
-        Variable relMaxWidth = getVariable(ScriptConstants.GUI_RELATIVE_BOUNDING_WIDTH);
-        if (relMaxWidth != null) {
-            boundedWidth *= relMaxWidth.getDouble();
-        }
-
-        return boundedWidth;
-    }
-
-    public int getAbsoluteParentHeight() {
-        GuiElement parent = (GuiElement) getSuperInstance();
-        return parent != null
-                ? parent.getAbsoluteMaxChildHeight()
-                : GuiData.getRenderWindow().getHeight();
-    }
-
-    public int getAbsoluteMaxChildHeight() {
-        int maxHeight = getAbsoluteMaxSelfHeight();
-
-        boolean limitsHeigth = getVariableSafe(ScriptConstants.GUI_LIMITS_HEIGHT).map(Variable::getBoolean).orElse(false);
-        if (limitsHeigth) {
-            maxHeight = (int) Math.min(maxHeight, getHeight());
-        }
-
-        return maxHeight;
-    }
-
-    public int getAbsoluteMaxSelfHeight() {
-        int boundedHeight = getAbsoluteParentHeight();
-
-        Variable relMaxHeight = getVariable(ScriptConstants.GUI_RELATIVE_BOUNDING_HEIGHT);
-        if (relMaxHeight != null) {
-            boundedHeight *= relMaxHeight.getDouble();
-        }
-
-        return boundedHeight;
     }
 
     public List<GuiElement> getSubElements() {

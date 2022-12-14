@@ -6,6 +6,7 @@ import engine.data.entities.GuiElement;
 import engine.data.variables.Variable;
 import engine.graphics.gui.GuiData;
 import engine.graphics.renderer.color.RGBA;
+import engine.math.numericalObjects.Vector2;
 import engine.parser.utils.Logger;
 import org.lwjglx.debug.joptsimple.internal.Strings;
 
@@ -31,16 +32,17 @@ public class TemplateProcessor {
         String backgroundPath = element.getVariableSafe(ScriptConstants.GUI_BACKGROUND)
                 .map(Variable::getString).orElse("");
 
-        double maxAbsTextObjectWidth = renderSpace.getMaxChildWidth() * (double) GuiData.getFontTexture().getHeight() / textSize;
+        double maxAbsTextObjectWidth = textSize != 0
+                ? renderSpace.getMaxAvailableSpace().getX() * (double) GuiData.getFontTexture().getHeight() / textSize
+                : 0;
 
         if (! Strings.isNullOrEmpty(text)) {
             TextObject textObject = GuiBuilder.Text(text, textColor, maxAbsTextObjectWidth)
-                    .withSize(textSize)
+                    .withTextSize(textSize)
                     .withZIndex(-1d + depth * Z_STEP)
                     .build();
 
             renderSpace.placeObject(textObject);
-            renderSpace.useSpace(textObject);
 
             objects.add(textObject);
         }
@@ -49,10 +51,9 @@ public class TemplateProcessor {
             GuiObject background = GuiBuilder.Sprite()
                     .withTexture(backgroundPath)
                     .withResize((object, rs) -> {
-                        object.setAbsoluteSize(
-                                rs.getFullUsedWidth(),
-                                rs.getFullUsedHeight()
-                        );
+                        Vector2 boxSize = rs.getBoxSize();
+                        object.setAbsoluteSize(boxSize.getX(), boxSize.getY());
+
                         Logger.debug("Resized background " + object);
                     })
                     .influenceSizeCalculations(false)

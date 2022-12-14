@@ -33,10 +33,10 @@ public class GuiBuilder<T extends GuiObject> {
         );
     }
 
-    public GuiBuilder<T> withSize(double size) {
+    public GuiBuilder<T> withTextSize(double textSize) {
         if (object instanceof TextObject) {
             TextObject textObject = (TextObject) object;
-            object.setAbsoluteSize(textObject.getTextWidth() * size, textObject.getTextHeight() * size);
+            object.setAbsoluteSize(textObject.getTextWidth() * textSize, textObject.getTextHeight() * textSize);
 
         } else {
             Logger.error("GuiObject was not of type TextObject: " + object);
@@ -57,18 +57,6 @@ public class GuiBuilder<T extends GuiObject> {
     // ###################################################################################
     // ################################ General ##########################################
     // ###################################################################################
-
-    public GuiBuilder<T> withRelativePosition(double relPosX, double relPosY) {
-        this.relPosX = relPosX;
-        this.relPosY = relPosY;
-        return this;
-    }
-
-    public GuiBuilder<T> withAbsolutePosition(double absPosX, double absPosY) {
-        this.absPosX = absPosX;
-        this.absPosY = absPosY;
-        return this;
-    }
 
     public GuiBuilder<T> withTexture(String texturePath) {
         object.setTexture(texturePath);
@@ -100,9 +88,6 @@ public class GuiBuilder<T extends GuiObject> {
     // ###################################################################################
 
     public T build() {
-        object.setRelativeOffset(relPosX, relPosY);
-        object.setAbsoluteOffset(absPosX, absPosY);
-
         return object;
     }
 }

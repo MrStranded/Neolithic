@@ -4,18 +4,18 @@ import engine.graphics.gui.GuiData;
 import engine.graphics.gui.RelativeParentPosition;
 import engine.graphics.objects.GraphicalObject;
 import engine.graphics.objects.models.Mesh;
+import engine.math.numericalObjects.Vector2;
 import engine.parser.utils.Logger;
 
 import java.util.function.BiConsumer;
 
 public class GuiObject extends GraphicalObject {
 
-	private int relativeScreenPositionX = RelativeParentPosition.LEFT;
-	private int relativeScreenPositionY = RelativeParentPosition.TOP;
+//	private int relativeScreenPositionX = RelativeParentPosition.LEFT;
+//	private int relativeScreenPositionY = RelativeParentPosition.TOP;
 
-	private double xRelOffset = 0, yRelOffset = 0;
-	private double xAbsOffset = 0, yAbsOffset = 0;
-	private double absWidth = 0, absHeight = 0;
+	private Vector2 positionOnScreen = new Vector2(0, 0);
+	private Vector2 sizeOnScreen = new Vector2(0, 0);
 
 	private BiConsumer<GuiObject, RenderSpace> resizeCallback = null;
 
@@ -31,39 +31,42 @@ public class GuiObject extends GraphicalObject {
 	// ################################ Recalculations ###################################
 	// ###################################################################################
 
-	public void consolidateSize(RenderSpace renderSpace) {
-		recalculateScale(renderSpace.getMaxChildWidth(), renderSpace.getMaxChildHeight());
-
+	public void recalculate(RenderSpace renderSpace) {
 		if (resizeCallback != null) {
 			resizeCallback.accept(this, renderSpace);
 		}
+
+		recalculateScale();
 	}
 
-	private void recalculateScale(double parentAbsWidth, double parentAbsHeight) {
+	private void recalculateScale() {
 		double windowWidth = GuiData.getRenderWindow().getWidth();
 		double windowHeight = GuiData.getRenderWindow().getHeight();
 		double aspectRatio = windowWidth / windowHeight;
 
 		// scale update
 
-		double scaleX = 2d * aspectRatio * absWidth / windowWidth;
-		double scaleY = 2d * absHeight / windowHeight;
+		double scaleX = 2d * aspectRatio * sizeOnScreen.getX() / windowWidth;
+		double scaleY = 2d * sizeOnScreen.getY() / windowHeight;
 
 		setScale(scaleX, scaleY, 1d);
 
 		// position update
 
-		double objectAbsX = xAbsOffset
-				+ xRelOffset * parentAbsWidth
-				+ RelativeParentPosition.getAbsOriginX(parentAbsWidth, absWidth, relativeScreenPositionX);
+		double objectAbsX = positionOnScreen.getX();
+//				+ xRelOffset * parentAbsWidth
+//				+ RelativeParentPosition.getAbsOriginX(parentAbsWidth, absWidth, relativeScreenPositionX);
 
-		double objectAbsY = yAbsOffset
-				+ yRelOffset * parentAbsHeight
-				+ RelativeParentPosition.getAbsOriginY(parentAbsHeight, absHeight, relativeScreenPositionY)
-				+ absHeight; // since meshes are drawn from the lower left corner, and not like here from the top left
+		double objectAbsY = positionOnScreen.getY()
+//				+ yRelOffset * parentAbsHeight
+//				+ RelativeParentPosition.getAbsOriginY(parentAbsHeight, absHeight, relativeScreenPositionY)
+				+ sizeOnScreen.getY(); // since meshes are drawn from the lower left corner, and not like here from the top left
 
-		double positionX = 2d * aspectRatio * objectAbsX / parentAbsWidth - aspectRatio;
-		double positionY = 2d * (parentAbsHeight - objectAbsY) / parentAbsHeight - 1d;
+		double positionX = 2d * aspectRatio * objectAbsX / windowWidth - aspectRatio;
+		double positionY = 2d * (windowHeight - objectAbsY) / windowHeight - 1d;
+
+		Logger.debug("recalculated scale on " + this + " to posX = " + positionX + " ,posY = " + positionY
+				+ " for windowWidth = " + windowWidth + " ,windowHeight = " + windowHeight);
 
 		setPosition(positionX, positionY, getPosition().getZ());
 	}
@@ -72,14 +75,11 @@ public class GuiObject extends GraphicalObject {
 	// ################################ Functionality ####################################
 	// ###################################################################################
 
-	public boolean isUnderMouse(double mouseX, double mouseY, double parentAbsWidth, double parentAbsHeight) {
-		double x = (xAbsOffset + xRelOffset * parentAbsWidth);
-		double y = (yAbsOffset + yRelOffset * parentAbsHeight);
-
-		return mouseX >= x
-				&& mouseX < x + absWidth
-				&& mouseY >= y
-				&& mouseY < y + absHeight;
+	public boolean isUnderMouse(double mouseX, double mouseY) {
+		return mouseX >= positionOnScreen.getX()
+				&& mouseX < positionOnScreen.getX() + sizeOnScreen.getX()
+				&& mouseY >= positionOnScreen.getY()
+				&& mouseY < positionOnScreen.getY() + sizeOnScreen.getY();
 	}
 
 	// ###################################################################################
@@ -99,65 +99,22 @@ public class GuiObject extends GraphicalObject {
 	}
 
 	public void setAbsoluteSize(double width, double height) {
-		this.absWidth = width;
-		this.absHeight = height;
+		sizeOnScreen.setX(width);
+		sizeOnScreen.setY(height);
 	}
 
-	public void setRelativeOffset(double xPos, double yPos) {
-		this.xRelOffset = xPos;
-		this.yRelOffset = yPos;
-	}
 	public void setAbsoluteOffset(double xPos, double yPos) {
 		Logger.debug("Set absolute position on " + this + " to " + xPos + ", " + yPos);
-		this.xAbsOffset = xPos;
-		this.yAbsOffset = yPos;
-	}
-
-	public int getRelativeScreenPositionX() {
-		return relativeScreenPositionX;
-	}
-	public void setRelativeScreenPositionX(int relativeScreenPositionX) {
-		this.relativeScreenPositionX = relativeScreenPositionX;
-	}
-
-	public int getRelativeScreenPositionY() {
-		return relativeScreenPositionY;
-	}
-	public void setRelativeScreenPositionY(int relativeScreenPositionY) {
-		this.relativeScreenPositionY = relativeScreenPositionY;
-	}
-
-	public void setRelativeScreenPosition(int horizontal, int vertical) {
-		relativeScreenPositionX = horizontal;
-		relativeScreenPositionY = vertical;
-	}
-
-	public double getxRelOffset() {
-		return xRelOffset;
-	}
-	public double getyRelOffset() {
-		return yRelOffset;
-	}
-
-	public double getxAbsOffset() {
-		return xAbsOffset;
-	}
-	public double getyAbsOffset() {
-		return yAbsOffset;
+		positionOnScreen.setX(xPos);
+		positionOnScreen.setY(yPos);
 	}
 
 	public double getAbsWidth() {
-		return absWidth;
-	}
-	public void setAbsWidth(double absWidth) {
-		this.absWidth = absWidth;
+		return sizeOnScreen.getX();
 	}
 
 	public double getAbsHeight() {
-		return absHeight;
-	}
-	public void setAbsHeight(double absHeight) {
-		this.absHeight = absHeight;
+		return sizeOnScreen.getY();
 	}
 
 	// ###################################################################################
@@ -166,15 +123,14 @@ public class GuiObject extends GraphicalObject {
 
 	public void debug(String prefix) {
 		Logger.debug(prefix + "> " + toString());
-		Logger.debug(prefix + "  position: " +  xAbsOffset + " + " + xRelOffset + ", " + yAbsOffset + " + " + yRelOffset);
-		Logger.debug(prefix + "  width: " + getAbsWidth());
-		Logger.debug(prefix + "  height: " + getAbsHeight());
+		Logger.debug(prefix + "  position: " +  positionOnScreen);
+		Logger.debug(prefix + "  size: " + sizeOnScreen);
 	}
 
 	public String toString() {
 		return "GuiObject (influenceSizeCalc = " + influenceSizeCalculations + " " +
-				"| xRel = " + xRelOffset + ",xAbs = " + xAbsOffset + ",width = " + absWidth + " " +
-				"| yRel = " + yRelOffset + ",yAbs = " + yAbsOffset + ",height = " + absHeight + ")";
+				"| position = " + positionOnScreen + " " +
+				"| size = " + sizeOnScreen + ")";
 	}
 
 }

@@ -4,32 +4,26 @@ import constants.ScriptConstants;
 import engine.data.entities.GuiElement;
 import engine.graphics.gui.GuiData;
 import engine.graphics.gui.GuiTemplate;
+import engine.math.numericalObjects.Vector2;
 import engine.parser.utils.Logger;
 
 public class RenderSpace {
 
     private final GuiTemplate template;
 
-    private double availableWidth, availableHeight;
+    private Vector2 availableSpace;
     private double maxWidth, maxHeight;
     private boolean widthIsBounded, heightIsBounded;
 
-    private double[] padding = {0, 0, 0, 0};
-    private double[] margin = {0, 0, 0, 0};
+    private Spacing margin;
+    private Spacing padding;
 
-    // how much space will be needed?
-    private double usedSpaceX = 0;
-    private double usedSpaceY = 0;
+    private Vector2 usedSpace = new Vector2(0,0);
 
-    // where are we in the process of positioning?
-    private double positionX = 0;
-    private double positionY = 0;
+    private Vector2 positionOnScreen = new Vector2(0, 0);
 
     public RenderSpace(GuiElement element, RenderSpace parentSpace) {
         template = GuiTemplate.from(element);
-
-        element.getVariableSafe(ScriptConstants.GUI_LEFT).ifPresent(value -> positionX = value.getDouble());
-        element.getVariableSafe(ScriptConstants.GUI_TOP).ifPresent(value -> positionY = value.getDouble());
 
         element.getVariableSafe(ScriptConstants.GUI_MAX_WIDTH_ABS).ifPresent(value -> {
             maxWidth = value.getDouble();
@@ -38,114 +32,121 @@ public class RenderSpace {
             maxHeight = value.getDouble();
             heightIsBounded = true; });
 
-        padding = element.getVariableAsDoubleArray(ScriptConstants.GUI_PADDING, 4);
-        margin = element.getVariableAsDoubleArray(ScriptConstants.GUI_MARGIN, 4);
+        margin = new Spacing(element.getVariableAsDoubleArray(ScriptConstants.GUI_MARGIN, 4));
+        padding = new Spacing(element.getVariableAsDoubleArray(ScriptConstants.GUI_PADDING, 4));
 
         if (parentSpace != null) {
-            availableWidth = parentSpace.getMaxChildWidth();
-            availableHeight = parentSpace.getMaxChildHeight();
+            availableSpace = parentSpace.getMaxAvailableSpace();
 
-            positionX = parentSpace.getChildPositionX();
-            positionY = parentSpace.getChildPositionY();
+            positionOnScreen = parentSpace.getNextChildPosition();
         } else {
-            availableWidth = GuiData.getRenderWindow().getWidth();
-            availableHeight = GuiData.getRenderWindow().getHeight();
+            availableSpace = new Vector2(GuiData.getRenderWindow().getWidth(), GuiData.getRenderWindow().getHeight());
         }
-    }
 
-    public void useSpace(GuiObject object) {
-        Logger.debug("Use space for object: " + object);
-
-        switch (template) {
-            case HORIZONTAL -> {
-                usedSpaceX += object.getAbsWidth();
-                usedSpaceY = Math.max(usedSpaceY, object.getAbsHeight());
-            }
-            case VERTICAL -> {
-                usedSpaceX = Math.max(usedSpaceX, object.getAbsWidth());
-                usedSpaceY += object.getAbsHeight();
-            }
-        }
+        element.getVariableSafe(ScriptConstants.GUI_LEFT)
+                .ifPresent(value -> positionOnScreen.setX(positionOnScreen.getX() + value.getDouble()));
+        element.getVariableSafe(ScriptConstants.GUI_TOP)
+                .ifPresent(value -> positionOnScreen.setY(positionOnScreen.getY() + value.getDouble()));
     }
 
     public void placeObject(GuiObject object) {
-        double x = positionX + margin[Padding.LEFT];
-        double y = positionY + margin[Padding.TOP];
+        Vector2 position;
 
         if (object.influencesSizeCalculations()) {
-            x += padding[Padding.LEFT];
-            y += padding[Padding.TOP];
+            position = getNextChildPosition();
 
-            switch (template) {
-                case HORIZONTAL -> x += usedSpaceX;
-                case VERTICAL -> y += usedSpaceY;
-            }
+            useSpace(object);
+        } else {
+            position = getBoxOrigin();
         }
 
-        object.setAbsoluteOffset(x, y);
+        object.setAbsoluteOffset(position.getX(), position.getY());
+    }
+
+    private void useSpace(GuiObject object) {
+        Logger.debug("Use space for object: " + object);
+
+        useSpace(object.getAbsWidth(), object.getAbsHeight());
     }
 
     public void useSpace(RenderSpace sub) {
         Logger.debug("Use space for renderSpace: " + sub);
 
+        Vector2 fullSize = sub.getFullSize();
+
+        useSpace(fullSize.getX(), fullSize.getY());
+    }
+
+    private void useSpace(double width, double height) {
         switch (template) {
             case HORIZONTAL -> {
-                usedSpaceX += sub.getFullUsedWidth();
-                usedSpaceY = Math.max(usedSpaceY, sub.getFullUsedHeight());
+                usedSpace.setX(usedSpace.getX() + width);
+                usedSpace.setY(Math.max(usedSpace.getY(), height));
             }
             case VERTICAL -> {
-                usedSpaceX = Math.max(usedSpaceX, sub.getFullUsedWidth());
-                usedSpaceY += sub.getFullUsedHeight();
+                usedSpace.setX(Math.max(usedSpace.getX(), width));
+                usedSpace.setY(usedSpace.getY() + height);
             }
         }
     }
 
-    public double getMaxChildWidth() {
-        double width = availableWidth - padding[Padding.LEFT] - padding[Padding.RIGHT];
+    public Vector2 getFullSize() {
+        Vector2 fullSize = getBoxSize();
 
-        if (widthIsBounded) { width = Math.min(width, maxWidth); }
+        fullSize.setX(fullSize.getX() + margin.getLeft() + margin.getRight());
+        fullSize.setY(fullSize.getY() + margin.getTop() + margin.getBottom());
 
-        return width;
+        return fullSize;
     }
 
-    public double getFullUsedWidth() {
-        return usedSpaceX + padding[Padding.LEFT] + padding[Padding.RIGHT];
+    public Vector2 getBoxSize() {
+        Vector2 boxSize = getContentSize();
+
+        boxSize.setX(boxSize.getX() + padding.getLeft() + padding.getRight());
+        boxSize.setY(boxSize.getY() + padding.getTop() + padding.getBottom());
+
+        return boxSize;
     }
 
-    public double getMaxChildHeight() {
-        double height = availableHeight - padding[Padding.TOP] - padding[Padding.BOTTOM];
-
-        if (heightIsBounded) { height = Math.min(height, maxHeight); }
-
-        return height;
+    public Vector2 getContentSize() {
+        return new Vector2(usedSpace);
     }
 
-    public double getFullUsedHeight() {
-        return usedSpaceY + padding[Padding.TOP] + padding[Padding.BOTTOM];
+    public Vector2 getMaxAvailableSpace() {
+        Vector2 maxAvailableSpace = new Vector2(availableSpace);
+
+        if (widthIsBounded) { maxAvailableSpace.setX(Math.min(maxAvailableSpace.getX(), maxWidth)); }
+        if (heightIsBounded) { maxAvailableSpace.setY(Math.min(maxAvailableSpace.getY(), maxHeight)); }
+
+        return maxAvailableSpace;
     }
 
-    private double getChildPositionX() {
-        double x = positionX + padding[Padding.LEFT] + margin[Padding.LEFT];
+    private Vector2 getNextChildPosition() {
+        Vector2 childPosition = getBoxOrigin();
 
-        if (template == GuiTemplate.HORIZONTAL) {
-            x += usedSpaceX;
+        childPosition.setX(childPosition.getX() + padding.getLeft());
+        childPosition.setY(childPosition.getY() + padding.getTop());
+
+        switch (template) {
+            case HORIZONTAL:
+                childPosition.setX(childPosition.getX() + usedSpace.getX());
+                break;
+            case VERTICAL:
+                childPosition.setY(childPosition.getY() + usedSpace.getY());
+                break;
         }
 
-        return x;
+        return childPosition;
     }
 
-    private double getChildPositionY() {
-        double y = positionY + padding[Padding.TOP] + margin[Padding.TOP];
+    private Vector2 getBoxOrigin() {
+        double x = positionOnScreen.getX() + margin.getLeft();
+        double y = positionOnScreen.getY() + margin.getTop();
 
-        if (template == GuiTemplate.VERTICAL) {
-            y += usedSpaceY;
-        }
-
-        return y;
+        return new Vector2(x, y);
     }
 
     public String toString() {
-        return String.format("(usedPositionX = %s, usedPositionY = %s, usedSpaceX = %s, usedSpaceY = %s)", positionX, positionY, usedSpaceX, usedSpaceY);
+        return String.format("(position = %s, margin = %s, padding = %s, usedSpace = %s)", positionOnScreen, margin, padding, usedSpace);
     }
-
 }
