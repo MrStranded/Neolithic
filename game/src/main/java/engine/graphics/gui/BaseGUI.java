@@ -47,8 +47,8 @@ public class BaseGUI implements GUIInterface {
 	// ###################################################################################
 
 	@Override
-	public void render(ShaderProgram hudShaderProgram, Matrix4 orthographicMatrix) {
-		elements.forEach(e -> e.render(hudShaderProgram, orthographicMatrix));
+	public void render(ShaderProgram hudShaderProgram, Matrix4 orthographicMatrix, MouseInput mouse) {
+		elements.forEach(e -> e.render(hudShaderProgram, orthographicMatrix, mouse));
 	}
 
 	@Override

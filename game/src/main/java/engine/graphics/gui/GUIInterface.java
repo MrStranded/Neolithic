@@ -9,7 +9,7 @@ public interface GUIInterface {
 
 	void tick();
 
-	void render(ShaderProgram hudShaderProgram, Matrix4 orthographicMatrix);
+	void render(ShaderProgram hudShaderProgram, Matrix4 orthographicMatrix, MouseInput mouse);
 
 	void resize();
 

@@ -170,6 +170,8 @@ public class Renderer {
 
 	private void initializeTasks() {
 		tasks = TimedTask.listOf(
+				new TimedTask("Processing Input", () -> ingameInteractions.processInput(scene), 100),
+
 				new TimedTask("Rendering Shadow Map", () -> renderDepthMap(scene.getShadowMap()), 100),
 
 				new TimedTask("Rendering Scene", () -> {
@@ -234,8 +236,6 @@ public class Renderer {
 		this.scene = scene;
 		this.hud = hud;
 		this.planetObject = planet != null ? planet.getPlanetObject() : null;
-
-		ingameInteractions.processInput(scene);
 
 		tasks.forEach(TimedTask::execute);
 
@@ -427,7 +427,7 @@ public class Renderer {
 		hudShaderProgram.setUniform("horizontalStep", 1f / GuiData.getFontTexture().getWidth());
 		hudShaderProgram.setUniform("verticalStep", 1f / GuiData.getFontTexture().getHeight());
 
-		hud.render(hudShaderProgram, orthographicMatrix);
+		hud.render(hudShaderProgram, orthographicMatrix, ingameInteractions.getMouse());
 
 		hudShaderProgram.unbind();
 	}

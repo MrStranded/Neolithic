@@ -45,7 +45,7 @@ public class GuiElement extends Instance {
     // ################################ Graphical ########################################
     // ###################################################################################
 
-    public void render(ShaderProgram hudShaderProgram, Matrix4 orthographicMatrix) {
+    public void render(ShaderProgram hudShaderProgram, Matrix4 orthographicMatrix, MouseInput mouse) {
         if (isSlatedForRemoval() || GameOptions.reloadScripts) {
             return;
         }
@@ -54,7 +54,7 @@ public class GuiElement extends Instance {
 
         // there were updates
         if (shouldUpdate) {
-            update();
+            update(mouse);
         }
 
         // render self
@@ -66,7 +66,7 @@ public class GuiElement extends Instance {
                 });
 
         // render subs
-        getSubElements().forEach(element -> element.render(hudShaderProgram, orthographicMatrix));
+        getSubElements().forEach(element -> element.render(hudShaderProgram, orthographicMatrix, mouse));
 
         rendering = false;
     }
@@ -75,15 +75,17 @@ public class GuiElement extends Instance {
     // ################################ Create Gui #######################################
     // ###################################################################################
 
-    private void update() {
+    private void update(MouseInput mouse) {
         if (getSuperInstance() != null) {
-            ((GuiElement) getSuperInstance()).update();
+            ((GuiElement) getSuperInstance()).update(mouse);
         } else {
-            update(null);
+            createGuiObjects(null);
+
+            updateBackgrounds(mouse);
         }
     }
 
-    private void update(RenderSpace parentSpace) {
+    private void createGuiObjects(RenderSpace parentSpace) {
         // determine available space
         renderSpace = new RenderSpace(this, parentSpace);
 
@@ -92,7 +94,7 @@ public class GuiElement extends Instance {
 
         // layout subs
         for (GuiElement sub : getSubElements()) {
-            sub.update(renderSpace);
+            sub.createGuiObjects(renderSpace);
         }
 
         if (parentSpace != null) { parentSpace.useSpace(renderSpace); }
