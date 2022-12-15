@@ -8,6 +8,7 @@ import engine.math.numericalObjects.Matrix4;
 import engine.parser.utils.Logger;
 import load.OBJLoader;
 import load.PLYLoader;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,12 @@ public class MeshHub {
 	private String meshPath;
 	private Mesh mesh = null;
 	private double opacity = 1.0;
-	private List<MoveableObject> objects;
+	private List<Pair<MoveableObject, Boolean>> objectPairs;
 	private boolean meshIsLoaded = false;
 
 	public MeshHub(String meshPath) {
 		this.meshPath = meshPath;
-		objects = new ArrayList<>(16);
+		objectPairs = new ArrayList<>(16);
 	}
 
 	public void loadMesh() {
@@ -64,15 +65,15 @@ public class MeshHub {
 		mesh.setAlpha((float) opacity);
 	}
 
-	public void registerObject(MoveableObject object) {
-		objects.add(object);
+	public void registerObject(MoveableObject object, boolean selected) {
+		objectPairs.add(Pair.of(object, selected));
 	}
 
 	/**
 	 * This method clears the list of registered objects.
 	 */
 	public void clear() {
-		objects.clear();
+		objectPairs.clear();
 	}
 
 	public void render(ShaderProgram shaderProgram, Matrix4 viewMatrix, ShadowMap shadowMap) {
@@ -87,7 +88,11 @@ public class MeshHub {
 
 		mesh.prepareRender();
 
-		for (MoveableObject object : objects) {
+		for (Pair<MoveableObject, Boolean> pair : objectPairs) {
+			MoveableObject object = pair.getLeft();
+			boolean selected = pair.getRight();
+
+			shaderProgram.setUniform("isSelected", selected ? 1 : 0);
 			shaderProgram.setUniform("modelViewMatrix", viewMatrix.times(object.getWorldMatrix()));
 
 			if (shadowMap != null) {
@@ -103,7 +108,9 @@ public class MeshHub {
 	public void renderForShadowMap(ShaderProgram shaderProgram, Matrix4 viewMatrix, ShadowMap shadowMap) {
 		if (!meshIsLoaded) { return; }
 
-		for (MoveableObject object : objects) {
+		for (Pair<MoveableObject, Boolean> pair : objectPairs) {
+			MoveableObject object = pair.getLeft();
+
 			if (shadowMap != null) {
 				shaderProgram.setUniform("modelLightViewMatrix", shadowMap.getViewMatrix().times(object.getWorldMatrix()));
 			}

@@ -63,6 +63,7 @@ uniform sampler2D textureSampler;
 //uniform vec4 color;
 uniform int affectedByLight;
 uniform int affectedByShadow;
+uniform int isSelected;
 uniform int flipLightDirection;
 
 uniform sampler2D shadowSampler;
@@ -211,6 +212,8 @@ vec4 calculateDirectionalLight(DirectionalLight light, vec3 normal) {
 void main() {
     setupColors(material, outTextureCoordinates);
 
+    vec4 color = outColor + vec4(isSelected * 150, 0, 0, 0);
+
     if (affectedByLight == 1) {
         vec4 pointLightColor = vec4(0, 0, 0, 0);
         vec4 spotLightColor = vec4(0, 0, 0, 0);
@@ -234,9 +237,9 @@ void main() {
             }
         }
 
-        fragmentColor = outColor * (ambientC * ambientLight + lightFactor * directionalLightColor + pointLightColor + spotLightColor );
+        fragmentColor = color * (ambientC * ambientLight + lightFactor * directionalLightColor + pointLightColor + spotLightColor);
     } else {
 
-        fragmentColor = outColor * ambientC;
+        fragmentColor = color * ambientC;
     }
 }

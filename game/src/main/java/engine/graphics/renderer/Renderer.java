@@ -137,6 +137,7 @@ public class Renderer {
 			//shaderProgram.createUniform("color");
 			shaderProgram.createUniform("affectedByLight");
 			shaderProgram.createUniform("affectedByShadow");
+			shaderProgram.createUniform("isSelected");
 			shaderProgram.createUniform("flipLightDirection");
 			shaderProgram.createUniform("dynamic");
 			shaderProgram.createMaterialUniform("material");

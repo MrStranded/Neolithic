@@ -422,7 +422,7 @@ public class Instance {
 		// render self
 		MeshHub hub = getMeshHub();
 		if (hub != null) { // we call getMeshHub() here, because it might have to be loaded from Data first
-			hub.registerObject(moveableObject);
+			hub.registerObject(moveableObject, this == GameOptions.selectedInstance);
 		}
 		// render subs
 		if (subInstances != null) {

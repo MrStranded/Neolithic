@@ -1,7 +1,9 @@
 package engine.graphics.objects.planet;
 
+import constants.GameConstants;
 import constants.TopologyConstants;
 import engine.data.entities.Tile;
+import engine.data.options.GameOptions;
 import engine.graphics.objects.generators.PlanetGenerator;
 import engine.graphics.objects.models.Mesh;
 import engine.graphics.renderer.color.RGBA;
@@ -63,6 +65,8 @@ public class FacePart {
 				if (m.getMaterial() != null) {
 					shaderProgram.setUniform("material", m.getMaterial());
 				}
+				shaderProgram.setUniform("isSelected", tile == GameOptions.selectedInstance ? 1 : 0);
+
 				m.render(true);
 			} else {
 				m.renderForShadowMap();
