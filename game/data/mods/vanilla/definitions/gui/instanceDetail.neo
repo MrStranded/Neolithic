@@ -16,6 +16,8 @@ Gui: gInstanceDetail {
 		->attributeList = [];
 		->c = -1;
 		
+		addGui(self, gInstanceDetailHeader, ->instance);
+		
 		update();
 	}
 	
@@ -30,8 +32,6 @@ Gui: gInstanceDetail {
 	}
 	
 	Script: update() {
-		->text = getName(->instance);
-		
 		// Adding guis for new instances
 		if (->c++ % 100 == 0) {
 	
@@ -62,6 +62,37 @@ Gui: gInstanceDetail {
 			}
 			
 		}
+	}
+}
+
+Gui: gInstanceDetailHeader {
+	
+	template = Horizontal;
+	
+	Script: new(instance) {
+		->text = getName(instance);
+		
+		->margin = [10, 0, 10, 0];
+		
+		addGui(self, gCloseButton);
+	}
+	
+}
+
+Gui: gCloseButton {
+	Script: new() {
+		->background = "gui/back_wood01.png";
+		->backgroundHover = "gui/back_wood01_hover.png";
+		->backgroundPressed = "gui/back_wood01_pressed.png";
+		->text = "X";
+		
+		->padding = [0, 10, 0, 10];
+		->margin = [0, 0, 0, 100];
+	}
+	
+	Script: click() {
+		clearGui();
+		select(0);
 	}
 }
 
@@ -173,6 +204,7 @@ Gui: gAttributeChangeButton {
 		->backgroundPressed = "gui/back_wood01_pressed.png";
 		
 		->padding = [0, 5, 0, 5];
+		->margin = [0, 5, 0, 5];
 	}
 	
 	Script: click() {

@@ -378,8 +378,8 @@ public class CommandExecuter {
 					checkValue(script, commandNode, instance, "target instance");
 
 					return new Variable(Data.getAllAttributeIDs().stream()
-							.map(id -> new int[] {id, instance.getAttributeValue(id)})
-							.filter(idValueTuple -> idValueTuple[1] != 0)
+							.map(id -> new int[] {id, instance.getAttributeValue(id), instance.getPersonalAttributeValue(id)})
+							.filter(idValueTuple -> idValueTuple[1] != 0 || idValueTuple[2] != 0)
 							.map(idValueTuple -> new Attribute(idValueTuple[0], idValueTuple[1]))
 							.map(Variable::new)
 							.collect(Collectors.toList()));
