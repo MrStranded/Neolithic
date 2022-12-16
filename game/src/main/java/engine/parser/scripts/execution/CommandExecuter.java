@@ -50,23 +50,6 @@ public class CommandExecuter {
 		}
 
 		switch (commandToken) {
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double abs (double value)
-			case ABSOLUTE:
-				Logger.info("Classic schmeckel is executed");
-
-				if (requireParameters(commandNode, 1)) {
-					double value = parameters[0].getDouble();
-					return new Variable(Math.abs(value));
-				}
-				break;
-
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double acos (double cos)
-			case ACOS:
-				if (requireParameters(commandNode, 1)) {
-					double cos = parameters[0].getDouble();
-					return new Variable(Math.acos(cos) * 180d / Math.PI);
-				}
-				break;
 
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& effect addEffect (Instance target, Container effectContainer)
 			case ADD_EFFECT:

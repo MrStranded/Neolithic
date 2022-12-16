@@ -1,5 +1,6 @@
 package engine.parser.constants;
 
+import engine.parser.scripts.execution.commands.math.ACosCommand;
 import engine.parser.scripts.execution.commands.math.AbsoluteCommand;
 import engine.parser.scripts.execution.commands.math.AbstractCommand;
 import engine.parser.tokenization.Token;
@@ -72,7 +73,7 @@ public enum TokenConstants {
 	COS				(TokenType.COMMAND, "cos"),
 	SIN				(TokenType.COMMAND, "sin"),
 	TAN				(TokenType.COMMAND, "tan"),
-	ACOS			(TokenType.COMMAND, "acos"),
+	ACOS			(TokenType.COMMAND, "acos", new ACosCommand()),
 	ATAN			(TokenType.COMMAND, "atan"),
 	ATAN2			(TokenType.COMMAND, "atan2"),
 
