@@ -81,6 +81,25 @@ const commands = [
                         <i>// Adds an effect to self for 12 ticks that adds 5 to health and reduces stress by 10</i>`,
   },
   {
+    name: 'addGui',
+    type: 'GuiElement',
+    parameters: [
+      {
+        name: 'target',
+        type: 'GuiElement',
+      },
+      {
+        name: 'container',
+        type: 'Container',
+      }
+    ],
+    description: `Adds a new gui element of the given container type to the target gui element.<br>
+                        On the newly created gui element the 'new' script is executed.<br>
+                        It is possible to give more than two parameters to this command. The additional parameters will be added as parameters on the 'new' script.`,
+    example: `addGui(parent, gAttributeText, "hello");<br>
+                        <i>// Adds a gAttributeText element to the parent gui element. "hello" will be added as parameter on the 'new' script of the gAttributeText</i>`
+  },
+  {
     name: 'addPersonalAtt',
     type: 'Number',
     parameters: [

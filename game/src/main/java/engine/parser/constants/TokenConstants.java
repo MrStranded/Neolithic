@@ -1,6 +1,7 @@
 package engine.parser.constants;
 
 import engine.parser.scripts.execution.commands.effects.AddEffectCommand;
+import engine.parser.scripts.execution.commands.gui.AddGuiCommand;
 import engine.parser.scripts.execution.commands.math.ACosCommand;
 import engine.parser.scripts.execution.commands.math.AbsoluteCommand;
 import engine.parser.scripts.execution.commands.AbstractCommand;
@@ -164,7 +165,7 @@ public enum TokenConstants {
 	DEBUG					(TokenType.COMMAND, "debug"),
 
 	// -------------------------------------------------- GUI
-	ADD_GUI      		(TokenType.COMMAND, "addGui"),
+	ADD_GUI      		(TokenType.COMMAND, "addGui", new AddGuiCommand()),
 	CLEAR_GUI			(TokenType.COMMAND, "clearGui"),
 	CREATE_GUI      	(TokenType.COMMAND, "createGui"),
 	PRINT           	(TokenType.COMMAND, "print"),

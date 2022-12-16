@@ -9,7 +9,6 @@ import engine.parser.constants.TokenType;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.execution.ScriptContext;
 import engine.parser.scripts.execution.commands.AbstractCommandTest;
-import engine.parser.scripts.execution.commands.math.ACosCommand;
 import engine.parser.tokenization.Token;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

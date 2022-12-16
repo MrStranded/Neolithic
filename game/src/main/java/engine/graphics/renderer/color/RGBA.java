@@ -104,12 +104,13 @@ public class RGBA {
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Multiplication
 
 	public RGBA times(double t) {
-		return new RGBA(r*t,g*t,b*t,a);
+		return new RGBA(r*t,g*t,b*t,a*t);
 	}
 	public RGBA timesInplace(double t) {
 		r *= t;
 		g *= t;
 		b *= t;
+		a *= t;
 		return this;
 	}
 
