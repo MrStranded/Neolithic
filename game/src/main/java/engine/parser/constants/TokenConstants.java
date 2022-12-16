@@ -1,5 +1,7 @@
 package engine.parser.constants;
 
+import engine.parser.scripts.execution.commands.math.AbsoluteCommand;
+import engine.parser.scripts.execution.commands.math.AbstractCommand;
 import engine.parser.tokenization.Token;
 
 public enum TokenConstants {
@@ -61,7 +63,7 @@ public enum TokenConstants {
 	// -------------------------------------------------- Math
 	CHANCE          (TokenType.COMMAND, "chance"),
 	RANDOM          (TokenType.COMMAND, "random"),
-	ABSOLUTE        (TokenType.COMMAND, "abs"),
+	ABSOLUTE        (TokenType.COMMAND, "abs", new AbsoluteCommand()),
 	MAX				(TokenType.COMMAND, "max"),
 	MIN				(TokenType.COMMAND, "min"),
 	FLOOR			(TokenType.COMMAND, "floor"),
@@ -270,9 +272,15 @@ public enum TokenConstants {
 
 	private Token token;
 	private int precedence = 0;
+	private AbstractCommand commandExecutor;
 
 	TokenConstants(TokenType type, String value) {
+		this(type, value, null);
+	}
+
+	TokenConstants(TokenType type, String value, AbstractCommand commandExecutor) {
 		token = new Token(type, value, 0);
+		this.commandExecutor = commandExecutor;
 	}
 
 	TokenConstants(TokenType type, String value, int precedence) {
@@ -347,6 +355,10 @@ public enum TokenConstants {
 
 	public int getPrecedence() {
 		return precedence;
+	}
+
+	public AbstractCommand getCommandExecutor() {
+		return commandExecutor;
 	}
 
 	/**

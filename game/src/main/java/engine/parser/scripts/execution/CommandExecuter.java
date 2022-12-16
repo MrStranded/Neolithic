@@ -26,6 +26,7 @@ import engine.parser.constants.TokenConstants;
 import engine.parser.scripts.exceptions.InvalidValueException;
 import engine.parser.scripts.exceptions.ReturnException;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
+import engine.parser.scripts.execution.commands.math.AbstractCommand;
 import engine.parser.scripts.nodes.CommandExpressionNode;
 import engine.parser.tokenization.Token;
 import engine.parser.utils.Logger;
@@ -42,9 +43,17 @@ public class CommandExecuter {
 		TokenConstants commandToken = TokenConstants.getCorrespondingConstant(command);
 		if (commandToken == null) { return new Variable(); }
 
+		if (commandToken.getCommandExecutor() != null) {
+			ScriptContext context = new ScriptContext(self, script, commandNode);
+
+			return commandToken.getCommandExecutor().execute(context, parameters);
+		}
+
 		switch (commandToken) {
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double abs (double value)
 			case ABSOLUTE:
+				Logger.info("Classic schmeckel is executed");
+
 				if (requireParameters(commandNode, 1)) {
 					double value = parameters[0].getDouble();
 					return new Variable(Math.abs(value));

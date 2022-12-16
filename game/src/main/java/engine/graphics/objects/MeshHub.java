@@ -78,7 +78,7 @@ public class MeshHub {
 
 	public void render(ShaderProgram shaderProgram, Matrix4 viewMatrix, ShadowMap shadowMap) {
 		if (!meshIsLoaded) {
-			Logger.error("Mesh with path '" + meshPath + "' is not loaded!");
+			Logger.info("Mesh with path '" + meshPath + "' is not yet loaded");
 			return;
 		}
 

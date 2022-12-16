@@ -182,7 +182,7 @@ Gui: gAttributeText {
 	}
 	
 	Script: updateText() {
-		value = getAttValue(->instance, getAttId(->attribute));
+		value = abs(getAttValue(->instance, getAttId(->attribute)));
 		->text = getName(->attribute) + ": " + value;
 	}
 }

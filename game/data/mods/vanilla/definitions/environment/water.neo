@@ -73,7 +73,6 @@ Entity: entWater {
 						if (item.attSize > 0 && item.attSize <= d) {
 							pickUp(next, item);
 						} else if (item.affectedByWaterDamage) {
-							print("Water hurting: " + item + " by " + d);
 							item..bodyHealth -= d;
 						}
 					}
