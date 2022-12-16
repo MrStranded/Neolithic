@@ -1,5 +1,6 @@
 package engine.parser.constants;
 
+import engine.parser.scripts.execution.commands.attributes.AddPersonalAttributeCommand;
 import engine.parser.scripts.execution.commands.effects.AddEffectCommand;
 import engine.parser.scripts.execution.commands.gui.AddGuiCommand;
 import engine.parser.scripts.execution.commands.math.ACosCommand;
@@ -86,7 +87,7 @@ public enum TokenConstants {
 	DESTROY                 (TokenType.COMMAND, "destroy"),
 	DELETE_EFFECTS			(TokenType.COMMAND, "deleteEffects"),
 	ADD_EFFECT				(TokenType.COMMAND, "addEffect", new AddEffectCommand()),
-	ADD_PERSONAL_ATTRIBUTE  (TokenType.COMMAND, "addPersonalAtt"),
+	ADD_PERSONAL_ATTRIBUTE  (TokenType.COMMAND, "addPersonalAtt", new AddPersonalAttributeCommand()),
 	ADD_SPECIES_ATTRIBUTE   (TokenType.COMMAND, "addSpeciesAtt"),
 	ADD_OCCUPATION			(TokenType.COMMAND, "addOccupation"),
 	MIX_ATTRIBUTES          (TokenType.COMMAND, "mixAttributes"),

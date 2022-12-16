@@ -101,7 +101,7 @@ const commands = [
   },
   {
     name: 'addPersonalAtt',
-    type: 'Number',
+    type: 'Attribute',
     parameters: [
       {
         name: 'target',
@@ -117,7 +117,8 @@ const commands = [
         type: 'Number'
       }
     ],
-    description: `Adds the specified amount to the attribute value with the given text ID to the target instance.`,
+    description: `Adds the specified amount to the attribute value with the given text ID to the target instance.<br>
+                        Returns the added or modified attribute of the target instance.`,
     example: `addPersonalAtt(self, "attHealth", 7);<br>
                          <i>// Adds 7 to the health attribute of self</i>`,
   },
