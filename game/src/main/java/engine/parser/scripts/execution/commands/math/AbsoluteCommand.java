@@ -3,6 +3,7 @@ package engine.parser.scripts.execution.commands.math;
 import engine.data.variables.Variable;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.execution.ScriptContext;
+import engine.parser.scripts.execution.commands.AbstractCommand;
 
 public class AbsoluteCommand extends AbstractCommand {
 

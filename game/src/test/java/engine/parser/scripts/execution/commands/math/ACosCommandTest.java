@@ -1,8 +1,8 @@
 package engine.parser.scripts.execution.commands.math;
 
-import engine.data.entities.Instance;
 import engine.parser.scripts.exceptions.ScriptInterruptedException;
 import engine.parser.scripts.execution.ScriptContext;
+import engine.parser.scripts.execution.commands.AbstractCommandTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,4 +1,4 @@
-package engine.parser.scripts.execution.commands.math;
+package engine.parser.scripts.execution.commands;
 
 import engine.data.entities.Instance;
 import engine.data.scripts.Script;
@@ -17,18 +17,22 @@ import java.util.List;
 public class AbstractCommandTest {
 
     protected ScriptContext createContext(int numberOfParameters) {
-        Instance self = new Instance(0);
-        Script script = new Script("scriptId", "testFile", null, Collections.emptyList());
-        return new ScriptContext(self, script, createNode(numberOfParameters));
+        return createContext(numberOfParameters, null);
     }
 
-    private CommandExpressionNode createNode(int numberOfParameters) {
+    protected ScriptContext createContext(int numberOfParameters, Token command) {
+        Instance self = new Instance(0);
+        Script script = new Script("scriptId", "testFile", null, Collections.emptyList());
+        return new ScriptContext(self, script, createNode(numberOfParameters, command));
+    }
+
+    private CommandExpressionNode createNode(int numberOfParameters, Token command) {
         List<AbstractScriptNode> parameterList = new ArrayList<>(numberOfParameters);
         for (int i = 0; i < numberOfParameters; i++) {
             parameterList.add(new LiteralNode(new Token(TokenType.LITERAL, "parameter" + i, 0)));
         }
 
-        return new CommandExpressionNode(null, parameterList);
+        return new CommandExpressionNode(command, parameterList);
     }
 
     protected Variable[] createParameters(Object... values) {
@@ -41,6 +45,12 @@ public class AbstractCommandTest {
                 parameters[i] = new Variable((Integer) value);
             } else if (value instanceof Double) {
                 parameters[i] = new Variable((Double) value);
+            } else if (value instanceof String) {
+                parameters[i] = new Variable((String) value);
+            } else if (value instanceof Instance) {
+                parameters[i] = new Variable((Instance) value);
+            } else if (value instanceof List) {
+                parameters[i] = new Variable((List<Variable>) value);
             } else {
                 parameters[i] = new Variable();
             }

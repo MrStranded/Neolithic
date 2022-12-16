@@ -1,4 +1,4 @@
-package engine.parser.scripts.execution.commands.math;
+package engine.parser.scripts.execution.commands;
 
 import engine.data.Data;
 import engine.data.proto.Container;

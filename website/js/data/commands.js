@@ -45,7 +45,9 @@ const commands = [
         type: 'Effect',
       }
     ],
-    description: `Adds an effect of the specified type to the given instance and returns the effect.`
+    description: `Adds an effect of the specified type to the given instance and returns the effect.`,
+    example: `effect = addEffect(self, effShadow);<br>
+                        <i>// Adds the shadow effect to self</i>`
   },
   {
     name: 'addEffect',

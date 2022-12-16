@@ -43,6 +43,10 @@ public class Effect extends Instance {
         this.remainingTicks = remainingTicks;
     }
 
+    public int getRemainingTicks() {
+        return remainingTicks;
+    }
+
     // ###################################################################################
     // ################################ Debugging ########################################
     // ###################################################################################
