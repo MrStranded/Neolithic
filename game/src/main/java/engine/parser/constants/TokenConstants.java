@@ -3,6 +3,7 @@ package engine.parser.constants;
 import engine.parser.scripts.execution.commands.attributes.AddPersonalAttributeCommand;
 import engine.parser.scripts.execution.commands.effects.AddEffectCommand;
 import engine.parser.scripts.execution.commands.gui.AddGuiCommand;
+import engine.parser.scripts.execution.commands.instances.AddOccupationCommand;
 import engine.parser.scripts.execution.commands.math.ACosCommand;
 import engine.parser.scripts.execution.commands.math.AbsoluteCommand;
 import engine.parser.scripts.execution.commands.AbstractCommand;
@@ -89,7 +90,7 @@ public enum TokenConstants {
 	ADD_EFFECT				(TokenType.COMMAND, "addEffect", new AddEffectCommand()),
 	ADD_PERSONAL_ATTRIBUTE  (TokenType.COMMAND, "addPersonalAtt", new AddPersonalAttributeCommand()),
 	ADD_SPECIES_ATTRIBUTE   (TokenType.COMMAND, "addSpeciesAtt"),
-	ADD_OCCUPATION			(TokenType.COMMAND, "addOccupation"),
+	ADD_OCCUPATION			(TokenType.COMMAND, "addOccupation", new AddOccupationCommand()),
 	MIX_ATTRIBUTES          (TokenType.COMMAND, "mixAttributes"),
 	SET_MESH				(TokenType.COMMAND, "setMesh"),
 	DELAY_NEXT_TICK			(TokenType.COMMAND, "delayNextTick"),

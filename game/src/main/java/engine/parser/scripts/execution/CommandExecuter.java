@@ -50,45 +50,6 @@ public class CommandExecuter {
 
 		switch (commandToken) {
 
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& int addPersonalAtt (Instance target, String attributeTextID, int amount)
-			case ADD_PERSONAL_ATTRIBUTE:
-				if (requireParameters(commandNode, 3)) {
-					Instance target = parameters[0].getInstance();
-					String attributeTextID = parameters[1].getString();
-					int amount = parameters[2].getInt();
-					int attributeID = Data.getProtoAttributeID(attributeTextID);
-
-					checkValue(script, commandNode, target, "target instance");
-					checkAttribute(script, commandNode, attributeID, attributeTextID);
-
-					target.addAttribute(attributeID, amount);
-				}
-				break;
-
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& void addOccupation (Instance target, int duration[, String callBackScript])
-			case ADD_OCCUPATION:
-				if (requireParameters(commandNode, 2)) {
-					Instance target = parameters[0].getInstance();
-					int duration = parameters[1].getInt();
-					Script callBackScript = null;
-
-					checkValue(script, commandNode, target, "target instance");
-
-					if (parameters.length >= 3) {
-						callBackScript = parameters[2].getScript();
-
-						if (callBackScript == null) {
-							Optional<Container> container = Data.getContainer(target.getId());
-							callBackScript = container.map(c -> c.getScript(target.getStage(), parameters[2].getString())).orElse(null);
-						}
-
-						checkValue(script, commandNode, callBackScript, "callback script");
-					}
-
-					target.addOccupation(duration, callBackScript);
-				}
-				break;
-
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double atan (double tan)
 			case ATAN:
 				if (requireParameters(commandNode, 1)) {

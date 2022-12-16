@@ -49,6 +49,8 @@ public class AbstractCommandTest {
                 parameters[i] = new Variable((String) value);
             } else if (value instanceof Instance) {
                 parameters[i] = new Variable((Instance) value);
+            } else if (value instanceof Script) {
+                parameters[i] = new Variable((Script) value);
             } else if (value instanceof List) {
                 parameters[i] = new Variable((List<Variable>) value);
             } else {
