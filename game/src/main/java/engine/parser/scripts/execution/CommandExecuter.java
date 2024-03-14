@@ -50,14 +50,6 @@ public class CommandExecuter {
 
 		switch (commandToken) {
 
-			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double atan (double tan)
-			case ATAN:
-				if (requireParameters(commandNode, 1)) {
-					double tan = parameters[0].getDouble();
-					return new Variable(Math.atan(tan) * 180d / Math.PI);
-				}
-				break;
-
 			// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& double atan2 (double y, double x)
 			case ATAN2:
 				if (requireParameters(commandNode, 1)) {
